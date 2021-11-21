@@ -170,6 +170,8 @@ export function is_combining_mark(cp) {
     return lookup_member(TABLE_M, typeof cp === 'string' ? cp.codePointAt(0) : cp);
 }
 
+// returns mapped string or undefined
+// warning: this does not check if disallowed/ignored
 export function get_mapped(cp) {
 	if (typeof cp === 'string') cp = cp.codePointAt(0);
 	let mapped = lookup_linear(TABLE_L, cp);
@@ -189,6 +191,7 @@ export function idna(s) {
 	}).join('').normalize('NFC');
 }
 
+// primary api
 export function ens_normalize(name) {
 	return idna(name).split('.').map(s => {
 		if (s.startsWith('xn--')) {
