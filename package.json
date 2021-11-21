@@ -1,0 +1,22 @@
+{
+  "name": "@adraffy/ens-normalize",
+  "version": "1.0.0",
+  "description": "Compact ES6 Ethereum Name Service (ENS) Name Normalizer",
+  "keywords": ["ENS", "Ethereum"],
+  "type": "module",
+  "main": "ens-normalizer.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adraffy/ens-normalizer.js.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/adraffy/ens-normalizer.js/issues"
+  },
+  "homepage": "https://github.com/adraffy/ens-normalizer.js#readme",
+  "author": {
+    "name" : "raffy.eth",
+    "email" : "raffy@me.com",
+    "url" : "http://raffy.antistupid.com"
+  }
+}
