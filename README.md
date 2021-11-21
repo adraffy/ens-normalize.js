@@ -8,9 +8,9 @@ Reference: [UTS-46 v14.0.0](https://unicode.org/reports/tr46/)
 [Demo](https://raffy.antistupid.com/eth/ens-resolver.html) | [Emoji Test](https://raffy.antistupid.com/eth/ens-emoji.html)
 
 ```Javascript
-import {ens_normalize} from '@adraffy/ens-normalizer';
+import {ens_normalize} from '@adraffy/ens-normalize';
 // browser:
-// import {ens_normalize} from 'https://unpkg.com/@adraffy/ens-normalizer@latest/ens-normalizer.js';
+// import {ens_normalize} from 'https://unpkg.com/@adraffy/ens-normalize@latest/ens-normalize.js';
 
 // simple api:
 let normalized = ens_normalize('🚴‍♂️.eth'); // throws if error
