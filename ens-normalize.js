@@ -32,10 +32,10 @@ class TableReader {
 		}
 		if (x0 < 0xFF) {
 			this.pos += 2;
-			return 0x80 + ((x0&0x7F)<<8) + table[pos+1];
+			return 0x80 + ((x0 & 0x7F) << 8) + table[pos+1];
 		}
 		this.pos += 4;
-		return 0x7F80 + (table[pos+1]<<16) + (table[pos+2]<<8) + table[pos+3];
+		return 0x7F80 + (table[pos+1] << 16) + (table[pos+2] << 8) + table[pos+3];
 	}
 	read_signed() { // eg. [0,1,2,3...] => [0,-1,1,-2,...]
 		let i = this.read();		
@@ -185,7 +185,7 @@ export function get_mapped(cp) {
 export function idna(s) {
 	return [...s].map(c => {
 		let cp = c.codePointAt(0);
-		if (is_disallowed(cp)) throw new Error(`disallowed: ${cp} 0x${cp.toString(16)} ${c}`);
+		if (is_disallowed(cp)) throw new Error(`disallowed: 0x${cp.toString(16)}`); //new Error(`disallowed: ${cp} 0x${cp.toString(16)} ${c}`);
 		if (is_ignored(cp)) return ''; 
 		return get_mapped(cp) ?? c;
 	}).join('').normalize('NFC');
