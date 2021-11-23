@@ -38,14 +38,14 @@ class TableReader {
 		}
 		if (x0 < 0xFF) {
 			this.pos += 2;
-			return 0x80 + ((x0 & 0x7F) << 8) + table[pos+1];
+			return 0x80 + (((x0 & 0x7F) << 8) | table[pos+1]);
 		}
 		this.pos += 4;
-		return 0x7F80 + (table[pos+1] << 16) + (table[pos+2] << 8) + table[pos+3];
+		return 0x7F80 + ((table[pos+1] << 16) | (table[pos+2] << 8) | table[pos+3]);
 	}
 	read_signed() { // eg. [0,1,2,3...] => [0,-1,1,-2,...]
 		let i = this.read();		
-		return (i & 1) ? -(i >> 1) : (i >> 1);
+		return (i & 1) ? -((i + 1) >> 1) : (i >> 1);
 	}
 }
 
@@ -95,7 +95,8 @@ function lookup_linear(table, cp) {
 function lookup_mapped(table, width, cp) {
 	let x = 0, y = 0;
 	let r = new TableReader(table);
-	while (r.more) {
+	let i = 0;
+	while (r.more) {		
 		x += r.read();
 		if (x > cp) break;
 		if (x == cp) {
@@ -107,7 +108,7 @@ function lookup_mapped(table, width, cp) {
 		}
 		for (let j = 0; j < width; j++) {
 			y += r.read_signed();
-		}
+		}	
 	}
 }
 
@@ -194,9 +195,9 @@ export function get_mapped(cp) {
 	if (typeof cp === 'string') cp = cp.codePointAt(0);
 	let mapped = lookup_linear(TABLE_N, cp);
 	if (mapped) return mapped;
-	for (let i = 0; i < TABLE_W.length; i++) {
+	for (let i = 0; i < TABLE_W.length; i++) {	
 		mapped = lookup_mapped(TABLE_W[i], i + 1, cp);
-		if (mapped) return mapped;	
+		if (mapped) return mapped;
 	}
 }
 
@@ -228,7 +229,9 @@ export function idna(s) {
 			} 
 			throw new Error('disallowed: zero-width joiner without context');			
 		} else if (cp === 0x200D) { // https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.2
-			if (i > 0 && lookup_member(TABLE_V, v[i - 1])) { // Virama
+			// rule 1: V + cp
+			// V = Combining_Class "Virama"
+			if (i > 0 && lookup_member(TABLE_V, v[i - 1])) { 
 				return String.fromCodePoint(cp);
 			}
 			throw new Error('disallowed: zero-width non-joiner without context');
