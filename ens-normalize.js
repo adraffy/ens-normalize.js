@@ -227,14 +227,16 @@ export function idna(s) {
 					}
 				}
 			} 
-			throw new Error('disallowed: zero-width joiner without context');			
+			//throw new Error('disallowed: zero-width joiner without context');	
+			return ''; // ignored		
 		} else if (cp === 0x200D) { // https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.2
 			// rule 1: V + cp
 			// V = Combining_Class "Virama"
 			if (i > 0 && lookup_member(TABLE_V, v[i - 1])) { 
 				return String.fromCodePoint(cp);
 			}
-			throw new Error('disallowed: zero-width non-joiner without context');
+			//throw new Error('disallowed: zero-width non-joiner without context');
+			return ''; // ignored
 		}
 		return get_mapped(cp) ?? String.fromCodePoint(cp);
 	}).join('').normalize('NFC');
