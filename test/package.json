@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@adraffy/keccak": "^1.0.5"
+  }
+}
