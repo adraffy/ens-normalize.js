@@ -81,6 +81,9 @@ function decode_zwnj_emoji(s) {
 	return buckets;
 }
 
+// upgrade emoji to fully-qualified w/o FEOF
+// expects list of code-points
+// returns list of code-points
 export function upgrade_zwnj_emoji(v) {
 	let ret = [];
 	next_cp: for (let i = 0, n = v.length; i < n; i++) {
@@ -237,9 +240,9 @@ function puny_decode(input) {
 }
 
 // warning: these should not be used directly
-// expects code point (number)
+// expects code-point (number)
 // is_* returns boolean
-// get_* returns list-of-code-points or undefined
+// get_* returns number, list of numbers, or undefined (code-points)
 export function is_disallowed(cp) {
 	return lookup_member_span(TABLE_D, cp);
 }
@@ -272,8 +275,8 @@ export function idna(s) {
 			// rule 1: V + cp
 			// V = Combining_Class "Virama"
 			if (i > 0 && lookup_member(TABLE_V, v[i - 1])) { 
-                return cp; // allowed
-    		}  
+				return cp; // allowed
+			}
 			// rule 2: {L,D} + T* + cp + T* + {R,D}
 			// L,D,T,R = Joining_Type
 			if (i > 0 && i < v.length - 1) { // there is room on either side
@@ -286,7 +289,7 @@ export function idna(s) {
 						return cp; // allowed
 					}
 				}
-			} 			
+			}
 			return empty; // ignore
 		} else if (cp === 0x200D) { // https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.2
 			// rule 1: V + cp
@@ -310,7 +313,7 @@ export function ens_normalize(name) { // https://unicode.org/reports/tr46/#Proce
 	// 1. map all full-stops to "." (see: Section 2.3 and Section 4.5)
 	// 2. apply ContextJ rules (see: Section 4.1 Rule #7) [as-of v14.0.0, ContextJ does not span a stop]
 	// 3. apply Section 4 Processing Rule #1 (Map) and Rule #2 (Normalize)
-	return idna(name).split('.').map(label => { // Section 4 Processing Rule #3 (Break)
+	return idna(name).split('.').map(label => { // Section 4 Processing Rule #3 (Break) + Section 4.1 Rule #4
 		if (label.startsWith('xn--')) { // Rule #4 (Convert)
 			label = puny_decode(label.slice(4));
 			if (idna(label) !== label) throw new Error(`puny-idna mismatch on label: ${label}`); // can this happen?
