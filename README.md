@@ -11,7 +11,7 @@
 ```Javascript
 import {ens_normalize} from '@adraffy/ens-normalize';
 // browser: 
-// https://unpkg.com/@adraffy/ens-normalize@latest/dist/ens-normalize.min.js
+// 'https://unpkg.com/@adraffy/ens-normalize@latest/dist/ens-normalize.min.js'
 
 // example:
 let normalized = ens_normalize('🚴‍♂️.eth'); // throws if error
