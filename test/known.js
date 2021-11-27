@@ -1,4 +1,4 @@
-export const KNOWN = [
+export default [
 	// pass
 	{name: "bRAnTlY.eTh", norm: "brantly.eth"}, 
 

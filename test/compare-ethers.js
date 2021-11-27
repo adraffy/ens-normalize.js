@@ -1,8 +1,7 @@
 import {nameprep} from '@ethersproject/strings';
 import {ens_normalize} from '../ens-normalize.js';
-
-import {KNOWN} from './known.js';
-import {readFileSync, writeFileSync} from 'fs';
+import KNOWN from './known.js';
+import {writeFileSync} from 'fs';
 
 function local_file(name) {
 	return new URL(name, import.meta.url).pathname;

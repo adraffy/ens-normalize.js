@@ -22,6 +22,6 @@
   "scripts": {
     "test": "node test/test-all.js",
     "render": "node test/render.js",
-    "dist": "uglifyjs ens-normalize.js --mangle --toplevel --output dist/ens-normalize.min.js"
+    "dist": "uglifyjs ens-normalize.js --compress --mangle --toplevel --output dist/ens-normalize.min.js"
   }
 }

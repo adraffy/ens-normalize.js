@@ -1,7 +1,7 @@
 // test some known names
 
 import {ens_normalize} from '../ens-normalize.js';
-import {KNOWN} from './known.js';
+import KNOWN from './known.js';
 
 for (let {name, norm, error} of KNOWN) {
 	if (!norm) norm = name;
