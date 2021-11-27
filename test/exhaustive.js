@@ -2,12 +2,12 @@
 // compare with mathematica
 
 import {is_disallowed, is_ignored, is_combining_mark, get_mapped} from '../ens-normalize.js';
-import {KeccakHasher} from '@adraffy/keccak';
+import {sha3} from '@adraffy/keccak';
 
 let N = 0x20000; // unicode range [0,N)
 
 function member_signature(fn) {
-    let h = KeccakHasher.sha3();
+    let h = sha3();
     for (let i = 0; i < N; ) {
         let u32 = 0;
         for (let e = Math.min(N, i + 32); i < e; i++) {
@@ -17,18 +17,18 @@ function member_signature(fn) {
         }
         h._add_block(u32);
     }
-    return h.finalize().hex;
+    return h.hex;
 }
 
 function mapped_signature() {
-    let h = KeccakHasher.sha3();
+    let h = sha3();
     for (let i = 0; i < N; i++) {
         let x = get_mapped(i);
         if (!x) continue;
         if (typeof x == 'number') x = [x];
         h.update(String.fromCodePoint(...x));
     }
-    return h.finalize().hex;
+    return h.hex;
 }
 
 console.log(member_signature(is_disallowed));

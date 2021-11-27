@@ -1,8 +1,8 @@
 {
   "name": "@adraffy/ens-normalize",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Compact ES6 Ethereum Name Service (ENS) Name Normalizer",
-  "keywords": ["ENS", "Ethereum", "UTS-46", "IDNA2008"],
+  "keywords": ["ENS", "Ethereum", "UTS-46", "IDNA"],
   "type": "module",
   "main": "ens-normalize.js",
   "repository": {
@@ -20,6 +20,8 @@
     "url" : "http://raffy.antistupid.com"
   },
   "scripts": {
-    "test": "node ./test/test.js"
+    "test": "node test/test-all.js",
+    "render": "node test/render.js",
+    "dist": "uglifyjs ens-normalize.js --mangle --toplevel --output dist/ens-normalize.min.js"
   }
 }

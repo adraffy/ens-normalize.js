@@ -4,7 +4,11 @@
 import {idna} from '../ens-normalize.js';
 import {readFile} from 'fs/promises';
 
-let list = JSON.parse(await readFile('./emoji-zwnj.json'));
+function local_file(name) {
+	return new URL(name, import.meta.url).pathname;
+}
+
+let list = JSON.parse(await readFile(local_file('emoji-zwnj.json')));
 
 let REGEX_STRIP = /(\u200D|\uFE0F)/gu;
 
