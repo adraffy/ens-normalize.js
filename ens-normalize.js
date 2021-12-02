@@ -280,9 +280,20 @@ export function get_mapped(cp) {
 	}
 }
 
-class DisallowedError extends Error {
-	constructor(message, cp, i) {
-		super(message);
+function smart_escape(s) {
+	return s.replace(/[^\-a-z0-9]/igu, x => `\\u{${x.codePointAt(0).toString(16).toUpperCase()}}`);
+}
+
+export class DisallowedLabelError extends Error {
+	constructor(message, label) {
+		super(`Disallowed label "${smart_escape(label)}": ${message}`);
+		this.label = label;
+	}
+}
+
+export class DisallowedCharacterError extends Error {
+	constructor(cp, i, desc = '') {
+		super(`Disallowed character "${smart_escape(String.fromCodePoint(cp))}" at position ${1+i}` + (desc ? `: ${desc}` : ''));
 		this.codePoint = cp;
 		this.offset = i;
 	}
@@ -298,7 +309,7 @@ export function idna(s, ignore_disallowed = false) {
 	return String.fromCodePoint(...v.map((cp, i) => {
 		if (is_disallowed(cp)) {
 			if (ignore_disallowed) return empty;
-			throw new DisallowedError(`disallowed: 0x${cp.toString(16).padStart(2, '0')}`, cp, i);
+			throw new DisallowedCharacterError(cp, i);
 		}
 		if (is_ignored(cp)) return empty;
 		if (cp === 0x200C) { // https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.1
@@ -321,7 +332,7 @@ export function idna(s, ignore_disallowed = false) {
 				}
 			}
 			if (ignore_disallowed) return empty;
-			throw new DisallowedError(`ZWJ outside of context`, cp, i);
+			throw new DisallowedCharacterError(cp, i, `ZWJ outside of context`);
 		} else if (cp === 0x200D) { // https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.2
 			// rule 1: V + cp
 			// V = Combining_Class "Virama"
@@ -333,7 +344,7 @@ export function idna(s, ignore_disallowed = false) {
 				return cp; // allowed
 			}
 			if (ignore_disallowed) return empty; 
-			throw new DisallowedError(`ZWNJ outside of context`, cp, i);
+			throw new DisallowedCharacterError(cp, i, `ZWNJ outside of context`);
 		}
 		return get_mapped(cp) ?? cp;
 	}).flat()).normalize('NFC');
@@ -355,12 +366,12 @@ export function ens_normalize(name, ignore_disallowed = false) { // https://unic
 		}
 		// Section 4.1 Rule #1 (NFC) is already satisfied by idna()
 		// apply Section 4.1 Rule #2
-		if (label.length >= 4 && label[2] == '-' && label[3] == '-') throw new Error(`double-hyphen at label[3:4]: ${label}`);
+		if (label.length >= 4 && label[2] == '-' && label[3] == '-') throw new DisallowedLabelError(`double-hyphen at position 3`, label);
 		// apply Section 4.1 Rule #3
-		if (label.startsWith('-')) throw new Error(`hyphen at label start: ${label}`);
-		if (label.endsWith('-')) throw new Error(`hyphen at label end: ${label}`);
+		if (label.startsWith('-')) throw new DisallowedLabelError(`leading hyphen`, label);
+		if (label.endsWith('-')) throw new DisallowedLabelError(`trailing hyphen`, label);
 		// apply Section 4.1 Rule #5
-		if (label.length > 0 && is_combining_mark(label.codePointAt(0))) throw new Error(`mark at label start: ${label}`);
+		if (label.length > 0 && is_combining_mark(label.codePointAt(0))) throw new DisallowedLabelError(`leading combining mark`, label);
 		// Section 4.1 Rule #6 (Valid) is satisfied by idna() following EIP-137 (transitional=N, useSTD3AsciiRules=Y)
 		// Section 4.1 Rule #7 (ContextJ) is satisfied by idna() 
 		// Section 4.1 Rule #8 NYI
