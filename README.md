@@ -3,7 +3,7 @@
 
 * Uses latest specification: [UTS-46 v14.0.0](https://unicode.org/reports/tr46/)
 * Handles [ZWNJ](https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.2)/[ZWJ](https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.2) in `ContextJ`
-* Handles (and upgrades) [Emoji ZWJ Sequences](https://unicode.org/emoji/charts/emoji-zwj-sequences.html)
+* Handles [Emoji ZWJ Sequences](https://unicode.org/emoji/charts/emoji-zwj-sequences.html)
 * Handles [Punycode](https://datatracker.ietf.org/doc/html/rfc3492), adapted from [mathiasbynens/punycode.js](https://github.com/mathiasbynens/punycode.js)
 
 [Demo](https://raffy.antistupid.com/eth/ens-resolver.html)
