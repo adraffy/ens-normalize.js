@@ -73,7 +73,7 @@ const TABLE_T = decompress('T');
 // emoji-zwj-sequences.txt
 const ZWNJ_EMOJI = (() => {
 	let r = new TableReader(decompress('E'));
-	let buckets = []; // stored by zwnj position
+	let buckets = []; // stored by post-idna length
 	while (r.more) {
 		let n = r.read();       // group size
 		let w = r.read_byte();  // group width
@@ -81,53 +81,51 @@ const ZWNJ_EMOJI = (() => {
 		let m = [];
 		for (let i = 0; i < n; i++) m.push([]);
 		let b = w;
-		let z = []; // position of zwnj
 		for (let i = 0; i < w; i++) { // signed delta-encoded, transposed
 			if (p & (1 << (i - 1))) {
-				z.push(i);
 				m.forEach(v => v.push(0x200D)); // insert zwnj
-				--b; // discount				
+				--b; // discount
 			} else {
 				let y = 0;
 				for (let v of m) v.push(y += r.read_signed());
 			}
 		}
-		for (let b of z) {
-			let bucket = buckets[b];
-			if (!bucket) buckets[b] = bucket = [];
-			bucket.push(...m);
-		}
+		let bucket = buckets[b];
+		if (!bucket) buckets[b] = bucket = [];
+		bucket.push(...m);
 	}
-	// assumption: zwnj is never the first, ie. bucket[0] = undefined
-	buckets.forEach((v, i) => {
-		if (!v) return;
-		v.sort((a, b) => a[i - 1] - b[i - 1]); // sort by i-th
-	});
+	for (let v of buckets) if (v) v.sort((a, b) => a[0] - b[0]); // store sorted
 	return buckets;
 })();
 
-export const DEBUG = {ZWNJ_EMOJI};
-
-export function is_zwnj_emoji(v, pos) {
-	let {length} = v;
-	for (let b = Math.min(pos, ZWNJ_EMOJI.length); b > 0; b--) {
-		let bucket = ZWNJ_EMOJI[b];
-		if (!bucket) continue;
-		next: for (let emoji of bucket) {
-			//if (pos - b + emoji.length > length) continue; // too long
-			let i = pos - b;
-			for (let c of emoji) {
-				let ci = v[i];				
-				if (ci === 0xFE0F) { // these may have been skipped already
-					if (++i == length) continue next;
-				} else if (c != v[i++]) {
-					continue next;
+// upgrade emoji to fully-qualified w/o FEOF
+// expects list of code-points
+// returns list of code-points
+function upgrade_zwnj_emoji(v) {
+	let ret = [];
+	next_cp: for (let i = 0, n = v.length; i < n; i++) {
+		let cp0 = v[i];
+		next_bucket: for (let b = Math.min(n - i, ZWNJ_EMOJI.length); b >= 1; b--) { // only consider emoji that fit
+			let bucket = ZWNJ_EMOJI[b];
+			if (!bucket) continue;
+			next_emoji: for (let emoji of bucket) { // todo: binary search
+				let c = emoji[0] - cp0;
+				if (c < 0) continue;
+				if (c > 0) continue next_bucket;
+				let j = i + 1;
+				for (let k = 1; k < emoji.length; k++) {
+					let cp = emoji[k];
+					if (cp == 0x200D) continue;
+					if (cp != v[j++]) continue next_emoji;
 				}
+				ret.push(emoji); // apply upgrade
+				i += b - 1;
+				continue next_cp;
 			}
-			return true;
 		}
+		ret.push(cp0);
 	}
-	return false;
+	return ret.flat();
 }
 
 // member are 1-tuples [unsigned(cp)]
@@ -287,7 +285,7 @@ export function idna(s, ignore_disallowed = false) {
 	if (typeof s !== 'string') throw new TypeError('expected string');
 	let v =  [...s].map(x => x.codePointAt(0)); // convert to code-points
 	const empty = [];
-	return String.fromCodePoint(...v.map((cp, i) => {
+	return String.fromCodePoint(...upgrade_zwnj_emoji(v.map((cp, i) => {
 		if (is_disallowed(cp)) {
 			if (ignore_disallowed) return empty;
 			throw new Error(`disallowed: 0x${cp.toString(16).padStart(2, '0')}`);
@@ -319,14 +317,10 @@ export function idna(s, ignore_disallowed = false) {
 			if (i > 0 && lookup_member(TABLE_V, v[i - 1])) { 
 				return cp; // allowed
 			}
-			// custom rule: emoji
-			if (is_zwnj_emoji(v, i)) {
-				return cp; // allowed
-			}
 			return empty; // ignore
 		}
 		return get_mapped(cp) ?? cp;
-	}).flat()).normalize('NFC');
+	}).flat())).normalize('NFC');
 }
 
 // primary api

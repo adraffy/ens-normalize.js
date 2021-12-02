@@ -43,6 +43,8 @@ export default [
 	// ZWNJ Emoji
 	{name: "👨‍👩‍👦.eth"},
 	// Upgraded
-	{name: "👨👩👦.eth", norm: "👨‍👩‍👦.eth"},
-	{name: "🧟♂.eth", norm: "🧟‍♂.eth"},
+	//{name: "👨👩👦.eth", norm: "👨‍👩‍👦.eth"},
+	//{name: "🧟♂.eth", norm: "🧟‍♂.eth"},
+	{name: "👨👩👦.eth"},
+	{name: "🧟♂.eth"},
 ];

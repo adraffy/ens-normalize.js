@@ -14,7 +14,7 @@ let diffs = [];
 let labels = readFileSync(local_file('goofy-labels.txt'), {encoding: 'utf8'}).split('\n');
 for (let label of labels) {
 	try {
-		let norm = ens_normalize(label, true);
+		let norm = ens_normalize(label);
 		if (norm != label) {
 			diffs.push({label, norm});
 		}

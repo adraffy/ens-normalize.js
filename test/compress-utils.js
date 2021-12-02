@@ -17,7 +17,6 @@ export function compare_array(a, b) {
 	return c;
 }
 
-
 export function bit_width(i) {
 	return 32 - Math.clz32(i);
 }

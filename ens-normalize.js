@@ -72,8 +72,8 @@ const TABLE_RD = decode2(bytes_from_base64('4XoCceNWRos6+TjCqaOIE49juZ6VkOq4zOTI
 const TABLE_T = decode2(bytes_from_base64('4DLTwPpbhwHJz8Bw+WklFE6RWTl2K4gdlnUyRkyEk49jet151TScYkNJZlyt55RlWMHIM3JMlEhc9Sx050ZJKDiixopZyZFIk2ceTNazkySlSHFFi0xOdFEyUGdVrHjnpsOZFnNyXKzJOq1jpzoozGVYoscWcqSSg4osdOkGdk60VPZRsRVNc2lLGySTm9xlKlrOSUnZpDMUljKkeISWlKY3ngs/fB5k8dWPLHloCM9BVdJy1k7qsiO7ORUmZ8BraRzomcklUTVI5hj+YyZgTKTKcopsWQSJF5wSmS86oS4DGGbTPIZi1wGjaBwPFlLGpcxllm2DIeL358BadgyDgeqk2tfrqkhqyBaguA5AsyHGVKeAxdY1iVpyajGa8ueYFSJZOdDmSSsNBy85mS0pUTlSoPAbcUZD53YHgthxDEMQ4DTzwG8vgeBPAbEeAxWXhpmVLJlDkPAZKuB72TgWuAxmvMZN7ObX5SUqnmMiU5z15JKaM+NizSmqRHX2iVMeAyAujFVnKZyWdy8BodCZOLnVJiZEVwG3STIrG1qtCJW1ElTE7K1IZeA4OkrgOARMh4DEJEpDkFWUTKSg0zJ5daVwOLTmYnUsWU5RW9TMlGcnSEyTwHtrlO7p7bN5c7n4PmDn8monzM4Rk5H3MuWL8D0DpxBT49JwGKPh87zeTMqDccWlN/CehOcRU5Rl4DhZ+A/c57JwuwT7bR/9fL5qce2DgBwG4Q=='));
 // emoji-zwj-sequences.txt
 const ZWNJ_EMOJI = (() => {
-	let r = new TableReader(decode2(bytes_from_base64('snxX/3tOoAAAIADztI/941xACA/941xI/941xQH/vaeW0lAoaQNJQ/97TqDCISUoWISy/+9p1AAAAIAADitQ87SP/eNcIggh/7xriR/7xrhEJBxH0f+9p1BhFFJShFcVqmKSr/3u2xAAAAAAAAAD/3tG7ABABABABAD/3u2yAAAAAAAAAD/3tG8JKeRKdSKdKSdJa/TlX/vadQAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAA4rUAAAAAAAAAB/72jdgAEAAgAEAAgAJwAAAAgAAAAgAAAAgAAAAgAAABOAEAEAEAEAPO0gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/3tPLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAf+9p1AAAAAAAAAAAAAAAIAAgAIAAgAIAAgAIAAgAIADitQAAAAAAAAAH/vaN2SSnSSnSSnSSnSSnSSnSSnSSnSSnSSnSSnSSnSSnSSnSSlSU8iU6kU6Uk6S4DNJ6v/e06gAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABxWoAAAAAAAAAAAAAAAAAAAAAAf+9o3YAAABAAAAIAAABAAAAIAAACcAAAAAAAAIAAAAAAAAIAAAAAAAAIAAAAAAAAIAAAAAAAATgAAAIAAABAAAAIAAABAAAAedpAAH/vI/yAH/vI/xAA/95H+QA/95H+IAH/vI/yAH/vI/xAA/95H+QA/95H+IAH/vI/yAH/vI/xAAAAH/vI/yAAAH/vI/xAAAAH/vI/yAAAH/vI/xAAAAH/vI/yAAAH/vI/xAAAAH/vI/yAAAH/vI/xAAAAH/vI/yAAAH/vI/xAH/vI/yAA/95H+IA/95H+QAH/vI/xAH/vI/yAA/95H+IA/95H+QAH/vI/xAH/vI/yAA/97TqAAAAAAAAAAAAAAAAAAAAAAAAAQABACABAAQABACABAAQABACABAAQABACABAAQABACAHFagAAAAAAAAAAAAAAAAAAAAAB/72jdkkpUlOklPIlOklOpFOklOlJOklOkpUkp0kpUlKkp0kp0kp5Ep5Ep0kp0kp1Ip1Ip0kp0kp0pJ0pJ0kp0kp0lKkmkp0kp5Ep0kp1Ip0kp0pJ0kp0lKklwGfs/+9p1AIEAAAAAAAAAIAAAAAAAAAcVqAAAAAAAAAA/95Nl4/941igQsCCHAeIEEEJBQMUCFAQ4HXBwOQBBCgSBDgMqGRBBDhNgGPCQIITBBDgN0CGUBBCoSBBBBBBBBBDittACAHFagAP/eS6yP/eM88FlGNaZZwetXLhu2/97TpiK/945ka4DZP/eMfZtWJZdkVHATScDji4DVquCyjJOF7rGl/7ybz1wGyf+8Y+zasSy7IqOAmk4HHFwGrVcFlGScL3WNL/3k3nrgNk/94x9m1Yll2RUcBNJwOOLgNWq4LKMk4XusaX/vJ95kcjkcjkcjkcjkcjkcjkcjkcjkcjkcjkcjkcjkcjkcjkcjkcjkcjkcjkcjkcjkcjkcjkcjkcjkcjk/95PriSlSUqS4jm+Kyj/3lGR/+8Z0L/3jWn8Tu3/vHe+/95Ltf/vHfI4H/5uC3/gMy4Lw5F/73TIgAOK1EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcVqAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/95Nl4AAAA/941igAAAAQAAAAsAAAACAAAACAAAAHAeIAAAAJAAAAAgAAABIAAAAKAAAABigAAAAQAAAAoAAAACAAAAHA64AAAAOByAAAAAIAAAAIAAAAUAAAACQAAAAIAAAAcBlQAAAAyIAAAAIAAAAIAAAAcJsAAAAAx4AAAASAAAABAAAABAAAACgAAAAIAAAAcBugAAAAQAAAAygAAAAIAAAAIAAAAVAAAACQAAAAIAAAAIAAAAIAAAAIAAAAIAAAAIAAAAIAAAAcVtIAAAAAAAAAQAAAAAAAAA4rUAAAAAAAAAB/72jdkkpwAAAAAAAAAgAAAAAAAAAgAAAAAAAAAgAAAAAAAAAgAAAAAAAABOAAAAAAAAAEAAAAAAAAAEAAAAAAAAAEAAAAAAAAAEAAAAAAAAAJwAAAAAAAAAgAAAAAAAAAgAAAAAAAAAgAAAAAAAAAgAAAAAAAABOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwggghOEEEEJwAgAgAgAgBOAEAEAEAEAJwAgAgAgAgB/72fiAAP/eNa6uA2T/3jH2bViWXZFRwE0nA44uA1argsoyThe6xpf+8m89cBsn/vGPs2rEsuyKjgJpOBxxcBq1XBZRknC91jS/95N564DZP/eMfZtWJZdkVHATScDji4DVquCyjJOF7rGl/7ybz1wGyf+8Y+zasSy7IqOAmk4HHFwGrVcFlGScL3WNL/3k3nrgNk/94x9m1Yll2RUcBNJwOOLgNWq4LKMk4XusaX/vJvPXAbJ/7xj7NqxLLsio4CaTgccXAatVwWUZJwvdY0v/eTeeuA2T/3jH2bViWXZFRwE0nA44uA1argsoyThe6xpf+8m89cBsn/vGPs2rEsuyKjgJpOBxxcBq1XBZRknC91jS/95N564DZP/eMfZtWJZdkVHATScDji4DVquCyjJOF7rGl/7ybz1wGyf+8Y+zasSy7IqOAmk4HHFwGrVcFlGScL3WNL/3k3nrgNk/94x9m1Yll2RUcBNJwOOLgNWq4LKMk4XusaX/vJvPXAbJ/7xj7NqxLLsio4CaTgccXAatVwWUZJwvdY0v/eTeeuA2T/3jH2bViWXZFRwE0nA44uA1argsoyThe6xpf+8m89cBsn/vGPs2rEsuyKjgJpOBxxcBq1XBZRknC91jS/95N564DZP/eMfZtWJZdkVHATScDji4DVquCyjJOF7rGl/7yfeZHI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5HI5P/eT64kpUlKkpUlKkpUlKkpUlKkpUlKkpUlKkpUlKkg==')));
-	let buckets = []; // stored by post-idna length
+	let r = new TableReader(decode2(decode2(bytes_from_base64('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'))));
+	let buckets = []; // stored by zwnj position
 	while (r.more) {
 		let n = r.read();       // group size
 		let w = r.read_byte();  // group width
@@ -81,51 +81,53 @@ const ZWNJ_EMOJI = (() => {
 		let m = [];
 		for (let i = 0; i < n; i++) m.push([]);
 		let b = w;
+		let z = []; // position of zwnj
 		for (let i = 0; i < w; i++) { // signed delta-encoded, transposed
 			if (p & (1 << (i - 1))) {
+				z.push(i);
 				m.forEach(v => v.push(0x200D)); // insert zwnj
-				--b; // discount
+				--b; // discount				
 			} else {
 				let y = 0;
 				for (let v of m) v.push(y += r.read_signed());
 			}
 		}
-		let bucket = buckets[b];
-		if (!bucket) buckets[b] = bucket = [];
-		bucket.push(...m);
+		for (let b of z) {
+			let bucket = buckets[b];
+			if (!bucket) buckets[b] = bucket = [];
+			bucket.push(...m);
+		}
 	}
-	for (let v of buckets) if (v) v.sort((a, b) => a[0] - b[0]); // store sorted
+	// assumption: zwnj is never the first, ie. bucket[0] = undefined
+	buckets.forEach((v, i) => {
+		if (!v) return;
+		v.sort((a, b) => a[i - 1] - b[i - 1]); // sort by i-th
+	});
 	return buckets;
 })();
 
-// upgrade emoji to fully-qualified w/o FEOF
-// expects list of code-points
-// returns list of code-points
-function upgrade_zwnj_emoji(v) {
-	let ret = [];
-	next_cp: for (let i = 0, n = v.length; i < n; i++) {
-		let cp0 = v[i];
-		next_bucket: for (let b = Math.min(n - i, ZWNJ_EMOJI.length); b >= 1; b--) { // only consider emoji that fit
-			let bucket = ZWNJ_EMOJI[b];
-			if (!bucket) continue;
-			next_emoji: for (let emoji of bucket) { // todo: binary search
-				let c = emoji[0] - cp0;
-				if (c < 0) continue;
-				if (c > 0) continue next_bucket;
-				let j = i + 1;
-				for (let k = 1; k < emoji.length; k++) {
-					let cp = emoji[k];
-					if (cp == 0x200D) continue;
-					if (cp != v[j++]) continue next_emoji;
+export const DEBUG = {ZWNJ_EMOJI};
+
+export function is_zwnj_emoji(v, pos) {
+	let {length} = v;
+	for (let b = Math.min(pos, ZWNJ_EMOJI.length); b > 0; b--) {
+		let bucket = ZWNJ_EMOJI[b];
+		if (!bucket) continue;
+		next: for (let emoji of bucket) {
+			//if (pos - b + emoji.length > length) continue; // too long
+			let i = pos - b;
+			for (let c of emoji) {
+				let ci = v[i];				
+				if (ci === 0xFE0F) { // these may have been skipped already
+					if (++i == length) continue next;
+				} else if (c != v[i++]) {
+					continue next;
 				}
-				ret.push(emoji); // apply upgrade
-				i += b - 1;
-				continue next_cp;
 			}
+			return true;
 		}
-		ret.push(cp0);
 	}
-	return ret.flat();
+	return false;
 }
 
 // member are 1-tuples [unsigned(cp)]
@@ -285,7 +287,7 @@ export function idna(s, ignore_disallowed = false) {
 	if (typeof s !== 'string') throw new TypeError('expected string');
 	let v =  [...s].map(x => x.codePointAt(0)); // convert to code-points
 	const empty = [];
-	return String.fromCodePoint(...upgrade_zwnj_emoji(v.map((cp, i) => {
+	return String.fromCodePoint(...v.map((cp, i) => {
 		if (is_disallowed(cp)) {
 			if (ignore_disallowed) return empty;
 			throw new Error(`disallowed: 0x${cp.toString(16).padStart(2, '0')}`);
@@ -317,10 +319,14 @@ export function idna(s, ignore_disallowed = false) {
 			if (i > 0 && lookup_member(TABLE_V, v[i - 1])) { 
 				return cp; // allowed
 			}
+			// custom rule: emoji
+			if (is_zwnj_emoji(v, i)) {
+				return cp; // allowed
+			}
 			return empty; // ignore
 		}
 		return get_mapped(cp) ?? cp;
-	}).flat())).normalize('NFC');
+	}).flat()).normalize('NFC');
 }
 
 // primary api
