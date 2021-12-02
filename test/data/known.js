@@ -29,14 +29,14 @@ export default [
 	// ContextJ
 	// https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.1
 	// ZWJ No Context
-	{name: "a\u200C.eth", norm: "a.eth"},
+	{name: "a\u200C.eth", error: true},
 	// ZWJ Rule#1
 	{name: "a\u094D\u200C.eth"},
 	// ZWJ Rule#2
 	{name: "a\uA872\u200C\u0622.eth"},
 	// https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.2
 	// ZWNJ No Context
-	{name: "a\u200D.eth", norm: "a.eth"},
+	{name: "a\u200D.eth", error: true},
 	// ZWNJ Rule#1
 	{name: "a\u094D\u200D.eth"},
 

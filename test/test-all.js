@@ -1,9 +1,15 @@
 // latest compression
-import './test-compress.js';
+await import('./test-compress.js');
+console.log('PASS: compress.js');
 
 // minified version
-import './test-dist.js';
+await import('./test-dist.js');
+console.log('PASS: dist.js');
 
 // rendered version
-import './test-known.js';
-import './test-readme.js';
+await import('./test-known.js');
+console.log('PASS: known.js');
+
+// readme
+await import('./test-readme.js');
+console.log('PASS: readme.js');

@@ -80,13 +80,11 @@ const ZWNJ_EMOJI = (() => {
 		let p = r.read();       // bit positions of zwnj
 		let m = [];
 		for (let i = 0; i < n; i++) m.push([]);
-		let b = w;
 		let z = []; // position of zwnj
 		for (let i = 0; i < w; i++) { // signed delta-encoded, transposed
 			if (p & (1 << (i - 1))) {
 				z.push(i);
 				m.forEach(v => v.push(0x200D)); // insert zwnj
-				--b; // discount				
 			} else {
 				let y = 0;
 				for (let v of m) v.push(y += r.read_signed());
@@ -98,28 +96,30 @@ const ZWNJ_EMOJI = (() => {
 			bucket.push(...m);
 		}
 	}
-	// assumption: zwnj is never the first, ie. bucket[0] = undefined
+	// assumption: zwnj is never the first character
+	// so buckets[0] = undefined
 	buckets.forEach((v, i) => {
 		if (!v) return;
-		v.sort((a, b) => a[i - 1] - b[i - 1]); // sort by i-th
+		v.sort((a, b) => a[i - 1] - b[i - 1]); // sort by the point before the zwj (not yet used)
 	});
 	return buckets;
 })();
 
-export const DEBUG = {ZWNJ_EMOJI};
+export const DEBUG = {TABLE_I, TABLE_D, TABLE_N, TABLE_W, TABLE_M, TABLE_V, TABLE_LD, TABLE_RD, TABLE_T, ZWNJ_EMOJI};
 
 export function is_zwnj_emoji(v, pos) {
 	let {length} = v;
 	for (let b = Math.min(pos, ZWNJ_EMOJI.length); b > 0; b--) {
 		let bucket = ZWNJ_EMOJI[b];
 		if (!bucket) continue;
-		next: for (let emoji of bucket) {
-			//if (pos - b + emoji.length > length) continue; // too long
+		next: for (let emoji of bucket) { // TODO: early abort 
 			let i = pos - b;
 			for (let c of emoji) {
-				let ci = v[i];				
-				if (ci === 0xFE0F) { // these may have been skipped already
-					if (++i == length) continue next;
+				if (i >= length) continue next;
+				let ci = v[i];			
+				if (ci === 0xFE0F) { // this could be is_ignored()
+					i++; // skip
+					continue;
 				} else if (c != v[i++]) {
 					continue next;
 				}
@@ -280,6 +280,14 @@ export function get_mapped(cp) {
 	}
 }
 
+class DisallowedError extends Error {
+	constructor(message, cp, i) {
+		super(message);
+		this.codePoint = cp;
+		this.offset = i;
+	}
+}
+
 // expects a string 
 // throws TypeError if not a string
 // returns a string normalized according to IDNA 2008, according to UTS-46 (v14.0.0), +CONTEXTJ, +ZWJ EMOJI
@@ -290,7 +298,7 @@ export function idna(s, ignore_disallowed = false) {
 	return String.fromCodePoint(...v.map((cp, i) => {
 		if (is_disallowed(cp)) {
 			if (ignore_disallowed) return empty;
-			throw new Error(`disallowed: 0x${cp.toString(16).padStart(2, '0')}`);
+			throw new DisallowedError(`disallowed: 0x${cp.toString(16).padStart(2, '0')}`, cp, i);
 		}
 		if (is_ignored(cp)) return empty;
 		if (cp === 0x200C) { // https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.1
@@ -312,7 +320,8 @@ export function idna(s, ignore_disallowed = false) {
 					}
 				}
 			}
-			return empty; // ignore
+			if (ignore_disallowed) return empty;
+			throw new DisallowedError(`ZWJ outside of context`, cp, i);
 		} else if (cp === 0x200D) { // https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.2
 			// rule 1: V + cp
 			// V = Combining_Class "Virama"
@@ -323,7 +332,8 @@ export function idna(s, ignore_disallowed = false) {
 			if (is_zwnj_emoji(v, i)) {
 				return cp; // allowed
 			}
-			return empty; // ignore
+			if (ignore_disallowed) return empty; 
+			throw new DisallowedError(`ZWNJ outside of context`, cp, i);
 		}
 		return get_mapped(cp) ?? cp;
 	}).flat()).normalize('NFC');

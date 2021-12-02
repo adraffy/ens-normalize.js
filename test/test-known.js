@@ -1,8 +1,7 @@
-// test some known names
-
 import {ens_normalize} from '../ens-normalize.js';
 import KNOWN from './data/known.js';
 
+// test known names match expected outcome
 KNOWN.forEach(({name, norm, error}, i) => {
 	if (!norm) norm = name;
 	console.log(`Test ${i+1}`);
@@ -20,5 +19,3 @@ KNOWN.forEach(({name, norm, error}, i) => {
 		}
 	}
 });
-
-console.log('OK');
