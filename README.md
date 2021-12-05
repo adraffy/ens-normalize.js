@@ -24,18 +24,19 @@ let normalized = ens_normalize('🚴‍♂️.eth'); // throws if error
 
 // optional argument: ignore_disallowed (default: false)
 // when truthy, disallowed characters are ignored 
-ens_normalize('_')       // throws: disallowed
-ens_normalize('_', true) // === ''
+console.log(ens_normalize('_', true)); // === ''
+console.log(ens_normalize('_'));       // throws: disallowed
 
 // errors:
 // - not a string
 // - contains disallowed character if !ignore_disallowed
 // - puny decode failure
+// - puny decode mismatch
 // - label has double-hyphen at [3:4]
 // - label starts/ends with hyphen
 // - label starts with combining mark
 
-// note: does not enforce .eth TLD 3-byte minimum
+// note: does not enforce .eth TLD 3-character minimum
 ```
 
 ---
