@@ -1,6 +1,6 @@
 {
   "name": "@adraffy/ens-normalize",
-  "version": "1.0.10",
+  "version": "1.1.0",
   "description": "Compact ES6 Ethereum Name Service (ENS) Name Normalizer",
   "keywords": [
     "ENS",
@@ -9,7 +9,6 @@
     "IDNA"
   ],
   "type": "module",
-  "main": "ens-normalize.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/adraffy/ens-normalize.js.git"
@@ -25,8 +24,11 @@
     "url": "http://raffy.antistupid.com"
   },
   "scripts": {
-    "test": "node test/test-all.js",
-    "render": "node test/render.js",
-    "dist": "uglifyjs ens-normalize.js --mangle --toplevel --output dist/ens-normalize.min.js"
+    "test-source": "node test/test-lib.js build/ens-normalize.js",
+    "test-build": "node test/test-lib.js dist/ens-normalize.js",
+    "test-dist": "node test/test-lib.js dist/ens-normalize.min.js",
+    "build-source": "node build/build-source.js",
+    "build-dist": "uglifyjs dist/ens-normalize.js --mangle --toplevel --output dist/ens-normalize.min.js",
+    "build": "(npm run test-source) && (npm run build-source) && (npm run test-build) && (npm run build-dist) && (npm run test-dist)"
   }
 }

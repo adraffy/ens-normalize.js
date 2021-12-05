@@ -1,10 +1,6 @@
 {
   "type": "module",
   "dependencies": {
-    "@adraffy/eth-tools": "^0.0.7",
-    "@adraffy/keccak": "^1.1.2",
-    "@ethersproject/strings": "^5.5.0",
-    "eth-ens-namehash": "^2.0.8",
-    "node-fetch": "^3.1.0"
+    "eth-ens-namehash": "^2.0.8"
   }
 }

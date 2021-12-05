@@ -1,4 +1,4 @@
-import {ens_normalize} from '../ens-normalize.js';
+import {ens_normalize} from '../index.js';
 
 ens_normalize('🚴‍♂️.eth');
 

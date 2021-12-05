@@ -37,6 +37,6 @@ ens_normalize('_', true) // === ''
 
 ## Build Notes
 
-* Clone the repo to access `test/`.  These files are not included in the npm version.
-* The actual source is in `test/ens-normalize.src.js`.  Use `npm run render` after modification to build a new `ens-normalize.js`.  
-* Use `npm run dist` to build the minified version.
+* Clone to access `build/`.  These files are not included in the npm version.
+* The actual source is in `build/ens-normalize.js`.
+* Use `npm run dist` to build the injected and minified versions.
