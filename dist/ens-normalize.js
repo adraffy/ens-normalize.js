@@ -38,7 +38,6 @@ class TableReader {
 	get more() {
 		return this.pos < this.table.length;
 	}
-	read_byte() { return this.table[this.pos++]; }
 	read() { // unsigned pseudo-huffman (note: assumes tables are valid)
 		let {table, pos} = this;
 		let x0 = table[pos];
@@ -121,10 +120,10 @@ function decode_emoji(table) {
 	let r = new TableReader(table);
 	let buckets = []; // stored by zwnj position
 	while (r.more) {
-		let n = r.read();      // group size
-		let w = r.read_byte(); // group width
-		let p = r.read();      // bit positions of zwnj
-		let m = [];            // columns of cp
+		let n = r.read(); // group size
+		let w = r.read(); // group width
+		let p = r.read(); // bit positions of zwnj
+		let m = [];       // columns of cp
 		for (let i = 0; i < n; i++) m.push([]);
 		let z = []; // position of zwnj
 		for (let i = 0; i < w; i++) { // signed delta-encoded, transposed
