@@ -30,45 +30,6 @@ function decode2(v) {
 	return ret;
 }
 // injected from ./decoder.js
-class TableReader {
-	constructor(table) {
-		this.table = table;
-		this.pos = 0;
-	}
-	get more() {
-		return this.pos < this.table.length;
-	}
-	read() { // unsigned pseudo-huffman (note: assumes tables are valid)
-		let {table, pos} = this;
-		let x0 = table[pos];
-		if (x0 < 0x80) {
-			this.pos += 1;
-			return x0;
-		}
-		if (x0 < 0xFF) {
-			this.pos += 2;
-			return 0x80 + (((x0 & 0x7F) << 8) | table[pos+1]);
-		}
-		this.pos += 4;
-		return 0x7F80 + ((table[pos+1] << 16) | (table[pos+2] << 8) | table[pos+3]);
-	}
-	read_signed() { // eg. [0,1,2,3...] => [0,-1,1,-2,...]
-		let i = this.read();		
-		return (i & 1) ? (~i >> 1) : (i >> 1);
-	}
-}
-// injected from ./decoder.js
-function lookup_member(table, cp) {
-	let x = 0;
-	let r = new TableReader(table); 
-	while (r.more) {
-		x += r.read();
-		if (x == cp) return true;
-		if (x > cp) break;
-	}
-	return false;
-}
-// injected from ./decoder.js
 function lookup_member_span(table, cp) {
 	let x = 0;
 	let r = new TableReader(table); 
@@ -143,6 +104,35 @@ function decode_emoji(table) {
 	}
 	return buckets;
 }
+// injected from ./decoder.js
+class TableReader {
+	constructor(table) {
+		this.table = table;
+		this.pos = 0;
+	}
+	get more() {
+		return this.pos < this.table.length;
+	}
+	read() { // unsigned pseudo-huffman (note: assumes tables are valid)
+		let {table, pos} = this;
+		let x0 = table[pos];
+		if (x0 < 0x80) {
+			this.pos += 1;
+			return x0;
+		}
+		if (x0 < 0xFF) {
+			this.pos += 2;
+			return 0x80 + (((x0 & 0x7F) << 8) | table[pos+1]);
+		}
+		this.pos += 4;
+		return 0x7F80 + ((table[pos+1] << 16) | (table[pos+2] << 8) | table[pos+3]);
+	}
+	read_signed() { // eg. [0,1,2,3...] => [0,-1,1,-2,...]
+		let i = this.read();		
+		return (i & 1) ? (~i >> 1) : (i >> 1);
+	}
+}
+// manually import this
 // injected from ./utils.js
 function escape_unicode(s) {
 	return s.replace(/[^\.\-a-z0-9]/igu, x => `{${x.codePointAt(0).toString(16).toUpperCase()}}`);
@@ -254,6 +244,9 @@ function puny_decode(input) {
 // expects code-point (number)
 // is_* returns boolean
 // get_* returns list of code-points or undefined
+function is_virama(cp) {
+	return !!lookup_mapped(TABLE_V, 0, cp);
+}
 export function is_disallowed(cp) {
 	return lookup_member_span(TABLE_D, cp);
 }
@@ -305,7 +298,7 @@ export function idna(s, ignore_disallowed = false) {
 		if (cp === 0x200C) { // https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.1
 			// rule 1: V + cp
 			// V = Combining_Class "Virama"
-			if (i > 0 && lookup_member(TABLE_V, v[i - 1])) { 
+			if (i > 0 && is_virama(v[i - 1])) { 
 				return cp; // allowed
 			}
 			// rule 2: {L,D} + T* + cp + T* + {R,D}
@@ -326,7 +319,7 @@ export function idna(s, ignore_disallowed = false) {
 		} else if (cp === 0x200D) { // https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.2
 			// rule 1: V + cp
 			// V = Combining_Class "Virama"
-			if (i > 0 && lookup_member(TABLE_V, v[i - 1])) { 
+			if (i > 0 && is_virama(v[i - 1])) { 
 				return cp; // allowed
 			}
 			// custom rule: emoji

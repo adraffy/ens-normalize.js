@@ -1,4 +1,5 @@
-import {TableReader, lookup_member, lookup_member_span, lookup_mapped, lookup_linear, decode_emoji} from './decoder.js';
+import {lookup_member_span, lookup_mapped, lookup_linear, decode_emoji} from './decoder.js';
+import {TableReader} from './decoder.js'; // manually import this
 import {escape_unicode} from './utils.js';
 
 //IGNORE
@@ -124,6 +125,9 @@ function puny_decode(input) {
 // expects code-point (number)
 // is_* returns boolean
 // get_* returns list of code-points or undefined
+function is_virama(cp) {
+	return !!lookup_mapped(TABLE_V, 0, cp);
+}
 export function is_disallowed(cp) {
 	return lookup_member_span(TABLE_D, cp);
 }
@@ -175,7 +179,7 @@ export function idna(s, ignore_disallowed = false) {
 		if (cp === 0x200C) { // https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.1
 			// rule 1: V + cp
 			// V = Combining_Class "Virama"
-			if (i > 0 && lookup_member(TABLE_V, v[i - 1])) { 
+			if (i > 0 && is_virama(v[i - 1])) { 
 				return cp; // allowed
 			}
 			// rule 2: {L,D} + T* + cp + T* + {R,D}
@@ -196,7 +200,7 @@ export function idna(s, ignore_disallowed = false) {
 		} else if (cp === 0x200D) { // https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.2
 			// rule 1: V + cp
 			// V = Combining_Class "Virama"
-			if (i > 0 && lookup_member(TABLE_V, v[i - 1])) { 
+			if (i > 0 && is_virama(v[i - 1])) { 
 				return cp; // allowed
 			}
 			// custom rule: emoji

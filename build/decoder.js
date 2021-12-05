@@ -51,18 +51,6 @@ export function decode2(v) {
 	return ret;
 }
 
-// 1-tuples [unsigned(cp)]
-export function lookup_member(table, cp) {
-	let x = 0;
-	let r = new TableReader(table); 
-	while (r.more) {
-		x += r.read();
-		if (x == cp) return true;
-		if (x > cp) break;
-	}
-	return false;
-}
-
 // 2-tuples [unsigned(cp), n] 
 export function lookup_member_span(table, cp) {
 	let x = 0;
