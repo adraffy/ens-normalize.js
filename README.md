@@ -6,7 +6,12 @@
 * Handles [Emoji ZWJ Sequences](https://unicode.org/emoji/charts/emoji-zwj-sequences.html)
 * Handles [Punycode](https://datatracker.ietf.org/doc/html/rfc3492), adapted from [mathiasbynens/punycode.js](https://github.com/mathiasbynens/punycode.js)
 
-[Demo](https://raffy.antistupid.com/eth/ens-resolver.html)
+---
+
+* [Live Demo](https://raffy.antistupid.com/eth/ens-resolver.html)
+* Generated Report: [Unicode IDNATestV2](https://adraffy.github.io/ens-normalize.js/test/output/idna.html)
+* Generated  Report: [eth-ens-namehash/normalize](https://adraffy.github.io/ens-normalize.js/test/output/ens.html)
+
 
 ```Javascript
 import {ens_normalize} from '@adraffy/ens-normalize';
