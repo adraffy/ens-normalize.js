@@ -1,37 +1,50 @@
-import {lookup_member_span, lookup_mapped, lookup_linear, decode_emoji} from './decoder.js';
-import {TableReader} from './decoder.js'; // manually import this
+import {Decoder} from './decoder.js'; // manually import
 import {escape_unicode} from './utils.js';
 
 //IGNORE
 // kludge to make the file runnable as-is
 import {readFileSync} from 'fs';
-let compressed = JSON.parse(readFileSync(new URL('tables-json/compressed.json', import.meta.url).pathname));
-function decompress(key) {
-	return compressed[key];
-}
-function decompress_mapped() {
-	let mapped = [];
-	for (let i = 1; i <= compressed.max_width; i++) {
-		mapped.push(decompress(`M${i}`));
-	}
-	return mapped;
+function compressed() {
+	return readFileSync(new URL('tables-json/compressed.bin', import.meta.url).pathname);
 }
 //~IGNORE
 
 // compressed lookup tables
-const TABLE_I = decompress('I');
-const TABLE_D = decompress('D');
-const TABLE_L1 = decompress('L1');
-const TABLE_L2 = decompress('L2');
-const TABLE_M = decompress_mapped(); 
-const TABLE_CM = decompress('CM');
-const TABLE_V = decompress('V');
-const TABLE_LD = decompress('LD');
-const TABLE_RD = decompress('RD');
-const TABLE_T = decompress('T');
-const ZWNJ_EMOJI = decode_emoji(decompress('E'));
+let r = new Decoder(compressed());
+const COMBINING_MARKS = r.read_member_table();
+const IGNORED = r.read_member_table();
+const DISALLOWED = r.read_member_table();
+const JOIN_T = r.read_member_table();
+const JOIN_LD = r.read_member_table();
+const JOIN_RD = r.read_member_table();
+const VIRAMA = r.read_member_table();
+const ZWNJ_EMOJI = r.read_emoji();
+const MAPPED = r.read_mapped_table();
+r = null;
 
-export const DEBUG = {TABLE_I, TABLE_D, TABLE_L1, TABLE_L2, TABLE_M, TABLE_CM, TABLE_V, TABLE_LD, TABLE_RD, TABLE_T, ZWNJ_EMOJI};
+function lookup_member(table, cp) {
+	for (let [x, n] of table) {
+		let d = cp - x;
+		if (d < 0) break;
+		if (d < n) return true;
+	}
+	return false;
+}
+
+function lookup_mapped(cp) {
+	for (let [x, y, n, dx, dy] of MAPPED) {
+		let d = cp - x;
+		if (d < 0) break;
+		if (n > 0) {
+			if (d < n && d % dx == 0) {
+				let r = d / dx;
+				return y.map(x => x + r * dy);
+			} 
+		} else if (d == 0) {
+			return y;
+		}
+	}
+}
 
 export function is_zwnj_emoji(v, pos) {
 	let {length} = v;
@@ -121,31 +134,24 @@ function puny_decode(input) {
 	return String.fromCodePoint(...output);
 }
 
+function is_virama(cp) {
+	return lookup_member(VIRAMA, cp);
+}
+function is_combining_mark(cp) {
+    return lookup_member(COMBINING_MARKS, cp);
+}
+
 // warning: these should not be used directly
 // expects code-point (number)
 // is_* returns boolean
-// get_* returns list of code-points or undefined
-function is_virama(cp) {
-	return !!lookup_mapped(TABLE_V, 0, cp);
-}
 export function is_disallowed(cp) {
-	return lookup_member_span(TABLE_D, cp);
+	return lookup_member(DISALLOWED, cp);
 }
 export function is_ignored(cp) {
-	return lookup_member_span(TABLE_I, cp);
-}
-export function is_combining_mark(cp) {
-    return lookup_member_span(TABLE_CM, cp);
+	return lookup_member(IGNORED, cp);
 }
 export function get_mapped(cp) {
-	let mapped = lookup_linear(TABLE_L1, 1, cp);
-	if (mapped) return mapped;
-	mapped = lookup_linear(TABLE_L2, 2, cp);
-	if (mapped) return mapped;
-	for (let i = 0; i < TABLE_M.length; i++) {	
-		mapped = lookup_mapped(TABLE_M[i], i + 1, cp);
-		if (mapped) return mapped;
-	}
+	return lookup_mapped(cp)?.slice();
 }
 
 export class DisallowedLabelError extends Error {
@@ -186,11 +192,11 @@ export function idna(s, ignore_disallowed = false) {
 			// L,D,T,R = Joining_Type
 			if (i > 0 && i < v.length - 1) { // there is room on either side
 				let head = i - 1;
-				while (head > 0 && lookup_member_span(TABLE_T, v[head])) head--; // T*
-				if (lookup_member_span(TABLE_LD, v[head])) { // L or D
+				while (head > 0 && lookup_member(JOIN_T, v[head])) head--; // T*
+				if (lookup_member(JOIN_LD, v[head])) { // L or D
 					let tail = i + 1;
-					while (tail < v.length - 1 && lookup_member_span(TABLE_T, v[tail])) tail++; // T*
-					if (lookup_member_span(TABLE_RD, v[tail])) { // R or D
+					while (tail < v.length - 1 && lookup_member(JOIN_T, v[tail])) tail++; // T*
+					if (lookup_member(JOIN_RD, v[tail])) { // R or D
 						return cp; // allowed
 					}
 				}
@@ -210,7 +216,7 @@ export function idna(s, ignore_disallowed = false) {
 			if (ignore_disallowed) return empty; 
 			throw new DisallowedCharacterError(cp, i, `ZWNJ outside of context`);
 		}
-		return get_mapped(cp) ?? cp;
+		return lookup_mapped(cp) ?? cp;
 	}).flat()).normalize('NFC');
 }
 

@@ -16,7 +16,7 @@ export function compare_array(a, b) {
 // keep compressing a list of bytes until the compressor fails
 export function recursive_encoder(fn, best, max = Infinity) {
 	let n = 0;
-	for (; n < max; n++) {
+	for (; best.length > 0 && n < max; n++) {
 		let v = fn(best);
 		if (v.length > best.length) break;
 		best = v;

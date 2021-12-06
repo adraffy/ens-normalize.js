@@ -1,6 +1,6 @@
 import {mkdirSync, readFileSync, writeFileSync} from 'fs';
 import {join} from 'path';
-import {} from './utils.js'; // Array.prototype injections
+import {Encoder} from './encoder.js';
 
 let base_dir = new URL('.', import.meta.url).pathname;
 let parsed_dir = join(base_dir, 'unicode-json');
@@ -48,29 +48,6 @@ mapped = mapped.map(([src, dst]) => {
 assert_sorted_unique(mapped.map(x => x[0]));
 mapped = mapped.group_by(x => x[1].length, []); // group by length 
 for (let i = 0; i < mapped.length; i++) mapped[i] = mapped[i] ?? []; // fix empty items
-// split off linear sequences, like alphabets
-function linear(step) {
-	let m = mapped[1]
-		// flatten [a, [b]] to [a, b] and keep a reference to the original
-		.map(x => [x[0], x[1][0], x])
-		// find adjacent by step size
-		.split((a, b) => b[0] == a[0] + step && b[1] == a[1] + step)
-		// find reasonably large groups
-		.filter(v => v.length >= 3)
-		// collapse into a span
-		.map(v => {
-			let [[a, b]] = v;
-			v.forEach(x => x[2][0] = -1); // mark for removal
-			return [a, step * v.length, b];
-		});
-	// remove marked
-	mapped[1] = mapped[1].filter(x => x[0] >= 0);
-	return m;
-}
-let mapped_linear1 = linear(1);
-let mapped_linear2 = linear(2);
-console.log(`Linear +1: ${mapped_linear1.length}`);
-console.log(`Linear +2: ${mapped_linear2.length}`);
 for (let i = 1; i < mapped.length; i++) {
 	console.log(`Mapped ${i}: ${mapped[i].length}`);
 }
@@ -90,10 +67,6 @@ console.log(`Combining Marks: ${combining_marks.length}`);
 let {["9"]: class_virama} = read_parsed('DerivedCombiningClass');
 class_virama = cps_from_ranges(class_virama);
 console.log(`Virama: ${class_virama.length}`);
-// assumption: sparse
-if (compress_member_as_set(class_virama).length > compress_member_as_span(class_virama).length) { 
-	throw new Error('Assumption wrong: V');
-}
 
 // ContextJ rules for 200C
 // eg. RegExpMatch((Joining_Type:{L,D})(Joining_Type:T)*\u200C(Joining_Type:T)*(Joining_Type:{R,D}))
@@ -106,11 +79,20 @@ console.log(`Join T: ${join_T.length}`);
 console.log(`Join L: ${join_L.length}`);
 console.log(`Join R: ${join_R.length}`);
 console.log(`Join D: ${join_D.length}`);
-// assumption: merged compress better than separate
+
+// merged
 let join_LD = assert_sorted_unique([join_L, join_D].flat().sort((a, b) => a - b));
 let join_RD = assert_sorted_unique([join_R, join_D].flat().sort((a, b) => a - b));
-if (compress_member_as_span(join_L).length + compress_member_as_span(join_R).length + compress_member_as_span(join_D).length 
-  < compress_member_as_span(join_LD).length + compress_member_as_span(join_RD).length) {
+
+// assumption: merged compress better than separate
+let enc_LR = new Encoder();
+enc_LR.write_member(join_LD);
+enc_LR.write_member(join_RD);
+let enc_LRD = new Encoder();
+enc_LRD.write_member(join_L);
+enc_LRD.write_member(join_R);
+enc_LRD.write_member(join_D);
+if (enc_LR.buf.length > enc_LRD.buf.length) {
 	throw new Error('Assumption wrong: LRD');
 }
 
@@ -152,40 +134,35 @@ write_table('join-T', join_T);
 write_table('join-LD', join_LD);
 write_table('join-RD', join_RD);
 write_table('virama', class_virama);
+write_table('emoji', emoji);
 for (let i = 1; i < mapped.length; i++) {
 	write_table(`mapped-${i}`, mapped[i]);
 }
-write_table('linear-1', mapped_linear1); // note: these are compact
-write_table('linear-2', mapped_linear2); 
-write_table('emoji', emoji);
 
 // ************************************************************
 // compress tables 
 
-let tables = {
-	CM: compress_member_as_span(combining_marks),
-	I: compress_member_as_span(ignored),
-	D: compress_member_as_span(disallowed),
-	T: compress_member_as_span(join_T),
-	LD: compress_member_as_span(join_LD),
-	RD: compress_member_as_span(join_RD),
-	V: compress_member_as_set(class_virama),
-	L1: compress_linear_mapped(mapped_linear1),
-	L2: compress_linear_mapped(mapped_linear2),
-	E: compress_zwnj_emoji(emoji)
-};
-for (let i = 1; i < mapped.length; i++) {
-	tables[`M${i}`] = compress_mapped(mapped[i]);
-}
+let enc = new Encoder();
+enc.write_member(combining_marks);
+enc.write_member(ignored);
+enc.write_member(disallowed);
+enc.write_member(join_T);
+enc.write_member(join_LD);
+enc.write_member(join_RD);
+enc.write_member(class_virama);
+enc.write_emoji(emoji);
+enc.write_mapped([
+	[1, 1, 1], // alphabets: ABC
+	[1, 2, 2], // paired-alphabets: AaBbCc
+	[1, 1, 0], // \ 
+	[2, 1, 0], //  adjacent that map to a constant
+	[3, 1, 0]  // /   eg. AAAA..BBBB => CCCC
+], mapped);
 
-write_table('compressed', {
-	date: new Date(),                // date of build
-	version: read_parsed('version'), // version/date of download
-	max_width: mapped.length - 1,    // width of largest mapped table
-	...tables
-});
+writeFileSync(join(tables_dir, 'huffman.bin'), Buffer.from(enc.buf));
+writeFileSync(join(tables_dir, 'compressed.bin'), Buffer.from(enc.compressed()));
 
-//writeFileSync(join(tables_dir, 'compressed.bin'), Buffer.concat(Object.values(tables).map(Buffer.from)));
+console.log(`Bytes: ${enc.buf.length}`);
 
 // ************************************************************
 // helper functions
@@ -220,88 +197,4 @@ function assert_sorted_unique(v) {
 		}
 	}
 	return v;
-}
-
-// ************************************************************
-// compression techniques
-// note: these are inverted by decoder.js
-
-// encode an unsigned integer as [1-4] bytes
-function huffman(i) {
-	if (i < 0x80) return [i];
-	i -= 0x80;
-	if (i < 0x7F00) return [0x80 | (i >> 8), i & 0xFF];
-	i -= 0x7F00;
-	return [255, i >> 16, (i >> 8) & 0xFF, i & 0xFF];
-}
-
-// encode a signed integer as [1-4] bytes
-function signed_huffman(i) {
-	return huffman(i < 0 ? -1 - 2 * i : 2 * i);
-}
-
-// input: [cp, ...]
-function compress_member_as_set(v) {
-	return v.delta().map(huffman).flat();
-}
-function compress_member_as_span(v) {
-	let a = 0;
-	return v.split((a, b) => b - a == 1).map(v => {		
-		let delta = v[0] - a; // always positive
-		a = v[0] + v.length;
-		return [...huffman(delta), ...huffman(v.length)];
-	}).flat();
-}
-
-// input: [[cp0, n, cp1], ...]
-function compress_linear_mapped(m) {
-	let a = 0;
-	let b = 0;
-	return m.map(([cp0, n, cp1]) => {
-		let delta0 = cp0 - a; // always positive
-		a = cp0 + n;
-		let delta1 = cp1 - b; // signed
-		b = cp1;
-		return [...huffman(delta0), ...huffman(n), ...signed_huffman(delta1)];
-	}).flat();
-}
-
-// input: [[cp0, [cp...]], ...]
-function compress_mapped(m) {
-	let a = 0;
-	let b = 0;
-	return m.map(([cp0, cps]) => {
-		let delta0 = cp0 - a; // always positive
-		a = cp0;
-		return [...huffman(delta0), ...cps.map(cp => {
-			let delta = cp - b;
-			b = cp;
-			return signed_huffman(delta);
-		}).flat()];
-	}).flat();
-}
-
-// input: [[cp, ...], ...]
-function compress_zwnj_emoji(emoji) {
-	// remove FE0F
-	emoji = emoji.map(v => v.filter(x => x != FE0F));
-	// group by (width and position of ZWNJ)
-	emoji = Object.values(emoji.group_by(v => [v.length, ...v.indices_of(ZWNJ)].join(':')));
-	// transpose and remove ZWNJ
-	return emoji.map(m => {
-		// m = [A Z B Z C] => Tr(m) = [A A]
-		//     [A Z B Z D]    w/o     [B B]
-		// pos = [1,  3]      ZWNJ    [C D]
-		let [first] = m;
-		let zwnj = first.indices_of(ZWNJ);
-		let rest = first.map((_, i) => i).filter(i => zwnj.indexOf(i) < 0);
-		return [
-			huffman(m.length),     // number of elements 
-			huffman(first.length), // true width of emoji
-			// bit positions of ZWNJ
-			huffman(zwnj.reduce((a, i) => a | (1 << (i - 1)), 0)),
-			// take every column of emoji sequences that aren't ZWNJ and delta compress
-			...rest.map(i => m.map(v => v[i]).delta().map(signed_huffman).flat())
-		].flat();
-	}).flat();
 }
