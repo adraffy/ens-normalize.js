@@ -55,12 +55,12 @@ class Decoder {
 	}
 	read_counts(n) {
 		let v = Array(n);
-		for (let i = 0; i < n; i++) v[i] = this.read() + 1;
+		for (let i = 0; i < n; i++) v[i] = 1 + this.read();
 		return v;
 	}
 	read_ascending(n) {
 		let v = Array(n);
-		for (let i = 0, x = 0; i < n; i++, x++) v[i] = x += this.read();
+		for (let i = 0, x = -1; i < n; i++) v[i] = x += 1 + this.read();
 		return v;
 	}
 	read_deltas(n) {
@@ -122,14 +122,14 @@ class Decoder {
 	}
 	read_emoji() {
 		let buckets = [];
-		for (let N = this.read(); N > 0; N--) {
+		for (let k = this.read(); k > 0; k--) {
 			let n = 1 + this.read(); // group size
 			let w = 1 + this.read(); // group width w/o ZWNJ
 			let p = 1 + this.read(); // bit positions of zwnj
 			let z = []; // position of zwnj
-			let m = []; // columns of cp
+			let m = []; // emoji vectors
 			for (let i = 0; i < n; i++) m.push([]);
-			for (let i = 0; i < w; i++) { // signed delta-encoded, transposed
+			for (let i = 0; i < w; i++) {
 				if (p & (1 << (i - 1))) {
 					w++; // increase width
 					z.push(i); // remember position
