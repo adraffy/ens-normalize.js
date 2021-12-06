@@ -57,9 +57,7 @@ export class Decoder {
 	}
 	read_ascending(n) {
 		let v = Array(n);
-		for (let i = 0, x = 0; i < n; i++, x++) {
-			v[i] = x += this.read();
-		}
+		for (let i = 0, x = 0; i < n; i++, x++) v[i] = x += this.read();
 		return v;
 	}
 	read_deltas(n) {
@@ -78,6 +76,9 @@ export class Decoder {
 			...vX.map((x, i) => [x, vN[i]])
 		].sort((a, b) => a[0] - b[0]);
 	}
+	// returns array of 
+	// [x, ys] => single replacement rule
+	// [x, ys, n, dx, dx] => linear map
 	read_mapped_table() {
 		let ret = [];
 		for (let n = this.read(), i = 0; i < n; i++) {
