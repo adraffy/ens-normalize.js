@@ -1,5 +1,6 @@
 export class Decoder {
 	constructor(bytes) {
+		/*
 		let buf = 0;
 		let n = 0;
 		let ret = [];
@@ -22,7 +23,8 @@ export class Decoder {
 			}
 		}
 		this.buf = ret;
-		//this.buf = bytes;
+		*/
+		this.buf = bytes;
 		this.pos = 0;
 	}
 	/*
@@ -65,6 +67,13 @@ export class Decoder {
 		for (let i = 0, x = 0; i < n; i++) v[i] = x += this.read_signed();
 		return v;
 	}
+	read_member_tables(n) {
+		let ret = [];
+		for (let i =0; i < n; i++) {
+			ret.push(this.read_member_table());
+		}
+		return ret;
+	}
 	// returns [[x, n], ...] s.t. [x,3] == [x,x+1,x+2]
  	read_member_table() {
 		let v1 = this.read_ascending(this.read());
@@ -81,11 +90,15 @@ export class Decoder {
 	// [x, ys, n, dx, dx] => linear map
 	read_mapped_table() {
 		let ret = [];
-		for (let n = this.read(), i = 0; i < n; i++) {
-			ret.push(this.read_linear_table());
+		while (true) {
+			let w = this.read();
+			if (w == 0) break;
+			ret.push(this.read_linear_table(w));
 		}
-		for (let n = 1 + this.read(), i = 1; i < n; i++) {
-			ret.push(this.read_mapped_replacement(i));
+		while (true) {
+			let w = this.read() - 1;
+			if (w < 0) break;
+			ret.push(this.read_mapped_replacement(w));
 		}
 		return ret.flat().sort((a, b) => a[0] - b[0]);
 	}
@@ -102,13 +115,12 @@ export class Decoder {
 		return m;
 	}
 	read_mapped_replacement(w) { 
-		let n = this.read();
+		let n = 1 + this.read();
 		let vX = this.read_ascending(n);
 		let mY = this.read_ys_transposed(n, w);
 		return vX.map((x, i) => [x, mY.map(v => v[i])])
 	}
-	read_linear_table() {
-		let w = 1 + this.read();
+	read_linear_table(w) {
 		let dx = 1 + this.read();
 		let dy = this.read();
 		let n = 1 + this.read();

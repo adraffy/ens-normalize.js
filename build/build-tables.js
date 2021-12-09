@@ -1,6 +1,7 @@
 import {mkdirSync, readFileSync, writeFileSync} from 'fs';
 import {join} from 'path';
 import {Encoder} from './encoder.js';
+import {cps_from_range, cps_from_sequence} from './utils.js';
 
 let base_dir = new URL('.', import.meta.url).pathname;
 let parsed_dir = join(base_dir, 'unicode-json');
@@ -46,11 +47,8 @@ mapped = mapped.map(([src, dst]) => {
 	return cps_from_range(src).map(x => [x, cps]);
 }).flat().sort((a, b) => a[0] - b[0]);
 assert_sorted_unique(mapped.map(x => x[0]));
-mapped = mapped.group_by(x => x[1].length, []); // group by length 
-for (let i = 0; i < mapped.length; i++) mapped[i] = mapped[i] ?? []; // fix empty items
-for (let i = 1; i < mapped.length; i++) {
-	console.log(`Mapped ${i}: ${mapped[i].length}`);
-}
+mapped = group_by(mapped, x => x[1].length, []); // group by length 
+mapped.forEach((v, i) => console.log(`Mapped ${i}: ${v.length}`));
 
 // https://unicode.org/reports/tr46/#Validity_Criteria
 // Section 4.1 Rule #5
@@ -64,9 +62,21 @@ console.log(`Combining Marks: ${combining_marks.length}`);
 // ContextJ rules 
 // 200C: https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.1 => Virama & Joining_Type
 // 200D: https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.2 => Virama 
+
+/*
 let {["9"]: class_virama} = read_parsed('DerivedCombiningClass');
 class_virama = cps_from_ranges(class_virama);
 console.log(`Virama: ${class_virama.length}`);
+*/
+let combining_class = read_parsed('DerivedCombiningClass');
+delete combining_class['0']; // we dont need class 0
+combining_class = Object.entries(combining_class).map(([k, v]) => [parseInt(k), v.map(cps_from_range).flat()]).sort((a, b) => a[0] - b[0]);
+combining_class.forEach(([c, v]) => console.log(`Combining ${c}: ${v.length}`));
+let virama_index = combining_class.findIndex(x => x[0] == '9'); // virama
+if (virama_index < 0) {
+	throw new Error(`Assumption wrong: no virama`);
+}
+combining_class = combining_class.map(x => x[1]); // drop the class, we just need order
 
 // ContextJ rules for 200C
 // eg. RegExpMatch((Joining_Type:{L,D})(Joining_Type:T)*\u200C(Joining_Type:T)*(Joining_Type:{R,D}))
@@ -79,24 +89,13 @@ console.log(`Join T: ${join_T.length}`);
 console.log(`Join L: ${join_L.length}`);
 console.log(`Join R: ${join_R.length}`);
 console.log(`Join D: ${join_D.length}`);
-
-// merged
-let join_LD = assert_sorted_unique([join_L, join_D].flat().sort((a, b) => a - b));
-let join_RD = assert_sorted_unique([join_R, join_D].flat().sort((a, b) => a - b));
-
-// assumption: merged compress better than separate
-let enc_LR = new Encoder();
-enc_LR.write_member(join_LD);
-enc_LR.write_member(join_RD);
-let enc_LRD = new Encoder();
-enc_LRD.write_member(join_L);
-enc_LRD.write_member(join_R);
-enc_LRD.write_member(join_D);
-if (enc_LR.buf.length > enc_LRD.buf.length) {
+let join_LD = assert_sorted_unique(int_sort([join_L, join_D].flat()));
+let join_RD = assert_sorted_unique(int_sort([join_R, join_D].flat()));
+if (!is_smaller([join_LD, join_RD], [join_L, join_R, join_D])) {
 	throw new Error('Assumption wrong: LRD');
 }
 
-// Emoji rules for 200D
+// emoji rules for 200D
 let emoji = read_parsed('emoji-zwj-sequences');
 emoji = emoji.map(x => cps_from_sequence(x.codes));
 console.log(`Emoji: ${emoji.length}`);
@@ -116,6 +115,39 @@ if (emoji_cps.some(x => disallowed.indexOf(x) >= 0 || ignored.indexOf(x) >= 0)) 
 	throw new Error('Assumption wrong: Emoji contains invalid code-point');
 }
 
+// normalization decomposition
+let decomp = read_parsed('Decomposition_Mapping');
+decomp = decomp.map(([x, ys]) => [parseInt(x, 16), cps_from_sequence(ys)]);
+// for some stupid reason, hangul not included
+// also the mapping is characters, not hex
+//decomp.push(...read_parsed('Jamo').map(([x, y]) => [parseInt(x, 16), [...y].map(x => x.codePointAt(0))]));
+decomp.sort((a, b) => a[0] - b[0]);
+decomp = group_by(decomp, x => x[1].length, []);
+decomp.forEach((v, i) => console.log(`Decomp ${i}: ${v.length}`));
+
+// normalization composition
+let comp_exclusions = read_parsed('CompositionExclusions');
+comp_exclusions = comp_exclusions.map(x => parseInt(x, 16));
+comp_exclusions.sort((a, b) => a - b);
+console.log(`Composition Exclusions: ${comp_exclusions.length}`);
+
+// bidi
+let bidi = read_parsed('DerivedBidiClass');
+for (let [k, v] of Object.entries(bidi)) {
+	bidi[k] = cps_from_ranges(v);
+}
+let bidi_R_AL_parts = [bidi.R, bidi.AL];
+let bidi_ECTOB_parts =[bidi.ES, bidi.CS, bidi.ET, bidi.ON, bidi.BN];
+
+let bidi_R_AL = assert_sorted_unique(int_sort(bidi_R_AL_parts.flat()));
+let bidi_ECTOB = assert_sorted_unique(int_sort(bidi_ECTOB_parts.flat()));
+if (!is_smaller([bidi_R_AL], bidi_R_AL_parts)) {
+	throw new Error(`Assumption wrong: R_AL`);
+}
+if (!is_smaller([bidi_ECTOB], bidi_ECTOB_parts)) {
+	throw new Error(`Assumption wrong: ECTOB`);
+}
+
 // ************************************************************
 // export tables for inspection
 
@@ -133,32 +165,57 @@ write_table('disallowed', disallowed); // warning: this is huge
 write_table('join-T', join_T);
 write_table('join-LD', join_LD);
 write_table('join-RD', join_RD);
-write_table('virama', class_virama);
+write_table('comp-exclusions', comp_exclusions);
+//write_table('virama', class_virama);
+write_table('combining-class', combining_class);
 write_table('emoji', emoji);
-for (let i = 1; i < mapped.length; i++) {
-	write_table(`mapped-${i}`, mapped[i]);
-}
+mapped.forEach((v, i) => write_table(`mapped-${i}`, v));
+decomp.forEach((v, i) => write_table(`decomp-${i}`, v));
+write_table('bidi', bidi);
 
 // ************************************************************
 // compress tables 
 
-let enc = new Encoder();
-enc.write_member(combining_marks);
-enc.write_member(ignored);
-enc.write_member(disallowed);
-enc.write_member(join_T);
-enc.write_member(join_LD);
-enc.write_member(join_RD);
-enc.write_member(class_virama);
-enc.write_emoji(emoji);
-enc.write_mapped([
-	[1, 1, 1], // alphabets: ABC
-	[1, 2, 2], // paired-alphabets: AaBbCc
-	[1, 1, 0], // \ 
-	[2, 1, 0], //  adjacent that map to a constant
-	[3, 1, 0]  // /   eg. AAAA..BBBB => CCCC
-], mapped);
+function compress(enable_nfc, enable_bidi) {
+	let enc = new Encoder();
+	enc.write_member(combining_marks);
+	enc.write_member(ignored);
+	enc.write_member(disallowed);
+	enc.write_member(join_T);
+	enc.write_member(join_LD);
+	enc.write_member(join_RD);
+	enc.write_mapped([
+		[1, 1, 1], // alphabets: ABC
+		[1, 2, 2], // paired-alphabets: AaBbCc
+		[1, 1, 0], // \ 
+		[2, 1, 0], //  adjacent that map to a constant
+		[3, 1, 0]  // /   eg. AAAA..BBBB => CCCC
+	], mapped);
+	enc.write_emoji(emoji);
+	if (enable_nfc) {
+		enc.positive(combining_class.length);
+		for (let c of combining_class) enc.write_member(c);
+		enc.unsigned(virama_index);
+		enc.write_mapped([	
+			[1, 1, 1],
+			[1, 1, 0]
+		], decomp);
+		enc.write_member(comp_exclusions);
+	} else {
+		enc.write_member(class_virama);
+	}
+	if (enable_bidi) {
+		enc.write_member(bidi_R_AL);
+		enc.write_member(bidi.L);
+		enc.write_member(bidi.AN);
+		enc.write_member(bidi.EN);
+		enc.write_member(bidi_ECTOB);
+		enc.write_member(bidi.NSM);
+	}
+	return enc;
+}
 
+let enc = compress(true, true);
 writeFileSync(join(tables_dir, 'huffman.bin'), Buffer.from(enc.buf));
 writeFileSync(join(tables_dir, 'compressed.bin'), Buffer.from(enc.compressed()));
 
@@ -167,26 +224,13 @@ console.log(`Bytes: ${enc.buf.length}`);
 // ************************************************************
 // helper functions
 
+function int_sort(v) {
+	return v.sort((a, b) => a - b);
+}
+
 // parse and flatten list of hex ranges
 function cps_from_ranges(v) {
-	return assert_sorted_unique(v.map(cps_from_range).flat().sort((a, b) => a - b));
-}
-// parse range of hex cps
-// "AAAA"       => [0xAAAA]
-// "AAAA..BBBB" => [0xAAAA, ..., 0xBBBB]
-function cps_from_range(s) {
-	let [lo, hi] = s.split('..');
-	lo = parseInt(lo, 16);
-	if (!Number.isSafeInteger(lo) || lo < 0) throw new TypeError('expected code point');
-	if (!hi) return [lo];
-	hi = parseInt(hi, 16);
-	if (!Number.isSafeInteger(hi) || hi < lo) throw new TypeError('expected upper code point');
-	return Array(hi - lo + 1).fill().map((_, i) => lo + i);
-}
-// parse sequence of hex cps
-// "AAAA BBBB CCCC" => [0xAAAA, 0xBBBB, 0xCCCC]
-function cps_from_sequence(s) {
-	return s.split(/\s+/).map(x => parseInt(x, 16));
+	return assert_sorted_unique(int_sort(v.map(cps_from_range).flat()));
 }
 
 // shit the bed if not sorted and unique
@@ -197,4 +241,22 @@ function assert_sorted_unique(v) {
 		}
 	}
 	return v;
+}
+
+function group_by(v, fn, gs = {}) {
+	for (let x of v) {
+		let key = fn(x);
+		let g = gs[key];
+		if (!g) g = gs[key] = [];
+		g.push(x);
+	}
+	return gs;
+}
+
+function is_smaller(smaller, bigger) {
+	let s = new Encoder();
+	for (let x of smaller) s.write_member(x);
+	let b = new Encoder();
+	for (let x of bigger) b.write_member(x);
+	return s.buf.length < b.buf.length;
 }

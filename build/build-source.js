@@ -36,7 +36,7 @@ while (true) {
 code = code.replace('compressed()', `Uint8Array.from(atob('${btoa(String.fromCharCode(...compressed))}'), c => c.charCodeAt(0))`);
 
 // inject unicode version
-let unicode_version = JSON.parse(readFileSync(join(base_dir, 'unicode-json/version.json')));
+let unicode_version = JSON.parse(readFileSync(join(base_dir, 'unicode-raw/version.json')));
 code = `export const UNICODE = '${unicode_version.major}.${unicode_version.minor}.${unicode_version.patch}';\n${code}`;
 
 // inject package version

@@ -1,4 +1,5 @@
-import {ens_normalize} from '../index.js';
+//import {ens_normalize} from '../index.js';
+import {ens_normalize} from '../build/ens-normalize.js';
 import {mkdirSync, writeFileSync, readFileSync} from 'fs';
 import {join} from 'path';
 import {escape_unicode} from '../build/utils.js';

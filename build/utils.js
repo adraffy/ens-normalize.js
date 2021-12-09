@@ -28,6 +28,25 @@ export function escape_unicode(s) {
 	return s.replace(/[^\.\-a-z0-9]/igu, x => `{${x.codePointAt(0).toString(16).toUpperCase()}}`);
 }
 
+// parse range of hex cps
+// "AAAA"       => [0xAAAA]
+// "AAAA..BBBB" => [0xAAAA, ..., 0xBBBB]
+export function cps_from_range(s) {
+	let [lo, hi] = s.split('..');
+	lo = parseInt(lo, 16);
+	if (!Number.isSafeInteger(lo) || lo < 0) throw new TypeError('expected code point');
+	if (!hi) return [lo];
+	hi = parseInt(hi, 16);
+	if (!Number.isSafeInteger(hi) || hi < lo) throw new TypeError('expected upper code point');
+	return Array(hi - lo + 1).fill().map((_, i) => lo + i);
+}
+
+// parse sequence of hex cps
+// "AAAA BBBB CCCC" => [0xAAAA, 0xBBBB, 0xCCCC]
+export function cps_from_sequence(s) {
+	return s.split(/\s+/).map(x => parseInt(x, 16));
+}
+
 // ************************************************************
 // array helpers
 

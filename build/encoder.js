@@ -20,11 +20,26 @@ export function split_linear(mapped, dx, dy) {
 			group.push(row);
 		}
 		if (group.length > 1) {
-			group.forEach(v => v[0] = -1); // mark useable
+			group.forEach(v => v[0] = -1); // mark used
 			linear.push([x0, group.length, ys0]);
 		}
 	}
-	return {linear, nonlinear: mapped.filter(v => v[0] >= 0)};
+	return {linear, nonlinear: mapped.filter(v => v[0] >= 0)}; // remove marked
+}
+
+export function huffman(i) {
+	if (i < 0x80) {
+		if (i < 0) throw new RangeError(`huffman underflow`);
+		return [i];
+	}
+	i -= 0x80;
+	if (i < 0x7F00) {
+		return [0x80 | (i >> 8), i & 0xFF];
+	}
+	i -= 0x7F00;
+	let upper = i >> 16;
+	if (upper > 255) throw new RangeError('huffman overflow');
+	return [255, upper, (i >> 8) & 0xFF, i & 0xFF];
 }
 
 export class Encoder {
@@ -32,24 +47,29 @@ export class Encoder {
 		this.buf = [];
 	}
 	compressed() {
-		return encode2(this.buf);
-	}
-	unsigned(i) {
-		if (i < 0x80) {
-			if (i < 0) throw new RangeError(`huffman underflow`);
-			this.buf.push(i);
-			return;
+		let bits = [];
+		let prev = 0;
+		let {buf} = this;
+		let {length} = buf;
+		for (let i = 0; i < length; i++) {
+			let next = buf[i];
+			let delta = next - prev;
+			if (delta == 0) {
+				let end = i + 1;
+				while (delta == 0 && end < length && buf[end] == next) end++;
+				bits.push(0, ...huffman(end - i - 1));
+				i = end - 1;
+				continue;
+			} else if (delta > 0) {
+				bits.push(1, 0, ...huffman(delta - 1));
+			} else {
+				bits.push(1, 1, ...huffman(~delta));
+			}
 		}
-		i -= 0x80;
-		if (i < 0x7F00) {
-			this.buf.push(0x80 | (i >> 8), i & 0xFF);
-			return;
-		}
-		i -= 0x7F00;
-		let upper = i >> 16;
-		if (upper > 255) throw new RangeError('huffman overflow');
-		this.buf.push(255, upper, (i >> 8) & 0xFF, i & 0xFF);
+		while (bits.length & 7) bits.push(1);
+		return bytes_from_bits(bits);
 	}
+	unsigned(i) { this.buf.push(...huffman(i)); }
 	signed(i) { this.unsigned(i < 0 ? -1 - 2 * i : 2 * i); }
 	positive(i) { this.unsigned(i - 1); }
 	counts(v) { for (let x of v) this.positive(x); }
@@ -77,7 +97,7 @@ export class Encoder {
 		this.ascending(gN.map(g => g[0]));
 		this.counts(gN.map(g => g.length));
 	}
-	write_ys(w, m) {
+	write_transposed_ys(w, m) {
 		this.deltas(m.map(v => v[0]));
 		for (let j = 1; j < w; j++) {
 			for (let i = 0; i < m.length; i++) {
@@ -88,27 +108,32 @@ export class Encoder {
 	}
 	write_mapped(linear_specs, mapped) {
 		mapped = mapped.slice(); // mutated
-		this.unsigned(linear_specs.length);
 		for (let [w, dx, dy] of linear_specs) {
+			if (w >= mapped.length) throw new Error(`linear spec out of bounds: ${w}`);
 			let {linear, nonlinear} = split_linear(mapped[w], dx, dy);
+			/*
+			console.log(`Linear ${w}: ${dx} ${dy} = ${linear.length}`)
+			if (linear.length === 0) continue;
+			*/
 			if (linear.length === 0) throw new Error(`empty linear spec: ${w} ${dx} ${dy}`);
 			mapped[w] = nonlinear; // remove them
-			this.positive(w);
+			this.unsigned(w);
 			this.positive(dx);
 			this.unsigned(dy);
 			this.positive(linear.length);
 			this.ascending(linear.map(v => v[0])); 
 			this.counts(linear.map(v => v[1]));
-			this.write_ys(w, linear.map(v => v[2]));
+			this.write_transposed_ys(w, linear.map(v => v[2]));
 		}
-		while (mapped.length > 1 && mapped[mapped.length - 1].length == 0) mapped.pop();
-		this.positive(mapped.length); 
-		for (let w = 1; w < mapped.length; w++) {
-			let m = mapped[w];
-			this.unsigned(m.length);
+		this.unsigned(0); // eol
+		mapped.forEach((m, w) => {
+			if (m.length == 0) return;
+			this.unsigned(1 + w);
+			this.positive(m.length);
 			this.ascending(m.map(v => v[0]));
-			this.write_ys(w, m.map(v => v[1]));
-		}
+			this.write_transposed_ys(w, m.map(v => v[1]));
+		});
+		this.unsigned(0); // eol
 	}
 	write_emoji(emoji) {
 		const ZWNJ = 0x200D;

@@ -1,9 +1,10 @@
 import fetch from 'node-fetch';
-import {writeFile, copyFile, mkdir} from 'fs/promises';
+import {writeFile, mkdir, access} from 'fs/promises';
 import {join} from 'path';
 import {createReadStream} from 'fs';
 import {createInterface} from 'readline/promises';
 
+// https://www.unicode.org/versions/latest/
 const major = 14;
 const minor = 0;
 const patch = 0;
@@ -25,10 +26,21 @@ let urls = [
 	url_for_spec('ucd/extracted/DerivedGeneralCategory.txt'),
 	url_for_spec('ucd/extracted/DerivedCombiningClass.txt'),
 	url_for_spec('ucd/extracted/DerivedJoiningType.txt'),
-	
+	url_for_spec('ucd/extracted/DerivedBidiClass.txt'),
+	url_for_spec('ucd/extracted/DerivedDecompositionType.txt'),
+
+
+	// note: this file lacks column names
+	// https://www.unicode.org/Public/5.1.0/ucd/UCD.html#UnicodeData.txt
+	url_for_spec('ucd/UnicodeData.txt'),
+	url_for_spec('ucd/Jamo.txt'),
+	url_for_spec('ucd/DerivedNormalizationProps.txt'),
+	url_for_spec('ucd/NormalizationTest.txt'),
+	url_for_spec('ucd/CompositionExclusions.txt'),
+
 	url_for_emoji('emoji-sequences.txt'),
-	url_for_emoji('emoji-test.txt'),
 	url_for_emoji('emoji-zwj-sequences.txt'),
+	url_for_emoji('emoji-test.txt'),
 ];
 
 let base_dir = new URL('.', import.meta.url).pathname;
@@ -49,35 +61,39 @@ async function main() {
 		}
 		case 'download': return download(argv);
 		case 'parse': return parse(argv);
+		case 'run': {
+			await download(argv);
+			await parse(argv);
+			return;
+		}
 		default: throw new Error(`unknown mode: ${mode}`);
 	}
 }
 
 async function download(argv) {
+	const skip = argv.includes('--skip');
 	await mkdir(downloaded_dir, {recursive: true});
 	console.log(`Directory: ${downloaded_dir}`);	
 	// write a version file
 	await writeFile(join(downloaded_dir, 'version.json'), JSON.stringify({major, minor, patch, date: new Date()}));
 	// download the unicode shit
 	await Promise.all(urls.map(async url => {
+		let name = url.split('/').pop();
+		let file = join(downloaded_dir, name);
+		if (skip && !(await access(file).catch(() => true))) {
+			console.log(`Skipped: ${name}`);
+			return;
+		}
 		try {
-			let name = url.split('/').pop();
-			let file = join(downloaded_dir, name);
 			let res = await fetch(url);
 			if (res.status != 200) throw new Error(`HTTP error ${res.status}`);
 			let buf = await res.arrayBuffer();
 			await writeFile(file, Buffer.from(buf));
 			console.log(`Downloaded: ${url} => ${file}`);
 		} catch (err) {
-			console.log(`Download "${url}" failed: ${err.message}`);
+			console.log(`Download "${name}" failed: ${err.message}`);
 		}
 	}));
-}
-
-function get_bucket(obj, key) {
-	let bucket = obj[key];
-	if (!bucket) bucket = obj[key] = [];
-	return bucket;
 }
 
 async function parse_semicolon_file(path, impl) {
@@ -85,15 +101,23 @@ async function parse_semicolon_file(path, impl) {
 		root: {},
 		...impl,
 		get_bucket(key) {
-			return get_bucket(root, key);
+			if (!key) throw new Error(`empty bucket key`);
+			let bucket = root[key];
+			if (!bucket) bucket = root[key] = [];
+			return bucket;
 		} 
 	};
 	let {root, row, comment} = scope;
 	let rl = createInterface({input: createReadStream(path)});
-	for await (let line0 of rl) {
-		let [data, rest] = line0.split('#', 2).map(s => s?.trim());
-		if (data) {
-			row?.call(scope, data.split(';').map(s => s.trim()));
+	for await (let line of rl) {
+		let rest;
+		let pos = line.indexOf('#');
+		if (pos >= 0) {
+			rest = line.slice(pos + 1).trim();
+			line = line.slice(0, pos).trim();
+		}
+		if (line) {
+			row?.call(scope, line.split(';').map(s => s.trim()), rest);
 		} else if (rest) {
 			comment?.call(scope, rest);
 		}
@@ -102,14 +126,16 @@ async function parse_semicolon_file(path, impl) {
 }
 
 
-async function write_simple_file(name, impl) {
+async function write_simple_file(impl) {
+	let {input, output} = impl;
+	if (!output) output = input;
 	try {
-		let root = await parse_semicolon_file(join(downloaded_dir, `${name}.txt`), impl);
-		await writeFile(join(parsed_dir, `${name}.json`), JSON.stringify(root));
-		console.log(`Wrote: ${name}`);
+		let root = await parse_semicolon_file(join(downloaded_dir, `${input}.txt`), impl);
+		await writeFile(join(parsed_dir, `${output}.json`), JSON.stringify(root));
+		console.log(`Wrote: ${output}`);
 	} catch (cause) {
 		console.error(cause);
-		throw new Error(`error during ${name}`, {cause});
+		throw new Error(`error during ${input}`, {cause});
 	}
 }
 
@@ -121,7 +147,8 @@ async function parse(argv) {
 	await mkdir(parsed_dir, {recursive: true});
 	console.log(`Directory: ${parsed_dir}`);
 	
-	await write_simple_file('IdnaMappingTable', {
+	await write_simple_file({
+		input: 'IdnaMappingTable',
 		row([src, type, dst]) {
 			if (!src) throw new Error('wtf src');
 			let bucket = this.get_bucket(type);
@@ -134,44 +161,102 @@ async function parse(argv) {
 		}
 	});
 
-	await write_simple_file('DerivedCombiningClass', {
+	await write_simple_file({
+		input: 'DerivedCombiningClass',
 		row([src, cls]) {
-			if (!cls) throw new Error('wtf class');
 			this.get_bucket(cls).push(src);
 		}
 	});
 
-	await write_simple_file('DerivedGeneralCategory', {
+	await write_simple_file({
+		input: 'DerivedGeneralCategory',
 		row([src, cls]) {
-			if (!cls) throw new Error('wtf class');
 			this.get_bucket(cls).push(src);
 		}
 	});
 
-	await write_simple_file('DerivedJoiningType', {
+	await write_simple_file({
+		input: 'DerivedJoiningType',
 		row([src, cls]) {
-			if (!cls) throw new Error('wtf class');
 			this.get_bucket(cls).push(src);
 		}
 	});
 
-	await write_simple_file('emoji-zwj-sequences', {
+	await write_simple_file({
+		input: 'emoji-zwj-sequences',
 		root: [],
 		row([codes, _, desc]) {
 			this.root.push({codes, desc, emoji: emoji_from_codes(codes)});
 		}
 	});
 
+	await write_simple_file({
+		input: 'DerivedBidiClass', 
+		row([src, cls]) {
+			this.get_bucket(cls).push(src);
+		}
+	});
+
+	await write_simple_file({
+		input: 'DerivedDecompositionType',
+		row([src, cls]) {
+			this.get_bucket(cls).push(src);
+		}
+	});
+
+	await write_simple_file({
+		input: 'DerivedNormalizationProps',
+		row([src, cls, dst]) {
+			if (dst === undefined) {
+				this.get_bucket(cls).push(src);
+			} else {
+				this.get_bucket(cls).push([src, dst]);
+			}
+		}
+	});
+
+	await write_simple_file({
+		input: 'UnicodeData',
+		output: 'Decomposition_Mapping',
+		root: [],
+		row([src, _1, _2, _3, _4, decomp]) {
+			// "" | "<tag>" | "XXXX YYYY" | "<tag>XXXX YYYY"
+			// https://www.unicode.org/Public/5.1.0/ucd/UCD.html#Character_Decomposition_Mappings
+			// "Conversely, the presence of a formatting tag also indicates that the mapping is a compatibility mapping and not a canonical mapping."
+			if (!decomp || decomp.indexOf('>') >= 0) return;
+			this.root.push([src, decomp]);
+		}
+	});
+
+	await write_simple_file({
+		input: 'CompositionExclusions',
+		root: [],
+		row([src]) {
+			this.root.push(src);
+		}
+	});
+
+	/*
+	await write_simple_file({
+		input: 'Jamo',
+		root: [],
+		row([src, dst]) {
+			this.root.push([src, dst]);
+		}
+	});
+	*/
+
 	// tests
 
-	await write_simple_file('emoji-test', {
+	await write_simple_file({
+		input: 'emoji-test', 
 		row([codes, type]) {
-			if (!type) throw new Error('wtf type');
 			this.get_bucket(type).push({codes, emoji: emoji_from_codes(codes)});
 		}
 	});
 
-	await write_simple_file('IdnaTestV2', {
+	await write_simple_file({
+		input: 'IdnaTestV2', 
 		test: 'COMPAT',
 		comment(s) {
 			let match = s.match(/^([A-Z ]*) TESTS$/);
@@ -181,13 +266,27 @@ async function parse(argv) {
 		},
 		row([src, toUnicode, status]) {
 			let {test} = this;
-			if (!test) throw new Error('wtf test');
+			if (!test) throw new Error('expected test');
 			status = status.split(/[\[\],]/).map(x => x.trim()).filter(x => x);
 			this.get_bucket(this.test).push([src, toUnicode, status]);
 		}
 	});
 
-	// make a copy of the version
-	await copyFile(join(downloaded_dir, 'version.json'), join(parsed_dir, 'version.json'));
+	// why is this file so shit?
+	// @Part0 # Test Name
+	await write_simple_file({
+		input: 'NormalizationTest',
+		output: 'NormalizationTest',
+		test: null,
+		row([src, nfc, nfd], comment) {
+			if (src.startsWith('@')) {
+				this.test = comment.trim();
+			} else {
+				let {test} = this;
+				if (!test) throw new Error('expected test');
+				this.get_bucket(test).push([src, nfc, nfd]);
+			}
+		}	
+	});
 
 }
