@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <title>NormalizationTest</title>
 <style>
+#version {
+	padding-left: 1rem;
+	font-size: 16pt;
+	font-weight: normal;
+}
 table {
 	width: 100%;
 	border-collapse: collapse;
@@ -29,17 +34,29 @@ tbody tr:nth-child(odd) {
 #summary tbody td {
 	text-align: right;
 }
+#loading {
+	display: inline-block;
+	margin-top: 1rem;
+	background: #ffc;
+	border-radius: 1rem;
+	padding: 1rem 2rem;
+	font-size: 24pt;
+	border: 1px solid #ccc;
+}
 </style>
 </head>
 <body>
-<h1><a href="../build/unicode-raw/NormalizationTest.txt">NormalizationTest</a></h1>
-<table id="summary">
-<thead>
+<h1><a href="../build/unicode-raw/NormalizationTest.txt">NormalizationTest</a><span id="version"></span></h1>
+<table id="summary"><thead>
 <tr><th rowspan="2">Test</th><th rowspan="2">#</th></th><th colspan="2">adraffy</th><th colspan="2">Browser</th></tr>
 <tr><th>NFD</th><th>NFC</th><th>NFD</th><th>NFC</th></tr>
 </thead><tbody></tbody></table>
+<div id="loading">Computing..</div>
 <script type="module">
-import {nfc as nfc_adraffy, nfd as nfd_adraffy} from '../dist/ens-normalize.min.js';
+import {nfc as nfc_adraffy, nfd as nfd_adraffy, VERSION, UNICODE} from '../dist/ens-normalize.min.js';
+
+document.querySelector('#version').innerHTML = ` v${VERSION} for Unicode ${UNICODE}`;
+
 function js_norm(type) {
 	return cps => [...String.fromCodePoint(...cps).normalize(type)].map(x => x.codePointAt(0));
 }
@@ -123,9 +140,8 @@ async function main() {
 		document.querySelector('#summary tbody').append(tr);
 
 	}
-
+	document.querySelector('#loading').remove();
 }
-
 </script>
 </body>
 </html>

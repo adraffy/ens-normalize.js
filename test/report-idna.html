@@ -37,6 +37,15 @@ td {
 #summary tbody tr:nth-child(odd) { 
 	background: #eee; 
 }
+#loading {
+	display: inline-block;
+	margin-top: 1rem;
+	background: #ffc;
+	border-radius: 1rem;
+	padding: 1rem 2rem;
+	font-size: 24pt;
+	border: 1px solid #ccc;
+}
 </style>
 </head>
 <body>
@@ -53,7 +62,7 @@ td {
 <script type="module">
 import {ens_normalize, VERSION, UNICODE} from '../dist/ens-normalize.min.js';
 
-document.querySelector('#version').innerHTML = ` ens_normalize.js (v${VERSION}) for Unicode ${UNICODE}`;
+document.querySelector('#version').innerHTML = ` v${VERSION} for Unicode ${UNICODE}`;
 
 let COLS = [...document.querySelectorAll('#summary .state')].map(x => x.innerHTML);
 
@@ -149,11 +158,8 @@ async function main() {
 
 		document.querySelector('#summary tbody').append(tr);
 	}
-
 	document.querySelector('#loading').remove();
-
 }
-
 </script>
 </body>
 </html>
