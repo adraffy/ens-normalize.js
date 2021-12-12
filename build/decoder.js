@@ -1,4 +1,4 @@
-export function arithmetic_decoder(bytes) {
+export function arithmetic_decoding(bytes) {
 	let pos = 0;
 	function u16() { return (bytes[pos++] << 8) | bytes[pos++]; }
 	
@@ -10,7 +10,7 @@ export function arithmetic_decoder(bytes) {
 		acc.push(total += u16());
 	}
 
-	// skip the symbols that index into the payload
+	// skip the sized-payload that the last 3 symbols index into
 	let skip = u16();
 	let pos_payload = pos;
 	pos += skip;
@@ -22,7 +22,7 @@ export function arithmetic_decoder(bytes) {
 			// this will read beyond end of buffer
 			// but (undefined|0) => zero pad
 			read_buffer = (read_buffer << 8) | bytes[pos++];
-			read_width += 8;
+			read_width = 8;
 		}
 		return (read_buffer >> --read_width) & 1;
 	}
@@ -33,17 +33,18 @@ export function arithmetic_decoder(bytes) {
 	const QRTR = HALF >> 1;
 	const MASK = FULL - 1;
 
+	// fill register
 	let register = 0;
 	for (let i = 0; i < N; i++) register = (register << 1) | read_bit();
 
 	let symbols = [];
 	let low = 0;
-	let range = FULL;
+	let range = FULL; // treat like a float
 	while (true) {
 		let value = Math.floor((((register - low + 1) * total) - 1) / range);
 		let start = 0;
 		let end = symbol_count;
-		while (end - start > 1) {
+		while (end - start > 1) { // binary search
 			let mid = (start + end) >>> 1;
 			if (value < acc[mid]) {
 				end = mid;
@@ -51,7 +52,7 @@ export function arithmetic_decoder(bytes) {
 				start = mid;
 			}
 		}
-		if (start == 0) break;
+		if (start == 0) break; // first symbol is end mark
 		symbols.push(start);
 		let a = low + Math.floor(range * acc[start]   / total);
 		let b = low + Math.floor(range * acc[start+1] / total) - 1
@@ -69,7 +70,7 @@ export function arithmetic_decoder(bytes) {
 		range = 1 + b - a;
 	}
 	let offset = symbol_count - 4;
-	return symbols.map(x => {
+	return symbols.map(x => { // index into payload
 		switch (x - offset) {
 			case 3: return offset + 0x10100 + ((bytes[pos_payload++] << 16) | (bytes[pos_payload++] << 8) | bytes[pos_payload++]);
 			case 2: return offset + 0x100 + ((bytes[pos_payload++] << 8) | bytes[pos_payload++]);
@@ -77,6 +78,15 @@ export function arithmetic_decoder(bytes) {
 			default: return x - 1;
 		}
 	});
+	/*
+	let offset = symbol_count - 3;
+	return symbols.map(x => { // index into payload
+		switch (x - offset) {
+			case 2: return offset + 0x10000 + ((bytes[pos_payload++] << 16) | (bytes[pos_payload++] << 8) | bytes[pos_payload++]);
+			case 1: return offset + ((bytes[pos_payload++] << 8) | bytes[pos_payload++]);
+			default: return x - 1;
+		}
+	});*/
 }
 
 export class Decoder {

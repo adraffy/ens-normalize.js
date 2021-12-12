@@ -1,4 +1,4 @@
-import {arithmetic_decoder} from './decoder.js';
+import {arithmetic_decoding} from './decoder.js';
 import {arithmetic_encoding} from './encoder.js';
 import {compare_array} from './utils.js';
 
@@ -22,7 +22,7 @@ for (let i = 0; i < 1000; i++) {
 		}
 	}
 	let v1 = arithmetic_encoding(v0, u);
-	let v2 = arithmetic_decoder(v1);
+	let v2 = arithmetic_decoding(v1);
 	if (compare_array(v0, v2) != 0) {
 		console.log({v0, v1, v2});
 		throw new Error('wtf');

@@ -11,7 +11,7 @@ let code = readFileSync(join(base_dir, 'ens-normalize.js'), {encoding: 'utf8'});
 code = code.replace(/\/\/\s*IGNORE.*?~IGNORE/gs, '');
 
 // inject code
-code = `import {arithmetic_decoder} from './decoder.js';\n${code}`;
+code = `import {arithmetic_decoding} from './decoder.js';\n${code}`;
 
 // replace imports
 while (true) {
@@ -37,7 +37,7 @@ while (true) {
 let compressed = readFileSync(join(base_dir, `output/arithmetic-nfc=true-bidi=true.bin`));
 
 // inject bytes
-code = code.replace('compressed()', `arithmetic_decoder(Uint8Array.from(atob('${btoa(String.fromCharCode(...compressed))}'), c => c.charCodeAt(0)))`);
+code = code.replace('compressed()', `arithmetic_decoding(Uint8Array.from(atob('${btoa(String.fromCharCode(...compressed))}'), c => c.charCodeAt(0)))`);
 
 // inject unicode version
 let unicode_version = JSON.parse(readFileSync(join(base_dir, 'unicode-raw/version.json')));

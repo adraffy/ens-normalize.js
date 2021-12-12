@@ -1,10 +1,10 @@
 //IGNORE
 // kludge to make the file runnable as-is
 import {readFileSync} from 'fs';
-import {arithmetic_decoder} from './decoder.js';
+import {arithmetic_decoding} from './decoder.js';
 function compressed() {
 	let params = `-nfc=true-bidi=true`;
-	return arithmetic_decoder(readFileSync(new URL(`output/arithmetic${params}.bin`, import.meta.url).pathname));
+	return arithmetic_decoding(readFileSync(new URL(`output/arithmetic${params}.bin`, import.meta.url).pathname));
 	//return JSON.parse(readFileSync(new URL(`output/values${params}.json`, import.meta.url).pathname));
 }
 //~IGNORE
@@ -316,7 +316,7 @@ function nfc_idna_contextj_emoji(cps, ignore_disallowed = false) {
 // throws TypeError if not a string
 // throws DisallowedLabelError/DisallowedCharacterError if not normalizable
 // returns a string ready for namehash
-export function ens_normalize(name, ignore_disallowed = false, check_bidi = true) { 
+export function ens_normalize(name, ignore_disallowed = false, check_bidi = false) { 
 	// https://github.com/ethereum/EIPs/blob/master/EIPS/eip-137.md
 	// "UTS46 with the options transitional=false and useSTD3AsciiRules=true."
 	// see: build-tables.js

@@ -259,5 +259,7 @@ function is_smaller(smaller, bigger) {
 	for (let x of smaller) s.write_member(x);
 	let b = new Encoder();
 	for (let x of bigger) b.write_member(x);
-	return s.compress_arithmetic().length < b.compress_arithmetic().length;
+	let ns = s.compress_arithmetic().length;
+	let nb = b.compress_arithmetic().length;
+	return ns < nb;
 }

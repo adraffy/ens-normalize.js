@@ -90,9 +90,26 @@ export function arithmetic_encoding(symbols, linear) {
 			return x + 1;
 		}
 	});
+	/*
+	symbols = symbols.map(x => {
+		if (x >= linear) {
+			x -= linear;
+			if (x < 0x10000) {
+				bytes.push(x >> 8, x & 0xFF);
+				return linear + 1;
+			}
+			x -= 0x10000;
+			bytes.push(x >> 16, (x >> 8) & 0xFF, x & 0xFF);
+			return linear + 2;
+		} else {
+			return x + 1;
+		}
+	});
+	*/
 	symbols.push(0);
 	// create frequency table
 	let freq = Array(linear + 4).fill(0);
+	//let freq = Array(linear + 3).fill(0);
 	for (let x of symbols) freq[x]++;
 	freq = freq.map(x => Math.max(1, x)); // prevent sparse
 	// create accumulated table
