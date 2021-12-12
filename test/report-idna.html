@@ -100,7 +100,7 @@ async function main() {
 			if (!output) output = input;
 			let norm, norm_err;
 			try {
-				norm = ens_normalize(input);
+				norm = ens_normalize(input, false, true);
 			} catch (err) {
 				norm_err = err.message;
 			}

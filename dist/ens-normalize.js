@@ -586,7 +586,7 @@ export function ens_normalize(name, ignore_disallowed = false, check_bidi = fals
 				// This provides a mechanism allowing explicit use of Deviation characters even during a transition period. 
 				// [Custom ENS Rule] deviate from UTS-46 and remap
 				let idna = nfc_idna_contextj_emoji(puny, true);
-				if (puny.length != idna.length || !puny.every((x, i) => x == idna[i])) throw new DisallowedLabelError(`puny not idna`, cps);
+				if (puny.length != idna.length || !puny.every((x, i) => x == idna[i])) throw new DisallowedLabelError(`punycode: not idna`, cps);
 				// Otherwise replace the original label in the string by the results of the conversion. 
 				cps = puny;
 			}
