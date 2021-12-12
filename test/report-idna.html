@@ -49,6 +49,7 @@ td {
 <th class="state">reject-valid</th>
 <th class="state">diff-norm</th>
 </tr></thead><tbody></tbody></table>
+<div id="loading">Computing...</div>
 <script type="module">
 import {ens_normalize, VERSION, UNICODE} from '../dist/ens-normalize.min.js';
 
@@ -148,6 +149,8 @@ async function main() {
 
 		document.querySelector('#summary tbody').append(tr);
 	}
+
+	document.querySelector('#loading').remove();
 
 }
 
