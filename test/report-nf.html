@@ -127,14 +127,24 @@ async function main() {
 		section.innerHTML = html;
 		document.body.append(section);
 
+
+		function total_cell(key) {
+			let total = errors[key];
+			if (total > 0) {
+				return `<td class="diff">${total}</td>`;
+			} else {
+				return `<td class="same">0</td>`;
+			}
+		}
+
 		let tr = document.createElement('tr');
 		tr.innerHTML = [
 			`<td class="name"><a href="#${name}">${name}</a></td>`,
 			`<td class="count">${cases.length}</td>`,
-			`<td class="errors">${errors.nfd_adraffy|0}</td>`,
-			`<td class="errors">${errors.nfc_adraffy|0}</td>`,
-			`<td class="errors">${errors.nfd_js|0}</td>`,
-			`<td class="errors">${errors.nfc_js|0}</td>`
+			total_cell('nfd_adraffy'),
+			total_cell('nfc_adraffy'),
+			total_cell('nfd_js'),
+			total_cell('nfc_js')
 		].join('');
 
 		document.querySelector('#summary tbody').append(tr);
