@@ -1,6 +1,6 @@
 {
   "name": "@adraffy/ens-normalize",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Compact ES6 Ethereum Name Service (ENS) Name Normalizer",
   "keywords": [
     "ENS",
@@ -22,16 +22,5 @@
     "name": "raffy.eth",
     "email": "raffy@me.com",
     "url": "http://raffy.antistupid.com"
-  },
-  "scripts": {
-    "test-source": "node test/test-lib.js build/ens-normalize.js",
-    "test-build": "node test/test-lib.js dist/ens-normalize.js",
-    "test-dist": "node test/test-lib.js dist/ens-normalize.min.js",
-    "build-source": "node build/build-source.js",
-    "build-dist": "uglifyjs dist/ens-normalize.js --mangle --mangle-props regex=/^read/ --toplevel --output dist/ens-normalize.min.js",
-    "build": "(npm run test-source) && (npm run build-source) && (npm run test-build) && (npm run build-dist) && (npm run test-dist)",
-    "report-idna": "node test/report-idna.js",
-    "report-ens": "node test/report-ens.js",
-    "report-reg": "node test/report-registered.js"
   }
 }

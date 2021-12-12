@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NormalizationTest</title>
+<style>
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+th {
+	background: #ddd;
+}
+th[colspan] {
+	font-size: 20pt;
+}
+td, th {
+	border: 1px solid #ccc;
+}
+tbody tr:nth-child(odd) {
+	background: #eee;
+}
+.same {
+	background: #cfc;
+}
+.diff {
+	background: #fcc;
+}
+#summary tbody td {
+	text-align: right;
+}
+</style>
+</head>
+<body>
+<h1><a href="../build/unicode-raw/NormalizationTest.txt">NormalizationTest</a></h1>
+<table id="summary">
+<thead>
+<tr><th rowspan="2">Test</th><th rowspan="2">#</th></th><th colspan="2">adraffy</th><th colspan="2">Browser</th></tr>
+<tr><th>NFD</th><th>NFC</th><th>NFD</th><th>NFC</th></tr>
+</thead><tbody></tbody></table>
+<script type="module">
+import {nfc as nfc_adraffy, nfd as nfd_adraffy} from '../dist/ens-normalize.min.js';
+function js_norm(type) {
+	return cps => [...String.fromCodePoint(...cps).normalize(type)].map(x => x.codePointAt(0));
+}
+const nfd_js = js_norm('NFD');
+const nfc_js = js_norm('NFC');
+
+try {
+	main();
+} catch (err) {
+	let div = document.createElement('div');
+	div.innerHTML = err.message;
+	document.body.append(div);
+	console.error(err);
+}
+
+function escape_unicode(cps) {
+	return cps.map(cp => {
+		let s = String.fromCodePoint(cp);
+		return /[\.\-a-z0-9]/.test(s) ? s : `{${cp.toString(16).toUpperCase()}}`;
+	}).join('');
+}
+function cps_from_sequence(s) {
+	return s.split(/\s+/).map(x => parseInt(x, 16));
+}
+
+function compare_array(a, b) {
+	let {length: n} = a;
+	let c = n - b.length;
+	for (let i = 0; c == 0 && i < n; i++) c = a[i] - b[i];
+	return c;
+}
+
+async function main() {	
+	let res = await fetch('../build/unicode-json/NormalizationTest.json');
+	if (res.status !== 200) throw new Error('download error');
+	let tests = await res.json();
+
+
+	for (let [name, cases] of Object.entries(tests)) {
+		let html = `<a name="${name}"></a><h2>${name}(${cases.length})</h2><table><thead>
+		<tr><th rowspan="2">Input</th><th colspan="3">NFD</th><th colspan="3">NFC</th></tr>
+		<tr><th>Expected</th><th>adraffy</th><th>Browser</th><th>Expected</th><th>adraffy</th><th>Browser</th></tr>
+		</tr></thead><tbody>`;
+		let errors = {};
+		function compare_cell(v0, v1, key) {
+			if (v0.length == v1.length && v0.every((x, i) => x == v1[i])) {
+				return '<td class="same"></td>';
+			} else {
+				errors[key] = (errors[key] ?? 0) + 1;
+				return `<td class="diff">${escape_unicode(v1)}</td>`;
+			}
+		}
+		for (let args of cases) {
+			let [src, nfc0, nfd0] = args.map(cps_from_sequence);
+			html += '<tr>' + [
+				`<td class="input">${escape_unicode(src)}</td>`,
+				`<td class="expect">${escape_unicode(nfd0)}</td>`,
+				compare_cell(nfd0, nfd_adraffy(src), 'nfc_adraffy'),
+				compare_cell(nfd0, nfd_js(src), 'nfd_js'),
+				`<td class="expect">${escape_unicode(nfc0)}</td>`,
+				compare_cell(nfc0, nfc_adraffy(src), 'nfd_adraffy'),
+				compare_cell(nfc0, nfc_js(src), 'nfc_js')
+			].join('') + '</tr>';
+		}
+		html += '</body></table>';
+
+		let section = document.createElement('section');
+		section.innerHTML = html;
+		document.body.append(section);
+
+		let tr = document.createElement('tr');
+		tr.innerHTML = [
+			`<td class="name"><a href="#${name}">${name}</a></td>`,
+			`<td class="count">${cases.length}</td>`,
+			`<td class="errors">${errors.nfd_adraffy|0}</td>`,
+			`<td class="errors">${errors.nfc_adraffy|0}</td>`,
+			`<td class="errors">${errors.nfd_js|0}</td>`,
+			`<td class="errors">${errors.nfc_js|0}</td>`
+		].join('');
+
+		document.querySelector('#summary tbody').append(tr);
+
+	}
+
+}
+
+</script>
+</body>
+</html>

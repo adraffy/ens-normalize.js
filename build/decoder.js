@@ -1,52 +1,91 @@
-export class Decoder {
-	constructor(bytes) {
-		/*
-		let buf = 0;
-		let n = 0;
-		let ret = [];
-		next: for (let x of bytes) {
-			buf = (buf << 8) | x;
-			n += 8;
-			while (n >= 3) {
-				switch ((buf >> (n - 2)) & 3) { // upper 2 bits
-					case 3:
-						if (n < 10) continue next;
-						ret.push((buf >> (n -= 10)) & 255);
-						continue;
-					case 2: 
-						if (n < 6) continue next;
-						ret.push((buf >> (n -= 6)) & 15);
-						continue;
-					default:
-						ret.push((buf >> (n -= 3)) & 3); 
-				}
+export function arithmetic_decoder(bytes) {
+	let pos = 0;
+	function u16() { return (bytes[pos++] << 8) | bytes[pos++]; }
+	
+	// decode the frequency table
+	let symbol_count = u16();
+	let total = 1;
+	let acc = [0, 1]; // first symbol has frequency 1
+	for (let i = 1; i < symbol_count; i++) {
+		acc.push(total += u16());
+	}
+
+	// skip the symbols that index into the payload
+	let skip = u16();
+	let pos_payload = pos;
+	pos += skip;
+
+	let read_width = 0;
+	let read_buffer = 0; 
+	function read_bit() {
+		if (read_width == 0) {
+			// this will read beyond end of buffer
+			// but (undefined|0) => zero pad
+			read_buffer = (read_buffer << 8) | bytes[pos++];
+			read_width += 8;
+		}
+		return (read_buffer >> --read_width) & 1;
+	}
+
+	const N = 31;
+	const FULL = 2**N;
+	const HALF = FULL >>> 1;
+	const QRTR = HALF >> 1;
+	const MASK = FULL - 1;
+
+	let register = 0;
+	for (let i = 0; i < N; i++) register = (register << 1) | read_bit();
+
+	let symbols = [];
+	let low = 0;
+	let range = FULL;
+	while (true) {
+		let value = Math.floor((((register - low + 1) * total) - 1) / range);
+		let start = 0;
+		let end = symbol_count;
+		while (end - start > 1) {
+			let mid = (start + end) >>> 1;
+			if (value < acc[mid]) {
+				end = mid;
+			} else {
+				start = mid;
 			}
 		}
-		this.buf = ret;
-		*/
-		this.buf = bytes;
+		if (start == 0) break;
+		symbols.push(start);
+		let a = low + Math.floor(range * acc[start]   / total);
+		let b = low + Math.floor(range * acc[start+1] / total) - 1
+		while (((a ^ b) & HALF) == 0) {
+			register = (register << 1) & MASK | read_bit();
+			a = (a << 1) & MASK;
+			b = (b << 1) & MASK | 1;
+		}
+		while (a & ~b & QRTR) {
+			register = (register & HALF) | ((register << 1) & (MASK >>> 1)) | read_bit();
+			a = (a << 1) ^ HALF;
+			b = ((b ^ HALF) << 1) | HALF | 1;
+		}
+		low = a;
+		range = 1 + b - a;
+	}
+	let offset = symbol_count - 4;
+	return symbols.map(x => {
+		switch (x - offset) {
+			case 3: return offset + 0x10100 + ((bytes[pos_payload++] << 16) | (bytes[pos_payload++] << 8) | bytes[pos_payload++]);
+			case 2: return offset + 0x100 + ((bytes[pos_payload++] << 8) | bytes[pos_payload++]);
+			case 1: return offset + bytes[pos_payload++];
+			default: return x - 1;
+		}
+	});
+}
+
+export class Decoder {
+	constructor(values) {
 		this.pos = 0;
+		this.values = values;
 	}
-	/*
-	get more() {
-		return this.pos < this.table.length;
-	}
-	*/
-	// unsigned pseudo-huffman
-	// note: no overflow check
 	read() { 
-		let {buf, pos} = this;
-		let x0 = buf[pos];
-		if (x0 < 0x80) {
-			this.pos += 1;
-			return x0;
-		}
-		if (x0 < 0xFF) {
-			this.pos += 2;
-			return 0x80 + (((x0 & 0x7F) << 8) | buf[pos+1]);
-		}
-		this.pos += 4;
-		return 0x7F80 + ((buf[pos+1] << 16) | (buf[pos+2] << 8) | buf[pos+3]);
+		return this.values[this.pos++];
 	}
 	read_signed() { // eg. [0,1,2,3...] => [0,-1,1,-2,...]
 		let i = this.read();		
@@ -154,5 +193,29 @@ export class Decoder {
 			}
 		}
 		return buckets;
+	}
+}
+
+export function lookup_member(table, cp) {
+	for (let [x, n] of table) {
+		let d = cp - x;
+		if (d < 0) break;
+		if (d < n) return true;
+	}
+	return false;
+}
+
+export function lookup_mapped(table, cp) {
+	for (let [x, ys, n, dx, dy] of table) {
+		let d = cp - x;
+		if (d < 0) break;
+		if (n > 0) {
+			if (d < dx * n && d % dx == 0) {
+				let r = d / dx;
+				return ys.map(y => y + r * dy);
+			} 
+		} else if (d == 0) {
+			return ys;
+		}
 	}
 }

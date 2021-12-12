@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>IDNATestV2</title>
+<style>
+#version {
+	padding-left: 1rem;
+	font-size: 16pt;
+	font-weight: normal;
+}
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+table { 
+	border-collapse: collapse; 
+	width: 100%; 
+	max-width: 100%; 
+}
+th { 
+	text-align: left; 
+}
+td { 
+	border: 1px solid #ccc; 
+	line-break: anywhere; 
+}
+.same-norm { background: #cfc; }
+.same-error { background: #cff; }
+.diff-norm { background: #f96; }
+.allow-error { background: #fcc; }
+.reject-valid { background: #f66; }
+.index { text-align: center; font-weight: bold; }
+.eq { color: #aaa; }
+#summary td, 
+#summary th { text-align: right; }
+#summary tbody tr:nth-child(odd) { 
+	background: #eee; 
+}
+</style>
+</head>
+<body>
+<h1><a href="../build/unicode-raw/IdnaTestV2.txt">IDNATestV2</a><span id="version"></span></h1>
+<table id="summary">
+<thead><tr><th>Test</th><th>#</th><th>same</th>
+<th class="state">same-norm</th>
+<th class="state">same-error</th>
+<th class="state">allow-error</th>
+<th class="state">reject-valid</th>
+<th class="state">diff-norm</th>
+</tr></thead><tbody></tbody></table>
+<script type="module">
+import {ens_normalize, VERSION, UNICODE} from '../dist/ens-normalize.min.js';
+
+document.querySelector('#version').innerHTML = ` ens_normalize.js (v${VERSION}) for Unicode ${UNICODE}`;
+
+let COLS = [...document.querySelectorAll('#summary .state')].map(x => x.innerHTML);
+
+try {
+	main();
+} catch (err) {
+	let div = document.createElement('div');
+	div.innerHTML = err.message;
+	document.body.append(div);
+	console.error(err);
+}
+
+function escape_unicode(s) {
+	return [...s].map(s => {
+		return /[\.\-a-z0-9]/.test(s) ? s : `{${s.codePointAt(0).toString(16).toUpperCase()}}`;
+	}).join('');
+}
+
+async function main() {	
+	let res = await fetch('../build/unicode-json/IdnaTestV2.json');
+	if (res.status !== 200) throw new Error('download error');
+	let tests = await res.json();
+
+	for (let [name, cases] of Object.entries(tests)) {
+		let html = `<a name="${name}"><h2>${name} (${cases.length})</h2></a><table><thead><tr>
+		<th>#</th><th width="32%">Input</th><th width="32%">Expected</th><th width="32%">Normalized</th>
+		</tr></thead><tbody>`;
+		let tally = {};
+		for (let i = 0; i < cases.length; i++) {
+			let test_case = cases[i];
+			let [input, output, errors] = test_case;
+			errors = new Set(errors);
+			errors.delete('X4_2');
+			errors = [...errors];
+			if (!output) output = input;
+			let norm, norm_err;
+			try {
+				norm = ens_normalize(input);
+			} catch (err) {
+				norm_err = err.message;
+			}
+			let type;
+			if (errors.length > 0) {
+				if (norm_err) {
+					type = 'same-error';
+				} else {
+					type = 'allow-error';
+				}
+			} else {
+				if (norm_err) {
+					type = 'reject-valid';
+				} else if (norm !== output) {
+					type = 'diff-norm';
+				} else {
+					type = 'same-norm';
+				}
+			}
+			tally[type] = (tally[type] ?? 0) + 1;
+			let row = `<tr class="${type}"><td class="index">${i+1}</td><td class="input name">${escape_unicode(input)}</td>`;
+			if (errors.length > 0) {
+				row += `<td class="error">${errors.join(', ')}</td>`;
+			} else {
+				row += `<td class="name">${escape_unicode(output)}</td>`;
+			}
+			if (type === 'same') {
+				row += `<td class="eq">Same</td>`;
+			} else if (norm_err) {
+				row += `<td class="error">${norm_err}</td>`;
+			} else {
+				row += `<td class="name">${escape_unicode(norm)}</td>`;
+			}
+			row += `</tr>`;		
+			html += row;
+			test_case.type = type;
+			test_case.result = norm_err ?? norm;
+		}
+		html += `</tbody></table>`;
+
+		let section = document.createElement('section');
+		section.innerHTML = html;
+		document.body.append(section);
+
+		let total = Object.values(tally).reduce((a, x) => a + x, 0);
+		let same = (tally['same-norm'] ?? 0) + (tally['same-error'] ?? 0);
+		let tr = document.createElement('tr');
+		tr.innerHTML = [
+			'<tr>',
+			`<td><a href="#${name}">${name}</a></td>`,
+			`<td>${total}</td>`,
+			`<td>${(100 * same / total).toFixed(1)}%</td>`,
+			...COLS.map(x => `<td>${tally[x] ?? 0}</td>`)
+		].join('');
+
+		document.querySelector('#summary tbody').append(tr);
+	}
+
+}
+
+</script>
+</body>
+</html>

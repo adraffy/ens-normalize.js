@@ -30,16 +30,17 @@ export const KNOWN = [
 	// ContextJ
 	// https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.1
 	// ZWJ No Context
-	{name: "a\u200C.eth", error: true},
+	{name: "a\u{200C}.eth", error: true},
 	// ZWJ Rule#1
-	{name: "a\u094D\u200C.eth"},
+	{name: "a\u{94D}\u{200C}.eth"},
 	// ZWJ Rule#2
-	{name: "a\uA872\u200C\u0622.eth"},
+	// TODO: find a valid string
+	//{name: "\u{A872}\u{200C}\u{1e939}.eth"},
 	// https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.2
 	// ZWNJ No Context
-	{name: "a\u200D.eth", error: true},
+	{name: "a\u{200D}.eth", error: true},
 	// ZWNJ Rule#1
-	{name: "a\u094D\u200D.eth"},
+	{name: "a\u{094D}\u{200D}.eth"},
 
 	// ZWNJ Emoji
 	{name: "👨‍👩‍👦.eth"},
@@ -64,6 +65,7 @@ export function test_known(ens_normalize) {
 				result = ens_normalize(name);
 			} catch (err) {
 				if (!error) {
+					console.log(err);
 					throw new Error('unexpected error');
 				}
 				return; // we got expected result

@@ -6,7 +6,6 @@ import {escape_unicode} from '../build/utils.js';
 import {ens_normalize} from '../index.js';
 // ens
 import lib from 'eth-ens-namehash';
-import { isExternal } from 'util/types';
 
 let base_dir = new URL('.', import.meta.url).pathname;
 let output_dir = join(base_dir, 'output');

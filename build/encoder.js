@@ -1,7 +1,8 @@
-import {} from './utils.js'; // Array.prototype, fix me?
+import {group_by, indices_of, split_between} from './utils.js'; // Array.prototype, fix me?
 
 export function split_linear(mapped, dx, dy) {
 	let linear = [];
+	mapped = mapped.map(v => v.slice());
 	for (let i = 0; i < mapped.length; i++) {
 		let row0 = mapped[i];
 		let [x0, ys0] = row0;
@@ -42,34 +43,118 @@ export function huffman(i) {
 	return [255, upper, (i >> 8) & 0xFF, i & 0xFF];
 }
 
+export function bytes_from_bits(v) {
+	if (v.length & 7) throw new TypeError('not divisible by 8');
+	let ret = [];
+	for (let i = 0; i < v.length; ) {
+		let b = 0;
+		for (let j = 7; j >= 0; j--) {
+			b |= v[i++] << j;
+		}
+		ret.push(b);
+	}
+	return ret;
+}
+
+export function best_arithmetic_encoding(symbols, max = 64) {
+	let best;
+	for (let n = 0; n <= max; n++) {
+		let v = arithmetic_encoding(symbols, n);
+		if (!best || v.length < best.length) {
+			best = v;
+		}
+	}
+	return best;
+}
+
+export function arithmetic_encoding(symbols, linear) {	
+	if (symbols.length == 0) throw new Error(`no symbols`);
+	if (linear < 0) throw new Error(`should be non-negative`);
+	let bytes = [];
+	symbols = symbols.map(x => {
+		if (x >= linear) {
+			x -= linear;
+			if (x < 0x100) {
+				bytes.push(x);
+				return linear + 1;
+			}
+			x -= 0x100;
+			if (x < 0x10000) {
+				bytes.push(x >> 8, x & 0xFF);
+				return linear + 2;
+			}
+			x -= 0x10000;
+			bytes.push(x >> 16, (x >> 8) & 0xFF, x & 0xFF);
+			return linear + 3;
+		} else {
+			return x + 1;
+		}
+	});
+	symbols.push(0);
+	// create frequency table
+	let freq = Array(linear + 4).fill(0);
+	for (let x of symbols) freq[x]++;
+	freq = freq.map(x => Math.max(1, x)); // prevent sparse
+	// create accumulated table
+	let acc = [0];
+	let total = 0;
+	for (let i = 0; i < freq.length; i++) {
+		acc.push(total += freq[i]);
+	}
+
+	const N = 31;
+	const FULL = 2**N;
+	const HALF = FULL >>> 1;
+	const QRTR = HALF >> 1;
+	const MASK = FULL - 1;
+
+	let low = 0;
+	let range = FULL;
+	let underflow = 0;
+	let bits = [];
+	for (let x of symbols) {
+		let a = low + Math.floor(range * acc[x]   / total);
+		let b = low + Math.floor(range * acc[x+1] / total) - 1;
+		while (((a ^ b) & HALF) == 0) {
+			let bit = a >>> (N - 1);
+			bits.push(bit);
+			for (; underflow > 0; underflow--) bits.push(bit ^ 1);
+			a = (a << 1) & MASK;
+			b = (b << 1) & MASK | 1;
+		}
+		while (a & ~b & QRTR) {
+			underflow++;
+			a = (a << 1) ^ HALF;
+			b = ((b ^ HALF) << 1) | HALF | 1;
+		}
+		low = a;
+		range = 1 + b - a;
+	}
+	bits.push(1);
+	while (bits.length & 7) bits.push(0);
+	let header = [];
+	freq[0] = freq.length;
+	freq.push(bytes.length);
+	for (let n of freq) {
+		header.push(n >> 8, n & 0xFF);
+	}
+	return header.concat(bytes, bytes_from_bits(bits));
+}
+
 export class Encoder {
-	constructor() {
-		this.buf = [];
+	constructor() { 
+		this.values = [];
 	}
 	compressed() {
-		let bits = [];
-		let prev = 0;
-		let {buf} = this;
-		let {length} = buf;
-		for (let i = 0; i < length; i++) {
-			let next = buf[i];
-			let delta = next - prev;
-			if (delta == 0) {
-				let end = i + 1;
-				while (delta == 0 && end < length && buf[end] == next) end++;
-				bits.push(0, ...huffman(end - i - 1));
-				i = end - 1;
-				continue;
-			} else if (delta > 0) {
-				bits.push(1, 0, ...huffman(delta - 1));
-			} else {
-				bits.push(1, 1, ...huffman(~delta));
-			}
-		}
-		while (bits.length & 7) bits.push(1);
-		return bytes_from_bits(bits);
+		return this.compress_arithmetic();
 	}
-	unsigned(i) { this.buf.push(...huffman(i)); }
+	compress_arithmetic() {
+		return best_arithmetic_encoding(this.values);
+	}
+	compress_huffman() {
+		return this.values.flatMap(huffman);
+	}
+	unsigned(x) { this.values.push(x); }
 	signed(i) { this.unsigned(i < 0 ? -1 - 2 * i : 2 * i); }
 	positive(i) { this.unsigned(i - 1); }
 	counts(v) { for (let x of v) this.positive(x); }
@@ -88,7 +173,7 @@ export class Encoder {
 		}
 	}
 	write_member(v) {
-		let m = v.split((a, b) => b - a == 1);
+		let m = split_between(v, (a, b) => b - a > 1);
 		let g1 = m.filter(g => g.length == 1);
 		let gN = m.filter(g => g.length != 1);
 		this.unsigned(g1.length);
@@ -139,7 +224,7 @@ export class Encoder {
 		const ZWNJ = 0x200D;
 		emoji = emoji.map(v => v.filter(x => x != 0xFE0F));
 		// group by (width and position of ZWNJ)
-		emoji = Object.values(emoji.group_by(v => [v.length, ...v.indices_of(ZWNJ)].join(':')));
+		emoji = Object.values(group_by(emoji, v => [v.length, ...indices_of(v, ZWNJ)].join(':')));
 		// transpose and remove ZWNJ
 		this.unsigned(emoji.length);
 		for (let m of emoji) {
@@ -147,7 +232,7 @@ export class Encoder {
 			//     [A Z B Z D]    w/o     [B B]
 			// pos = [1,  3]      ZWNJ    [C D]
 			let [first] = m;
-			let zwnj = first.indices_of(ZWNJ);
+			let zwnj = indices_of(first, ZWNJ);
 			this.positive(m.length); // number of elements
 			this.positive(first.length - zwnj.length); // width w/o ZWNJ
 			this.positive(zwnj.reduce((a, i) => a | (1 << (i - 1)), 0)); // bit positions of ZWNJ
@@ -157,51 +242,4 @@ export class Encoder {
 			}
 		}
 	}
-}
-
-// compress a list of bytes
-export function encode2(v) {
-	const A = 2;
-	const B = 4;
-	let ret = [];
-	for (let x of v) {
-		let w = bit_width(x);
-		if (w <= A) {
-			ret.push(0, ...bit_array(x, A));
-		} else if (w <= B) {
-			ret.push(1, 0, ...bit_array(x, B));
-		} else {
-			ret.push(1, 1, ...bit_array(x, 8));
-		}
-	}
-	while (ret.length & 7) ret.push(1);
-	return bytes_from_bits(ret);
-}
-
-export function bit_width(i) {
-	return 32 - Math.clz32(i);
-}
-
-// compress speed is irrelevant so
-// doesn't matter if this is pepega
-export function bit_array(i, n) {
-	let v = Array(n);
-	while (n > 0) {
-		v[--n] = i & 1;
-		i >>= 1;
-	}
-	return v;
-}
-
-export function bytes_from_bits(v) {
-	if (v.length & 7) throw new TypeError('not divisible by 8');
-	let ret = [];
-	for (let i = 0; i < v.length; ) {
-		let b = 0;
-		for (let j = 7; j >= 0; j--) {
-			b |= v[i++] << j;
-		}
-		ret.push(b);
-	}
-	return ret;
 }

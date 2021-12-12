@@ -1,14 +1,12 @@
 import {mkdirSync, readFileSync, writeFileSync} from 'fs';
 import {join} from 'path';
 import {Encoder} from './encoder.js';
-import {cps_from_range, cps_from_sequence} from './utils.js';
+import {cps_from_range, cps_from_sequence, group_by} from './utils.js';
 
 let base_dir = new URL('.', import.meta.url).pathname;
-let parsed_dir = join(base_dir, 'unicode-json');
-let tables_dir = join(base_dir, 'tables-json');
 
 function read_parsed(name) {
-	return JSON.parse(readFileSync(join(parsed_dir, `${name}.json`)));
+	return JSON.parse(readFileSync(join(base_dir, 'unicode-json', `${name}.json`)));
 }
 
 // EIP-137: Ethereum Domain Name Service - Specification
@@ -151,12 +149,14 @@ if (!is_smaller([bidi_ECTOB], bidi_ECTOB_parts)) {
 // ************************************************************
 // export tables for inspection
 
+let tables_dir = join(base_dir, 'tables-json');
+
 mkdirSync(tables_dir, {recursive: true});
 
 function write_table(name, json) {
 	let file = join(tables_dir, `${name}.json`);
 	writeFileSync(file, JSON.stringify(json));
-	console.log(`Wrote: ${file}`);
+	console.log(`Wrote table: ${file}`);
 }
 
 write_table('combining-marks', combining_marks);
@@ -176,8 +176,8 @@ write_table('bidi', bidi);
 // ************************************************************
 // compress tables 
 
-function compress(enable_nfc, enable_bidi) {
-	let enc = new Encoder();
+function compress(enable_nfc, enable_bidi) { //}, params) {
+	let enc = new Encoder(); //params);
 	enc.write_member(combining_marks);
 	enc.write_member(ignored);
 	enc.write_member(disallowed);
@@ -202,7 +202,7 @@ function compress(enable_nfc, enable_bidi) {
 		], decomp);
 		enc.write_member(comp_exclusions);
 	} else {
-		enc.write_member(class_virama);
+		enc.write_member(combining_class[virama_index]);
 	}
 	if (enable_bidi) {
 		enc.write_member(bidi_R_AL);
@@ -215,11 +215,22 @@ function compress(enable_nfc, enable_bidi) {
 	return enc;
 }
 
-let enc = compress(true, true);
-writeFileSync(join(tables_dir, 'huffman.bin'), Buffer.from(enc.buf));
-writeFileSync(join(tables_dir, 'compressed.bin'), Buffer.from(enc.compressed()));
 
-console.log(`Bytes: ${enc.buf.length}`);
+let output_dir = join(base_dir, 'output');
+
+mkdirSync(output_dir, {recursive: true});
+
+for (let nfc of [true, false]) {
+	for (let bidi of [true, false]) {
+		let enc = compress(nfc, bidi);
+		let params = `-nfc=${nfc}-bidi=${bidi}`;
+		writeFileSync(join(output_dir, `values${params}.json`), JSON.stringify(enc.values));
+		writeFileSync(join(output_dir, `huffman${params}.bin`), Buffer.from(enc.compress_huffman()));
+		let buf = Buffer.from(enc.compress_arithmetic());
+		writeFileSync(join(output_dir, `arithmetic${params}.bin`), buf);
+		console.log(`Wrote ${params}: ${buf.length} bytes`);
+	}
+}
 
 // ************************************************************
 // helper functions
@@ -243,20 +254,10 @@ function assert_sorted_unique(v) {
 	return v;
 }
 
-function group_by(v, fn, gs = {}) {
-	for (let x of v) {
-		let key = fn(x);
-		let g = gs[key];
-		if (!g) g = gs[key] = [];
-		g.push(x);
-	}
-	return gs;
-}
-
 function is_smaller(smaller, bigger) {
 	let s = new Encoder();
 	for (let x of smaller) s.write_member(x);
 	let b = new Encoder();
 	for (let x of bigger) b.write_member(x);
-	return s.buf.length < b.buf.length;
+	return s.compress_arithmetic().length < b.compress_arithmetic().length;
 }

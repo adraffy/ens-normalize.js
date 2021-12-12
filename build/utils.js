@@ -47,76 +47,61 @@ export function cps_from_sequence(s) {
 	return s.split(/\s+/).map(x => parseInt(x, 16));
 }
 
-// ************************************************************
-// array helpers
+
+// return all indicies of exact match in array
+// [1, 2, 1, 1] of 1 => [0, 2, 3]
+export function indices_of(v, x) {
+	let ret = [];
+	let last = 0;
+	while (true) {
+		let i = v.indexOf(x, last);
+		if (i == -1) break;
+		ret.push(i);
+		last = i + 1;
+	}
+	return ret;
+}
+
+// group list into collection
+// [1, 2, 2, 3] + odd => [odd:[1,3], even:[2,2]]
+export function group_by(v, fn, gs = {}) {
+	for (let x of v) {
+		let key = fn(x);
+		let g = gs[key];
+		if (!g) g = gs[key] = [];
+		g.push(x);
+	}
+	return gs;
+}
 
 // split list into runs where 
-// [..., a, b, ...] => [[..., a], [b, ...]] unless fn(a, b)
-Array.prototype.split = function(fn) {
+// [..., a, b, ...] => [[..., a], [b, ...]] if fn(a, b)
+export function split_between(v, fn) {
 	let start = 0;
 	let groups = [];
-	for (let i = 1; i < this.length; i++) {
-		if (!fn(this[i - 1], this[i])) {
-			groups.push(this.slice(start, i));
+	for (let i = 1; i < v.length; i++) {
+		if (fn(v[i - 1], v[i])) {
+			groups.push(v.slice(start, i));
 			start = i;
 		}
 	}
-	if (start < this.length) {
-		groups.push(this.slice(start));
+	if (start < v.length) {
+		groups.push(v.slice(start));
 	}
 	return groups;
 }
 
-// collect into groups by key
-Array.prototype.group_by = function(fn, groups = {}) {
-	for (let x of this) {
-		let key = fn(x);
-		let group = groups[key];
-		if (!group) group = groups[key] = [];
-		group.push(x);
-	}
-	return groups;
-}
-
-// sort by plucked key difference
-// check for duplicates
-Array.prototype.union = function(pluck = x => x) {
-	let sorted = this.slice().sort((a, b) => pluck(a) - pluck(b));
-	
-	return sorted;
-}
-
-// differences
-// [a, b, c, ...] => [a, b-a, c-b, ...]
-Array.prototype.delta = function() {
-	let {length} = this;
-	let v = Array(length);
-	let a = 0;
-	for (let i = 0; i < length; i++) {
-		let x = this[i];
-		v[i] = x - a;
-		a = x;
-	}
-	return v;
-}
-
-// return indicies of x in
-// [1, a, 1, b, 1].indices_of(1) = [0, 2, 4]
-Array.prototype.indices_of = function(x) {
-	let v = [];
-	let last = 0;
+// split an array on specific values
+// [a, b, x, c, d] => [[a, b], [c, d]]
+export function split_on(v, x) {
+	let ret = [];
+	let pos = 0;
 	while (true) {
-		let i = this.indexOf(x, last);
-		if (i == -1) break;
-		v.push(i);
-		last = i + 1;
+		let next = v.indexOf(x, pos);
+		if (next == -1) break;
+		ret.push(v.slice(pos, next));
+		pos = next + 1;		
 	}
-	return v;
-}
-
-// return counts of elements
-Array.prototype.tally = function(t = {}) {
-	for (let x of this) t[x] = (t[x] ?? 0) + 1;
-	if (Array.isArray(t)) for (let i = 0; i < t.length; i++) t[i] |= 0; // fill zeros
-	return t;
+	ret.push(v.slice(pos));
+	return ret;
 }

@@ -1,16 +1,17 @@
 import {readFileSync, writeFileSync} from 'fs';
 import {join} from 'path';
+import UglifyJS from 'uglify-js';
 
 let base_dir = new URL('.', import.meta.url).pathname;
 
 // read templated code
 let code = readFileSync(join(base_dir, 'ens-normalize.js'), {encoding: 'utf8'});
 
-// read compressed tables
-let compressed = readFileSync(join(base_dir, 'tables-json/compressed.bin'));
-
 // remove junk between ignore tags
 code = code.replace(/\/\/\s*IGNORE.*?~IGNORE/gs, '');
+
+// inject code
+code = `import {arithmetic_decoder} from './decoder.js';\n${code}`;
 
 // replace imports
 while (true) {
@@ -32,8 +33,11 @@ while (true) {
 	code = parts.join('\n');
 }
 
+// read compressed tables
+let compressed = readFileSync(join(base_dir, `output/arithmetic-nfc=true-bidi=true.bin`));
+
 // inject bytes
-code = code.replace('compressed()', `Uint8Array.from(atob('${btoa(String.fromCharCode(...compressed))}'), c => c.charCodeAt(0))`);
+code = code.replace('compressed()', `arithmetic_decoder(Uint8Array.from(atob('${btoa(String.fromCharCode(...compressed))}'), c => c.charCodeAt(0)))`);
 
 // inject unicode version
 let unicode_version = JSON.parse(readFileSync(join(base_dir, 'unicode-raw/version.json')));
@@ -43,5 +47,21 @@ code = `export const UNICODE = '${unicode_version.major}.${unicode_version.minor
 let {version} = JSON.parse(readFileSync(join(base_dir, '../package.json')));
 code = `export const VERSION = '${version}';\n${code}`;
 
-// output code
-writeFileSync(join(base_dir, '../dist/ens-normalize.js'), code);
+// inject comments
+code = `// built: ${new Date().toJSON()}\n${code}`;
+
+// create readable source
+writeFileSync(join(base_dir, `../dist/ens-normalize.js`), code);
+
+// create minified source
+writeFileSync(join(base_dir, `../dist/ens-normalize.min.js`), UglifyJS.minify(code, {
+	compress: {				
+		toplevel: true
+	},
+	mangle: { 
+		toplevel: true,
+		properties: {
+			regex: /^read/
+		}
+	}
+}).code);

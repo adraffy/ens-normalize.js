@@ -1,37 +1,55 @@
 //IGNORE
 // kludge to make the file runnable as-is
+const ENABLE_BIDI = true;
+const ENABLE_NFC = true;
 import {readFileSync} from 'fs';
 import {arithmetic_decoder} from './decoder.js';
 function compressed() {
-	let params = `-nfc=true-bidi=true`;
+	let params = `-nfc=${ENABLE_NFC}-bidi=${ENABLE_BIDI}`;
 	return arithmetic_decoder(readFileSync(new URL(`output/arithmetic${params}.bin`, import.meta.url).pathname));
 	//return JSON.parse(readFileSync(new URL(`output/values${params}.json`, import.meta.url).pathname));
 }
 //~IGNORE
 
 import {Decoder, lookup_mapped, lookup_member} from './decoder.js';
-import {escape_unicode, split_on} from './utils.js';
+import {escape_unicode} from './utils.js';
+
+const str_from_cp = String.fromCodePoint;
 
 // compressed lookup tables
 let r = new Decoder(compressed());
-const COMBINING_MARKS = r.read_member_table();
-const IGNORED = r.read_member_table();
-const DISALLOWED = r.read_member_table();
-const JOIN_T = r.read_member_table();
-const JOIN_LD = r.read_member_table();
-const JOIN_RD = r.read_member_table();
-const MAPPED = r.read_mapped_table();
-const ZWNJ_EMOJI = r.read_emoji();
-const COMBINING_RANK = r.read_member_tables(1 + r.read());
-const VIRAMA = COMBINING_RANK[r.read()];
-const DECOMP = r.read_mapped_table();
-const COMP_EXCLUSIONS = r.read_member_table();
-const BIDI_R_AL = r.read_member_table();
-const BIDI_L = r.read_member_table();
-const BIDI_AN = r.read_member_table();
-const BIDI_EN = r.read_member_table();
-const BIDI_ECTOB = r.read_member_table();
-const BIDI_NSM = r.read_member_table();
+
+let COMBINING_MARKS = r.read_member_table(),
+	IGNORED = r.read_member_table(),
+	DISALLOWED = r.read_member_table(),
+	JOIN_T = r.read_member_table(),
+	JOIN_LD = r.read_member_table(),
+	JOIN_RD = r.read_member_table(),
+	MAPPED = r.read_mapped_table(),
+	ZWNJ_EMOJI = r.read_emoji();
+
+let COMBINING_RANK, VIRAMA, DECOMP, COMP_EXCLUSIONS;
+if (ENABLE_NFC) {
+	COMBINING_RANK = r.read_member_tables(1 + r.read());
+	VIRAMA = COMBINING_RANK[r.read()];
+	DECOMP = r.read_mapped_table();
+	COMP_EXCLUSIONS = r.read_member_table();
+} else {
+	VIRAMA  = r.read_member_table();
+}
+
+let BIDI;
+if (ENABLE_BIDI) {
+	BIDI = {
+		R_AL: r.read_member_table(),
+		L:    r.read_member_table(),
+		AN:   r.read_member_table(),
+		EN:   r.read_member_table(),
+		ECTOB:r.read_member_table(),
+		NSM:  r.read_member_table()
+	};
+}
+
 
 // ************************************************************
 // normalization forms
@@ -116,12 +134,14 @@ function decomposer(cps, callback) {
 }
 
 export function nfd(cps) {
+	if (!ENABLE_NFC) return [...str_from_cp(cps).normalize('NFD')].map(x => x.codePointAt(0));	
 	let ret = [];
 	decomposer(cps, (_, cp) => ret.push(cp));
 	return ret;
 }
 
 export function nfc(cps) {
+	if (!ENABLE_NFC) return [...str_from_cp(cps).normalize('NFC')].map(x => x.codePointAt(0));
 	let ret = [];
 	let stack = [];
 	let prev_cp = -1;
@@ -255,13 +275,13 @@ export function get_mapped(cp) {
 
 export class DisallowedLabelError extends Error {
 	constructor(message, cps) {
-		super(`Disallowed label "${escape_unicode(String.fromCodePoint(...cps))}": ${message}`);
+		super(`Disallowed label "${escape_unicode(str_from_cp(...cps))}": ${message}`);
 		this.codePoints = cps;
 	}
 }
 export class DisallowedCharacterError extends Error {
 	constructor(cp, desc = '') {
-		super(`Disallowed character "${escape_unicode(String.fromCodePoint(cp))}"` + (desc ? `: ${desc}` : ''));
+		super(`Disallowed character "${escape_unicode(str_from_cp(cp))}"` + (desc ? `: ${desc}` : ''));
 		this.codePoint = cp;
 	}
 }
@@ -331,7 +351,7 @@ export function ens_normalize(name, ignore_disallowed = false, check_bidi = true
 	// [Processing] 1.) Map
 	// [Processing] 2.) Normalize
 	// [Processing] 3.) Break
-	let labels = split_on(nfc_idna_contextj_emoji([...name].map(x => x.codePointAt(0), ignore_disallowed)), STOP).map(cps => {		
+	let labels = split(nfc_idna_contextj_emoji([...name].map(x => x.codePointAt(0), ignore_disallowed)), STOP).map(cps => {		
 		// [Processing] 4.) Convert/Validate
 		if (cps.length >= 4 && cps[2] == HYPHEN && cps[3] == HYPHEN) { // "**--"
 			if (cps[0] == 0x78 && cps[1] == 0x6E) { // "xn--"
@@ -381,53 +401,68 @@ export function ens_normalize(name, ignore_disallowed = false, check_bidi = true
 		// * The spec is ambiguious regarding when you can determine a domain name is bidi
 		// * According to IDNATestV2, this is calculated AFTER puny decoding
 		// https://unicode.org/reports/tr46/#Notation
-		// A Bidi domain name is a domain name containing at least one character with BIDI_Class R, AL, or AN
-		if (labels.some(cps => cps.some(cp => lookup_member(BIDI_R_AL, cp) || lookup_member(BIDI_AN, cp)))) {
+		// A Bidi domain name is a domain name containing at least one character with BIDI.Class R, AL, or AN
+		if (labels.some(cps => cps.some(cp => lookup_member(BIDI.R_AL, cp) || lookup_member(BIDI.AN, cp)))) {
 			for (let cps of labels) {
 				if (cps.length == 0) continue;
 				// https://www.rfc-editor.org/rfc/rfc5893.txt
 				// 1.) The first character must be a character with Bidi property L, R, 
 				// or AL.  If it has the R or AL property, it is an RTL label; if it
 				// has the L property, it is an LTR label.
-				if (lookup_member(BIDI_R_AL, cps[0])) { // RTL 
+				if (lookup_member(BIDI.R_AL, cps[0])) { // RTL 
 					// 2.) In an RTL label, only characters with the Bidi properties R, AL,
 					// AN, EN, ES, CS, ET, ON, BN, or NSM are allowed.
-					if (!cps.every(cp => lookup_member(BIDI_R_AL, cp) 
-						|| lookup_member(BIDI_AN, cp)
-						|| lookup_member(BIDI_EN, cp)
-						|| lookup_member(BIDI_ECTOB, cp) 
-						|| lookup_member(BIDI_NSM, cp))) throw new DisallowedLabelError(`bidi RTL: disallowed properties`, cps);
+					if (!cps.every(cp => lookup_member(BIDI.R_AL, cp) 
+						|| lookup_member(BIDI.AN, cp)
+						|| lookup_member(BIDI.EN, cp)
+						|| lookup_member(BIDI.ECTOB, cp) 
+						|| lookup_member(BIDI.NSM, cp))) throw new DisallowedLabelError(`bidi RTL: disallowed properties`, cps);
 					// 3. In an RTL label, the end of the label must be a character with
 					// Bidi property R, AL, EN, or AN, followed by zero or more
 					// characters with Bidi property NSM.
 					let last = cps.length - 1;
-					while (lookup_member(BIDI_NSM, cps[last])) last--;
+					while (lookup_member(BIDI.NSM, cps[last])) last--;
 					last = cps[last];
-					if (!(lookup_member(BIDI_R_AL, last) 
-						|| lookup_member(BIDI_EN, last) 
-						|| lookup_member(BIDI_AN, last))) throw new DisallowedLabelError(`bidi RTL: disallowed ending`, cps);
+					if (!(lookup_member(BIDI.R_AL, last) 
+						|| lookup_member(BIDI.EN, last) 
+						|| lookup_member(BIDI.AN, last))) throw new DisallowedLabelError(`bidi RTL: disallowed ending`, cps);
 					// 4. In an RTL label, if an EN is present, no AN may be present, and vice versa.
-					let en = cps.some(cp => lookup_member(BIDI_EN, cp));
-					let an = cps.some(cp => lookup_member(BIDI_AN, cp));
+					let en = cps.some(cp => lookup_member(BIDI.EN, cp));
+					let an = cps.some(cp => lookup_member(BIDI.AN, cp));
 					if (en && an) throw new DisallowedLabelError(`bidi RTL: AN+EN`, cps);
-				} else if (lookup_member(BIDI_L, cps[0])) { // LTR
+				} else if (lookup_member(BIDI.L, cps[0])) { // LTR
 					// 5. In an LTR label, only characters with the Bidi properties L, EN,
 					// ES, CS, ET, ON, BN, or NSM are allowed.
-					if (!cps.every(cp => lookup_member(BIDI_L, cp) 
-						|| lookup_member(BIDI_EN, cp)
-						|| lookup_member(BIDI_ECTOB, cp)
-						|| lookup_member(BIDI_NSM, cp))) throw new DisallowedLabelError(`bidi LTR: disallowed properties`, cps);
+					if (!cps.every(cp => lookup_member(BIDI.L, cp) 
+						|| lookup_member(BIDI.EN, cp)
+						|| lookup_member(BIDI.ECTOB, cp)
+						|| lookup_member(BIDI.NSM, cp))) throw new DisallowedLabelError(`bidi LTR: disallowed properties`, cps);
 					// 6. end with L or EN .. 0+ NSM
 					let last = cps.length - 1;
-					while (lookup_member(BIDI_NSM, cps[last])) last--;
+					while (lookup_member(BIDI.NSM, cps[last])) last--;
 					last = cps[last];
-					if (!lookup_member(BIDI_L, last) 
-						&& !lookup_member(BIDI_EN, last)) throw new DisallowedLabelError(`bidi LTR: disallowed ending`, cps);
+					if (!lookup_member(BIDI.L, last) 
+						&& !lookup_member(BIDI.EN, last)) throw new DisallowedLabelError(`bidi LTR: disallowed ending`, cps);
 				} else {
 					throw new DisallowedLabelError(`bidi without direction`, cps);
 				}
 			}
 		}
 	}	
-	return labels.map(cps => String.fromCodePoint(...cps)).join(String.fromCodePoint(STOP));
+	return labels.map(cps => str_from_cp(...cps)).join(str_from_cp(STOP));
+}
+
+// split an array at specific values
+// [a, b, x, c, d] => [[a, b], [c, d]]
+function split(v, x) {
+	let ret = [];
+	let pos = 0;
+	while (true) {
+		let next = v.indexOf(x, pos);
+		if (next == -1) break;
+		ret.push(v.slice(pos, next));
+		pos = next + 1;		
+	}
+	ret.push(v.slice(pos));
+	return ret;
 }
