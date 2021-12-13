@@ -156,11 +156,11 @@ async function main() {
 		let same = (tally['same-norm'] ?? 0) + (tally['same-error'] ?? 0);
 		let tr = document.createElement('tr');
 		tr.innerHTML = [
-			'<tr>',
+			`<tr>`,
 			`<td><a href="#${name}">${name}</a></td>`,
 			`<td>${(new Date() - date0).toFixed(0)}ms</td>`,
 			`<td>${total}</td>`,
-			`<td>${(100 * same / total).toFixed(1)}%</td>`,
+			`<td class="${same == total ? 'same-norm' : 'reject-valid'}">${(100 * same / total).toFixed(1)}%</td>`,
 			...COLS.map(x => `<td>${tally[x] ?? 0}</td>`)
 		].join('');
 
