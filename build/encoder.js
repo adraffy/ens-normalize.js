@@ -67,6 +67,10 @@ export function best_arithmetic_encoding(symbols, max = 64) {
 	return best;
 }
 
+// TODO: make this adaptive
+// TODO: make payload symbols encoded as bit-width symbols
+// eg. instead of byte[1,2,3] use bits[5-20]
+// this goes from 11.5KB to 8KB see: CheckLogarithmic.nb
 export function arithmetic_encoding(symbols, linear) {	
 	if (symbols.length == 0) throw new Error(`no symbols`);
 	if (linear < 0) throw new Error(`should be non-negative`);
