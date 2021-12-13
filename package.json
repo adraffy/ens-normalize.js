@@ -1,6 +1,6 @@
 {
   "name": "@adraffy/ens-normalize",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Compact ES6 Ethereum Name Service (ENS) Name Normalizer",
   "keywords": [
     "ENS",
@@ -22,5 +22,10 @@
     "name": "raffy.eth",
     "email": "raffy@me.com",
     "url": "http://raffy.antistupid.com"
+  },
+  "scripts": {
+    "build": "node build/build-source.js",
+    "test-source": "node test/test-lib.js build/ens-normalize.js",
+    "test-build": "node test/test-lib.js dist/ens-normalize.js"
   }
 }

@@ -228,14 +228,12 @@ function is_zwnj_emoji(v, pos) {
 		next: for (let emoji of bucket) { // TODO: early abort 
 			let i = pos - b;
 			for (let c of emoji) {
-				if (i >= length) continue next;
-				let ci = v[i];			
-				if (ci === 0xFE0F) { // this could be is_ignored()
-					i++; // skip
-					continue;
-				} else if (c != v[i++]) {
-					continue next;
+				while (true) {
+					if (i >= length) continue next;
+					if (!is_ignored(v[i])) break;
+					i++;
 				}
+				if (c != v[i++]) break;
 			}
 			return true;
 		}
@@ -331,7 +329,7 @@ export function ens_normalize(name, ignore_disallowed = false, check_bidi = fals
 	// [Processing] 1.) Map
 	// [Processing] 2.) Normalize
 	// [Processing] 3.) Break
-	let labels = split_on(nfc_idna_contextj_emoji([...name].map(x => x.codePointAt(0), ignore_disallowed)), STOP).map(cps => {		
+	let labels = split_on(nfc_idna_contextj_emoji([...name].map(x => x.codePointAt(0)), ignore_disallowed), STOP).map(cps => {		
 		// [Processing] 4.) Convert/Validate
 		if (cps.length >= 4 && cps[2] == HYPHEN && cps[3] == HYPHEN) { // "**--"
 			if (cps[0] == 0x78 && cps[1] == 0x6E) { // "xn--"

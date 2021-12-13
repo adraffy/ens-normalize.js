@@ -10,8 +10,8 @@
 * [Live Demo](https://raffy.antistupid.com/eth/ens-resolver.html)
 * Passes **100%** [IDNATestV2](https://adraffy.github.io/ens-normalize.js/test/report-idna.html)
 * Passes **100%** [NormalizationTests](https://adraffy.github.io/ens-normalize.js/test/report-nf.html)
+* [Emoji Test](https://adraffy.github.io/ens-normalize.js/test/report-emoji.html)
 * Generated Report: [eth-ens-namehash](https://adraffy.github.io/ens-normalize.js/test/output/ens.html)
-
 
 ```Javascript
 import {ens_normalize} from '@adraffy/ens-normalize';
@@ -53,4 +53,6 @@ console.log(ens_normalize('_'));       // throws: disallowed
 * Run `node build/unicode.js download` to download data from [unicode.org](https://www.unicode.org/Public/).
 * Run `node build/unicode.js parse` to parse those files into JSON files.
 * Run `node build/build-tables.js` to extract the necessary tables as JSON and generate compressed tables as binary.
-* Run `node build/build-source.js` to inject the compressed tables into the source template and create the normal and minified `dist/` files.
+* Run `npm run test-source` to test `build/ens-normalize.js`.
+* Run `npm run build ` or `node build/build-source.js` to inject the compressed tables into the source template and create the normal and minified `dist/` files.
+* Run `npm run test-build` to test `dist/ens-normalize.js`.

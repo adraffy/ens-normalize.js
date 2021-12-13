@@ -1,5 +1,3 @@
-import {nfd, nfc} from '../index.js';
-
 import {readFileSync} from 'fs';
 import {join} from 'path';
 import {cps_from_sequence, compare_array} from '../build/utils.js';
@@ -7,7 +5,7 @@ import {cps_from_sequence, compare_array} from '../build/utils.js';
 let base_dir = new URL('.', import.meta.url).pathname;
 let tests = JSON.parse(readFileSync(join(base_dir, '../build/unicode-json/NormalizationTest.json')));
 
-function test(nfd, nfc) {
+export function test_nf(nfd, nfc) {
 	let errors = [];		
 	for (let [name, cases] of Object.entries(tests)) {
 		let nfd_errors = 0;
@@ -29,16 +27,3 @@ function test(nfd, nfc) {
 	}
 	return errors;
 }
-
-// adraffy
-if (test(nfd, nfc).length > 0) {
-	throw new Error('test failed');
-}
-
-// javascript
-function js_norm(type) {
-	return cps => [...String.fromCodePoint(...cps).normalize(type)].map(x => x.codePointAt(0));
-}
-console.log();
-console.log('Javascript:');
-test(js_norm('NFD'), js_norm('NFC'));

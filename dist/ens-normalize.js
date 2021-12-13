@@ -1,5 +1,5 @@
-// built: 2021-12-12T10:04:56.964Z
-export const VERSION = '1.2.0';
+// built: 2021-12-13T04:15:26.022Z
+export const VERSION = '1.2.1';
 export const UNICODE = '14.0.0';
 // injected from ./decoder.js
 function arithmetic_decoding(bytes) {
@@ -466,14 +466,12 @@ function is_zwnj_emoji(v, pos) {
 		next: for (let emoji of bucket) { // TODO: early abort 
 			let i = pos - b;
 			for (let c of emoji) {
-				if (i >= length) continue next;
-				let ci = v[i];			
-				if (ci === 0xFE0F) { // this could be is_ignored()
-					i++; // skip
-					continue;
-				} else if (c != v[i++]) {
-					continue next;
+				while (true) {
+					if (i >= length) continue next;
+					if (!is_ignored(v[i])) break;
+					i++;
 				}
+				if (c != v[i++]) break;
 			}
 			return true;
 		}
@@ -569,7 +567,7 @@ export function ens_normalize(name, ignore_disallowed = false, check_bidi = fals
 	// [Processing] 1.) Map
 	// [Processing] 2.) Normalize
 	// [Processing] 3.) Break
-	let labels = split_on(nfc_idna_contextj_emoji([...name].map(x => x.codePointAt(0), ignore_disallowed)), STOP).map(cps => {		
+	let labels = split_on(nfc_idna_contextj_emoji([...name].map(x => x.codePointAt(0)), ignore_disallowed), STOP).map(cps => {		
 		// [Processing] 4.) Convert/Validate
 		if (cps.length >= 4 && cps[2] == HYPHEN && cps[3] == HYPHEN) { // "**--"
 			if (cps[0] == 0x78 && cps[1] == 0x6E) { // "xn--"
@@ -586,7 +584,7 @@ export function ens_normalize(name, ignore_disallowed = false, check_bidi = fals
 				// This provides a mechanism allowing explicit use of Deviation characters even during a transition period. 
 				// [Custom ENS Rule] deviate from UTS-46 and remap
 				let idna = nfc_idna_contextj_emoji(puny, true);
-				if (puny.length != idna.length || !puny.every((x, i) => x == idna[i])) throw new DisallowedLabelError(`punycode: not idna`, cps);
+				if (puny.length != idna.length || !puny.every((x, i) => x == idna[i])) throw new DisallowedLabelError(`puny not idna`, cps);
 				// Otherwise replace the original label in the string by the results of the conversion. 
 				cps = puny;
 			}

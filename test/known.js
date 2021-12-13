@@ -1,5 +1,3 @@
-import {escape_unicode} from '../build/utils.js';
-
 export const KNOWN = [
 	// pass
 	{name: "bRAnTlY.eTh", norm: "brantly.eth"}, 
@@ -51,37 +49,23 @@ export const KNOWN = [
 	{name: "🧟♂.eth"},
 ];
 
-function explode(s) {
-	return typeof s !== 'string' ? 'null' : `"${escape_unicode(s)}"`;
-}
-
 // test known names match expected outcome
 export function test_known(ens_normalize) {
-	KNOWN.forEach(({name, norm, error}, i) => {
-		let result;
-		if (!error && !norm) norm = name; // no change
+	let errors = [];
+	for (let {name, norm, error} of KNOWN) {
+		if (!error && !norm) norm = name; // expect no change
 		try {
-			try {
-				result = ens_normalize(name);
-			} catch (err) {
-				if (!error) {
-					console.log(err);
-					throw new Error('unexpected error');
-				}
-				return; // we got expected result
-			}
+			let result = ens_normalize(name);
 			if (error) {
-				throw new Error('expected error');
+				error.push({type: 'expected-error', name, norm, result, error});
 			} else if (result !== norm) {
-				throw new Error(`expected norm`);
-			} else {
-				return; // we got expected result
+				error.push({type: 'expected-norm', name, norm, result});
 			}
 		} catch (err) {
-			console.error(`Name: ${explode(name)}`);
-			console.error(`Norm: ${explode(norm)}`);
-			console.error(` Got: ${explode(result)}`);
-			throw err;
+			if (!error) {
+				errors.push({type: 'unexpected-error', name, norm, error: err.message});
+			}
 		}
-	});
+	}
+	return errors;
 }
