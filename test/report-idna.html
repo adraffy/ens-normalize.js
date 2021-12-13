@@ -51,7 +51,7 @@ td {
 <body>
 <h1><a href="../build/unicode-raw/IdnaTestV2.txt">IDNATestV2</a><span id="version"></span></h1>
 <table id="summary">
-<thead><tr><th>Test</th><th>#</th><th>same</th>
+<thead><tr><th>Test</th><th>Duration</th><th>Cases</th><th>same</th>
 <th class="state">same-norm</th>
 <th class="state">same-error</th>
 <th class="state">allow-error</th>
@@ -85,8 +85,15 @@ async function main() {
 	let res = await fetch('../build/unicode-json/IdnaTestV2.json');
 	if (res.status !== 200) throw new Error('download error');
 	let tests = await res.json();
-
-	for (let [name, cases] of Object.entries(tests)) {
+	tests = Object.entries(tests).sort((a, b) => b[1].length - a[1].length);
+	next();
+	function next() {
+		if (tests.length == 0) {
+			document.querySelector('#loading').remove();
+			return;
+		}
+		let date0 = new Date();
+		let [name, cases] = tests.pop();
 		let html = `<a name="${name}"><h2>${name} (${cases.length})</h2></a><table><thead><tr>
 		<th>#</th><th width="32%">Input</th><th width="32%">Expected</th><th width="32%">Normalized</th>
 		</tr></thead><tbody>`;
@@ -100,7 +107,7 @@ async function main() {
 			if (!output) output = input;
 			let norm, norm_err;
 			try {
-				norm = ens_normalize(input, false, true);
+				norm = ens_normalize(input, false, true); // enable bidi
 			} catch (err) {
 				norm_err = err.message;
 			}
@@ -151,14 +158,15 @@ async function main() {
 		tr.innerHTML = [
 			'<tr>',
 			`<td><a href="#${name}">${name}</a></td>`,
+			`<td>${(new Date() - date0).toFixed(0)}ms</td>`,
 			`<td>${total}</td>`,
 			`<td>${(100 * same / total).toFixed(1)}%</td>`,
 			...COLS.map(x => `<td>${tally[x] ?? 0}</td>`)
 		].join('');
 
 		document.querySelector('#summary tbody').append(tr);
+		setTimeout(next, 0);
 	}
-	document.querySelector('#loading').remove();
 }
 </script>
 </body>

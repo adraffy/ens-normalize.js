@@ -1,3 +1,5 @@
+import {escape_unicode} from '../build/utils.js';
+
 export const KNOWN = [
 	// pass
 	{name: "bRAnTlY.eTh", norm: "brantly.eth"}, 
@@ -53,17 +55,18 @@ export const KNOWN = [
 export function test_known(ens_normalize) {
 	let errors = [];
 	for (let {name, norm, error} of KNOWN) {
+		let input = escape_unicode(name);
 		if (!error && !norm) norm = name; // expect no change
 		try {
 			let result = ens_normalize(name);
 			if (error) {
-				error.push({type: 'expected-error', name, norm, result, error});
+				error.push({type: 'expected-error', input, name, norm, result, error});
 			} else if (result !== norm) {
-				error.push({type: 'expected-norm', name, norm, result});
+				error.push({type: 'expected-norm', input, name, norm, result});
 			}
 		} catch (err) {
 			if (!error) {
-				errors.push({type: 'unexpected-error', name, norm, error: err.message});
+				errors.push({type: 'unexpected-error', input, name, norm, error: err.message});
 			}
 		}
 	}

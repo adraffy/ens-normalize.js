@@ -220,20 +220,28 @@ function puny_decode(cps) {
 
 // ************************************************************
 
+// TODO: i think this is better than FE0F dodge
+// if (!is_ignored(v[i])) break; 			
 function is_zwnj_emoji(v, pos) {
-	let {length} = v;
 	for (let b = Math.min(pos, ZWNJ_EMOJI.length); b > 0; b--) {
 		let bucket = ZWNJ_EMOJI[b];
 		if (!bucket) continue;
-		next: for (let emoji of bucket) { // TODO: early abort 
-			let i = pos - b;
-			for (let c of emoji) {
+		next: for (let emoji of bucket) {
+			for (let i = b - 1, p = pos - 1; i >= 0; i--, p--) { // check backwards
 				while (true) {
-					if (i >= length) continue next;
-					if (!is_ignored(v[i])) break;
-					i++;
+					if (p < 0) continue next;
+					if (v[p] != 0xFE0F) break; 
+					p--;
 				}
-				if (c != v[i++]) break;
+				if (emoji[i] != v[p]) continue next;
+			}
+			for (let i = b + 1, p = pos + 1; i < emoji.length; i++, p++) { // check forwards
+				while (true) {
+					if (p >= v.length) continue next;
+					if (v[p] != 0xFE0F) break;
+					p++;
+				}
+				if (emoji[i] != v[p]) continue next;
 			}
 			return true;
 		}
@@ -298,7 +306,7 @@ function nfc_idna_contextj_emoji(cps, ignore_disallowed = false) {
 			// 1.) V + cp
 			// V = Combining_Class "Virama"
 			if (i > 0 && lookup_member(VIRAMA, cps[i - 1])) return cp; // allowed
-			// [Custom ENS Rule] Emoji
+			// [Custom ENS Rule] Emoji			
 			if (is_zwnj_emoji(cps, i)) return cp; // allowed
 			if (ignore_disallowed) return empty; 
 			throw new DisallowedCharacterError(cp, `ZWNJ outside of context`);
@@ -381,7 +389,7 @@ export function ens_normalize(name, ignore_disallowed = false, check_bidi = fals
 	// https://unicode.org/reports/tr46/#Notation
 	// A Bidi domain name is a domain name containing at least one character with BIDI_Class R, AL, or AN
 	if (check_bidi && labels.some(cps => cps.some(cp => lookup_member(BIDI_R_AL, cp) || lookup_member(BIDI_AN, cp)))) {
-		cps.filter(cps => cps.length > 0).map(cps => {
+		labels.filter(cps => cps.length > 0).map(cps => {
 			// https://www.rfc-editor.org/rfc/rfc5893.txt
 			// 1.) The first character must be a character with Bidi property L, R, 
 			// or AL.  If it has the R or AL property, it is an RTL label; if it

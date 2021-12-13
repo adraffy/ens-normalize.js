@@ -48,7 +48,7 @@ tbody tr:nth-child(odd) {
 <body>
 <h1><a href="../build/unicode-raw/NormalizationTest.txt">NormalizationTest</a><span id="version"></span></h1>
 <table id="summary"><thead>
-<tr><th rowspan="2">Test</th><th rowspan="2">#</th></th><th colspan="2">adraffy</th><th colspan="2">Browser</th></tr>
+<tr><th rowspan="2">Test</th><th rowspan="2">Cases</th></th><th colspan="2">adraffy</th><th colspan="2">Browser</th></tr>
 <tr><th>NFD</th><th>NFC</th><th>NFD</th><th>NFC</th></tr>
 </thead><tbody></tbody></table>
 <div id="loading">Computing..</div>
@@ -93,9 +93,14 @@ async function main() {
 	let res = await fetch('../build/unicode-json/NormalizationTest.json');
 	if (res.status !== 200) throw new Error('download error');
 	let tests = await res.json();
-
-
-	for (let [name, cases] of Object.entries(tests)) {
+	tests = Object.entries(tests).sort((a, b) => b[1].length - a[1].length);
+	next();
+	function next() {
+		if (tests.length == 0) {
+			document.querySelector('#loading').remove();
+			return;
+		}
+		let [name, cases] = tests.pop();
 		let html = `<a name="${name}"></a><h2>${name}(${cases.length})</h2><table><thead>
 		<tr><th rowspan="2">Input</th><th colspan="3">NFD</th><th colspan="3">NFC</th></tr>
 		<tr><th>Expected</th><th>adraffy</th><th>Browser</th><th>Expected</th><th>adraffy</th><th>Browser</th></tr>
@@ -148,9 +153,8 @@ async function main() {
 		].join('');
 
 		document.querySelector('#summary tbody').append(tr);
-
+		setTimeout(next, 0);
 	}
-	document.querySelector('#loading').remove();
 }
 </script>
 </body>

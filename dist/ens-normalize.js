@@ -1,5 +1,5 @@
-// built: 2021-12-13T04:15:26.022Z
-export const VERSION = '1.2.1';
+// built: 2021-12-13T23:22:17.238Z
+export const VERSION = '1.2.2';
 export const UNICODE = '14.0.0';
 // injected from ./decoder.js
 function arithmetic_decoding(bytes) {
@@ -458,20 +458,28 @@ function puny_decode(cps) {
 
 // ************************************************************
 
+// TODO: i think this is better than FE0F dodge
+// if (!is_ignored(v[i])) break; 			
 function is_zwnj_emoji(v, pos) {
-	let {length} = v;
 	for (let b = Math.min(pos, ZWNJ_EMOJI.length); b > 0; b--) {
 		let bucket = ZWNJ_EMOJI[b];
 		if (!bucket) continue;
-		next: for (let emoji of bucket) { // TODO: early abort 
-			let i = pos - b;
-			for (let c of emoji) {
+		next: for (let emoji of bucket) {
+			for (let i = b - 1, p = pos - 1; i >= 0; i--, p--) { // check backwards
 				while (true) {
-					if (i >= length) continue next;
-					if (!is_ignored(v[i])) break;
-					i++;
+					if (p < 0) continue next;
+					if (v[p] != 0xFE0F) break; 
+					p--;
 				}
-				if (c != v[i++]) break;
+				if (emoji[i] != v[p]) continue next;
+			}
+			for (let i = b + 1, p = pos + 1; i < emoji.length; i++, p++) { // check forwards
+				while (true) {
+					if (p >= v.length) continue next;
+					if (v[p] != 0xFE0F) break;
+					p++;
+				}
+				if (emoji[i] != v[p]) continue next;
 			}
 			return true;
 		}
@@ -536,7 +544,7 @@ function nfc_idna_contextj_emoji(cps, ignore_disallowed = false) {
 			// 1.) V + cp
 			// V = Combining_Class "Virama"
 			if (i > 0 && lookup_member(VIRAMA, cps[i - 1])) return cp; // allowed
-			// [Custom ENS Rule] Emoji
+			// [Custom ENS Rule] Emoji			
 			if (is_zwnj_emoji(cps, i)) return cp; // allowed
 			if (ignore_disallowed) return empty; 
 			throw new DisallowedCharacterError(cp, `ZWNJ outside of context`);
@@ -560,14 +568,14 @@ export function ens_normalize(name, ignore_disallowed = false, check_bidi = fals
 	// * CheckHyphens = true
 	// * CheckJoiners = true
 	// * CheckBidi = unknown
-	const STOP = 0x2E;
-	const HYPHEN = 0x2D;	
 	// https://unicode.org/reports/tr46/#Processing
 	// https://unicode.org/reports/tr46/#Validity_Criteria
 	// [Processing] 1.) Map
-	// [Processing] 2.) Normalize
-	// [Processing] 3.) Break
-	let labels = split_on(nfc_idna_contextj_emoji([...name].map(x => x.codePointAt(0)), ignore_disallowed), STOP).map(cps => {		
+	// [Processing] 2.) Normalize: Normalize the domain_name string to Unicode Normalization Form C.
+	// [Processing] 3.) Break: Break the string into labels at U+002E ( . ) FULL STOP.
+	const STOP   = 0x2E; // FULL STOP
+	const HYPHEN = 0x2D; // HYPHEN MINUS
+	let labels = split_on(nfc_idna_contextj_emoji([...name].map(x => x.codePointAt(0)), ignore_disallowed), STOP).map(cps => {
 		// [Processing] 4.) Convert/Validate
 		if (cps.length >= 4 && cps[2] == HYPHEN && cps[3] == HYPHEN) { // "**--"
 			if (cps[0] == 0x78 && cps[1] == 0x6E) { // "xn--"
@@ -587,83 +595,81 @@ export function ens_normalize(name, ignore_disallowed = false, check_bidi = fals
 				if (puny.length != idna.length || !puny.every((x, i) => x == idna[i])) throw new DisallowedLabelError(`puny not idna`, cps);
 				// Otherwise replace the original label in the string by the results of the conversion. 
 				cps = puny;
+				// warning: this could be empty
+				// warning: this could be **--
 			}
+		}
+		if (cps.length > 0) {
+			// [Validity] 1.) The label must be in Unicode Normalization Form NFC.
+			// => satsified by nfc_idna()
+			// [Validity] 2.) If CheckHyphens, the label must not contain a U+002D HYPHEN-MINUS character in both the third and fourth positions.
+			// note: we check this here because puny can expand into "aa--bb"
+			if (cps.length >= 4 && cps[2] == HYPHEN && cps[3] == HYPHEN) throw new DisallowedLabelError(`invalid label extension`, cps);
+			// [Validity] 3.) If CheckHyphens, the label must neither begin nor end with a U+002D HYPHEN-MINUS character.
+			if (cps[0] == HYPHEN) throw new DisallowedLabelError(`leading hyphen`, cps);
+			if (cps[cps.length - 1] == HYPHEN) throw new DisallowedLabelError(`trailing hyphen`, cps);		
+			// [Validity] 4.) The label must not contain a U+002E ( . ) FULL STOP.
+			// => satisfied by [Processing] 3.) Break
+			// [Validity] 5.) The label must not begin with a combining mark, that is: General_Category=Mark.
+			if (lookup_member(COMBINING_MARKS, cps[0])) throw new DisallowedLabelError(`leading combining mark`, cps);
+			// [Validity] 6.) For Nontransitional Processing, each value must be either valid or deviation.
+			// => satisfied by nfc_idna()
+			// [Validity] 7.) If CheckJoiners, the label must satisify the ContextJ rules
+			// => satisfied by nfc_idna()
+			// [Validity] 8.) see below
 		}
 		return cps;
 	});
-	for (let cps of labels) {	
-		if (cps.length == 0) continue;
-		// [Validity] 1.) The label must be in Unicode Normalization Form NFC.
-		// => satsified by nfc_idna()
-		// [Validity] 2.) If CheckHyphens, the label must not contain a U+002D HYPHEN-MINUS character in both the third and fourth positions.
-		// note: we check this here because puny can expand into "aa--bb"
-		if (cps.length >= 4 && cps[2] == HYPHEN && cps[3] == HYPHEN) throw new DisallowedLabelError(`invalid label extension`, cps);
-		// [Validity] 3.) If CheckHyphens, the label must neither begin nor end with a U+002D HYPHEN-MINUS character.
-		if (cps[0] == HYPHEN) throw new DisallowedLabelError(`leading hyphen`, cps);
-		if (cps[cps.length - 1] == HYPHEN) throw new DisallowedLabelError(`trailing hyphen`, cps);		
-		// [Validity] 4.) The label must not contain a U+002E ( . ) FULL STOP.
-		// => satisfied by [Processing] 3.) Break
-		// [Validity] 5.) The label must not begin with a combining mark, that is: General_Category=Mark.
-		if (lookup_member(COMBINING_MARKS, cps[0])) throw new DisallowedLabelError(`leading combining mark`, cps);
-		// [Validity] 6.) For Nontransitional Processing, each value must be either valid or deviation.
-		// => satisfied by nfc_idna()
-		// [Validity] 7.) If CheckJoiners, the label must satisify the ContextJ rules
-		// => satisfied by nfc_idna()
-		// [Validity] 8.) see below
-	}
-	if (check_bidi) {
-		// [Validity] 8.) If CheckBidi, and if the domain name is a Bidi domain name, then the label 
-		// must satisfy all six of the numbered conditions in [IDNA2008] RFC 5893, Section 2.
-		// * The spec is ambiguious regarding when you can determine a domain name is bidi
-		// * According to IDNATestV2, this is calculated AFTER puny decoding
-		// https://unicode.org/reports/tr46/#Notation
-		// A Bidi domain name is a domain name containing at least one character with BIDI_Class R, AL, or AN
-		if (labels.some(cps => cps.some(cp => lookup_member(BIDI_R_AL, cp) || lookup_member(BIDI_AN, cp)))) {
-			for (let cps of labels) {
-				if (cps.length == 0) continue;
-				// https://www.rfc-editor.org/rfc/rfc5893.txt
-				// 1.) The first character must be a character with Bidi property L, R, 
-				// or AL.  If it has the R or AL property, it is an RTL label; if it
-				// has the L property, it is an LTR label.
-				if (lookup_member(BIDI_R_AL, cps[0])) { // RTL 
-					// 2.) In an RTL label, only characters with the Bidi properties R, AL,
-					// AN, EN, ES, CS, ET, ON, BN, or NSM are allowed.
-					if (!cps.every(cp => lookup_member(BIDI_R_AL, cp) 
-						|| lookup_member(BIDI_AN, cp)
-						|| lookup_member(BIDI_EN, cp)
-						|| lookup_member(BIDI_ECTOB, cp) 
-						|| lookup_member(BIDI_NSM, cp))) throw new DisallowedLabelError(`bidi RTL: disallowed properties`, cps);
-					// 3. In an RTL label, the end of the label must be a character with
-					// Bidi property R, AL, EN, or AN, followed by zero or more
-					// characters with Bidi property NSM.
-					let last = cps.length - 1;
-					while (lookup_member(BIDI_NSM, cps[last])) last--;
-					last = cps[last];
-					if (!(lookup_member(BIDI_R_AL, last) 
-						|| lookup_member(BIDI_EN, last) 
-						|| lookup_member(BIDI_AN, last))) throw new DisallowedLabelError(`bidi RTL: disallowed ending`, cps);
-					// 4. In an RTL label, if an EN is present, no AN may be present, and vice versa.
-					let en = cps.some(cp => lookup_member(BIDI_EN, cp));
-					let an = cps.some(cp => lookup_member(BIDI_AN, cp));
-					if (en && an) throw new DisallowedLabelError(`bidi RTL: AN+EN`, cps);
-				} else if (lookup_member(BIDI_L, cps[0])) { // LTR
-					// 5. In an LTR label, only characters with the Bidi properties L, EN,
-					// ES, CS, ET, ON, BN, or NSM are allowed.
-					if (!cps.every(cp => lookup_member(BIDI_L, cp) 
-						|| lookup_member(BIDI_EN, cp)
-						|| lookup_member(BIDI_ECTOB, cp)
-						|| lookup_member(BIDI_NSM, cp))) throw new DisallowedLabelError(`bidi LTR: disallowed properties`, cps);
-					// 6. end with L or EN .. 0+ NSM
-					let last = cps.length - 1;
-					while (lookup_member(BIDI_NSM, cps[last])) last--;
-					last = cps[last];
-					if (!lookup_member(BIDI_L, last) 
-						&& !lookup_member(BIDI_EN, last)) throw new DisallowedLabelError(`bidi LTR: disallowed ending`, cps);
-				} else {
-					throw new DisallowedLabelError(`bidi without direction`, cps);
-				}
+	// [Validity] 8.) If CheckBidi, and if the domain name is a Bidi domain name, then the label 
+	// must satisfy all six of the numbered conditions in [IDNA2008] RFC 5893, Section 2.
+	// * The spec is ambiguious regarding when you can determine a domain name is bidi
+	// * According to IDNATestV2, this is calculated AFTER puny decoding
+	// https://unicode.org/reports/tr46/#Notation
+	// A Bidi domain name is a domain name containing at least one character with BIDI_Class R, AL, or AN
+	if (check_bidi && labels.some(cps => cps.some(cp => lookup_member(BIDI_R_AL, cp) || lookup_member(BIDI_AN, cp)))) {
+		labels.filter(cps => cps.length > 0).map(cps => {
+			// https://www.rfc-editor.org/rfc/rfc5893.txt
+			// 1.) The first character must be a character with Bidi property L, R, 
+			// or AL.  If it has the R or AL property, it is an RTL label; if it
+			// has the L property, it is an LTR label.
+			if (lookup_member(BIDI_R_AL, cps[0])) { // RTL 
+				// 2.) In an RTL label, only characters with the Bidi properties R, AL,
+				// AN, EN, ES, CS, ET, ON, BN, or NSM are allowed.
+				if (!cps.every(cp => lookup_member(BIDI_R_AL, cp) 
+					|| lookup_member(BIDI_AN, cp)
+					|| lookup_member(BIDI_EN, cp)
+					|| lookup_member(BIDI_ECTOB, cp) 
+					|| lookup_member(BIDI_NSM, cp))) throw new DisallowedLabelError(`bidi RTL: disallowed properties`, cps);
+				// 3. In an RTL label, the end of the label must be a character with
+				// Bidi property R, AL, EN, or AN, followed by zero or more
+				// characters with Bidi property NSM.
+				let last = cps.length - 1;
+				while (lookup_member(BIDI_NSM, cps[last])) last--;
+				last = cps[last];
+				if (!(lookup_member(BIDI_R_AL, last) 
+					|| lookup_member(BIDI_EN, last) 
+					|| lookup_member(BIDI_AN, last))) throw new DisallowedLabelError(`bidi RTL: disallowed ending`, cps);
+				// 4. In an RTL label, if an EN is present, no AN may be present, and vice versa.
+				let en = cps.some(cp => lookup_member(BIDI_EN, cp));
+				let an = cps.some(cp => lookup_member(BIDI_AN, cp));
+				if (en && an) throw new DisallowedLabelError(`bidi RTL: AN+EN`, cps);
+			} else if (lookup_member(BIDI_L, cps[0])) { // LTR
+				// 5. In an LTR label, only characters with the Bidi properties L, EN,
+				// ES, CS, ET, ON, BN, or NSM are allowed.
+				if (!cps.every(cp => lookup_member(BIDI_L, cp) 
+					|| lookup_member(BIDI_EN, cp)
+					|| lookup_member(BIDI_ECTOB, cp)
+					|| lookup_member(BIDI_NSM, cp))) throw new DisallowedLabelError(`bidi LTR: disallowed properties`, cps);
+				// 6. end with L or EN .. 0+ NSM
+				let last = cps.length - 1;
+				while (lookup_member(BIDI_NSM, cps[last])) last--;
+				last = cps[last];
+				if (!lookup_member(BIDI_L, last) 
+					&& !lookup_member(BIDI_EN, last)) throw new DisallowedLabelError(`bidi LTR: disallowed ending`, cps);
+			} else {
+				throw new DisallowedLabelError(`bidi without direction`, cps);
 			}
-		}
+		});
 	}	
 	return labels.map(cps => String.fromCodePoint(...cps)).join(String.fromCodePoint(STOP));
 }
