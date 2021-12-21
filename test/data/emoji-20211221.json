@@ -1,53 +1,51 @@
 [
   {
     "input": "0030 20E3",
-    "type": "unqualified",
-    "error": "disallowed"
+    "type": "unqualified"
   },
   {
     "input": "0031 20E3",
-    "type": "unqualified",
-    "error": "disallowed"
+    "type": "unqualified"
   },
   {
     "input": "0032 20E3",
-    "type": "unqualified",
-    "error": "disallowed"
+    "type": "unqualified"
   },
   {
     "input": "0033 20E3",
-    "type": "unqualified",
-    "error": "disallowed"
+    "type": "unqualified"
   },
   {
     "input": "0034 20E3",
-    "type": "unqualified",
-    "error": "disallowed"
+    "type": "unqualified"
   },
   {
     "input": "0035 20E3",
-    "type": "unqualified",
-    "error": "disallowed"
+    "type": "unqualified"
   },
   {
     "input": "0036 20E3",
-    "type": "unqualified",
-    "error": "disallowed"
+    "type": "unqualified"
   },
   {
     "input": "0037 20E3",
-    "type": "unqualified",
-    "error": "disallowed"
+    "type": "unqualified"
   },
   {
     "input": "0038 20E3",
-    "type": "unqualified",
-    "error": "disallowed"
+    "type": "unqualified"
   },
   {
     "input": "0039 20E3",
-    "type": "unqualified",
-    "error": "disallowed"
+    "type": "unqualified"
+  },
+  {
+    "input": "0023 20E3",
+    "type": "unqualified"
+  },
+  {
+    "input": "002A 20E3",
+    "type": "unqualified"
   },
   {
     "input": "2049",
@@ -68,22 +66,12 @@
     "error": "disallowed"
   },
   {
-    "input": "0023 20E3",
-    "type": "unqualified",
-    "error": "disallowed"
-  },
-  {
     "input": "0023 FE0F 20E3",
     "type": "fully-qualified"
   },
   {
     "input": "002A FE0F 20E3",
     "type": "fully-qualified"
-  },
-  {
-    "input": "002A 20E3",
-    "type": "unqualified",
-    "error": "disallowed"
   },
   {
     "input": "1F3F4 E0067 E0062 E0065 E006E E0067 E007F",

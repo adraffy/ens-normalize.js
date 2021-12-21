@@ -495,7 +495,7 @@ function consume_emoji_sequence(cps, pos) {
 	// [ED-14] emoji flag sequence
 	// https://www.unicode.org/reports/tr51/#def_emoji_flag_sequence
 	// A sequence of two Regional Indicator characters, where the corresponding ASCII characters are valid region sequences as specified 
-	if (pos + 2 <= len && lookup_member(REGIONAL, cp)) {
+	if (pos+1 < len && lookup_member(REGIONAL, cp)) {
 		// emoji_flag_sequence := regional_indicator regional_indicator
 		let next = cps[pos+1];
 		if (lookup_member(REGIONAL, next)) {
@@ -528,8 +528,17 @@ function consume_emoji_sequence(cps, pos) {
 	// https://unicode.org/reports/tr51/#def_emoji_keycap_sequence
 	// A sequence of the following form: 
 	// emoji_keycap_sequence := [0-9#*] \x{FE0F 20E3}
+	/*
 	if (pos + 3 <= len && lookup_member(KEYCAP, cp) && cps[pos+1] == FE0F && cps[pos+2] == KEYCAP_END) {
 		return [3, [cp, KEYCAP_END]];
+	}
+	*/
+	if (pos+1 < len && lookup_member(KEYCAP, cp)) {
+		let next = pos + 1;
+		if (next+1 < len && cps[next] == FE0F) next++; // optional
+		if (cps[next] == KEYCAP_END) {
+			return [1 + next - pos, [cp, KEYCAP_END]];
+		}
 	}
 	// [ED-17] emoji sequence
 	// emoji_sequence := emoji_core_sequence | emoji_zwj_sequence | emoji_tag_sequence 
@@ -550,9 +559,9 @@ function consume_emoji_sequence(cps, pos) {
 	return [next - pos, stack];
 }
 
-// built: 2021-12-21T11:15:48.446Z
+// built: 2021-12-21T12:42:17.461Z
 const UNICODE = '14.0.0';
-const VERSION = '1.3.0';
+const VERSION = '1.3.1';
 
 
 
