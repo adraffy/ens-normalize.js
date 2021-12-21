@@ -3,6 +3,7 @@ import {writeFile, mkdir, access} from 'fs/promises';
 import {join} from 'path';
 import {createReadStream} from 'fs';
 import {createInterface} from 'readline/promises';
+import {parse_cp_sequence} from './utils.js';
 
 // https://www.unicode.org/versions/latest/
 const major = 14;
@@ -29,11 +30,12 @@ let urls = [
 	url_for_spec('ucd/extracted/DerivedBidiClass.txt'),
 	url_for_spec('ucd/extracted/DerivedDecompositionType.txt'),
 
-
 	// note: this file lacks column names
 	// https://www.unicode.org/Public/5.1.0/ucd/UCD.html#UnicodeData.txt
 	url_for_spec('ucd/UnicodeData.txt'),
-	url_for_spec('ucd/Jamo.txt'),
+
+	url_for_spec('ucd/Scripts.txt'),
+	//url_for_spec('ucd/Jamo.txt'), // not needed with algorithmic hangul
 	url_for_spec('ucd/DerivedNormalizationProps.txt'),
 	url_for_spec('ucd/NormalizationTest.txt'),
 	url_for_spec('ucd/CompositionExclusions.txt'),
@@ -41,6 +43,8 @@ let urls = [
 	url_for_emoji('emoji-sequences.txt'),
 	url_for_emoji('emoji-zwj-sequences.txt'),
 	url_for_emoji('emoji-test.txt'),
+	url_for_spec('ucd/emoji/emoji-variation-sequences.txt'),
+	url_for_spec('ucd/emoji/emoji-data.txt')
 ];
 
 let base_dir = new URL('.', import.meta.url).pathname;
@@ -140,7 +144,7 @@ async function write_simple_file(impl) {
 }
 
 function emoji_from_codes(s) {
-	return String.fromCharCode(...s.split(/\s+/).map(x => parseInt(x, 16)));
+	return String.fromCharCode(parse_cp_sequence);
 }
 
 async function parse(argv) {
@@ -149,8 +153,9 @@ async function parse(argv) {
 	
 	await write_simple_file({
 		input: 'IdnaMappingTable',
-		row([src, type, dst]) {
+		row([src, type, dst, status]) {
 			if (!src) throw new Error('wtf src');
+			if (status) type = `${type}_${status}`; // IDNA 2008 Status NV8/XV8
 			let bucket = this.get_bucket(type);
 			if (type.includes('mapped')) {
 				if (!dst) throw new Error('wtf dst');
@@ -183,10 +188,41 @@ async function parse(argv) {
 	});
 
 	await write_simple_file({
+		input: 'emoji-sequences',
+		row([src, type, desc]) {
+			this.get_bucket(type).push({hex: src, desc, emoji: String.fromCodePoint(...parse_cp_sequence(src))});
+		}
+	});
+
+	// 1F468 200D 2764 FE0F 200D 1F468 ; RGI_Emoji_ZWJ_Sequence ; couple with heart: man, man
+	await write_simple_file({
 		input: 'emoji-zwj-sequences',
 		root: [],
-		row([codes, _, desc]) {
-			this.root.push({codes, desc, emoji: emoji_from_codes(codes)});
+		row([src, _, desc]) {
+			this.root.push({hex: src, desc, emoji: String.fromCodePoint(...parse_cp_sequence(src))});
+		}
+	});
+
+	// 0023 FE0(E|F) ; text style;  # (1.1) NUMBER SIGN
+	await write_simple_file({
+		input: 'emoji-variation-sequences',
+		row([src, style_desc]) {
+			let v = parse_cp_sequence(src);
+			if (v.length != 2) throw new Error('wtf length');
+			let [cp, style] = v;
+			switch (style) {
+				case 0xFE0F: this.get_bucket('f').push(cp); break;
+				case 0xFE0E: this.get_bucket('e').push(cp); break;
+				default: throw new Error('wtf style');
+			}
+		}
+	});
+
+	// 1F691..1F693  ; Emoji # E0.6 [3] (🚑..🚓) ambulance..police car
+	await write_simple_file({
+		input: 'emoji-data',
+		row([src, type]) {
+			this.get_bucket(type).push(src);	
 		}
 	});
 
@@ -233,6 +269,13 @@ async function parse(argv) {
 		root: [],
 		row([src]) {
 			this.root.push(src);
+		}
+	});
+
+	await write_simple_file({
+		input: 'Scripts',
+		row([codes, type]) {
+			this.get_bucket(type).push(codes);
 		}
 	});
 

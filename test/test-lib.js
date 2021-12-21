@@ -15,15 +15,6 @@ if (known_errors.length > 0) {
 }
 console.log('Known: OK');
 
-// test normalization forms
-import {test_nf} from './nf.js';
-let nf_errors = test_nf(lib.nfd, lib.nfc);
-if (nf_errors.length > 0) {
-	console.log(nf_errors);
-	throw new Error('NF');
-}
-console.log('NF: OK');
-
 // test emoji
 import {test_emoji} from './emoji.js';
 let emoji_errors = test_emoji(lib.ens_normalize);

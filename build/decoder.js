@@ -1,4 +1,4 @@
-export function arithmetic_decoding(bytes) {
+export function decode_arithmetic(bytes) {
 	let pos = 0;
 	function u16() { return (bytes[pos++] << 8) | bytes[pos++]; }
 	
@@ -78,132 +78,153 @@ export function arithmetic_decoding(bytes) {
 			default: return x - 1;
 		}
 	});
-	/*
-	let offset = symbol_count - 3;
-	return symbols.map(x => { // index into payload
-		switch (x - offset) {
-			case 2: return offset + 0x10000 + ((bytes[pos_payload++] << 16) | (bytes[pos_payload++] << 8) | bytes[pos_payload++]);
-			case 1: return offset + ((bytes[pos_payload++] << 8) | bytes[pos_payload++]);
-			default: return x - 1;
-		}
-	});*/
+}	
+
+// returns an iterator which returns the next symbol
+export function decode_payload(s) {
+	let values = decode_arithmetic(Uint8Array.from(atob(s), c => c.charCodeAt(0)));
+	let pos = 0;
+	return () => values[pos++];
 }
 
-export class Decoder {
-	constructor(values) {
-		this.pos = 0;
-		this.values = values;
+// eg. [0,1,2,3...] => [0,-1,1,-2,...]
+export function signed(i) { 
+	return (i & 1) ? (~i >> 1) : (i >> 1);
+}
+
+function read_counts(n, next) {
+	let v = Array(n);
+	for (let i = 0; i < n; i++) v[i] = 1 + next();
+	return v;
+}
+
+function read_ascending(n, next) {
+	let v = Array(n);
+	for (let i = 0, x = -1; i < n; i++) v[i] = x += 1 + next();
+	return v;
+}
+
+function read_deltas(n, next) {
+	let v = Array(n);
+	for (let i = 0, x = 0; i < n; i++) v[i] = x += signed(next());
+	return v;
+}
+
+// returns [[x, n], ...] s.t. [x,3] == [x,x+1,x+2]
+export function read_member_table(next) {
+	let v1 = read_ascending(next(), next);
+	let n = next();
+	let vX = read_ascending(n, next);
+	let vN = read_counts(n, next);
+	return [
+		...v1.map(x => [x, 1]),
+		...vX.map((x, i) => [x, vN[i]])
+	].sort((a, b) => a[0] - b[0]);
+}
+
+// returns array of 
+// [x, ys] => single replacement rule
+// [x, ys, n, dx, dx] => linear map
+export function read_mapped_table(next) {
+	let ret = [];
+	while (true) {
+		let w = next();
+		if (w == 0) break;
+		ret.push(read_linear_table(w, next));
 	}
-	read() { 
-		return this.values[this.pos++];
+	while (true) {
+		let w = next() - 1;
+		if (w < 0) break;
+		ret.push(read_replacement_table(w, next));
 	}
-	read_signed() { // eg. [0,1,2,3...] => [0,-1,1,-2,...]
-		let i = this.read();		
-		return (i & 1) ? (~i >> 1) : (i >> 1);
-	}
-	read_counts(n) {
+	return ret.flat().sort((a, b) => a[0] - b[0]);
+}
+
+function read_ys_transposed(n, w, next) {
+	let m = [read_deltas(n, next)];
+	for (let j = 1; j < w; j++) {
 		let v = Array(n);
-		for (let i = 0; i < n; i++) v[i] = 1 + this.read();
-		return v;
-	}
-	read_ascending(n) {
-		let v = Array(n);
-		for (let i = 0, x = -1; i < n; i++) v[i] = x += 1 + this.read();
-		return v;
-	}
-	read_deltas(n) {
-		let v = Array(n);
-		for (let i = 0, x = 0; i < n; i++) v[i] = x += this.read_signed();
-		return v;
-	}
-	read_member_tables(n) {
-		let ret = [];
-		for (let i =0; i < n; i++) {
-			ret.push(this.read_member_table());
+		let prev = m[j - 1];
+		for (let i = 0; i < n; i++) {
+			v[i] = prev[i] + signed(next());
 		}
-		return ret;
+		m.push(v);
 	}
-	// returns [[x, n], ...] s.t. [x,3] == [x,x+1,x+2]
- 	read_member_table() {
-		let v1 = this.read_ascending(this.read());
-		let n = this.read();
-		let vX = this.read_ascending(n);
-		let vN = this.read_counts(n);
-		return [
-			...v1.map(x => [x, 1]),
-			...vX.map((x, i) => [x, vN[i]])
-		].sort((a, b) => a[0] - b[0]);
-	}
-	// returns array of 
-	// [x, ys] => single replacement rule
-	// [x, ys, n, dx, dx] => linear map
-	read_mapped_table() {
-		let ret = [];
-		while (true) {
-			let w = this.read();
-			if (w == 0) break;
-			ret.push(this.read_linear_table(w));
-		}
-		while (true) {
-			let w = this.read() - 1;
-			if (w < 0) break;
-			ret.push(this.read_mapped_replacement(w));
-		}
-		return ret.flat().sort((a, b) => a[0] - b[0]);
-	}
-	read_ys_transposed(n, w) {
-		let m = [this.read_deltas(n)];
-		for (let j = 1; j < w; j++) {
-			let v = Array(n);
-			let prev = m[j - 1];
-			for (let i = 0; i < n; i++) {
-				v[i] = prev[i] + this.read_signed();
-			}
-			m.push(v);
-		}
-		return m;
-	}
-	read_mapped_replacement(w) { 
-		let n = 1 + this.read();
-		let vX = this.read_ascending(n);
-		let mY = this.read_ys_transposed(n, w);
-		return vX.map((x, i) => [x, mY.map(v => v[i])])
-	}
-	read_linear_table(w) {
-		let dx = 1 + this.read();
-		let dy = this.read();
-		let n = 1 + this.read();
-		let vX = this.read_ascending(n);
-		let vN = this.read_counts(n);
-		let mY = this.read_ys_transposed(n, w);
-		return vX.map((x, i) => [x, mY.map(v => v[i]), vN[i], dx, dy]);
-	}
-	read_emoji() {
-		let buckets = [];
-		for (let k = this.read(); k > 0; k--) {
-			let n = 1 + this.read(); // group size
-			let w = 1 + this.read(); // group width w/o ZWNJ
-			let p = 1 + this.read(); // bit positions of zwnj
-			let z = []; // position of zwnj
-			let m = []; // emoji vectors
-			for (let i = 0; i < n; i++) m.push([]);
-			for (let i = 0; i < w; i++) {
-				if (p & (1 << (i - 1))) {
-					w++; // increase width
-					z.push(i); // remember position
-					m.forEach(v => v.push(0x200D)); // insert zwnj
-				} else {
-					this.read_deltas(n).forEach((x, i) => m[i].push(x));
-				}
-			}
-			for (let b of z) {
-				let bucket = buckets[b];
-				if (!bucket) buckets[b] = bucket = [];
-				bucket.push(...m);
+	return m;
+}
+
+function read_replacement_table(w, next) { 
+	let n = 1 + next();
+	let vX = read_ascending(n, next);
+	let mY = read_ys_transposed(n, w, next);
+	return vX.map((x, i) => [x, mY.map(v => v[i])])
+}
+
+function read_linear_table(w, next) {
+	let dx = 1 + next();
+	let dy = next();
+	let n = 1 + next();
+	let vX = read_ascending(n, next);
+	let vN = read_counts(n, next);
+	let mY = read_ys_transposed(n, w, next);
+	return vX.map((x, i) => [x, mY.map(v => v[i]), vN[i], dx, dy]);
+}
+
+export function read_zwj_emoji(next) {
+	let buckets = [];
+	for (let k = next(); k > 0; k--) {
+		let n = 1 + next(); // group size
+		let w = 1 + next(); // group width w/o ZWJ
+		let p = 1 + next(); // bit positions of zwj
+		let z = []; // position of zwj
+		let m = []; // emoji vectors
+		for (let i = 0; i < n; i++) m.push([]);
+		for (let i = 0; i < w; i++) {
+			if (p & (1 << (i - 1))) {
+				w++; // increase width
+				z.push(i); // remember position
+				m.forEach(v => v.push(0x200D)); // insert zwj
+			} else {
+				read_deltas(n, next).forEach((x, i) => m[i].push(x));
 			}
 		}
-		return buckets;
+		for (let b of z) {
+			let bucket = buckets[b];
+			if (!bucket) buckets[b] = bucket = [];
+			bucket.push(...m);
+		}
 	}
+	return buckets;
+}
+
+export function read_emoji(next, sep) {
+	let ret = {};
+	for (let k = next(); k > 0; k--) {
+		let n = 1 + next(); // group size
+		let w = 1 + next(); // group width w/o sep
+		let p = 1 + next(); // bit positions of sep
+		let z = []; // position of sep
+		let m = []; // emoji vectors
+		for (let i = 0; i < n; i++) m.push([]);
+		for (let i = 0; i < w; i++) {
+			if (p & (1 << (i - 1))) {
+				w++; // increase width
+				z.push(i); // remember position
+				m.forEach(v => v.push(sep)); // insert 
+			} else {
+				read_deltas(n, next).forEach((x, i) => m[i].push(x));
+			}
+		}
+		for (let v of m) {
+			let bucket = ret[v[0]];
+			if (!bucket) bucket = ret[v[0]] = [];
+			bucket.push(v.slice(1));
+		}
+	}
+	for (let bucket of Object.values(ret)) {
+		bucket.sort((a, b) => b.length - a.length);
+	}
+	return ret;
 }
 
 export function lookup_member(table, cp) {

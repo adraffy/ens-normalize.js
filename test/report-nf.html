@@ -46,22 +46,16 @@ tbody tr:nth-child(odd) {
 </style>
 </head>
 <body>
-<h1><a href="../build/unicode-raw/NormalizationTest.txt">NormalizationTest</a><span id="version"></span></h1>
+<h1><a href="../build/unicode-raw/NormalizationTest.txt">NormalizationTest</a></h1>
 <table id="summary"><thead>
-<tr><th rowspan="2">Test</th><th rowspan="2">Cases</th></th><th colspan="2">adraffy</th><th colspan="2">Browser</th></tr>
+<tr><th rowspan="2">Test</th><th rowspan="2">Cases</th><th colspan="2">adraffy</th><th colspan="2">Browser</th></tr>
 <tr><th>NFD</th><th>NFC</th><th>NFD</th><th>NFC</th></tr>
 </thead><tbody></tbody></table>
 <div id="loading">Computing..</div>
 <script type="module">
-import {nfc as nfc_adraffy, nfd as nfd_adraffy, VERSION, UNICODE} from '../dist/ens-normalize.min.js';
+import {nfc_adraffy, nfd_adraffy, nfc_default, nfd_default} from '../dist/nf.min.js';
 
-document.querySelector('#version').innerHTML = ` v${VERSION} for Unicode ${UNICODE}`;
-
-function js_norm(type) {
-	return cps => [...String.fromCodePoint(...cps).normalize(type)].map(x => x.codePointAt(0));
-}
-const nfd_js = js_norm('NFD');
-const nfc_js = js_norm('NFC');
+//document.querySelector('#version').innerHTML = ` v${VERSION} for Unicode ${UNICODE}`;
 
 try {
 	main();
@@ -120,10 +114,10 @@ async function main() {
 				`<td class="input">${escape_unicode(src)}</td>`,
 				`<td class="expect">${escape_unicode(nfd0)}</td>`,
 				compare_cell(nfd0, nfd_adraffy(src), 'nfc_adraffy'),
-				compare_cell(nfd0, nfd_js(src), 'nfd_js'),
+				compare_cell(nfd0, nfd_default(src), 'nfd_default'),
 				`<td class="expect">${escape_unicode(nfc0)}</td>`,
 				compare_cell(nfc0, nfc_adraffy(src), 'nfd_adraffy'),
-				compare_cell(nfc0, nfc_js(src), 'nfc_js')
+				compare_cell(nfc0, nfc_default(src), 'nfc_default')
 			].join('') + '</tr>';
 		}
 		html += '</body></table>';
@@ -148,8 +142,8 @@ async function main() {
 			`<td class="count">${cases.length}</td>`,
 			total_cell('nfd_adraffy'),
 			total_cell('nfc_adraffy'),
-			total_cell('nfd_js'),
-			total_cell('nfc_js')
+			total_cell('nfd_default'),
+			total_cell('nfc_default')
 		].join('');
 
 		document.querySelector('#summary tbody').append(tr);

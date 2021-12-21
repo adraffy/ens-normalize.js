@@ -1,17 +1,17 @@
 import {readFileSync} from 'fs';
 import {join} from 'path';
-import {cps_from_sequence, compare_array} from '../build/utils.js';
+import {compare_array, parse_cp_sequence} from '../build/utils.js';
 
 let base_dir = new URL('.', import.meta.url).pathname;
 let tests = JSON.parse(readFileSync(join(base_dir, '../build/unicode-json/NormalizationTest.json')));
 
-export function test_nf(nfd, nfc) {
+function test_nf(nfd, nfc) {
 	let errors = [];		
 	for (let [name, cases] of Object.entries(tests)) {
 		let nfd_errors = 0;
 		let nfc_errors = 0;
 		for (let args of cases) {
-			let [src, nfc0, nfd0] = args.map(cps_from_sequence);
+			let [src, nfc0, nfd0] = args.map(parse_cp_sequence);
 			let ndf1 = nfd(src);
 			if (compare_array(nfd0, ndf1) != 0) {
 				nfd_errors++;
@@ -26,4 +26,12 @@ export function test_nf(nfd, nfc) {
 		console.log(`"${name}" [${cases.length}] NFD(${nfd_errors}) NFC(${nfc_errors})`);
 	}
 	return errors;
+}
+
+import {nfc, nfd} from '../build/nf.js';
+
+let nf_errors = test_nf(nfd, nfc);
+if (nf_errors.length > 0) {
+	console.log(nf_errors);
+	throw new Error('wtf');
 }

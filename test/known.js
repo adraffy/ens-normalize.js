@@ -19,9 +19,10 @@ export const KNOWN = [
 	{name: "\u0300test.eth", error: true},
 
 	// Section 2.3: label-separators
-	{name: "test\uFF0Eeth", norm: "test.eth"},
-	{name: "test\u3002eth", norm: "test.eth"},
-	{name: "test\uFF61eth", norm: "test.eth"},
+	// these are now disallowed by ENS rule
+	{name: "test\uFF0Eeth", norm: "test.eth", error: true},
+	{name: "test\u3002eth", norm: "test.eth", error: true},
+	{name: "test\uFF61eth", norm: "test.eth", error: true},
 
 	// FE0F is stripped due to legacy normalization
 	{name: "\u{1f3f3}\u{fe0f}\u{200d}\u{1f308}.eth", norm: "\u{1f3f3}\u{200d}\u{1f308}.eth"},

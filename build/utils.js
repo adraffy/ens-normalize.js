@@ -28,25 +28,78 @@ export function escape_unicode(s) {
 	return s.replace(/[^\.\-a-z0-9]/igu, x => `{${x.codePointAt(0).toString(16).toUpperCase()}}`);
 }
 
-// parse range of hex cps
+export function label_error(cps, message) {
+	return new Error(`Disallowed label "${escape_unicode(String.fromCodePoint(...cps))}": ${message}`);
+}
+
+export function take_from(v, fn) {
+	let take = [], rest = [];
+	for (let x of v) (fn(x) ? take : rest).push(x);
+	v.splice(0, v.length, ...rest);
+	return take;
+}
+
+export function split_ascending(cps) {
+	return split_between(cps, (a, b) => b - a > 1).map(v => [v[0], v.length]);
+}
+
+// from a list of [[x,ys]...]
+// find spans of [[x,ys],[x+dx,ys+dy],[x+2dx,ys+2dy],...]
+export function split_linear(mapped, dx, dy) {
+	let linear = [];
+	mapped = mapped.map(v => v.slice());
+	for (let i = 0; i < mapped.length; i++) {
+		let row0 = mapped[i];
+		let [x0, ys0] = row0;
+		if (x0 == -1) continue; // marked
+		let group = [row0];
+		next: for (let j = i + 1; j < mapped.length; j++) {
+			let row =  mapped[j];
+			let [x, ys] = row;
+			if (x == -1) continue; // marked
+			let x1 = x0 + group.length * dx;
+			if (x < x1) continue;
+			if (x > x1) break;
+			for (let k = 0; k < ys0.length; k++) {
+				if (ys0[k] + group.length * dy != ys[k]) continue next;
+			}
+			group.push(row);
+		}
+		if (group.length > 1) {
+			group.forEach(v => v[0] = -1); // mark used
+			linear.push([x0, group.length, ys0]);
+		}
+	}
+	return {linear, nonlinear: mapped.filter(v => v[0] >= 0)}; // remove marked
+}
+
+export function explode_cp(s) {
+	return [...s].map(c => c.codePointAt(0));
+}
+
+export function parse_cp(s) {
+	let cp = parseInt(s, 16);
+	if (!Number.isSafeInteger(cp) || cp < 0) throw new TypeError(`expected code point: ${s}`);
+	return cp;
+}
+// "AAAA"      => [0xAAAA]
+// "AAAA BBBB" => [0xAAAA, 0xBBBB]
+export function parse_cp_sequence(s) {
+	return s.split(/\s+/).map(parse_cp);
+}
 // "AAAA"       => [0xAAAA]
-// "AAAA..BBBB" => [0xAAAA, ..., 0xBBBB]
-export function cps_from_range(s) {
-	let [lo, hi] = s.split('..');
-	lo = parseInt(lo, 16);
-	if (!Number.isSafeInteger(lo) || lo < 0) throw new TypeError('expected code point');
-	if (!hi) return [lo];
-	hi = parseInt(hi, 16);
-	if (!Number.isSafeInteger(hi) || hi < lo) throw new TypeError('expected upper code point');
-	return Array(hi - lo + 1).fill().map((_, i) => lo + i);
+// "AAAA..AAAC" => [0xAAAA, 0xAAAB, 0xAAAC]
+export function parse_cp_range(s) {
+	let pos = s.indexOf('..');
+	if (pos >= 0) {
+		let lo = parse_cp(s.slice(0, pos));
+		let hi = parse_cp(s.slice(pos + 2));
+		if (hi < lo) throw new Error(`expected non-empty range: ${s}`);
+		return Array(hi - lo + 1).fill().map((_, i) => lo + i);
+	} else {
+		return [parse_cp(s)];
+	}
 }
-
-// parse sequence of hex cps
-// "AAAA BBBB CCCC" => [0xAAAA, 0xBBBB, 0xCCCC]
-export function cps_from_sequence(s) {
-	return s.split(/\s+/).map(x => parseInt(x, 16));
-}
-
 
 // return all indicies of exact match in array
 // [1, 2, 1, 1] of 1 => [0, 2, 3]
@@ -64,31 +117,38 @@ export function indices_of(v, x) {
 
 // group list into collection
 // [1, 2, 2, 3] + odd => [odd:[1,3], even:[2,2]]
-export function group_by(v, fn, gs = {}) {
+export function group_by(v, fn, ret = {}) {
 	for (let x of v) {
 		let key = fn(x);
-		let g = gs[key];
-		if (!g) g = gs[key] = [];
+		let g = ret[key];
+		if (!g) g = ret[key] = [];
 		g.push(x);
 	}
-	return gs;
+	return ret;
+}
+
+export function tally(v, ret = {}) {
+	for (let x of v) {
+		ret[x] = (ret[x] ?? 0) + 1;
+	}
+	return ret;
 }
 
 // split list into runs where 
 // [..., a, b, ...] => [[..., a], [b, ...]] if fn(a, b)
 export function split_between(v, fn) {
 	let start = 0;
-	let groups = [];
+	let ret = [];
 	for (let i = 1; i < v.length; i++) {
 		if (fn(v[i - 1], v[i])) {
-			groups.push(v.slice(start, i));
+			ret.push(v.slice(start, i));
 			start = i;
 		}
 	}
 	if (start < v.length) {
-		groups.push(v.slice(start));
+		ret.push(v.slice(start));
 	}
-	return groups;
+	return ret;
 }
 
 // split an array on specific values

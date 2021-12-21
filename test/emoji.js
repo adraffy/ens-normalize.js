@@ -15,16 +15,16 @@ writeFileSync(join(base_dir, 'data/emoji-20211212.json'), JSON.stringify(emoji, 
 
 import {readFileSync} from 'fs';
 import {join} from 'path';
-import {cps_from_sequence} from '../build/utils.js';
+import {parse_cp_sequence} from '../build/utils.js';
 
 let base_dir = new URL('.', import.meta.url).pathname;
-let tests = JSON.parse(readFileSync(join(base_dir, 'data/emoji-20211212.json')));
+let tests = JSON.parse(readFileSync(join(base_dir, 'data/emoji-20211221.json')));
 
 export function test_emoji(ens_normalize) {
 	let errors = [];
 	for (let {input, error} of tests) {
 		try {
-			let name = String.fromCodePoint(...cps_from_sequence(input));
+			let name = String.fromCodePoint(...parse_cp_sequence(input));
 			let result = ens_normalize(name);
 			if (error) {
 				errors.push({type: 'expected-error', input, error, result});
@@ -33,7 +33,7 @@ export function test_emoji(ens_normalize) {
 			if (!error) {
 				errors.push({type: 'unexpected-error', input, error: err.message});
 			}
-			// TODO: confirm form (no FOEF)
+			// TODO: confirm form (no FE0F)
 		}
 	}
 	return errors;

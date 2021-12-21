@@ -1,32 +1,4 @@
-import {group_by, indices_of, split_between} from './utils.js'; // Array.prototype, fix me?
-
-export function split_linear(mapped, dx, dy) {
-	let linear = [];
-	mapped = mapped.map(v => v.slice());
-	for (let i = 0; i < mapped.length; i++) {
-		let row0 = mapped[i];
-		let [x0, ys0] = row0;
-		if (x0 == -1) continue; // marked
-		let group = [row0];
-		next: for (let j = i + 1; j < mapped.length; j++) {
-			let row =  mapped[j];
-			let [x, ys] = row;
-			if (x == -1) continue; // marked
-			let x1 = x0 + group.length * dx;
-			if (x < x1) continue;
-			if (x > x1) break;
-			for (let k = 0; k < ys0.length; k++) {
-				if (ys0[k] + group.length * dy != ys[k]) continue next;
-			}
-			group.push(row);
-		}
-		if (group.length > 1) {
-			group.forEach(v => v[0] = -1); // mark used
-			linear.push([x0, group.length, ys0]);
-		}
-	}
-	return {linear, nonlinear: mapped.filter(v => v[0] >= 0)}; // remove marked
-}
+import {group_by, indices_of, split_between, split_linear, tally, split_on} from './utils.js'; 
 
 export function huffman(i) {
 	if (i < 0x80) {
@@ -56,10 +28,10 @@ export function bytes_from_bits(v) {
 	return ret;
 }
 
-export function best_arithmetic_encoding(symbols, max = 64) {
+export function best_arithmetic(symbols, max = 64) {
 	let best;
 	for (let n = 0; n <= max; n++) {
-		let v = arithmetic_encoding(symbols, n);
+		let v = encode_arithmetic(symbols, n);
 		if (!best || v.length < best.length) {
 			best = v;
 		}
@@ -67,49 +39,40 @@ export function best_arithmetic_encoding(symbols, max = 64) {
 	return best;
 }
 
+export function bit_width(i) {
+	return 32 - Math.clz32(i);
+}
+
 // TODO: make this adaptive
 // TODO: make payload symbols encoded as bit-width symbols
 // eg. instead of byte[1,2,3] use bits[5-20]
 // this goes from 11.5KB to 8KB see: CheckLogarithmic.nb
-export function arithmetic_encoding(symbols, linear) {	
+// 00001        0001
+// 10000 => w=5 0000 
+export function encode_arithmetic(symbols, linear) {	
 	if (symbols.length == 0) throw new Error(`no symbols`);
 	if (linear < 0) throw new Error(`should be non-negative`);
-	let bytes = [];
+	let payload = [];
+	let w0 = bit_width(linear);
 	symbols = symbols.map(x => {
 		if (x >= linear) {
-			x -= linear;
+			x -= linear;			
 			if (x < 0x100) {
-				bytes.push(x);
+				payload.push(x);
 				return linear + 1;
 			}
 			x -= 0x100;
 			if (x < 0x10000) {
-				bytes.push(x >> 8, x & 0xFF);
+				payload.push(x >> 8, x & 0xFF);
 				return linear + 2;
 			}
 			x -= 0x10000;
-			bytes.push(x >> 16, (x >> 8) & 0xFF, x & 0xFF);
+			payload.push(x >> 16, (x >> 8) & 0xFF, x & 0xFF);
 			return linear + 3;
 		} else {
 			return x + 1;
 		}
 	});
-	/*
-	symbols = symbols.map(x => {
-		if (x >= linear) {
-			x -= linear;
-			if (x < 0x10000) {
-				bytes.push(x >> 8, x & 0xFF);
-				return linear + 1;
-			}
-			x -= 0x10000;
-			bytes.push(x >> 16, (x >> 8) & 0xFF, x & 0xFF);
-			return linear + 2;
-		} else {
-			return x + 1;
-		}
-	});
-	*/
 	symbols.push(0);
 	// create frequency table
 	let freq = Array(linear + 4).fill(0);
@@ -155,11 +118,11 @@ export function arithmetic_encoding(symbols, linear) {
 	while (bits.length & 7) bits.push(0);
 	let header = [];
 	freq[0] = freq.length;
-	freq.push(bytes.length);
+	freq.push(payload.length);
 	for (let n of freq) {
 		header.push(n >> 8, n & 0xFF);
 	}
-	return header.concat(bytes, bytes_from_bits(bits));
+	return header.concat(payload, bytes_from_bits(bits));
 }
 
 export class Encoder {
@@ -170,7 +133,7 @@ export class Encoder {
 		return this.compress_arithmetic();
 	}
 	compress_arithmetic() {
-		return best_arithmetic_encoding(this.values);
+		return best_arithmetic(this.values);
 	}
 	compress_huffman() {
 		return this.values.flatMap(huffman);
@@ -241,26 +204,60 @@ export class Encoder {
 		});
 		this.unsigned(0); // eol
 	}
-	write_emoji(emoji) {
-		const ZWNJ = 0x200D;
-		emoji = emoji.map(v => v.filter(x => x != 0xFE0F));
-		// group by (width and position of ZWNJ)
-		emoji = Object.values(group_by(emoji, v => [v.length, ...indices_of(v, ZWNJ)].join(':')));
-		// transpose and remove ZWNJ
+	/*
+	write_emoji_chunks1(emojis, sep) {
+		let chunks = tally(emojis.flatMap(u => split_on(u, sep).map(v => v.join())));
+		chunks = Object.entries(chunks).sort((a, b) => b[1] - a[1]);
+		for (let [key] of chunks) {
+			let cps = key.split(',').map(x => parseInt(x));
+			this.unsigned(cps.length);
+			cps.forEach(cp => this.unsigned(cp));
+		}
+		
+		this.unsigned(0);
+		let map = Object.fromEntries(chunks.map(([key], i) => [key, i]));		
+		for (let cps of emojis) {
+			let chunks = split_on(cps, sep);
+			this.unsigned(chunks.length); // number of chunks
+			for (let v of chunks) {
+				this.unsigned(map[v.join()]); // index into the chunks
+			}
+		}
+		this.unsigned(0);
+	}
+	write_emoji_chunks2(emojis) {
+		let unique = [...new Set(emojis.flat())].sort((a, b) => a - b);
+		console.log(unique);
+		console.log(unique.length);
+		this.ascending(unique);
+		for (let cps of emojis) {
+			//this.unsigned(cps.length);
+			for (let cp of cps) {
+				this.unsigned(unique.indexOf(cp)); 
+			}
+		}
+		this.unsigned(0);
+	}
+	*/
+	write_emoji(emoji, sep) {
+		// group by (width and position of sep)
+		emoji = Object.values(group_by(emoji, v => [v.length, ...indices_of(v, sep)].join(':')));
+		// transpose and remove sep
 		this.unsigned(emoji.length);
 		for (let m of emoji) {
 			// m = [A Z B Z C] => Tr(m) = [A A]
 			//     [A Z B Z D]    w/o     [B B]
-			// pos = [1,  3]      ZWNJ    [C D]
+			// pos = [1,  3]      sep     [C D]
 			let [first] = m;
-			let zwnj = indices_of(first, ZWNJ);
+			let where = indices_of(first, sep);
 			this.positive(m.length); // number of elements
-			this.positive(first.length - zwnj.length); // width w/o ZWNJ
-			this.positive(zwnj.reduce((a, i) => a | (1 << (i - 1)), 0)); // bit positions of ZWNJ
+			this.positive(first.length - where.length); // width w/o sep
+			this.positive(where.reduce((a, i) => a | (1 << (i - 1)), 0)); // bit positions of sep
 			for (let i = 0; i < first.length; i++) {
-				if (zwnj.indexOf(i) >= 0) continue;
+				if (where.indexOf(i) >= 0) continue;
 				this.deltas(m.map(v => v[i]));
 			}
 		}
 	}
+
 }

@@ -86,16 +86,23 @@ async function main() {
 	if (res.status !== 200) throw new Error('download error');
 	let tests = await res.json();
 	tests = Object.entries(tests).sort((a, b) => b[1].length - a[1].length);
-	next();
-	function next() {
+	next([]);
+	function next(diffs) {
 		if (tests.length == 0) {
+			if (diffs.length > 0) {
+				let section = document.createElement('section');
+				section.innerHTML = `<h2>Differences (${diffs.length})</h2></a><table><thead><tr>
+				<th class="index">#</th><th>Test Case</th><th width="27%">Input</th><th width="27%">Expected</th><th width="27%">Normalized</th>
+				</tr></thead><tbody>${diffs.join('')}</tbody></table>`;
+				document.querySelector('#summary').insertAdjacentElement('afterend', section);
+			}
 			document.querySelector('#loading').remove();
 			return;
 		}
 		let date0 = new Date();
 		let [name, cases] = tests.pop();
 		let html = `<a name="${name}"><h2>${name} (${cases.length})</h2></a><table><thead><tr>
-		<th>#</th><th width="32%">Input</th><th width="32%">Expected</th><th width="32%">Normalized</th>
+		<th class="index">#</th><th width="32%">Input</th><th width="32%">Expected</th><th width="32%">Normalized</th>
 		</tr></thead><tbody>`;
 		let tally = {};
 		for (let i = 0; i < cases.length; i++) {
@@ -107,7 +114,7 @@ async function main() {
 			if (!output) output = input;
 			let norm, norm_err;
 			try {
-				norm = ens_normalize(input, false, true); // enable bidi
+				norm = ens_normalize(input, true); // enable bidi
 			} catch (err) {
 				norm_err = err.message;
 			}
@@ -128,21 +135,21 @@ async function main() {
 				}
 			}
 			tally[type] = (tally[type] ?? 0) + 1;
-			let row = `<tr class="${type}"><td class="index">${i+1}</td><td class="input name">${escape_unicode(input)}</td>`;
+			let row = `<td class="input name">${escape_unicode(input)}</td>`;
 			if (errors.length > 0) {
 				row += `<td class="error">${errors.join(', ')}</td>`;
 			} else {
 				row += `<td class="name">${escape_unicode(output)}</td>`;
 			}
-			if (type === 'same') {
-				row += `<td class="eq">Same</td>`;
-			} else if (norm_err) {
+			if (norm_err) {
 				row += `<td class="error">${norm_err}</td>`;
 			} else {
 				row += `<td class="name">${escape_unicode(norm)}</td>`;
+			}	
+			if (type != 'same-error' && type != 'same-norm') {
+				diffs.push(`<tr class="${type}"><td class="index">${diffs.length+1}</td><td>${name}#${i+1}</td>${row}</tr>`);
 			}
-			row += `</tr>`;		
-			html += row;
+			html += `<tr class="${type}"><td class="index">${i+1}</td>${row}</tr>`;
 			test_case.type = type;
 			test_case.result = norm_err ?? norm;
 		}
@@ -165,7 +172,7 @@ async function main() {
 		].join('');
 
 		document.querySelector('#summary tbody').append(tr);
-		setTimeout(next, 0);
+		setTimeout(next, 0, diffs);
 	}
 }
 </script>
