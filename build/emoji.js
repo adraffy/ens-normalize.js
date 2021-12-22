@@ -16,22 +16,31 @@ const ZWJ = 0x200D;
 const KEYCAP_END = 0x20E3;
 const TAG_END = 0xE007F;
 
-
 function find_emoji_chr_mod_pre(cps, pos) {
 	let cp = cps[pos];
 	let cp2 = cps[pos+1]; // out of bounds, but unassigned
-	// emoji_modifier_sequence => emoji_modifier_base emoji_modifier
+	// emoji_modifier_sequence := emoji_modifier_base emoji_modifier
 	let base = lookup_member(MODIFIER_BASE, cp);
 	if (base && cp2 && lookup_member(MODIFIER, cp2)) {
 		return [2, [cp, cp2]];
 	}
-	// emoji_presentation_sequence => emoji_character \x{FE0F}
-	let opt = base || lookup_member(EMOJI_OPT, cp); // these have optional FE0F that gets dropped
-	let req = lookup_member(EMOJI_REQ, cp); // these require FE0F
-	if (cp2 == FE0F && (opt || req)) {
-		return [2, req ? [cp, FE0F] : [cp]];
+	// emoji_modifier_base is a emoji_character 
+	// emoji_presentation_sequence := emoji_character \x{FE0F}
+	// but some emoji dont need presentation
+	// and previously valid emoji are already registered
+	// we call these emoji optional
+	let opt = base || lookup_member(EMOJI_OPT, cp); 
+	if (cp2 == FE0F) {
+		// these have optional FE0F 
+		if (opt) return [2, [cp]]; // drop FE0F
+		// these require FE0F
+		// these are the new emoji 
+		// all future emoji should be added 
+		// through this mechanism, if appropriate 
+		if (lookup_member(EMOJI_REQ, cp)) return [2, [cp, FE0F]]; // keep FE0F
 	}
 	// emoji_character 
+	// we also allow single regional 
 	if (base || opt || lookup_member(REGIONAL, cp) || lookup_member(MODIFIER, cp)) {
 		return [1, [cp]];	
 	}

@@ -111,6 +111,65 @@ function read_member_table(next) {
 	].sort((a, b) => a[0] - b[0]);
 }
 
+/*
+export function read_zwj_emoji(next) {
+	let buckets = [];
+	for (let k = next(); k > 0; k--) {
+		let n = 1 + next(); // group size
+		let w = 1 + next(); // group width w/o ZWJ
+		let p = 1 + next(); // bit positions of zwj
+		let z = []; // position of zwj
+		let m = []; // emoji vectors
+		for (let i = 0; i < n; i++) m.push([]);
+		for (let i = 0; i < w; i++) {
+			if (p & (1 << (i - 1))) {
+				w++; // increase width
+				z.push(i); // remember position
+				m.forEach(v => v.push(0x200D)); // insert zwj
+			} else {
+				read_deltas(n, next).forEach((x, i) => m[i].push(x));
+			}
+		}
+		for (let b of z) {
+			let bucket = buckets[b];
+			if (!bucket) buckets[b] = bucket = [];
+			bucket.push(...m);
+		}
+	}
+	return buckets;
+}
+
+export function read_emoji(next, sep) {
+	let ret = {};
+	for (let k = next(); k > 0; k--) {
+		let n = 1 + next(); // group size
+		let w = 1 + next(); // group width w/o sep
+		let p = 1 + next(); // bit positions of sep
+		let z = []; // position of sep
+		let m = []; // emoji vectors
+		for (let i = 0; i < n; i++) m.push([]);
+		for (let i = 0; i < w; i++) {
+			if (p & (1 << (i - 1))) {
+				w++; // increase width
+				z.push(i); // remember position
+				m.forEach(v => v.push(sep)); // insert 
+			} else {
+				read_deltas(n, next).forEach((x, i) => m[i].push(x));
+			}
+		}
+		for (let v of m) {
+			let bucket = ret[v[0]];
+			if (!bucket) bucket = ret[v[0]] = [];
+			bucket.push(v.slice(1));
+		}
+	}
+	for (let bucket of Object.values(ret)) {
+		bucket.sort((a, b) => b.length - a.length);
+	}
+	return ret;
+}
+*/
+
 function lookup_member(table, cp) {
 	for (let [x, n] of table) {
 		let d = cp - x;

@@ -170,6 +170,7 @@ function read_linear_table(w, next) {
 	return vX.map((x, i) => [x, mY.map(v => v[i]), vN[i], dx, dy]);
 }
 
+/*
 export function read_zwj_emoji(next) {
 	let buckets = [];
 	for (let k = next(); k > 0; k--) {
@@ -226,6 +227,7 @@ export function read_emoji(next, sep) {
 	}
 	return ret;
 }
+*/
 
 export function lookup_member(table, cp) {
 	for (let [x, n] of table) {

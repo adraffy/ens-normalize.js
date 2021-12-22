@@ -184,6 +184,65 @@ function read_linear_table(w, next) {
 	return vX.map((x, i) => [x, mY.map(v => v[i]), vN[i], dx, dy]);
 }
 
+/*
+export function read_zwj_emoji(next) {
+	let buckets = [];
+	for (let k = next(); k > 0; k--) {
+		let n = 1 + next(); // group size
+		let w = 1 + next(); // group width w/o ZWJ
+		let p = 1 + next(); // bit positions of zwj
+		let z = []; // position of zwj
+		let m = []; // emoji vectors
+		for (let i = 0; i < n; i++) m.push([]);
+		for (let i = 0; i < w; i++) {
+			if (p & (1 << (i - 1))) {
+				w++; // increase width
+				z.push(i); // remember position
+				m.forEach(v => v.push(0x200D)); // insert zwj
+			} else {
+				read_deltas(n, next).forEach((x, i) => m[i].push(x));
+			}
+		}
+		for (let b of z) {
+			let bucket = buckets[b];
+			if (!bucket) buckets[b] = bucket = [];
+			bucket.push(...m);
+		}
+	}
+	return buckets;
+}
+
+export function read_emoji(next, sep) {
+	let ret = {};
+	for (let k = next(); k > 0; k--) {
+		let n = 1 + next(); // group size
+		let w = 1 + next(); // group width w/o sep
+		let p = 1 + next(); // bit positions of sep
+		let z = []; // position of sep
+		let m = []; // emoji vectors
+		for (let i = 0; i < n; i++) m.push([]);
+		for (let i = 0; i < w; i++) {
+			if (p & (1 << (i - 1))) {
+				w++; // increase width
+				z.push(i); // remember position
+				m.forEach(v => v.push(sep)); // insert 
+			} else {
+				read_deltas(n, next).forEach((x, i) => m[i].push(x));
+			}
+		}
+		for (let v of m) {
+			let bucket = ret[v[0]];
+			if (!bucket) bucket = ret[v[0]] = [];
+			bucket.push(v.slice(1));
+		}
+	}
+	for (let bucket of Object.values(ret)) {
+		bucket.sort((a, b) => b.length - a.length);
+	}
+	return ret;
+}
+*/
+
 function lookup_member(table, cp) {
 	for (let [x, n] of table) {
 		let d = cp - x;
@@ -574,22 +633,31 @@ const ZWJ = 0x200D;
 const KEYCAP_END = 0x20E3;
 const TAG_END = 0xE007F;
 
-
 function find_emoji_chr_mod_pre(cps, pos) {
 	let cp = cps[pos];
 	let cp2 = cps[pos+1]; // out of bounds, but unassigned
-	// emoji_modifier_sequence => emoji_modifier_base emoji_modifier
+	// emoji_modifier_sequence := emoji_modifier_base emoji_modifier
 	let base = lookup_member(MODIFIER_BASE, cp);
 	if (base && cp2 && lookup_member(MODIFIER, cp2)) {
 		return [2, [cp, cp2]];
 	}
-	// emoji_presentation_sequence => emoji_character \x{FE0F}
-	let opt = base || lookup_member(EMOJI_OPT, cp); // these have optional FE0F that gets dropped
-	let req = lookup_member(EMOJI_REQ, cp); // these require FE0F
-	if (cp2 == FE0F && (opt || req)) {
-		return [2, req ? [cp, FE0F] : [cp]];
+	// emoji_modifier_base is a emoji_character 
+	// emoji_presentation_sequence := emoji_character \x{FE0F}
+	// but some emoji dont need presentation
+	// and previously valid emoji are already registered
+	// we call these emoji optional
+	let opt = base || lookup_member(EMOJI_OPT, cp); 
+	if (cp2 == FE0F) {
+		// these have optional FE0F 
+		if (opt) return [2, [cp]]; // drop FE0F
+		// these require FE0F
+		// these are the new emoji 
+		// all future emoji should be added 
+		// through this mechanism, if appropriate 
+		if (lookup_member(EMOJI_REQ, cp)) return [2, [cp, FE0F]]; // keep FE0F
 	}
 	// emoji_character 
+	// we also allow single regional 
 	if (base || opt || lookup_member(REGIONAL, cp) || lookup_member(MODIFIER, cp)) {
 		return [1, [cp]];	
 	}
@@ -726,7 +794,7 @@ function validate_bidi_label(cps) {
 	}
 }
 
-// built: 2021-12-22T09:43:51.699Z
+// built: 2021-12-22T11:29:42.663Z
 
 function flatten_label_tokens(tokens) {
 	return tokens.flatMap(token => token.e ?? nfc(token.t));
