@@ -70,7 +70,7 @@ export default [
 	{ty: 'emoji', src: '2669..266C'}, // notes
 	{ty: 'emoji', src: '266E'}, // notes
 	{ty: 'map', src: '266D', dst: '0062'}, // map b flat to "b"
-	{ty: 'map', src: '266F', dst: '0023'}, // map # sharp to "#"
+	{ty: 'disallow', src: '266F'}, // map # sharp to "#"
 
 	/*
 	// hummm
