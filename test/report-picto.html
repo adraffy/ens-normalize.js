@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Non-Emoji Pictographs</title>
+<style>
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+td { 
+	border: 1px solid #ccc; 
+	text-align: center;
+}
+td + td.dec {
+	border-left-width: 5px;
+}
+tbody tr:nth-child(odd) {
+	background: #eee; 
+}
+#loading {
+	display: inline-block;
+	margin-top: 1rem;
+	background: #ffc;
+	border-radius: 1rem;
+	padding: 1rem 2rem;
+	font-size: 24pt;
+	border: 1px solid #ccc;
+}
+</style>
+</head>
+<body>
+<h1>Non-Emoji Pictographs</h1>
+<div id="loading">Loading...</div>
+<script type="module">
+import {escape_name_for_html, parse_cp_range} from '../build/utils.js';
+
+try {
+	main();
+} catch (err) {
+	let div = document.createElement('div');
+	div.innerHTML = err.message;
+	document.body.append(div);
+	console.error(err);
+}
+
+async function main() {
+	let res = await fetch('../build/unicode-json/emoji-data.json');
+	if (res.status !== 200) throw new Error('download failed');
+	let {Emoji: emoji, Extended_Pictographic: picto} = await res.json();
+
+	emoji = emoji.flatMap(parse_cp_range);
+	picto = picto.flatMap(parse_cp_range);
+
+	let non = picto.filter(cp => !emoji.includes(cp));
+
+	document.querySelector('h1').innerHTML += ` (${non.length})`;
+
+	let width = 3;
+	let cols = `<th>Dec</th><th>Hex</th><th>Form</th>`;
+	let rows = [];
+	let row = [];
+	function drain() {
+		rows.push(`<tr>${row.join('')}</tr>`);
+		row.length = 0;
+	}
+	for (let cp of non) {		
+		row.push(`<td class="dec">${cp}</td><td>${cp.toString(16).toUpperCase()}</td><td>${escape_name_for_html(String.fromCodePoint(cp))}</td>`);
+		if (row.length == width) {
+			drain();
+		}		
+	}
+	if (row.length > 0) drain();
+	width = Math.min(3, rows.length);
+	
+	let section = document.createElement('section');
+	section.innerHTML = `<table><thead><tr>${Array(width).fill(cols).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`;
+	document.body.append(section);
+
+	document.querySelector('#loading').remove();
+}
+</script>
+</body>
+</html>
