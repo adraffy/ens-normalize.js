@@ -27,7 +27,7 @@ export default [
 	{ty: 'emoji', src: '278A..2793'}, //  1-10
 	{ty: 'emoji', src: '24EB..24F4'}, // 11-20
 
-    // Circled Digits
+	// Circled Digits
 	{ty: 'emoji', src: '24FF'}, // 0
 	{ty: 'emoji', src: '2780..2789'}, // 1-10 
 	{ty: 'map', src: '24F5..24FE', dst: '2780..2789'}, // map double-circle to circle
@@ -48,7 +48,7 @@ export default [
 	// dominos
 	{ty: 'emoji', src: '1F030..1F093'},
 
-    // planets	
+	// planets	
 	{ty: 'emoji', src: '2641'}, // earth
 	{ty: 'emoji', src: '2643..2647'}, // plants
 	{ty: 'emoji', src: '2648..2653'}, // astrology???
@@ -62,27 +62,25 @@ export default [
 	{ty: 'emoji', src: '2605'}, // 5-star???
 	{ty: 'emoji', src: '221E'}, // infinity
 
-    // bullets
+	// bullets
 	{ty: 'emoji', src: '2022'}, // circle
 	{ty: 'emoji', src: '2023'}, // triangle???
 
-    // music stuff 
+	// music stuff 
 	{ty: 'emoji', src: '2669..266C'}, // notes
 	{ty: 'emoji', src: '266E'}, // notes
 	{ty: 'map', src: '266D', dst: '0062'}, // map b flat to "b"
 	{ty: 'map', src: '266F', dst: '0023'}, // map # sharp to "#"
-
-
 
 	/*
 	// hummm
 	'2596..259F', // QUADRANTS
 	'25A0..25EF', // SHAPES
 
-    // 00A2 = ¢
-    // 0024 = $
-    
-    // 263A = ☺
-    // 263B = ☻ 
+	// 00A2 = ¢
+	// 0024 = $
+	
+	// 263A = ☺
+	// 263B = ☻ 
 	*/
 ];
