@@ -1,5 +1,5 @@
 # ens-normalize.js
-1-file, 0-dependancy Compact ES6 Ethereum Name Service (ENS) Name Normalizer.
+1-file, 1-function, 1-argument, 0-dependancy Compact ES6 Ethereum Name Service (ENS) Name Normalizer.
 
 * <span style="color:#f88">Currently using experimental ideas!</span>
 * Uses Unicode v14.0.0
