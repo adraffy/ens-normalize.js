@@ -1,6 +1,7 @@
 # ens-normalize.js
 1-file, 0-dependancy Compact ES6 Ethereum Name Service (ENS) Name Normalizer.
 
+* <span style="color:#f88">Currently using experimental ideas!</span>
 * Uses Unicode v14.0.0
 * Uses [UTS-46](https://unicode.org/reports/tr46/) w/IDNA2008
 * Uses [UTS-51](https://unicode.org/reports/tr51/)
@@ -10,20 +11,25 @@
 * Handles [Punycode](https://datatracker.ietf.org/doc/html/rfc3492), adapted from [mathiasbynens/punycode.js](https://github.com/mathiasbynens/punycode.js)
 ---
 
-* [Live Demo](https://raffy.antistupid.com/eth/ens-resolver.html)
+* [Live Demo](https://adraffy.github.io/ens-normalize.js/test/demo.html)
 * ~~Passes **100%** [IDNATestV2](https://adraffy.github.io/ens-normalize.js/test/report-idna.html)~~ (This test is IDNA2003)
 * Passes **100%** [NormalizationTests](https://adraffy.github.io/ens-normalize.js/test/report-nf.html)
 * [Emoji Test](https://adraffy.github.io/ens-normalize.js/test/report-emoji.html)
-* Generated Report: [eth-ens-namehash](https://adraffy.github.io/ens-normalize.js/test/output/ens.html)
+* Generated Report vs `eth-ens-namehash` [Latest version](https://adraffy.github.io/ens-normalize.js/test/output/ens2.html) • [Prior (IDNA2003)](https://adraffy.github.io/ens-normalize.js/test/output/ens.html)
 
 ```Javascript
 import {ens_normalize} from '@adraffy/ens-normalize';
 // browser: 
 // 'https://unpkg.com/@adraffy/ens-normalize@latest/dist/ens-normalize.min.js'
+// alternatives:
+// - ens-normalize-xbidi.min.js (no CheckBidi)
+// - ens-normalize-xnfc.min.js (use default String.normalize)
+// see: /dist/ for more
 
-// example:
+// single-function one-argument API
+// - ens_normalize(string): string
 let normalized = ens_normalize('🚴‍♂️.eth'); // throws if error
-// this value is ready for hashing
+// ready for namehash
 
 // errors:
 // - not a string
