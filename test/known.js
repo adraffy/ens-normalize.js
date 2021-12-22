@@ -1,11 +1,11 @@
-import {escape_unicode} from '../build/utils.js';
+import {escape_unicode, explode_cp} from '../build/utils.js';
 
 export const KNOWN = [
 	// pass
 	{name: "bRAnTlY.eTh", norm: "brantly.eth"}, 
 
 	// fail
-	{name: "🧞\u200c\u200c.eth", norm: "🧞", error: true},
+	{name: "🧞\u{200C}\u{200C}.eth", norm: "🧞", error: true},
 
 	// puny-code
 	{name: "xn--ls8h.eth", norm: "💩.eth"},
@@ -16,17 +16,17 @@ export const KNOWN = [
 	{name: "test-.eth", error: true},
 	{name: "-test.eth", error: true},
 	// Section 4.1 Rule #5
-	{name: "\u0300test.eth", error: true},
+	{name: "\u{300}test.eth", error: true},
 
 	// Section 2.3: label-separators
 	// these are now disallowed by ENS rule
-	{name: "test\uFF0Eeth", norm: "test.eth", error: true},
-	{name: "test\u3002eth", norm: "test.eth", error: true},
-	{name: "test\uFF61eth", norm: "test.eth", error: true},
+	{name: "test\u{FF0E}eth", norm: "test.eth", error: true},
+	{name: "test\u{3002}eth", norm: "test.eth", error: true},
+	{name: "test\u{FF61}eth", norm: "test.eth", error: true},
 
 	// FE0F is stripped due to legacy normalization
-	{name: "\u{1f3f3}\u{fe0f}\u{200d}\u{1f308}.eth", norm: "\u{1f3f3}\u{200d}\u{1f308}.eth"},
-	{name: "\u{1f3f3}\u{200d}\u{1f308}.eth"},
+	{name: "\u{1F3F3}\u{FE0F}\u{200D}\u{1F308}.eth", norm: "\u{1F3F3}\u{200D}\u{1F308}.eth"},
+	{name: "\u{1F3F3}\u{200D}\u{1F308}.eth"},
 
 	// ContextJ
 	// https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.1
@@ -41,13 +41,10 @@ export const KNOWN = [
 	// ZWNJ No Context
 	{name: "a\u{200D}.eth", error: true},
 	// ZWNJ Rule#1
-	{name: "a\u{094D}\u{200D}.eth"},
+	{name: "a\u{94D}\u{200D}.eth"},
 
 	// ZWNJ Emoji
 	{name: "👨‍👩‍👦.eth"},
-	// Upgraded
-	//{name: "👨👩👦.eth", norm: "👨‍👩‍👦.eth"},
-	//{name: "🧟♂.eth", norm: "🧟‍♂.eth"},
 	{name: "👨👩👦.eth"},
 	{name: "🧟♂.eth"},
 ];
@@ -61,9 +58,11 @@ export function test_known(ens_normalize) {
 		try {
 			let result = ens_normalize(name);
 			if (error) {
-				error.push({type: 'expected-error', input, name, norm, result, error});
+				errors.push({type: 'expected-error', input, name, norm, result});
 			} else if (result !== norm) {
-				error.push({type: 'expected-norm', input, name, norm, result});
+				console.log(explode_cp(norm));
+				console.log(explode_cp(result));
+				errors.push({type: 'expected-norm', input, name, norm, result});
 			}
 		} catch (err) {
 			if (!error) {

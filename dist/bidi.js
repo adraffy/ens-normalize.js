@@ -141,7 +141,7 @@ function is_bidi_label(cps) {
 	return cps.some(cp => lookup_member(BIDI_R_AL, cp) || lookup_member(BIDI_AN, cp));
 }
 
-function validate_bidi(cps) {
+function validate_bidi_label(cps) {
 	if (cps.length == 0) return;
 	// https://www.rfc-editor.org/rfc/rfc5893.txt
 	// 1.) The first character must be a character with Bidi property L, R, 
@@ -185,25 +185,21 @@ function validate_bidi(cps) {
 	}
 }
 
-function escape_unicode(s) {
-	return s.replace(/[^\.\-a-z0-9]/igu, x => `{${x.codePointAt(0).toString(16).toUpperCase()}}`);
-}
-
-function label_error(cps, message) {
-	return new Error(`Disallowed label "${escape_unicode(String.fromCodePoint(...cps))}": ${message}`);
+function explode_cp(s) {
+	return [...s].map(c => c.codePointAt(0));
 }
 
 function check_bidi(name) {
-	let labels = name.split('.').map(s => [...s].map(x => x.codePointAt(0)));
+	let labels = name.split('.').map(explode_cp);
 	if (labels.some(is_bidi_label)) {
 		for (let cps of labels) {
 			try {
 				validate_bidi(cps);
 			} catch (err) {
-				throw label_error(cps, err.message);
+				throw new Error(`Disallowed bidi label "${escape_unicode(String.fromCodePoint(...cps))}": ${err.message}`);
 			}
 		}
 	}	
 }
 
-export { check_bidi };
+export { check_bidi, is_bidi_label, validate_bidi_label };

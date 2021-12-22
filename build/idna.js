@@ -1,6 +1,6 @@
 import {decode_payload, read_member_table, read_mapped_table, lookup_member, lookup_mapped} from './decoder.js';
 import {escape_unicode} from './utils.js';
-import PAYLOAD from './output/uts.js';
+import PAYLOAD from './output/idna.js';
 
 let r = decode_payload(PAYLOAD);
 const COMBINING_MARKS = read_member_table(r);
@@ -24,13 +24,23 @@ export function get_mapped(cp) {
 	return lookup_mapped(MAPPED, cp)?.slice();
 }
 
+// this returns [[]] if empty
 export function tokenized_idna(cps, validate = false, emoji_parser = false) {
+	let chars = [];
 	let tokens = [];
-	let stack = [];
+	let labels = [tokens];
 	function drain() { 
-		if (stack.length) {
-			tokens.push({t: stack}); // these are textual tokens
-			stack = [];
+		while (true) {
+			let pos = chars.indexOf(0x2E); // split the chars at each stop
+			if (pos == -1) break;
+			if (pos > 0) tokens.push({t: chars.slice(0, pos)}); // before the stop
+			tokens = [];  // create a new label
+			labels.push(tokens);
+			chars = chars.slice(pos + 1);
+		}
+		if (chars.length > 0) {
+			tokens.push({t: chars}); // after the stop
+			chars = [];
 		}
 	}
 	for (let i = 0; i < cps.length; i++) {
@@ -52,17 +62,17 @@ export function tokenized_idna(cps, validate = false, emoji_parser = false) {
 			// ignored: Remove the code point from the string. This is equivalent to mapping the code point to an empty string.		
 			if (validate) break; // fail early
 		} else if (validate) {
-			stack.push(cp);
-		} else if (cp == 0x2E) { // stop
-			drain();
-			tokens.push(0);
+			// With either Transitional or Nontransitional Processing, sources already in Punycode are validated without mapping. 
+			// In particular, Punycode containing Deviation characters, such as href="xn--fu-hia.de" (for fuß.de) is not remapped. 
+			// This provides a mechanism allowing explicit use of Deviation characters even during a transition period. 
+			chars.push(cp);
 		} else {
 			// mapped: Replace the code point in the string by the value for the mapping in Section 5, IDNA Mapping Table.
 			// deviation: Leave the code point unchanged in the string.
 			// valid: Leave the code point unchanged in the string.
-			stack.push(...(lookup_mapped(MAPPED, cp) ?? [cp]));
+			chars.push(...(lookup_mapped(MAPPED, cp) ?? [cp]));
 		}
 	}
 	drain();
-	return tokens;
+	return labels;
 }

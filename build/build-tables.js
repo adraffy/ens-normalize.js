@@ -1,6 +1,6 @@
 import {mkdirSync, readFileSync, writeFileSync} from 'fs';
 import {join} from 'path';
-import {Encoder} from './encoder.js';
+import {Encoder, is_better_member_compression} from './encoder.js';
 import {nfc} from './nf0.js';
 import {parse_cp, parse_cp_range, parse_cp_sequence, escape_unicode, split_ascending, 
 	take_from, group_by, split_on, compare_array, tally, split_between} from './utils.js';
@@ -16,11 +16,14 @@ function read_parsed(name) {
 	return JSON.parse(readFileSync(join(base_dir, 'unicode-json', `${name}.json`)));
 }
 
-function write_table(name, json) {
+function dump_json(name, json) {
 	let file = join(tables_dir, `${name}.json`);
 	writeFileSync(file, JSON.stringify(json));
 	console.log(`Wrote table: ${file}`);
 }
+
+const ZWJ = 0x200D;
+const FE0F = 0xFE0F;
 
 // EIP-137: Ethereum Domain Name Service - Specification
 // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-137.md
@@ -50,81 +53,230 @@ let {
 	// because transitional=false, remain valid
 } = read_parsed('IdnaMappingTable');
 
-// ignored characters
-ignored = flatten_ranges(ignored);
-console.log(`Ignored: ${ignored.length}`);
-
-// mapped characters
-// these map to an output sequence: [char] => [char, char, ...]
-mapped = mapped.map(([src, dst]) => {
-	let cps = parse_cp_sequence(dst);
-	return parse_cp_range(src).map(x => [x, cps]);
-}).flat().sort((a, b) => a[0] - b[0]);
-assert_sorted_unique(mapped.map(x => x[0]));
-
-// disallowed characters according to IDNA2003
-// https://unicode.org/reports/tr46/#UseSTD3ASCIIRules
-// merge disallowed_STD3* into disallowed due to useSTD3AsciiRules=true
-disallowed.push(...disallowed_STD3_mapped.map(([x, _]) => x));
-disallowed.push(...disallowed_STD3_valid); 
-disallowed = flatten_ranges(disallowed);
-let disallowed_idna2003 = disallowed.slice();
-
-// change mapped stops to disallowed
-let mapped_stops = take_from(mapped, ([_, ys]) => ys.includes(0x2E));
-if (mapped_stops.some(([_, ys]) => ys.length > 1)) {
-	throw new Error(`Assumption wrong: expected 1-width stop`);
-}
-let disallowed_stops = mapped_stops.map(([x]) => x);
-
-// additional disallowed by idna2008
-let disallowed_idna2008_extra = flatten_ranges(valid_NV8.concat(valid_XV8));
-
-// merge into disallowed
-disallowed = int_union(disallowed.concat(disallowed_idna2008_extra, disallowed_stops));
-console.log(`Disallowed: ${disallowed.length}`);
-
-let mapped_by_w = group_by(mapped, x => x[1].length, []); // group by length 
-mapped_by_w.forEach((v, w) => console.log(`Mapped ${w}: ${v.length}`));
-
-// emoji
-const ZWJ = 0x200D;
-const FE0F = 0xFE0F;
-if (!ignored.includes(FE0F)) { // assumption: FE0F is ignored 
-	throw new Error('Assumption wrong: FE0F not ignored');
-}
 let emoji_data = map_values(read_parsed('emoji-data'), e => e.flatMap(parse_cp_range));
+
 let emoji_seq = map_values(read_parsed('emoji-sequences'), e => e.flatMap(({hex}) => {
 	return hex.includes('..') ? parse_cp_range(hex).map(x => [x]) : [parse_cp_sequence(hex)]
 }));
 
-let {Emoji, Emoji_Modifier_Base, Emoji_Presentation} = emoji_data;
+/*
+let emoji_zwj = read_parsed('emoji-zwj-sequences').map(x => parse_cp_sequence(x.hex));
+*/
+
+let emoji_OG = new Set(emoji_data.Emoji);
+let emoji_OPT = new Set();
+let emoji_REQ = new Set();
+let emoji_REGIONAL = new Set();
+let emoji_KEYCAP_OG = new Set();
+let emoji_KEYCAP_FIXED = new Set();
+let emoji_TAG_SPEC = new Set();
+
+let emoji_sets = [
+	emoji_OPT,
+	emoji_OG,
+	emoji_REQ,
+	emoji_REGIONAL,
+	emoji_KEYCAP_OG,
+	emoji_KEYCAP_FIXED,
+	emoji_TAG_SPEC
+];
+
+function assign_emoji_set(set, cp) {
+	emoji_sets.some(set => set.delete(cp));
+	set.add(cp);
+}
+
 // check that Emoji_Presentation is a subset of emoji
-if (Emoji_Presentation.some(cp => !Emoji.includes(cp))) {
+if (emoji_data.Emoji_Presentation.some(cp => !emoji_OG.has(cp))) {
 	throw new Error(`Assumption wrong: Emoji_Presentation not emoji`);
 }
 // check that Emoji_Modifier_Base is a subset of emoji
-if (Emoji_Modifier_Base.some(cp => !Emoji.includes(cp))) {
+if (emoji_data.Emoji_Modifier_Base.some(cp => !emoji_OG.has(cp))) {
 	throw new Error(`Assumption wrong: Emoji_Modifier_Base not emoji`);
 }
-// these are not defined for some reason
-let emoji_REGIONAL = flatten_ranges(['1F1E6..1F1FF']);
-let emoji_KEYCAP = flatten_ranges(['23', '2A', '30..39']);
-let emoji_TAG_SPEC = flatten_ranges(['E0020..E007E']); // these are not emoji
-take_from(Emoji, cp => emoji_REGIONAL.includes(cp));
-take_from(Emoji, cp => emoji_KEYCAP.includes(cp));
+// check that Emoji_Modifier is a subset of emoji
+if (emoji_data.Emoji_Modifier.some(cp => !emoji_OG.has(cp))) {
+	throw new Error(`Assumption wrong: Emoji_Modifier are emoji`);
+}
 
-// find the emoji that are disallowed according to idna2003
-// we can enable them by adding FE0F
-let emoji_disallowed_idna2003 = take_from(Emoji, cp => disallowed_idna2003.includes(cp));
+// remove these emoji
+emoji_data.Emoji_Modifier_Base.forEach(cp => emoji_OG.delete(cp));
+     emoji_data.Emoji_Modifier.forEach(cp => emoji_OG.delete(cp));
 
-// find the emoji that are mapped by idna2003
-// these can never be emoji
-let emoji_mapped_idna2003 = take_from(Emoji, cp => mapped.some(([x]) => x == cp));
+// find all the non-emoji emoji (seriously?)
+let emoji_PICTO = take_from(emoji_data.Extended_Pictographic, cp => !emoji_OG.has(cp));
+dump_json('emoji-picto', emoji_PICTO);
+emoji_PICTO = new Set(emoji_PICTO);
+
+// include all of the singular basic emoji
+for (let [cp] of take_from(emoji_seq.Basic_Emoji, v => v.length == 1)) {
+	assign_emoji_set(emoji_OPT, cp);
+}
+// include all of the styled emoji 
+for (let [cp] of take_from(emoji_seq.Basic_Emoji, v => v.length == 2 && v[1] == FE0F)) {
+	assign_emoji_set(emoji_OPT, cp);
+}
+
+if (emoji_seq.Basic_Emoji.length > 0) {
+	throw new Error(`Assumption wrong: there are other basic emoji!`);
+}
+
+// TODO: move any unused emoji to the new emoji set
+
+// ignored characters
+ignored = new Set(ignored.flatMap(parse_cp_range));
+
+// mapped characters 
+// these map to an output sequence: [char] => [char, char, ...]
+mapped = mapped.flatMap(([src, dst]) => {
+	let cps = parse_cp_sequence(dst);
+	return parse_cp_range(src).map(x => [x, cps]);
+});
+
+// disallowed characters 
+// https://unicode.org/reports/tr46/#UseSTD3ASCIIRules
+// merge disallowed_STD3* into disallowed due to useSTD3AsciiRules=true
+disallowed.push(...disallowed_STD3_mapped.map(([x, _]) => x));
+disallowed.push(...disallowed_STD3_valid); 
+// merge valid_ due to IDNA2008
+disallowed.push(...valid_NV8);
+disallowed.push(...valid_XV8);
+disallowed = new Set(disallowed.flatMap(parse_cp_range));
+
+
+function remove_idna_rule(cp) {
+	if (ignored.delete(cp)) return true;
+	if (disallowed.delete(cp)) return true;
+	let pos = mapped.findIndex(([x]) => cp == x);
+	if (pos >= 0) {
+		mapped.splice(pos, 1);
+		return true;
+	}
+	return false;
+}
+
+function for_each_rule_cp(src, fn) {
+	for (let cp of src.split(/\s+/).flatMap(parse_cp_range)) {
+		fn(cp);
+	}
+}
+
+// custom ENS modifications
+import ENS_RULES from './ens-rules.js';
+for (let rule of ENS_RULES) {
+	try {
+		let {ty, src, dst} = rule;
+		switch (ty) {
+			case 'tag-spec': {
+				for_each_rule_cp(src, cp => assign_emoji_set(emoji_TAG_SPEC, cp));
+				continue;
+			}
+			case 'keycap': {
+				for_each_rule_cp(src, cp => assign_emoji_set(emoji_KEYCAP_OG, cp));
+				continue;
+			}
+			case 'styled-keycap': {
+				for_each_rule_cp(src, cp => assign_emoji_set(emoji_KEYCAP_FIXED, cp));
+				continue;
+			}
+			case 'regional': {
+				for_each_rule_cp(src, cp => assign_emoji_set(emoji_REGIONAL, cp));
+				continue;
+			}
+			case 'emoji': {
+				for_each_rule_cp(src, cp => assign_emoji_set(emoji_OPT, cp));
+				continue;
+			}
+			case 'styled-emoji': {
+				for_each_rule_cp(src, cp => assign_emoji_set(emoji_REQ, cp));
+				continue;
+			}
+			case 'allow': {
+				for_each_rule_cp(src, cp => {
+					if (!remove_idna_rule(cp)) {
+						throw new Error(`already allowed: ${cp}`);
+					}
+				});
+				continue;
+			}
+			case 'disallow': {
+				for_each_rule_cp(src, cp => {
+					remove_idna_rule(cp);
+					disallowed.add(cp);
+				});
+				continue;
+			}
+			case 'map': {
+				if (dst.includes(' ')) { // MAP x TO ys...
+					src = parse_cp(src);
+					dst = parse_cp_sequence(dst);
+					remove_idna_rule(src);
+					mapped.push([src, dst]);
+				} else { // map [x,x+1,...] to [y,y+1,...]
+					src = parse_cp_range(rule.src);
+					dst = parse_cp_range(rule.dst);
+					if (src.length != dst.length) throw new Error(`length`);
+					for (let i = 0; i < src.length; i++) {
+						remove_idna_rule(src[i]);
+						mapped.push([src[i], [dst[i]]]);
+					}
+				}
+				continue;
+			}
+			default: throw new Error(`unknown type: ${rule.type}`);
+		}
+	} catch (err) {
+		console.error(rule);
+		throw new Error(`bad rule: ${err.message}`)
+	}
+}
+
+// these emoji cant be used solo
+for (let cp of emoji_REQ) {
+	remove_idna_rule(cp);
+	disallowed.add(cp);
+}
+
+// allowed emoji that are pictos
+// should become valid characters
+for (let cp of emoji_OPT) {
+	if (emoji_PICTO.has(cp)) {
+		remove_idna_rule(cp);	
+		emoji_OPT.delete(cp);
+	}
+}
+
+
+if (!ignored.has(FE0F)) throw new Error('Assumption wrong: FE0F not ignored');
+if (remove_idna_rule(ZWJ)) throw new Error('Assumption wrong: ZWJ not allowed');
+
+function sorted_from_set(set) {
+	return [...set].sort((a, b) => a - b);
+}
+
+ignored = sorted_from_set(ignored);
+console.log(`Ignored: ${ignored.length}`);
+
+disallowed = sorted_from_set(disallowed);
+console.log(`Disallowed: ${disallowed.length}`);
+
+mapped.sort((a, b) => a[0] - b[0]);
+if (new Set(mapped.map(([x]) => x)).size < mapped.length) {
+	throw new Error(`Assumption wrong: duplicate map`);
+}
+let mapped_by_w = group_by(mapped, x => x[1].length, []); // group by length 
+mapped_by_w.forEach((v, w) => console.log(`Mapped ${w}: ${v.length}`));
 
 
 
 
+emoji_OG = sorted_from_set(emoji_OG);
+emoji_OPT = sorted_from_set(emoji_OPT);
+emoji_REQ = sorted_from_set(emoji_REQ);
+emoji_REGIONAL = sorted_from_set(emoji_REGIONAL);
+emoji_KEYCAP_OG = sorted_from_set(emoji_KEYCAP_OG);
+emoji_KEYCAP_FIXED = sorted_from_set(emoji_KEYCAP_FIXED);
+emoji_TAG_SPEC = sorted_from_set(emoji_TAG_SPEC);
 
 
 /*
@@ -263,7 +415,7 @@ console.log(`Join R: ${join_R.length}`);
 console.log(`Join D: ${join_D.length}`);
 let join_LD = assert_sorted_unique(int_sort([join_L, join_D].flat()));
 let join_RD = assert_sorted_unique(int_sort([join_R, join_D].flat()));
-if (!is_smaller([join_LD, join_RD], [join_L, join_R, join_D])) {
+if (!is_better_member_compression([join_LD, join_RD], [join_L, join_R, join_D])) {
 	throw new Error('Assumption wrong: LRD');
 }
 
@@ -303,7 +455,7 @@ for (let [k, v] of Object.entries(scripts)) {
 }
 let scripts_HKN_parts = [scripts.Hiragana, scripts.Katakana, scripts.Han];
 let scripts_HKH = assert_sorted_unique(int_sort(scripts_HKN_parts.flat()));
-if (!is_smaller([scripts_HKH], scripts_HKN_parts)) {
+if (!is_better_member_compression([scripts_HKH], scripts_HKN_parts)) {
 	throw new Error(`Assumption wrong: R_AL`);
 }
 
@@ -333,30 +485,30 @@ let bidi_ECTOB_parts =[bidi.ES, bidi.CS, bidi.ET, bidi.ON, bidi.BN];
 
 let bidi_R_AL = assert_sorted_unique(int_sort(bidi_R_AL_parts.flat()));
 let bidi_ECTOB = assert_sorted_unique(int_sort(bidi_ECTOB_parts.flat()));
-if (!is_smaller([bidi_R_AL], bidi_R_AL_parts)) {
+if (!is_better_member_compression([bidi_R_AL], bidi_R_AL_parts)) {
 	throw new Error(`Assumption wrong: R_AL`);
 }
-if (!is_smaller([bidi_ECTOB], bidi_ECTOB_parts)) {
+if (!is_better_member_compression([bidi_ECTOB], bidi_ECTOB_parts)) {
 	throw new Error(`Assumption wrong: ECTOB`);
 }
 
 // ************************************************************
 // export tables for inspection
 
-write_table('combining-marks', combining_marks);
-write_table('ignored', ignored);
-write_table('disallowed', disallowed); // warning: this is huge
-write_table('join-T', join_T);
-write_table('join-LD', join_LD);
-write_table('join-RD', join_RD);
-write_table('comp-exclusions', comp_exclusions);
+dump_json('combining-marks', combining_marks);
+dump_json('ignored', ignored);
+dump_json('disallowed', disallowed); // warning: this is huge
+dump_json('join-T', join_T);
+dump_json('join-LD', join_LD);
+dump_json('join-RD', join_RD);
+dump_json('comp-exclusions', comp_exclusions);
 //write_table('virama', class_virama);
-write_table('combining-class', combining_class);
+dump_json('combining-class', combining_class);
 //write_table('emoji', emoji_zwj);
-mapped_by_w.forEach((v, w) => write_table(`mapped-${w}`, v));
-decomp.forEach((v, i) => write_table(`decomp-${i}`, v));
-write_table('bidi', bidi);
-write_table('scripts', scripts);
+mapped_by_w.forEach((v, w) => dump_json(`mapped-${w}`, v));
+decomp.forEach((v, i) => dump_json(`decomp-${i}`, v));
+dump_json('bidi', bidi);
+dump_json('scripts', scripts);
 //write_table('allowed-emoji', emoji_dis);
 
 // ************************************************************
@@ -389,26 +541,26 @@ enc_nf.write_mapped([
 enc_nf.write_member(comp_exclusions);
 write_payload('nf', enc_nf);
 
-let enc_uts = new Encoder(); //params);
-enc_uts.write_member(combining_marks);
-enc_uts.write_member(ignored);
-enc_uts.write_member(disallowed);
-enc_uts.write_mapped([
+let enc_idna = new Encoder();
+enc_idna.write_member(combining_marks);
+enc_idna.write_member(ignored);
+enc_idna.write_member(disallowed);
+enc_idna.write_mapped([
 	[1, 1, 1], // alphabets: ABC
 	[1, 2, 2], // paired-alphabets: AaBbCc
 	[1, 1, 0], // \ 
 	[2, 1, 0], //  adjacent that map to a constant
 	[3, 1, 0]  // /   eg. AAAA..BBBB => CCCC
 ], mapped_by_w);
+
 //enc_uts.write_member(emoji_blank_FE0F);
 //enc_uts.write_emoji(emoji_zwj.map(v => v.filter(x => x != FE0F)), ZWJ);
-write_payload('uts', enc_uts);
+write_payload('idna', enc_idna);
 
 let enc_ctx = new Encoder();
 enc_ctx.write_member(join_T);
 enc_ctx.write_member(join_LD);
 enc_ctx.write_member(join_RD);
-//enc_ctx.write_emoji(emoji_zwj);
 enc_ctx.write_member(combining_class[virama_index]);
 enc_ctx.write_member(scripts.Greek);
 enc_ctx.write_member(scripts.Hebrew);
@@ -416,18 +568,15 @@ enc_ctx.write_member(scripts_HKH);
 write_payload('context', enc_ctx);
 
 
-
 let enc_emoji = new Encoder();
-enc_emoji.write_member(emoji_disallowed_idna2003);
 enc_emoji.write_member(emoji_REGIONAL);
-enc_emoji.write_member(emoji_KEYCAP);
-enc_emoji.write_member(Emoji);
+enc_emoji.write_member(emoji_KEYCAP_OG);
+enc_emoji.write_member(emoji_KEYCAP_FIXED);
+enc_emoji.write_member(emoji_OPT);
+enc_emoji.write_member(emoji_REQ);
 enc_emoji.write_member(emoji_data.Emoji_Modifier);
-enc_emoji.write_member(Emoji_Modifier_Base);
-//enc_emoji.write_member(Emoji_Presentation);
+enc_emoji.write_member(emoji_data.Emoji_Modifier_Base);
 enc_emoji.write_member(emoji_TAG_SPEC);
-//enc_emoji.write_member(emoji_TAG_END);
-//enc_emoji.write_emoji(emoji_zwj);
 write_payload('emoji', enc_emoji);
 
 //writeFileSync(join(output_dir, `bidi.bin`), Buffer.from(enc.compress_arithmetic()));
@@ -438,10 +587,6 @@ write_payload('emoji', enc_emoji);
 
 function map_values(obj, fn) {
 	return Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, fn(v)]));
-}
-
-function int_union(v) {
-	return int_sort([...new Set(v)]);
 }
 
 function int_sort(v) {
@@ -463,14 +608,3 @@ function assert_sorted_unique(v) {
 	return v;
 }
 
-
-function is_smaller(smaller, bigger) {
-	let s = new Encoder();
-	for (let x of smaller) s.write_member(x);
-	let b = new Encoder();
-	for (let x of bigger) b.write_member(x);
-	let ns = s.compress_arithmetic().length;
-	let nb = b.compress_arithmetic().length;
-	console.log(`Smaller(${ns}) vs Bigger(${nb})`);
-	return ns < nb;
-}

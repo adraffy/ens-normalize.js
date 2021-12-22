@@ -1,14 +1,18 @@
-import {split_on, label_error, explode_cp} from './utils.js';
+import {split_on, explode_cp, escape_unicode} from './utils.js';
 import {nfc} from './nf.js'; // this gets replaced by nf0.js when String.normalize() is used
 import {puny_decode} from './puny.js';
 import {tokenized_idna, is_combining_mark} from './idna.js';
 import {validate_context} from './context.js';
 import {consume_emoji_sequence} from './emoji.js';
 
-/*BIDI*/import {is_bidi_label, validate_bidi} from './bidi.js';/*~BIDI*/
+/*BIDI*/import {is_bidi_label, validate_bidi_label} from './bidi.js';/*~BIDI*/
 
-function flatten_tokens(tokens) {
+function flatten_label_tokens(tokens) {
 	return tokens.flatMap(token => token.e ?? nfc(token.t));
+}
+
+function label_error(cps, message) {
+	return new Error(`Disallowed label "${escape_unicode(String.fromCodePoint(...cps))}": ${message}`);
 }
 
 // Primary API
@@ -30,8 +34,8 @@ export function ens_normalize(name) {
 	// [Processing] 3.) Break: Break the string into labels at U+002E ( . ) FULL STOP.
 	const HYPHEN = 0x2D; // HYPHEN MINUS	
 	// note: idna will throw
-	let labels = split_on(tokenized_idna(explode_cp(name), false, consume_emoji_sequence), 0).map(tokens => {
-		let cps = flatten_tokens(tokens);
+	let labels = tokenized_idna(explode_cp(name), false, consume_emoji_sequence).map(tokens => {
+		let cps = flatten_label_tokens(tokens);
 		// [Processing] 4.) Convert/Validate
 		if (cps.length >= 4 && cps[2] == HYPHEN && cps[3] == HYPHEN) { // "**--"
 			if (cps[0] == 0x78 && cps[1] == 0x6E) { // "xn--"
@@ -43,8 +47,8 @@ export function ens_normalize(name) {
 					// With either Transitional or Nontransitional Processing, sources already in Punycode are validated without mapping. 
 					// In particular, Punycode containing Deviation characters, such as href="xn--fu-hia.de" (for fuß.de) is not remapped. 
 					// This provides a mechanism allowing explicit use of Deviation characters even during a transition period. 
-					tokens = tokenized_idna(cps_decoded, true, consume_emoji_sequence);
-					let expected = flatten_tokens(tokens);
+					tokens = tokenized_idna(cps_decoded, true, consume_emoji_sequence).flat();
+					let expected = flatten_label_tokens(tokens);
 					if (cps_decoded.length != expected.length || !cps_decoded.every((x, i) => x == expected[i])) throw new Error('not normalized');
 				} catch (err) {
 					throw label_error(cps, `punycode: ${err.message}`);
@@ -73,6 +77,8 @@ export function ens_normalize(name) {
 			// [Validity] 7.) If CheckJoiners, the label must satisify the ContextJ rules
 			// this also does ContextO
 			try {
+				// emoji are invisible to context rules
+				// IDEA: they could get replaced by a space
 				validate_context(tokens.map(({t}) => t).filter(x => x));
 			} catch (err) {
 				throw label_error(cps, err.message);
@@ -92,12 +98,12 @@ export function ens_normalize(name) {
 	if (text_labels.some(is_bidi_label)) {
 		for (let i = 0; i < labels.length; i++) {
 			try {
-				validate_bidi(text_labels[i]);
+				validate_bidi_label(text_labels[i]);
 			} catch (err) {
-				throw label_error(flatten_tokens(labels[i]), `bidi: ${err.message}`);
+				throw label_error(flatten_label_tokens(labels[i]), `bidi: ${err.message}`);
 			}
 		}
 	}
 	/*~BIDI*/
-	return labels.map(tokens => String.fromCodePoint(...flatten_tokens(tokens))).join('.');
+	return labels.map(tokens => String.fromCodePoint(...flatten_label_tokens(tokens))).join('.');
 }

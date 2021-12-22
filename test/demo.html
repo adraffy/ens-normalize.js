@@ -1,0 +1,953 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ENS Resolver</title>
+<style>
+.hide {
+	display: none;
+}
+a, button {
+	cursor: pointer;
+}
+body { 
+	margin: 3rem; 
+	background: #eee;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+header .ext {
+	margin-left: 1rem;
+	float: right;
+}
+h1 {
+	display: flex;
+	align-items: center;
+	font-size: 24pt;
+	margin: 0;
+	gap: 0.5rem;
+	white-space: pre;
+}
+#provider {
+	align-self: flex-end;
+	white-space: pre;
+	font-size: 12pt;
+	font-weight: normal;
+	color: #666;
+}
+#arrows {
+	width: 2rem;
+	height: 2rem;
+	animation: spin 2s infinite linear;
+	user-select: none;
+}
+@keyframes spin {
+	from { transform:rotate(0deg); }
+	to	 { transform:rotate(360deg); }
+}
+.examples {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 3px;
+}
+#input {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+#input label:first-child {
+	display: none;
+}
+#input input {
+	flex-grow: 1;
+	padding: 0.5rem;
+	font-size: 16pt;
+}
+#input button {
+	align-self: stretch;
+}
+input[type=checkbox], label {
+	user-select: none;
+	cursor: pointer;
+}
+input[type=checkbox]:checked + label {
+	background: #f00;
+	color: #fff;
+	outline: 2px solid #f00;
+	border-radius: 5px;
+}
+#resolve_btn {
+	font-size: 16pt;
+	font-weight: bold;
+}
+#link button {
+	font-size: 14pt;
+}
+button.main {
+	font-weight: bold;
+}
+#output {
+	font-size: 14pt;
+}
+.elapsed {
+	color: #999;
+	font-size: 10pt;
+	position: absolute;
+	bottom: 0.3rem;
+	left: 0.3rem;
+}
+.row-label {
+	text-align: right;
+	font-weight: bold;
+	white-space: pre-wrap;
+}
+.row {
+	position: relative;
+	padding: 1rem;
+}
+.row > div {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+/*
+.row + .row {
+	border-top: 1px solid #ccc;
+}
+*/
+.row:nth-child(odd) {
+	background: #fff;
+}
+ul.row {
+	margin: 0;
+	padding-left: 2rem;
+}
+li + li {
+	margin-top: 0.5rem;
+}
+.hash {
+	line-break: anywhere;
+}
+.exploded {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	align-items: center;
+}
+.exploded button {
+	align-self: stretch;
+}
+.codepoints {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-items: stretch;
+	text-align: center;
+	gap: 3px;
+}
+.codepoints span {
+	padding: 1px 1px 0 1px;
+}
+.codepoints a {
+	padding: 0.2rem;
+	border-radius: 0.5rem;
+	background: #fff;
+	border: 1px solid #ccc;
+	text-decoration: none;
+	min-width: 1rem;
+}
+.codepoints a:hover {
+	outline: 2px solid #000;
+}
+.codepoints .stop {
+	background: #cff;
+	font-weight: bold;
+	min-width: 10px;
+	border: 1px solid #ccc;
+}
+.codepoints .ignored {
+	background: #eee;
+}
+.codepoints .emoji {
+	display: flex;
+	align-items: center;
+	text-align: center;
+	gap: 1px;
+	padding: 3px; 
+	border-radius: 0.5rem;
+	background: #afa;
+	border: 1px solid #ccc;
+}
+.codepoints .emoji .zero-width {
+	background: #060;
+	color: #fff;
+	border: none;
+	border-radius: 0;
+	font-size: 10pt;
+}
+.codepoints .tiny {
+	font-size: 10pt;
+}
+.codepoints.not-norm .text.zero-width {
+	background: #f66;
+}
+.codepoints .disallowed {
+	background: #faa;
+}
+.codepoints .mapped {
+	background: #ffa;
+}
+.codepoints span.mapped {
+	border-bottom: 1px solid #000;
+}
+.codepoints sub {
+	padding-left: 0.1rem;
+}
+.codepoints .cp {
+	background: #fff;
+}
+.tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	align-items: center;
+}
+.tags span {
+	background: #ddd;
+	color: #555;
+	padding: 0.2rem 0.5rem;
+	font-size: 12pt;
+	border-radius: 0.5rem;
+	border: 1px solid #ccc;
+}
+.tags .length {
+	background: #fff;
+}
+.tags .length:hover {
+	cursor: pointer;
+	background: #eee;
+}
+.tags .okay {
+	background: #ffc;
+}
+.tags .good {
+	color: #060;
+	background: #cfc;
+}
+.tags .best {
+	font-weight: bold;
+	border-color: #060;
+}
+.tags .fail {
+	background: #fcc;
+	color: #600;
+}
+.hashes {
+	display: grid;
+	grid-template-columns: 20% 20% auto;
+	gap: 0.5rem;
+	font-size: 12pt;
+	width: 100%;
+}
+.hashes .text {
+	line-break: anywhere;
+	text-align: right;
+}
+.hashes .cp {
+	white-space: break-spaces;
+}
+.hashes .name {
+	grid-column: 1 / -1;
+	text-align: center;
+} 
+.tags .warn {
+	background: #ffc;
+}
+.error {
+	background: #fcc;
+	padding: 1rem;
+	border: 3px dashed #f00;
+}
+@media only screen and (max-width: 800px) { 
+	body {
+		margin: 0;
+	}
+	button {
+		font-size: 100%;
+	}
+	header {
+		margin: 1rem 1rem 0 1rem;
+	}
+	#input, #options, .examples {
+		margin: 0 1rem;
+	}
+	#input {
+		flex-wrap: wrap;
+		justify-content: flex-end;
+	}
+	#input input {
+		flex-basis: 100%;
+	}
+}
+</style>
+</head>
+<body>
+<header>
+<a class="ext" id="github" href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a>
+<h1><a href="https://ens.domains/">ENS Resolver</a><span id="provider"></span></h1>
+</header>
+<div class="examples">
+<button>brantly.eth</button>
+<button>bRAnTlY.eTh</button>
+<button>brantly.cash</button>
+<button>brantlymillegan.com</button>
+<button>.eth</button>
+<button>öbb.at</button>
+<button>Öbb.at</button>
+<button>◌̈bb.at</button>
+<button>xn--bb-eka.at</button>
+
+<b>Deviation:</b> 
+<button data-name="[0xDF].eth">ß [0xDF]</button>
+<button data-name="[0x3C2].eth">ς [0x3C2]</button>
+
+<b>Disallowed:</b>
+<button>te[st.org</button>
+<button>tes_t.gov</button>
+
+<a href="https://unicode.org/reports/tr46/#Validity_Criteria"><b>CheckHyphen:</b></a>
+<button>-test.org</button>
+<button>test-.net</button>
+<button>te--st.com</button>
+
+<b>Goofy:</b>
+<button data-name="[ba967c160905ade030f84952644a963994eeaed3881a6b8a4e9c8cbe452ad7a2].eth" data-skip="1">"💩.eth"</button>
+
+<a href="./report-emoji.html"><b>Emoji:</b></a>
+<button>🚀🚀🚀.eth</button>
+<button>💩💩💩.eth</button>
+<button>🚴‍♂️.eth</button>
+<button>👁️‍🗨️.eth</button>
+<button>🌈rainbow.eth</button>
+<button>6️⃣9️⃣.eth</button>
+<button>🏳️‍🌈.eth</button>
+<button>🧟‍♂.eth</button>
+<button>🧟♂.eth</button>
+<button>😵‍💫😵‍💫😵‍💫.eth</button>
+<button>😵💫😵💫😵💫.eth</button>
+<button>👩🏽‍⚕.eth</button>
+<button>👨‍👩‍👦.eth</button>
+<button>👨👩👦.eth</button>
+
+<a href="./report-picto.html"><b>Picto:</b></a>
+<button>🅼🅼🅼.eth</button>
+
+<a href="https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.1"><b>ContextJ:</b></a>
+ZWNJ:
+<button data-name="a[0x94D][0x200C].eth">✅ Rule 1</button>
+<button data-name="[0xA872][0x200C][0x622].eth">✅ Rule 2A</button>
+<button data-name="a[0xA872][0xAC8][0x200C][0x300][0x300][0x622].eth">✅ Rule 2B</button>
+<button data-name="a[0x200C]b.eth">❌</button>
+<button data-name="🧞[0x200C][0x200C].eth">"🧞.eth"</button>
+• 
+ZWJ:
+<button data-name="a[0x94D][0x200D].eth">✅</button>
+<button data-name="a[0x200D]b.eth">❌</button>
+<a href="https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.3"><b>ContextO:</b></a>
+Middle Dot: 
+<button data-name="[0x6C][0xB7][0x6C].eth">✅</button>
+<button data-name="a[0xB7]b.eth">❌</button>
+• 
+Greek Keraia: 
+<button data-name="ab[0x375][0x0377].eth">✅</button>
+<button data-name="ab[0x375].eth">❌</button>
+• 
+Hebrew Geresh 
+<button data-name="a[0x0591][0x5F3].eth">✅</button>
+<button data-name="ab[0x5F3].eth">❌</button>
+• 
+Katakana:
+<button data-name="[0x3041][0x30A1][0x30FB].eth">✅</button>
+<button data-name="ab[0x30FB].eth">❌</button>
+• 
+Arabic-Indic:
+<button data-name="[0x0660][0x0661][0x0662].eth">✅</button>
+<button data-name="[0x06F0][0x06F1][0x06F2].eth">✅</button>
+<button data-name="[0x0660][0x06F0].eth">❌</button>
+<a href="https://www.rfc-editor.org/rfc/rfc5893.html#section-2"><b>CheckBidi:</b></a>
+<button data-name="[0x202e]elgoog[0x202d].eth" data-replace="true"></button>
+<button data-name="[0x202e]hte.elgoog" data-replace="true"></button>
+<button>פעילותהבינאום.eth</button>
+• 
+<button data-name="bahrainمصر.eth">Mixed LTR+RTL in Label</button>
+<button data-name="bahrain.مصر.eth">Separate LTR and RTL Labels</button>
+<b>Revived:</b>
+<button>‼️‼️‼️.eth</button>
+<button>⁉️⁉️⁉️.eth</button>
+<button data-replace="true">[0x2A][0xFE0F][0x20e3].eth</button>
+<button data-replace="true">[0x23][0xFE0F][0x20e3].eth</button>
+</div>
+<div id="options">
+<label><input type="checkbox" id="show_hashes_check" checked>Show Hashes</label>
+<span><input type="checkbox" id="skip_norm_check"><label for="skip_norm_check">Skip Normalization</label></span>
+<span><input type="checkbox" id="ignore_disallowed_check"><label for="ignore_disallowed_check">Remove Disallowed Characters from Input</label></span>
+<span><input type="checkbox" id="ignore_bidi_check"><label for="ignore_bidi_check">Disable CheckBidi</label></span>
+</div>
+<div id="input">
+<label for="input_field">Name or Address:</label>
+<input id="input_field" size="20" placeholder="Name or Address (Checksummed)">
+<svg id="arrows" class="hide" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+<path d="M990,377.5H622.5l137.4-137.4C690.4,170.7,598.2,132.5,500,132.5c-98.2,0-190.4,38.2-259.9,107.6C170.7,309.6,132.5,401.8,132.5,500c0,98.2,38.2,190.4,107.6,259.9c69.4,69.4,161.7,107.6,259.9,107.6c98.2,0,190.4-38.2,259.9-107.6c5.8-5.8,11.4-11.8,16.7-17.9l92.2,80.7C778.9,925.2,647,990,500,990C229.4,990,10,770.6,10,500C10,229.4,229.4,10,500,10c135.3,0,257.8,54.9,346.5,143.5L990,10V377.5z"/>
+</svg>
+<button id="link_btn">Copy Link</button>
+<button id="resolve_btn">Resolve</button>
+</div>
+<div id="output">
+<ul class="row">
+<li>Click an <button data-name="brantly.eth">Example</button> to see how it works.</li>
+<li>Use <code>[0xFF]</code> or <code>[255]</code> to manually include codepoints, eg. <button data-name="a[0x200D]b.eth">ZWJ</button></li>
+<li><b>Copy Link</b> to get a URL that resolves on page-load.</li>
+</ul>
+</div>
+<script type="module">
+import {
+	FetchProvider, retry,
+	ens_node_from_name, keccak, checksum_address,
+	ens_address_from_node , ens_name_from_address
+} from 'https://unpkg.com/@adraffy/eth-tools@0.0.7/dist/eth-tools.min.js';
+
+// load in the latest version
+import {
+	ens_normalize as ens_normalize_bidi, VERSION,
+	// debug
+	is_disallowed, is_ignored, get_mapped,
+	consume_emoji_sequence
+} from '../dist/ens-normalize-debug.min.js';
+
+import {
+	ens_normalize as ens_normalize_xbidi
+} from '../dist/ens-normalize-xbidi.min.js';
+
+function ens_normalize(name, ignore_disallowed, ignore_bidi) {
+	console.log({name,ignore_disallowed});
+	if (ignore_disallowed) {
+		name = String.fromCodePoint(...[...name].map(c => c.codePointAt(0)).filter(x => !is_disallowed(x)));
+	}
+	if (ignore_bidi) {
+		return ens_normalize_xbidi(name);
+	} else {
+		return ens_normalize_bidi(name);
+	}
+}
+
+function ens_labelhash(s) {
+	return keccak().update(s).hex;
+}
+
+document.querySelector('#github').innerHTML += ` (v${VERSION})`;
+
+const input_field = document.querySelector('#input_field');
+const resolve_btn = document.querySelector('#resolve_btn');
+const output_div = document.querySelector('#output');
+
+let provider_infura = retry(new FetchProvider({url: 'https://cloudflare-eth.com'})); 
+let provider_window = typeof window.ethereum !== 'undefined' ? retry(ethereum) : null;
+
+for (let btn of document.querySelectorAll('.examples button, button[data-name]')) {
+	if (btn.dataset.replace) {
+		btn.innerHTML = replace_codes(btn.dataset.name ?? btn.innerHTML);
+	}
+	btn.addEventListener('click', () => {
+		input_field.value = btn.dataset.name ?? btn.innerHTML;
+		resolve(btn.dataset.skip);
+	});
+}
+
+resolve_btn.addEventListener('click', () => resolve());
+input_field.addEventListener('keydown', e => {
+	if (e.key === 'Enter') {
+		e.stopPropagation();
+		resolve();
+	}
+});
+
+document.querySelector('#link_btn').addEventListener('click', () => {
+	navigator.clipboard.writeText(window.location + '#' + encodeURIComponent(input_field.value.trim()));
+});
+
+input_field.focus();
+
+if (window.location.hash.length > 0) {
+	input_field.value = decodeURIComponent(window.location.hash.slice(1).trim());
+	history.replaceState(null, null, ' ');
+	resolve();
+}
+
+function replace_codes(s) {
+	return s.replace(/\[((0x)?[0-9a-f]{1,6})\]/ig, (_, x) => String.fromCodePoint(parseInt(x)));
+}
+
+function set_working(b) {
+	resolve_btn.disabled = b;
+	document.querySelector('#arrows').classList.toggle('hide', !b);
+}
+
+function format_dur(t) {
+	if (t < 1000) return `${Math.ceil(t)}ms`;
+	t /= 1000;
+	if (t < 60) return `${t.toFixed(1)}sec`;
+	t /= 60;
+	return `${t.toFixed(1)}min`;
+}
+
+function is_printable_ascii(s) {
+	return /^[\x21-\x25\x27-\x3B\x3D\x3F-\x7F]$/gu.test(s);
+}
+
+function create_link(url, s) {
+	let a = document.createElement('a');
+	a.href = url;
+	a.innerHTML = s ?? url;
+	a.target = '_blank';
+	return a;
+}
+
+function create_exploded(s, is_norm) {	
+	let div = document.createElement('div');
+	div.classList.add('codepoints');
+	if (!is_norm) div.classList.add('not-norm');
+	let cps = [...s].map(c => c.codePointAt(0));
+	let emoji_end = 0;
+	let emoji_group;
+	for (let i = 0; i < cps.length; i++) {
+		if (i >= emoji_end) {
+			let [len, e] = consume_emoji_sequence(cps, i);
+			if (len > 0) {
+				emoji_end = i + len;
+				emoji_group = document.createElement('span');
+				emoji_group.classList.add('emoji');
+				div.append(emoji_group);
+			}
+		}
+		let inside_emoji = i < emoji_end;
+		let cp = cps[i];
+		let ch = String.fromCodePoint(cp);
+		let el;
+		if (is_printable_ascii(ch)) {
+			el = document.createElement('span');
+			el.innerHTML = ch;
+		} else {
+			el = create_link(`https://emojipedia.org/${ch}`, ch);
+		}
+		if (cp === 0x200C) {
+			el.innerHTML = ch = 'ZWNJ';
+			el.classList.add('zero-width');
+		} else if (cp == 0x200D) {
+			el.innerHTML = ch = 'ZWJ';
+			el.classList.add('zero-width');
+		} else if (cp == 0xFE0F) {
+			el.innerHTML = ch = 'FE0F';
+		} else if (cp == 0x20e3) {
+			el.innerHTML = ch = 'Keycap';
+		} else if (cp == 0x2E) {
+			el.classList.add('stop');
+		}
+		el.title = `${ch}\nHex: 0x${cp.toString(16).toUpperCase()}\nDec: ${cp}`;
+		if (i < emoji_end) {
+			emoji_group.append(el);
+		} else {
+			el.classList.add('text');
+			if (is_ignored(cp)) el.classList.add('ignored');
+			if (is_disallowed(cp)) el.classList.toggle('disallowed');
+			if (get_mapped(cp)) el.classList.toggle('mapped');
+			div.append(el);
+		}
+		
+	}
+	let tags = document.createElement('div');
+	tags.classList.add('tags');
+	let n_u8 = unescape(encodeURIComponent(s)).length;
+	let count = document.createElement('span');
+	count.classList.add('length');		
+	count.addEventListener('click', () => {
+		input_field.value = cps.map(cp => {
+			let ch = String.fromCodePoint(cp);
+			return is_printable_ascii(ch) ? ch : `[0x${cp.toString(16).toUpperCase()}]`;
+		}).join('');
+	});
+	tags.append(count);
+	if (cps.length != n_u8) {
+		count.innerHTML = `${cps.length}<sub>ch</sub>`;	
+		let bytes = document.createElement('span');
+		bytes.classList.add('bytes');
+		bytes.innerHTML = `${n_u8}<sub>bytes</sub>`;
+		tags.append(bytes); 
+	} else {
+		count.innerHTML = `${cps.length}<sub>ch=bytes</sub>`; 		
+	}
+	let exploded = document.createElement('div');
+	exploded.classList.add('exploded');
+	exploded.append(div, tags);
+	return exploded;
+}
+
+function create_copy_btn(s, title = 'Copy') {
+	let btn = document.createElement('button');
+	btn.addEventListener('click', () => navigator.clipboard.writeText(s));
+	btn.innerHTML = title;
+	return btn;
+}
+
+function create_byte_codes(s) {
+	s = unescape(encodeURIComponent(s));
+	let v = [];
+	for (let i = 0; i < s.length; i++) {
+		v.push(s.charCodeAt(i).toString(16).padStart(2, '0'));
+	}
+	return v.join(' ');
+}
+
+function create_ens_btn(s) {
+	let a = document.createElement('a');
+	a.classList.add('ens');
+	a.innerHTML = 'ENS';
+	a.href = `https://app.ens.domains/name/${encodeURIComponent(s)}`;
+	a.title = `ENS: ${s}`;
+	return a;
+}
+
+function create_hashes_row(name) {
+	let div = document.createElement('div');
+	div.classList.add('hashes');
+	// build table of label hashes
+	let labels = name.split('.');
+	for (let i = 0; i < labels.length; i++) {
+		let label = labels[i];
+		let text = document.createElement('span');
+		text.classList.add('text');
+		text.innerHTML = label;
+		let points = document.createElement('span');
+		points.classList.add('cp');		
+		points.innerHTML = label.length == 0 ? 'null' : [...label].map(x => x.codePointAt(0).toString(16).padStart(2, '0')).join(' ');		
+		let hash = document.createElement('span');
+		hash.classList.add('hash');
+		hash.innerHTML = ens_labelhash(label);
+		div.append(text, points, hash);
+	}
+	// add namehash
+	let hash = document.createElement('span');
+	hash.classList.add('name', 'hash');
+	hash.innerHTML = `<b>Namehash:</b> ${ens_node_from_name(name)}`;
+	div.append(hash);
+	// wrap it in a row
+	let wrap = document.createElement('div');
+	wrap.append(div);
+	let row = document.createElement('div');
+	row.classList.add('row');
+	row.append(wrap);
+	return row;
+}
+
+function resolve(...a) {
+	if (resolve_btn.disabled) return;
+	set_working(true);
+	resolve0(...a);
+}
+async function resolve0(...a) {
+	try {
+		await resolve1(...a);
+	} catch (err) {
+		let {desc} = err;
+		desc = desc ? `Error during ${desc}` : 'Unknown Error'; 
+		let div = document.createElement('div');
+		div.classList.add('error');
+		div.innerHTML = `<b>${desc}:</b> ${err.message}`;
+		output_div.append(div);
+		console.log(err);
+	}
+	set_working(false);
+}
+async function resolve1(override_skip_norm) {
+	let date0 = new Date();
+	
+	function create_row(add_time, label, item, value_class) {
+		let div = document.createElement('div');
+		div.classList.add('row');	
+		if (add_time) {
+			let span = document.createElement('span');
+			span.classList.add('elapsed');
+			let now = new Date();
+			span.innerHTML = format_dur(now - date0)
+			div.append(span);
+			date0 = now;
+		}
+		let inner = document.createElement('div');
+		if (label) {
+			let span = document.createElement('span');
+			span.classList.add('row-label');
+			span.innerHTML = `${label}:`;
+			inner.append(span);
+		}
+		if (typeof item === 'string') {
+			let span = document.createElement('span');
+			span.innerHTML = item;
+			item = span;
+		}	
+		item.classList.add('value');
+		if (value_class) item.classList.add(value_class);
+		inner.append(item);
+		div.append(inner);
+		return div;
+	}
+	
+	// clear 
+	output_div.innerHTML = '';
+	
+	// find a provider
+	let provider;
+	if (provider_window && parseInt(provider_window.chainId) == 1) { // dont force a chain switch
+		provider = provider_window;
+	} else {
+		provider = provider_infura;
+	}
+	document.querySelector('#provider').innerHTML = `using ${provider === provider_infura ? 'Infura' : 'Browser Wallet'}`;
+
+	// get user input
+	let name0 = input_field.value.trim();
+	
+	// replace [*] codes
+	let name = replace_codes(name0);
+	
+	// check if actual address
+	let is_address;
+	try {
+		is_address = checksum_address(name) === name;
+	} catch (ignored) {
+		is_address = false;
+	}
+	
+	let show_hashes = document.querySelector('#show_hashes_check').checked;
+	let skip_norm = override_skip_norm || document.querySelector('#skip_norm_check').checked;
+	let ignore_disallowed = document.querySelector('#ignore_disallowed_check').checked;
+	let ignore_bidi_check = document.querySelector('#ignore_bidi_check').checked;
+	
+	try {
+		let address, norm = false;
+		let span_grade = document.createElement('span');
+		if (is_address) {
+
+			address = name;
+
+		} else {
+		
+			// add exploded name
+			let exploded_input = create_exploded(name, false);
+			output_div.append(create_row(false, 'Input', exploded_input));			
+			if (show_hashes) {
+				output_div.append(create_hashes_row(name));
+			}
+			
+			// grade the name (so far)
+			/*if (name === safe_idna(name)) { 
+				span_grade.classList.add('good');
+				span_grade.innerHTML = 'IDNA';			
+				exploded_input.querySelector('.tags').append(span_grade);
+			} else */
+			if (is_printable_ascii(name)) {
+				span_grade.innerHTML = 'ASCII'; //safe_idna(name.toLowerCase()) ? 'Mixed-case' : 'ASCII';
+			} else {
+				span_grade.innerHTML = 'Unicode';
+			}
+			span_grade.classList.add('okay');
+			exploded_input.querySelector('.tags').append(span_grade);
+			
+			// add a button to swap user input with [*] codes
+			if (name != name0) {
+				let btn = document.createElement('button');
+				btn.innerHTML = 'Replace Input';
+				btn.addEventListener('click', () => input_field.value = name);
+				exploded_input.append(btn);		
+			}
+					
+			let exploded_norm;
+			if (skip_norm) {
+				norm = name; // yolo
+				// add a warning
+				let span = document.createElement('span');
+				span.classList.add('fail');
+				span.innerHTML = '❌ Skipped';
+				let tags = document.createElement('div');
+				tags.classList.add('tags');
+				tags.append(span);
+				// make a placeholder
+				exploded_norm = document.createElement('div');
+				exploded_norm.classList.add('exploded');
+				exploded_norm.append(tags);
+				output_div.append(create_row(true, 'Normalization', exploded_norm));
+			} else {	
+				// normalize the name
+				try {
+					norm = ens_normalize(name, ignore_disallowed, ignore_bidi_check);
+				} catch (err) {
+					err.desc = 'Normalize';
+					throw err;
+				}	
+				// add exploded norm
+				exploded_norm = create_exploded(norm, true);
+				output_div.append(create_row(true, 'Normalized', exploded_norm));
+				if (name === norm) {
+					// adjust the grade
+					span_grade.innerHTML = 'Normalized';
+					span_grade.classList.add('good');
+					exploded_input.querySelector('.ens')?.remove();
+				} else { 
+					// add warning to input
+					let span = document.createElement('span');
+					span.classList.add('fail');
+					span.innerHTML = '❌ Normalized';
+					exploded_input.querySelector('.tags').append(span);
+					// add some helpers
+					exploded_input.append(create_ens_btn(name)); // on input
+					exploded_norm.append(create_copy_btn(norm));
+					// show different labels
+					if (show_hashes) {
+						output_div.append(create_hashes_row(norm));
+					}
+				}
+				// add hyperlink
+				exploded_norm.append(create_ens_btn(norm));
+			}
+			let node = ens_node_from_name(norm);
+			// lookup the norm node
+			let resolver;
+			try {
+				({resolver, address} = await ens_address_from_node(provider, node));
+			} catch (err) {	  
+				err.desc = 'Resolve';
+				throw err;
+			}
+			// check if not registered
+			if (!address) {
+				let span = document.createElement('span');
+				span.classList.add('warn');
+				span.innerHTML = '⚠️ ENS Record Not Found';
+				let tags = document.createElement('div');
+				tags.classList.add('tags');
+				tags.append(span);
+				output_div.append(create_row(true, 'Resolver', tags));
+				return;
+			}
+			// add etherscan
+			let a_resolver = document.createElement('a');
+			a_resolver.classList.add('hash');
+			a_resolver.href = `https://etherscan.io/address/${resolver}`;
+			a_resolver.innerHTML = resolver;			
+			output_div.append(create_row(false, 'Resolver', a_resolver));
+			// add opensea if ENS
+			if (resolver === '0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41') { // label.length must be 2?
+				let label = norm.split('.')[0];
+				let token = BigInt('0x' + ens_labelhash(label));
+				exploded_norm.append(create_link(`https://opensea.io/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/${token}`, 'Opensea'));				
+			}
+		}
+
+		// if we got here, either:
+		// 1. an address was entered
+		// 2. a name was entered and we resolved the address		
+
+		// add etherscan
+		let a_address = document.createElement('a');
+		a_address.classList.add('hash');
+		a_address.href = `https://etherscan.io/address/${address}`;
+		a_address.innerHTML = address;		
+		output_div.append(create_row(true, 'Address', a_address));
+		// reverse-lookup the address
+		let reverse;
+		try {
+			({name: reverse} = await ens_name_from_address(provider, address));;
+		} catch (err) {
+			err.desc ='Reverse';
+			throw err;
+		}
+		// check if not primary
+		if (typeof reverse !== 'string') {	
+			let span = document.createElement('span');
+			span.classList.add('warn');
+			span.innerHTML = '⚠️ Primary ENS Name Not Set';
+			let div = document.createElement('div');
+			div.classList.add('tags');
+			div.append(span);
+			output_div.append(create_row(true, 'Reverse', div));
+			return;
+		}
+		// adjust the grade
+		if (name === reverse) {
+			span_grade.classList.add('best');
+			span_grade.innerHTML = '✅️ Matches Reverse';
+		}
+		// explode the reverse name
+		let exploded_reverse = create_exploded(reverse, false);		
+		if (norm === reverse) { 
+			let span = document.createElement('span');
+			span.innerHTML = '&check; Same as Normalized';
+			exploded_reverse.querySelector('.tags').append(span);
+		} else if (!is_address) { // we might not have a norm
+			let span = document.createElement('span');
+			span.classList.add('warn');
+			span.innerHTML = '⚠️ Different from Input';
+			exploded_reverse.querySelector('.tags').append(span);
+		}		
+		output_div.append(create_row(true, 'Reverse', exploded_reverse));
+		if (show_hashes && norm !== reverse) { // only show if necessary
+			output_div.append(create_hashes_row(reverse));
+		}	
+		// note: im curious if any reverse names are unnormalized
+		// but stop if theres nothing more to do
+		if (norm === reverse) return;		
+		// normalize the reverse name
+		let reverse_norm;
+		try {
+			reverse_norm = ens_normalize(reverse, ignore_disallowed, ignore_bidi_check);
+		} catch (err) {
+			err.desc = 'Reverse Normalize';
+			throw err;
+		}	
+		// explode the reverse norm name
+		let exploded_reverse_norm = create_exploded(reverse_norm, true);
+		if (reverse === reverse_norm) {
+			let span = document.createElement('span');
+			span.innerHTML = '&check; Normalized';
+			exploded_reverse.querySelector('.tags').append(span);
+		}
+		// add some helpers since reverse != input
+		exploded_reverse_norm.append(create_copy_btn(reverse_norm));
+		exploded_reverse_norm.append(create_ens_btn(reverse_norm));
+		// make it easy to resolve this new name
+		let again_btn = document.createElement('button');
+		again_btn.classList.add('main');
+		again_btn.addEventListener('click', () => {
+			input_field.value = reverse;
+			resolve();
+		});
+		again_btn.innerHTML = 'Resolve';	
+		exploded_reverse_norm.append(again_btn);
+		output_div.append(create_row(true, 'Normalized Reverse', exploded_reverse_norm));		
+	} catch (err) {
+		let {desc, message} = err;
+		desc = desc ? `Error during ${desc}` : 'Unknown Error';					
+		let div = document.createElement('div');
+		div.classList.add('error');
+		div.innerHTML = `<b>${desc}:</b> ${message}`;
+		output_div.append(div);
+		console.log(err);
+	} finally {
+		set_working(false);
+	}
+}
+
+</script>
+</body>
+</html>

@@ -1,16 +1,16 @@
-import {is_bidi_label, validate_bidi} from './bidi.js';
-import {label_error} from './utils.js';
+import {is_bidi_label, validate_bidi_label} from './bidi.js';
+import {explode_cp} from './utils.js';
+
+export {is_bidi_label, validate_bidi_label};
 
 export function check_bidi(name) {
-	// TODO: fix this
-	// determine if emoji interact with bidi
-	let labels = name.split('.').map(s => [...s].map(x => x.codePointAt(0)));
+	let labels = name.split('.').map(explode_cp);
 	if (labels.some(is_bidi_label)) {
 		for (let cps of labels) {
 			try {
 				validate_bidi(cps);
 			} catch (err) {
-				throw label_error(cps, err.message);
+				throw new Error(`Disallowed bidi label "${escape_unicode(String.fromCodePoint(...cps))}": ${err.message}`);
 			}
 		}
 	}	

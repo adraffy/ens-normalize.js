@@ -1,5 +1,15 @@
 import {group_by, indices_of, split_between, split_linear, tally, split_on} from './utils.js'; 
 
+export function is_better_member_compression(smaller, bigger) {
+	let s = new Encoder();
+	for (let x of smaller) s.write_member(x);
+	let b = new Encoder();
+	for (let x of bigger) b.write_member(x);
+	let ns = s.compress_arithmetic().length;
+	let nb = b.compress_arithmetic().length;
+	return ns < nb;
+}
+
 export function huffman(i) {
 	if (i < 0x80) {
 		if (i < 0) throw new RangeError(`huffman underflow`);

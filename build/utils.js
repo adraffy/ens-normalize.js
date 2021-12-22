@@ -24,13 +24,27 @@ export function recursive_encoder(fn, best, max = Infinity) {
 	return {v: best, n}
 }
 
-export function escape_unicode(s) {
-	return s.replace(/[^\.\-a-z0-9]/igu, x => `{${x.codePointAt(0).toString(16).toUpperCase()}}`);
+// my suggested inline ascii-safe unicode escape
+// this is ES6 \u{X} without the \u
+export function quote_cp(cp) {
+	return `{${cp.toString(16).toUpperCase()}}`;
 }
 
-export function label_error(cps, message) {
-	return new Error(`Disallowed label "${escape_unicode(String.fromCodePoint(...cps))}": ${message}`);
+export function escape_unicode(s) {
+	return s.replace(/[^\.\-a-z0-9]/igu, x => quote_cp(x.codePointAt(0)));
 }
+
+export function escape_name_for_html(s) {
+	// 0x26 `&` => &amp; 
+	// 0x3C `<` => &lt;
+	// 0x3E `>` => &gt;
+	// printable: 0x20 - 0x7F	
+	// remove: 0x20 SPACE, 0x7F DEL
+	// wrap spacers and whitespace
+	return s.replace(/[\u200C\u200D\s]/, x => quote_cp(x.codePointAt(0)))
+	        .replace(/[^\x21-\x25\x27-\x3B\x3D\x3F-\x7F]/gu, x => `&#${x.codePointAt(0)};`);
+}
+
 
 export function take_from(v, fn) {
 	let take = [], rest = [];

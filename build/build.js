@@ -11,13 +11,14 @@ let tmp_file = join(base_dir, '.tmp.js'); // this needs to be in this directory
 let unicode_version = JSON.parse(readFileSync(join(base_dir, 'unicode-raw/version.json')));
 let {version: package_version} = JSON.parse(readFileSync(join(base_dir, '../package.json')));
 
-let HEADER = `// built: ${new Date().toJSON()}
-export const UNICODE = '${unicode_version.major}.${unicode_version.minor}.${unicode_version.patch}';
-export const VERSION = '${package_version}';`;
+let HEADER = `// built: ${new Date().toJSON()}`;
 
-function inject_header(file) {
+let VERSIONS = `export const UNICODE = '${unicode_version.major}.${unicode_version.minor}.${unicode_version.patch}';
+export const VERSION = '${package_version}';`
+
+function add_version(file) {
 	let code = readFileSync(file, {encoding: 'utf8'});
-	writeFileSync(tmp_file, `${HEADER}\n${code}`);
+	writeFileSync(tmp_file, `${HEADER}\n${VERSIONS}\n${code}`);
 	return tmp_file;
 }
 
@@ -32,12 +33,16 @@ function generate_lib(nfc, bidi) {
 	return tmp_file;
 }
 
+// build libraries
 await build(generate_lib(true, true), 'ens-normalize');
 await build(generate_lib(true, false), 'ens-normalize-xbidi');
 await build(generate_lib(false, true), 'ens-normalize-xnfc');
 await build(generate_lib(false, false), 'ens-normalize-xnfc-xbidi');
 
-await build(inject_header(join(base_dir, 'lib-debug.js')), 'ens-normalize-debug');
+// build debug library with everything
+await build(add_version(join(base_dir, 'lib-debug.js')), 'ens-normalize-debug');
+
+// build sub-libraries
 await build(join(base_dir, 'lib-nf.js'), 'nf');
 await build(join(base_dir, 'lib-bidi.js'), 'bidi');
 
