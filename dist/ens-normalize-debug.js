@@ -956,9 +956,9 @@ function norm(form, cps) {
 function nfc(cps) { return norm('NFC', cps); }
 function nfd(cps) { return norm('NFD', cps); }
 
-// built: 2021-12-23T20:10:30.509Z
+const BUILT = '2021-12-23T21:04:48.791Z';
 const UNICODE = '14.0.0';
 const VERSION = '1.3.2';
 const IDNA = '1.3.2';
 
-export { IDNA, UNICODE, VERSION, ens_normalize, ens_tokenize, escape_name_for_html, escape_unicode, nfc$1 as nfc, nfc as nfc0, nfd$1 as nfd, nfd as nfd0, puny_decode, tokenized_idna };
+export { BUILT, IDNA, UNICODE, VERSION, ens_normalize, ens_tokenize, escape_name_for_html, escape_unicode, nfc$1 as nfc, nfc as nfc0, nfd$1 as nfd, nfd as nfd0, puny_decode, tokenized_idna };
