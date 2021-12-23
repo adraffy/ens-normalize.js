@@ -425,7 +425,7 @@ import {
 	ens_normalize as ens_normalize_bidi, VERSION,
 	// debug
 	is_disallowed, is_ignored, get_mapped,
-	consume_emoji_sequence
+	ens_tokenize
 } from '../dist/ens-normalize-debug.min.js';
 
 import {
@@ -532,59 +532,58 @@ function create_link(url, s) {
 	return a;
 }
 
+
+
 function create_exploded(name, is_norm) {	
-	let div = document.createElement('div');
-	div.classList.add('codepoints');
-	if (!is_norm) div.classList.add('not-norm');
-	let cps = [...name].map(c => c.codePointAt(0));
-	let emoji_end = 0;
-	let emoji_group;
-	for (let i = 0; i < cps.length; i++) {
-		if (i >= emoji_end) {
-			let [len, e] = consume_emoji_sequence(cps, i);
-			if (len > 0) {
-				emoji_end = i + len;
-				emoji_group = document.createElement('span');
-				emoji_group.classList.add('emoji');
-				div.append(emoji_group);
+	let tokens_div = document.createElement('div');
+	tokens_div.classList.add('tokens');
+	if (!is_norm) tokens_div.classList.add('not-norm');
+	for (let token of tokens) {
+		let {v, m, i, d, to, e} = token;
+		let el = document.createElement('div');
+		if (v) {
+			el.innerHTML = str(...v);
+			el.classList.add('valid');
+		} else if (m) {
+			el.classList.add('mapped');
+			el.innerHTML = str(to);
+			el.title = `Mapped from ${m}\n${tooltip(m)}`;
+		} else if (i) {
+			el.classList.add('ignored');
+			el.innerHTML = `<code>${hex(i)}</code>`;
+			el.title = tooltip(i);
+		} else if (d !== undefined) {			
+			el.classList.add('disallowed');
+			el.innerHTML = str(d);
+			el.title = tooltip(i);
+		} else if (e) {
+			el.classList.add('glyph');
+			for (let cp of e) {
+				let span = document.createElement('span');
+				span.classList.add('mod');
+				if (cp == 0x200C) {
+					span.innerHTML = 'ZWNJ';
+				} else if (cp == 0x200D) {
+					span.classList.add('zwj');
+					span.innerHTML = 'ZWJ';
+				} else if (cp == 0xFE0F) {
+					span.classList.add('style');
+					span.innerHTML = 'FE0F';
+				} else if (cp == 0x20E3) {
+					span.classList.add('keycap');
+					span.innerHTML = 'Keycap';
+				} else {
+					span.classList.remove('mod');
+					span.classList.add('emoji');
+					span.innerHTML = String.fromCodePoint(cp);
+				}
+				el.append(span);
 			}
-		}
-		let inside_emoji = i < emoji_end;
-		let cp = cps[i];
-		let ch = String.fromCodePoint(cp);
-		let el;
-		if (is_printable_ascii(ch)) {
-			el = document.createElement('span');
-			el.innerHTML = ch;
 		} else {
-			el = create_link(`https://emojipedia.org/${ch}`, ch);
-		}
-		if (cp === 0x200C) {
-			el.innerHTML = ch = 'ZWNJ';
-			el.classList.add('zero-width');
-		} else if (cp == 0x200D) {
-			el.innerHTML = ch = 'ZWJ';
-			el.classList.add('zero-width');
-		} else if (cp == 0xFE0F) {
-			el.innerHTML = '<i>Emoji</i>';
-		} else if (cp == 0xFE0E) {
-			el.innerHTML = '<i>Text</i>';
-		} else if (cp == 0x20e3) {
-			el.innerHTML = 'Keycap';
-		} else if (cp == 0x2E) {
 			el.classList.add('stop');
+			el.innerHTML = '.';
 		}
-		el.title = `${ch}\nHex: 0x${cp.toString(16).toUpperCase()}\nDec: ${cp}`;
-		if (i < emoji_end) {
-			emoji_group.append(el);
-		} else {
-			el.classList.add('text');
-			if (is_ignored(cp)) el.classList.add('ignored');
-			if (is_disallowed(cp)) el.classList.toggle('disallowed');
-			if (get_mapped(cp)) el.classList.toggle('mapped');
-			div.append(el);
-		}
-		
+		tokens_div.append(el);
 	}
 	let tags = document.createElement('div');
 	tags.classList.add('tags');
@@ -606,7 +605,7 @@ function create_exploded(name, is_norm) {
 	}
 	let exploded = document.createElement('div');
 	exploded.classList.add('exploded');
-	exploded.append(div, tags);
+	exploded.append(tokens_div, tags);
 	return exploded;
 }
 

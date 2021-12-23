@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ENS Resolver</title>
+<title>ENS Tokenizer</title>
 <style>
 .hide {
 	display: none;
@@ -44,13 +44,22 @@ body {
 	font-size: 20pt;
 	display: flex;
 	flex-wrap: wrap;
-	align-items: center;
+	align-items: stretch;
 	justify-content: center;
 	gap: 2px;
 	padding: 1rem;
 }
 #tokens > * {
 	padding: 2px 4px;
+	display: flex;
+	align-items: center;
+	gap: 2px;
+}
+#tokens a {
+	text-decoration: none;
+}
+#tokens a:hover {
+	outline: 2px solid #00f;
 }
 #tokens .valid {
 	border-radius: 5px;
@@ -59,7 +68,7 @@ body {
 }
 #tokens .ignored {
 	color: #fff;
-	background: #ccc;
+	background: #aaa;
 	min-width: 1rem;
 }
 #tokens .disallowed {
@@ -77,16 +86,22 @@ body {
 	background: #ffa;
 }
 #tokens .glyph {
-	display: flex;
-	align-items: center;
 	border: 2px solid #0aa;
 	border-radius: 0.5rem;
 	background: #cff;
 }
-#tokens .zwj {
+#tokens .mod {
 	font-size: 10pt;
-	background: #fff;
 	padding: 2px;
+	background: #333;
+	color: #fff;
+	border-radius: 5px;
+}
+#tokens .mod.zwj {
+	background: #0aa;
+}
+#tokens .mod.ignored {	
+	background: #aaa;
 }
 #tokens code {
 	font-size: 14pt;
@@ -116,7 +131,7 @@ body {
 </style>
 </head>
 <body>
-<h1>Tokenizer</h1>
+<h1>ENS Tokenizer</h1>
 <div id="examples">
 <button>🚀🚀🚀.eth</button>
 <button>💩💩💩.eth</button>
@@ -132,6 +147,7 @@ body {
 <button>👩🏽‍⚕.eth</button>
 <button>👨‍👩‍👦.eth</button>
 <button>👨👩👦.eth</button>
+<button data-replace="true">{2A}{FE0F}{20E3}.eth</button>
 </div>
 <div id="input">
 <input id="input_field" size="20" placeholder="ENS Name">
@@ -148,7 +164,7 @@ const output_div = document.querySelector('#output_div');
 
 for (let btn of document.querySelectorAll('#examples button, button[data-name]')) {
 	if (btn.dataset.replace) {
-		btn.innerHTML = replace_codes(btn.dataset.name ?? btn.innerHTML);
+		btn.innerHTML = replace_escapes(btn.dataset.name ?? btn.innerHTML);
 	}
 	btn.addEventListener('click', () => {
 		input_field.value = btn.dataset.name ?? btn.innerHTML;
@@ -202,27 +218,15 @@ function parse() {
 	let tokens_div = document.createElement('div');
 	tokens_div.id = 'tokens';
 	for (let token of tokens) {
-		let {v, m, i, d, to, e} = token;
-		let el = document.createElement('div');
-		if (v) {
-			el.innerHTML = str(...v);
-			el.classList.add('valid');
-		} else if (m) {
-			el.classList.add('mapped');
-			el.innerHTML = str(to);
-			el.title = `Mapped from ${m}\n${tooltip(m)}`;
-		} else if (i) {
-			el.classList.add('ignored');
-			el.innerHTML = `<code>${hex(i)}</code>`;
-			el.title = tooltip(i);
-		} else if (d !== undefined) {			
-			el.classList.add('disallowed');
-			el.innerHTML = str(d);
-			el.title = tooltip(i);
-		} else if (e) {
+		let {v, m, i, d, e, u} = token;
+		let el;
+		if (e) {
+			el = document.createElement('a');
+			el.href = `https://emojipedia.org/${String.fromCodePoint(...e)}`;
 			el.classList.add('glyph');
-			for (let cp of e) {
+			for (let cp of u) {
 				let span = document.createElement('span');
+				span.classList.add('mod');
 				if (cp == 0x200C) {
 					span.innerHTML = 'ZWNJ';
 				} else if (cp == 0x200D) {
@@ -231,15 +235,38 @@ function parse() {
 				} else if (cp == 0xFE0F) {
 					span.classList.add('style');
 					span.innerHTML = 'FE0F';
+				} else if (cp == 0x20E3) {
+					span.classList.add('keycap');
+					span.innerHTML = 'Keycap';
 				} else {
+					span.classList.remove('mod');
 					span.classList.add('emoji');
 					span.innerHTML = String.fromCodePoint(cp);
 				}
+				if (!e.includes(cp)) span.classList.add('ignored');
 				el.append(span);
 			}
 		} else {
-			el.classList.add('stop');
-			el.innerHTML = '.';
+			el = document.createElement('div');
+			if (v) {
+				el.innerHTML = str(...v);
+				el.classList.add('valid');
+			} else if (m) {
+				el.classList.add('mapped');
+				el.innerHTML = str(u);
+				el.title = `Mapped from ${m}\n${tooltip(m)}`;
+			} else if (i) {
+				el.classList.add('ignored');
+				el.innerHTML = `<code>${hex(i)}</code>`;
+				el.title = tooltip(i);
+			} else if (d !== undefined) {			
+				el.classList.add('disallowed');
+				el.innerHTML = str(d);
+				el.title = tooltip(i);
+			} else {
+				el.classList.add('stop');
+				el.innerHTML = '.';
+			}
 		}
 		tokens_div.append(el);
 	}
@@ -255,9 +282,9 @@ function parse() {
 			input_field.classList.add('norm');
 		} else {
 			input_field.classList.add('not-norm');
-		}
-		if (norm) {
-			pre_json.innerHTML = `${norm}<br><br>${pre_json.innerHTML}`;
+			if (norm) {
+				pre_json.innerHTML = `Normalized: <b>${norm}</b><br><br>${pre_json.innerHTML}`;
+			}
 		}
 	} catch (err) {
 		input_field.classList.add('error');

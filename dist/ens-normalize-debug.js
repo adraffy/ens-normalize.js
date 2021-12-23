@@ -266,15 +266,18 @@ function quote_cp(cp) {
 }
 
 function escape_unicode(s) {
-	return s.replace(/[^\.\-a-z0-9]/igu, x => quote_cp(x.codePointAt(0)));
+	// printable w/o:
+	// 0x22 " (double-quote)
+	// 0x7F DEL
+	return s.replace(/[^\x20-\x21\x23-\x7E]/gu, x => quote_cp(x.codePointAt(0)));
+	//return s.replace(/[^\.\-a-z0-9]/igu, x => quote_cp(x.codePointAt(0)));
 }
 
 function escape_name_for_html(s) {
-	// printable: 0x20-0x7F	
-	// html: 0x26 "&", 0x3C "<", 0x3E ">"
-	// remove: 0x7F DEL
-	// quoted: whitespace, joiners
-	return s.replace(/[\x00-\x20\x7F\u200C\u200D\s]/gu, x => quote_cp(x.codePointAt(0)))
+	// printable w/o:
+	// html: 0x26 &, 0x3C <, 0x3E >
+	// quote: 0x00-0x20 control, 0x7F DEL, whitespace, joiners
+	return s.replace(/[\x00-\x20\x7F\xA0\u200C\u200D\s]/gu, x => quote_cp(x.codePointAt(0)))
 	        .replace(/[^\x21-\x25\x27-\x3B\x3D\x3F-\x7E]/gu, x => `&#${x.codePointAt(0)};`);
 }
 
@@ -340,7 +343,7 @@ function puny_decode(cps) {
 }
 
 // this returns [[]] if empty
-// {e:[]} => emoji
+// {e:[],u:[]} => emoji
 // {v:[]} => chars
 function tokenized_idna(cps, emoji_parser, tokenizer) {
 	let chars = [];
@@ -357,7 +360,7 @@ function tokenized_idna(cps, emoji_parser, tokenizer) {
 			let [len, e] = emoji_parser(cps, i);
 			if (len > 0) {
 				drain();
-				tokens.push({e}); // these are emoji tokens
+				tokens.push({e, u:cps.slice(i, i+len)}); // these are emoji tokens
 				i += len - 1;
 				continue;
 			}
@@ -936,7 +939,7 @@ function ens_tokenize(name) {
 		if (VALID(cp)) return [cp];
 		if (IGNORED(cp)) return {i: cp};
 		let mapped = lookup_mapped(MAPPED, cp);
-		if (mapped) return {m: cp, to: mapped};
+		if (mapped) return {m: cp, u: mapped};
 		return {d: cp};
 	})[0];
 }
@@ -953,7 +956,7 @@ function norm(form, cps) {
 function nfc(cps) { return norm('NFC', cps); }
 function nfd(cps) { return norm('NFD', cps); }
 
-// built: 2021-12-23T12:30:38.281Z
+// built: 2021-12-23T20:10:30.509Z
 const UNICODE = '14.0.0';
 const VERSION = '1.3.2';
 const IDNA = '1.3.2';

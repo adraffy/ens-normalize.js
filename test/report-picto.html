@@ -4,6 +4,15 @@
 <meta charset="utf-8">
 <title>Non-Emoji Pictographs</title>
 <style>
+#loading {
+	display: inline-block;
+	margin-top: 1rem;
+	background: #ffc;
+	border-radius: 1rem;
+	padding: 1rem 2rem;
+	font-size: 24pt;
+	border: 1px solid #ccc;
+}
 table {
 	border-collapse: collapse;
 	width: 100%;
@@ -18,14 +27,8 @@ td + td.dec {
 tbody tr:nth-child(odd) {
 	background: #eee; 
 }
-#loading {
-	display: inline-block;
-	margin-top: 1rem;
-	background: #ffc;
-	border-radius: 1rem;
-	padding: 1rem 2rem;
-	font-size: 24pt;
-	border: 1px solid #ccc;
+td.picto {
+	font-size: 16pt;
 }
 td.valid {
 	background: #cfc;
@@ -83,7 +86,7 @@ async function main() {
 		row.push([
 			`<td class="dec">${cp}</td>`,
 			`<td>${cp.toString(16).toUpperCase()}</td>`,
-			`<td>${escape_name_for_html(String.fromCodePoint(cp))}</td>`,
+			`<td class="picto">${escape_name_for_html(String.fromCodePoint(cp))}</td>`,
 			mapped_cell(cp, token2003),
 			mapped_cell(cp, token2008),		
 			mapped_cell(cp, token2022),	
@@ -107,7 +110,7 @@ function mapped_cell(cp, tokenize) {
 	if (token.v) {
 		return `<td class="valid"></td>`;		
 	} else if (token.m) {
-		return `<td class="mapped">${escape_name_for_html(String.fromCodePoint(...token.to))}</td>`;	
+		return `<td class="mapped">${escape_name_for_html(String.fromCodePoint(...token.u))}</td>`;	
 	} else if (token.i) {
 		return `<td class="ignored"></td>`;
 	} else {
