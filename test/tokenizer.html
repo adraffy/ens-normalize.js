@@ -203,7 +203,7 @@ document.querySelector('#escape_btn').addEventListener('click', () => {
 	let s1 = replace_escapes(s0);
 	let s2 = apply_escapes(s1);
 	let s3 = apply_escapes(s1, true);
-	let set = [...new Set([s0, s1, s2])];
+	let set = [...new Set([s1, s2, s3])];
 	let pos = set.indexOf(s0);	
 	input_field.value = set[(pos + 1) % set.length];
 });
