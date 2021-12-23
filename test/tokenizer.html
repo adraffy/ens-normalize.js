@@ -57,6 +57,11 @@ body {
 	background: #cfc;
 	border: 2px solid #0a0;
 }
+#tokens .ignored {
+	color: #fff;
+	background: #ccc;
+	min-width: 1rem;
+}
 #tokens .disallowed {
 	background: #f66;	
 }
@@ -69,7 +74,7 @@ body {
 }
 #tokens .stop {
 	font-weight: bold;
-	background: #ccc;
+	background: #ffa;
 }
 #tokens .glyph {
 	display: flex;
@@ -169,19 +174,25 @@ input_field.addEventListener('input', e => parse());
 input_field.focus();
 parse();
 
+function hex(cp) {
+	return cp.toString(16).toUpperCase().padStart(2, '0');
+}
 function is_printable_ascii(s) {
 	return /^[\x21-\x25\x27-\x3B\x3D\x3F-\x7F]$/gu.test(s);
 }
 function apply_escapes(s, forced) {
-	return [...s].map(x => !forced && is_printable_ascii(x) ? x : `{${x.codePointAt(0).toString(16).toUpperCase()}}`).join('');
+	return [...s].map(x => !forced && is_printable_ascii(x) ? x : `{${hex(x.codePointAt(0))}}`).join('');
 }
 function replace_escapes(s) {
 	return s.replace(/\{([0-9a-f]{1,6})\}/uig, (_, x) => String.fromCodePoint(parseInt(x, 16)));
 }
 function str(...v) {
 	return escape_name_for_html(String.fromCodePoint(...v)).replace(/\{([0-9a-f]+)\}/uig, '<code>$1</code>');
-
 }
+function tooltip(cp) {
+	return `Hex: 0x${cp.toString(16).toUpperCase()}\nDec: ${cp}`;
+}
+
 function parse() {
 	output_div.innerHTML = '';
 	
@@ -190,9 +201,8 @@ function parse() {
 
 	let tokens_div = document.createElement('div');
 	tokens_div.id = 'tokens';
-	for (let i = 0; i < tokens.length; i++) {
-		let token = tokens[i];
-		let {v, m, d, to, e} = token;
+	for (let token of tokens) {
+		let {v, m, i, d, to, e} = token;
 		let el = document.createElement('div');
 		if (v) {
 			el.innerHTML = str(...v);
@@ -200,10 +210,15 @@ function parse() {
 		} else if (m) {
 			el.classList.add('mapped');
 			el.innerHTML = str(to);
-			el.title = `Mapped from ${m}`;
+			el.title = `Mapped from ${m}\n${tooltip(m)}`;
+		} else if (i) {
+			el.classList.add('ignored');
+			el.innerHTML = `<code>${hex(i)}</code>`;
+			el.title = tooltip(i);
 		} else if (d !== undefined) {			
 			el.classList.add('disallowed');
 			el.innerHTML = str(d);
+			el.title = tooltip(i);
 		} else if (e) {
 			el.classList.add('glyph');
 			for (let cp of e) {

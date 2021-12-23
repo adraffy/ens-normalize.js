@@ -11,7 +11,8 @@
 * Handles [Punycode](https://datatracker.ietf.org/doc/html/rfc3492), adapted from [mathiasbynens/punycode.js](https://github.com/mathiasbynens/punycode.js)
 ---
 
-* [Live Demo](https://adraffy.github.io/ens-normalize.js/test/demo.html)
+* [Demo: Resolver](https://adraffy.github.io/ens-normalize.js/test/resolver.html) 
+* [Demo: Tokenizer](https://adraffy.github.io/ens-normalize.js/test/tokenizer.html)
 * ~~Passes **100%** [IDNATestV2](https://adraffy.github.io/ens-normalize.js/test/report-idna.html)~~ (This test is IDNA2003)
 * Passes **100%** [NormalizationTests](https://adraffy.github.io/ens-normalize.js/test/report-nf.html)
 * [Emoji Test](https://adraffy.github.io/ens-normalize.js/test/report-emoji.html)
