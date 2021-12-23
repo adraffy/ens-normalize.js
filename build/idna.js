@@ -1,6 +1,5 @@
-
 // this returns [[]] if empty
-// {e:[]} => emoji
+// {e:[],u:[]} => emoji
 // {v:[]} => chars
 export function tokenized_idna(cps, emoji_parser, tokenizer) {
 	let chars = [];
@@ -17,7 +16,7 @@ export function tokenized_idna(cps, emoji_parser, tokenizer) {
 			let [len, e] = emoji_parser(cps, i);
 			if (len > 0) {
 				drain();
-				tokens.push({e}); // these are emoji tokens
+				tokens.push({e, u:cps.slice(i, i+len)}); // these are emoji tokens
 				i += len - 1;
 				continue;
 			}

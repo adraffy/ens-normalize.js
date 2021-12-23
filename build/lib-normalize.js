@@ -157,7 +157,7 @@ export function ens_tokenize(name) {
 		if (VALID(cp)) return [cp];
 		if (IGNORED(cp)) return {i: cp};
 		let mapped = lookup_mapped(MAPPED, cp);
-		if (mapped) return {m: cp, to: mapped};
+		if (mapped) return {m: cp, u: mapped};
 		return {d: cp};
 	})[0];
 }
