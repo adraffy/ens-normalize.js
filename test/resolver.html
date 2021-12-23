@@ -140,74 +140,77 @@ li + li {
 .exploded button {
 	align-self: stretch;
 }
-.codepoints {
+.tokens {
+	font-size: 16pt;
 	display: flex;
 	flex-wrap: wrap;
-	align-items: center;
-	justify-items: stretch;
-	text-align: center;
-	gap: 3px;
+	align-items: stretch;
+	justify-content: center;
+	gap: 2px;
 }
-.codepoints span {
-	padding: 1px 1px 0 1px;
-}
-.codepoints a {
-	padding: 0.2rem;
-	border-radius: 0.5rem;
-	background: #fff;
-	border: 1px solid #ccc;
-	text-decoration: none;
-	min-width: 1rem;
-}
-.codepoints a:hover {
-	outline: 2px solid #000;
-}
-.codepoints .stop {
-	background: #cff;
-	font-weight: bold;
-	min-width: 10px;
-	border: 1px solid #ccc;
-}
-.codepoints .ignored {
-	background: #eee;
-}
-.codepoints .emoji {
+.tokens > * {
+	padding: 2px 4px;
 	display: flex;
 	align-items: center;
-	text-align: center;
-	gap: 1px;
-	padding: 3px; 
-	border-radius: 0.5rem;
-	background: #afa;
-	border: 1px solid #ccc;
+	gap: 4px;
 }
-.codepoints .emoji .zero-width {
-	background: #060;
+.tokens a {
+	text-decoration: none;
+}
+.tokens a:hover {
+	outline: 2px solid #00f;
+}
+.tokens .valid {
+	border-radius: 5px;
+	background: #cfc;
+	border: 2px solid #0a0;
+}
+.tokens .ignored {
 	color: #fff;
-	border: none;
-	border-radius: 0;
-	font-size: 10pt;
+	background: #aaa;
+	min-width: 1rem;
 }
-.codepoints .tiny {
-	font-size: 10pt;
+.tokens .disallowed {
+	background: #f66;	
 }
-.codepoints.not-norm .text.zero-width {
-	background: #f66;
+#tokens .mapped {
+	display: flex;
+	background: #fc9;
 }
-.codepoints .disallowed {
-	background: #faa;
+#tokens .mapped span {
+	margin-top: 2px;
+	margin-bottom: -2px;
+	border-bottom: 4px solid #000;
 }
-.codepoints .mapped {
+.tokens .stop {
+	font-weight: bold;
 	background: #ffa;
 }
-.codepoints span.mapped {
-	border-bottom: 1px solid #000;
+.tokens .glyph {
+	border: 2px solid #0aa;
+	border-radius: 0.5rem;
+	background: #cff;
 }
-.codepoints sub {
+.tokens .mod {
+	font-size: 10pt;
+	padding: 2px;
+	background: #333;
+	color: #fff;
+	border-radius: 5px;
+}
+.tokens .mod.zwj {
+	background: #0aa;
+}
+.tokens .mod.ignored {	
+	background: #aaa;
+}
+.tokens code {
+	font-size: 14pt;
+	color: #fff;
+	background: rgba(0, 0, 0, .5);
+}
+.tags sub {
 	padding-left: 0.1rem;
-}
-.codepoints .cp {
-	background: #fff;
 }
 .tags {
 	display: flex;
@@ -311,8 +314,8 @@ li + li {
 <button>xn--bb-eka.at</button>
 
 <b>Deviation:</b> 
-<button data-name="[0xDF].eth">ß [0xDF]</button>
-<button data-name="[0x3C2].eth">ς [0x3C2]</button>
+<button>ß.eth</button>
+<button>ς.eth</button>
 
 <b>Disallowed:</b>
 <button>te[st.org</button>
@@ -345,50 +348,51 @@ li + li {
 <a href="./report-picto.html"><b>Picto:</b></a>
 <button>🅼🅼🅼.eth</button>
 
+
 <a href="https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.1"><b>ContextJ:</b></a>
 ZWNJ:
-<button data-name="a[0x94D][0x200C].eth">✅ Rule 1</button>
-<button data-name="[0xA872][0x200C][0x622].eth">✅ Rule 2A</button>
-<button data-name="a[0xA872][0xAC8][0x200C][0x300][0x300][0x622].eth">✅ Rule 2B</button>
-<button data-name="a[0x200C]b.eth">❌</button>
-<button data-name="🧞[0x200C][0x200C].eth">"🧞.eth"</button>
+<button data-name="a{94D}{200C}.eth">✅ Rule 1</button>
+<button data-name="{A872}{200C}{622}.eth">✅ Rule 2A</button>
+<button data-name="a{A872}{AC8}{200C}{300}{300}{622}.eth">✅ Rule 2B</button>
+<button data-name="a{200C}b.eth">❌</button>
+<button data-name="🧞{200C}{200C}.eth">"🧞.eth"</button>
 • 
 ZWJ:
-<button data-name="a[0x94D][0x200D].eth">✅</button>
-<button data-name="a[0x200D]b.eth">❌</button>
+<button data-name="a{94D}{200D}.eth">✅</button>
+<button data-name="a{200D}b.eth">❌</button>
 <a href="https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.3"><b>ContextO:</b></a>
 Middle Dot: 
-<button data-name="[0x6C][0xB7][0x6C].eth">✅</button>
-<button data-name="a[0xB7]b.eth">❌</button>
+<button data-name="{6C}{B7}{6C}.eth">✅</button>
+<button data-name="a{B7}b.eth">❌</button>
 • 
 Greek Keraia: 
-<button data-name="ab[0x375][0x0377].eth">✅</button>
-<button data-name="ab[0x375].eth">❌</button>
+<button data-name="ab{375}{0377}.eth">✅</button>
+<button data-name="ab{375}.eth">❌</button>
 • 
 Hebrew Geresh 
-<button data-name="[0x05D1][0x0591][0x5F3].eth">✅</button>
-<button data-name="ab[0x5F3].eth">❌</button>
+<button data-name="{05D1}{0591}{5F3}.eth">✅</button>
+<button data-name="ab{5F3}.eth">❌</button>
 • 
 Katakana:
-<button data-name="[0x3041][0x30A1][0x30FB].eth">✅</button>
-<button data-name="ab[0x30FB].eth">❌</button>
+<button data-name="{3041}{30A1}{30FB}.eth">✅</button>
+<button data-name="ab{30FB}.eth">❌</button>
 • 
 Arabic-Indic:
-<button data-name="[0x0660][0x0661][0x0662].eth">✅</button>
-<button data-name="[0x06F0][0x06F1][0x06F2].eth">✅</button>
-<button data-name="[0x0660][0x06F0].eth">❌</button>
+<button data-name="{5D0}{660}{661}{662}.eth">✅</button>
+<button data-name="{5D0}{6F0}{6F1}{6F2}.eth">✅</button>
+<button data-name="{660}{6F0}.eth">❌</button>
 <a href="https://www.rfc-editor.org/rfc/rfc5893.html#section-2"><b>CheckBidi:</b></a>
-<button data-name="[0x202e]elgoog[0x202d].eth" data-replace="true"></button>
-<button data-name="[0x202e]hte.elgoog" data-replace="true"></button>
+<button data-name="{202e}elgoog{202d}.eth" data-replace="true"></button>
+<button data-name="{202e}hte.elgoog" data-replace="true"></button>
 <button>פעילותהבינאום.eth</button>
-• 
+
 <button data-name="bahrainمصر.eth">Mixed LTR+RTL in Label</button>
 <button data-name="bahrain.مصر.eth">Separate LTR and RTL Labels</button>
 <b>Revived:</b>
 <button>‼️‼️‼️.eth</button>
 <button>⁉️⁉️⁉️.eth</button>
-<button data-replace="true">[0x2A][0xFE0F][0x20e3].eth</button>
-<button data-replace="true">[0x23][0xFE0F][0x20e3].eth</button>
+<button data-replace="true">{2A}{FE0F}{20E3}.eth</button>
+<button data-replace="true">{23}{FE0F}{20E3}.eth</button>
 </div>
 <div id="options">
 <label><input type="checkbox" id="show_hashes_check" checked>Show Hashes</label>
@@ -421,21 +425,13 @@ import {
 } from 'https://unpkg.com/@adraffy/eth-tools@0.0.7/dist/eth-tools.min.js';
 
 // load in the latest version
-import {
-	ens_normalize as ens_normalize_bidi, VERSION,
-	// debug
-	is_disallowed, is_ignored, get_mapped,
-	ens_tokenize
-} from '../dist/ens-normalize-debug.min.js';
-
-import {
-	ens_normalize as ens_normalize_xbidi
-} from '../dist/ens-normalize-xbidi.min.js';
+import {ens_normalize as ens_normalize_bidi, ens_tokenize, escape_name_for_html, VERSION, IDNA} from '../dist/ens-normalize-debug.min.js';
+import {ens_normalize as ens_normalize_xbidi} from '../dist/ens-normalize-xbidi.min.js';
 
 function ens_normalize(name, ignore_disallowed, ignore_bidi) {
 	console.log({name,ignore_disallowed});
 	if (ignore_disallowed) {
-		name = String.fromCodePoint(...[...name].map(c => c.codePointAt(0)).filter(x => !is_disallowed(x)));
+		name = String.fromCodePoint(...ens_tokenize(name).flatMap(({v,i,m,e,u}) => v ?? i ?? m ?? (e ?? u) ?? []));
 	}
 	if (ignore_bidi) {
 		return ens_normalize_xbidi(name);
@@ -479,13 +475,9 @@ document.querySelector('#escape_btn').addEventListener('click', () => {
 	let s1 = replace_escapes(s0);
 	let s2 = apply_escapes(s1);
 	let s3 = apply_escapes(s1, true);
-	if (s0 == s1) {
-		input_field.value = s2;
-	} else if (s0 == s2) {
-		input_field.value = s3;
-	} else {
-		input_field.value = s1;
-	}
+	let set = [...new Set([s0, s1, s2])];
+	let pos = set.indexOf(s0);	
+	input_field.value = set[(pos + 1) % set.length];
 });
 document.querySelector('#link_btn').addEventListener('click', () => {
 	navigator.clipboard.writeText(window.location + '#' + encodeURIComponent(input_field.value.trim()));
@@ -497,14 +489,6 @@ if (window.location.hash.length > 0) {
 	input_field.value = decodeURIComponent(window.location.hash.slice(1).trim());
 	history.replaceState(null, null, ' ');
 	resolve();
-}
-
-function replace_escapes(s) {
-	return s.replace(/\[((0x)?[0-9a-f]{1,6})\]/uig, (_, x) => String.fromCodePoint(parseInt(x)))
-	        .replace(/\{([0-9a-f]{1,6})\}/uig, (_, x) => String.fromCodePoint(parseInt(x, 16)))
-}
-function apply_escapes(s, forced) {
-	return [...s].map(x => !forced && is_printable_ascii(x) ? x : `{${x.codePointAt(0).toString(16).toUpperCase()}}`).join('');
 }
 
 function set_working(b) {
@@ -520,8 +504,23 @@ function format_dur(t) {
 	return `${t.toFixed(1)}min`;
 }
 
+function hex(cp) {
+	return cp.toString(16).toUpperCase().padStart(2, '0');
+}
 function is_printable_ascii(s) {
 	return /^[\x21-\x25\x27-\x3B\x3D\x3F-\x7F]$/gu.test(s);
+}
+function apply_escapes(s, forced) {
+	return [...s].map(x => !forced && is_printable_ascii(x) ? x : `{${hex(x.codePointAt(0))}}`).join('');
+}
+function replace_escapes(s) {
+	return s.replace(/\{([0-9a-f]{1,6})\}/uig, (_, x) => String.fromCodePoint(parseInt(x, 16)));
+}
+function str(...v) {
+	return escape_name_for_html(String.fromCodePoint(...v)).replace(/\{([0-9a-f]+)\}/uig, '<code>$1</code>');
+}
+function tooltip(cp) {
+	return `Hex: 0x${hex(cp)}\nDec: ${cp}`;
 }
 
 function create_link(url, s) {
@@ -532,33 +531,19 @@ function create_link(url, s) {
 	return a;
 }
 
-
-
 function create_exploded(name, is_norm) {	
 	let tokens_div = document.createElement('div');
 	tokens_div.classList.add('tokens');
 	if (!is_norm) tokens_div.classList.add('not-norm');
+	let tokens = ens_tokenize(name);
 	for (let token of tokens) {
-		let {v, m, i, d, to, e} = token;
-		let el = document.createElement('div');
-		if (v) {
-			el.innerHTML = str(...v);
-			el.classList.add('valid');
-		} else if (m) {
-			el.classList.add('mapped');
-			el.innerHTML = str(to);
-			el.title = `Mapped from ${m}\n${tooltip(m)}`;
-		} else if (i) {
-			el.classList.add('ignored');
-			el.innerHTML = `<code>${hex(i)}</code>`;
-			el.title = tooltip(i);
-		} else if (d !== undefined) {			
-			el.classList.add('disallowed');
-			el.innerHTML = str(d);
-			el.title = tooltip(i);
-		} else if (e) {
+		let {v, m, i, d, e, u} = token;
+		let el;
+		if (e) {
+			el = document.createElement('a');
+			el.href = `https://emojipedia.org/${String.fromCodePoint(...e)}`;
 			el.classList.add('glyph');
-			for (let cp of e) {
+			for (let cp of u) {
 				let span = document.createElement('span');
 				span.classList.add('mod');
 				if (cp == 0x200C) {
@@ -577,16 +562,45 @@ function create_exploded(name, is_norm) {
 					span.classList.add('emoji');
 					span.innerHTML = String.fromCodePoint(cp);
 				}
+				if (!e.includes(cp)) span.classList.add('ignored');
 				el.append(span);
 			}
 		} else {
-			el.classList.add('stop');
-			el.innerHTML = '.';
+			el = document.createElement('div');
+			if (v) {
+				el.innerHTML = str(...v);
+				el.classList.add('valid');
+			} else if (m) {
+				el.classList.add('mapped');
+				if (is_norm) {
+					for (let cp of u) {
+						let span = document.createElement('span');
+						span.innerHTML = str(cp);	
+						span.title = tooltip(cp)
+						el.append(span);
+					}
+				} else {
+					el.innerHTML = str(m);	
+					el.title = tooltip(m)
+				}
+			} else if (i) {
+				el.classList.add('ignored');
+				el.innerHTML = `<code>${hex(i)}</code>`;
+				el.title = tooltip(i);
+			} else if (d !== undefined) {			
+				el.classList.add('disallowed');
+				el.innerHTML = str(d);
+				el.title = tooltip(d);
+			} else {
+				el.classList.add('stop');
+				el.innerHTML = '.';
+			}
 		}
 		tokens_div.append(el);
 	}
 	let tags = document.createElement('div');
 	tags.classList.add('tags');
+	let n_cp = [...name].length;
 	let n_u8 = unescape(encodeURIComponent(name)).length;
 	let count = document.createElement('span');
 	count.classList.add('length');		
@@ -594,14 +608,14 @@ function create_exploded(name, is_norm) {
 		input_field.value = apply_escapes(name);
 	});
 	tags.append(count);
-	if (cps.length != n_u8) {
-		count.innerHTML = `${cps.length}<sub>ch</sub>`;	
+	if (n_cp != n_u8) {
+		count.innerHTML = `${n_cp}<sub>ch</sub>`;	
 		let bytes = document.createElement('span');
 		bytes.classList.add('bytes');
 		bytes.innerHTML = `${n_u8}<sub>bytes</sub>`;
 		tags.append(bytes); 
 	} else {
-		count.innerHTML = `${cps.length}<sub>ch=bytes</sub>`; 		
+		count.innerHTML = `${n_cp}<sub>ch=bytes</sub>`;
 	}
 	let exploded = document.createElement('div');
 	exploded.classList.add('exploded');

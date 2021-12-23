@@ -9,6 +9,8 @@ const BIDI_EN = read_member_table(r);
 const BIDI_ECTOB = read_member_table(r);
 const BIDI_NSM = read_member_table(r);
 
+console.log(BIDI_AN);
+
 // [Validity] 8.) If CheckBidi, and if the domain name is a Bidi domain name, then the label 
 // must satisfy all six of the numbered conditions in [IDNA2008] RFC 5893, Section 2.
 // * The spec is ambiguious regarding when you can determine a domain name is bidi

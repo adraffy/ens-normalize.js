@@ -252,9 +252,9 @@ function write_idna_payload(name, idna, emoji) {
 }
 
 
+/*
 function write_library_payload(name, {emoji, idna, bidi, nf, context, combining_marks}) {
 	let allowed = new Set([...idna.valid, ...idna.mapped.map(([x]) => x)]);
-
 	// filter
 	combining_marks = set_intersect(combining_marks, allowed);
 	context = map_values(context, v => set_intersect(v, allowed));
@@ -266,7 +266,6 @@ function write_library_payload(name, {emoji, idna, bidi, nf, context, combining_
 	if (bidi) {
 		bidi = map_values(bidi, v => set_intersect(v, allowed));
 	}
-
 	let enc = new Encoder();
 	enc.write_member(combining_marks);
 	encode_idna(enc, idna);
@@ -276,6 +275,7 @@ function write_library_payload(name, {emoji, idna, bidi, nf, context, combining_
 	if (bidi) encode_bidi(enc, bidi);
 	write_payload(name, enc);
 }
+*/
 
 function update_idna_rules(idna, rules) {
 
