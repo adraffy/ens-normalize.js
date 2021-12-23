@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ENS Tokenizer</title>
+<title>ENS Name Tokenizer</title>
 <style>
 .hide {
 	display: none;
@@ -133,7 +133,7 @@ body {
 </style>
 </head>
 <body>
-<h1>ENS Tokenizer</h1>
+<h1>ENS Name Tokenizer</h1>
 <div id="examples">
 <button>🚀🚀🚀.eth</button>
 <button>💩💩💩.eth</button>
@@ -230,8 +230,9 @@ function tooltip(cp) {
 
 function parse() {
 	output_div.innerHTML = '';
-	
+	input_field.classList.remove('norm', 'not-norm', 'error');
 	let name = replace_escapes(input_field.value);
+	if (!name) return;
 	let tokens = ens_tokenize(name);
 
 	let tokens_div = document.createElement('div');
@@ -300,7 +301,7 @@ function parse() {
 		return String(i+1).padStart(2) + ': ' + JSON.stringify(token).replace(/\d+/g, x => '0x' + parseInt(x).toString(16).toUpperCase());
 	}).join('\n');
 
-	input_field.classList.remove('norm', 'not-norm', 'error');
+	
 	try {
 		let norm = ens_normalize(name);
 		if (norm === name) {
