@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ENS Resolver</title>
+<style>
+.hide {
+	display: none;
+}
+body {
+	margin: 3rem;
+}
+#examples {
+	margin-bottom: 1rem;
+}
+#input {
+	display: flex;
+	gap: 0.5rem;
+}
+#input_field {
+	font-size: 20pt;
+	box-sizing: border-box;
+	flex: 100%;
+	padding: 0.5rem;
+	text-align: center;
+	border: 2px solid #333;
+	border-radius: 0.5rem;
+}
+#input_field.norm {
+	background-color: #cfc;
+}
+#input_field.not-norm {
+	background-color: #fc9;
+}
+#input_field.error {
+	background-color: #fcc;
+}
+#output_div {
+	display: flex;
+	flex-direction: column;
+}
+#tokens {
+	font-size: 20pt;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 2px;
+	padding: 1rem;
+}
+#tokens > * {
+	padding: 2px 4px;
+}
+#tokens .valid {
+	border-radius: 5px;
+	background: #cfc;
+	border: 2px solid #0a0;
+}
+#tokens .disallowed {
+	background: #f66;	
+}
+#tokens .mapped {
+	display: flex;
+	border-bottom: 4px solid #000;
+	background: #fc9;
+	margin-top: 2px;
+	margin-bottom: -2px;
+}
+#tokens .stop {
+	font-weight: bold;
+	background: #ccc;
+}
+#tokens .glyph {
+	display: flex;
+	align-items: center;
+	border: 2px solid #0aa;
+	border-radius: 0.5rem;
+	background: #cff;
+}
+#tokens .zwj {
+	font-size: 10pt;
+	background: #fff;
+	padding: 2px;
+}
+#tokens code {
+	font-size: 14pt;
+	color: #fff;
+	background: rgba(0, 0, 0, .5);
+}
+#json {
+	font-size: 12pt;
+	margin: 0;
+	padding: 0.5rem;
+	text-align: center;
+	background: #eee;
+	white-space: normal;
+	line-height: 1.5;
+}
+#error {
+	font-weight: bold;
+	margin-top: 0.5rem;
+	text-align: center;
+	font-size: 14pt;
+}
+@media only screen and (max-width: 800px) { 
+	body {
+		margin: 1rem;
+	}
+}
+</style>
+</head>
+<body>
+<h1>Tokenizer</h1>
+<div id="examples">
+<button>🚀🚀🚀.eth</button>
+<button>💩💩💩.eth</button>
+<button>🚴‍♂️.eth</button>
+<button>👁️‍🗨️.eth</button>
+<button>🌈rainbow.eth</button>
+<button>6️⃣9️⃣.eth</button>
+<button>🏳️‍🌈.eth</button>
+<button>🧟‍♂.eth</button>
+<button>🧟♂.eth</button>
+<button>😵‍💫😵‍💫😵‍💫.eth</button>
+<button>😵💫😵💫😵💫.eth</button>
+<button>👩🏽‍⚕.eth</button>
+<button>👨‍👩‍👦.eth</button>
+<button>👨👩👦.eth</button>
+</div>
+<div id="input">
+<input id="input_field" size="20" placeholder="ENS Name">
+<button id="escape_btn">Escape</button>
+</div>
+<div id="output_div">
+</div>
+
+<script type="module">
+import {ens_normalize, ens_tokenize, escape_name_for_html} from '../dist/ens-normalize-debug.js';
+
+const input_field = document.querySelector('#input_field');
+const output_div = document.querySelector('#output_div');
+
+for (let btn of document.querySelectorAll('#examples button, button[data-name]')) {
+	if (btn.dataset.replace) {
+		btn.innerHTML = replace_codes(btn.dataset.name ?? btn.innerHTML);
+	}
+	btn.addEventListener('click', () => {
+		input_field.value = btn.dataset.name ?? btn.innerHTML;
+		parse();
+	});
+}
+
+document.querySelector('#escape_btn').addEventListener('click', () => {
+	let s0 = input_field.value;
+	let s1 = replace_escapes(s0);
+	let s2 = apply_escapes(s1);
+	let s3 = apply_escapes(s1, true);
+	if (s0 == s2) {
+		input_field.value = s3;
+	} else if (s0 == s3) {
+		input_field.value = s1;
+	} else {
+		input_field.value = s2;
+	}
+});
+
+input_field.addEventListener('input', e => parse());
+input_field.focus();
+parse();
+
+function is_printable_ascii(s) {
+	return /^[\x21-\x25\x27-\x3B\x3D\x3F-\x7F]$/gu.test(s);
+}
+function apply_escapes(s, forced) {
+	return [...s].map(x => !forced && is_printable_ascii(x) ? x : `{${x.codePointAt(0).toString(16).toUpperCase()}}`).join('');
+}
+function replace_escapes(s) {
+	return s.replace(/\{([0-9a-f]{1,6})\}/uig, (_, x) => String.fromCodePoint(parseInt(x, 16)));
+}
+function str(...v) {
+	return escape_name_for_html(String.fromCodePoint(...v)).replace(/\{([0-9a-f]+)\}/uig, '<code>$1</code>');
+
+}
+function parse() {
+	output_div.innerHTML = '';
+	
+	let name = replace_escapes(input_field.value);
+	let tokens = ens_tokenize(name);
+
+	let tokens_div = document.createElement('div');
+	tokens_div.id = 'tokens';
+	for (let i = 0; i < tokens.length; i++) {
+		let token = tokens[i];
+		let {v, m, d, to, e} = token;
+		let el = document.createElement('div');
+		if (v) {
+			el.innerHTML = str(...v);
+			el.classList.add('valid');
+		} else if (m) {
+			el.classList.add('mapped');
+			el.innerHTML = str(to);
+			el.title = `Mapped from ${m}`;
+		} else if (d !== undefined) {			
+			el.classList.add('disallowed');
+			el.innerHTML = str(d);
+		} else if (e) {
+			el.classList.add('glyph');
+			for (let cp of e) {
+				let span = document.createElement('span');
+				if (cp == 0x200C) {
+					span.innerHTML = 'ZWNJ';
+				} else if (cp == 0x200D) {
+					span.classList.add('zwj');
+					span.innerHTML = 'ZWJ';
+				} else if (cp == 0xFE0F) {
+					span.classList.add('style');
+					span.innerHTML = 'FE0F';
+				} else {
+					span.classList.add('emoji');
+					span.innerHTML = String.fromCodePoint(cp);
+				}
+				el.append(span);
+			}
+		} else {
+			el.classList.add('stop');
+			el.innerHTML = '.';
+		}
+		tokens_div.append(el);
+	}
+
+	let pre_json = document.createElement('pre');
+	pre_json.id = 'json';
+	pre_json.innerHTML = JSON.stringify(tokens);
+
+	input_field.classList.remove('norm', 'not-norm', 'error');
+	try {
+		let norm = ens_normalize(name);
+		if (norm === name) {
+			input_field.classList.add('norm');
+		} else {
+			input_field.classList.add('not-norm');
+		}
+		if (norm) {
+			pre_json.innerHTML = `${norm}<br><br>${pre_json.innerHTML}`;
+		}
+	} catch (err) {
+		input_field.classList.add('error');
+		let error = document.createElement('div');
+		error.id = 'error';
+		error.innerHTML = `❌ ${err.message}`;
+		output_div.append(error);
+	}
+
+	
+	output_div.append(tokens_div, pre_json);
+
+}
+
+</script>
+</body>
+</html>

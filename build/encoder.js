@@ -167,6 +167,17 @@ export class Encoder {
 		}
 	}
 	write_member(v) {
+		if (v instanceof Set) {
+			v = [...v];
+		} else if (Array.isArray(v)) {
+			v = [...new Set(v)];
+		} else {
+			throw new TypeError('expected set or array');
+		}
+		if (v.some(x => !Number.isSafeInteger(x) || x < 0)) {
+			throw new TypeError('expected unsigned');
+		}
+		v = v.sort((a, b) => a - b);
 		let m = split_between(v, (a, b) => b - a > 1);
 		let g1 = m.filter(g => g.length == 1);
 		let gN = m.filter(g => g.length != 1);
@@ -177,6 +188,7 @@ export class Encoder {
 		this.counts(gN.map(g => g.length));
 	}
 	write_transposed_ys(w, m) {
+		if (w == 0) return;
 		this.deltas(m.map(v => v[0]));
 		for (let j = 1; j < w; j++) {
 			for (let i = 0; i < m.length; i++) {
@@ -186,7 +198,7 @@ export class Encoder {
 		}
 	}
 	write_mapped(linear_specs, mapped) {
-		mapped = mapped.slice(); // mutated
+		mapped = group_by(mapped, ([_, ys]) => ys.length, []).map(v => v.sort((a, b) => a[0] - b[0]));
 		for (let [w, dx, dy] of linear_specs) {
 			if (w >= mapped.length) throw new Error(`linear spec out of bounds: ${w}`);
 			let {linear, nonlinear} = split_linear(mapped[w], dx, dy);

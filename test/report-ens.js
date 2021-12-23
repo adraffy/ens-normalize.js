@@ -115,5 +115,5 @@ for (let [type, bucket] of buckets) {
 }
 html += `</body></html>`;
 
-writeFileSync(join(output_dir, 'ens2.html'), html);
+writeFileSync(join(output_dir, 'ens3.html'), html);
 //writeFileSync(join(output_dir, 'ens.json'), JSON.stringify(buckets));

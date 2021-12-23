@@ -27,6 +27,18 @@ tbody tr:nth-child(odd) {
 	font-size: 24pt;
 	border: 1px solid #ccc;
 }
+td.valid {
+	background: #cfc;
+}
+td.ignored {
+	background: #ddd;
+}
+td.disallowed {
+	background: #f66;
+}
+td.mapped {
+	background: #fc9;
+}
 </style>
 </head>
 <body>
@@ -34,6 +46,9 @@ tbody tr:nth-child(odd) {
 <div id="loading">Loading...</div>
 <script type="module">
 import {escape_name_for_html, parse_cp_range} from '../build/utils.js';
+import {ens_tokenize as token2003} from '../dist/ens-normalize-2003.min.js';
+import {ens_tokenize as token2008} from '../dist/ens-normalize-2008.min.js';
+import {ens_tokenize as token2022} from '../dist/ens-normalize.min.js';
 
 try {
 	main();
@@ -57,7 +72,7 @@ async function main() {
 	document.querySelector('h1').innerHTML += ` (${non.length})`;
 
 	let width = 3;
-	let cols = `<th>Dec</th><th>Hex</th><th>Form</th>`;
+	let cols = `<th>Dec</th><th>Hex</th><th>Form</th><th>2003</th><th>2008</th><th>2022</th>`;
 	let rows = [];
 	let row = [];
 	function drain() {
@@ -65,7 +80,14 @@ async function main() {
 		row.length = 0;
 	}
 	for (let cp of non) {		
-		row.push(`<td class="dec">${cp}</td><td>${cp.toString(16).toUpperCase()}</td><td>${escape_name_for_html(String.fromCodePoint(cp))}</td>`);
+		row.push([
+			`<td class="dec">${cp}</td>`,
+			`<td>${cp.toString(16).toUpperCase()}</td>`,
+			`<td>${escape_name_for_html(String.fromCodePoint(cp))}</td>`,
+			mapped_cell(cp, token2003),
+			mapped_cell(cp, token2008),		
+			mapped_cell(cp, token2022),	
+		].join(''));
 		if (row.length == width) {
 			drain();
 		}		
@@ -79,6 +101,20 @@ async function main() {
 
 	document.querySelector('#loading').remove();
 }
+
+function mapped_cell(cp, tokenize) {
+	let [token] = tokenize(String.fromCodePoint(cp));
+	if (token.v) {
+		return `<td class="valid"></td>`;		
+	} else if (token.m) {
+		return `<td class="mapped">${escape_name_for_html(String.fromCodePoint(...token.to))}</td>`;	
+	} else if (token.i) {
+		return `<td class="ignored"></td>`;
+	} else {
+		return `<td class="disallowed"></td>`;
+	}
+}
+
 </script>
 </body>
 </html>

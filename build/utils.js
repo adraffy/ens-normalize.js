@@ -6,6 +6,31 @@ export function random_bytes(n) {
 	return v;
 }
 
+export function set_intersect(...sets) {
+	let n = sets.length;
+	if (n == 0) throw new TypeError('no sets');
+	let inter = new Set(sets[0]);
+	for (let i = 1; i < n; i++) {
+		let set = sets[i];
+		for (let x of inter) {
+			if (!set.has(x)) {
+				inter.delete(x);
+			}
+		}
+	}
+	return inter;
+}
+
+export function set_union(...sets) {
+	let union = new Set();
+	for (let set of sets) {
+		for (let x of set) {
+			union.add(x);
+		}
+	}
+	return union;
+}
+
 export function compare_array(a, b) {
 	let {length: n} = a;
 	let c = n - b.length;
@@ -13,21 +38,15 @@ export function compare_array(a, b) {
 	return c;
 }
 
-// keep compressing a list of bytes until the compressor fails
-export function recursive_encoder(fn, best, max = Infinity) {
-	let n = 0;
-	for (; best.length > 0 && n < max; n++) {
-		let v = fn(best);
-		if (v.length > best.length) break;
-		best = v;
-	}
-	return {v: best, n}
+// map over an objects values
+export function map_values(obj, fn) {
+	return Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, fn(v)]));
 }
 
 // my suggested inline ascii-safe unicode escape
 // this is ES6 \u{X} without the \u
 export function quote_cp(cp) {
-	return `{${cp.toString(16).toUpperCase()}}`;
+	return `{${cp.toString(16).padStart(2, '0').toUpperCase()}}`;
 }
 
 export function escape_unicode(s) {
@@ -35,16 +54,13 @@ export function escape_unicode(s) {
 }
 
 export function escape_name_for_html(s) {
-	// 0x26 `&` => &amp; 
-	// 0x3C `<` => &lt;
-	// 0x3E `>` => &gt;
-	// printable: 0x20 - 0x7F	
-	// remove: 0x20 SPACE, 0x7F DEL
-	// wrap spacers and whitespace
-	return s.replace(/[\u200C\u200D\s]/, x => quote_cp(x.codePointAt(0)))
-	        .replace(/[^\x21-\x25\x27-\x3B\x3D\x3F-\x7F]/gu, x => `&#${x.codePointAt(0)};`);
+	// printable: 0x20-0x7F	
+	// html: 0x26 "&", 0x3C "<", 0x3E ">"
+	// remove: 0x7F DEL
+	// quoted: whitespace, joiners
+	return s.replace(/[\x00-\x20\x7F\u200C\u200D\s]/gu, x => quote_cp(x.codePointAt(0)))
+	        .replace(/[^\x21-\x25\x27-\x3B\x3D\x3F-\x7E]/gu, x => `&#${x.codePointAt(0)};`);
 }
-
 
 export function take_from(v, fn) {
 	let take = [], rest = [];
@@ -88,19 +104,23 @@ export function split_linear(mapped, dx, dy) {
 }
 
 export function explode_cp(s) {
+	if (typeof s != 'string') throw new TypeError(`expected string`);	
 	return [...s].map(c => c.codePointAt(0));
 }
 
+// hex to dec
 export function parse_cp(s) {
 	let cp = parseInt(s, 16);
 	if (!Number.isSafeInteger(cp) || cp < 0) throw new TypeError(`expected code point: ${s}`);
 	return cp;
 }
+
 // "AAAA"      => [0xAAAA]
 // "AAAA BBBB" => [0xAAAA, 0xBBBB]
 export function parse_cp_sequence(s) {
 	return s.split(/\s+/).map(parse_cp);
 }
+
 // "AAAA"       => [0xAAAA]
 // "AAAA..AAAC" => [0xAAAA, 0xAAAB, 0xAAAC]
 export function parse_cp_range(s) {

@@ -111,65 +111,6 @@ function read_member_table(next) {
 	].sort((a, b) => a[0] - b[0]);
 }
 
-/*
-export function read_zwj_emoji(next) {
-	let buckets = [];
-	for (let k = next(); k > 0; k--) {
-		let n = 1 + next(); // group size
-		let w = 1 + next(); // group width w/o ZWJ
-		let p = 1 + next(); // bit positions of zwj
-		let z = []; // position of zwj
-		let m = []; // emoji vectors
-		for (let i = 0; i < n; i++) m.push([]);
-		for (let i = 0; i < w; i++) {
-			if (p & (1 << (i - 1))) {
-				w++; // increase width
-				z.push(i); // remember position
-				m.forEach(v => v.push(0x200D)); // insert zwj
-			} else {
-				read_deltas(n, next).forEach((x, i) => m[i].push(x));
-			}
-		}
-		for (let b of z) {
-			let bucket = buckets[b];
-			if (!bucket) buckets[b] = bucket = [];
-			bucket.push(...m);
-		}
-	}
-	return buckets;
-}
-
-export function read_emoji(next, sep) {
-	let ret = {};
-	for (let k = next(); k > 0; k--) {
-		let n = 1 + next(); // group size
-		let w = 1 + next(); // group width w/o sep
-		let p = 1 + next(); // bit positions of sep
-		let z = []; // position of sep
-		let m = []; // emoji vectors
-		for (let i = 0; i < n; i++) m.push([]);
-		for (let i = 0; i < w; i++) {
-			if (p & (1 << (i - 1))) {
-				w++; // increase width
-				z.push(i); // remember position
-				m.forEach(v => v.push(sep)); // insert 
-			} else {
-				read_deltas(n, next).forEach((x, i) => m[i].push(x));
-			}
-		}
-		for (let v of m) {
-			let bucket = ret[v[0]];
-			if (!bucket) bucket = ret[v[0]] = [];
-			bucket.push(v.slice(1));
-		}
-	}
-	for (let bucket of Object.values(ret)) {
-		bucket.sort((a, b) => b.length - a.length);
-	}
-	return ret;
-}
-*/
-
 function lookup_member(table, cp) {
 	for (let [x, n] of table) {
 		let d = cp - x;
@@ -245,15 +186,22 @@ function validate_bidi_label(cps) {
 }
 
 function explode_cp(s) {
+	if (typeof s != 'string') throw new TypeError(`expected string`);	
 	return [...s].map(c => c.codePointAt(0));
 }
 
+// return true if the domain name is a bidi domain
+function is_bidi_domain_name(name) {
+	return name.split('.').some(s => is_bidi_label(explode_cp(s)));
+}
+
+// throws if the domain name violates bidi rules
 function check_bidi(name) {
 	let labels = name.split('.').map(explode_cp);
 	if (labels.some(is_bidi_label)) {
 		for (let cps of labels) {
 			try {
-				validate_bidi(cps);
+				validate_bidi_label(cps);
 			} catch (err) {
 				throw new Error(`Disallowed bidi label "${escape_unicode(String.fromCodePoint(...cps))}": ${err.message}`);
 			}
@@ -261,4 +209,4 @@ function check_bidi(name) {
 	}	
 }
 
-export { check_bidi, is_bidi_label, validate_bidi_label };
+export { check_bidi, is_bidi_domain_name, is_bidi_label, validate_bidi_label };

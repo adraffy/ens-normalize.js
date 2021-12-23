@@ -402,13 +402,14 @@ Arabic-Indic:
 <svg id="arrows" class="hide" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
 <path d="M990,377.5H622.5l137.4-137.4C690.4,170.7,598.2,132.5,500,132.5c-98.2,0-190.4,38.2-259.9,107.6C170.7,309.6,132.5,401.8,132.5,500c0,98.2,38.2,190.4,107.6,259.9c69.4,69.4,161.7,107.6,259.9,107.6c98.2,0,190.4-38.2,259.9-107.6c5.8-5.8,11.4-11.8,16.7-17.9l92.2,80.7C778.9,925.2,647,990,500,990C229.4,990,10,770.6,10,500C10,229.4,229.4,10,500,10c135.3,0,257.8,54.9,346.5,143.5L990,10V377.5z"/>
 </svg>
+<button id="escape_btn">Escape</button>
 <button id="link_btn">Copy Link</button>
 <button id="resolve_btn">Resolve</button>
 </div>
 <div id="output">
 <ul class="row">
 <li>Click an <button data-name="brantly.eth">Example</button> to see how it works.</li>
-<li>Use <code>[0xFF]</code> or <code>[255]</code> to manually include codepoints, eg. <button data-name="a[0x200D]b.eth">ZWJ</button></li>
+<li>Use <code>{FF}</code> or <code>[0xFF]</code> or <code>[255]</code> to manually include codepoints, eg. <button data-name="a[0x200D]b.eth">ZWJ</button></li>
 <li><b>Copy Link</b> to get a URL that resolves on page-load.</li>
 </ul>
 </div>
@@ -458,7 +459,7 @@ let provider_window = typeof window.ethereum !== 'undefined' ? retry(ethereum) :
 
 for (let btn of document.querySelectorAll('.examples button, button[data-name]')) {
 	if (btn.dataset.replace) {
-		btn.innerHTML = replace_codes(btn.dataset.name ?? btn.innerHTML);
+		btn.innerHTML = replace_escapes(btn.dataset.name ?? btn.innerHTML);
 	}
 	btn.addEventListener('click', () => {
 		input_field.value = btn.dataset.name ?? btn.innerHTML;
@@ -473,7 +474,19 @@ input_field.addEventListener('keydown', e => {
 		resolve();
 	}
 });
-
+document.querySelector('#escape_btn').addEventListener('click', () => {
+	let s0 = input_field.value;
+	let s1 = replace_escapes(s0);
+	let s2 = apply_escapes(s1);
+	let s3 = apply_escapes(s1, true);
+	if (s0 == s1) {
+		input_field.value = s2;
+	} else if (s0 == s2) {
+		input_field.value = s3;
+	} else {
+		input_field.value = s1;
+	}
+});
 document.querySelector('#link_btn').addEventListener('click', () => {
 	navigator.clipboard.writeText(window.location + '#' + encodeURIComponent(input_field.value.trim()));
 });
@@ -486,8 +499,12 @@ if (window.location.hash.length > 0) {
 	resolve();
 }
 
-function replace_codes(s) {
-	return s.replace(/\[((0x)?[0-9a-f]{1,6})\]/ig, (_, x) => String.fromCodePoint(parseInt(x)));
+function replace_escapes(s) {
+	return s.replace(/\[((0x)?[0-9a-f]{1,6})\]/uig, (_, x) => String.fromCodePoint(parseInt(x)))
+	        .replace(/\{([0-9a-f]{1,6})\}/uig, (_, x) => String.fromCodePoint(parseInt(x, 16)))
+}
+function apply_escapes(s, forced) {
+	return [...s].map(x => !forced && is_printable_ascii(x) ? x : `{${x.codePointAt(0).toString(16).toUpperCase()}}`).join('');
 }
 
 function set_working(b) {
@@ -515,11 +532,11 @@ function create_link(url, s) {
 	return a;
 }
 
-function create_exploded(s, is_norm) {	
+function create_exploded(name, is_norm) {	
 	let div = document.createElement('div');
 	div.classList.add('codepoints');
 	if (!is_norm) div.classList.add('not-norm');
-	let cps = [...s].map(c => c.codePointAt(0));
+	let cps = [...name].map(c => c.codePointAt(0));
 	let emoji_end = 0;
 	let emoji_group;
 	for (let i = 0; i < cps.length; i++) {
@@ -549,9 +566,11 @@ function create_exploded(s, is_norm) {
 			el.innerHTML = ch = 'ZWJ';
 			el.classList.add('zero-width');
 		} else if (cp == 0xFE0F) {
-			el.innerHTML = ch = 'FE0F';
+			el.innerHTML = '<i>Emoji</i>';
+		} else if (cp == 0xFE0E) {
+			el.innerHTML = '<i>Text</i>';
 		} else if (cp == 0x20e3) {
-			el.innerHTML = ch = 'Keycap';
+			el.innerHTML = 'Keycap';
 		} else if (cp == 0x2E) {
 			el.classList.add('stop');
 		}
@@ -569,14 +588,11 @@ function create_exploded(s, is_norm) {
 	}
 	let tags = document.createElement('div');
 	tags.classList.add('tags');
-	let n_u8 = unescape(encodeURIComponent(s)).length;
+	let n_u8 = unescape(encodeURIComponent(name)).length;
 	let count = document.createElement('span');
 	count.classList.add('length');		
 	count.addEventListener('click', () => {
-		input_field.value = cps.map(cp => {
-			let ch = String.fromCodePoint(cp);
-			return is_printable_ascii(ch) ? ch : `[0x${cp.toString(16).toUpperCase()}]`;
-		}).join('');
+		input_field.value = apply_escapes(name);
 	});
 	tags.append(count);
 	if (cps.length != n_u8) {
@@ -631,7 +647,7 @@ function create_hashes_row(name) {
 		text.innerHTML = label;
 		let points = document.createElement('span');
 		points.classList.add('cp');		
-		points.innerHTML = label.length == 0 ? 'null' : [...label].map(x => x.codePointAt(0).toString(16).padStart(2, '0')).join(' ');		
+		points.innerHTML = label.length == 0 ? 'null' : [...label].map(x => x.codePointAt(0).toString(16).toUpperCase().padStart(2, '0')).join(' ');		
 		let hash = document.createElement('span');
 		hash.classList.add('hash');
 		hash.innerHTML = ens_labelhash(label);
@@ -718,8 +734,8 @@ async function resolve1(override_skip_norm) {
 	// get user input
 	let name0 = input_field.value.trim();
 	
-	// replace [*] codes
-	let name = replace_codes(name0);
+	// replace escapes
+	let name = replace_escapes(name0);
 	
 	// check if actual address
 	let is_address;
@@ -764,14 +780,6 @@ async function resolve1(override_skip_norm) {
 			span_grade.classList.add('okay');
 			exploded_input.querySelector('.tags').append(span_grade);
 			
-			// add a button to swap user input with [*] codes
-			if (name != name0) {
-				let btn = document.createElement('button');
-				btn.innerHTML = 'Replace Input';
-				btn.addEventListener('click', () => input_field.value = name);
-				exploded_input.append(btn);		
-			}
-					
 			let exploded_norm;
 			if (skip_norm) {
 				norm = name; // yolo

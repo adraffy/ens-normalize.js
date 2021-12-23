@@ -59,3 +59,5 @@ dump_json('emoji-idna2003-disallowed', emoji_disallowed);
 // these can never be emoji
 let emoji_mapped = take_from(emoji, cp => mapped.some(([x]) => x == cp));
 dump_json('emoji-idna2003-mapped', emoji_mapped);
+
+

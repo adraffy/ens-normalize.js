@@ -54,10 +54,7 @@ let parsed_dir = join(base_dir, 'unicode-json');
 await main();
 
 async function main() {
-	if (process.argv.length < 3) {
-		throw new Error('expected mode');
-	}
-	let [_0, _1, mode, ...argv] = process.argv;
+	let [ mode, ...argv] = process.slice(2);
 	switch (mode) {
 		case 'version': {
 			console.log({major, minor, patch});
@@ -147,15 +144,28 @@ function emoji_from_codes(s) {
 	return String.fromCharCode(parse_cp_sequence);
 }
 
+function apply_UseSTD3ASCIIRules(type, use) {
+	switch (type) {
+		// the status is disallowed if UseSTD3ASCIIRules=true (the normal case); 
+		// implementations that allow UseSTD3ASCIIRules=false would treat the code point as mapped.
+		case 'disallowed_STD3_mapped': return use ? 'disallowed' : 'mapped';
+		// disallowed_STD3_valid: the status is disallowed if UseSTD3ASCIIRules=true (the normal case); 
+		// implementations that allow UseSTD3ASCIIRules=false would treat the code point as valid.
+		case 'disallowed_STD3_valid': return use ? 'disallowed' : 'valid';
+		default: return type;
+	}
+}
+
 async function parse(argv) {
 	await mkdir(parsed_dir, {recursive: true});
 	console.log(`Directory: ${parsed_dir}`);
-	
+
 	await write_simple_file({
 		input: 'IdnaMappingTable',
 		row([src, type, dst, status]) {
 			if (!src) throw new Error('wtf src');
-			if (status) type = `${type}_${status}`; // IDNA 2008 Status NV8/XV8
+			if (type == 'deviation') type = dst ? 'deviation_mapped' : 'deviation_ignored';
+			if (status) type = `${type}_${status}`; // NV8/XV8
 			let bucket = this.get_bucket(type);
 			if (type.includes('mapped')) {
 				if (!dst) throw new Error('wtf dst');

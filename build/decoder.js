@@ -141,6 +141,7 @@ export function read_mapped_table(next) {
 }
 
 function read_ys_transposed(n, w, next) {
+	if (w == 0) return [];
 	let m = [read_deltas(n, next)];
 	for (let j = 1; j < w; j++) {
 		let v = Array(n);
@@ -228,6 +229,11 @@ export function read_emoji(next, sep) {
 	return ret;
 }
 */
+
+export function read_member_function(r) {
+	let table = read_member_table(r);
+	return cp => lookup_member(table, cp);
+}
 
 export function lookup_member(table, cp) {
 	for (let [x, n] of table) {
