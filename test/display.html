@@ -12,8 +12,8 @@ body {
 	margin: 3rem;
 }
 #arrows {
-	width: 2rem;
-	height: 2rem;
+	width: 4rem;
+	height: 4rem;
 	animation: spin 2s infinite linear;
 	user-select: none;
 }
@@ -23,16 +23,33 @@ body {
 }
 #input {
 	display: flex;
+	align-items: center;
 	gap: 0.5rem;
 }
 #input_field {
-	font-size: 20pt;
+	font-size: 32pt;
 	box-sizing: border-box;
 	flex: 100%;
-	padding: 0.5rem;
-	text-align: center;
+	padding: 1rem;
 	border: 2px solid #333;
 	border-radius: 0.5rem;
+}
+#input_field.working {
+	background: #eee;
+}
+#input_field.norm {
+	background-color: #cfc;
+}
+#input_field.not-norm {
+	background-color: #fc9;
+}
+#input_field.error {
+	background-color: #f66;
+}
+#error {
+	margin-top: 0.5rem;
+	text-align: center;
+	font-size: 14pt;
 }
 </style>
 </head>
@@ -44,54 +61,76 @@ body {
 <path d="M990,377.5H622.5l137.4-137.4C690.4,170.7,598.2,132.5,500,132.5c-98.2,0-190.4,38.2-259.9,107.6C170.7,309.6,132.5,401.8,132.5,500c0,98.2,38.2,190.4,107.6,259.9c69.4,69.4,161.7,107.6,259.9,107.6c98.2,0,190.4-38.2,259.9-107.6c5.8-5.8,11.4-11.8,16.7-17.9l92.2,80.7C778.9,925.2,647,990,500,990C229.4,990,10,770.6,10,500C10,229.4,229.4,10,500,10c135.3,0,257.8,54.9,346.5,143.5L990,10V377.5z"/>
 </svg>
 </div>
+<div id="output_div"></div>
 <script type="module">
 import {ens_normalize} from '../dist/ens-normalize-debug.js';
 import {
 	FetchProvider, retry,
-	ens_node_from_name, 
-	ens_address_from_node,
+	node_from_ens_name,
+	ens_resolve, 
 	ens_text_record
-} from 'https://unpkg.com/@adraffy/eth-tools@0.0.7/dist/eth-tools.min.js';
+} from 'https://adraffy.github.io/eth-tools.js/dist/eth-tools.min.js';
 
 const provider_infura = retry(new FetchProvider({url: 'https://cloudflare-eth.com'})); 
 const provider_window = typeof window.ethereum !== 'undefined' ? retry(ethereum) : null;
 
 const input_field = document.querySelector('#input_field');
+const output_div = document.querySelector('#output_div');
 const arrows = document.querySelector('#arrows');
 
 let update_timer;
 let dirty = false;
 
-input_field.addEventListener('input', e => {
+input_field.addEventListener('input', mark_dirty);
+if (input_field.value) mark_dirty();
+
+function mark_dirty() {
 	dirty = true;
-	update(); 
-});
+	update();
+}
 
 function update() {
 	if (!dirty || update_timer) return;
 	update_timer = setTimeout(resolve, 500);
-	arrows.classList.remove('hide');
+	arrows.classList.remove('hide');	
+	input_field.classList.add('working');
+	input_field.classList.remove('norm', 'not-norm', 'error');
+}
+
+function match_display(display, name) {
+	if (!display) return false;
+	try {
+		return ens_normalize(display) == name;
+ 	} catch (ignored) {
+		return false;
+	}
 }
 
 async function resolve() {
+	output_div.innerHTML = '';
 	try {
 		let name = input_field.value.trim();
-		let norm = ens_normalize(name);
+		let norm = ens_normalize(name);		
 		let provider;
 		if (provider_window && parseInt(provider_window.chainId) == 1) { // dont force a chain switch
 			provider = provider_window;
 		} else {
 			provider = provider_infura;
 		}
-		let node = ens_node_from_name(norm);
-		let resolved = await ens_address_from_node(provider, node);
-		console.log(resolved);
-		let {text} = await ens_text_record(provider, resolved, ['display', 'com.twitter']);
-
-		console.log(text);
+		let node = node_from_ens_name(norm);
+		let resolved = await ens_resolve(provider, node);
+		let ret = await ens_text_record(provider, resolved, 'display');
+		let display = ret?.text?.display;
+		if (name === norm || (match_display(display, norm) && name === display)) {
+			input_field.classList.add('norm');
+		} else {
+			input_field.classList.add('not-norm');
+		}
 	} catch (err) {
-		console.error(err);
+		input_field.classList.add('error');
+		output_div.innerHTML = `<div id="error">❌ <b>${err.message}</b></div>`;
 	}
+	input_field.classList.remove('working');
 	arrows.classList.add('hide');
 	update_timer = false;
 }
