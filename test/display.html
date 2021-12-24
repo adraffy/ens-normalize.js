@@ -123,6 +123,7 @@ function match_display(display, name) {
 }
 
 async function resolve() {
+	dirty = false;
 	output_div.innerHTML = '';
 	try {
 		let name = input_field.value.trim();
@@ -150,6 +151,7 @@ async function resolve() {
 	input_field.classList.remove('working');
 	arrows.classList.add('hide');
 	update_timer = false;
+	if (dirty) update();
 }
 </script>
 </body>
