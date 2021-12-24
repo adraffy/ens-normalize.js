@@ -173,11 +173,11 @@ li + li {
 .tokens .disallowed {
 	background: #f66;	
 }
-#tokens .mapped {
+.tokens .mapped {
 	display: flex;
 	background: #fc9;
 }
-#tokens .mapped span {
+.tokens .mapped span {
 	margin-top: 2px;
 	margin-bottom: -2px;
 	border-bottom: 4px solid #000;
@@ -572,16 +572,11 @@ function create_exploded(name, is_norm) {
 				el.classList.add('valid');
 			} else if (m) {
 				el.classList.add('mapped');
-				if (is_norm) {
-					for (let cp of u) {
-						let span = document.createElement('span');
-						span.innerHTML = str(cp);	
-						span.title = tooltip(cp)
-						el.append(span);
-					}
-				} else {
-					el.innerHTML = str(m);	
-					el.title = tooltip(m)
+				for (let cp of (is_norm ? u : [m])) {
+					let span = document.createElement('span');
+					span.innerHTML = str(cp);	
+					span.title = tooltip(cp)
+					el.append(span);
 				}
 			} else if (i) {
 				el.classList.add('ignored');

@@ -122,9 +122,6 @@ body {
 	text-align: center;
 	font-size: 14pt;
 }
-#comment.error {
-	font-weight: bold;
-}
 @media only screen and (max-width: 800px) { 
 	body {
 		margin: 1rem;
@@ -181,7 +178,6 @@ body {
 </div>
 <div id="output_div">
 </div>
-
 <script type="module">
 import {ens_normalize, ens_tokenize, escape_name_for_html} from '../dist/ens-normalize-debug.js';
 
@@ -322,8 +318,7 @@ function parse() {
 		input_field.classList.add('error');
 		let el = document.createElement('div');
 		el.id = 'comment';
-		el.classList.add('error');
-		el.innerHTML = `❌ ${err.message}`;
+		el.innerHTML = `❌ <b>${err.message}</b>`;
 		output_div.append(el);
 	}
 	output_div.append(tokens_div, pre_json);
