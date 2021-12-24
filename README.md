@@ -18,7 +18,7 @@
 * Passes **100%** [NormalizationTests](https://adraffy.github.io/ens-normalize.js/test/report-nf.html)
 * [Emoji &amp; Pictographs](https://adraffy.github.io/ens-normalize.js/test/report-emoji-picto.html)
 * [Emoji ZWJ Sequences](https://adraffy.github.io/ens-normalize.js/test/report-emoji-picto.html)
-* Generated Report vs `eth-ens-namehash` [Latest version](https://adraffy.github.io/ens-normalize.js/test/output/ens2.html) • [Prior (IDNA2003)](https://adraffy.github.io/ens-normalize.js/test/output/ens.html)
+* Generated Report vs `eth-ens-namehash` [Latest version](https://adraffy.github.io/ens-normalize.js/test/output/ens3.html) • [Prior (IDNA2003)](https://adraffy.github.io/ens-normalize.js/test/output/ens.html)
 
 ```Javascript
 import {ens_normalize} from '@adraffy/ens-normalize';

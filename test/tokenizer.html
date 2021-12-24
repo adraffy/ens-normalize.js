@@ -37,8 +37,13 @@ body {
 	background-color: #f66;
 }
 #output_div {
-	display: flex;
-	flex-direction: column;
+	position: relative;
+}
+#escape_btn {
+	position: absolute;
+	top: 0.5rem;
+	right: 0;
+	padding: 0.3rem;
 }
 #tokens {
 	font-size: 20pt;
@@ -116,9 +121,10 @@ body {
 	padding: 0.5rem;
 	background: #eee;
 	line-height: 1.5;
+	white-space: pre-wrap;
 }
 #comment {
-	margin-top: 0.5rem;
+	padding-top: 0.5rem;
 	text-align: center;
 	font-size: 14pt;
 }
@@ -172,9 +178,9 @@ body {
 <button data-name="{202e}elgoog{202d}.eth" data-replace="true"></button>
 <button data-name="{202e}hte.elgoog" data-replace="true"></button>
 </div>
+
 <div id="input">
 <input id="input_field" size="20" placeholder="ENS Name">
-<button id="escape_btn">Escape</button>
 </div>
 <div id="output_div">
 </div>
@@ -194,7 +200,10 @@ for (let btn of document.querySelectorAll('#examples button, button[data-name]')
 	});
 }
 
-document.querySelector('#escape_btn').addEventListener('click', () => {
+const escape_btn = document.createElement('button');
+escape_btn.id = 'escape_btn';
+escape_btn.innerHTML = 'Escape';
+escape_btn.addEventListener('click', () => {
 	let s0 = input_field.value;
 	let s1 = replace_escapes(s0);
 	let s2 = apply_escapes(s1);
@@ -232,8 +241,8 @@ function parse() {
 	input_field.classList.remove('norm', 'not-norm', 'error');
 	let name = replace_escapes(input_field.value);
 	if (!name) return;
+	output_div.append(escape_btn);
 	let tokens = ens_tokenize(name);
-
 	let tokens_div = document.createElement('div');
 	tokens_div.id = 'tokens';
 	for (let token of tokens) {

@@ -963,7 +963,7 @@ function norm(form, cps) {
 function nfc(cps) { return norm('NFC', cps); }
 function nfd(cps) { return norm('NFD', cps); }
 
-const BUILT = '2021-12-24T07:29:58.490Z';
+const BUILT = '2021-12-24T07:35:17.681Z';
 const UNICODE = '14.0.0';
 const VERSION = '1.3.3';
 const IDNA = '1.3.3';
