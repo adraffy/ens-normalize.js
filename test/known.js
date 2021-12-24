@@ -60,8 +60,6 @@ export function test_known(ens_normalize) {
 			if (error) {
 				errors.push({type: 'expected-error', input, name, norm, result});
 			} else if (result !== norm) {
-				console.log(explode_cp(norm));
-				console.log(explode_cp(result));
 				errors.push({type: 'expected-norm', input, name, norm, result});
 			}
 		} catch (err) {

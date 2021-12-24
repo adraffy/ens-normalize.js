@@ -31,7 +31,7 @@ export function set_union(...sets) {
 	return union;
 }
 
-export function compare_array(a, b) {
+export function compare_arrays(a, b) {
 	let {length: n} = a;
 	let c = n - b.length;
 	for (let i = 0; c == 0 && i < n; i++) c = a[i] - b[i];

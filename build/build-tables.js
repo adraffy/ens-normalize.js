@@ -101,7 +101,8 @@ function read_idna_rules({use_STD3 = true, version = 2008, valid_deviations}) {
 	// x:[char] => ys:[char, char, ...]
 	mapped = mapped.flatMap(([src, dst]) => {
 		let cps = parse_cp_sequence(dst);
-		return parse_cp_range(src).map(x => [x, cps]);
+		// we need to re-apply the rules to the mapped output
+		return cps.some(cp => ignored.has(cp) || !valid.has(cp)) ? [] : parse_cp_range(src).map(x => [x, cps]);
 	});
 	return {valid, ignored, mapped};
 }
@@ -290,6 +291,7 @@ function update_idna_rules(idna, rules) {
 	*/
 
 	let emoji_OG = new Set(emoji_data.Emoji);
+	//let emoji_MAP = {};
 
 	let emoji = {
 		OG: emoji_OG,
@@ -303,9 +305,15 @@ function update_idna_rules(idna, rules) {
 		MODIFIER: new Set()
 	};
 
-	function assign_emoji_set(set, cp) {
-		Object.values(emoji).some(set => set.delete(cp));
-		set.add(cp);
+	function remove_emoji_rule(cp) {
+		if (Object.values(emoji).some(set => set.delete(cp))) {
+			return true; // removed from set
+			/*
+		} else if (cp in emoji_MAP) {
+			delete emoji_MAP[cp];
+			return true;
+			*/
+		}
 	}
 
 	// check that Emoji_Presentation is a subset of emoji
@@ -326,11 +334,13 @@ function update_idna_rules(idna, rules) {
 
 	// include all of the singular basic emoji
 	for (let [cp] of take_from(emoji_seq.Basic_Emoji, v => v.length == 1)) {
-		assign_emoji_set(emoji.OPT, cp);
+		remove_emoji_rule(cp);
+		emoji.OPT.add(cp);
 	}
 	// include all of the styled emoji 
 	for (let [cp] of take_from(emoji_seq.Basic_Emoji, v => v.length == 2 && v[1] == 0xFE0F)) {
-		assign_emoji_set(emoji.OPT, cp);
+		remove_emoji_rule(cp);
+		emoji.OPT.add(cp);
 	}
 	if (emoji_seq.Basic_Emoji.length > 0) {
 		throw new Error(`Assumption wrong: there are other basic emoji!`);
@@ -338,11 +348,13 @@ function update_idna_rules(idna, rules) {
 
 	// assign modifier_base
 	for (let cp of emoji_data.Emoji_Modifier_Base) {
-		assign_emoji_set(emoji.MOD_BASE, cp);
+		remove_emoji_rule(cp);
+		emoji.MOD_BASE.add(cp);
 	}
 	// assign modifier
 	for (let cp of emoji_data.Emoji_Modifier) {
-		assign_emoji_set(emoji.MODIFIER, cp);
+		remove_emoji_rule(cp);
+		emoji.MODIFIER.add(cp);
 	}
 	
 	// TODO: move any unused emoji to the new emoji set
@@ -361,6 +373,12 @@ function update_idna_rules(idna, rules) {
 	function for_each_rule_cp(src, fn) {
 		src.split(/\s+/).flatMap(parse_cp_range).forEach(fn);
 	}
+	function move_to_emoji_set(src, set) {
+		for_each_rule_cp(src, cp => {
+			remove_emoji_rule(cp);
+			set.add(cp);
+		});
+	}
 
 	// custom ENS modifications
 	for (let rule of rules) {
@@ -368,27 +386,39 @@ function update_idna_rules(idna, rules) {
 			let {ty, src, dst} = rule;
 			switch (ty) {
 				case 'tag-spec': {
-					for_each_rule_cp(src, cp => assign_emoji_set(emoji.TAG_SPEC, cp));
+					move_to_emoji_set(src, emoji.TAG_SPEC);
 					continue;
 				}
 				case 'keycap': {
-					for_each_rule_cp(src, cp => assign_emoji_set(emoji.KEYCAP_OG, cp));
+					move_to_emoji_set(src, emoji.KEYCAP_OG);
 					continue;
 				}
 				case 'styled-keycap': {
-					for_each_rule_cp(src, cp => assign_emoji_set(emoji.KEYCAP_FIXED, cp));
+					move_to_emoji_set(src, emoji.KEYCAP_FIXED);
 					continue;
 				}
 				case 'regional': {
-					for_each_rule_cp(src, cp => assign_emoji_set(emoji.REGIONAL, cp));
+					move_to_emoji_set(src, emoji.REGIONAL);
 					continue;
 				}
 				case 'emoji': {
-					for_each_rule_cp(src, cp => assign_emoji_set(emoji.OPT, cp));
+					move_to_emoji_set(src, emoji.OPT);
 					continue;
 				}
+				/*
+				case 'map-emoji': {
+					src = parse_cp_range(rule.src);
+					dst = parse_cp_range(rule.dst);
+					if (src.length != dst.length) throw new Error(`length`);
+					for (let i = 0; i < src.length; i++) {
+						if (!remove_emoji_rule(src)) throw new Error(`expected emoji`);
+						emoji_MAP[src] = dst;
+					}
+					continue;
+				}
+				*/
 				case 'styled-emoji': {
-					for_each_rule_cp(src, cp => assign_emoji_set(emoji.REQ, cp));
+					move_to_emoji_set(src, emoji.REQ);
 					continue;
 				}
 				case 'ignore': {
@@ -415,15 +445,19 @@ function update_idna_rules(idna, rules) {
 					if (dst.includes(' ')) { // MAP x TO ys...
 						src = parse_cp(src);
 						dst = parse_cp_sequence(dst);
+						remove_emoji_rule(src);
 						remove_idna_rule(src);
 						mapped.push([src, dst]);
 					} else { // map [x,x+1,...] to [y,y+1,...]
 						src = parse_cp_range(rule.src);
 						dst = parse_cp_range(rule.dst);
+						//if (dst.length == 1) dst = Array(src.length).fill(dst[0]); // map to single value
 						if (src.length != dst.length) throw new Error(`length`);
 						for (let i = 0; i < src.length; i++) {
-							remove_idna_rule(src[i]);
-							mapped.push([src[i], [dst[i]]]);
+							let cp = src[i];
+							remove_emoji_rule(cp);
+							remove_idna_rule(cp);
+							mapped.push([cp, [dst[i]]]);
 						}
 					}
 					continue;
@@ -451,7 +485,14 @@ function update_idna_rules(idna, rules) {
 		}
 	}
 
-	if (!ignored.has(0xFE0E)) throw new Error('Assumption wrong: FE0E not ignored');
+	// everything in the mapped output should be valid
+	for (let [x, ys] of mapped) {
+		if (ys.some(cp => ignored.has(cp) || !valid.has(cp))) {
+			console.log([x, ys]);
+			throw new Error(`Invalid rules: mapped is ignored or disallowed`);
+		}
+	}
+
 	if (!ignored.has(0xFE0F)) throw new Error('Assumption wrong: FE0F not ignored');
 	if (!valid.has(0x200C)) throw new Error('Assumption wrong: ZWNJ not valid');
 	if (!valid.has(0x200D)) throw new Error('Assumption wrong: ZWJ not valid');

@@ -1,6 +1,6 @@
-import {decode_arithmetic} from './decoder.js';
-import {encode_arithmetic} from './encoder.js';
-import {compare_array} from './utils.js';
+import {decode_arithmetic} from '../build/decoder.js';
+import {encode_arithmetic} from '../build/encoder.js';
+import {compare_arrays} from '../build/utils.js';
 
 for (let i = 0; i < 1000; i++) {
 	let n = 1 + (Math.random() * 10000)|0;
@@ -15,7 +15,7 @@ for (let i = 0; i < 1000; i++) {
 	}
 	let v1 = encode_arithmetic(v0, u);
 	let v2 = decode_arithmetic(v1);
-	if (compare_array(v0, v2) != 0) {
+	if (compare_arrays(v0, v2) != 0) {
 		console.log({v0, v1, v2});
 		throw new Error('wtf');
 	}

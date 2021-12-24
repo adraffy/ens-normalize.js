@@ -13,9 +13,11 @@
 
 * [Demo: Resolver](https://adraffy.github.io/ens-normalize.js/test/resolver.html) 
 * [Demo: Tokenizer](https://adraffy.github.io/ens-normalize.js/test/tokenizer.html)
+* [Demo: Display Name](https://adraffy.github.io/ens-normalize.js/test/display.html)
 * ~~Passes **100%** [IDNATestV2](https://adraffy.github.io/ens-normalize.js/test/report-idna.html)~~ (This test is IDNA2003)
 * Passes **100%** [NormalizationTests](https://adraffy.github.io/ens-normalize.js/test/report-nf.html)
-* [Emoji Test](https://adraffy.github.io/ens-normalize.js/test/report-emoji.html)
+* [Emoji &amp; Pictographs](https://adraffy.github.io/ens-normalize.js/test/report-emoji-picto.html)
+* [Emoji ZWJ Sequences](https://adraffy.github.io/ens-normalize.js/test/report-emoji-picto.html)
 * Generated Report vs `eth-ens-namehash` [Latest version](https://adraffy.github.io/ens-normalize.js/test/output/ens2.html) • [Prior (IDNA2003)](https://adraffy.github.io/ens-normalize.js/test/output/ens.html)
 
 ```Javascript

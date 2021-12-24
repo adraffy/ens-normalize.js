@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Non-Emoji Pictographs</title>
+<title>Emoji &amp; Pictographs</title>
 <style>
 #loading {
 	display: inline-block;
@@ -27,11 +27,14 @@ td + td.dec {
 tbody tr:nth-child(odd) {
 	background: #eee; 
 }
-td.picto {
+td.str {
 	font-size: 16pt;
 }
 td.valid {
 	background: #cfc;
+}
+td.valid.diff {
+	background: #0f0;
 }
 td.ignored {
 	background: #ddd;
@@ -42,11 +45,18 @@ td.disallowed {
 td.mapped {
 	background: #fc9;
 }
+td.emoji {
+	background: #cff;
+}
+td.emoji.only {
+	background: #66f;
+}
 </style>
 </head>
 <body>
-<h1>Non-Emoji Pictographs</h1>
+<h1>Emoji &amp; Pictographs</h1>
 <div id="loading">Computing...</div>
+<ul></ul>
 <script type="module">
 import {escape_name_for_html, parse_cp_range} from '../build/utils.js';
 import {ens_tokenize as token2003} from '../dist/ens-normalize-2003.min.js';
@@ -70,11 +80,14 @@ async function main() {
 	emoji = emoji.flatMap(parse_cp_range);
 	picto = picto.flatMap(parse_cp_range);
 
-	let non = picto.filter(cp => !emoji.includes(cp));
+	add_section('Emoji', emoji);
+	add_section('Non-Emoji Pictographs', picto.filter(cp => !emoji.includes(cp)));
 
-	document.querySelector('h1').innerHTML += ` (${non.length})`;
+	document.querySelector('#loading').remove();
+}
 
-	let width = 3;
+function add_section(name, chars, width = 3) {
+	
 	let cols = `<th>Dec</th><th>Hex</th><th>Form</th><th>2003</th><th>2008</th><th>adraffy</th>`;
 	let rows = [];
 	let row = [];
@@ -82,11 +95,12 @@ async function main() {
 		rows.push(`<tr>${row.join('')}</tr>`);
 		row.length = 0;
 	}
-	for (let cp of non) {		
+	for (let cp of chars) {		
+		let hex = cp.toString(16).toUpperCase();
 		row.push([
 			`<td class="dec">${cp}</td>`,
-			`<td>${cp.toString(16).toUpperCase()}</td>`,
-			`<td class="picto">${escape_name_for_html(String.fromCodePoint(cp))}</td>`,
+			`<td><a href="https://www.compart.com/en/unicode/U+${hex}">${hex}</td>`,
+			`<td class="str">${escape_name_for_html(String.fromCodePoint(cp))}</td>`,
 			mapped_cell(cp, token2003),
 			mapped_cell(cp, token2008),		
 			mapped_cell(cp, ens_tokenize),	
@@ -96,19 +110,32 @@ async function main() {
 		}		
 	}
 	if (row.length > 0) drain();
-	width = Math.min(3, rows.length);
+	width = Math.min(width, rows.length);
 	
+	let title = `${name} (${chars.length})`;
+
+	// add section
 	let section = document.createElement('section');
-	section.innerHTML = `<table><thead><tr>${Array(width).fill(cols).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`;
+	section.innerHTML = `<a name="${name}"><h2>${title}</h2><table><thead><tr>${Array(width).fill(cols).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`;
 	document.body.append(section);
 
-	document.querySelector('#loading').remove();
+	// add link
+	document.querySelector('ul').innerHTML += `<li><a href="#${name}">${title}</a></li>`;
 }
 
 function mapped_cell(cp, tokenize) {
 	let [token] = tokenize(String.fromCodePoint(cp));
-	if (token.v) {
-		return `<td class="valid"></td>`;		
+	let [emoji] = tokenize(String.fromCodePoint(cp, 0xFE0F));
+	if (token.d && emoji.e) {
+		return `<td class="emoji only">${String.fromCodePoint(...emoji.e)}</td>`;
+	} else if (emoji.e) {
+		return `<td class="emoji"></td>`;
+	} else if (token.v) {
+		if (token.v[0] == cp) {
+			return `<td class="valid"></td>`;		
+		} else {
+			return `<td class="valid diff">${escape_name_for_html(String.fromCodePoint(...token.v))}</td>`;	
+		}
 	} else if (token.m) {
 		return `<td class="mapped">${escape_name_for_html(String.fromCodePoint(...token.u))}</td>`;	
 	} else if (token.i) {
