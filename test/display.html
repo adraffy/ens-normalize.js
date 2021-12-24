@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ENS Name Tokenizer</title>
+<title>ENS Display Name</title>
 <style>
 .hide {
 	display: none;
@@ -34,22 +34,32 @@ body {
 	border: 2px solid #333;
 	border-radius: 0.5rem;
 }
-#input_field.working {
+.working {
 	background: #eee;
 }
-#input_field.norm {
+.norm {
 	background-color: #cfc;
 }
-#input_field.not-norm {
+.not-norm {
 	background-color: #fc9;
 }
-#input_field.error {
+.error {
 	background-color: #f66;
 }
 #error {
 	margin-top: 0.5rem;
 	text-align: center;
 	font-size: 14pt;
+}
+#key {
+	margin-top: 1rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 1rem;
+}
+#key > * {
+	padding: 0.5rem;
 }
 </style>
 </head>
@@ -62,13 +72,19 @@ body {
 </svg>
 </div>
 <div id="output_div"></div>
+<div id="key">
+<span class="norm">Normalized</span>
+<span class="not-norm">Not-Normalized</span>
+<span class="error">Error</span>
+</div>
 <script type="module">
 import {ens_normalize} from '../dist/ens-normalize-debug.js';
 import {
 	FetchProvider, retry,
 	node_from_ens_name,
 	ens_resolve, 
-	ens_text_record
+	ens_text_record,
+	is_null_hex
 } from 'https://adraffy.github.io/eth-tools.js/dist/eth-tools.min.js';
 
 const provider_infura = retry(new FetchProvider({url: 'https://cloudflare-eth.com'})); 
@@ -119,6 +135,7 @@ async function resolve() {
 		}
 		let node = node_from_ens_name(norm);
 		let resolved = await ens_resolve(provider, node);
+		if (is_null_hex(resolved.resolver)) throw new Error('Resolver not set');
 		let ret = await ens_text_record(provider, resolved, 'display');
 		let display = ret?.text?.display;
 		if (name === norm || (match_display(display, norm) && name === display)) {
