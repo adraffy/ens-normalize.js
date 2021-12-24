@@ -12,7 +12,6 @@
 ---
 
 * [Demo: Resolver](https://adraffy.github.io/ens-normalize.js/test/resolver.html) 
-* [Demo: Tokenizer](https://adraffy.github.io/ens-normalize.js/test/tokenizer.html)
 * [Demo: Display Name](https://adraffy.github.io/ens-normalize.js/test/display.html)
 * ~~Passes **100%** [IDNATestV2](https://adraffy.github.io/ens-normalize.js/test/report-idna.html)~~ (This test is IDNA2003)
 * Passes **100%** [NormalizationTests](https://adraffy.github.io/ens-normalize.js/test/report-nf.html)

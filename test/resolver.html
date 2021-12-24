@@ -426,11 +426,6 @@ Arabic-Indic:
 </div>
 <script type="module">
 import {
-
-	ens_address_from_node , ens_name_from_address
-} from 'https://unpkg.com/@adraffy/eth-tools@0.0.7/dist/eth-tools.min.js';
-
-import {
 	FetchProvider, retry,
 	node_from_ens_name,
 	checksum_address,
@@ -440,14 +435,13 @@ import {
 	hash_from_label
 } from 'https://adraffy.github.io/eth-tools.js/dist/eth-tools.min.js';
 
-
 // load in the latest version
 import {ens_normalize as ens_normalize_bidi, ens_tokenize, escape_name_for_html, VERSION, IDNA} from '../dist/ens-normalize-debug.min.js';
 import {ens_normalize as ens_normalize_xbidi} from '../dist/ens-normalize-xbidi.min.js';
 
 function ens_normalize(name, ignore_disallowed, ignore_bidi) {
 	if (ignore_disallowed) {
-		name = String.fromCodePoint(...ens_tokenize(name).flatMap(({v,i,m,e,u}) => v ?? i ?? m ?? (e ?? u) ?? []));
+		name = String.fromCodePoint(...ens_tokenize(name).flatMap(({v,i,m,e,u,d}) => v ?? i ?? m ?? (e ?? u) ?? (d===undefined ? 0x2E : [])));
 	}
 	if (ignore_bidi) {
 		return ens_normalize_xbidi(name);
