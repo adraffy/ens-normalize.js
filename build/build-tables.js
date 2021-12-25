@@ -22,7 +22,7 @@ switch (mode) {
 		// this is adraffy
 		write_idna_payload('idna-adraffy', idna, emoji);
 		// this is current ENS 
-		write_idna_payload('idna-ens-genesis', read_idna_rules({version: 2003, valid_deviations: true}));		
+		write_idna_payload('idna-ENS0', read_idna_rules({version: 2003, valid_deviations: true}));		
 		// these are the true specs
 		write_idna_payload('idna-2003', read_idna_rules({version: 2003}));
 		write_idna_payload('idna-2008', read_idna_rules({version: 2008}));		
@@ -282,8 +282,8 @@ function update_idna_rules(idna, rules) {
 
 	let {ignored, valid, mapped} = idna;
 	let emoji_data = map_values(read_parsed('emoji-data'), e => e.flatMap(parse_cp_range));
-	let emoji_seq = map_values(read_parsed('emoji-sequences'), e => e.flatMap(({hex}) => {
-		return hex.includes('..') ? parse_cp_range(hex).map(x => [x]) : [parse_cp_sequence(hex)]
+	let emoji_seq = map_values(read_parsed('emoji-sequences'), e => e.flatMap(({src}) => {
+		return src.includes('..') ? parse_cp_range(src).map(x => [x]) : [parse_cp_sequence(src)]
 	}));
 
 	/*

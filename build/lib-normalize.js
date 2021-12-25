@@ -22,8 +22,8 @@ const EMOJI_PARSER = r() && emoji_parser_factory(r);
 // text tokens are normalized
 // note: it's safe to apply to entire 
 // string but you'd have to retokenize
-function flatten_label_tokens(tokens) {
-	return tokens.flatMap(token => token.e ?? nfc(token.v));
+function flatten_tokens(tokens) {
+	return tokens.flatMap(({e, v}) => e ?? nfc(v));
 }
 
 function label_error(cps, message) {
@@ -73,7 +73,7 @@ export function ens_normalize(name) {
 		// disallowed: Leave the code point unchanged in the string, and record that there was an error.
 		throw new Error(`Disallowed character "${escape_unicode(String.fromCodePoint(cp))}"`);
 	}).map(tokens => {
-		let cps = flatten_label_tokens(tokens);
+		let cps = flatten_tokens(tokens);
 		// [Processing] 4.) Convert/Validate
 		if (cps.length >= 4 && cps[2] == HYPHEN && cps[3] == HYPHEN) { // "**--"
 			if (cps[0] == 0x78 && cps[1] == 0x6E) { // "xn--"
@@ -86,7 +86,7 @@ export function ens_normalize(name) {
 					// In particular, Punycode containing Deviation characters, such as href="xn--fu-hia.de" (for fuß.de) is not remapped. 
 					// This provides a mechanism allowing explicit use of Deviation characters even during a transition period. 
 					[tokens] = tokenized_idna(cps_decoded, EMOJI_PARSER, cp => VALID(cp) ? [cp] : []);
-					let expected = flatten_label_tokens(tokens);
+					let expected = flatten_tokens(tokens);
 					if (cps_decoded.length != expected.length || !cps_decoded.every((x, i) => x == expected[i])) throw new Error('not normalized');
 				} catch (err) {
 					throw label_error(cps, `punycode: ${err.message}`);
@@ -97,6 +97,10 @@ export function ens_normalize(name) {
 				// warning: this could be "**--"
 			}
 		}
+		// flatten textual part of token to a single list of code-points
+		// emoji should be invisible to context and bidi rules
+		// could replace emoji w/a generic character 
+		let text = tokens.flatMap(({v}) => v ?? []);
 		if (cps.length > 0) {
 			// [Validity] 1.) The label must be in Unicode Normalization Form NFC.
 			// => satsified by nfc() via flatten_label_tokens()
@@ -115,15 +119,13 @@ export function ens_normalize(name) {
 			// [Validity] 7.) If CheckJoiners, the label must satisify the ContextJ rules
 			// this also does ContextO
 			try {
-				// emoji should be invisible to context rules
-				// IDEA: replace emoji w/a generic character 
-				validate_context(tokens.flatMap(({v}) => v ?? []));
+				validate_context(text);
 			} catch (err) {
 				throw label_error(cps, err.message);
 			}
 			// [Validity] 8.) see below
 		}
-		return tokens;
+		return {tokens, cps, text};
 	});
 	// [Validity] 8.) If CheckBidi, and if the domain name is a Bidi domain name, then the label 
 	// must satisfy all six of the numbered conditions in [IDNA2008] RFC 5893, Section 2.
@@ -132,32 +134,31 @@ export function ens_normalize(name) {
 	// * According to IDNATestV2, this is calculated AFTER puny decoding
 	// https://unicode.org/reports/tr46/#Notation
 	// A Bidi domain name is a domain name containing at least one character with BIDI_Class R, AL, or AN
-	let text_labels = labels.map(tokens => tokens.flatMap(({v}) => v ?? []));
-	if (text_labels.some(is_bidi_label)) {
-		for (let i = 0; i < labels.length; i++) {
+	if (labels.some(x => is_bidi_label(x.text))) {
+		for (let {text, cps} of labels) {
 			try {
-				validate_bidi_label(text_labels[i]);
+				validate_bidi_label(text);
 			} catch (err) {
-				throw label_error(flatten_label_tokens(labels[i]), `bidi: ${err.message}`);
+				throw label_error(cps, `bidi: ${err.message}`);
 			}
 		}
 	}
 	/*~BIDI*/
-	return labels.map(tokens => String.fromCodePoint(...flatten_label_tokens(tokens))).join('.');
+	return labels.map(x => String.fromCodePoint(...x.cps)).join('.');
 }
 
 // Secondary API
 // throws TypeError if not a string
 // turns a name into tokens: eg. "R💩affy.eth"
 // this is much nicer than exposing the predicates
-// [[{m:0x52, to:[0x72]},{e:[0x1F4A9]},{t:[61,66,66]}],[{t:[65,74,68]}]]
+// [{m:[0x72], u:[0x52]},{e:[0x1F4A9],u:[0x1F4A9]},{t:[61,66,66]},{},{t:[65,74,68]}]
 export function ens_tokenize(name) {
 	return tokenized_idna(explode_cp(name), EMOJI_PARSER, cp => {
 		if (STOP(cp)) return {};
-		if (VALID(cp)) return [cp];
+		if (VALID(cp)) return [cp]; // this gets merged into v
 		if (IGNORED(cp)) return {i: cp};
 		let mapped = lookup_mapped(MAPPED, cp);
-		if (mapped) return {m: cp, u: mapped};
+		if (mapped) return {m: mapped, u: [cp]}; 
 		return {d: cp};
 	})[0];
 }

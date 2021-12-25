@@ -13,24 +13,10 @@ let {version: package_version} = JSON.parse(readFileSync(join(base_dir, '../pack
 
 let BUILD_TIME = new Date().toJSON();
 
-let VERSIONS = `export const UNICODE = '${unicode_version.major}.${unicode_version.minor}.${unicode_version.patch}';
-export const VERSION = '${package_version}';`
-
-function add_version(file) {
-	let code = readFileSync(file, {encoding: 'utf8'});
-	writeFileSync(tmp_file, `
-export const BUILT = '${BUILD_TIME}';
-export const UNICODE = '${unicode_version.major}.${unicode_version.minor}.${unicode_version.patch}';
-export const VERSION = '${package_version}';
-export const IDNA = '${package_version}';
-//
-${code}`);
-	return tmp_file;
-}
-
-function generate_lib({idna, nfc = true, bidi = true}) {
+function generate_lib({idna, nfc = true, bidi = true, version = false, debug = false}) {
 	let code = readFileSync(join(base_dir, 'lib-normalize.js'), {encoding: 'utf8'});
 	// change version of idna (from default)
+	// this should match lib-normalize.js import statement
 	code = code.replace(/(output\/idna-).*(\.js)/m, (_, a, b) => a+idna+b);
 	if (!nfc) {
 		// swap to String.normalize()
@@ -40,7 +26,23 @@ function generate_lib({idna, nfc = true, bidi = true}) {
 		// remove bidi blocks
 		code = code.replaceAll(/\/\*BIDI\*\/(.*?)\/\*~BIDI\*\//smg, '');
 	}
-	writeFileSync(tmp_file, `// built: ${new Date().toJSON()}\n${code}`);
+	if (version) {
+		// include version variables
+		code = [
+			`export const BUILT = '${BUILD_TIME}';`,
+			`export const UNICODE = '${unicode_version.major}.${unicode_version.minor}.${unicode_version.patch}';`,
+			`export const VERSION = '${package_version}';`,
+			`export const IDNA = '${idna}';`,
+			code
+		].join('\n');
+	} else {
+		code = `// built: ${BUILD_TIME}\n${code}`;
+	}
+	if (debug) {
+		debug = readFileSync(join(base_dir, 'debug-includes.js'), {encoding: 'utf8'});
+		code = `${code}\n// *** DEBUG ***\n${debug}`;
+	}
+	writeFileSync(tmp_file, code);
 	return tmp_file;
 }
 
@@ -50,18 +52,17 @@ await build(generate_lib({idna}), 'ens-normalize');
 await build(generate_lib({idna, bidi: false}), 'ens-normalize-xbidi');
 await build(generate_lib({idna, nfc: false}), 'ens-normalize-xnfc');
 await build(generate_lib({idna, bidi: false, nfc: false}), 'ens-normalize-xnfc-xbidi');
-
-// build debug library with everything
-await build(add_version(join(base_dir, 'lib-debug.js')), 'ens-normalize-debug');
+await build(generate_lib({idna, debug: true, version: true}), 'ens-normalize-debug');
 
 // build alt versions
-for (let x of ['2003', '2008', 'ens-genesis']) {
+for (let x of ['2003', '2008', 'ENS0']) {
 	await build(generate_lib({idna: x}), `ens-normalize-${x}`);
 }
 
 // build sub-libraries
 await build(join(base_dir, 'lib-nf.js'), 'nf');
 await build(join(base_dir, 'lib-bidi.js'), 'bidi');
+await build(join(base_dir, 'lib-parts.js'), 'parts');
 
 unlinkSync(tmp_file);
 

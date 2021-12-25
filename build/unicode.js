@@ -54,7 +54,7 @@ let parsed_dir = join(base_dir, 'unicode-json');
 await main();
 
 async function main() {
-	let [ mode, ...argv] = process.slice(2);
+	let [mode, ...argv] = process.argv.slice(2);
 	switch (mode) {
 		case 'version': {
 			console.log({major, minor, patch});
@@ -140,22 +140,6 @@ async function write_simple_file(impl) {
 	}
 }
 
-function emoji_from_codes(s) {
-	return String.fromCharCode(parse_cp_sequence);
-}
-
-function apply_UseSTD3ASCIIRules(type, use) {
-	switch (type) {
-		// the status is disallowed if UseSTD3ASCIIRules=true (the normal case); 
-		// implementations that allow UseSTD3ASCIIRules=false would treat the code point as mapped.
-		case 'disallowed_STD3_mapped': return use ? 'disallowed' : 'mapped';
-		// disallowed_STD3_valid: the status is disallowed if UseSTD3ASCIIRules=true (the normal case); 
-		// implementations that allow UseSTD3ASCIIRules=false would treat the code point as valid.
-		case 'disallowed_STD3_valid': return use ? 'disallowed' : 'valid';
-		default: return type;
-	}
-}
-
 async function parse(argv) {
 	await mkdir(parsed_dir, {recursive: true});
 	console.log(`Directory: ${parsed_dir}`);
@@ -197,10 +181,11 @@ async function parse(argv) {
 		}
 	});
 
+	// 2695 FE0F ; Basic_Emoji ; medical symbol # E4.0 [1] (⚕️)
 	await write_simple_file({
 		input: 'emoji-sequences',
 		row([src, type, desc]) {
-			this.get_bucket(type).push({hex: src, desc, emoji: String.fromCodePoint(...parse_cp_sequence(src))});
+			this.get_bucket(type).push({src, desc});
 		}
 	});
 
@@ -208,15 +193,16 @@ async function parse(argv) {
 	await write_simple_file({
 		input: 'emoji-zwj-sequences',
 		root: [],
-		row([src, _, desc]) {
-			this.root.push({hex: src, desc, emoji: String.fromCodePoint(...parse_cp_sequence(src))});
+		row([src, type, desc]) {
+			if (type != 'RGI_Emoji_ZWJ_Sequence') throw new Error('wtf type');
+			this.root.push({src, desc});
 		}
 	});
 
-	// 0023 FE0(E|F) ; text style;  # (1.1) NUMBER SIGN
+	// 0023 FE0(E|F) ; text style; # (1.1) NUMBER SIGN
 	await write_simple_file({
 		input: 'emoji-variation-sequences',
-		row([src, style_desc]) {
+		row([src]) {
 			let v = parse_cp_sequence(src);
 			if (v.length != 2) throw new Error('wtf length');
 			let [cp, style] = v;
@@ -261,19 +247,24 @@ async function parse(argv) {
 		}
 	});
 
+	// note: this file lacks an inline description
+	// https://www.unicode.org/reports/tr44/#UnicodeData.txt
+	// 0000;<control>;Cc;0;BN;;;;;N;NULL;;;;
 	await write_simple_file({
 		input: 'UnicodeData',
 		output: 'Decomposition_Mapping',
 		root: [],
 		row([src, _1, _2, _3, _4, decomp]) {
-			// "" | "<tag>" | "XXXX YYYY" | "<tag>XXXX YYYY"
 			// https://www.unicode.org/Public/5.1.0/ucd/UCD.html#Character_Decomposition_Mappings
 			// "Conversely, the presence of a formatting tag also indicates that the mapping is a compatibility mapping and not a canonical mapping."
+			// "" | "<tag>" | "XXXX YYYY" | "<tag>XXXX YYYY"
 			if (!decomp || decomp.indexOf('>') >= 0) return;
 			this.root.push([src, decomp]);
 		}
 	});
 
+	// note: these are all single chars
+	// 0958 #  DEVANAGARI LETTER QA
 	await write_simple_file({
 		input: 'CompositionExclusions',
 		root: [],
@@ -282,6 +273,7 @@ async function parse(argv) {
 		}
 	});
 
+	// 0000..001F ; Common # Cc  [32] <control-0000>..<control-001F>
 	await write_simple_file({
 		input: 'Scripts',
 		row([codes, type]) {
@@ -299,15 +291,35 @@ async function parse(argv) {
 	});
 	*/
 
-	// tests
-
+	// 1F44C 1F3FB ; fully-qualified # 👌🏻 E1.0 OK hand: light skin tone
 	await write_simple_file({
 		input: 'emoji-test', 
-		row([codes, type]) {
-			this.get_bucket(type).push({codes, emoji: emoji_from_codes(codes)});
+		row([src, type]) {
+			this.get_bucket(type).push(src);
 		}
 	});
 
+	/*
+	# Column 1: source -          The source string to be tested
+	# Column 2: toUnicode -       The result of applying toUnicode to the source,
+	#                             with Transitional_Processing=false.
+	#                             A blank value means the same as the source value.
+	# Column 3: toUnicodeStatus - A set of status codes, each corresponding to a particular test.
+	#                             A blank value means [] (no errors).
+	# Column 4: toAsciiN -        The result of applying toASCII to the source,
+	#                             with Transitional_Processing=false.
+	#                             A blank value means the same as the toUnicode value.
+	# Column 5: toAsciiNStatus -  A set of status codes, each corresponding to a particular test.
+	#                             A blank value means the same as the toUnicodeStatus value.
+	#                             An explicit [] means no errors.
+	# Column 6: toAsciiT -        The result of applying toASCII to the source,
+	#                             with Transitional_Processing=true.
+	#                             A blank value means the same as the toAsciiN value.
+	# Column 7: toAsciiTStatus -  A set of status codes, each corresponding to a particular test.
+	#                             A blank value means the same as the toAsciiNStatus value.
+	#                             An explicit [] means no errors.
+	*/
+	// xn--fa-hia.de; faß.de; ; xn--fa-hia.de; ; ;  # faß.de
 	await write_simple_file({
 		input: 'IdnaTestV2', 
 		test: 'COMPAT',
@@ -327,6 +339,14 @@ async function parse(argv) {
 
 	// why is this file so shit?
 	// @Part0 # Test Name
+	/*
+	#   Columns (c1, c2,...) are separated by semicolons
+	#   They have the following meaning:
+	#      source; NFC; NFD; NFKC; NFKD
+	#   Comments are indicated with hash marks
+	#   Each of the columns may have one or more code points.
+	*/
+	// 1E0A;1E0A;0044 0307;1E0A;0044 0307; # (Ḋ; Ḋ; D◌̇; Ḋ; D◌̇; ) LATIN CAPITAL LETTER D WITH DOT ABOVE
 	await write_simple_file({
 		input: 'NormalizationTest',
 		output: 'NormalizationTest',

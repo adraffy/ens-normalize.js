@@ -1,7 +1,10 @@
 import {inspect} from 'util';
 import {ens_normalize, ens_tokenize} from './lib-normalize.js';
-import {escape_unicode} from './utils.js';
+import {escape_name_for_html, escape_unicode} from './utils.js';
 
+
+
+console.log(escape_name_for_html(String.fromCodePoint(0x61, 0x26, 0x200D, 10)));
 
 console.log(inspect(ens_tokenize('🚴‍♂️.eth'), false, null, true));
 
