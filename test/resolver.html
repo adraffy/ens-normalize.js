@@ -379,10 +379,24 @@ import {ens_normalize, ens_tokenize, VERSION, BUILT, IDNA, UNICODE} from '../dis
 import {ens_normalize as ens_normalize_xbidi} from '../dist/ens-normalize-xbidi.min.js'; // load without bidi
 import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
 
+document.querySelector('#version').innerHTML += ` (v${VERSION}+${IDNA}+U${UNICODE})<br><code>${BUILT}</code>`;
+
 use_default_style();
 
+const input_field = document.querySelector('#input_field');
+const resolve_btn = document.querySelector('#resolve_btn');
+const arrows = document.querySelector('#arrows');
+const ignore_disallowed_check = document.querySelector('#ignore_disallowed_check');
+const output_div = document.querySelector('#output');
+const readme_rows = [...output_div.childNodes];
+
+let resolve_timer;
+
+let provider_infura = retry(new FetchProvider({url: 'https://cloudflare-eth.com'})); 
+let provider_window = typeof window.ethereum !== 'undefined' ? retry(ethereum) : null;
+
 function ens_normalize_input(name) {
-	if (document.querySelector('#ignore_disallowed_check').checked) {
+	if (ignore_disallowed_check.checked) {
 		name = String.fromCodePoint(...ens_tokenize(name).flatMap(({v,i,m,e,u,d}) => v ?? i ?? m ?? (e ?? u) ?? (d===undefined ? 0x2E : [])));
 	}
 	if (document.querySelector('#ignore_bidi_check').checked) {
@@ -391,19 +405,6 @@ function ens_normalize_input(name) {
 		return ens_normalize(name);
 	}
 }
-
-document.querySelector('#version').innerHTML += ` (v${VERSION}+${IDNA}+${UNICODE})<br><code>${BUILT}</code>`;
-
-const input_field = document.querySelector('#input_field');
-const resolve_btn = document.querySelector('#resolve_btn');
-const arrows = document.querySelector('#arrows');
-const output_div = document.querySelector('#output');
-const readme_rows = [...output_div.childNodes];
-
-let resolve_timer;
-
-let provider_infura = retry(new FetchProvider({url: 'https://cloudflare-eth.com'})); 
-let provider_window = typeof window.ethereum !== 'undefined' ? retry(ethereum) : null;
 
 for (let btn of document.querySelectorAll('.examples button, button[data-name]')) {
 	let name = replace_escapes(btn.dataset.name ?? btn.innerHTML);
@@ -423,8 +424,9 @@ input_field.addEventListener('keydown', e => {
 	}
 });
 input_field.addEventListener('input', () => {
-	parse();
-	schedule_resolve();
+	if (parse()) {
+		schedule_resolve();
+	}
 });
 
 document.querySelector('#escape_btn').addEventListener('click', () => {
@@ -466,28 +468,38 @@ function parse() {
 	output_div.innerHTML = '';
 	let name = replace_escapes(input_field.value);
 	if (!name) {
+		clearTimeout(resolve_timer);
+		resolve_timer = false;
+		arrows.classList.add('hide');
 		output_div.append(...readme_rows);
 		return;
 	}
 	if (is_checksum_address(name)) {
 		let row = create_row(false, 'Address', create_etherscan_address_link(name));
 		output_div.append(row);
-		return;
+		return true;
 	}
 	let exploded = create_exploded(name, false);
+	if (ignore_disallowed_check.checked) {
+		for (let x of exploded.querySelectorAll('.disallowed')) {
+			x.classList.add('ignored');
+			x.classList.remove('disallowed');
+		}
+	}
 	let row = create_row(false, 'Input', exploded);
 	output_div.append(row);
+	add_hashes_row(name);
 	try {
 		let norm = ens_normalize_input(name);
 		if (norm !== name) {
 			output_div.append(create_row(false, 'Normalized', create_exploded(norm, true)));
 		}
-		add_hashes_row(name);
+		return true;
 	} catch (err) {
 		row.classList.add('error');
 		let span = document.createElement('span');
 		apply_warn_grade(span, err.message);
-		row.querySelector('.tags').append(span);
+		row.querySelector('.tags').prepend(span);
 	}
 }
 
@@ -758,6 +770,7 @@ async function resolve0(name0, override_skip_norm) {
 			} catch (err) {
 				input_row.classList.add('error');
 				apply_warn_grade(input_grade, err.message);
+				input_grade.parentNode.prepend(input_grade);
 				return;
 			}	
 			// add exploded norm
@@ -790,6 +803,7 @@ async function resolve0(name0, override_skip_norm) {
 			let resolved = await ens_resolve(provider, node);
 			({resolver} = resolved);
 			address = await lookup_address(provider, resolved);
+			if (resolve_timer) return
 		} catch (err) {	  
 			show_critical_error('Resolver', err.message);
 			return;
@@ -815,6 +829,7 @@ async function resolve0(name0, override_skip_norm) {
 
 		// check display name
 		let display_name = await ens_text_record(provider, node, 'display').then(({text: {display: s}}) => s).catch(() => false);
+		if (resolve_timer) return
 		if (display_name && display_name != input_norm) {
 			let display_exploded = create_exploded(display_name, false);
 			let display_row = create_row(clock(), 'Display', display_exploded);
@@ -852,6 +867,7 @@ async function resolve0(name0, override_skip_norm) {
 	let reverse_name;
 	try {
 		reverse_name = await ens_name_for_address(provider, address);
+		if (resolve_timer) return
 	} catch (err) {
 		show_critical_error('Reverse', err.message);
 		return;
@@ -919,13 +935,14 @@ async function resolve0(name0, override_skip_norm) {
 }
 
 function show_critical_error(title, message) {
+	if (resolve_timer) return
 	let tags = document.createElement('div');
 	tags.classList.add('tags');
 	let row = create_row(clock(), title, tags);
 	row.classList.add('error');
 	let span = document.createElement('span');
 	apply_warn_grade(span, message);
-	tags.append(span);
+	tags.prepend(span);
 	output_div.append(row);
 } 
 
