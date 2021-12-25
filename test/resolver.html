@@ -18,9 +18,10 @@ body {
 	flex-direction: column;
 	gap: 0.7rem;
 }
-header .ext {
+#version {
 	margin-left: 1rem;
 	float: right;
+	text-align: right;
 }
 h1 {
 	display: flex;
@@ -120,14 +121,10 @@ button.main {
 .row + .row {
 	margin-top: 0.7rem;
 }
-/*
-.row + .row {
-	border-top: 1px solid #ccc;
-}
-*/
 ul.row {
 	margin: 0;
 	padding-left: 2rem;
+	background: #ffc;
 }
 li + li {
 	margin-top: 0.5rem;
@@ -143,74 +140,6 @@ li + li {
 }
 .exploded button {
 	align-self: stretch;
-}
-.tokens {
-	font-size: 16pt;
-	display: flex;
-	flex-wrap: wrap;
-	align-items: stretch;
-	gap: 2px;
-}
-.tokens > * {
-	padding: 2px 4px;
-	display: flex;
-	align-items: center;
-	gap: 4px;
-}
-.tokens a {
-	text-decoration: none;
-}
-.tokens a:hover {
-	outline: 2px solid #00f;
-}
-.tokens .valid {
-	border-radius: 5px;
-	background: #cfc;
-	border: 2px solid #0a0;
-}
-.tokens .ignored {
-	color: #fff;
-	background: #aaa;
-	min-width: 1rem;
-}
-.tokens .disallowed {
-	background: #f66;	
-}
-.tokens .mapped {
-	display: flex;
-	background: #fc9;
-}
-.tokens .mapped span {
-	margin-top: 2px;
-	margin-bottom: -2px;
-	border-bottom: 4px solid #000;
-}
-.tokens .stop {
-	font-weight: bold;
-	background: #ffa;
-}
-.tokens .glyph {
-	border: 2px solid #0aa;
-	border-radius: 0.5rem;
-	background: #cff;
-}
-.tokens .mod {
-	font-size: 10pt;
-	padding: 2px;
-	background: #333;
-	color: #fff;
-	border-radius: 5px;
-}
-.tokens .mod.zwj {
-	background: #0aa;
-}
-.tokens .mod.ignored {	
-	background: #aaa;
-}
-.tokens code {
-	font-size: 14pt;
-	color: #fff;
-	background: rgba(0, 0, 0, .5);
 }
 .tags sub {
 	padding-left: 0.1rem;
@@ -244,8 +173,14 @@ li + li {
 	background: #cfc;
 }
 .tags .best {
+	
+	color: #060;
+	background: #cfc;
 	font-weight: bold;
 	border-color: #060;
+}
+.tags .warn {
+	background: #ffc;
 }
 .tags .fail {
 	background: #fcc;
@@ -253,7 +188,7 @@ li + li {
 }
 .row.hashes {
 	background: none;
-	padding: 0;
+	padding: 0 0.5rem;
 }
 .hashes > div > div {
 	display: grid;
@@ -273,9 +208,6 @@ li + li {
 	grid-column: 1 / -1;
 	text-align: center;
 } 
-.tags .warn {
-	background: #ffc;
-}
 .error {
 	background: #fcc;
 	border: 3px dashed #f00;
@@ -298,11 +230,11 @@ li + li {
 </head>
 <body>
 <header>
-<a class="ext" id="github" href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a>
+<span id="version"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a></span>
 <h1><a href="https://ens.domains/">ENS Resolver</a><span id="provider"></span></h1>
 </header>
 <div class="examples">
-<button>brantly.eth</button>
+<button>vitalik.eth</button>
 <button>bRAnTlY.eTh</button>
 <button>brantly.cash</button>
 <button>brantlymillegan.com</button>
@@ -313,39 +245,39 @@ li + li {
 <button>xn--bb-eka.at</button>
 
 <b>Mapped:</b> 
-<button data-name="Ⅷ.eth">Ⅷ</button>
+<button>Ⅷ</button>
 
 <b>Deviation:</b> 
-<button>ß.eth</button>
-<button>ς.eth</button>
+<button>ß</button>
+<button>ς</button>
 
 <b>Disallowed:</b>
-<button>te[st.org</button>
-<button>tes_t.gov</button>
+<button>te[st</button>
+<button>tes_t</button>
 
 <a href="https://unicode.org/reports/tr46/#Validity_Criteria"><b>CheckHyphen:</b></a>
-<button>-test.org</button>
-<button>test-.net</button>
-<button>te--st.com</button>
+<button>-test</button>
+<button>test-</button>
+<button>te--st</button>
 
 <b>Goofy:</b>
 <button data-name="[ba967c160905ade030f84952644a963994eeaed3881a6b8a4e9c8cbe452ad7a2].eth" data-skip="1">"💩.eth"</button>
 
 <a href="./report-emoji-zwj.html"><b>Emoji:</b></a>
-<button>🚀🚀🚀.eth</button>
-<button>💩💩💩.eth</button>
-<button>🚴‍♂️.eth</button>
-<button>👁️‍🗨️.eth</button>
-<button>🌈rainbow.eth</button>
-<button>6️⃣9️⃣.eth</button>
-<button>🏳️‍🌈.eth</button>
-<button>🧟‍♂.eth</button>
-<button>🧟♂.eth</button>
-<button>😵‍💫😵‍💫😵‍💫.eth</button>
-<button>😵💫😵💫😵💫.eth</button>
-<button>👩🏽‍⚕.eth</button>
-<button>👨‍👩‍👦.eth</button>
-<button>👨👩👦.eth</button>
+<button>🚀🚀🚀</button>
+<button>💩💩💩</button>
+<button>🚴‍♂️</button>
+<button>👁️‍🗨️</button>
+<button>🌈rainbow</button>
+<button>6️⃣9️⃣</button>
+<button>🏳️‍🌈</button>
+<button>🧟‍♂</button>
+<button>🧟♂</button>
+<button>😵‍💫😵‍💫😵‍💫</button>
+<button>😵💫😵💫😵💫</button>
+<button>👩🏽‍⚕</button>
+<button>👨‍👩‍👦</button>
+<button>👨👩👦</button>
 
 <a href="./report-emoji-picto.html"><b>Picto:</b></a>
 <button>mmm</button>
@@ -358,51 +290,52 @@ li + li {
 
 <a href="https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.1"><b>ContextJ:</b></a>
 ZWNJ:
-<button data-name="a{94D}{200C}.eth">✅ Rule 1</button>
-<button data-name="{A872}{200C}{622}.eth">✅ 2A</button>
-<button data-name="a{A872}{AC8}{200C}{300}{300}{622}.eth">✅ 2B</button>
-<button data-name="a{200C}b.eth">❌</button>
-<button data-name="🧞{200C}{200C}.eth">"🧞.eth"</button>
+<button data-name="a{94D}{200C}">✅ Rule 1</button>
+<button data-name="{A872}{200C}{622}">✅ 2A</button>
+<button data-name="a{A872}{AC8}{200C}{300}{300}{622}">✅ 2B</button>
+<button data-name="a{200C}b">❌</button>
+<button data-name="🧞{200C}{200C}">"🧞.eth"</button>
 • 
 ZWJ:
-<button data-name="a{94D}{200D}.eth">✅</button>
-<button data-name="a{200D}b.eth">❌</button>
+<button data-name="a{94D}{200D}">✅</button>
+<button data-name="a{200D}b">❌</button>
 <a href="https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.3"><b>ContextO:</b></a>
 Middle Dot: 
-<button data-name="{6C}{B7}{6C}.eth">✅</button>
-<button data-name="a{B7}b.eth">❌</button>
+<button data-name="{6C}{B7}{6C}">✅</button>
+<button data-name="a{B7}b">❌</button>
 • 
 Greek Keraia: 
-<button data-name="ab{375}{0377}.eth">✅</button>
-<button data-name="ab{375}.eth">❌</button>
+<button data-name="ab{375}{0377}">✅</button>
+<button data-name="ab{375}">❌</button>
 • 
 Hebrew Geresh 
-<button data-name="{05D1}{0591}{5F3}.eth">✅</button>
-<button data-name="ab{5F3}.eth">❌</button>
+<button data-name="{05D1}{0591}{5F3}">✅</button>
+<button data-name="ab{5F3}">❌</button>
 • 
 Katakana:
-<button data-name="{3041}{30A1}{30FB}.eth">✅</button>
-<button data-name="ab{30FB}.eth">❌</button>
+<button data-name="{3041}{30A1}{30FB}">✅</button>
+<button data-name="ab{30FB}">❌</button>
 • 
 Arabic-Indic:
-<button data-name="{5D0}{660}{661}{662}.eth">✅</button>
-<button data-name="{5D0}{6F0}{6F1}{6F2}.eth">✅</button>
+<button data-name="{5D0}{660}{661}{662}">✅</button>
+<button data-name="{5D0}{6F0}{6F1}{6F2}">✅</button>
 <button data-name="{660}{6F0}.eth">❌</button>
 <a href="https://www.rfc-editor.org/rfc/rfc5893.html#section-2"><b>CheckBidi:</b></a>
 <button data-name="{202e}elgoog{202d}.eth" data-replace="true"></button>
 <button data-name="{202e}hte.elgoog" data-replace="true"></button>
-<button>פעילותהבינאום.eth</button>
+<button>פעילותהבינאום</button>
 <button data-name="{0786}{07AE}{0782}{07B0}{0795}{07A9}{0793}{07A6}{0783}{07AA}">Dhivehi</button>
 <button data-name="{05D9}{05B4}{05D5}{05D0}{05B8}">Yiddish</button>
-<button data-name="bahrainمصر.eth">Mixed LTR+RTL in Label</button>
-<button data-name="bahrain.مصر.eth">Separate LTR and RTL Labels</button>
+<button data-name="bahrainمصر">Mixed LTR+RTL in Label</button>
+<button data-name="bahrain.مصر">Separate LTR and RTL Labels</button>
 <b>Revived:</b>
-<button>‼️‼️‼️.eth</button>
-<button>⁉️⁉️⁉️.eth</button>
-<button data-replace="true">{2A}{FE0F}{20E3}.eth</button>
-<button data-replace="true">{23}{FE0F}{20E3}.eth</button>
+<button>‼️‼️‼️</button>
+<button>⁉️⁉️⁉️</button>
+<button>*️⃣</button>
+<button>#️⃣</button>
 </div>
 <div id="options">
+<span><input type="checkbox" id="auto_check" checked>Resolve on Input</span>
 <label><input type="checkbox" id="show_hashes_check" checked>Show Hashes</label>
 <span><input type="checkbox" id="skip_norm_check"><label for="skip_norm_check">Skip Normalization</label></span>
 <span><input type="checkbox" id="ignore_disallowed_check"><label for="ignore_disallowed_check">Ignore Disallowed</label></span>
@@ -420,8 +353,8 @@ Arabic-Indic:
 </div>
 <div id="output">
 <ul class="row">
-<li>Click an <button data-name="brantly.eth">Example</button> to see how it works.</li>
-<li>Use <code>{FF}</code> or <code>[0xFF]</code> or <code>[255]</code> to manually include codepoints, eg. <button data-name="a[0x200D]b.eth">ZWJ</button></li>
+<li>Click an <button data-name="bRANtly.eth">Example</button> to see how it works.</li>
+<li>Use <code>{FF}</code> or <code>[255]</code> to manually include codepoints, eg. <button data-name="a{200D}b.eth">ZWJ</button></li>
 <li><b>Copy Link</b> to get a URL that resolves on page-load.</li>
 </ul>
 </div>
@@ -429,44 +362,50 @@ Arabic-Indic:
 import {
 	FetchProvider, retry,
 	node_from_ens_name,
-	checksum_address,
+	is_checksum_address,
 	ens_resolve, 
 	lookup_address,
 	ens_name_for_address,
-	hash_from_label
+	hash_from_label,
+	ens_text_record
 } from 'https://adraffy.github.io/eth-tools.js/dist/eth-tools.min.js';
+import {escape_name_for_html, explode_cp} from '../build/utils.js';
+import {ens_normalize, ens_tokenize, VERSION, BUILT, IDNA, UNICODE} from '../dist/ens-normalize-debug.min.js';
+import {ens_normalize as ens_normalize_xbidi} from '../dist/ens-normalize-xbidi.min.js'; // load without bidi
+import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
 
-// load in the latest version
-import {ens_normalize as ens_normalize_bidi, ens_tokenize, escape_name_for_html, VERSION, IDNA} from '../dist/ens-normalize-debug.min.js';
-import {ens_normalize as ens_normalize_xbidi} from '../dist/ens-normalize-xbidi.min.js';
+use_default_style();
 
-function ens_normalize(name, ignore_disallowed, ignore_bidi) {
-	if (ignore_disallowed) {
+function ens_normalize_input(name) {
+	if (document.querySelector('#ignore_disallowed_check').checked) {
 		name = String.fromCodePoint(...ens_tokenize(name).flatMap(({v,i,m,e,u,d}) => v ?? i ?? m ?? (e ?? u) ?? (d===undefined ? 0x2E : [])));
 	}
-	if (ignore_bidi) {
+	if (document.querySelector('#ignore_bidi_check').checked) {
 		return ens_normalize_xbidi(name);
 	} else {
-		return ens_normalize_bidi(name);
+		return ens_normalize(name);
 	}
 }
 
-document.querySelector('#github').innerHTML += ` (v${VERSION})`;
+document.querySelector('#version').innerHTML += ` (v${VERSION}+${IDNA}+${UNICODE})<br><code>${BUILT}</code>`;
 
 const input_field = document.querySelector('#input_field');
 const resolve_btn = document.querySelector('#resolve_btn');
+const arrows = document.querySelector('#arrows');
 const output_div = document.querySelector('#output');
 const readme_rows = [...output_div.childNodes];
+
+let resolve_timer;
 
 let provider_infura = retry(new FetchProvider({url: 'https://cloudflare-eth.com'})); 
 let provider_window = typeof window.ethereum !== 'undefined' ? retry(ethereum) : null;
 
 for (let btn of document.querySelectorAll('.examples button, button[data-name]')) {
-	if (btn.dataset.replace) {
-		btn.innerHTML = replace_escapes(btn.dataset.name ?? btn.innerHTML);
-	}
+	let name = replace_escapes(btn.dataset.name ?? btn.innerHTML);
+	if (btn.dataset.replace) btn.innerHTML = name;
+	if (!name.includes('.')) name += '.eth';
 	btn.addEventListener('click', () => {
-		input_field.value = btn.dataset.name ?? btn.innerHTML;
+		input_field.value = name;
 		resolve(btn.dataset.skip);
 	});
 }
@@ -478,7 +417,10 @@ input_field.addEventListener('keydown', e => {
 		resolve();
 	}
 });
-input_field.addEventListener('input', parse);
+input_field.addEventListener('input', () => {
+	parse();
+	schedule_resolve();
+});
 
 document.querySelector('#escape_btn').addEventListener('click', () => {
 	let s0 = input_field.value;
@@ -489,20 +431,31 @@ document.querySelector('#escape_btn').addEventListener('click', () => {
 	let pos = set.indexOf(s0);	
 	input_field.value = set[(pos + 1) % set.length];
 });
+
 document.querySelector('#link_btn').addEventListener('click', () => {
-	navigator.clipboard.writeText(window.location + '#' + encodeURIComponent(input_field.value.trim()));
+	navigator.clipboard.writeText(window.location.href.split('#')[0] + '#' + encodeURIComponent(input_field.value));
 });
 
 input_field.focus();
-
-if (window.location.hash.length > 0) {
-	input_field.value = decodeURIComponent(window.location.hash.slice(1).trim());
-	history.replaceState(null, null, ' ');
+input_field.value = decode_location_hash();
+resolve();
+window.addEventListener('hashchange', () => {
+	input_field.value = decode_location_hash();
 	resolve();
-} else {
-	parse();
+});
+
+function decode_location_hash() {
+	return decodeURIComponent(window.location.hash.slice(1));
 }
 
+function schedule_resolve() {
+	if (is_working()) {
+		resolve_timer = true;
+	} else if (!resolve_timer && document.querySelector('#auto_check').checked) {
+		resolve_timer = setTimeout(resolve, 1000);
+		arrows.classList.remove('hide');	
+	}
+}
 
 function parse() {
 	output_div.innerHTML = '';
@@ -511,39 +464,26 @@ function parse() {
 		output_div.append(...readme_rows);
 		return;
 	}
-	let exploded = create_exploded(name, false);
-	
-	output_div.append(create_row(false, 'Input', exploded));
-
-	try {
-		let norm = ens_normalize(name);
-		if (norm === name) {
-			input_field.classList.add('norm');
-		} else {
-			input_field.classList.add('not-norm');
-			if (norm) {
-				output_div.append(create_row(false, 'Normalized', create_exploded(norm, true)));
-			}
-		}
-	} catch (err) {
-		let el = document.createElement('div');
-		el.classList.add('row', 'error');
-		el.innerHTML = `❌ <b>${err.message}</b>`;
-		output_div.append(el);
+	if (is_checksum_address(name)) {
+		let row = create_row(false, 'Address', create_etherscan_address_link(name));
+		output_div.append(row);
+		return;
 	}
-}
-
-function set_working(b) {
-	resolve_btn.disabled = b;
-	document.querySelector('#arrows').classList.toggle('hide', !b);
-}
-
-function format_dur(t) {
-	if (t < 1000) return `${Math.ceil(t)}ms`;
-	t /= 1000;
-	if (t < 60) return `${t.toFixed(1)}sec`;
-	t /= 60;
-	return `${t.toFixed(1)}min`;
+	let exploded = create_exploded(name, false);
+	let row = create_row(false, 'Input', exploded);
+	output_div.append(row);
+	try {
+		let norm = ens_normalize_input(name);
+		if (norm !== name) {
+			output_div.append(create_row(false, 'Normalized', create_exploded(norm, true)));
+		}
+		add_hashes_row(name);
+	} catch (err) {
+		row.classList.add('error');
+		let span = document.createElement('span');
+		apply_warn_grade(span, err.message);
+		row.querySelector('.tags').append(span);
+	}
 }
 
 function hex(cp) {
@@ -569,72 +509,16 @@ function create_link(url, s) {
 	let a = document.createElement('a');
 	a.href = url;
 	a.innerHTML = s ?? url;
-	a.target = '_blank';
 	return a;
+}
+function create_etherscan_address_link(s) {
+	let a = create_link(`https://etherscan.io/address/${s}`, s);
+	a.classList.add('hash');
+	return a;	
 }
 
 function create_exploded(name, is_norm) {	
-	let tokens_div = document.createElement('div');
-	tokens_div.classList.add('tokens');
-	if (!is_norm) tokens_div.classList.add('not-norm');
-	let tokens = ens_tokenize(name);
-	for (let token of tokens) {
-		let {v, m, i, d, e, u} = token;
-		let el;
-		if (e) {
-			el = document.createElement('a');
-			el.href = `https://emojipedia.org/${String.fromCodePoint(...e)}`;
-			el.classList.add('glyph');
-			for (let cp of u) {
-				let span = document.createElement('span');
-				span.classList.add('mod');
-				if (cp == 0x200C) {
-					span.innerHTML = 'ZWNJ';
-				} else if (cp == 0x200D) {
-					span.classList.add('zwj');
-					span.innerHTML = 'ZWJ';
-				} else if (cp == 0xFE0F) {
-					span.classList.add('style');
-					span.innerHTML = 'FE0F';
-				} else if (cp == 0x20E3) {
-					span.classList.add('keycap');
-					span.innerHTML = 'Keycap';
-				} else {
-					span.classList.remove('mod');
-					span.classList.add('emoji');
-					span.innerHTML = String.fromCodePoint(cp);
-				}
-				if (!e.includes(cp)) span.classList.add('ignored');
-				el.append(span);
-			}
-		} else {
-			el = document.createElement('div');
-			if (v) {
-				el.innerHTML = str(...v);
-				el.classList.add('valid');
-			} else if (m) {
-				el.classList.add('mapped');
-				for (let cp of (is_norm ? u : [m])) {
-					let span = document.createElement('span');
-					span.innerHTML = str(cp);	
-					span.title = tooltip(cp)
-					el.append(span);
-				}
-			} else if (i) {
-				el.classList.add('ignored');
-				el.innerHTML = `<code>${hex(i)}</code>`;
-				el.title = tooltip(i);
-			} else if (d !== undefined) {			
-				el.classList.add('disallowed');
-				el.innerHTML = str(d);
-				el.title = tooltip(d);
-			} else {
-				el.classList.add('stop');
-				el.innerHTML = '.';
-			}
-		}
-		tokens_div.append(el);
-	}
+	let tokens_div = dom_from_tokens(ens_tokenize(name), is_norm);
 	let tags = document.createElement('div');
 	tags.classList.add('tags');
 	let n_cp = [...name].length;
@@ -685,7 +569,21 @@ function create_ens_btn(s) {
 	return a;
 }
 
-function create_hashes_row(name) {
+function apply_warn_grade(span, s) {
+	span.classList.add('warn');
+	span.innerHTML = `⚠️ ${s}`;
+}
+function apply_best_grade(span, s) {
+	span.classList.add('best');
+	span.innerHTML = `✅️ ${s}`;
+}
+function apply_fail_grade(span, s) {
+	span.classList.add('fail');
+	span.innerHTML = `❌ ${s}`;
+}
+
+function add_hashes_row(name) {
+	if (!document.querySelector('#show_hashes_check').checked) return;
 	let div = document.createElement('div');
 	div.classList.add('hashes');
 	// build table of label hashes
@@ -714,43 +612,84 @@ function create_hashes_row(name) {
 	let row = document.createElement('div');
 	row.classList.add('row', 'hashes');
 	row.append(wrap);
-	return row;
+	output_div.append(row);
 }
 
 function create_row(dur, label, item, value_class) {
-		let div = document.createElement('div');
-		div.classList.add('row');	
-		if (dur) {
-			let span = document.createElement('span');
-			span.classList.add('elapsed');			
-			span.innerHTML = dur;
-			div.append(span);
-		}
-		let inner = document.createElement('div');
-		if (label) {
-			let span = document.createElement('span');
-			span.classList.add('row-label');
-			span.innerHTML = `${label}:`;
-			inner.append(span);
-		}
-		if (typeof item === 'string') {
-			let span = document.createElement('span');
-			span.innerHTML = item;
-			item = span;
-		}	
-		item.classList.add('value');
-		if (value_class) item.classList.add(value_class);
-		inner.append(item);
-		div.append(inner);
-		return div;
+	let div = document.createElement('div');
+	div.classList.add('row');	
+	if (dur) {
+		let span = document.createElement('span');
+		span.classList.add('elapsed');			
+		span.innerHTML = dur;
+		div.append(span);
 	}
+	let inner = document.createElement('div');
+	if (label) {
+		let span = document.createElement('span');
+		span.classList.add('row-label');
+		span.innerHTML = `${label}:`;
+		inner.append(span);
+	}
+	if (typeof item === 'string') {
+		let span = document.createElement('span');
+		span.innerHTML = item;
+		item = span;
+	}	
+	item.classList.add('value');
+	if (value_class) item.classList.add(value_class);
+	inner.append(item);
+	div.append(inner);
+	return div;
+}
+
+function format_dur(t) {
+	if (t < 1000) return `${Math.ceil(t)}ms`;
+	t /= 1000;
+	if (t < 60) return `${t.toFixed(1)}sec`;
+	t /= 60;
+	return `${t.toFixed(1)}min`;
+}
+
+function set_working(b) {
+	resolve_btn.disabled = b;
+	document.querySelector('#arrows').classList.toggle('hide', !b);
+}
+function is_working() {
+	return resolve_btn.disabled;
+}
 
 function resolve(...a) {
-	if (resolve_btn.disabled) return;
-	set_working(true);
-	resolve0(...a);
+	if (is_working()) return;
+	clearTimeout(resolve_timer);
+	resolve_timer = false;
+	let input = input_field.value.trim();
+	const title = 'ENS Resolver';
+	if (!input) {
+		if (window.location.hash) {
+			window.history.pushState(null, null, ' ');
+		} else {
+			window.history.replaceState(null, null, ' ');
+		}
+		document.title = title;
+		parse();
+		return;
+	}
+	window.location = '#' + encodeURIComponent(input);
+	document.title = `${title}: ${input}`;
+	resolve_btn.disabled = true;
+	arrows.classList.remove('hide');
+	resolve0(input, ...a).then(() => {
+		resolve_btn.disabled = false;
+		if (resolve_timer) {
+			resolve_timer = false;
+			schedule_resolve();
+		} else {
+			arrows.classList.add('hide');
+		}
+	});
 }
-async function resolve0(override_skip_norm) {
+async function resolve0(name0, override_skip_norm) {
 	let date0 = new Date();
 	function clock() {
 		let now = new Date();
@@ -758,8 +697,6 @@ async function resolve0(override_skip_norm) {
 		date0 = now;
 		return dur;
 	}
-	
-	// clear 
 	output_div.innerHTML = '';
 	
 	// find a provider
@@ -771,231 +708,224 @@ async function resolve0(override_skip_norm) {
 	}
 	document.querySelector('#provider').innerHTML = `using ${provider === provider_infura ? 'Infura' : 'Browser Wallet'}`;
 
-	// get user input
-	let name0 = input_field.value.trim();
-	
 	// replace escapes
-	let name = replace_escapes(name0);
+	let input_name = replace_escapes(name0);
 	
 	// check if actual address
-	let is_address;
-	try {
-		is_address = checksum_address(name) === name;
-	} catch (ignored) {
-		is_address = false;
-	}
-	
-	let show_hashes = document.querySelector('#show_hashes_check').checked;
+	let input_is_address = is_checksum_address(input_name);
 	let skip_norm = override_skip_norm || document.querySelector('#skip_norm_check').checked;
-	let ignore_disallowed = document.querySelector('#ignore_disallowed_check').checked;
-	let ignore_bidi_check = document.querySelector('#ignore_bidi_check').checked;
+	let address, input_norm = false;
+	let input_grade = document.createElement('span');
+	if (input_is_address) {
+
+		address = input_name;
+
+	} else {
 	
-	try {
-		let address, norm = false;
-		let span_grade = document.createElement('span');
-		if (is_address) {
-
-			address = name;
-
-		} else {
+		// add exploded name
+		let input_exploded = create_exploded(input_name, false);
+		let input_row = create_row(false, 'Input', input_exploded);
+		output_div.append(input_row);			
+		add_hashes_row(input_name);
 		
-			// add exploded name
-			let exploded_input = create_exploded(name, false);
-			output_div.append(create_row(false, 'Input', exploded_input));			
-			if (show_hashes) {
-				output_div.append(create_hashes_row(name));
-			}
-			
-			// grade the name (so far)
-			/*if (name === safe_idna(name)) { 
-				span_grade.classList.add('good');
-				span_grade.innerHTML = 'IDNA';			
-				exploded_input.querySelector('.tags').append(span_grade);
-			} else */
-			if (is_printable_ascii(name)) {
-				span_grade.innerHTML = 'ASCII'; //safe_idna(name.toLowerCase()) ? 'Mixed-case' : 'ASCII';
-			} else {
-				span_grade.innerHTML = 'Unicode';
-			}
-			span_grade.classList.add('okay');
-			exploded_input.querySelector('.tags').append(span_grade);
-			
-			let exploded_norm;
-			if (skip_norm) {
-				norm = name; // yolo
-				// add a warning
+		if (is_printable_ascii(input_name)) {
+			input_grade.innerHTML = 'ASCII';
+		} else {
+			input_grade.innerHTML = 'Unicode';
+		}
+		input_grade.classList.add('okay');
+		input_exploded.querySelector('.tags').append(input_grade);
+		
+		let exploded_norm;
+		if (skip_norm) {
+			input_norm = input_name; // yolo
+			// add a warning
+			let span = document.createElement('span');
+			apply_fail_grade(span, 'Skipped');
+			let tags = document.createElement('div');
+			tags.classList.add('tags');
+			tags.append(span);
+			// make a placeholder
+			exploded_norm = document.createElement('div');
+			exploded_norm.classList.add('exploded');
+			exploded_norm.append(tags);
+			output_div.append(create_row(false, 'Normalization', exploded_norm));
+		} else {	
+			// normalize the name
+			try {
+				input_norm = ens_normalize_input(input_name);
+			} catch (err) {
+				input_row.classList.add('error');
+				apply_warn_grade(input_grade, err.message);
+				return;
+			}	
+			// add exploded norm
+			exploded_norm = create_exploded(input_norm, true);
+			output_div.append(create_row(false, 'Normalized', exploded_norm));
+			if (input_name === input_norm) {
+				// adjust the grade
+				input_grade.innerHTML = 'Normalized';
+				input_grade.classList.add('good');
+				input_exploded.querySelector('.ens')?.remove();
+			} else { 
+				// add warning to input
 				let span = document.createElement('span');
 				span.classList.add('fail');
-				span.innerHTML = '❌ Skipped';
-				let tags = document.createElement('div');
-				tags.classList.add('tags');
-				tags.append(span);
-				// make a placeholder
-				exploded_norm = document.createElement('div');
-				exploded_norm.classList.add('exploded');
-				exploded_norm.append(tags);
-				output_div.append(create_row(clock(), 'Normalization', exploded_norm));
-			} else {	
-				// normalize the name
-				try {
-					norm = ens_normalize(name, ignore_disallowed, ignore_bidi_check);
-				} catch (err) {
-					err.desc = 'Normalize';
-					throw err;
-				}	
-				// add exploded norm
-				exploded_norm = create_exploded(norm, true);
-				output_div.append(create_row(clock(), 'Normalized', exploded_norm));
-				if (name === norm) {
-					// adjust the grade
-					span_grade.innerHTML = 'Normalized';
-					span_grade.classList.add('good');
-					exploded_input.querySelector('.ens')?.remove();
-				} else { 
-					// add warning to input
-					let span = document.createElement('span');
-					span.classList.add('fail');
-					span.innerHTML = '❌ Normalized';
-					exploded_input.querySelector('.tags').append(span);
-					// add some helpers
-					exploded_input.append(create_ens_btn(name)); // on input
-					exploded_norm.append(create_copy_btn(norm));
-					// show different labels
-					if (show_hashes) {
-						output_div.append(create_hashes_row(norm));
-					}
-				}
-				// add hyperlink
-				exploded_norm.append(create_ens_btn(norm));
+				span.innerHTML = '❌ Normalized';
+				input_exploded.querySelector('.tags').append(span);
+				// add some helpers
+				input_exploded.append(create_ens_btn(input_name)); // on input
+				exploded_norm.append(create_copy_btn(input_norm));
+				// show different labels
+				add_hashes_row(input_norm);
 			}
-			let node = node_from_ens_name(norm);
-			// lookup the norm node
-			let resolver;
-			try {
-				let resolved = await ens_resolve(provider, node);
-				({resolver} = resolved);
-				address = await lookup_address(provider, resolved);
-			} catch (err) {	  
-				err.desc = 'Resolve';
-				throw err;
-			}
-			// check if not registered
-			if (!address) {
-				let span = document.createElement('span');
-				span.classList.add('warn');
-				span.innerHTML = '⚠️ ENS Record Not Found';
-				let tags = document.createElement('div');
-				tags.classList.add('tags');
-				tags.append(span);
-				output_div.append(create_row(clock(), 'Resolver', tags));
-				return;
-			}
-			// add etherscan
-			let a_resolver = document.createElement('a');
-			a_resolver.classList.add('hash');
-			a_resolver.href = `https://etherscan.io/address/${resolver}`;
-			a_resolver.innerHTML = resolver;			
-			output_div.append(create_row(false, 'Resolver', a_resolver));
-			// add opensea if ENS
-			if (resolver === '0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41') { // label.length must be 2?
-				let label = norm.split('.')[0];
-				exploded_norm.append(create_link(`https://opensea.io/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/${hash_from_label(label).hex}`, 'Opensea'));				
-			}
+			// add hyperlink
+			exploded_norm.append(create_ens_btn(input_norm));
 		}
-
-		// if we got here, either:
-		// 1. an address was entered
-		// 2. a name was entered and we resolved the address		
-
-		// add etherscan
-		let a_address = document.createElement('a');
-		a_address.classList.add('hash');
-		a_address.href = `https://etherscan.io/address/${address}`;
-		a_address.innerHTML = address;		
-		output_div.append(create_row(clock(), 'Address', a_address));
-		// reverse-lookup the address
-		let reverse;
+		let node = node_from_ens_name(input_norm);
+		// lookup the norm node
+		let resolver;
 		try {
-			reverse = await ens_name_for_address(provider, address);
-		} catch (err) {
-			err.desc ='Reverse';
-			throw err;
-		}
-		// check if not primary
-		if (typeof reverse !== 'string') {	
-			let span = document.createElement('span');
-			span.classList.add('warn');
-			span.innerHTML = '⚠️ Primary ENS Name Not Set';
-			let div = document.createElement('div');
-			div.classList.add('tags');
-			div.append(span);
-			output_div.append(create_row(clock(), 'Reverse', div));
+			let resolved = await ens_resolve(provider, node);
+			({resolver} = resolved);
+			address = await lookup_address(provider, resolved);
+		} catch (err) {	  
+			show_critical_error('Resolver', err.message);
 			return;
 		}
-		// adjust the grade
-		if (name === reverse) {
-			span_grade.classList.add('best');
-			span_grade.innerHTML = '✅️ Matches Reverse';
+		// check if not registered
+		if (!address) {
+			let tags = document.createElement('div');
+			tags.classList.add('tags');
+			let span = document.createElement('span');
+			apply_warn_grade(span, 'ENS Record Not Found');
+			tags.append(span);
+			output_div.append(create_row(clock(), 'Resolver', tags));
+			return;
 		}
-		// explode the reverse name
-		let exploded_reverse = create_exploded(reverse, false);		
-		if (norm === reverse) { 
-			let span = document.createElement('span');
-			span.innerHTML = '&check; Same as Normalized';
-			exploded_reverse.querySelector('.tags').append(span);
-		} else if (!is_address) { // we might not have a norm
-			let span = document.createElement('span');
-			span.classList.add('warn');
-			span.innerHTML = '⚠️ Different from Input';
-			exploded_reverse.querySelector('.tags').append(span);
-		}		
-		output_div.append(create_row(clock(), 'Reverse', exploded_reverse));
-		if (show_hashes && norm !== reverse) { // only show if necessary
-			output_div.append(create_hashes_row(reverse));
-		}	
-		// note: im curious if any reverse names are unnormalized
-		// but stop if theres nothing more to do
-		if (norm === reverse) return;		
-		// normalize the reverse name
-		let reverse_norm;
-		try {
-			reverse_norm = ens_normalize(reverse, ignore_disallowed, ignore_bidi_check);
-		} catch (err) {
-			err.desc = 'Reverse Normalize';
-			throw err;
-		}	
-		// explode the reverse norm name
-		let exploded_reverse_norm = create_exploded(reverse_norm, true);
-		if (reverse === reverse_norm) {
-			let span = document.createElement('span');
-			span.innerHTML = '&check; Normalized';
-			exploded_reverse.querySelector('.tags').append(span);
+		// add etherscan
+		output_div.append(create_row(clock(), 'Resolver', create_etherscan_address_link(resolver)));
+
+		// add opensea if ENS
+		if (resolver === '0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41') { // label.length must be 2?
+			let label = input_norm.split('.')[0];
+			exploded_norm.append(create_link(`https://opensea.io/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/${hash_from_label(label).hex}`, 'Opensea'));				
 		}
-		// add some helpers since reverse != input
-		exploded_reverse_norm.append(create_copy_btn(reverse_norm));
-		exploded_reverse_norm.append(create_ens_btn(reverse_norm));
-		// make it easy to resolve this new name
-		let again_btn = document.createElement('button');
-		again_btn.classList.add('main');
-		again_btn.addEventListener('click', () => {
-			input_field.value = reverse;
-			resolve();
-		});
-		again_btn.innerHTML = 'Resolve';	
-		exploded_reverse_norm.append(again_btn);
-		output_div.append(create_row(clock(), 'Normalized Reverse', exploded_reverse_norm));		
-	} catch (err) {
-		let {desc, message} = err;
-		desc = desc ? `Error during ${desc}` : 'Unknown Error';					
-		let div = document.createElement('div');
-		div.classList.add('row', 'error');
-		div.innerHTML = `<b>${desc}:</b> ${message}`;
-		output_div.append(div);
-		console.log(err);
-	} finally {
-		set_working(false);
+
+		// check display name
+		let display_name = await ens_text_record(provider, node, 'display').then(({text: {display: s}}) => s).catch(() => false);
+		if (display_name && display_name != input_norm) {
+			let display_exploded = create_exploded(display_name, false);
+			let display_row = create_row(clock(), 'Display', display_exploded);
+			try {
+				let display_norm = ens_normalize(display_name);
+				if (display_norm == input_norm) {
+					let fake_tokens = dom_from_tokens([{v:explode_cp(display_name)}], true);
+					display_exploded.replaceChild(fake_tokens, display_exploded.querySelector('.tokens'));
+					apply_best_grade(input_grade, 'Matches Display Name');
+				} else {
+					let grade = document.createElement('span');
+					apply_warn_grade(grade, `Does Not Match`);
+					display_exploded.querySelector('.tags').append(grade);
+					display_row.classList.add('error');
+				}
+			} catch (err) {
+				let grade = document.createElement('span');
+				apply_fail_grade(grade, `Normalized: ${err.message}`);
+				display_exploded.querySelector('.tags').append(grade);
+			}
+			output_div.append(display_row);
+		}			
+
 	}
+
+	// if we got here, either:
+	// 1. an address was entered
+	// 2. a name was entered and we resolved the address		
+
+	// add etherscan
+	output_div.append(create_row(false, 'Address', create_etherscan_address_link( address)));
+
+	// reverse-lookup the address
+	let reverse_name;
+	try {
+		reverse_name = await ens_name_for_address(provider, address);
+	} catch (err) {
+		show_critical_error('Reverse', err.message);
+		return;
+	}
+	// check if not primary
+	if (typeof reverse_name !== 'string') {	
+		let span = document.createElement('span');
+		apply_warn_grade(span, 'Primary ENS Name Not Set');
+		let div = document.createElement('div');
+		div.classList.add('tags');
+		div.append(span);
+		output_div.append(create_row(clock(), 'Reverse', div));
+		return;
+	}
+	// adjust the grade
+	if (input_name === reverse_name && !input_grade.classList.contains('best')) {
+		apply_best_grade(input_grade, 'Matches Reverse');
+	}
+	// explode the reverse name
+	let exploded_reverse = create_exploded(reverse_name, true);		
+	if (input_norm === reverse_name) { 
+		let span = document.createElement('span');
+		span.innerHTML = '&check; Same as Normalized';
+		exploded_reverse.querySelector('.tags').append(span);
+	} else if (!input_is_address) { // we might not have a norm
+		let span = document.createElement('span');
+		apply_warn_grade(span, 'Different from Input');
+		exploded_reverse.querySelector('.tags').append(span);
+	}		
+	output_div.append(create_row(clock(), 'Reverse', exploded_reverse));
+	if (input_norm !== reverse_name) { // only show if necessary
+		add_hashes_row(reverse_name);
+	}	
+	// note: im curious if any reverse names are unnormalized
+	// but stop if theres nothing more to do
+	if (input_norm === reverse_name) return;		
+	// normalize the reverse name
+	let reverse_norm;
+	try {
+		reverse_norm = ens_normalize(reverse_name);
+	} catch (err) {
+		show_critical_error('Normalized Reverse', err.message);
+		return;
+	}	
+	// explode the reverse norm name
+	let exploded_reverse_norm = create_exploded(reverse_norm, true);
+	if (reverse_name === reverse_norm) {
+		let span = document.createElement('span');
+		span.innerHTML = '&check; Normalized';
+		exploded_reverse.querySelector('.tags').append(span);
+	}
+	// add some helpers since reverse != input
+	exploded_reverse_norm.append(create_copy_btn(reverse_norm));
+	exploded_reverse_norm.append(create_ens_btn(reverse_norm));
+	// make it easy to resolve this new name
+	let again_btn = document.createElement('button');
+	again_btn.classList.add('main');
+	again_btn.addEventListener('click', () => {
+		input_field.value = reverse_name;
+		resolve();
+	});
+	again_btn.innerHTML = 'Resolve';	
+	exploded_reverse_norm.append(again_btn);
+	output_div.append(create_row(false, 'Normalized Reverse', exploded_reverse_norm));		
 }
+
+function show_critical_error(title, message) {
+	let tags = document.createElement('div');
+	tags.classList.add('tags');
+	let row = create_row(clock(), title, tags);
+	row.classList.add('error');
+	let span = document.createElement('span');
+	apply_warn_grade(span, message);
+	tags.append(span);
+	output_div.append(row);
+} 
 
 </script>
 </body>

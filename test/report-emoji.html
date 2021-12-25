@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Emoji</title>
+<style>
+body {
+	margin: 1rem;
+}
+#loading {
+	display: inline-block;
+	margin-top: 1rem;
+	background: #ffc;
+	border-radius: 1rem;
+	padding: 1rem 2rem;
+	font-size: 24pt;
+	border: 1px solid #ccc;
+}
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+td { 
+	border: 1px solid #aaa; 
+	text-align: center;
+}
+td + td.emoji {
+	border-left-width: 5px;
+}
+thead {
+	position: -webkit-sticky;
+	position: sticky; 
+	top: 0; 
+	z-index: 1;
+}
+thead th {
+	background: #fff;
+	background-clip: padding-box;
+}
+tbody tr:nth-child(odd) {
+	background: #eee; 
+}
+td.desc {
+	text-align: left;
+}
+td.form {
+	font-size: 16pt;
+	text-align: center;
+}
+td.src {
+	font-family: monospace;
+}
+td.valid {
+	background: #cfc;
+}
+td.valid.diff {
+	background: #0f0;
+}
+td.ignored {
+	background: #ddd;
+}
+td.error {
+	background: #fcc;
+}
+td.disallowed {
+	background: #f66;
+}
+td.mapped {
+	background: #fc9;
+}
+td.emoji {
+	background: #cff;
+}
+td.emoji.only {
+	background: #66f;
+}
+.tokens {
+	justify-content: center;
+}
+</style>
+</head>
+<body>
+<h1>Emoji</h1>
+<div id="loading">Computing...</div>
+<ul></ul>
+<script type="module">
+import {escape_name_for_html, parse_cp_range, parse_cp_sequence, hex_cp, map_values, compare_arrays} from '../build/utils.js';
+import {ens_tokenize} from '../dist/ens-normalize.min.js';
+import {ens_tokenize as tokenize2003} from '../dist/ens-normalize-2003.min.js';
+import {ens_tokenize as tokenize2008} from '../dist/ens-normalize-2008.min.js';
+import {ens_tokenize as tokenizeENS0} from '../dist/ens-normalize-ENS0.min.js';
+import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
+
+use_default_style();
+
+const PRIMARY = 'adraffy';
+
+const VERSIONS = [
+	{idna: PRIMARY, tokenize: ens_tokenize},
+	{idna: 'ENS0', tokenize: tokenizeENS0},
+	{idna: '2003', tokenize: tokenize2003},
+	{idna: '2008', tokenize: tokenize2008},
+];
+
+try {
+	main();
+} catch (err) {
+	let div = document.createElement('div');
+	div.innerHTML = err.message;
+	document.body.append(div);
+	console.error(err);
+}
+
+async function fetch_json(url) {
+	let res = await fetch(url);
+	if (res.status !== 200) throw new Error('download failed');
+	return res.json();
+}
+
+async function main() {
+	let [data, seqs, zwjs] = await Promise.all([
+		'../build/unicode-json/emoji-data.json',
+		'../build/unicode-json/emoji-sequences.json',
+		'../build/unicode-json/emoji-zwj-sequences.json'
+	].map(fetch_json));
+
+	let {Emoji: emoji, Extended_Pictographic: picto} = data;
+
+	emoji = new Set(emoji.flatMap(parse_cp_range));
+	
+	// find all of the non-emoji
+	picto = picto.flatMap(parse_cp_range).filter(cp => !emoji.has(cp));
+
+	// pluck out all of the single-char emoji
+	let basic = new Set();
+	seqs = map_values(seqs, srcs => srcs.flatMap(({src, desc}) => {
+		if (src.includes('..')) {
+			for (let cp of parse_cp_range(src)) {
+				basic.add(cp);
+				emoji.delete(cp);
+			}
+			return [];
+		} else {
+			let cps = parse_cp_sequence(src);
+			if (cps.length == 1 || (cps.length == 2 && cps[1] == 0xFE0F)) {
+				emoji.delete(cps[0]); 
+			}
+			return {cps, desc};
+		}
+	}));
+
+	zwjs = zwjs.map(({src, desc}) => ({cps: parse_cp_sequence(src), desc}));
+
+	basic = [...basic].sort((a, b) => a - b);
+	emoji = [...emoji].sort((a, b) => a - b);
+
+	add_characters('Non-Emoji Pictographs', picto);
+	add_characters('Single Character Emoji', basic);
+	add_characters('Unknown Emoji', emoji);
+
+	for (let [name, v] of Object.entries(seqs)) {
+		if (v.length > 0) {
+			add_sequences(name, v);
+		}
+	}
+	add_sequences('ZWJ Sequences', zwjs);
+
+	
+	document.querySelector('#loading').remove();
+}
+
+function str_from_tokens(tokens) {
+	return String.fromCodePoint(...tokens.flatMap(({v,m,e}) => v ?? m ?? e ?? []));
+}
+
+function add_sequences(name, seqs) {
+
+	const ERROR = 'error';
+	let types = [ERROR, 'mapped', 'valid'];
+	
+	let rows = seqs.map(({cps, desc}) => {
+		let emoji = String.fromCodePoint(...cps);
+
+		let td_src = document.createElement('td');
+		td_src.classList.add('parsed');
+		td_src.append(dom_from_tokens(ens_tokenize(emoji)));
+		
+		let type;
+		let td_dst = document.createElement('td');
+		let tokens = ens_tokenize(emoji);
+		if (tokens.length == 1 && tokens[0].e) {
+			let [{e, u}] = tokens;
+			if (compare_arrays(e, u) == 0) {
+				type = 'valid';
+				td_dst.innerHTML = String.fromCodePoint(...e);
+			} else {
+				type = 'mapped';
+				td_dst.append(dom_from_tokens(tokens, true));
+			}
+		} else {
+			type = ERROR;
+			td_dst.append(dom_from_tokens(tokens, true));
+		}
+		td_dst.classList.add(type);
+
+		let tr = document.createElement('tr');
+		tr.innerHTML = `<td class="form">${emoji}</td><td class="desc">${desc}</td><td class="src">${cps.map(hex_cp).join(' ')}</td>`;
+		tr.append(td_src);
+
+		let ref0 = str_from_tokens(tokens);
+		for (let {idna, tokenize} of VERSIONS) {
+			if (idna == PRIMARY) {
+				tr.append(td_dst);
+			 } else {
+				let td = document.createElement('td');
+				let ref = str_from_tokens(tokenize(emoji));
+				if (ref === ref0) {
+					td.classList.add(type);
+				} else if (ref === emoji) {
+					td.classList.add('valid');
+				} else {					
+					td.classList.add('disallowed');
+					//td.innerHTML = [...ref].map(x => x.codePointAt(0));
+				}
+				tr.append(td);
+			}
+		}
+		return {type, tr};
+	});
+
+	// sort by type
+	rows.sort((a, b) => types.indexOf(a.type) - types.indexOf(b.type));
+
+	let errors = rows.filter(x => x.type == ERROR).length;
+	let title = `${name} (${seqs.length}, ${errors} errors)`;
+
+	// create html
+	let section = document.createElement('section');
+	section.innerHTML = `<a name="${name}"><h2>${title}</h2><table><thead><tr>
+	<th>Form</th><th width="20%">Description</th><th>Sequence</th><th>Parsed</th>${VERSIONS.map(x => `<th>${x.idna}</th>`).join('')}
+	</tr></thead><tbody></tbody></table>`;
+	section.querySelector('tbody').append(...rows.map(x => x.tr));
+	document.body.append(section);	
+
+	// add link
+	document.querySelector('ul').innerHTML += `<li><a href="#${name}">${title}</a></li>`;
+}
+
+function add_characters(name, chars, width = 3) {
+	
+	//<th>Dec</th>
+	let cols = `<th>Form</th><th>Hex</th>${VERSIONS.map(x => `<th>${x.idna}</th>`).join('')}`;
+	let rows = [];
+	let buf = [];
+	function drain() {
+		let tr = document.createElement('tr');
+		tr.append(...buf.flatMap(tr => [...tr.children]));
+		rows.push(tr);
+		buf.length = 0;
+	}
+	for (let cp of chars) {		
+		let hex = hex_cp(cp);
+		let tr = document.createElement('tr');
+		//<td class="dec">${cp}</td>
+		tr.innerHTML = `<td class="form">${escape_name_for_html(String.fromCodePoint(cp))}</td>
+		<td><a href="https://www.compart.com/en/unicode/U+${hex}">${hex}</td>`;
+		tr.append(...VERSIONS.map(({tokenize}) => {
+			let [token] = tokenize(String.fromCodePoint(cp));
+			let [emoji] = tokenize(String.fromCodePoint(cp, 0xFE0F));
+			let td = document.createElement('td');
+			if (emoji.e) {
+				td.classList.add('emoji');
+				if (token.d) {
+					td.classList.add('emoji', 'only');
+					td.innerHTML = String.fromCodePoint(...emoji.e);
+				}
+			} else if (token.v) {
+				let {v} = token;
+				td.classList.add('valid');
+				if (v.length != 1 || v[0] != cp) {
+					td.classList.add('diff');
+					td.innerHTML = escape_name_for_html(String.fromCodePoint(...v));
+				}
+			} else if (token.m) {
+				td.classList.add('mapped');
+				td.innerHTML = escape_name_for_html(String.fromCodePoint(...token.m));
+			} else if (token.i) {
+				td.classList.add('ignored');
+			} else {
+				td.classList.add('disallowed');
+			}
+			return td;
+		}));
+		buf.push(tr);
+		if (buf.length == width) {
+			drain();
+		}		
+	}
+	if (buf.length > 0) drain();
+	width = Math.min(width, rows.length);
+	
+	let title = `${name} (${chars.length})`;
+
+	// add section
+	let section = document.createElement('section');
+	section.innerHTML = `<a name="${name}"><h2>${title}</h2><table><thead><tr>${Array(width).fill(cols).join('')}</tr></thead><tbody></tbody></table>`;
+	section.querySelector('tbody').append(...rows);
+	document.body.append(section);
+
+	// add link
+	document.querySelector('ul').innerHTML += `<li><a href="#${name}">${title}</a></li>`;
+}
+
+function mapped_cell(cp, tokenize) {
+	
+}
+
+</script>
+</body>
+</html>
