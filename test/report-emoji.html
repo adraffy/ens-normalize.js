@@ -165,6 +165,7 @@ async function main() {
 	}
 	add_sequences('ZWJ Sequences', zwjs);
 
+	window.location.hash = window.location.hash.toString();
 	
 	document.querySelector('#loading').remove();
 }
@@ -237,7 +238,7 @@ function add_sequences(name, seqs) {
 	// create html
 	let section = document.createElement('section');
 	section.innerHTML = `<a name="${name}"><h2>${title}</h2><table><thead><tr>
-	<th>Form</th><th width="20%">Description</th><th>Sequence</th><th>Parsed</th>${VERSIONS.map(x => `<th>${x.idna}</th>`).join('')}
+	<th>Form</th><th>Description</th><th>Sequence</th><th>Parsed</th>${VERSIONS.map(x => `<th>${x.idna}</th>`).join('')}
 	</tr></thead><tbody></tbody></table>`;
 	section.querySelector('tbody').append(...rows.map(x => x.tr));
 	document.body.append(section);	

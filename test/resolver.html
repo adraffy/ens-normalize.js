@@ -54,22 +54,21 @@ h1 {
 	align-items: center;
 	gap: 3px;
 }
-#input {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-	flex-wrap: wrap;
-	justify-content: flex-end;
-}
-#input label:first-child {
+#input label {
 	display: none;
 }
 #input input {
-	flex-basis: 100%;
+	box-sizing: border-box;
+	width: 100%;
 	padding: 0.5rem;
 	font-size: 16pt;
 }
-#input button {
+#controls {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+#controls button {
 	align-self: stretch;
 	padding: 0.2rem;
 }
@@ -82,6 +81,9 @@ input[type=checkbox]:checked + label {
 	color: #fff;
 	outline: 2px solid #f00;
 	border-radius: 5px;
+}
+#controls .balloon {
+	flex-grow: 1;
 }
 #resolve_btn {
 	font-size: 16pt;
@@ -263,7 +265,7 @@ li + li {
 <b>Goofy:</b>
 <button data-name="[ba967c160905ade030f84952644a963994eeaed3881a6b8a4e9c8cbe452ad7a2].eth" data-skip="1">"💩.eth"</button>
 
-<a href="./report-emoji-zwj.html"><b>Emoji:</b></a>
+<a href="./report-emoji.html#ZWJ%20Sequences"><b>Emoji:</b></a>
 <button>🚀🚀🚀</button>
 <button>💩💩💩</button>
 <button>🚴‍♂️</button>
@@ -279,7 +281,7 @@ li + li {
 <button>👨‍👩‍👦</button>
 <button>👨👩👦</button>
 
-<a href="./report-emoji-picto.html"><b>Picto:</b></a>
+<a href="./report-emoji.html"><b>Picto:</b></a>
 <button>mmm</button>
 <button>ⓂⓂⓂ</button>
 <button>Ⓜ️Ⓜ️Ⓜ️</button>
@@ -344,9 +346,12 @@ Arabic-Indic:
 <div id="input">
 <label for="input_field">Name or Address:</label>
 <input id="input_field" size="20" placeholder="Name or Address (Checksummed)">
+</div>
+<div id="controls">
 <svg id="arrows" class="hide" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
 <path d="M990,377.5H622.5l137.4-137.4C690.4,170.7,598.2,132.5,500,132.5c-98.2,0-190.4,38.2-259.9,107.6C170.7,309.6,132.5,401.8,132.5,500c0,98.2,38.2,190.4,107.6,259.9c69.4,69.4,161.7,107.6,259.9,107.6c98.2,0,190.4-38.2,259.9-107.6c5.8-5.8,11.4-11.8,16.7-17.9l92.2,80.7C778.9,925.2,647,990,500,990C229.4,990,10,770.6,10,500C10,229.4,229.4,10,500,10c135.3,0,257.8,54.9,346.5,143.5L990,10V377.5z"/>
 </svg>
+<span class="balloon"></span>
 <button id="escape_btn">Escape</button>
 <button id="link_btn">Copy Link</button>
 <button id="resolve_btn">Resolve</button>
@@ -651,10 +656,6 @@ function format_dur(t) {
 	return `${t.toFixed(1)}min`;
 }
 
-function set_working(b) {
-	resolve_btn.disabled = b;
-	document.querySelector('#arrows').classList.toggle('hide', !b);
-}
 function is_working() {
 	return resolve_btn.disabled;
 }
@@ -817,6 +818,7 @@ async function resolve0(name0, override_skip_norm) {
 		if (display_name && display_name != input_norm) {
 			let display_exploded = create_exploded(display_name, false);
 			let display_row = create_row(clock(), 'Display', display_exploded);
+			display_row.style.backgroundColor = '#ffc';
 			try {
 				let display_norm = ens_normalize(display_name);
 				if (display_norm == input_norm) {
