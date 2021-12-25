@@ -88,7 +88,7 @@ import {
 } from 'https://adraffy.github.io/eth-tools.js/dist/eth-tools.min.js';
 
 const provider_infura = retry(new FetchProvider({url: 'https://cloudflare-eth.com'})); 
-const provider_window = typeof window.ethereum !== 'undefined' ? retry(ethereum) : null;
+const provider_window = typeof window.ethereum !== 'undefined' ? retry(window.ethereum) : null;
 
 const input_field = document.querySelector('#input_field');
 const output_div = document.querySelector('#output_div');
@@ -124,6 +124,7 @@ function match_display(display, name) {
 
 async function resolve() {
 	dirty = false;
+	clearTimeout(update_timer);
 	output_div.innerHTML = '';
 	try {
 		let name = input_field.value.trim();

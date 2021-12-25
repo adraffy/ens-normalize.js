@@ -335,6 +335,8 @@ Arabic-Indic:
 <button>⁉️⁉️⁉️</button>
 <button>*️⃣</button>
 <button>#️⃣</button>
+<b>Display:</b>
+<button>ADRaffy.eth</button>
 </div>
 <div id="options">
 <span><input type="checkbox" id="auto_check" checked>Resolve on Input</span>
@@ -393,7 +395,7 @@ const readme_rows = [...output_div.childNodes];
 let resolve_timer;
 
 let provider_infura = retry(new FetchProvider({url: 'https://cloudflare-eth.com'})); 
-let provider_window = typeof window.ethereum !== 'undefined' ? retry(ethereum) : null;
+let provider_window = typeof window.ethereum !== 'undefined' ? retry(window.ethereum) : null;
 
 function ens_normalize_input(name) {
 	if (ignore_disallowed_check.checked) {
