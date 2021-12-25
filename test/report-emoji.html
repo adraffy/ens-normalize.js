@@ -268,7 +268,7 @@ function add_characters(name, chars, width = 3) {
 			let [token] = tokenize(String.fromCodePoint(cp));
 			let [emoji] = tokenize(String.fromCodePoint(cp, 0xFE0F));
 			let td = document.createElement('td');
-			if (emoji.e) {
+			if (emoji.e) { 
 				td.classList.add('emoji');
 				if (token.d) {
 					td.classList.add('emoji', 'only');
