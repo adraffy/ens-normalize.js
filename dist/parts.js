@@ -18,7 +18,7 @@ function escape_name_for_html(s, quoter) {
 }
 
 function str(...v) {
-	return escape_name_for_html(String.fromCodePoint(...v), s => `<code>${s}</code>`);
+	return escape_name_for_html(String.fromCodePoint(...v), cp => `<code>${hex_cp(cp)}</code>`);
 }
 function tooltip(cp) {
 	return `Hex: 0x${hex_cp(cp)}\nDec: ${cp}`;
@@ -119,7 +119,7 @@ function use_default_style() {
 	.tokens .ignored {
 		color: #fff;
 		background: #aaa;
-		min-width: 1rem;
+		min-width: 0.3rem;
 	}
 	.tokens .disallowed {
 		background: #f66;	
