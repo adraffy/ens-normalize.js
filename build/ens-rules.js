@@ -21,26 +21,26 @@ export default [
 	{ty: 'styled-emoji', src: '203C'}, // !!
 
 	// Kill the following emoji
-	{ty: 'map', src: '2122', dst: '74 6D'}, // ™ -> tm
-	{ty: 'map', src: '2139', dst: '69'}, // ℹ -> i
-	{ty: 'map', src: '24C2', dst: '6D'}, // Ⓜ -> m
-	{ty: 'map', src: '3297', dst: '795D'}, // ㊗
-	{ty: 'map', src: '3299', dst: '79D8'}, // ㊙
-	{ty: 'map', src: '1F201', dst: '30B3 30B3'}, // 🈁
-	{ty: 'map', src: '1F202', dst: '30B5'}, // 🈂
-	{ty: 'map', src: '1F21A', dst: '7121'}, // 🈚
-	{ty: 'map', src: '1F22F', dst: '6307'}, // 🈯
-	{ty: 'map', src: '1F232', dst: '7981'}, // 🈲
-	{ty: 'map', src: '1F233', dst: '7A7A'}, // 🈳
-	{ty: 'map', src: '1F234', dst: '5408'}, // 🈴
-	{ty: 'map', src: '1F235', dst: '6E80'}, // 🈵
-	{ty: 'map', src: '1F236', dst: '6709'}, // 🈶
-	{ty: 'map', src: '1F237', dst: '6708'}, // 🈷
-	{ty: 'map', src: '1F238', dst: '7533'}, // 🈸
-	{ty: 'map', src: '1F239', dst: '5272'}, // 🈹
-	{ty: 'map', src: '1F23A', dst: '55B6'}, // 🈺
-	{ty: 'map', src: '1F250', dst: '5F97'}, // 🉐
-	{ty: 'map', src: '1F251', dst: '53EF'}, // 🉑
+	{ty: 'demoji', src: '2122', dst: '74 6D'}, // ™ -> tm
+	{ty: 'demoji', src: '2139', dst: '69'}, // ℹ -> i
+	{ty: 'demoji', src: '24C2', dst: '6D'}, // Ⓜ -> m
+	{ty: 'demoji', src: '3297', dst: '795D'}, // ㊗
+	{ty: 'demoji', src: '3299', dst: '79D8'}, // ㊙
+	{ty: 'demoji', src: '1F201', dst: '30B3 30B3'}, // 🈁
+	{ty: 'demoji', src: '1F202', dst: '30B5'}, // 🈂
+	{ty: 'demoji', src: '1F21A', dst: '7121'}, // 🈚
+	{ty: 'demoji', src: '1F22F', dst: '6307'}, // 🈯
+	{ty: 'demoji', src: '1F232', dst: '7981'}, // 🈲
+	{ty: 'demoji', src: '1F233', dst: '7A7A'}, // 🈳
+	{ty: 'demoji', src: '1F234', dst: '5408'}, // 🈴
+	{ty: 'demoji', src: '1F235', dst: '6E80'}, // 🈵
+	{ty: 'demoji', src: '1F236', dst: '6709'}, // 🈶
+	{ty: 'demoji', src: '1F237', dst: '6708'}, // 🈷
+	{ty: 'demoji', src: '1F238', dst: '7533'}, // 🈸
+	{ty: 'demoji', src: '1F239', dst: '5272'}, // 🈹
+	{ty: 'demoji', src: '1F23A', dst: '55B6'}, // 🈺
+	{ty: 'demoji', src: '1F250', dst: '5F97'}, // 🉐
+	{ty: 'demoji', src: '1F251', dst: '53EF'}, // 🉑
 
 	// should we map this to i?
 	{ty: 'valid', src: '1F6C8'}, // 🛈

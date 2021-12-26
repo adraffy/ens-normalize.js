@@ -2,15 +2,13 @@ import {readFileSync, writeFileSync} from 'fs';
 import {join} from 'path';
 import {explode_cp} from './utils.js';
 
-import {ens_normalize} from './lib-normalize.js';
-import {is_disallowed} from './idna.js';
+import {ens_tokenize as tokenize2003} from '../dist/ens-normalize-2003.js';
+import {ens_tokenize as tokenize2008} from '../dist/ens-normalize-2008.js';
+import LABELS from './registered_labels.js';
 
-let base_dir = new URL('.', import.meta.url).pathname;
-
-let labels = readFileSync(join(base_dir, '../test/data/eth-labels-20211127-134810-rx6ulbdm52rz.csv'), {encoding: 'utf8'}).split('\n');
 
 let set = new Set();
-for (let label of labels) {
+for (let label of LABELS) {
 	try {
 		ens_normalize(label);
 	} catch (err) {

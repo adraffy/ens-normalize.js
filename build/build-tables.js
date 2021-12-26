@@ -1,18 +1,16 @@
-import {mkdirSync, readFileSync, writeFileSync} from 'fs';
+import {mkdirSync, writeFileSync} from 'fs';
 import {join} from 'path';
 import {Encoder, is_better_member_compression} from './encoder.js';
-import {parse_cp, parse_cp_range, parse_cp_sequence, 
-	take_from, group_by, map_values, set_union, set_intersect, split_ascending} from './utils.js';
+import {
+	parse_cp, parse_cp_range, parse_cp_sequence, 
+	map_values, take_from, set_union, set_intersect
+} from './utils.js';
+import {read_parsed} from './nodejs-utils.js';
 
-let base_dir = new URL('.', import.meta.url).pathname;
-
-let output_dir = join(base_dir, 'output');
+let output_dir = new URL('./output/', import.meta.url).pathname;
 mkdirSync(output_dir, {recursive: true});
 
-function read_parsed(name) {
-	return JSON.parse(readFileSync(join(base_dir, 'unicode-json', `${name}.json`)));
-}
-
+// this is used by two separate sub-libraries
 const VIRAMA_COMBINING_CLASS = 9;
 
 let [mode, ...argv] = process.argv.slice(2);
@@ -252,7 +250,6 @@ function write_idna_payload(name, idna, emoji) {
 	write_payload(name, enc);
 }
 
-
 /*
 function write_library_payload(name, {emoji, idna, bidi, nf, context, combining_marks}) {
 	let allowed = new Set([...idna.valid, ...idna.mapped.map(([x]) => x)]);
@@ -356,6 +353,9 @@ function update_idna_rules(idna, rules) {
 		remove_emoji_rule(cp);
 		emoji.MODIFIER.add(cp);
 	}
+
+	// save a copy of the OG
+	const actual_emoji = new Set(emoji_OG);
 	
 	// TODO: move any unused emoji to the new emoji set
 
@@ -373,9 +373,11 @@ function update_idna_rules(idna, rules) {
 	function for_each_rule_cp(src, fn) {
 		src.split(/\s+/).flatMap(parse_cp_range).forEach(fn);
 	}
-	function move_to_emoji_set(src, set) {
+	function move_to_emoji_set(src, set, require_emoji = true) {
 		for_each_rule_cp(src, cp => {
-			remove_emoji_rule(cp);
+			if (!remove_emoji_rule(cp) && require_emoji) {
+				throw new Error(`non-emoji: ${cp}`);
+			}
 			set.add(cp);
 		});
 	}
@@ -386,7 +388,7 @@ function update_idna_rules(idna, rules) {
 			let {ty, src, dst} = rule;
 			switch (ty) {
 				case 'tag-spec': {
-					move_to_emoji_set(src, emoji.TAG_SPEC);
+					move_to_emoji_set(src, emoji.TAG_SPEC, false); // note: these are not actually emoji
 					continue;
 				}
 				case 'keycap': {
@@ -421,6 +423,16 @@ function update_idna_rules(idna, rules) {
 					move_to_emoji_set(src, emoji.REQ);
 					continue;
 				}
+				case 'demoji': {
+					// remove an emoji
+					// go thru text processing instead
+					src = parse_cp(src);
+					dst = parse_cp_sequence(dst);
+					if (!remove_emoji_rule(src)) throw new Error(`expected emoji: ${src}`)
+					remove_idna_rule(src);
+					mapped.push([src, dst]);
+					break;
+				}
 				case 'ignore': {
 					for_each_rule_cp(src, cp => {
 						remove_idna_rule(cp);
@@ -445,7 +457,6 @@ function update_idna_rules(idna, rules) {
 					if (dst.includes(' ')) { // MAP x TO ys...
 						src = parse_cp(src);
 						dst = parse_cp_sequence(dst);
-						remove_emoji_rule(src);
 						remove_idna_rule(src);
 						mapped.push([src, dst]);
 					} else { // map [x,x+1,...] to [y,y+1,...]
@@ -455,7 +466,6 @@ function update_idna_rules(idna, rules) {
 						if (src.length != dst.length) throw new Error(`length`);
 						for (let i = 0; i < src.length; i++) {
 							let cp = src[i];
-							remove_emoji_rule(cp);
 							remove_idna_rule(cp);
 							mapped.push([cp, [dst[i]]]);
 						}
@@ -493,7 +503,12 @@ function update_idna_rules(idna, rules) {
 		}
 	}
 
+	// emoji styling should be ignored
+	if (!ignored.has(0xFE0E)) throw new Error('Assumption wrong: FE0E not ignored');
 	if (!ignored.has(0xFE0F)) throw new Error('Assumption wrong: FE0F not ignored');
+
+	// joiners should be valid if using context rules
+	// note: this doesn't impact emoji zwj processing
 	if (!valid.has(0x200C)) throw new Error('Assumption wrong: ZWNJ not valid');
 	if (!valid.has(0x200D)) throw new Error('Assumption wrong: ZWJ not valid');
 

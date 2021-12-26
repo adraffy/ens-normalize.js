@@ -1,4 +1,4 @@
-import {escape_unicode, explode_cp} from '../build/utils.js';
+import {escape_unicode} from '../build/utils.js';
 
 export const KNOWN = [
 	// pass
@@ -53,7 +53,7 @@ export const KNOWN = [
 export function test_known(ens_normalize) {
 	let errors = [];
 	for (let {name, norm, error} of KNOWN) {
-		let input = escape_unicode(name);
+		let input = escape_unicode(name); // shitty terminal support
 		if (!error && !norm) norm = name; // expect no change
 		try {
 			let result = ens_normalize(name);

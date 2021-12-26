@@ -6,6 +6,10 @@ export function random_bytes(n) {
 	return v;
 }
 
+export function random_choice(v) {
+	return v[Math.random() * v.length|0];
+}
+
 export function set_intersect(...sets) {
 	let n = sets.length;
 	if (n == 0) throw new TypeError('no sets');
@@ -53,12 +57,15 @@ export function quote_cp(cp) {
 	return `{${hex_cp(cp)}}`;
 }
 
+export function is_printable_ascii(s) {	
+	return /^[\x21-\x25\x27-\x3B\x3D\x3F-\x7E]$/gu.test(s);
+}
+
 export function escape_unicode(s) {
 	// printable w/o:
 	// 0x22 " (double-quote)
 	// 0x7F DEL
 	return s.replace(/[^\x20-\x21\x23-\x7E]/gu, x => quote_cp(x.codePointAt(0)));
-	//return s.replace(/[^\.\-a-z0-9]/igu, x => quote_cp(x.codePointAt(0)));
 }
 
 export function escape_name_for_html(s, quoter) {

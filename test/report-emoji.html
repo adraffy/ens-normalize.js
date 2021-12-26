@@ -7,16 +7,28 @@
 body {
 	margin: 1rem;
 }
+#arrows {
+	width: 1.5rem;
+	height: 1.5rem;
+	animation: spin 2s infinite linear;
+	user-select: none;
+}
+@keyframes spin {
+	from { transform:rotate(0deg); }
+	to	 { transform:rotate(360deg); }
+}
 #loading {
-	display: inline-block;
-	margin-top: 1rem;
+	display: inline-flex;
 	background: #ffc;
 	border-radius: 1rem;
 	padding: 1rem 2rem;
 	font-size: 24pt;
 	border: 1px solid #ccc;
+	gap: 1rem;
+	align-items: center;
+	margin-top: 1rem;
 }
-table {
+section table {
 	border-collapse: collapse;
 	width: 100%;
 }
@@ -50,14 +62,11 @@ td.form {
 td.src {
 	font-family: monospace;
 }
+td.verbatim {
+	background: #ffc;
+}
 td.valid {
 	background: #cfc;
-}
-td.valid.diff {
-	background: #0f0;
-}
-td.ignored {
-	background: #ddd;
 }
 td.error {
 	background: #fcc;
@@ -65,7 +74,7 @@ td.error {
 td.disallowed {
 	background: #f66;
 }
-td.mapped {
+td.different {
 	background: #fc9;
 }
 td.emoji {
@@ -77,18 +86,49 @@ td.emoji.only {
 .tokens {
 	justify-content: center;
 }
+.legend {
+	display: flex;
+	align-items: center;
+}
+.legend table {
+	display: inline-table;
+	border-collapse: collapse;
+}
+.legend td {
+	padding: 2px;
+}
 </style>
 </head>
 <body>
 <h1>Emoji</h1>
-<div id="loading">Computing...</div>
-<ul></ul>
+<div class="legend">
+Pictograph and Single Character Emoji have no preferred appearance: 
+<table><tr>
+<td class="valid">Valid</td>
+<td class="verbatim">Verbatim</td>
+<td class="different">Different</td>
+<td class="disallowed">Disallowed</td>
+</tr></table></div>
+<div class="legend">
+Sequences have a known appearance: 
+<table class="legend"><tr>
+<td class="verbatim">Verbatim</td>
+<td class="different">Different</td>
+<td class="disallowed">Disallowed</td>
+</tr></table>
+</div>
+<div id="loading">
+	<svg id="arrows" class="hide" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+	<path d="M990,377.5H622.5l137.4-137.4C690.4,170.7,598.2,132.5,500,132.5c-98.2,0-190.4,38.2-259.9,107.6C170.7,309.6,132.5,401.8,132.5,500c0,98.2,38.2,190.4,107.6,259.9c69.4,69.4,161.7,107.6,259.9,107.6c98.2,0,190.4-38.2,259.9-107.6c5.8-5.8,11.4-11.8,16.7-17.9l92.2,80.7C778.9,925.2,647,990,500,990C229.4,990,10,770.6,10,500C10,229.4,229.4,10,500,10c135.3,0,257.8,54.9,346.5,143.5L990,10V377.5z"/>
+	</svg>
+	<span>Downloading...</span></div>	
+<ul id="toc"></ul>
 <script type="module">
 import {escape_name_for_html, parse_cp_range, parse_cp_sequence, hex_cp, map_values, compare_arrays} from '../build/utils.js';
-import {ens_tokenize} from '../dist/ens-normalize.min.js';
-import {ens_tokenize as tokenize2003} from '../dist/ens-normalize-2003.min.js';
-import {ens_tokenize as tokenize2008} from '../dist/ens-normalize-2008.min.js';
-import {ens_tokenize as tokenizeENS0} from '../dist/ens-normalize-ENS0.min.js';
+import {ens_normalize, ens_tokenize} from '../dist/ens-normalize.min.js';
+import {ens_normalize as norm2003, ens_tokenize as tokenize2003} from '../dist/ens-normalize-2003.min.js';
+import {ens_normalize as norm2008, ens_tokenize as tokenize2008} from '../dist/ens-normalize-2008.min.js';
+import {ens_normalize as normENS0, ens_tokenize as tokenizeENS0} from '../dist/ens-normalize-ENS0.min.js';
 import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
 
 use_default_style();
@@ -96,10 +136,10 @@ use_default_style();
 const PRIMARY = 'adraffy';
 
 const VERSIONS = [
-	{idna: PRIMARY, tokenize: ens_tokenize},
-	{idna: 'ENS0', tokenize: tokenizeENS0},
-	{idna: '2003', tokenize: tokenize2003},
-	{idna: '2008', tokenize: tokenize2008},
+	{idna: PRIMARY},
+	{idna: 'ENS0',  tokenize: tokenizeENS0, normalize: normENS0},
+	{idna: '2003',  tokenize: tokenize2003, normalize: norm2003},
+	{idna: '2008',  tokenize: tokenize2008, normalize: norm2008},
 ];
 
 try {
@@ -117,12 +157,28 @@ async function fetch_json(url) {
 	return res.json();
 }
 
+async function update_state(state) {
+	document.querySelector('#loading span').innerHTML = state;
+	return new Promise(ful => {
+		requestAnimationFrame(() => {
+			requestAnimationFrame(ful);
+		});
+	});
+}
+
+function add_index_link(name, suffix) {
+	document.querySelector('#toc').innerHTML += `<li><a href="#${name}">${name}</a>${suffix}</li>`;
+}
+
 async function main() {
-	let [data, seqs, zwjs] = await Promise.all([
+	let [data, seqs, zwjs, invalid] = await Promise.all([
 		'../build/unicode-json/emoji-data.json',
 		'../build/unicode-json/emoji-sequences.json',
-		'../build/unicode-json/emoji-zwj-sequences.json'
+		'../build/unicode-json/emoji-zwj-sequences.json',
+		'./data/invalid-sequences.json'
 	].map(fetch_json));
+
+	await update_state('Computing');
 
 	let {Emoji: emoji, Extended_Pictographic: picto} = data;
 
@@ -150,21 +206,23 @@ async function main() {
 	}));
 
 	zwjs = zwjs.map(({src, desc}) => ({cps: parse_cp_sequence(src), desc}));
+	invalid = invalid.map(({src, desc}) => ({cps: parse_cp_sequence(src), desc}));
 
 	basic = [...basic].sort((a, b) => a - b);
 	emoji = [...emoji].sort((a, b) => a - b);
 
-	add_characters('Non-Emoji Pictographs', picto);
-	add_characters('Single Character Emoji', basic);
-	add_characters('Unknown Emoji', emoji);
+
+	await add_characters('Non-Emoji Pictographs', picto);
+	await add_characters('Single Character Emoji', basic);
+	await add_characters('Unknown Emoji', emoji);
 
 	for (let [name, v] of Object.entries(seqs)) {
-		if (v.length > 0) {
-			add_sequences(name, v);
-		}
+		await add_sequences(name, v);
 	}
-	add_sequences('ZWJ Sequences', zwjs);
-
+	await add_sequences('ZWJ Sequences', zwjs);
+	await add_sequences('Invalid Sequences', invalid);
+	
+	// jump to anchor
 	window.location.hash = window.location.hash.toString();
 	
 	document.querySelector('#loading').remove();
@@ -174,81 +232,87 @@ function str_from_tokens(tokens) {
 	return String.fromCodePoint(...tokens.flatMap(({v,m,e}) => v ?? m ?? e ?? []));
 }
 
-function add_sequences(name, seqs) {
+async function add_sequences(name, seqs) {
+	if (seqs.length == 0) return;
+	await update_state(`${name} (${seqs.length})`);
 
-	const ERROR = 'error';
-	let types = [ERROR, 'mapped', 'valid'];
+	let types = ['error', 'disallowed', 'different', 'verbatim'];
 	
 	let rows = seqs.map(({cps, desc}) => {
 		let emoji = String.fromCodePoint(...cps);
 
+		let type;
+		let td0 = document.createElement('td');
+		let norm0;
+		try {
+		 	norm0 = ens_normalize(emoji);
+			let tokens = ens_tokenize(emoji);
+			if (norm0 === emoji) {
+				type = 'verbatim';
+			} else {
+				type = 'different';
+				td0.append(dom_from_tokens(tokens, true));
+			}
+		} catch (err) {
+			type = 'error';
+			td0.innerHTML = err.message;
+		}
+		td0.classList.add(type);
+
+		let tr = document.createElement('tr');
+		tr.innerHTML = `<td class="desc">${desc}</td><td class="src">${cps.map(hex_cp).join(' ')}</td><td class="form">${emoji}</td>`;
+
 		let td_src = document.createElement('td');
 		td_src.classList.add('parsed');
 		td_src.append(dom_from_tokens(ens_tokenize(emoji)));
-		
-		let type;
-		let td_dst = document.createElement('td');
-		let tokens = ens_tokenize(emoji);
-		if (tokens.length == 1 && tokens[0].e) {
-			let [{e, u}] = tokens;
-			if (compare_arrays(e, u) == 0) {
-				type = 'valid';
-				td_dst.innerHTML = String.fromCodePoint(...e);
-			} else {
-				type = 'mapped';
-				td_dst.append(dom_from_tokens(tokens, true));
-			}
-		} else {
-			type = ERROR;
-			td_dst.append(dom_from_tokens(tokens, true));
-		}
-		td_dst.classList.add(type);
-
-		let tr = document.createElement('tr');
-		tr.innerHTML = `<td class="form">${emoji}</td><td class="desc">${desc}</td><td class="src">${cps.map(hex_cp).join(' ')}</td>`;
 		tr.append(td_src);
 
-		let ref0 = str_from_tokens(tokens);
-		for (let {idna, tokenize} of VERSIONS) {
-			if (idna == PRIMARY) {
-				tr.append(td_dst);
-			 } else {
-				let td = document.createElement('td');
-				let ref = str_from_tokens(tokenize(emoji));
-				if (ref === ref0) {
+		tr.append(...VERSIONS.map(({idna, tokenize, normalize}) => {
+			if (idna == PRIMARY) return td0;				
+			let td = document.createElement('td');
+			try {
+				let norm = normalize(emoji);
+				if (norm === norm0) { // same as primary
 					td.classList.add(type);
-				} else if (ref === emoji) {
-					td.classList.add('valid');
-				} else {					
-					td.classList.add('disallowed');
-					//td.innerHTML = [...ref].map(x => x.codePointAt(0));
+				} else if (norm === emoji) { 
+					td.classList.add('verbatim');
+				} else {
+					td.classList.add('different');
+					td.append(dom_from_tokens(tokenize(emoji), false));
 				}
-				tr.append(td);
+			} catch (err) {
+				td.classList.add('disallowed');
 			}
-		}
+			return td;
+		}));
+
 		return {type, tr};
 	});
 
 	// sort by type
 	rows.sort((a, b) => types.indexOf(a.type) - types.indexOf(b.type));
 
-	let errors = rows.filter(x => x.type == ERROR).length;
-	let title = `${name} (${seqs.length}, ${errors} errors)`;
+	let errors = rows.filter(x => x.type == 'error').length;
+	let suffix = ` (${seqs.length})`;
+	if (errors > 0) {
+		suffix += ` &rarr; <b>${errors} errors</b>`;
+	}
 
 	// create html
 	let section = document.createElement('section');
-	section.innerHTML = `<a name="${name}"><h2>${title}</h2><table><thead><tr>
-	<th>Form</th><th>Description</th><th>Sequence</th><th>Parsed</th>${VERSIONS.map(x => `<th>${x.idna}</th>`).join('')}
+	section.innerHTML = `<h2><a name="${name}" href="#${name}">${name}</a>${suffix}</h2><table><thead><tr>
+	<th>Description</th><th>Sequence</th><th>Form</th><th>Parsed</th>${VERSIONS.map(x => `<th>${x.idna}</th>`).join('')}
 	</tr></thead><tbody></tbody></table>`;
 	section.querySelector('tbody').append(...rows.map(x => x.tr));
 	document.body.append(section);	
 
-	// add link
-	document.querySelector('ul').innerHTML += `<li><a href="#${name}">${title}</a></li>`;
+	add_index_link(name, suffix);
 }
 
-function add_characters(name, chars, width = 3) {
-	
+
+async function add_characters(name, chars, width = 3) {
+	await update_state(`${name} (${chars.length})`);
+
 	//<th>Dec</th>
 	let cols = `<th>Form</th><th>Hex</th>${VERSIONS.map(x => `<th>${x.idna}</th>`).join('')}`;
 	let rows = [];
@@ -265,29 +329,49 @@ function add_characters(name, chars, width = 3) {
 		//<td class="dec">${cp}</td>
 		tr.innerHTML = `<td class="form">${escape_name_for_html(String.fromCodePoint(cp))}</td>
 		<td><a href="https://www.compart.com/en/unicode/U+${hex}">${hex}</td>`;
-		tr.append(...VERSIONS.map(({tokenize}) => {
-			let [token] = tokenize(String.fromCodePoint(cp));
-			let [emoji] = tokenize(String.fromCodePoint(cp, 0xFE0F));
-			let td = document.createElement('td');
-			if (emoji.e) { 
-				td.classList.add('emoji');
-				if (token.d) {
-					td.classList.add('emoji', 'only');
-					td.innerHTML = String.fromCodePoint(...emoji.e);
-				}
-			} else if (token.v) {
-				let {v} = token;
-				td.classList.add('valid');
-				if (v.length != 1 || v[0] != cp) {
-					td.classList.add('diff');
-					td.innerHTML = escape_name_for_html(String.fromCodePoint(...v));
-				}
-			} else if (token.m) {
-				td.classList.add('mapped');
-				td.innerHTML = escape_name_for_html(String.fromCodePoint(...token.m));
-			} else if (token.i) {
-				td.classList.add('ignored');
+
+		let td0 = document.createElement('td');
+		let norm0;
+		let type;
+		try {
+			let solo = String.fromCodePoint(cp);
+			let styled = String.fromCodePoint(cp, 0xFE0F);
+			norm0 = ens_normalize(styled);
+			if (norm0 === solo) {
+				type = 'valid';
 			} else {
+				td0.append(dom_from_tokens(ens_tokenize(solo), true));
+				if (norm0 === styled) {
+					type = 'verbatim';
+				} else {
+					type = 'different';
+				}
+			}
+		} catch (err) {
+			type = 'disallowed';
+		}
+		td0.classList.add(type);
+
+		tr.append(...VERSIONS.map(({idna, tokenize, normalize}) => {
+			if (idna == PRIMARY) return td0;	
+			let td = document.createElement('td');
+			try {
+				let solo = String.fromCodePoint(cp);
+				let styled = String.fromCodePoint(cp, 0xFE0F);
+				let norm = normalize(styled);
+				if (norm == norm0) { // same as primary
+					td.classList.add(type);
+				} else if (norm === solo) {
+					td.classList.add('valid');
+				} else {
+					td.append(dom_from_tokens(tokenize(solo)));
+					if (norm === styled) {
+						td.classList.add('verbatim');
+					} else {
+						td.classList.add('different');
+					}
+				}
+			} catch (err) {
 				td.classList.add('disallowed');
 			}
 			return td;
@@ -300,22 +384,16 @@ function add_characters(name, chars, width = 3) {
 	if (buf.length > 0) drain();
 	width = Math.min(width, rows.length);
 	
-	let title = `${name} (${chars.length})`;
+	let suffix = ` (${chars.length})`;
 
 	// add section
 	let section = document.createElement('section');
-	section.innerHTML = `<a name="${name}"><h2>${title}</h2><table><thead><tr>${Array(width).fill(cols).join('')}</tr></thead><tbody></tbody></table>`;
+	section.innerHTML = `<h2><a name="${name}" href="#${name}">${name}</a>${suffix}</h2><table><thead><tr>${Array(width).fill(cols).join('')}</tr></thead><tbody></tbody></table>`;
 	section.querySelector('tbody').append(...rows);
 	document.body.append(section);
 
-	// add link
-	document.querySelector('ul').innerHTML += `<li><a href="#${name}">${title}</a></li>`;
+	add_index_link(name, suffix);
 }
-
-function mapped_cell(cp, tokenize) {
-	
-}
-
 </script>
 </body>
 </html>

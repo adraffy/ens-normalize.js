@@ -3,11 +3,12 @@ import {explode_cp, escape_unicode} from './utils.js';
 import {puny_decode} from './puny.js';
 import {tokenized_idna} from './idna.js';
 import emoji_parser_factory from './emoji.js';
-import {validate_context} from './context.js';
 // the following is replaced by nf0.js when using "-xnfc"
 import {nfc} from './nf.js'; 
 // the following is deleted when using "-xbidi"
 /*BIDI*/import {is_bidi_label, validate_bidi_label} from './bidi.js';/*~BIDI*/
+// the following is deleted when using "-context"
+/*CONTEXT*/import {validate_context} from './context.js';/*~CONTEXT*/
 // the following is replaced by different idna versions
 import PAYLOAD from './output/idna-adraffy.js';
 let r = decode_payload(PAYLOAD);
@@ -118,11 +119,13 @@ export function ens_normalize(name) {
 			// => satisfied by tokenized_idna()
 			// [Validity] 7.) If CheckJoiners, the label must satisify the ContextJ rules
 			// this also does ContextO
+			/*CONTEXT*/
 			try {
 				validate_context(text);
 			} catch (err) {
 				throw label_error(cps, err.message);
 			}
+			/*~CONTEXT*/
 			// [Validity] 8.) see below
 		}
 		return {tokens, cps, text};

@@ -1,19 +1,15 @@
-import {mkdirSync, readFileSync, writeFileSync} from 'fs';
+import {mkdirSync, writeFileSync} from 'fs';
 import {join} from 'path';
 import {escape_unicode, escape_name_for_html, parse_cp} from '../build/utils.js';
+import LABELS from './registered_labels.js';
 
 // adraffy
 import {ens_normalize} from '../index.js';
 // ens
 import lib from 'eth-ens-namehash';
 
-let base_dir = new URL('.', import.meta.url).pathname;
-let output_dir = join(base_dir, 'output');
-
+let output_dir = new URL('./output/', import.meta.url).pathname;
 mkdirSync(output_dir, {recursive: true});
-
-let labels = readFileSync(join(base_dir, 'data/eth-labels-20211127-134810-rx6ulbdm52rz.csv'), {encoding: 'utf8'}).split('\n');
-console.log(`Labels: ${labels.length}`);
 
 async function explode(s) {
 	//return {label: s, points: [...s].map(x => x.codePointAt(0)).join(' '), owner: await get_owner(`${s}.eth`)};
@@ -21,7 +17,7 @@ async function explode(s) {
 }
 
 let buckets = {};
-for (let label of labels) {
+for (let label of LABELS) {
 	let ens, ens_err;
 	try {
 		ens = lib.normalize(label);
@@ -30,7 +26,7 @@ for (let label of labels) {
 	}
 	let adraffy, adraffy_err;
 	try {
-		adraffy = ens_normalize(label);     
+		adraffy = ens_normalize(label);
 	} catch (err) {
 		adraffy_err = err.message;
 	}
@@ -77,7 +73,7 @@ tbody tr:nth-child(odd) { background: #eee; }
 
 html += `<table id="overall"><thead><tr><th>Type</th><th>#</th><th>%</th></tr></thead><tbody>`
 for (let [type, bucket] of buckets) {
-	html += `<tr><td><a href="#${type}">${type}</a></td><td>${bucket.length}</td><td>${(100 * bucket.length / labels.length).toFixed(3)}%</td></tr>`;
+	html += `<tr><td><a href="#${type}">${type}</a></td><td>${bucket.length}</td><td>${(100 * bucket.length / LABELS.length).toFixed(3)}%</td></tr>`;
 }
 html += '</tbody></table>';
 
@@ -91,12 +87,16 @@ function adraffy_error(s) {
 	return s.replaceAll(/{([0-9A-F]+)}/g, (_, x) => escape_name_for_html(String.fromCodePoint(parse_cp(x))));
 }
 
+function escape_unicode_for_html(s) {
+	return escape_name_for_html(escape_unicode(s));
+}
+
 for (let [type, bucket] of buckets) {
 	let temp = `<a name="${type}"><h2>${type} (${bucket.length})</h2></a><table id="${type}"><thead><tr>
 	<th colspan="2">Unicode</th><th>ens</th><th>adraffy</th>
 	</tr></thead><tbody>`;
-	let ens_fmtr = escape_unicode;
-	let adraffy_fmtr = escape_unicode;
+	let ens_fmtr = escape_unicode_for_html;
+	let adraffy_fmtr = escape_unicode_for_html;
 	switch (type) {
 		case 'ens-error': 
 			ens_fmtr = ens_error;
@@ -109,7 +109,7 @@ for (let [type, bucket] of buckets) {
 			ens_fmtr = ens_error;
 			break;
 	}
-	temp += bucket.map(({label, ens, adraffy}) => `<tr><td>${escape_name_for_html(label)}</td><td>${escape_unicode(label)}</td><td>${ens_fmtr(ens)}</td><td>${adraffy_fmtr(adraffy)}</td></tr>`).join('');
+	temp += bucket.map(({label, ens, adraffy}) => `<tr><td>${escape_name_for_html(label)}</td><td>${escape_unicode_for_html(label)}</td><td>${ens_fmtr(ens)}</td><td>${adraffy_fmtr(adraffy)}</td></tr>`).join('');
 	temp += '</tbody></table>';
 	html += temp;
 }

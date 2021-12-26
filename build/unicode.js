@@ -45,6 +45,9 @@ let urls = [
 	url_for_emoji('emoji-test.txt'),
 	url_for_spec('ucd/emoji/emoji-variation-sequences.txt'),
 	url_for_spec('ucd/emoji/emoji-data.txt')
+
+	// note: this isn't versioned by url
+	// https://www.unicode.org/Public/UNIDATA/NamesList.txt
 ];
 
 let base_dir = new URL('.', import.meta.url).pathname;

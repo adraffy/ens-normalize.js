@@ -13,7 +13,7 @@ let {version: package_version} = JSON.parse(readFileSync(join(base_dir, '../pack
 
 let BUILD_TIME = new Date().toJSON();
 
-function generate_lib({idna, nfc = true, bidi = true, version = false, debug = false}) {
+function generate_lib({idna, nfc = true, bidi = true, context = true, version = false, debug = false}) {
 	let code = readFileSync(join(base_dir, 'lib-normalize.js'), {encoding: 'utf8'});
 	// change version of idna (from default)
 	// this should match lib-normalize.js import statement
@@ -25,6 +25,10 @@ function generate_lib({idna, nfc = true, bidi = true, version = false, debug = f
 	if (!bidi) {
 		// remove bidi blocks
 		code = code.replaceAll(/\/\*BIDI\*\/(.*?)\/\*~BIDI\*\//smg, '');
+	}
+	if (!context) {
+		// remove context blocks
+		code = code.replaceAll(/\/\*CONTEXT\*\/(.*?)\/\*~CONTEXT\*\//smg, '');
 	}
 	if (version) {
 		// include version variables
@@ -55,9 +59,9 @@ await build(generate_lib({idna, bidi: false, nfc: false}), 'ens-normalize-xnfc-x
 await build(generate_lib({idna, debug: true, version: true}), 'ens-normalize-debug');
 
 // build alt versions
-for (let x of ['2003', '2008', 'ENS0']) {
-	await build(generate_lib({idna: x}), `ens-normalize-${x}`);
-}
+await build(generate_lib({idna: '2003', version: true}), `ens-normalize-2003`);
+await build(generate_lib({idna: '2008', version: true}), `ens-normalize-2008`);
+await build(generate_lib({idna: 'ENS0', version: true, context: false}), `ens-normalize-ENS0`);
 
 // build sub-libraries
 await build(join(base_dir, 'lib-nf.js'), 'nf');

@@ -18,8 +18,17 @@ function escape_name_for_html(s, quoter) {
 }
 
 function str(...v) {
-	return escape_name_for_html(String.fromCodePoint(...v), cp => `<code>${hex_cp(cp)}</code>`);
+	return escape_name_for_html(String.fromCodePoint(...v), cp => {
+		if (cp == 0x200C) {
+			return '<span class="mod zwj">ZWNJ</span>';
+		} else if (cp == 0x200D) {
+			return '<span class="mod zwj">ZWJ</span>';
+		} else {
+			return `<code>${hex_cp(cp)}</code>`;
+		}
+	});
 }
+
 function tooltip(cp) {
 	return `Hex: 0x${hex_cp(cp)}\nDec: ${cp}`;
 }
@@ -27,7 +36,7 @@ function tooltip(cp) {
 function dom_from_tokens(tokens, is_norm = false) {
 	let div = document.createElement('div');
 	div.classList.add('tokens');
-	div.append(...tokens.map(({v, m, i, d, e, u}) => {
+	div.append(...tokens.flatMap(({v, m, i, d, e, u}) => {
 		let el;
 		if (e) {
 			let cps = is_norm ? e : u;
@@ -37,23 +46,24 @@ function dom_from_tokens(tokens, is_norm = false) {
 			for (let cp of cps) {
 				let span = document.createElement('span');
 				span.classList.add('mod');
-				if (cp == 0x200C) {
-					span.innerHTML = 'ZWNJ';
-				} else if (cp == 0x200D) {
+				if (cp == 0x200D) {
 					span.classList.add('zwj');
 					span.innerHTML = 'ZWJ';
 				} else if (cp == 0xFE0F) {
-					span.classList.add('style');
+					span.classList.add('dropped', 'style');
 					span.innerHTML = 'FE0F';
 				} else if (cp == 0x20E3) {
 					span.classList.add('keycap');
 					span.innerHTML = 'Keycap';
+				} else if (!e.includes(cp)) {
+					span = document.createElement('code');
+					span.classList.add('dropped'); 
+					span.innerHTML = hex_cp(cp);
 				} else {
 					span.classList.remove('mod');
 					span.classList.add('emoji');
 					span.innerHTML = String.fromCodePoint(cp);
 				}
-				if (!e.includes(cp)) span.classList.add('ignored'); // meh
 				el.append(span);
 			}
 		} else {
@@ -70,11 +80,11 @@ function dom_from_tokens(tokens, is_norm = false) {
 					el.append(span);
 				}
 			} else if (i) {
-				if (!is_norm) {
-					el.classList.add('ignored');
-					el.innerHTML = `<code>${hex_cp(i)}</code>`;
-					el.title = tooltip(i);
-				}
+				if (is_norm) return []; // hide
+				el = document.createElement('code');
+				el.innerHTML = hex_cp(i); 
+				el.title = tooltip(i);
+				el.classList.add('ignored');		
 			} else if (d !== undefined) {			
 				el.classList.add('disallowed');
 				el.innerHTML = str(d);
@@ -93,10 +103,8 @@ function use_default_style() {
 	let style = document.createElement('style');
 	style.innerText = `
 	.tokens {
-		font-size: 16pt;
 		display: flex;
 		flex-wrap: wrap;
-		align-items: stretch;
 		gap: 2px;
 	}
 	.tokens > * {
@@ -119,7 +127,7 @@ function use_default_style() {
 	.tokens .ignored {
 		color: #fff;
 		background: #aaa;
-		min-width: 0.3rem;
+		min-width: 5px;
 	}
 	.tokens .disallowed {
 		background: #f66;	
@@ -144,7 +152,7 @@ function use_default_style() {
 		background: #cff;
 	}
 	.tokens .mod {
-		font-size: 10pt;
+		font-size: 70%;
 		padding: 2px;
 		background: #333;
 		color: #fff;
@@ -153,13 +161,17 @@ function use_default_style() {
 	.tokens .mod.zwj {
 		background: #0aa;
 	}
-	.tokens .mod.ignored {	
+	.tokens .mod.dropped {
 		background: #aaa;
+		min-width: 5px;
 	}
 	.tokens code {
-		font-size: 14pt;
+		font-size: 90%;
+		padding: 2px;
+		border-radius: 5px;
 		color: #fff;
-		background: rgba(0, 0, 0, .5);
+		background: rgba(0, 0, 0, .3);
+		align-self: center;
 	}`;
 	document.body.append(style);
 }

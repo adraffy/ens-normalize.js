@@ -6,7 +6,7 @@
 <title>ENS Resolver</title>
 <style>
 .hide {
-	display: none;
+	display: none !important;
 }
 a, button {
 	cursor: pointer;
@@ -18,25 +18,30 @@ body {
 	flex-direction: column;
 	gap: 0.7rem;
 }
-#version {
-	margin-left: 1rem;
-	float: right;
-	text-align: right;
+header {
+	display: flex;
+	justify-content: space-between;
 }
 h1 {
 	display: flex;
-	align-items: center;
-	font-size: 24pt;
+	flex-wrap: wrap;
+	flex-basis: 50%;
+	align-items: baseline;
 	margin: 0;
 	gap: 0.5rem;
+}
+h1 a {
+	font-size: 24pt;
 	white-space: pre;
 }
 #provider {
-	align-self: flex-end;
-	white-space: pre;
 	font-size: 12pt;
 	font-weight: normal;
 	color: #666;
+}
+#version {
+	text-align: right;
+	box-sizing: border-box;
 }
 #arrows {
 	width: 1.5rem;
@@ -76,7 +81,7 @@ input[type=checkbox], label {
 	user-select: none;
 	cursor: pointer;
 }
-input[type=checkbox]:checked + label {
+input[type=checkbox]:checked + label.nonstd {
 	background: #f00;
 	color: #fff;
 	outline: 2px solid #f00;
@@ -96,6 +101,9 @@ button.main {
 	font-weight: bold;
 }
 #output {
+	display: flex;
+	flex-direction: column;
+	gap: 0.7rem;
 	font-size: 14pt;
 }
 .elapsed {
@@ -119,9 +127,6 @@ button.main {
 	display: flex;
 	align-items: center;
 	gap: 0.5rem;
-}
-.row + .row {
-	margin-top: 0.7rem;
 }
 ul.row {
 	margin: 0;
@@ -209,6 +214,9 @@ li + li {
 	grid-column: 1 / -1;
 	text-align: center;
 } 
+.tokens {
+	font-size: 16pt;
+}
 .error {
 	background: #fcc;
 	border: 3px dashed #f00;
@@ -226,13 +234,17 @@ li + li {
 	#input, #controls, #options, .examples {
 		margin: 0 1rem;
 	}
+	.error {
+		border-left: 0;
+		border-right: 0;
+	}
 }
 </style>
 </head>
 <body>
 <header>
-<span id="version"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a></span>
 <h1><a href="https://ens.domains/">ENS Resolver</a><span id="provider"></span></h1>
+<span id="version"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a></span>
 </header>
 <div class="examples">
 <button>vitalik.eth</button>
@@ -243,10 +255,25 @@ li + li {
 <button>öbb.at</button>
 <button>Öbb.at</button>
 <button>◌̈bb.at</button>
-<button>xn--bb-eka.at</button>
+
+<b>Puny:</b>
+<button>xn--ls8h</button>
+<button>xn--bb-eka</button>
+
+<b>Subdomain:</b>
+<button data-name="nowzad.loopring.eth">loopring</button>
+
+<b>Display:</b>
+<button>ADRaffy</button>
+
+<b>Address:</b>
+<button data-name="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045">0xd8..6045</button>
 
 <b>Mapped:</b> 
 <button>Ⅷ</button>
+
+<b>Ignored:</b> 
+<button data-name="{FE0E}{FE0F}">Emoji Style</button>
 
 <b>Deviation:</b> 
 <button>ß</button>
@@ -276,7 +303,7 @@ li + li {
 <button>🧟♂</button>
 <button>😵‍💫😵‍💫😵‍💫</button>
 <button>😵💫😵💫😵💫</button>
-<button>👩🏽‍⚕</button>
+<button>👩🏽‍⚕️</button>
 <button>👨‍👩‍👦</button>
 <button>👨👩👦</button>
 
@@ -291,9 +318,8 @@ li + li {
 
 <a href="https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.1"><b>ContextJ:</b></a>
 ZWNJ:
-<button data-name="a{94D}{200C}">✅ Rule 1</button>
-<button data-name="{A872}{200C}{622}">✅ 2A</button>
-<button data-name="a{A872}{AC8}{200C}{300}{300}{622}">✅ 2B</button>
+<button data-name="a{94D}{200C}">✅ #1</button>
+<button data-name="{843}{8ED}{200C}{7F2}{713}">✅ #2</button>
 <button data-name="a{200C}b">❌</button>
 <button data-name="🧞{200C}{200C}">"🧞.eth"</button>
 • 
@@ -327,22 +353,20 @@ Arabic-Indic:
 <button>פעילותהבינאום</button>
 <button data-name="{0786}{07AE}{0782}{07B0}{0795}{07A9}{0793}{07A6}{0783}{07AA}">Dhivehi</button>
 <button data-name="{05D9}{05B4}{05D5}{05D0}{05B8}">Yiddish</button>
-<button data-name="bahrainمصر">Mixed LTR+RTL in Label</button>
+<button data-name="bahrainمصر">❌ Mixed LTR+RTL in Label</button>
 <button data-name="bahrain.مصر">Separate LTR and RTL Labels</button>
 <b>Revived:</b>
 <button>‼️‼️‼️</button>
 <button>⁉️⁉️⁉️</button>
 <button>*️⃣</button>
 <button>#️⃣</button>
-<b>Display:</b>
-<button>ADRaffy.eth</button>
 </div>
 <div id="options">
-<span><input type="checkbox" id="auto_check" checked>Resolve on Input</span>
+<label><input type="checkbox" id="auto_resolve_check" checked>Resolve on Input<label>
 <label><input type="checkbox" id="show_hashes_check" checked>Show Hashes</label>
-<span><input type="checkbox" id="skip_norm_check"><label for="skip_norm_check">Skip Normalization</label></span>
-<span><input type="checkbox" id="ignore_disallowed_check"><label for="ignore_disallowed_check">Ignore Disallowed</label></span>
-<span><input type="checkbox" id="ignore_bidi_check"><label for="ignore_bidi_check">Disable CheckBidi</label></span>
+<span><input type="checkbox" id="skip_norm_check"><label class="nonstd" for="skip_norm_check">Skip Normalization</label></span>
+<span><input type="checkbox" id="ignore_disallowed_check"><label class="nonstd" for="ignore_disallowed_check">Ignore Disallowed</label></span>
+<span><input type="checkbox" id="ignore_bidi_check"><label class="nonstd" for="ignore_bidi_check">Disable CheckBidi</label></span>
 </div>
 <div id="input">
 <label for="input_field">Name or Address:</label>
@@ -375,7 +399,7 @@ import {
 	hash_from_label,
 	ens_text_record
 } from 'https://adraffy.github.io/eth-tools.js/dist/eth-tools.min.js';
-import {escape_name_for_html, explode_cp} from '../build/utils.js';
+import {escape_name_for_html, is_printable_ascii, explode_cp, hex_cp} from '../build/utils.js';
 import {ens_normalize, ens_tokenize, VERSION, BUILT, IDNA, UNICODE} from '../dist/ens-normalize-debug.min.js';
 import {ens_normalize as ens_normalize_xbidi} from '../dist/ens-normalize-xbidi.min.js'; // load without bidi
 import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
@@ -387,9 +411,13 @@ use_default_style();
 const input_field = document.querySelector('#input_field');
 const resolve_btn = document.querySelector('#resolve_btn');
 const arrows = document.querySelector('#arrows');
+const auto_resolve_check = document.querySelector('#auto_resolve_check');
+const skip_norm_check = document.querySelector('#skip_norm_check');
 const ignore_disallowed_check = document.querySelector('#ignore_disallowed_check');
+const ignore_bidi_check = document.querySelector('#ignore_bidi_check');
+const show_hashes_check = document.querySelector('#show_hashes_check');
 const output_div = document.querySelector('#output');
-const readme_rows = [...output_div.childNodes];
+const readme_rows = [...output_div.childNodes]; // save initial ux
 
 let resolve_timer;
 
@@ -400,7 +428,7 @@ function ens_normalize_input(name) {
 	if (ignore_disallowed_check.checked) {
 		name = String.fromCodePoint(...ens_tokenize(name).flatMap(({v,i,m,e,u,d}) => v ?? i ?? m ?? (e ?? u) ?? (d===undefined ? 0x2E : [])));
 	}
-	if (document.querySelector('#ignore_bidi_check').checked) {
+	if (ignore_bidi_check.checked) {
 		return ens_normalize_xbidi(name);
 	} else {
 		return ens_normalize(name);
@@ -410,7 +438,7 @@ function ens_normalize_input(name) {
 for (let btn of document.querySelectorAll('.examples button, button[data-name]')) {
 	let name = replace_escapes(btn.dataset.name ?? btn.innerHTML);
 	if (btn.dataset.replace) btn.innerHTML = name;
-	if (!name.includes('.')) name += '.eth';
+	if (!name.includes('.') && !is_checksum_address(name)) name += '.eth';
 	btn.addEventListener('click', () => {
 		input_field.value = name;
 		resolve(btn.dataset.skip);
@@ -425,9 +453,7 @@ input_field.addEventListener('keydown', e => {
 	}
 });
 input_field.addEventListener('input', () => {
-	if (parse()) {
-		schedule_resolve();
-	}
+	if (parse()) schedule_resolve();
 });
 
 document.querySelector('#escape_btn').addEventListener('click', () => {
@@ -442,6 +468,19 @@ document.querySelector('#escape_btn').addEventListener('click', () => {
 
 document.querySelector('#link_btn').addEventListener('click', () => {
 	navigator.clipboard.writeText(window.location.href.split('#')[0] + '#' + encodeURIComponent(input_field.value));
+});
+
+for (let el of [auto_resolve_check, ignore_disallowed_check, ignore_bidi_check, skip_norm_check]) {
+	el.addEventListener('input', () => {
+		if (auto_resolve_check.checked && input_field.value) {
+			if (parse()) schedule_resolve();
+		}
+	});
+}
+show_hashes_check.addEventListener('input', () => {	
+	for (let el of document.querySelectorAll('.hashes')) {
+		el.classList.toggle('hide', !show_hashes_check.checked);
+	}
 });
 
 input_field.focus();
@@ -459,9 +498,9 @@ function decode_location_hash() {
 function schedule_resolve() {
 	if (is_working()) {
 		resolve_timer = true;
-	} else if (!resolve_timer && document.querySelector('#auto_check').checked) {
+	} else if (!resolve_timer && auto_resolve_check.checked) {
 		resolve_timer = setTimeout(resolve, 1000);
-		arrows.classList.remove('hide');	
+		arrows.classList.remove('hide');
 	}
 } 
 
@@ -480,13 +519,7 @@ function parse() {
 		output_div.append(row);
 		return true;
 	}
-	let exploded = create_exploded(name, false);
-	if (ignore_disallowed_check.checked) {
-		for (let x of exploded.querySelectorAll('.disallowed')) {
-			x.classList.add('ignored');
-			x.classList.remove('disallowed');
-		}
-	}
+	let exploded = create_exploded(name, false, ignore_disallowed_check.checked);
 	let row = create_row(false, 'Input', exploded);
 	output_div.append(row);
 	add_hashes_row(name);
@@ -504,23 +537,18 @@ function parse() {
 	}
 }
 
-function hex(cp) {
-	return cp.toString(16).toUpperCase().padStart(2, '0');
-}
-function is_printable_ascii(s) {
-	return /^[\x21-\x25\x27-\x3B\x3D\x3F-\x7F]$/gu.test(s);
-}
 function apply_escapes(s, forced) {
-	return [...s].map(x => !forced && is_printable_ascii(x) ? x : `{${hex(x.codePointAt(0))}}`).join('');
+	return [...s].map(x => !forced && is_printable_ascii(x) ? x : `{${hex_cp(x.codePointAt(0))}}`).join('');
 }
 function replace_escapes(s) {
-	return s.replace(/\{([0-9a-f]{1,6})\}/uig, (_, x) => String.fromCodePoint(parseInt(x, 16)));
-}
-function str(...v) {
-	return escape_name_for_html(String.fromCodePoint(...v)).replace(/\{([0-9a-f]+)\}/uig, '<code>$1</code>');
-}
-function tooltip(cp) {
-	return `Hex: 0x${hex(cp)}\nDec: ${cp}`;
+	// match: {HEX}, [0xHEX], [DEC]
+	return s.replace(/(?:(?:\{([0-9a-f]+)\})|(?:\[((?:0x[0-9a-f]+)|[0-9]+)\]))/uig, (_, a, b) => {
+		try {
+			return String.fromCodePoint(a ? parseInt(a, 16) : parseInt(b)); 
+		} catch (err) {
+			return '\u{FFFD}';
+		}
+	});
 }
 
 function create_link(url, s) {
@@ -535,8 +563,14 @@ function create_etherscan_address_link(s) {
 	return a;	
 }
 
-function create_exploded(name, is_norm) {	
+function create_exploded(name, is_norm, downgrade_disallowed) {	
 	let tokens_div = dom_from_tokens(ens_tokenize(name), is_norm);
+	if (downgrade_disallowed) {
+		for (let x of tokens_div.querySelectorAll('.disallowed')) {
+			x.classList.add('ignored');
+			x.classList.remove('disallowed');
+		}
+	}
 	let tags = document.createElement('div');
 	tags.classList.add('tags');
 	let n_cp = [...name].length;
@@ -554,7 +588,8 @@ function create_exploded(name, is_norm) {
 		bytes.innerHTML = `${n_u8}<sub>bytes</sub>`;
 		tags.append(bytes); 
 	} else {
-		count.innerHTML = `${n_cp}<sub>ch=bytes</sub>`;
+		count.innerHTML = `${n_cp}<sub>chytes</sub>`;
+		count.title = '1-byte Characters';
 	}
 	let exploded = document.createElement('div');
 	exploded.classList.add('exploded');
@@ -601,7 +636,6 @@ function apply_fail_grade(span, s) {
 }
 
 function add_hashes_row(name) {
-	if (!document.querySelector('#show_hashes_check').checked) return;
 	let div = document.createElement('div');
 	div.classList.add('hashes');
 	// build table of label hashes
@@ -630,6 +664,7 @@ function add_hashes_row(name) {
 	let row = document.createElement('div');
 	row.classList.add('row', 'hashes');
 	row.append(wrap);
+	row.classList.toggle('hide', !show_hashes_check.checked);
 	output_div.append(row);
 }
 
@@ -677,7 +712,7 @@ function resolve(...a) {
 	if (is_working()) return;
 	clearTimeout(resolve_timer);
 	resolve_timer = false;
-	let input = input_field.value.trim();
+	let input = input_field.value;
 	const title = 'ENS Resolver';
 	if (!input) {
 		if (window.location.hash) {
@@ -727,7 +762,7 @@ async function resolve0(name0, override_skip_norm) {
 	
 	// check if actual address
 	let input_is_address = is_checksum_address(input_name);
-	let skip_norm = override_skip_norm || document.querySelector('#skip_norm_check').checked;
+	let skip_norm = override_skip_norm || skip_norm_check.checked;
 	let address, input_norm = false;
 	let input_grade = document.createElement('span');
 	if (input_is_address) {
@@ -737,7 +772,7 @@ async function resolve0(name0, override_skip_norm) {
 	} else {
 	
 		// add exploded name
-		let input_exploded = create_exploded(input_name, false);
+		let input_exploded = create_exploded(input_name, false, ignore_disallowed_check.checked);
 		let input_row = create_row(false, 'Input', input_exploded);
 		output_div.append(input_row);			
 		add_hashes_row(input_name);
