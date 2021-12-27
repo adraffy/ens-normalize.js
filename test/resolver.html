@@ -306,6 +306,7 @@ li + li {
 <button>👩🏽‍⚕️</button>
 <button>👨‍👩‍👦</button>
 <button>👨👩👦</button>
+<button>🟧🟧🟧</button>
 
 <a href="./report-emoji.html"><b>Picto:</b></a>
 <button>mmm</button>
@@ -348,8 +349,8 @@ Arabic-Indic:
 <button data-name="{5D0}{6F0}{6F1}{6F2}">✅</button>
 <button data-name="{660}{6F0}.eth">❌</button>
 <a href="https://www.rfc-editor.org/rfc/rfc5893.html#section-2"><b>CheckBidi:</b></a>
-<button data-name="{202e}elgoog{202d}.eth" data-replace="true"></button>
-<button data-name="{202e}hte.elgoog" data-replace="true"></button>
+<button data-name="{202e}elgoog{202d}.eth" data-replace="1"></button>
+<button data-name="{202e}hte.elgoog" data-replace="1"></button>
 <button>פעילותהבינאום</button>
 <button data-name="{0786}{07AE}{0782}{07B0}{0795}{07A9}{0793}{07A6}{0783}{07AA}">Dhivehi</button>
 <button data-name="{05D9}{05B4}{05D5}{05D0}{05B8}">Yiddish</button>
@@ -384,7 +385,7 @@ Arabic-Indic:
 <div id="output">
 <ul class="row">
 <li>Click an <button data-name="bRANtly.eth">Example</button> to see how it works.</li>
-<li>Use <code>{FF}</code> or <code>[255]</code> to manually include codepoints, eg. <button data-name="a{200D}b.eth">ZWJ</button></li>
+<li>Use <code>{FF}</code> or <code>[255]</code> to manually include codepoints, eg. <button data-escape="1" data-name="a{200D}b.eth">ZWJ</button></li>
 <li><b>Copy Link</b> to get a URL that resolves on page-load.</li>
 </ul>
 </div>
@@ -439,6 +440,7 @@ for (let btn of document.querySelectorAll('.examples button, button[data-name]')
 	let name = replace_escapes(btn.dataset.name ?? btn.innerHTML);
 	if (btn.dataset.replace) btn.innerHTML = name;
 	if (!name.includes('.') && !is_checksum_address(name)) name += '.eth';
+	if (btn.dataset.escape) name = apply_escapes(name, false);
 	btn.addEventListener('click', () => {
 		input_field.value = name;
 		resolve(btn.dataset.skip);
