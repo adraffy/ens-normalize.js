@@ -62,6 +62,7 @@ await build(generate_lib({idna, debug: true, version: true}), 'ens-normalize-deb
 await build(generate_lib({idna: '2003', version: true}), `ens-normalize-2003`);
 await build(generate_lib({idna: '2008', version: true}), `ens-normalize-2008`);
 await build(generate_lib({idna: 'ENS0', version: true, context: false}), `ens-normalize-ENS0`);
+await build(generate_lib({idna: 'uts46', version: true}), `ens-normalize-uts46`);
 await build(generate_lib({idna: 'uts51', version: true}), `ens-normalize-uts51`);
 
 // build sub-libraries

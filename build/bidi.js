@@ -6,7 +6,7 @@ const R_AL = read_member_set(r);
 const L = read_member_set(r);
 const AN = read_member_set(r);
 const EN = read_member_set(r);
-const ECTOB = read_member_set(r);
+const ECTOB = read_member_set(r); // ES, CS, ET, ON, BN
 const NSM = read_member_set(r);
 
 // [Validity] 8.) If CheckBidi, and if the domain name is a Bidi domain name, then the label 
@@ -37,12 +37,9 @@ export function validate_bidi_label(cps) {
 		last = cps[last];
 		if (!(R_AL.has(last) || EN.has(last) || AN.has(last))) throw new Error(`RTL: disallowed ending`);
 		// 4. In an RTL label, if an EN is present, no AN may be present, and vice versa.
-		let en = cps.some(cp => EN.has(cp));
-		let an = cps.some(cp => AN.has(cp));
-		if (en && an) throw new Error(`RTL: AN+EN`);
+		if (cps.some(cp => EN.has(cp)) && cps.some(cp => AN.has(cp))) throw new Error(`RTL: AN+EN`);
 	} else if (L.has(cps[0])) { // LTR
-		// 5. In an LTR label, only characters with the Bidi properties L, EN,
-		// ES, CS, ET, ON, BN, or NSM are allowed.
+		// 5. In an LTR label, only characters with the Bidi properties L, EN, ES, CS, ET, ON, BN, or NSM are allowed.
 		if (!cps.every(cp => L.has(cp) || EN.has(cp) || ECTOB.has(cp) || NSM.has(cp))) throw new Error(`LTR: disallowed properties`);
 		// 6. end with L or EN .. 0+ NSM
 		while (NSM.has(cps[last])) last--;

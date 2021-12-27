@@ -9,6 +9,7 @@ export default [
 
 	// nuke the keycaps that IDNA mangled
 	{ty: 'keycap-drop', src: '30..39'},
+	// prevent digits from being emoji
 	{ty: 'demoji', src: '30..39'},
 
 	// permit solo regional emojis
@@ -80,18 +81,24 @@ export default [
 	{ty: 'valid', src: '1F39C'}, // 🎜
 	{ty: 'valid', src: '1F39D'}, // 🎝
 
+	// gender
 	{ty: 'valid', src: '2640'}, // ♀
 	{ty: 'valid', src: '2642'}, // ♂
+	{ty: 'valid', src: '26A2'}, // ⚢️
+	{ty: 'valid', src: '26A3'}, // ⚣️
+	{ty: 'valid', src: '26A4'}, // ⚤️
+	{ty: 'valid', src: '26A5'}, // ⚥️
+	{ty: 'valid', src: '26A6'}, // ⚦️
+	// 26A7 is an emoji
+	{ty: 'valid', src: '26A8'}, // ⚨
+	{ty: 'valid', src: '26A9'}, // ⚩️
+
 	{ty: 'valid', src: '1F6C9'}, // 🛉
 	{ty: 'valid', src: '1F6CA'}, // 🛊
 	
-	{ty: 'valid', src: '2388'}, // helm
-	{ty: 'valid', src: '2605'}, // 5-star???
-	{ty: 'valid', src: '221E'}, // infinity
-
-	{ty: 'valid', src: '1F5E2'}, // lips
-	{ty: 'valid', src: '1F5DF'}, // newspaper
-	{ty: 'valid', src: '1F5E0'}, // chart
+	{ty: 'valid', src: '1F5E2'}, // 🗢
+	{ty: 'valid', src: '1F5DF'}, // 🗟
+	{ty: 'valid', src: '1F5E0'}, // 🗠
 	{ty: 'valid', src: '1F5D8'}, // 🗘
 	{ty: 'map', src: '1F5D4', dst: '1F5D6'}, // 🗔
 	{ty: 'valid', src: '1F5D6'}, // 🗖
@@ -189,20 +196,38 @@ export default [
 	{ty: 'valid', src: '1F6F1'}, // truck
 	{ty: 'valid', src: '1F6F2'}, // train
 
-	/*
-	// hummm
-	'2596..259F', // QUADRANTS
-	'25A0..25EF', // SHAPES
-
-	// rays
-	// 1F5E4..1F5E7
-	// _
-	// 1F5D5
-
-	// 00A2 = ¢
-	// 0024 = $
+	// 20211227
 	
-	// 263A = ☺
-	// 263B = ☻ 
-	*/
+	{ty: 'valid', src: '263B'}, // ☻
+
+	{ty: 'valid', src: '2605'}, // ★
+	{ty: 'valid', src: '2606'}, // ☆
+	{ty: 'valid', src: '272F'}, // ✯
+	{ty: 'valid', src: '272A'}, // ✪
+
+	{ty: 'valid', src: '2388'}, // ⎈
+	{ty: 'valid', src: '058D'}, // ֍
+	{ty: 'map', src: '058E', dst: '058D'}, // ֎
+
+	{ty: 'valid', src: '27E0'}, // ⟠
+	{ty: 'valid', src: '29EB'}, // ⧫
+
+	// math
+	{ty: 'valid', src: '2206'}, // ∆
+	{ty: 'valid', src: '2207'}, // ∇
+	{ty: 'valid', src: '2211'}, // ∑
+	{ty: 'valid', src: '221E'}, // ∞
+	{ty: 'valid', src: '22C8'}, // ⋈
+
+	// currency
+	{ty: 'valid', src: '24'}, // $
+	{ty: 'valid', src: 'A2'}, // ¢
+	{ty: 'valid', src: 'A3'}, // £
+	{ty: 'valid', src: 'A5'}, // ¥
+	{ty: 'valid', src: '20AC'}, // €
+	{ty: 'valid', src: '20BF'}, // ₿
+
+
+	//'2596..259F', // QUADRANTS
+	//'25A0..25EF', // SHAPES
 ];

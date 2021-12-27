@@ -2,8 +2,8 @@ import {mkdirSync, writeFileSync} from 'fs';
 import {join} from 'path';
 import {Encoder, is_better_member_compression, base64} from './encoder.js';
 import {
-	parse_cp, parse_cp_range, parse_cp_sequence, parse_cp_multi_ranges,
-	map_values, take_from, set_union, set_intersect, split_ascending, hex_cp, split_on, group_by, compare_arrays
+	hex_cp, parse_cp, parse_cp_range, parse_cp_sequence, parse_cp_multi_ranges,
+	map_values, take_from, set_union, set_intersect, split_on, compare_arrays
 } from './utils.js';
 import {read_parsed} from './nodejs-utils.js';
 
@@ -31,8 +31,11 @@ class IDNA {
 		}
 		return false;
 	}
+	is_mapped(cp) {
+		return this.mapped.some(([x]) => x == cp)
+	}
 	is_disallowed(cp) {
-		return !this.valid.has(cp) && !this.ignored.has(cp) && !this.mapped.some(([x]) => x == cp);
+		return !this.valid.has(cp) && !this.ignored.has(cp) && !this.is_mapped(cp);
 	}
 	check_invariants() {
 		// everything in the mapped output should be valid
@@ -68,7 +71,7 @@ class UTS51 {
 		this.STYLE_DROP = new Set();
 		this.STYLE_OPT = new Set();
 		this.STYLE_REQ = new Set();
-		this.NON_SOLO = new Set(); // TODO: use this to allow 1F233 inside of a ZWJ sequence
+		this.NON_SOLO = new Set(); // currently not used
 		this.KEYCAP_DROP = new Set();
 		this.KEYCAP_REQ = new Set();
 		this.REGIONAL = new Set();
@@ -106,12 +109,12 @@ class UTS51 {
 		}
 		// assign regional
 		for (let cp of data.regional) {
-			this.remove_style(cp);
+			this.remove_style(cp); // remove from normal emoji handling 
 			this.REGIONAL.add(cp); 
 		}
 		// assign tag spec
 		for (let cp of data.tag_spec) {
-			this.TAG_SPEC.add(cp);
+			this.TAG_SPEC.add(cp); // these are not emoji
 		}
 		// assign keycaps
 		for (let cp of data.keycaps) {
@@ -168,12 +171,12 @@ switch (mode) {
 		break;
 	}
 	case 'sub': {
-		['context', 'nf', 'bidi'].map(create_payload);
+		['context', 'nf', 'bidi'].forEach(create_payload);
 		break;
 	}
 	case 'missing-emoji': {
 		// find the emoji that are missing from ENS0
-		let idna = read_rules_for_ENS0();
+		let {idna} = read_rules_for_ENS0();
 		let emoji_seq = map_values(read_parsed('emoji-sequences'), e => e.flatMap(({src}) => {
 			return src.includes('..') ? parse_cp_range(src).map(x => [x]) : [parse_cp_sequence(src)]
 		}));
@@ -192,7 +195,7 @@ switch (mode) {
 	}
 	case 'style-drop': {	
 		// find the emoji that are valid in ENS0
-		let idna = read_rules_for_ENS0();
+		let {idna} = read_rules_for_ENS0();
 		let valid = read_emoji_data().Emoji.filter(cp => idna.valid.has(cp));
 		if (argv.length == 0) { // just output to console
 			console.log(valid);
@@ -209,14 +212,15 @@ switch (mode) {
 	}
 	case 'demoji': {
 		// find the emoji that are mapped by ENS0
-		let idna = read_idna_rules({version: 2003});
+		let {idna} = read_rules_for_ENS0();
 		let {Emoji} = read_emoji_data();
 		let mapped = idna.mapped.filter(([x]) => Emoji.includes(x));
-		let invalid = Emoji.filter(cp => !idna.valid.has(cp) && !idna.mapped.some(([x]) => x == cp));
+		let invalid = Emoji.filter(cp => !idna.valid.has(cp) && !idna.is_mapped(cp));
 		if (argv.length == 0) { // just output to console
 			console.log({mapped, invalid});
 			break;
-		}	
+		}
+		// write file
 		writeFileSync(join(ensure_dir('rules'), 'demoji.js'), [
 			`// generated: ${new Date().toJSON()}`,
 			`export default [`,
@@ -251,6 +255,8 @@ async function create_payload(name) {
 		case 'others': {
 			// this is current ENS 
 			write_rules_payload('idna-ENS0', read_rules_for_ENS0());
+			// for IDNATestV2
+			write_rules_payload('idna-uts46', {idna: read_idna_rules({version: 2003, valid_deviations: true})});
 			// these are the true specs
 			write_rules_payload('idna-2003', {idna: read_idna_rules({version: 2003})});
 			write_rules_payload('idna-2008', {idna: read_idna_rules({version: 2008})});
@@ -561,7 +567,7 @@ function apply_rules(idna, uts51, rules) {
 			switch (ty) {			
 				case 'keycap-drop': {
 					// proper keycaps are $CAP FE0F 20E3
-					// drop match this pattern, but strip the FE0F
+					// dropped keycaps match this pattern, but strip the FE0F
 					// this is supported as a 1-way downgrade
 					for (let cp of parse_cp_multi_ranges(src)) {
 						if (!uts51.KEYCAP_REQ.has(cp)) {
@@ -577,24 +583,12 @@ function apply_rules(idna, uts51, rules) {
 					// proper emoji are opt: eg. $EMOJI or $EMOJI FE0F
 					// drop matches either pattern, but drops FE0F
 					// required only matches FE0F, and keeps the FE0F
-					// opt matches either pattern and keeps the FE0F
+					// opt matches either pattern, keeps FE0F if it was provided
 					for (let cp of parse_cp_multi_ranges(src)) {
 						uts51.set_style(cp, ty);
 					}
 					continue;
 				}
-				/*
-				case 'map-emoji': {
-					src = parse_cp_range(rule.src);
-					dst = parse_cp_range(rule.dst);
-					if (src.length != dst.length) throw new Error(`length`);
-					for (let i = 0; i < src.length; i++) {
-						if (!remove_emoji_rule(src)) throw new Error(`expected emoji`);
-						emoji_MAP[src] = dst;
-					}
-					continue;
-				}
-				*/
 				case 'demoji': {
 					// remove an emoji
 					// go thru text processing instead
