@@ -681,7 +681,7 @@ const R_AL = read_member_set(r$2);
 const L = read_member_set(r$2);
 const AN = read_member_set(r$2);
 const EN = read_member_set(r$2);
-const ECTOB = read_member_set(r$2);
+const ECTOB = read_member_set(r$2); // ES, CS, ET, ON, BN
 const NSM = read_member_set(r$2);
 
 // [Validity] 8.) If CheckBidi, and if the domain name is a Bidi domain name, then the label 
@@ -712,12 +712,9 @@ function validate_bidi_label(cps) {
 		last = cps[last];
 		if (!(R_AL.has(last) || EN.has(last) || AN.has(last))) throw new Error(`RTL: disallowed ending`);
 		// 4. In an RTL label, if an EN is present, no AN may be present, and vice versa.
-		let en = cps.some(cp => EN.has(cp));
-		let an = cps.some(cp => AN.has(cp));
-		if (en && an) throw new Error(`RTL: AN+EN`);
+		if (cps.some(cp => EN.has(cp)) && cps.some(cp => AN.has(cp))) throw new Error(`RTL: AN+EN`);
 	} else if (L.has(cps[0])) { // LTR
-		// 5. In an LTR label, only characters with the Bidi properties L, EN,
-		// ES, CS, ET, ON, BN, or NSM are allowed.
+		// 5. In an LTR label, only characters with the Bidi properties L, EN, ES, CS, ET, ON, BN, or NSM are allowed.
 		if (!cps.every(cp => L.has(cp) || EN.has(cp) || ECTOB.has(cp) || NSM.has(cp))) throw new Error(`LTR: disallowed properties`);
 		// 6. end with L or EN .. 0+ NSM
 		while (NSM.has(cps[last])) last--;
@@ -827,9 +824,9 @@ function validate_context(cps) {
 
 var PAYLOAD = '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';
 
-const BUILT = '2021-12-27T05:53:52.428Z';
+const BUILT = '2021-12-27T11:01:53.753Z';
 const UNICODE = '14.0.0';
-const VERSION = '1.3.7';
+const VERSION = '1.3.8';
 const IDNA = 'uts51';
 let r = decode_payload(PAYLOAD);
 const STOP = read_member_set(r);

@@ -1,15 +1,5 @@
-import {ens_normalize} from '../index.js';
+import {ens_normalize, ens_tokenize} from '../index.js';
 
 ens_normalize('🚴‍♂️.eth');
 
-console.log(expect_throw(() => ens_normalize('_')));
-console.log(ens_normalize('_', true) === '');
-
-function expect_throw(fn) {
-	try {
-		fn();
-	} catch (err) {
-		return err.message;
-	}
-	throw new Error('expected throw');
-}
+console.log(ens_tokenize('R💩\uFE0Fa\xAD./'));

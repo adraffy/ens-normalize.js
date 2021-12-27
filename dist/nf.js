@@ -1,3 +1,8 @@
+function explode_cp(s) {
+	if (typeof s != 'string') throw new TypeError(`expected string`);	
+	return [...s].map(c => c.codePointAt(0));
+}
+
 function decode_arithmetic(bytes) {
 	let pos = 0;
 	function u16() { return (bytes[pos++] << 8) | bytes[pos++]; }
@@ -381,13 +386,13 @@ function decomposer(cps, callback) {
 	}
 }
 
-function nfd$1(cps) {
+function nfd$2(cps) {
 	let ret = [];
 	decomposer(cps, (_, cp) => ret.push(cp));
 	return ret;
 }
 
-function nfc$1(cps) {
+function nfc$2(cps) {
 	let ret = [];
 	let stack = [];
 	let prev_cp = -1;
@@ -427,11 +432,6 @@ function nfc$1(cps) {
 	}
 }
 
-function explode_cp(s) {
-	if (typeof s != 'string') throw new TypeError(`expected string`);	
-	return [...s].map(c => c.codePointAt(0));
-}
-
 // this is a polyfill for normalized forms
 // it exists because the ES6 implementation fails many tests
 // see: https://adraffy.github.io/ens-normalize.js/test/report-nf.html
@@ -441,7 +441,15 @@ function norm(form, cps) {
 	return explode_cp(String.fromCodePoint(...cps).normalize(form));
 }
 
-function nfc(cps) { return norm('NFC', cps); }
-function nfd(cps) { return norm('NFD', cps); }
+function nfc$1(cps) { return norm('NFC', cps); }
+function nfd$1(cps) { return norm('NFD', cps); }
 
-export { nfc$1 as nfc_adraffy, nfc as nfc_default, nfd$1 as nfd_adraffy, nfd as nfd_default };
+// these use strings
+function nfc(s) {
+	return String.fromCodePoint(...nfc(explode_cp(s)));
+}
+function nfd(s) {
+	return String.fromCodePoint(...nfd(explode_cp(s)));
+}
+
+export { nfc, nfc$2 as nfc_adraffy, nfc$1 as nfc_default, nfd, nfd$2 as nfd_adraffy, nfd$1 as nfd_default };

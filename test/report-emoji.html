@@ -217,8 +217,9 @@ async function main() {
 	//await add_sequences('Test', [{cps:parse_cp_sequence('270A')}]);
 	//await add_characters('Test', parse_cp_sequence('270A'), true);
 
-
 	await add_sequences('Custom Sequences', custom, true);
+	//await add_sequences('Custom Characters', custom, true);
+
 	await add_characters('Single Character Emoji', basic);
 	await add_characters('Unknown Emoji', emoji);
 	for (let [name, v] of Object.entries(seqs)) {
