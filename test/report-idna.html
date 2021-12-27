@@ -4,10 +4,20 @@
 <meta charset="utf-8">
 <title>IDNATestV2</title>
 <style>
+body {
+	margin: 1rem;	
+}
+header {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 1rem;
+}
+h1 {
+	margin: 0;
+}
 #version {
-	padding-left: 1rem;
-	font-size: 16pt;
-	font-weight: normal;
+	text-align: right;
+	box-sizing: border-box;
 }
 table {
 	width: 100%;
@@ -49,7 +59,10 @@ td {
 </style>
 </head>
 <body>
-<h1><a href="../build/unicode-raw/IdnaTestV2.txt">IDNATestV2</a><span id="version"></span></h1>
+<header>
+<h1><a href="../build/unicode-raw/IdnaTestV2.txt">IDNATestV2</a></h1>
+<span id="version"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a></span>
+</header>
 <table id="summary">
 <thead><tr><th>Test</th><th>Duration</th><th>Cases</th><th>same</th>
 <th class="state">same-norm</th>
@@ -60,9 +73,9 @@ td {
 </tr></thead><tbody></tbody></table>
 <div id="loading">Computing...</div>
 <script type="module">
-import {ens_normalize, VERSION, UNICODE} from '../dist/ens-normalize-debug.min.js';
+import {ens_normalize, VERSION, UNICODE, IDNA, BUILT} from '../dist/ens-normalize-debug.min.js';
 
-document.querySelector('#version').innerHTML = ` v${VERSION} for Unicode ${UNICODE}`;
+document.querySelector('#version').innerHTML += ` (v${VERSION}+${IDNA}+U${UNICODE})<br><code>${BUILT}</code>`;
 
 let COLS = [...document.querySelectorAll('#summary .state')].map(x => x.innerHTML);
 

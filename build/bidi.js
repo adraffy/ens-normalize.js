@@ -28,13 +28,8 @@ export function validate_bidi_label(cps) {
 	// has the L property, it is an LTR label.
 	let last = cps.length - 1;
 	if (R_AL.has(cps[0])) { // RTL 
-		// 2.) In an RTL label, only characters with the Bidi properties R, AL,
-		// AN, EN, ES, CS, ET, ON, BN, or NSM are allowed.
-		if (!cps.every(cp => R_AL.has(cp) 
-			|| AN.has(cp)
-			|| EN.has(cp)
-			|| ECTOB.has(cp) 
-			|| NSM.has(cp))) throw new Error(`RTL: disallowed properties`);
+		// 2.) In an RTL label, only characters with the Bidi properties R, AL, AN, EN, ES, CS, ET, ON, BN, or NSM are allowed.
+		if (!cps.every(cp => R_AL.has(cp) || AN.has(cp) || EN.has(cp) || ECTOB.has(cp) || NSM.has(cp))) throw new Error(`RTL: disallowed properties`);
 		// 3. In an RTL label, the end of the label must be a character with
 		// Bidi property R, AL, EN, or AN, followed by zero or more
 		// characters with Bidi property NSM.

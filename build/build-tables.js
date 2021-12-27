@@ -226,11 +226,11 @@ switch (mode) {
 		].join('\n'));
 		break;
 	}
-	default: create_payload(mode);
+	default: await create_payload(mode);
 }
 
 
-function create_payload(name) {
+async function create_payload(name) {
 	switch (name) {
 		case 'adraffy': {
 			let idna = read_idna_rules({version: 2008});
@@ -598,13 +598,16 @@ function apply_rules(idna, uts51, rules) {
 				case 'demoji': {
 					// remove an emoji
 					// go thru text processing instead
-					let cp = parse_cp(src);
-					if (!uts51.remove_style(cp)) throw new Error(`demoji not styled`);
-					uts51.NON_SOLO.add(cp);
-					// allow for an inline mapping
+					let cps = parse_cp_multi_ranges(src);
 					if (typeof dst === 'string') {
-						idna.remove_rule(cp);
-						idna.mapped.push([cp, parse_cp_sequence(dst)]);
+						// allow for an inline mapping
+						if (cps.length != 1) throw new Error('demoji map allows only raw cp');
+						idna.remove_rule(cps);
+						idna.mapped.push([cps, parse_cp_sequence(dst)]);
+					}
+					for (let cp of cps) {
+						if (!uts51.remove_style(cp)) throw new Error(`demoji not styled`);
+						uts51.NON_SOLO.add(cp);
 					}
 					break;
 				}
