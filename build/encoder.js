@@ -1,4 +1,4 @@
-import {group_by, indices_of, split_between, split_linear, tally, split_on} from './utils.js'; 
+import {group_by, indices_of, split_between, split_linear, tally, split_on, compare_arrays} from './utils.js'; 
 
 export function is_better_member_compression(smaller, bigger) {
 	let s = new Encoder();
@@ -135,6 +135,10 @@ export function encode_arithmetic(symbols, linear) {
 	return header.concat(payload, bytes_from_bits(bits));
 }
 
+export function base64(v) {
+	return btoa(String.fromCharCode(...v));
+}
+
 export class Encoder {
 	constructor() { 
 		this.values = [];
@@ -151,7 +155,7 @@ export class Encoder {
 	unsigned(x) { this.values.push(x); }
 	signed(i) { this.unsigned(i < 0 ? -1 - 2 * i : 2 * i); }
 	positive(i) { this.unsigned(i - 1); }
-	counts(v) { for (let x of v) this.positive(x); }
+	positive_counts(v) { for (let x of v) this.positive(x); }
 	ascending(v) {
 		let prev = 0;
 		for (let x of v) {
@@ -185,8 +189,9 @@ export class Encoder {
 		this.ascending(g1.map(g => g[0]));
 		this.unsigned(gN.length);
 		this.ascending(gN.map(g => g[0]));
-		this.counts(gN.map(g => g.length));
+		this.positive_counts(gN.map(g => g.length));
 	}
+	/*
 	write_transposed_ys(w, m) {
 		if (w == 0) return;
 		this.deltas(m.map(v => v[0]));
@@ -200,20 +205,23 @@ export class Encoder {
 	write_mapped(linear_specs, mapped) {
 		mapped = group_by(mapped, ([_, ys]) => ys.length, []).map(v => v.sort((a, b) => a[0] - b[0]));
 		for (let [w, dx, dy] of linear_specs) {
-			if (w >= mapped.length) throw new Error(`linear spec out of bounds: ${w}`);
+			if (!(dx > 0)) throw new TypeError(`expected positive dx: ${dx}`);
+			if (w >= mapped.length) {				
+				console.log(`linear spec not used: out of bounds: ${w}`);
+				continue;
+			}
 			let {linear, nonlinear} = split_linear(mapped[w], dx, dy);
-			/*
-			console.log(`Linear ${w}: ${dx} ${dy} = ${linear.length}`)
-			if (linear.length === 0) continue;
-			*/
-			if (linear.length === 0) throw new Error(`empty linear spec: ${w} ${dx} ${dy}`);
+			if (linear.length * dx <= 1) {
+				console.log(`linear spec not used: empty: ${w} ${dx} ${dy}`);
+				continue;
+			}
 			mapped[w] = nonlinear; // remove them
 			this.unsigned(w);
 			this.positive(dx);
 			this.unsigned(dy);
 			this.positive(linear.length);
 			this.ascending(linear.map(v => v[0])); 
-			this.counts(linear.map(v => v[1]));
+			this.positive_counts(linear.map(v => v[1]));
 			this.write_transposed_ys(w, linear.map(v => v[2]));
 		}
 		this.unsigned(0); // eol
@@ -223,6 +231,45 @@ export class Encoder {
 			this.positive(m.length);
 			this.ascending(m.map(v => v[0]));
 			this.write_transposed_ys(w, m.map(v => v[1]));
+		});
+		this.unsigned(0); // eol
+	}*/
+	write_transposed(m) {
+		if (m.length == 0) return;
+		let w = m[0].length;
+		for (let i = 0; i < w; i++) {
+			this.deltas(m.map(v => v[i]));
+		}
+	}
+	write_mapped(linear_specs, mapped) {
+		mapped = group_by(mapped, ([_, ys]) => ys.length, []).map(v => v.sort((a, b) => a[0] - b[0]));
+		for (let [w, dx, dy] of linear_specs) {
+			if (!(dx > 0)) throw new TypeError(`expected positive dx: ${dx}`);
+			if (w >= mapped.length) {				
+				console.log(`linear spec not used: out of bounds: ${w}`);
+				continue;
+			}
+			let {linear, nonlinear} = split_linear(mapped[w], dx, dy);
+			if (linear.length == 0) {
+				console.log(`linear spec not used: empty: ${w} ${dx} ${dy}`);
+				continue;
+			}
+			mapped[w] = nonlinear; // remove them
+			this.unsigned(w);
+			this.positive(dx);
+			this.unsigned(dy);
+			//this.positive(linear.length);
+			//this.positive_counts(linear.map(v => v[1]));
+			linear.forEach(v => this.unsigned(v[1]));
+			this.unsigned(0);
+			this.write_transposed(linear.map(([x, _, ys]) => [x, ...ys]).sort(compare_arrays));
+		}
+		this.unsigned(0); // eol
+		mapped.forEach((m, w) => {
+			if (m.length == 0) return;
+			this.unsigned(1 + w);
+			this.positive(m.length);
+			this.write_transposed(m.map(([x, ys]) => [x, ...ys]).sort(compare_arrays));
 		});
 		this.unsigned(0); // eol
 	}
@@ -260,7 +307,6 @@ export class Encoder {
 		}
 		this.unsigned(0);
 	}
-	*/
 	write_emoji(emoji, sep) {
 		// group by (width and position of sep)
 		emoji = Object.values(group_by(emoji, v => [v.length, ...indices_of(v, sep)].join(':')));
@@ -281,5 +327,6 @@ export class Encoder {
 			}
 		}
 	}
+	*/
 
 }

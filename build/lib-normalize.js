@@ -1,4 +1,4 @@
-import {decode_payload, read_member_function, read_mapped_table, lookup_mapped} from './decoder.js';
+import {decode_payload, read_member_set, read_mapped_table, lookup_mapped} from './decoder.js';
 import {explode_cp, escape_unicode} from './utils.js';
 import {puny_decode} from './puny.js';
 import {tokenized_idna} from './idna.js';
@@ -12,11 +12,11 @@ import {nfc} from './nf.js';
 // the following is replaced by different idna versions
 import PAYLOAD from './output/idna-adraffy.js';
 let r = decode_payload(PAYLOAD);
-const STOP = read_member_function(r);
-const VALID = read_member_function(r);
-const IGNORED = read_member_function(r);
+const STOP = read_member_set(r);
+const VALID = read_member_set(r);
+const IGNORED = read_member_set(r);
 const MAPPED = read_mapped_table(r);
-const COMBINING_MARKS = read_member_function(r);
+const COMBINING_MARKS = read_member_set(r);
 const EMOJI_PARSER = r() && emoji_parser_factory(r);
 
 // emoji tokens are as-is
@@ -63,11 +63,11 @@ export function ens_normalize(name) {
 	const HYPHEN = 0x2D; // HYPHEN MINUS
 	let labels = tokenized_idna(explode_cp(name), EMOJI_PARSER, cp => {
 		// ignored: Remove the code point from the string. This is equivalent to mapping the code point to an empty string.
-		if (STOP(cp)) return;
-		if (IGNORED(cp)) return [];
+		if (STOP.has(cp)) return;
+		if (IGNORED.has(cp)) return [];
 		// deviation: Leave the code point unchanged in the string.
 		// valid: Leave the code point unchanged in the string.		
-		if (VALID(cp)) return [cp];
+		if (VALID.has(cp)) return [cp];
 		// mapped: Replace the code point in the string by the value for the mapping in Section 5, IDNA Mapping Table.
 		let mapped = lookup_mapped(MAPPED, cp);
 		if (mapped) return mapped;
@@ -114,7 +114,7 @@ export function ens_normalize(name) {
 			// [Validity] 4.) The label must not contain a U+002E ( . ) FULL STOP.
 			// => satisfied by [Processing] 3.) Break
 			// [Validity] 5.) The label must not begin with a combining mark, that is: General_Category=Mark.
-			if (COMBINING_MARKS(cps[0])) throw label_error(cps, `leading combining mark`);
+			if (COMBINING_MARKS.has(cps[0])) throw label_error(cps, `leading combining mark`);
 			// [Validity] 6.) For Nontransitional Processing, each value must be either valid or deviation.
 			// => satisfied by tokenized_idna()
 			// [Validity] 7.) If CheckJoiners, the label must satisify the ContextJ rules
@@ -157,9 +157,9 @@ export function ens_normalize(name) {
 // [{m:[0x72], u:[0x52]},{e:[0x1F4A9],u:[0x1F4A9]},{t:[61,66,66]},{},{t:[65,74,68]}]
 export function ens_tokenize(name) {
 	return tokenized_idna(explode_cp(name), EMOJI_PARSER, cp => {
-		if (STOP(cp)) return {};
-		if (VALID(cp)) return [cp]; // this gets merged into v
-		if (IGNORED(cp)) return {i: cp};
+		if (STOP.has(cp)) return {};
+		if (VALID.has(cp)) return [cp]; // this gets merged into v
+		if (IGNORED.has(cp)) return {i: cp};
 		let mapped = lookup_mapped(MAPPED, cp);
 		if (mapped) return {m: mapped, u: [cp]}; 
 		return {d: cp};

@@ -2,6 +2,8 @@ import {readFileSync, writeFileSync} from 'fs';
 import {join} from 'path';
 import {explode_cp} from './utils.js';
 
+// TODO finish this
+
 import {ens_tokenize as tokenize2003} from '../dist/ens-normalize-2003.js';
 import {ens_tokenize as tokenize2008} from '../dist/ens-normalize-2008.js';
 import LABELS from './registered_labels.js';

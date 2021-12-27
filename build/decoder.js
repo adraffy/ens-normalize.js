@@ -122,6 +122,19 @@ export function read_member_table(next) {
 	].sort((a, b) => a[0] - b[0]);
 }
 
+export function read_member_set(next) {
+	let set = new Set(read_ascending(next(), next));
+	let n = next();
+	let vX = read_ascending(n, next);
+	let vN = read_counts(n, next);
+	for (let i = 0; i < n; i++) {
+		for (let j = 0; j < vN[i]; j++) {
+			set.add(vX[i] + j);
+		}
+	}
+	return set;
+}
+
 // returns array of 
 // [x, ys] => single replacement rule
 // [x, ys, n, dx, dx] => linear map
@@ -140,7 +153,57 @@ export function read_mapped_table(next) {
 	return ret.flat().sort((a, b) => a[0] - b[0]);
 }
 
-function read_ys_transposed(n, w, next) {
+function read_zero_terminated_array(next) {
+	let v = [];
+	while (true) {
+		let i = next();
+		if (i == 0) break;
+		v.push(i);
+	}
+	return v;
+}
+
+function read_transposed(n, w, next, lookup) {
+	let m = Array(n).fill().map(() => []);
+	for (let i = 0; i < w; i++) {
+		read_deltas(n, next).forEach((x, j) => m[j].push(lookup ? lookup[x] : x));
+	}
+	return m;
+}
+ 
+function read_linear_table(w, next) {
+	let dx = 1 + next();
+	let dy = next();
+	let vN = read_zero_terminated_array(next);
+	let m = read_transposed(vN.length, 1+w, next);
+	return m.map((v, i) => [v[0], v.slice(1), vN[i], dx, dy]);
+}
+
+function read_replacement_table(w, next) { 
+	let n = 1 + next();
+	let m = read_transposed(n, 1+w, next);
+	return m.map(v => [v[0], v.slice(1)]);
+}
+
+export function read_zwj_seqs(next, lookup) {
+	let seqs = [];
+	while (true) {
+		let lens = read_zero_terminated_array(next);
+		if (lens.length == 0) break;
+		let n = 1 + next();
+		seqs.push(...lens.reduce(
+			(m, w) => read_transposed(n, w, next, lookup).map((v, i) => m[i].concat(0x200D, v)), 
+			read_transposed(n, lens.shift(), next, lookup)
+		));
+	}
+	return new Set(seqs.map(v => String.fromCodePoint(...v)));
+}
+
+/*
+
+
+/*
+function read_ys_transposed1(n, w, next) {
 	if (w == 0) return [];
 	let m = [read_deltas(n, next)];
 	for (let j = 1; j < w; j++) {
@@ -154,14 +217,14 @@ function read_ys_transposed(n, w, next) {
 	return m;
 }
 
-function read_replacement_table(w, next) { 
+function read_replacement_table1(w, next) { 
 	let n = 1 + next();
 	let vX = read_ascending(n, next);
 	let mY = read_ys_transposed(n, w, next);
 	return vX.map((x, i) => [x, mY.map(v => v[i])])
 }
 
-function read_linear_table(w, next) {
+function read_linear_table1(w, next) {
 	let dx = 1 + next();
 	let dy = next();
 	let n = 1 + next();
@@ -171,7 +234,6 @@ function read_linear_table(w, next) {
 	return vX.map((x, i) => [x, mY.map(v => v[i]), vN[i], dx, dy]);
 }
 
-/*
 export function read_zwj_emoji(next) {
 	let buckets = [];
 	for (let k = next(); k > 0; k--) {
@@ -228,7 +290,6 @@ export function read_emoji(next, sep) {
 	}
 	return ret;
 }
-*/
 
 export function read_member_function(r) {
 	let table = read_member_table(r);
@@ -243,6 +304,7 @@ export function lookup_member(table, cp) {
 	}
 	return false;
 }
+*/
 
 export function lookup_mapped(table, cp) {
 	for (let [x, ys, n, dx, dy] of table) {

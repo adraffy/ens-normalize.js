@@ -3,7 +3,7 @@ import {writeFile, mkdir, access} from 'fs/promises';
 import {join} from 'path';
 import {createReadStream} from 'fs';
 import {createInterface} from 'readline/promises';
-import {parse_cp_sequence} from './utils.js';
+import {parse_cp, parse_cp_sequence, parse_cp_range} from './utils.js';
 
 // https://www.unicode.org/versions/latest/
 const major = 14;
@@ -137,6 +137,7 @@ async function write_simple_file(impl) {
 		let root = await parse_semicolon_file(join(downloaded_dir, `${input}.txt`), impl);
 		await writeFile(join(parsed_dir, `${output}.json`), JSON.stringify(root));
 		console.log(`Wrote: ${output}`);
+		return root;
 	} catch (cause) {
 		console.error(cause);
 		throw new Error(`error during ${input}`, {cause});
@@ -184,6 +185,32 @@ async function parse(argv) {
 		}
 	});
 
+	// 1F691..1F693  ; Emoji # E0.6 [3] (🚑..🚓) ambulance..police car
+	// this file is shit because Emoji_Component is not broken down
+	let {Emoji_Component: emoji_comp} = await write_simple_file({
+		input: 'emoji-data',
+		row([src, type]) {
+			this.get_bucket(type).push(src);	
+		}
+	});
+	emoji_comp = new Set(emoji_comp.flatMap(parse_cp_range));
+	
+	// kludge: missing emoji data
+	// 1F1E6;REGIONAL INDICATOR SYMBOL LETTER A;So;0;L;;;;;N;;;;;
+	// E0061;TAG LATIN SMALL LETTER A;Cf;0;BN;;;;;N;;;;;
+	await write_simple_file({
+		input: 'UnicodeData',
+		output: 'emoji-missing',
+		row([src, name]) {
+			src = parse_cp(src);
+			if (name.startsWith('REGIONAL INDICATOR SYMBOL') && emoji_comp.has(src)) {
+				this.get_bucket('regional').push(src);
+			} else if (name.startsWith('TAG') && emoji_comp.has(src)) {
+				this.get_bucket('tag_spec').push(src);
+			} 
+		}
+	});
+
 	// 2695 FE0F ; Basic_Emoji ; medical symbol # E4.0 [1] (⚕️)
 	await write_simple_file({
 		input: 'emoji-sequences',
@@ -214,14 +241,6 @@ async function parse(argv) {
 				case 0xFE0E: this.get_bucket('e').push(cp); break;
 				default: throw new Error('wtf style');
 			}
-		}
-	});
-
-	// 1F691..1F693  ; Emoji # E0.6 [3] (🚑..🚓) ambulance..police car
-	await write_simple_file({
-		input: 'emoji-data',
-		row([src, type]) {
-			this.get_bucket(type).push(src);	
 		}
 	});
 

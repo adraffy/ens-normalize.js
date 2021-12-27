@@ -150,6 +150,11 @@ export function parse_cp_range(s) {
 	}
 }
 
+// "AAAA AAAC..AAAD" => [0xAAAA, 0xAAAC, 0xAAAD]
+export function parse_cp_multi_ranges(s) {
+	return s.trim().split(/\s+/).flatMap(parse_cp_range);
+}
+
 // return all indicies of exact match in array
 // [1, 2, 1, 1] of 1 => [0, 2, 3]
 export function indices_of(v, x) {

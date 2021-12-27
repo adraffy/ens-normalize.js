@@ -1,16 +1,20 @@
-import {read_member_function} from './decoder.js';
+import {read_member_set, read_zwj_seqs} from './decoder.js';
+import { escape_unicode } from './utils.js';
 
 // returns an emoji parser
 export default function(r) {	
-	const REGIONAL = read_member_function(r);
-	const KEYCAP_OG = read_member_function(r);
-	const KEYCAP_FIXED = read_member_function(r);
-	const EMOJI_OPT = read_member_function(r);
-	const EMOJI_REQ = read_member_function(r);
-	const MODIFIER = read_member_function(r);
-	const MODIFIER_BASE = read_member_function(r);
-	const TAG_SPEC = read_member_function(r);
-
+	const REGIONAL = read_member_set(r);
+	const KEYCAP_DROP = read_member_set(r);
+	const KEYCAP_REQ = read_member_set(r);
+	const STYLE_DROP = read_member_set(r);
+	const STYLE_REQ = read_member_set(r);
+	const STYLE_OPT = read_member_set(r);
+	const MODIFIER = read_member_set(r);
+	const MODIFIER_BASE = read_member_set(r);
+	const TAG_SPEC = read_member_set(r); 
+	const ZWJ_SEQS = read_zwj_seqs(r, [...STYLE_DROP, ...STYLE_OPT].sort((a, b) => a - b));
+	//const TAG_SPEC_VALID = read_member_function(r);
+	
 	const FE0F = 0xFE0F;
 	const ZWJ = 0x200D;
 	const KEYCAP_END = 0x20E3;
@@ -20,8 +24,7 @@ export default function(r) {
 		let cp = cps[pos];
 		let cp2 = cps[pos+1]; // out of bounds, but unassigned
 		// emoji_modifier_sequence := emoji_modifier_base emoji_modifier
-		let base = MODIFIER_BASE(cp);
-		if (base && cp2 && MODIFIER(cp2)) {
+		if (MODIFIER_BASE.has(cp) && cp2 && MODIFIER.has(cp2)) {
 			return [2, [cp, cp2]];
 		}
 		// emoji_modifier_base is a emoji_character 
@@ -29,19 +32,14 @@ export default function(r) {
 		// but some emoji dont need presentation
 		// and previously valid emoji are already registered
 		// we call these emoji optional
-		let opt = base || EMOJI_OPT(cp); 
 		if (cp2 == FE0F) {
-			// these have optional FE0F 
-			if (opt) return [2, [cp]]; // drop FE0F
-			// these require FE0F
-			// these are the new emoji 
-			// all future emoji should be added 
-			// through this mechanism, if appropriate 
-			if (EMOJI_REQ(cp)) return [2, [cp, FE0F]]; // keep FE0F
+			// these drop FE0F
+			if (STYLE_DROP.has(cp)) return [2, [cp]];
+			// these keep FE0F
+			if (STYLE_OPT.has(cp) || STYLE_REQ.has(cp)) return [2, [cp, FE0F]]; 
 		}
 		// emoji_character 
-		// we also allow single regional 
-		if (base || opt || REGIONAL(cp) || MODIFIER(cp)) {
+		if (STYLE_DROP.has(cp) || STYLE_OPT.has(cp)) {
 			return [1, [cp]];	
 		}
 	}
@@ -52,21 +50,25 @@ export default function(r) {
 		// [ED-14] emoji flag sequence
 		// https://www.unicode.org/reports/tr51/#def_emoji_flag_sequence
 		// A sequence of two Regional Indicator characters, where the corresponding ASCII characters are valid region sequences as specified 
-		if (pos+1 < len && REGIONAL(cp)) {
+		if (pos+2 <= len && REGIONAL.has(cp)) {
 			// emoji_flag_sequence := regional_indicator regional_indicator
 			let cp2 = cps[pos+1];
-			if (REGIONAL(cp2)) {
+			if (REGIONAL.has(cp2)) {
 				return [2, [cp, cp2]];
+			} else if (!find_emoji_chr_mod_pre(cps, pos)) {
+				// A singleton Regional Indicator character is not a well-formed emoji flag sequence.
+				//throw new Error(`Invalid Emoji: ${cp}`);
+				return [0];
 			}
 		} 
 		// [ED-14c] emoji keycap sequence
 		// https://unicode.org/reports/tr51/#def_emoji_keycap_sequence
 		// A sequence of the following form: 
 		// emoji_keycap_sequence := [0-9#*] \x{FE0F 20E3}
-		let keycap_og = KEYCAP_OG(cp);
-		if (pos+1 < len && keycap_og && cps[pos+1] == KEYCAP_END) {
+		let keycap_og = KEYCAP_DROP.has(cp);
+		if (pos+2 <= len && keycap_og && cps[pos+1] == KEYCAP_END) {
 			return [2, [cp, KEYCAP_END]];
-		} else if (pos+2 < len && (keycap_og || KEYCAP_FIXED(cp)) && cps[pos+1] == FE0F && cps[pos+2] == KEYCAP_END) {
+		} else if (pos+3 <= len && (keycap_og || KEYCAP_REQ.has(cp)) && cps[pos+1] == FE0F && cps[pos+2] == KEYCAP_END) {
 			return [3, keycap_og ? [cp, KEYCAP_END] : [cp, FE0F, KEYCAP_END]];		
 		}
 		// [ED-15] emoji core sequence
@@ -79,8 +81,8 @@ export default function(r) {
 		// emoji_sequence := emoji_core_sequence | emoji_zwj_sequence | emoji_tag_sequence 
 		let emoji0 = find_emoji_chr_mod_pre(cps, pos);
 		if (!emoji0) return [0];
-		let [pos2, stack] = emoji0;
-		pos2 += pos;
+		let pos2 = emoji0[0] + pos;
+		let stack = emoji0[1].slice(); // make a copy
 		let zwj = false;
 		while (pos2+1 < len && cps[pos2] === ZWJ) {
 			let emoji = find_emoji_chr_mod_pre(cps, pos2 + 1);
@@ -89,7 +91,14 @@ export default function(r) {
 			pos2 += 1 + emoji[0];
 			stack.push(ZWJ, ...emoji[1]);
 		}
-		if (!zwj) {
+		if (zwj) {
+			// the emoji sequence must be a member of ZWJ_SEQS
+			let s = String.fromCodePoint(...stack);
+			if (!ZWJ_SEQS.has(s.replace(/\u{FE0F}/gu, ''))) {
+				//throw new Error(`Invalid Emoji Sequence: ${escape_unicode(s)}`);
+				return emoji0;
+			}
+		} else {
 			// [ED-14a] emoji tag sequence (ETS) 
 			// https://www.unicode.org/reports/tr51/#def_emoji_tag_sequence
 			// A sequence of the following form:
@@ -99,17 +108,15 @@ export default function(r) {
 			//             | emoji_presentation_sequence => emoji_character \x{FE0F}
 			//   tag_spec := [\x{E0020}-\x{E007E}]+
 			//   tag_end  := \x{E007F}		
-			if (pos2+2 < len && TAG_SPEC(cps[pos2])) {
+			if (pos2+2 < len && TAG_SPEC.has(cps[pos2])) {
 				let pos3 = pos2 + 1;
-				while (pos3+1 < len && TAG_SPEC(cps[pos3])) pos3++;
+				while (pos3+1 < len && TAG_SPEC.has(cps[pos3])) pos3++;
 				if (cps[pos3++] == TAG_END) {
-					// these are crazy dangerous because they don't render
-					// ignore the sequence
-					// return [pos3 - pos, stack.concat(cps.slice(pos2, pos3 - pos2))];
+					//stack.push(...cps.slice(pos2, pos3 - pos2).filter(TAG_SPEC_VALID));
 					return [pos3 - pos, stack];
 				}
 			}
 		}
-		return [pos2 - pos, stack];;
+		return [pos2 - pos, stack];
 	};
 }

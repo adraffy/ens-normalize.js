@@ -1,10 +1,10 @@
-import {decode_payload, read_mapped_table, read_member_table, lookup_member, lookup_mapped} from './decoder.js';
+import {decode_payload, read_member_set, read_mapped_table, lookup_mapped} from './decoder.js';
 import PAYLOAD from './output/nf.js';
 
 let r = decode_payload(PAYLOAD);
-const COMBINING_RANK = Array(1 + r()).fill().map(() => read_member_table(r));
+const COMBINING_RANK = Array(1 + r()).fill().map(() => read_member_set(r));
 const DECOMP = read_mapped_table(r);
-const COMP_EXCLUSIONS = read_member_table(r);
+const COMP_EXCLUSIONS = read_member_set(r);
 
 // algorithmic hangul
 // https://www.unicode.org/versions/Unicode14.0.0/ch03.pdf
@@ -58,7 +58,7 @@ function compose_pair(a, b) {
 	} else {
 		for (let [combined, v] of DECOMP) {		
 			if (v.length == 2 && v[0] == a && v[1] == b) {
-				if (lookup_member(COMP_EXCLUSIONS, combined)) break;
+				if (COMP_EXCLUSIONS.has(combined)) break;
 				return combined;
 			}
 		}
@@ -75,7 +75,7 @@ function decomposer(cps, callback) {
 		stack.length = 0;
 	}
 	function next(cp) {
-		let rank = 1 + COMBINING_RANK.findIndex(table => lookup_member(table, cp));
+		let rank = 1 + COMBINING_RANK.findIndex(table => table.has(cp));
 		if (rank == 0) {
 			drain();
 			callback(rank, cp);

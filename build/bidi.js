@@ -1,13 +1,13 @@
-import {decode_payload, read_member_table, lookup_member} from './decoder.js';
+import {decode_payload, read_member_set} from './decoder.js';
 import PAYLOAD from './output/bidi.js';
 
 let r = decode_payload(PAYLOAD);
-const BIDI_R_AL = read_member_table(r);
-const BIDI_L = read_member_table(r);
-const BIDI_AN = read_member_table(r);
-const BIDI_EN = read_member_table(r);
-const BIDI_ECTOB = read_member_table(r);
-const BIDI_NSM = read_member_table(r);
+const R_AL = read_member_set(r);
+const L = read_member_set(r);
+const AN = read_member_set(r);
+const EN = read_member_set(r);
+const ECTOB = read_member_set(r);
+const NSM = read_member_set(r);
 
 // [Validity] 8.) If CheckBidi, and if the domain name is a Bidi domain name, then the label 
 // must satisfy all six of the numbered conditions in [IDNA2008] RFC 5893, Section 2.
@@ -17,7 +17,7 @@ const BIDI_NSM = read_member_table(r);
 // A Bidi domain name is a domain name containing at least one character with BIDI_Class R, AL, or AN
 
 export function is_bidi_label(cps) {
-	return cps.some(cp => lookup_member(BIDI_R_AL, cp) || lookup_member(BIDI_AN, cp));
+	return cps.some(cp => R_AL.has(cp) || AN.has(cp));
 }
 
 export function validate_bidi_label(cps) {
@@ -27,38 +27,32 @@ export function validate_bidi_label(cps) {
 	// or AL.  If it has the R or AL property, it is an RTL label; if it
 	// has the L property, it is an LTR label.
 	let last = cps.length - 1;
-	if (lookup_member(BIDI_R_AL, cps[0])) { // RTL 
+	if (R_AL.has(cps[0])) { // RTL 
 		// 2.) In an RTL label, only characters with the Bidi properties R, AL,
 		// AN, EN, ES, CS, ET, ON, BN, or NSM are allowed.
-		if (!cps.every(cp => lookup_member(BIDI_R_AL, cp) 
-			|| lookup_member(BIDI_AN, cp)
-			|| lookup_member(BIDI_EN, cp)
-			|| lookup_member(BIDI_ECTOB, cp) 
-			|| lookup_member(BIDI_NSM, cp))) throw new Error(`RTL: disallowed properties`);
+		if (!cps.every(cp => R_AL.has(cp) 
+			|| AN.has(cp)
+			|| EN.has(cp)
+			|| ECTOB.has(cp) 
+			|| NSM.has(cp))) throw new Error(`RTL: disallowed properties`);
 		// 3. In an RTL label, the end of the label must be a character with
 		// Bidi property R, AL, EN, or AN, followed by zero or more
 		// characters with Bidi property NSM.
-		while (lookup_member(BIDI_NSM, cps[last])) last--;
+		while (NSM.has(cps[last])) last--;
 		last = cps[last];
-		if (!(lookup_member(BIDI_R_AL, last) 
-			|| lookup_member(BIDI_EN, last) 
-			|| lookup_member(BIDI_AN, last))) throw new Error(`RTL: disallowed ending`);
+		if (!(R_AL.has(last) || EN.has(last) || AN.has(last))) throw new Error(`RTL: disallowed ending`);
 		// 4. In an RTL label, if an EN is present, no AN may be present, and vice versa.
-		let en = cps.some(cp => lookup_member(BIDI_EN, cp));
-		let an = cps.some(cp => lookup_member(BIDI_AN, cp));
+		let en = cps.some(cp => EN.has(cp));
+		let an = cps.some(cp => AN.has(cp));
 		if (en && an) throw new Error(`RTL: AN+EN`);
-	} else if (lookup_member(BIDI_L, cps[0])) { // LTR
+	} else if (L.has(cps[0])) { // LTR
 		// 5. In an LTR label, only characters with the Bidi properties L, EN,
 		// ES, CS, ET, ON, BN, or NSM are allowed.
-		if (!cps.every(cp => lookup_member(BIDI_L, cp) 
-			|| lookup_member(BIDI_EN, cp)
-			|| lookup_member(BIDI_ECTOB, cp)
-			|| lookup_member(BIDI_NSM, cp))) throw new Error(`LTR: disallowed properties`);
+		if (!cps.every(cp => L.has(cp) || EN.has(cp) || ECTOB.has(cp) || NSM.has(cp))) throw new Error(`LTR: disallowed properties`);
 		// 6. end with L or EN .. 0+ NSM
-		while (lookup_member(BIDI_NSM, cps[last])) last--;
+		while (NSM.has(cps[last])) last--;
 		last = cps[last];
-		if (!lookup_member(BIDI_L, last) 
-			&& !lookup_member(BIDI_EN, last)) throw new Error(`LTR: disallowed ending`);
+		if (!L.has(last) && !EN.has(last)) throw new Error(`LTR: disallowed ending`);
 	} else {
 		throw new Error(`unknown direction`);
 	}

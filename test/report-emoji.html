@@ -118,17 +118,18 @@ Sequences have a known appearance:
 </tr></table>
 </div>
 <div id="loading">
-	<svg id="arrows" class="hide" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
-	<path d="M990,377.5H622.5l137.4-137.4C690.4,170.7,598.2,132.5,500,132.5c-98.2,0-190.4,38.2-259.9,107.6C170.7,309.6,132.5,401.8,132.5,500c0,98.2,38.2,190.4,107.6,259.9c69.4,69.4,161.7,107.6,259.9,107.6c98.2,0,190.4-38.2,259.9-107.6c5.8-5.8,11.4-11.8,16.7-17.9l92.2,80.7C778.9,925.2,647,990,500,990C229.4,990,10,770.6,10,500C10,229.4,229.4,10,500,10c135.3,0,257.8,54.9,346.5,143.5L990,10V377.5z"/>
-	</svg>
-	<span>Downloading...</span></div>	
+<svg id="arrows" class="hide" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+<path d="M990,377.5H622.5l137.4-137.4C690.4,170.7,598.2,132.5,500,132.5c-98.2,0-190.4,38.2-259.9,107.6C170.7,309.6,132.5,401.8,132.5,500c0,98.2,38.2,190.4,107.6,259.9c69.4,69.4,161.7,107.6,259.9,107.6c98.2,0,190.4-38.2,259.9-107.6c5.8-5.8,11.4-11.8,16.7-17.9l92.2,80.7C778.9,925.2,647,990,500,990C229.4,990,10,770.6,10,500C10,229.4,229.4,10,500,10c135.3,0,257.8,54.9,346.5,143.5L990,10V377.5z"/>
+</svg>
+<span>Downloading...</span></div>	
 <ul id="toc"></ul>
 <script type="module">
 import {escape_name_for_html, parse_cp_range, parse_cp_sequence, hex_cp, map_values, compare_arrays} from '../build/utils.js';
 import {ens_normalize, ens_tokenize} from '../dist/ens-normalize.min.js';
-import {ens_normalize as norm2003, ens_tokenize as tokenize2003} from '../dist/ens-normalize-2003.min.js';
+import {ens_normalize as norm2003, ens_tokenize as tokenize2003} from '../dist/ens-normalize-2003.js';
 import {ens_normalize as norm2008, ens_tokenize as tokenize2008} from '../dist/ens-normalize-2008.min.js';
 import {ens_normalize as normENS0, ens_tokenize as tokenizeENS0} from '../dist/ens-normalize-ENS0.min.js';
+import {ens_normalize as normUTS51,ens_tokenize as tokenizeUTS51} from '../dist/ens-normalize-uts51.min.js';
 import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
 
 use_default_style();
@@ -137,9 +138,10 @@ const PRIMARY = 'adraffy';
 
 const VERSIONS = [
 	{idna: PRIMARY},
-	{idna: 'ENS0',  tokenize: tokenizeENS0, normalize: normENS0},
-	{idna: '2003',  tokenize: tokenize2003, normalize: norm2003},
-	{idna: '2008',  tokenize: tokenize2008, normalize: norm2008},
+	{idna: 'UTS51',tokenize: tokenizeUTS51,normalize: normUTS51},
+	{idna: 'ENS0', tokenize: tokenizeENS0, normalize: normENS0},
+	{idna: '2003', tokenize: tokenize2003, normalize: norm2003},
+	{idna: '2008', tokenize: tokenize2008, normalize: norm2008},
 ];
 
 try {
@@ -171,11 +173,11 @@ function add_index_link(name, suffix) {
 }
 
 async function main() {
-	let [data, seqs, zwjs, invalid] = await Promise.all([
+	let [data, seqs, zwjs, custom] = await Promise.all([
 		'../build/unicode-json/emoji-data.json',
 		'../build/unicode-json/emoji-sequences.json',
 		'../build/unicode-json/emoji-zwj-sequences.json',
-		'./data/invalid-sequences.json'
+		'./data/custom-sequences.json'
 	].map(fetch_json));
 
 	await update_state('Computing');
@@ -206,22 +208,25 @@ async function main() {
 	}));
 
 	zwjs = zwjs.map(({src, desc}) => ({cps: parse_cp_sequence(src), desc}));
-	invalid = invalid.map(({src, desc}) => ({cps: parse_cp_sequence(src), desc}));
+	custom = custom.map(({src, desc}) => ({cps: parse_cp_sequence(src), desc}));
 
 	basic = [...basic].sort((a, b) => a - b);
 	emoji = [...emoji].sort((a, b) => a - b);
 
+	// debug
+	//await add_sequences('Test', [{cps:parse_cp_sequence('270A')}]);
+	//await add_characters('Test', parse_cp_sequence('270A'), true);
 
-	await add_characters('Non-Emoji Pictographs', picto);
+
+	await add_sequences('Custom Sequences', custom, true);
 	await add_characters('Single Character Emoji', basic);
 	await add_characters('Unknown Emoji', emoji);
-
 	for (let [name, v] of Object.entries(seqs)) {
 		await add_sequences(name, v);
 	}
 	await add_sequences('ZWJ Sequences', zwjs);
-	await add_sequences('Invalid Sequences', invalid);
-	
+	await add_characters('Non-Emoji Pictographs', picto);
+
 	// jump to anchor
 	window.location.hash = window.location.hash.toString();
 	
@@ -232,7 +237,7 @@ function str_from_tokens(tokens) {
 	return String.fromCodePoint(...tokens.flatMap(({v,m,e}) => v ?? m ?? e ?? []));
 }
 
-async function add_sequences(name, seqs) {
+async function add_sequences(name, seqs, show_errors = false) {
 	if (seqs.length == 0) return;
 	await update_state(`${name} (${seqs.length})`);
 
@@ -251,7 +256,7 @@ async function add_sequences(name, seqs) {
 				type = 'verbatim';
 			} else {
 				type = 'different';
-				td0.append(dom_from_tokens(tokens, true));
+				td0.append(dom_from_tokens(tokens));
 			}
 		} catch (err) {
 			type = 'error';
@@ -262,26 +267,24 @@ async function add_sequences(name, seqs) {
 		let tr = document.createElement('tr');
 		tr.innerHTML = `<td class="desc">${desc}</td><td class="src">${cps.map(hex_cp).join(' ')}</td><td class="form">${emoji}</td>`;
 
-		let td_src = document.createElement('td');
-		td_src.classList.add('parsed');
-		td_src.append(dom_from_tokens(ens_tokenize(emoji)));
-		tr.append(td_src);
-
 		tr.append(...VERSIONS.map(({idna, tokenize, normalize}) => {
-			if (idna == PRIMARY) return td0;				
+			if (idna == PRIMARY) return td0;
 			let td = document.createElement('td');
 			try {
 				let norm = normalize(emoji);
-				if (norm === norm0) { // same as primary
-					td.classList.add(type);
-				} else if (norm === emoji) { 
+				if (norm === emoji) { 
 					td.classList.add('verbatim');
+				} else if (norm === norm0) { // same as primary
+					td.classList.add(type);
 				} else {
 					td.classList.add('different');
-					td.append(dom_from_tokens(tokenize(emoji), false));
+					td.append(dom_from_tokens(tokenize(emoji)));
 				}
 			} catch (err) {
 				td.classList.add('disallowed');
+				if (show_errors) {
+					td.innerHTML = err.message;
+				}
 			}
 			return td;
 		}));
@@ -301,7 +304,7 @@ async function add_sequences(name, seqs) {
 	// create html
 	let section = document.createElement('section');
 	section.innerHTML = `<h2><a name="${name}" href="#${name}">${name}</a>${suffix}</h2><table><thead><tr>
-	<th>Description</th><th>Sequence</th><th>Form</th><th>Parsed</th>${VERSIONS.map(x => `<th>${x.idna}</th>`).join('')}
+	<th>Description</th><th>Sequence</th><th>Form</th>${VERSIONS.map(x => `<th>${x.idna}</th>`).join('')}
 	</tr></thead><tbody></tbody></table>`;
 	section.querySelector('tbody').append(...rows.map(x => x.tr));
 	document.body.append(section);	
@@ -310,7 +313,7 @@ async function add_sequences(name, seqs) {
 }
 
 
-async function add_characters(name, chars, width = 3) {
+async function add_characters(name, chars, show_errors = false, width = 3) {
 	await update_state(`${name} (${chars.length})`);
 
 	//<th>Dec</th>
@@ -324,31 +327,34 @@ async function add_characters(name, chars, width = 3) {
 		buf.length = 0;
 	}
 	for (let cp of chars) {		
+		let solo = String.fromCodePoint(cp);
+		let styled = String.fromCodePoint(cp, 0xFE0F);
 		let hex = hex_cp(cp);
 		let tr = document.createElement('tr');
 		//<td class="dec">${cp}</td>
-		tr.innerHTML = `<td class="form">${escape_name_for_html(String.fromCodePoint(cp))}</td>
+		tr.innerHTML = `<td class="form">${escape_name_for_html(styled)}</td>
 		<td><a href="https://www.compart.com/en/unicode/U+${hex}">${hex}</td>`;
 
 		let td0 = document.createElement('td');
 		let norm0;
 		let type;
 		try {
-			let solo = String.fromCodePoint(cp);
-			let styled = String.fromCodePoint(cp, 0xFE0F);
 			norm0 = ens_normalize(styled);
 			if (norm0 === solo) {
 				type = 'valid';
 			} else {
-				td0.append(dom_from_tokens(ens_tokenize(solo), true));
 				if (norm0 === styled) {
 					type = 'verbatim';
 				} else {
 					type = 'different';
+					td0.append(dom_from_tokens(ens_tokenize(solo), true));
 				}
 			}
 		} catch (err) {
 			type = 'disallowed';
+			if (show_errors) {
+				td0.innerHTML = err.message;
+			}
 		}
 		td0.classList.add(type);
 
@@ -356,23 +362,24 @@ async function add_characters(name, chars, width = 3) {
 			if (idna == PRIMARY) return td0;	
 			let td = document.createElement('td');
 			try {
-				let solo = String.fromCodePoint(cp);
-				let styled = String.fromCodePoint(cp, 0xFE0F);
 				let norm = normalize(styled);
 				if (norm == norm0) { // same as primary
 					td.classList.add(type);
 				} else if (norm === solo) {
 					td.classList.add('valid');
 				} else {
-					td.append(dom_from_tokens(tokenize(solo)));
 					if (norm === styled) {
 						td.classList.add('verbatim');
 					} else {
 						td.classList.add('different');
+						td.append(dom_from_tokens(tokenize(solo)));
 					}
 				}
 			} catch (err) {
 				td.classList.add('disallowed');
+				if (show_errors) {
+					td.innerHTML = err.message;
+				}
 			}
 			return td;
 		}));

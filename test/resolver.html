@@ -205,7 +205,7 @@ li + li {
 }
 .hashes .text {
 	line-break: anywhere;
-	text-align: right;
+	text-align: center;
 }
 .hashes .cp {
 	white-space: break-spaces;
@@ -666,6 +666,7 @@ function add_hashes_row(name) {
 	row.append(wrap);
 	row.classList.toggle('hide', !show_hashes_check.checked);
 	output_div.append(row);
+	return row;
 }
 
 function create_row(dur, label, item, value_class) {
@@ -775,7 +776,7 @@ async function resolve0(name0, override_skip_norm) {
 		let input_exploded = create_exploded(input_name, false, ignore_disallowed_check.checked);
 		let input_row = create_row(false, 'Input', input_exploded);
 		output_div.append(input_row);			
-		add_hashes_row(input_name);
+		let input_hashes = add_hashes_row(input_name);
 		
 		if (is_printable_ascii(input_name)) {
 			input_grade.innerHTML = 'ASCII';
@@ -817,6 +818,8 @@ async function resolve0(name0, override_skip_norm) {
 				input_grade.innerHTML = 'Normalized';
 				input_grade.classList.add('good');
 				input_exploded.querySelector('.ens')?.remove();
+				// steal the hashes from above
+				output_div.append(input_hashes);
 			} else { 
 				// add warning to input
 				let span = document.createElement('span');
@@ -934,12 +937,10 @@ async function resolve0(name0, override_skip_norm) {
 		exploded_reverse.querySelector('.tags').append(span);
 	}		
 	output_div.append(create_row(clock(), 'Reverse', exploded_reverse));
-	if (input_norm !== reverse_name) { // only show if necessary
-		add_hashes_row(reverse_name);
-	}	
 	// note: im curious if any reverse names are unnormalized
 	// but stop if theres nothing more to do
-	if (input_norm === reverse_name) return;		
+	if (input_norm === reverse_name) return;
+	let reverse_hashes = add_hashes_row(reverse_name);
 	// normalize the reverse name
 	let reverse_norm;
 	try {
@@ -968,6 +969,12 @@ async function resolve0(name0, override_skip_norm) {
 	again_btn.innerHTML = 'Resolve';	
 	exploded_reverse_norm.append(again_btn);
 	output_div.append(create_row(false, 'Normalized Reverse', exploded_reverse_norm));		
+	if (reverse_name === reverse_norm) {
+		output_div.append(reverse_hashes);
+	} else {
+		add_hashes_row(reverse_norm);
+	}
+
 }
 
 function show_critical_error(title, message) {

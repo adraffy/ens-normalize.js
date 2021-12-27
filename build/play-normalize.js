@@ -3,7 +3,6 @@ import {ens_normalize, ens_tokenize} from './lib-normalize.js';
 import {escape_name_for_html, escape_unicode} from './utils.js';
 
 
-
 console.log(escape_name_for_html(String.fromCodePoint(0x61, 0x26, 0x200D, 10)));
 
 console.log(inspect(ens_tokenize('🚴‍♂️.eth'), false, null, true));
@@ -31,8 +30,8 @@ console.log(inspect(ens_tokenize('R💩ffy.eth'), false, null, true));
 console.log(ens_normalize('xn--ls8h.eth'));
 
 try {
-    console.log(ens_normalize('bahrainمصر.eth'));
-    throw new Error('no throw');
+	console.log(ens_normalize('bahrainمصر.eth'));
+	throw new Error('no throw');
 } catch (err) {
-    console.error(err);
+	console.error(err);
 }

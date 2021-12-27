@@ -1,15 +1,15 @@
-import {decode_payload, read_member_function} from './decoder.js';
+import {decode_payload, read_member_set} from './decoder.js';
 import {escape_unicode} from './utils.js';
 import PAYLOAD from './output/context.js';
 
 let r = decode_payload(PAYLOAD);
-const VIRAMA = read_member_function(r);
-const JOIN_T = read_member_function(r);
-const JOIN_LD = read_member_function(r);
-const JOIN_RD = read_member_function(r);
-const SCRIPT_GREEK = read_member_function(r);
-const SCRIPT_HEBREW = read_member_function(r);
-const SCRIPT_HKH = read_member_function(r);
+const VIRAMA = read_member_set(r);
+const JOIN_T = read_member_set(r);
+const JOIN_LD = read_member_set(r);
+const JOIN_RD = read_member_set(r);
+const SCRIPT_GREEK = read_member_set(r);
+const SCRIPT_HEBREW = read_member_set(r);
+const SCRIPT_HKH = read_member_set(r);
 
 // chunks is a list of textual code-points
 // chunks can be empty and contain empty lists
@@ -21,15 +21,15 @@ export function validate_context(cps) {
 				// ZERO WIDTH NON-JOINER (ZWNJ)
 				// ContextJ: https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.1	
 				// If Canonical_Combining_Class(Before(cp)) .eq.  Virama Then True;
-				if (i > 0 && VIRAMA(cps[i - 1])) continue;
+				if (i > 0 && VIRAMA.has(cps[i - 1])) continue;
 				// If RegExpMatch((Joining_Type:{L,D})(Joining_Type:T)*\u200C(Joining_Type:T)*(Joining_Type:{R,D})) Then True;
 				if (i > 0 && i < e) { // there is room on either side
 					let head = i - 1;
-					while (head > 0 && JOIN_T(cps[head])) head--; // T*
-					if (JOIN_LD(cps[head])) { // L or D
+					while (head > 0 && JOIN_T.has(cps[head])) head--; // T*
+					if (JOIN_LD.has(cps[head])) { // L or D
 						let tail = i + 1;
-						while (tail < e && JOIN_T(cps[tail])) tail++; // T*
-						if (JOIN_RD(cps[tail])) { // R or D
+						while (tail < e && JOIN_T.has(cps[tail])) tail++; // T*
+						if (JOIN_RD.has(cps[tail])) { // R or D
 							continue;
 						}
 					}
@@ -40,7 +40,7 @@ export function validate_context(cps) {
 				// ZERO WIDTH JOINER (ZWJ)
 				// ContextJ: https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.2
 				// If Canonical_Combining_Class(Before(cp)) .eq.  Virama Then True;
-				if (i > 0 && VIRAMA(cps[i-1])) continue;
+				if (i > 0 && VIRAMA.has(cps[i-1])) continue;
 				break;
 			}
 			case 0x00B7: {
@@ -55,7 +55,7 @@ export function validate_context(cps) {
 				// GREEK LOWER NUMERAL SIGN (KERAIA)
 				// ContextO: https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.4
 				// The script of the following character MUST be Greek.
-				if (i < e && SCRIPT_GREEK(cps[i+1])) continue; 
+				if (i < e && SCRIPT_GREEK.has(cps[i+1])) continue; 
 				break;
 			}
 			case 0x05F3:
@@ -66,7 +66,7 @@ export function validate_context(cps) {
 				// HEBREW PUNCTUATION GERSHAYIM
 				// ContextO: https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.6		
 				// The script of the preceding character MUST be Hebrew.
-				if (i > 0 && SCRIPT_HEBREW(cps[i-1])) continue;
+				if (i > 0 && SCRIPT_HEBREW.has(cps[i-1])) continue;
 				break;
 			}
 			default: continue;
@@ -92,7 +92,7 @@ export function validate_context(cps) {
 	// ContextO: https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.7
 	// The effect of this rule is to require at least one character in the label to be in one of those scripts.
 	// For All Characters: If Script(cp) .in. {Hiragana, Katakana, Han} Then True; End For;
-	if (cps.includes(0x30FB) && !cps.some(cp => SCRIPT_HKH(cp))) {
+	if (cps.includes(0x30FB) && !cps.some(cp => SCRIPT_HKH.has(cp))) {
 		throw new Error(`Disallowed katakana`);
 	}
 }
