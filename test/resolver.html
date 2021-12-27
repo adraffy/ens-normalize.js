@@ -427,7 +427,7 @@ let provider_window = typeof window.ethereum !== 'undefined' ? retry(window.ethe
 
 function ens_normalize_input(name) {
 	if (ignore_disallowed_check.checked) {
-		name = String.fromCodePoint(...ens_tokenize(name).flatMap(({v,i,m,e,u,d}) => v ?? i ?? m ?? (e ?? u) ?? (d===undefined ? 0x2E : [])));
+		name = String.fromCodePoint(...ens_tokenize(name).flatMap(({v,i,m,e,u,d}) => v ?? i ?? (m?u:null) ?? (e?u:null) ?? (d===undefined ? 0x2E : [])));
 	}
 	if (ignore_bidi_check.checked) {
 		return ens_normalize_xbidi(name);

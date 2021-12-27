@@ -7,7 +7,7 @@ export default [
 	// add all the emoji that IDNA mapped
 	...DEMOJI,	
 
-	// nuke these keycaps that IDNA mangled
+	// nuke the keycaps that IDNA mangled
 	{ty: 'keycap-drop', src: '30..39'},
 
 	// permit solo regional emojis
