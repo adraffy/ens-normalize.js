@@ -347,7 +347,7 @@ async function add_characters(name, chars, show_errors = false, width = 3) {
 					type = 'verbatim';
 				} else {
 					type = 'different';
-					td0.append(dom_from_tokens(ens_tokenize(solo), true));
+					td0.append(dom_from_tokens(ens_tokenize(solo)));
 				}
 			}
 		} catch (err) {

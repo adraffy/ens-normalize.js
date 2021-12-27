@@ -16,13 +16,13 @@ function tooltip(cp) {
 	return `Hex: 0x${hex_cp(cp)}\nDec: ${cp}`;
 }
 
-export function dom_from_tokens(tokens, is_norm = false) {
+export function dom_from_tokens(tokens, show_mapped = true) {
 	let div = document.createElement('div');
 	div.classList.add('tokens');
 	div.append(...tokens.flatMap(({v, m, i, d, e, u}) => {
 		let el;
 		if (e) {
-			let cps = is_norm ? e : u;
+			let cps = show_mapped ? e : u;
 			el = document.createElement('a');
 			el.href = `https://emojipedia.org/${String.fromCodePoint(...cps)}`;
 			el.classList.add('glyph');
@@ -56,14 +56,14 @@ export function dom_from_tokens(tokens, is_norm = false) {
 				el.classList.add('valid');
 			} else if (m) {
 				el.classList.add('mapped');
-				for (let cp of (is_norm ? m : u)) {
+				for (let cp of (show_mapped ? m : u)) {
 					let span = document.createElement('span');
 					span.innerHTML = str(cp);	
 					span.title = tooltip(cp)
 					el.append(span);
 				}
 			} else if (i) {
-				if (is_norm) return []; // hide
+				//if (is_norm) return []; // hide
 				el = document.createElement('code');
 				el.innerHTML = hex_cp(i); 
 				el.title = tooltip(i);

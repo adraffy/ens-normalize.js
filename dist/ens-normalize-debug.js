@@ -866,7 +866,7 @@ function norm(form, cps) {
 function nfc(cps) { return norm('NFC', cps); }
 function nfd(cps) { return norm('NFD', cps); }
 
-const BUILT = '2021-12-27T03:56:02.730Z';
+const BUILT = '2021-12-27T04:32:24.044Z';
 const UNICODE = '14.0.0';
 const VERSION = '1.3.6';
 const IDNA = 'adraffy';
