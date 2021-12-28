@@ -267,7 +267,7 @@ li + li {
 <button>ADRaffy</button>
 
 <b>Address:</b>
-<button data-name="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045">0xd8..6045</button>
+<button data-name="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045">d8dA..6045</button>
 
 <b>Mapped:</b> 
 <button>Ⅷ</button>
@@ -363,7 +363,7 @@ Arabic-Indic:
 <button>#️⃣</button>
 </div>
 <div id="options">
-<label><input type="checkbox" id="auto_resolve_check" checked>Resolve on Input<label>
+<label><input type="checkbox" id="auto_resolve_check" checked>Resolve on Input</label>
 <label><input type="checkbox" id="show_hashes_check" checked>Show Hashes</label>
 <span><input type="checkbox" id="skip_norm_check"><label class="nonstd" for="skip_norm_check">Skip Normalization</label></span>
 <span><input type="checkbox" id="ignore_disallowed_check"><label class="nonstd" for="ignore_disallowed_check">Ignore Disallowed Characters</label></span>
@@ -397,9 +397,9 @@ import {
 	ens_resolve, 
 	lookup_address,
 	ens_name_for_address,
-	hash_from_label,
+	labelhash,
 	ens_text_record
-} from 'https://adraffy.github.io/eth-tools.js/dist/eth-tools.min.js';
+} from '../../eth-tools.js/dist/eth-tools.min.js';
 import {escape_name_for_html, is_printable_ascii, explode_cp, hex_cp} from '../build/utils.js';
 import {ens_normalize, ens_tokenize, VERSION, BUILT, IDNA, UNICODE} from '../dist/ens-normalize-debug.min.js';
 import {ens_normalize as ens_normalize_xbidi} from '../dist/ens-normalize-xbidi.min.js'; // load without bidi
@@ -652,7 +652,7 @@ function add_hashes_row(name) {
 		points.innerHTML = label.length == 0 ? 'null' : [...label].map(x => x.codePointAt(0).toString(16).toUpperCase().padStart(2, '0')).join(' ');		
 		let hash = document.createElement('span');
 		hash.classList.add('hash');
-		hash.innerHTML = hash_from_label(label).hex;
+		hash.innerHTML = labelhash(label).hex;
 		div.append(text, points, hash);
 	}
 	// add namehash
@@ -865,7 +865,7 @@ async function resolve0(name0, override_skip_norm) {
 		// add opensea if ENS
 		if (resolver === '0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41') { // label.length must be 2?
 			let label = input_norm.split('.')[0];
-			exploded_norm.append(create_link(`https://opensea.io/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/${hash_from_label(label).hex}`, 'Opensea'));				
+			exploded_norm.append(create_link(`https://opensea.io/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/${labelhash(label).hex}`, 'Opensea'));				
 		}
 
 		// check display name
@@ -902,13 +902,13 @@ async function resolve0(name0, override_skip_norm) {
 	// 2. a name was entered and we resolved the address		
 
 	// add etherscan
-	output_div.append(create_row(false, 'Address', create_etherscan_address_link( address)));
+	output_div.append(create_row(false, 'Address', create_etherscan_address_link(address)));
 
 	// reverse-lookup the address
 	let reverse_name;
 	try {
 		reverse_name = await ens_name_for_address(provider, address);
-		if (resolve_timer) return
+		if (resolve_timer) return;
 	} catch (err) {
 		show_critical_error('Reverse', err.message);
 		return;
@@ -968,7 +968,7 @@ async function resolve0(name0, override_skip_norm) {
 		input_field.value = reverse_name;
 		resolve();
 	});
-	again_btn.innerHTML = 'Resolve';	
+	again_btn.innerHTML = 'Resolve Reverse Name';	
 	exploded_reverse_norm.append(again_btn);
 	output_div.append(create_row(false, 'Normalized Reverse', exploded_reverse_norm));		
 	if (reverse_name === reverse_norm) {
@@ -980,7 +980,7 @@ async function resolve0(name0, override_skip_norm) {
 }
 
 function show_critical_error(title, message) {
-	if (resolve_timer) return
+	if (resolve_timer) return;
 	let tags = document.createElement('div');
 	tags.classList.add('tags');
 	let row = create_row(clock(), title, tags);
