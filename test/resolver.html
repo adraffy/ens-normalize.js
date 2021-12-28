@@ -754,8 +754,8 @@ async function resolve0(name0, override_skip_norm) {
 	
 	// find a provider
 	let provider;
-	if (provider_window && parseInt(provider_window.chainId) == 1) { // dont force a chain switch
-		provider = provider_window;
+	if (provider_window && parseInt(await provider_window.request({method: 'eth_chainId'})) == 1) {
+		provider = provider_window; // only use browser wallet if on mainnet
 	} else {
 		provider = provider_infura;
 	}
