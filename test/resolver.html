@@ -128,6 +128,9 @@ button.main {
 .row.normalized {
 	background: #efe;
 }
+.row.owner {
+	background: #fed;
+}
 ul.row {
 	flex-direction: column;
 	align-items: start;
@@ -238,6 +241,11 @@ ul.row {
 .error {
 	background: #fcc;
 	border: 3px dashed #f00;
+}
+footer {
+	text-align: center;
+	color: #666;
+	margin-bottom: 0.5rem;
 }
 @media only screen and (max-width: 800px) { 
 	body {
@@ -405,6 +413,7 @@ Arabic-Indic:
 <li><b>Copy Link</b> to get a URL that resolves on page-load.</li>
 </ul>
 </div>
+<footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
 <script type="module">
 import {
 	Providers, FetchProvider, 
@@ -504,7 +513,7 @@ show_hashes_check.addEventListener('input', () => {
 
 input_field.focus();
 input_field.value = decode_location_hash();
-resolve();
+schedule_resolve(100);
 window.addEventListener('hashchange', () => {
 	input_field.value = decode_location_hash();
 	resolve();
@@ -514,11 +523,11 @@ function decode_location_hash() {
 	return decodeURIComponent(window.location.hash.slice(1));
 }
 
-function schedule_resolve() {
+function schedule_resolve(t = 1000) {
 	if (is_working()) {
 		resolve_timer = true;
 	} else if (!resolve_timer && auto_resolve_check.checked) {
-		resolve_timer = setTimeout(resolve, 1000);
+		resolve_timer = setTimeout(resolve, t);
 		arrows.classList.remove('hide');
 	}
 } 
@@ -990,7 +999,8 @@ async function resolve0(name0, override_skip_norm) {
 			add_row_tag(address_row, span);
 		} else {
 			let owner_row = create_row('Owner');
-			owner_row.append(create_etherscan_address_link(address));
+			owner_row.classList.add('owner');
+			owner_row.append(create_etherscan_address_link(owner));
 			add_row_tag(owner_row, create_elapsed());
 			output_append(owner_row);
 		}
