@@ -425,7 +425,8 @@ import {ens_normalize, ens_tokenize, VERSION, BUILT, IDNA, UNICODE} from '../dis
 import {ens_normalize as ens_normalize_xbidi} from '../dist/ens-normalize-xbidi.min.js'; // load without bidi
 import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
 
-let providers = new Providers().add_static(1, new FetchProvider({url: 'https://cloudflare-eth.com'}));
+let providers = new Providers()
+	.add_static(1, new FetchProvider({url: 'https://mainnet.infura.io/v3/f36f6a8638134ac09f9400d3a7008dfe', source: 'Infura'}));
 let window_provider;
 determine_window_provider().then(p => {
 	window_provider = p;
@@ -902,8 +903,8 @@ async function resolve0(name0, override_skip_norm) {
 		// resolve as a name
 		name = await ens.resolve(input_norm, false);
 		if (resolve_timer) return;
-		if (name.error) {
-			output_append(create_error_row('Resolver', name.error));
+		if (name.input_error) {
+			output_append(create_error_row('Resolver', name.input_error));
 			return;
 		}
 		
