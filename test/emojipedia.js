@@ -15,9 +15,10 @@ if (pos1 == -1) throw new Error('missing stop');
 let json = [];
 // <li><a href="/eye-in-speech-bubble/"><span class="emoji">👁️‍🗨️</span> Eye in Speech Bubble</a></li>
 for (let match of html.slice(pos0, pos1).matchAll(/<li>.*?href="(.+?)".*?class="emoji">(.*?)<\/span>(.*?)<\/a>/ug)) {
-    let [slug, emoji, desc] = match.slice(1);
+    let [_, slug, emoji, desc] = match;
+    desc = desc.trim();
     let cps = explode_cp(emoji);
-    if (!cps.includes(0x200D)) {
+    if (!cps.includes(0x200D)) { // wtf
         console.log(`Not ZWJ: ${slug} => ${cps.map(quote_cp).join('')}`);
         continue;
     }
