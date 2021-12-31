@@ -174,6 +174,15 @@ switch (mode) {
 		['context', 'nf', 'bidi'].forEach(create_payload);
 		break;
 	}
+	case 'dump-emoji': {
+		let emoji = read_emoji_data();
+		if (argv.length == 0) { // just output to console
+			console.log(emoji);
+			break;
+		}
+		writeFileSync(join(ensure_dir('output'), 'emoji.json'), JSON.stringify(emoji));
+		break
+	}
 	case 'missing-emoji': {
 		// find the emoji that are missing from ENS0
 		let {idna} = read_rules_for_ENS0();
@@ -284,20 +293,19 @@ async function create_payload(name) {
 	}
 }
 
-
 function read_emoji_data() {
-	return Object.assign(
-		map_values(read_parsed('emoji-data'), e => e.flatMap(parse_cp_range)),
+	return {
+		...map_values(read_parsed('emoji-data'), e => e.flatMap(parse_cp_range)),
 		// RGI_Emoji_ZWJ_Sequence
-		{zwj: read_parsed('emoji-zwj-sequences').map(({src}) => parse_cp_sequence(src))},
+		zwj: read_parsed('emoji-zwj-sequences').map(({src}) => parse_cp_sequence(src)),
 		//
 		// these following exist in emoji-data
 		// but can only be identified by parsing the comments
 		// regional and tag_spec
-		read_parsed('emoji-missing'),
+		...read_parsed('emoji-missing'),
 		// keycaps
-		{keycaps: read_parsed('emoji-sequences').Emoji_Keycap_Sequence.map(({src}) => parse_cp_sequence(src)[0])}
-	);
+		keycaps: read_parsed('emoji-sequences').Emoji_Keycap_Sequence.map(({src}) => parse_cp_sequence(src)[0])
+	};
 }
 
 function read_combining_marks() {

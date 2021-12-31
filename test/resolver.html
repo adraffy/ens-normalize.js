@@ -916,18 +916,25 @@ async function resolve0(name0, override_skip_norm) {
 					let available = await ens.is_dot_eth_available(label);
 					if (resolve_timer) return;
 					let row = create_row('Availability');
-					let span = document.createElement('span');
+					let span_avail = document.createElement('span');
+					let len = [...label].length;
 					if (available) {
-						if ([...label].length < 3) {
-							apply_warn_grade(span, `Too Short`);
+						if (len < 3) {
+							apply_warn_grade(span_avail, `Too Short`);
 						} else {
-							span.classList.add('good');
-							span.innerHTML = 'Available';
+							span_avail.classList.add('good');
+							span_avail.innerHTML = 'Available';
 						}
 					} else {
-						apply_fail_grade(span, `Not Available`);
+						apply_fail_grade(span_avail, `Not Available`);
 					}
-					add_row_tag(row, span);
+					add_row_tag(row, span_avail);
+
+					let span_len = document.createElement('span');
+					span_len.classList.add('length');
+					span_len.innerHTML = `${len}<sub>ch</sub>`;
+					add_row_tag(row, span_len);
+
 					norm_ens_btn?.remove();// remove duplicate
 					add_row_tag(row, create_ens_link(input_norm));
 					output_append(row);
