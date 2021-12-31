@@ -123,6 +123,7 @@ function use_default_style() {
 		border-radius: 5px;
 		background: #cfc;
 		border: 2px solid #0a0;
+		line-break: anywhere;
 	}
 	.tokens .ignored {
 		color: #fff;
@@ -144,7 +145,6 @@ function use_default_style() {
 	}
 	.tokens .stop {
 		font-weight: bold;
-		background: #ffa;
 	}
 	.tokens .glyph {
 		border: 2px solid #0aa;

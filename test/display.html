@@ -10,6 +10,7 @@
 }
 body {
 	margin: 3rem;
+	background: #eee;
 }
 #arrows {
 	width: 4rem;
@@ -20,6 +21,9 @@ body {
 @keyframes spin {
 	from { transform:rotate(0deg); }
 	to	 { transform:rotate(360deg); }
+}
+#examples {
+	margin-bottom: 1rem;
 }
 #input {
 	display: flex;
@@ -35,10 +39,13 @@ body {
 	border-radius: 0.5rem;
 }
 .working {
-	background: #eee;
+	background: #fff;
 }
 .norm {
 	background-color: #cfc;
+}
+.display {
+	background-color: #cff;
 }
 .not-norm {
 	background-color: #fc9;
@@ -65,6 +72,12 @@ body {
 </head>
 <body>
 <h1>ENS Display Name</h1>
+<div id="examples">
+<button>ADRaffy.eth</button>
+<button>adraffy.eth</button>
+<button>aDrAfFy.eTh</button>
+<button>adraffy?eth</button>
+</div>
 <div id="input">
 <input id="input_field" placeholder="ENS Name">
 <svg id="arrows" class="hide" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
@@ -73,22 +86,23 @@ body {
 </div>
 <div id="output_div"></div>
 <div id="key">
+<span class="display">Display</span>
 <span class="norm">Normalized</span>
 <span class="not-norm">Not-Normalized</span>
 <span class="error">Error</span>
 </div>
 <script type="module">
 import {ens_normalize} from '../dist/ens-normalize-debug.js';
-import {
-	FetchProvider, retry,
-	node_from_ens_name,
-	ens_resolve, 
-	ens_text_record,
-	is_null_hex
-} from 'https://adraffy.github.io/eth-tools.js/dist/eth-tools.min.js';
+import {FetchProvider, Providers, determine_window_provider, ENS} from '../../eth-tools.js/dist/eth-tools.js';
 
-const provider_infura = retry(new FetchProvider({url: 'https://cloudflare-eth.com'})); 
-const provider_window = typeof window.ethereum !== 'undefined' ? retry(window.ethereum) : null;
+let providers = Providers.from_map({
+	1: new FetchProvider({url: 'https://cloudflare-eth.com'})
+});
+determine_window_provider().then(p => {
+	providers.add_dynamic(p);
+}).catch(() => {});
+
+const ens = new ENS({provider: providers.view(1), ens_normalize});
 
 const input_field = document.querySelector('#input_field');
 const output_div = document.querySelector('#output_div');
@@ -100,6 +114,13 @@ let dirty = false;
 input_field.addEventListener('input', mark_dirty);
 if (input_field.value) mark_dirty();
 
+for (let el of document.querySelectorAll('#examples button')) {
+	el.addEventListener('click', () => {
+		input_field.value = el.innerHTML;
+		mark_dirty();
+	});
+}
+
 function mark_dirty() {
 	dirty = true;
 	update();
@@ -109,17 +130,8 @@ function update() {
 	if (!dirty || update_timer) return;
 	update_timer = setTimeout(resolve, 500);
 	arrows.classList.remove('hide');	
+	input_field.classList.remove(...input_field.classList.values());
 	input_field.classList.add('working');
-	input_field.classList.remove('norm', 'not-norm', 'error');
-}
-
-function match_display(display, name) {
-	if (!display) return false;
-	try {
-		return ens_normalize(display) == name;
- 	} catch (ignored) {
-		return false;
-	}
 }
 
 async function resolve() {
@@ -127,21 +139,18 @@ async function resolve() {
 	clearTimeout(update_timer);
 	output_div.innerHTML = '';
 	try {
-		let name = input_field.value.trim();
-		let norm = ens_normalize(name);		
-		let provider;
-		if (provider_window && parseInt(provider_window.chainId) == 1) { // dont force a chain switch
-			provider = provider_window;
-		} else {
-			provider = provider_infura;
-		}
-		let node = node_from_ens_name(norm);
-		let resolved = await ens_resolve(provider, node);
-		if (is_null_hex(resolved.resolver)) throw new Error('Resolver not set');
-		let ret = await ens_text_record(provider, resolved, 'display');
-		let display = ret?.text?.display;
-		if (name === norm || (match_display(display, norm) && name === display)) {
+		let name = await ens.resolve(input_field.value.trim(), {throws: true});
+		if (name.is_input_address()) {
+			input_field.classList.add('address');
+		} else if (name.is_input_norm()) {
 			input_field.classList.add('norm');
+		} else if (await name.is_input_display().catch(err => {
+			console.error(err);
+			// display network error
+			output_div.innerHTML = `<div id="error">⚠️ <b>${err.message}</b></div>`;
+			return false;
+		})) {
+			input_field.classList.add('display');
 		} else {
 			input_field.classList.add('not-norm');
 		}

@@ -58,7 +58,7 @@ export function quote_cp(cp) {
 }
 
 export function is_printable_ascii(s) {	
-	return /^[\x21-\x25\x27-\x3B\x3D\x3F-\x7E]$/gu.test(s);
+	return /^[\x21-\x25\x27-\x3B\x3D\x3F-\x7E]+$/gu.test(s);
 }
 
 export function escape_unicode(s) {

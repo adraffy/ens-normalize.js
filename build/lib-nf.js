@@ -1,5 +1,5 @@
 import {explode_cp} from './utils.js';
-import {nfc as nfc_adraffy, nfd as nfd_adraffy} from './nf';
+import {nfc as nfc_adraffy, nfd as nfd_adraffy} from './nf.js';
 
 // these use code-points
 export {nfc_adraffy, nfd_adraffy};
