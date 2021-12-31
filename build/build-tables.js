@@ -160,6 +160,7 @@ class UTS51 {
 		return groups;
 	}
 }
+
 // this is used by two separate sub-libraries
 const VIRAMA_COMBINING_CLASS = 9;
 
@@ -174,13 +175,13 @@ switch (mode) {
 		['context', 'nf', 'bidi'].forEach(create_payload);
 		break;
 	}
-	case 'dump-emoji': {
+	case 'emoji-data': {
 		let emoji = read_emoji_data();
 		if (argv.length == 0) { // just output to console
 			console.log(emoji);
 			break;
 		}
-		writeFileSync(join(ensure_dir('output'), 'emoji.json'), JSON.stringify(emoji));
+		writeFileSync(join(ensure_dir('output'), 'emoji-data.json'), JSON.stringify(emoji));
 		break
 	}
 	case 'missing-emoji': {

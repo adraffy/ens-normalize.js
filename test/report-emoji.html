@@ -17,6 +17,12 @@ body {
 	from { transform:rotate(0deg); }
 	to	 { transform:rotate(360deg); }
 }
+#versions {
+	position: absolute;
+	right: 1rem;
+	top: 1rem;
+	text-align: right;
+}
 #loading {
 	display: inline-flex;
 	background: #ffc;
@@ -31,6 +37,10 @@ body {
 section table {
 	border-collapse: collapse;
 	width: 100%;
+}
+.error-count {
+	font-weight: bold;
+	color: #f00;
 }
 td { 
 	border: 1px solid #aaa; 
@@ -101,6 +111,7 @@ td.emoji.only {
 </head>
 <body>
 <h1>Emoji</h1>
+<div id="versions"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a></div>
 <div class="legend">
 Pictograph and Single Character Emoji have no preferred appearance: 
 <table><tr>
@@ -125,7 +136,7 @@ Sequences have a known appearance:
 <ul id="toc"></ul>
 <script type="module">
 import {escape_name_for_html, parse_cp_range, parse_cp_sequence, hex_cp, map_values, compare_arrays} from '../build/utils.js';
-import {ens_normalize, ens_tokenize} from '../dist/ens-normalize.min.js';
+import {ens_normalize, ens_tokenize, BUILT, VERSION, UNICODE} from '../dist/ens-normalize-debug.min.js';
 import {ens_normalize as norm2003, ens_tokenize as tokenize2003} from '../dist/ens-normalize-2003.js';
 import {ens_normalize as norm2008, ens_tokenize as tokenize2008} from '../dist/ens-normalize-2008.min.js';
 import {ens_normalize as normENS0, ens_tokenize as tokenizeENS0} from '../dist/ens-normalize-ENS0.min.js';
@@ -143,6 +154,8 @@ const VERSIONS = [
 	{idna: '2003', tokenize: tokenize2003, normalize: norm2003},
 	{idna: '2008', tokenize: tokenize2008, normalize: norm2008},
 ];
+
+document.querySelector('#versions').innerHTML += ` (v${VERSION}+U${UNICODE})<br>${VERSIONS.map(x => x.idna).join(', ')}<br><code>${BUILT}</code>`;
 
 try {
 	main();
@@ -173,11 +186,12 @@ function add_index_link(name, suffix) {
 }
 
 async function main() {
-	let [data, seqs, zwjs, custom] = await Promise.all([
+	let [data, seqs, zwjs, custom_seqs, emojipedia] = await Promise.all([
 		'../build/unicode-json/emoji-data.json',
 		'../build/unicode-json/emoji-sequences.json',
 		'../build/unicode-json/emoji-zwj-sequences.json',
-		'./data/custom-sequences.json'
+		'./data/custom-sequences.json',
+		'./data/emojipedia-missing-zwj-20211231.json'
 	].map(fetch_json));
 
 	await update_state('Computing');
@@ -208,7 +222,9 @@ async function main() {
 	}));
 
 	zwjs = zwjs.map(({src, desc}) => ({cps: parse_cp_sequence(src), desc}));
-	custom = custom.map(({src, desc}) => ({cps: parse_cp_sequence(src), desc}));
+	let custom_chrs = [];
+	custom_seqs = custom_seqs.map(({src, desc}) => ({cps: parse_cp_sequence(src), desc}));
+	emojipedia = emojipedia.map(({src, desc}) => ({cps: parse_cp_sequence(src), desc}));
 
 	basic = [...basic].sort((a, b) => a - b);
 	emoji = [...emoji].sort((a, b) => a - b);
@@ -217,9 +233,12 @@ async function main() {
 	//await add_sequences('Test', [{cps:parse_cp_sequence('270A')}]);
 	//await add_characters('Test', parse_cp_sequence('270A'), true);
 
-	await add_sequences('Custom Sequences', custom, true);
-	//await add_sequences('Custom Characters', custom, true);
+	// these are nonstandard
+	await add_sequences('Custom Sequences', custom_seqs, true);
+	await add_sequences('Custom Characters', custom_chrs, true);
+	await add_sequences('Missing ZWJ from Emojipedia', emojipedia)
 
+	// these are standard
 	await add_characters('Single Character Emoji', basic);
 	await add_characters('Unknown Emoji', emoji);
 	for (let [name, v] of Object.entries(seqs)) {
@@ -299,7 +318,7 @@ async function add_sequences(name, seqs, show_errors = false) {
 	let errors = rows.filter(x => x.type == 'error').length;
 	let suffix = ` (${seqs.length})`;
 	if (errors > 0) {
-		suffix += ` &rarr; <b>${errors} errors</b>`;
+		suffix += ` &rarr; <span class="error-count">${errors} errors</span>`;
 	}
 
 	// create html
