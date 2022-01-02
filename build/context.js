@@ -11,8 +11,8 @@ const SCRIPT_GREEK = read_member_set(r);
 const SCRIPT_HEBREW = read_member_set(r);
 const SCRIPT_HKH = read_member_set(r);
 
-// chunks is a list of textual code-points
-// chunks can be empty and contain empty lists
+// cps is a list of codepoints
+// could be empty
 export function validate_context(cps) {
 	// apply relative checks
 	for (let i = 0, e = cps.length - 1; i <= e; i++) {
