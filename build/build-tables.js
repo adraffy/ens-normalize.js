@@ -579,7 +579,7 @@ function apply_rules(idna, uts51, rules) {
 					// dropped keycaps match this pattern, but strip the FE0F
 					// this is supported as a 1-way downgrade
 					for (let cp of parse_cp_multi_ranges(src)) {
-						if (!uts51.KEYCAP_REQ.has(cp)) {
+						if (!uts51.KEYCAP_REQ.delete(cp)) {
 							throw new Error(`expected keycap: ${cp}`);
 						}
 						uts51.KEYCAP_DROP.add(cp);

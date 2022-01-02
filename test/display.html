@@ -8,30 +8,49 @@
 .hide {
 	display: none;
 }
-body {
-	margin: 3rem;
-	background: #eee;
-}
-#arrows {
-	width: 4rem;
-	height: 4rem;
+.arrows {
+	width: 3rem;
+	padding-bottom: 100%;
 	animation: spin 2s infinite linear;
 	user-select: none;
+	background-image: url('data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%201000%201000%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M990%2C377.5H622.5l137.4-137.4C690.4%2C170.7%2C598.2%2C132.5%2C500%2C132.5c-98.2%2C0-190.4%2C38.2-259.9%2C107.6C170.7%2C309.6%2C132.5%2C401.8%2C132.5%2C500c0%2C98.2%2C38.2%2C190.4%2C107.6%2C259.9c69.4%2C69.4%2C161.7%2C107.6%2C259.9%2C107.6c98.2%2C0%2C190.4-38.2%2C259.9-107.6c5.8-5.8%2C11.4-11.8%2C16.7-17.9l92.2%2C80.7C778.9%2C925.2%2C647%2C990%2C500%2C990C229.4%2C990%2C10%2C770.6%2C10%2C500C10%2C229.4%2C229.4%2C10%2C500%2C10c135.3%2C0%2C257.8%2C54.9%2C346.5%2C143.5L990%2C10V377.5z%22%2F%3E%3C%2Fsvg%3E');
+	background-repeat: no-repeat;
+	background-size: contain;
 }
 @keyframes spin {
 	from { transform:rotate(0deg); }
 	to	 { transform:rotate(360deg); }
 }
+body {
+	margin: 3rem;
+	background: #eee;
+}
+header {
+	display: flex;
+}
+h1 {
+	margin: 0;
+	white-space: pre;
+	flex-grow: 1;
+}
+#version {
+	text-align: right;
+}
 #examples {
-	margin-bottom: 1rem;
+	margin: 0.5rem 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.2rem;
+	align-items: center;
 }
 #input {
+	margin-top: 1rem;
 	display: flex;
 	align-items: center;
-	gap: 0.5rem;
+	gap: 1rem;
 }
 #input_field {
-	font-size: 32pt;
+	font-size: 24pt;
 	box-sizing: border-box;
 	flex: 100%;
 	padding: 1rem;
@@ -47,57 +66,109 @@ body {
 .display {
 	background-color: #cff;
 }
-.not-norm {
+#input_field.address {
+	font-size: 14pt;
+}
+.address {
+	font-family: monospace;
+	background: #ffc;
+}
+.unnorm {
 	background-color: #fc9;
 }
-.error {
+.invalid {
 	background-color: #f66;
 }
-#error {
+#key {
+	margin: 0.5rem 0;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: stretch;
+	gap: 0.2rem;
+}
+#key > * {
+	padding: 0.2rem 0.5rem;
+	border: 1px solid #aaa;
+	border-radius: 0.5rem;
+	display: flex;
+	align-items: center;
+}
+#output_div {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+#output_div > * {
 	margin-top: 0.5rem;
+}
+#error {
 	text-align: center;
 	font-size: 14pt;
 }
-#key {
-	margin-top: 1rem;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 1rem;
+#output_div button {
+	font-size: 14pt;
+	padding: 0.2rem 0.5rem;
 }
-#key > * {
+#address {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	justify-content: center;
+}
+#address a {
+	font-size: 12pt;
+	font-family: monospace;
+	line-break: anywhere;
 	padding: 0.5rem;
+	border: 1px solid #aaa;
+	border-radius: 0.5rem;
+}
+@media only screen and (max-width: 800px) { 
+	body {
+		margin: 1rem;
+	}
+	button {
+		font-size: 100%;
+	}
 }
 </style>
 </head>
 <body>
+<header>
 <h1>ENS Display Name</h1>
+<div id="version"><a href="https://github.com/adraffy/eth-tools.js">@adraffy/eth-tools.js</a></div>
+</header>
+<div id="key">
+<span class="display">Display</span>
+<span class="norm">Normalized</span>
+<span class="unnorm">Unnormalized</span>
+<span class="address">Address</span>
+<span class="invalid">Invalid</span>
+</div>
 <div id="examples">
 <button>ADRaffy.eth</button>
 <button>adraffy.eth</button>
 <button>aDrAfFy.eTh</button>
+<button data-input="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045">0xd8dA..6045</button>
 <button>adraffy?eth</button>
+<button>adraffyeth</button>
 </div>
 <div id="input">
 <input id="input_field" placeholder="ENS Name">
-<svg id="arrows" class="hide" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
-<path d="M990,377.5H622.5l137.4-137.4C690.4,170.7,598.2,132.5,500,132.5c-98.2,0-190.4,38.2-259.9,107.6C170.7,309.6,132.5,401.8,132.5,500c0,98.2,38.2,190.4,107.6,259.9c69.4,69.4,161.7,107.6,259.9,107.6c98.2,0,190.4-38.2,259.9-107.6c5.8-5.8,11.4-11.8,16.7-17.9l92.2,80.7C778.9,925.2,647,990,500,990C229.4,990,10,770.6,10,500C10,229.4,229.4,10,500,10c135.3,0,257.8,54.9,346.5,143.5L990,10V377.5z"/>
-</svg>
+<div id="arrows" class="hide"><div class="arrows"></div></div>
 </div>
 <div id="output_div"></div>
-<div id="key">
-<span class="display">Display</span>
-<span class="norm">Normalized</span>
-<span class="not-norm">Not-Normalized</span>
-<span class="error">Error</span>
-</div>
 <script type="module">
 import {ens_normalize} from '../dist/ens-normalize-debug.js';
-import {FetchProvider, Providers, determine_window_provider, ENS} from '../../eth-tools.js/dist/eth-tools.js';
+import {
+	FetchProvider, Providers, 
+	determine_window_provider, ENS,
+	is_valid_address
+} from '../../eth-tools.js/dist/eth-tools.js';
 
-let providers = Providers.from_map({
-	1: new FetchProvider({url: 'https://cloudflare-eth.com'})
-});
+const providers = new Providers()
+	.add_static(1, new FetchProvider({url: 'https://mainnet.infura.io/v3/f36f6a8638134ac09f9400d3a7008dfe'}));
+
 determine_window_provider().then(p => {
 	providers.add_dynamic(p);
 }).catch(() => {});
@@ -112,17 +183,22 @@ let update_timer;
 let dirty = false;
 
 input_field.addEventListener('input', mark_dirty);
-if (input_field.value) mark_dirty();
-
+input_field.addEventListener('keydown', e => {
+	if (e.key === 'Enter') {
+		document.querySelector('#resolve_btn')?.click();
+	}
+});
 for (let el of document.querySelectorAll('#examples button')) {
 	el.addEventListener('click', () => {
-		input_field.value = el.innerHTML;
+		input_field.value = el.dataset.input ?? el.innerHTML;
 		mark_dirty();
 	});
 }
+if (input_field.value) mark_dirty();
 
 function mark_dirty() {
 	dirty = true;
+	output_div.innerHTML = '';
 	update();
 }
 
@@ -130,33 +206,70 @@ function update() {
 	if (!dirty || update_timer) return;
 	update_timer = setTimeout(resolve, 500);
 	arrows.classList.remove('hide');	
-	input_field.classList.remove(...input_field.classList.values());
+	remove_classes(input_field);
 	input_field.classList.add('working');
+}
+
+function remove_classes(x) {
+	x.classList.remove(...x.classList);
 }
 
 async function resolve() {
 	dirty = false;
 	clearTimeout(update_timer);
 	output_div.innerHTML = '';
+	let input = input_field.value.trim();
 	try {
-		let name = await ens.resolve(input_field.value.trim(), {throws: true});
-		if (name.is_input_address()) {
+		if (is_valid_address(input)) {
 			input_field.classList.add('address');
-		} else if (name.is_input_norm()) {
-			input_field.classList.add('norm');
-		} else if (await name.is_input_display().catch(err => {
-			console.error(err);
-			// display network error
-			output_div.innerHTML = `<div id="error">⚠️ <b>${err.message}</b></div>`;
-			return false;
-		})) {
-			input_field.classList.add('display');
-		} else {
-			input_field.classList.add('not-norm');
+			let owner = ens.owner(input);
+			let reverse = await owner.get_primary_name();
+			if (reverse) {
+				let btn = document.createElement('button');
+				btn.id = 'resolve_btn';
+				btn.innerHTML = `Resolve: <b>${reverse}</b>`;
+				btn.addEventListener('click', () => {
+					input_field.value = reverse;
+					mark_dirty();
+				});
+				output_div.append(btn);
+			} else {
+				output_div.innerHTML = `<div class="error">❌ <b>Reverse Name</b></div>`; 
+			}
+		} else if (input) {
+			let name = await ens.resolve(input);
+			if (name.is_input_normalized()) {
+				input_field.classList.add('norm');
+			} else if (await name.is_input_display().catch(err => {
+				output_div.innerHTML = `<div class="error">⚠️ <b>${err.message}</b></div>`;
+				return false;
+			})) {
+				remove_classes(input_field);
+				input_field.classList.add('display');
+			} else {
+				input_field.classList.add('unnorm');
+			}
+			let address = await name.get_address().catch(err => {
+				output_div.innerHTML += `<div class="error">⚠️ <b>${err.message}</b></div>`;
+			});
+			if (address) {
+				let div = document.createElement('div');
+				div.id = 'address';
+				div.innerHTML = `<a class="address" href="https://etherscan.io/address/${address}">${address}</a>`;
+				let btn = document.createElement('button');
+				btn.innerHTML = 'Copy';
+				btn.addEventListener('click', () => navigator.clipboard.writeText(address));
+				div.append(btn);
+				output_div.append(div);
+			}
 		}
 	} catch (err) {
-		input_field.classList.add('error');
-		output_div.innerHTML = `<div id="error">❌ <b>${err.message}</b></div>`;
+		if (err.isInvalid) {
+			input_field.classList.add('invalid');
+			output_div.innerHTML = `<div class="error">❌ <b>${err.cause.message}</b></div>`;
+		} else {
+			output_div.innerHTML = `<div class="error">❌ <b>${err.message}</b></div>`;
+		}		
 	}
 	input_field.classList.remove('working');
 	arrows.classList.add('hide');

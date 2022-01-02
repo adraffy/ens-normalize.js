@@ -44,11 +44,11 @@ h1 a {
 	box-sizing: border-box;
 }
 .arrows {
-	width: 1.5rem;
-	height: 1.5rem;
+	width: 2rem;
+	padding-bottom: 100%;
 	animation: spin 2s infinite linear;
 	user-select: none;
-	background: url('data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%201000%201000%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M990%2C377.5H622.5l137.4-137.4C690.4%2C170.7%2C598.2%2C132.5%2C500%2C132.5c-98.2%2C0-190.4%2C38.2-259.9%2C107.6C170.7%2C309.6%2C132.5%2C401.8%2C132.5%2C500c0%2C98.2%2C38.2%2C190.4%2C107.6%2C259.9c69.4%2C69.4%2C161.7%2C107.6%2C259.9%2C107.6c98.2%2C0%2C190.4-38.2%2C259.9-107.6c5.8-5.8%2C11.4-11.8%2C16.7-17.9l92.2%2C80.7C778.9%2C925.2%2C647%2C990%2C500%2C990C229.4%2C990%2C10%2C770.6%2C10%2C500C10%2C229.4%2C229.4%2C10%2C500%2C10c135.3%2C0%2C257.8%2C54.9%2C346.5%2C143.5L990%2C10V377.5z%22%2F%3E%3C%2Fsvg%3E');
+	background-image: url('data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%201000%201000%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M990%2C377.5H622.5l137.4-137.4C690.4%2C170.7%2C598.2%2C132.5%2C500%2C132.5c-98.2%2C0-190.4%2C38.2-259.9%2C107.6C170.7%2C309.6%2C132.5%2C401.8%2C132.5%2C500c0%2C98.2%2C38.2%2C190.4%2C107.6%2C259.9c69.4%2C69.4%2C161.7%2C107.6%2C259.9%2C107.6c98.2%2C0%2C190.4-38.2%2C259.9-107.6c5.8-5.8%2C11.4-11.8%2C16.7-17.9l92.2%2C80.7C778.9%2C925.2%2C647%2C990%2C500%2C990C229.4%2C990%2C10%2C770.6%2C10%2C500C10%2C229.4%2C229.4%2C10%2C500%2C10c135.3%2C0%2C257.8%2C54.9%2C346.5%2C143.5L990%2C10V377.5z%22%2F%3E%3C%2Fsvg%3E');
 	background-size: contain;
 	background-repeat: no-repeat;
 }
@@ -97,13 +97,6 @@ input[type=checkbox]:checked + label.nonstd {
 	font-size: 16pt;
 	font-weight: bold;
 }
-#link button {
-	font-size: 14pt;
-}
-button.main {
-	font-weight: bold;
-	font-size: 100%;
-}
 #output {
 	display: flex;
 	flex-direction: column;
@@ -115,6 +108,9 @@ button.main {
 	font-weight: bold;
 	white-space: pre-wrap;
 }
+.row .arrows {
+	width: 1.5rem;
+}
 .row {
 	padding: 0.7rem;
 	background: #fff;
@@ -123,13 +119,13 @@ button.main {
 	gap: 0.5rem;
 }
 .row.display {
-	background: #ffc;
+	background: #eff;
 }
 .row.normalized {
 	background: #efe;
 }
 .row.owner {
-	background: #fed;
+	background: #ffd;
 }
 ul.row {
 	flex-direction: column;
@@ -245,6 +241,7 @@ ul.row {
 footer {
 	text-align: center;
 	color: #666;
+	margin-top: 1rem;
 	margin-bottom: 0.5rem;
 }
 @media only screen and (max-width: 800px) { 
@@ -392,7 +389,6 @@ Arabic-Indic:
 <label><input type="checkbox" id="auto_resolve_check" checked>Resolve on Input</label>
 <label><input type="checkbox" id="show_hashes_check" checked>Show Hashes</label>
 <span><input type="checkbox" id="skip_norm_check"><label class="nonstd" for="skip_norm_check">Skip Normalization</label></span>
-<span><input type="checkbox" id="ignore_disallowed_check"><label class="nonstd" for="ignore_disallowed_check">Ignore Disallowed Characters</label></span>
 <span><input type="checkbox" id="ignore_bidi_check"><label class="nonstd" for="ignore_bidi_check">Disable CheckBidi</label></span>
 </div>
 <div id="input">
@@ -400,8 +396,8 @@ Arabic-Indic:
 <input id="input_field" size="20" placeholder="Name or Address (Checksummed)">
 </div>
 <div id="controls">
-<div class="arrows hide"></div>
-<span class="balloon"></span>
+<div id="arrows" class="hide"><div class="arrows"></div></div>
+<div class="balloon"></div>
 <button id="escape_btn">Escape</button>
 <button id="link_btn">Copy Link</button>
 <button id="resolve_btn">Resolve</button>
@@ -421,19 +417,20 @@ import {
 	is_checksum_address, namehash, labelhash, ENS
 } from '../../eth-tools.js/dist/eth-tools.min.js';
 import {escape_name_for_html, is_printable_ascii, explode_cp, hex_cp} from '../build/utils.js';
-import {ens_normalize, ens_tokenize, VERSION, BUILT, IDNA, UNICODE} from '../dist/ens-normalize-debug.min.js';
+import {ens_normalize as ens_normalize_0, ens_tokenize, VERSION, BUILT, IDNA, UNICODE} from '../dist/ens-normalize-debug.min.js';
 import {ens_normalize as ens_normalize_xbidi} from '../dist/ens-normalize-xbidi.min.js'; // load without bidi
 import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
 
-let providers = new Providers()
+const providers = new Providers()
 	.add_static(1, new FetchProvider({url: 'https://mainnet.infura.io/v3/f36f6a8638134ac09f9400d3a7008dfe', source: 'Infura'}));
+
 let window_provider;
 determine_window_provider().then(p => {
 	window_provider = p;
 	providers.add_dynamic(p);
 }).catch(() => {});
 
-let ens = new ENS({provider: providers.view(1)});
+const ens = new ENS({provider: providers.view(1)});
 
 document.querySelector('#version').innerHTML += ` (v${VERSION}+${IDNA}+U${UNICODE})<br><code>${BUILT}</code>`;
 
@@ -441,25 +438,22 @@ use_default_style();
 
 const input_field = document.querySelector('#input_field');
 const resolve_btn = document.querySelector('#resolve_btn');
-const arrows = document.querySelector('#controls .arrows');
+const primary_arrows = document.querySelector('#arrows');
 const auto_resolve_check = document.querySelector('#auto_resolve_check');
 const skip_norm_check = document.querySelector('#skip_norm_check');
-const ignore_disallowed_check = document.querySelector('#ignore_disallowed_check');
 const ignore_bidi_check = document.querySelector('#ignore_bidi_check');
 const show_hashes_check = document.querySelector('#show_hashes_check');
 const output_div = document.querySelector('#output');
 const readme_rows = [...output_div.childNodes]; // save initial ux
 
 let resolve_timer;
+let resolve_date0;
 
-function ens_normalize_input(name) {
-	if (ignore_disallowed_check.checked) {
-		name = String.fromCodePoint(...ens_tokenize(name).flatMap(({v,i,m,e,u,d}) => v ?? i ?? (m?u:null) ?? (e?u:null) ?? (d===undefined ? 0x2E : [])));
-	}
+function ens_normalize(name) {
 	if (ignore_bidi_check.checked) {
 		return ens_normalize_xbidi(name);
 	} else {
-		return ens_normalize(name);
+		return ens_normalize_0(name);
 	}
 }
 
@@ -499,7 +493,7 @@ document.querySelector('#link_btn').addEventListener('click', () => {
 	navigator.clipboard.writeText(window.location.href.split('#')[0] + '#' + encodeURIComponent(input_field.value));
 });
 
-for (let el of [auto_resolve_check, ignore_disallowed_check, ignore_bidi_check, skip_norm_check]) {
+for (let el of [auto_resolve_check, ignore_bidi_check, skip_norm_check]) {
 	el.addEventListener('input', () => {
 		if (auto_resolve_check.checked && input_field.value) {
 			if (parse()) schedule_resolve();
@@ -514,7 +508,7 @@ show_hashes_check.addEventListener('input', () => {
 
 input_field.focus();
 input_field.value = decode_location_hash();
-schedule_resolve(100);
+schedule_resolve(100, true);
 window.addEventListener('hashchange', () => {
 	input_field.value = decode_location_hash();
 	resolve();
@@ -524,12 +518,12 @@ function decode_location_hash() {
 	return decodeURIComponent(window.location.hash.slice(1));
 }
 
-function schedule_resolve(t = 1000) {
+function schedule_resolve(t = 1000, force) {
 	if (is_working()) {
 		resolve_timer = true;
-	} else if (!resolve_timer && auto_resolve_check.checked) {
+	} else if (!resolve_timer && (force || auto_resolve_check.checked)) {
 		resolve_timer = setTimeout(resolve, t);
-		arrows.classList.remove('hide');
+		primary_arrows.classList.remove('hide');
 	}
 } 
 
@@ -539,7 +533,7 @@ function parse() {
 	if (!name) {
 		clearTimeout(resolve_timer);
 		resolve_timer = 'null';
-		arrows.classList.add('hide');
+		primary_arrows.classList.add('hide');
 		output_div.append(...readme_rows);
 		return;
 	}
@@ -552,15 +546,21 @@ function parse() {
 		output_div.append(row);
 		return true;
 	}
-	let row = create_exploded_row('Input', name, false, ignore_disallowed_check.checked);
+	let row = create_row('Name');
+	make_exploded(row, name, false);
 	let grade = document.createElement('span');	
 	apply_input_grade(grade, name);
 	add_row_tag(row, grade);
 	output_div.append(row, create_hashes_row(name));
+	if (skip_norm_check.checked) return true;
 	try {
-		let norm = ens_normalize_input(name);
-		if (norm !== name) {
-			let norm_row = create_exploded_row('Normalized', norm, true);
+		let norm = ens_normalize(name);
+		if (norm === name) {
+			row.classList.add('normalized');
+		} else {
+			let norm_row = create_row('Normalized');
+			norm_row.classList.add('normalized');
+			make_exploded(norm_row, norm, true);
 			norm_row.classList.add('normalized');
 			output_div.append(norm_row, create_hashes_row(norm));
 		}
@@ -568,7 +568,17 @@ function parse() {
 	} catch (err) {
 		row.classList.add('error');
 		grade.classList.add('long');
-		apply_warn_grade(grade, err.message);
+		apply_grade(grade, 'warn', err.message);		
+		let tokens = ens_tokenize(name);
+		if (tokens.some(x => 'd' in x)) {
+			let btn = document.createElement('button');
+			btn.innerHTML = 'Remove Disallowed';
+			btn.addEventListener('click', () => {			
+				input_field.value = String.fromCodePoint(...tokens.flatMap(({v,i,m,e,u,d}) => v ?? i ?? (m?u:null) ?? (e?u:null) ?? (d===undefined ? 0x2E : [])));
+				resolve();
+			});
+			add_row_tag(row, btn);
+		}		
 	}
 }
 
@@ -604,6 +614,15 @@ function create_copy_btn(s, title = 'Copy') {
 	btn.innerHTML = title;
 	return btn;
 }
+function create_resolve_btn(s) {
+	let btn = document.createElement('button');
+	btn.innerHTML = 'Resolve';	
+	btn.addEventListener('click', () => {
+		input_field.value = s;
+		resolve();
+	});
+	return btn;
+}
 function create_ens_link(s) {
 	let a = create_link(`https://app.ens.domains/name/${encodeURIComponent(s)}`, 'ENS');
 	a.classList.add('ens');
@@ -612,7 +631,7 @@ function create_ens_link(s) {
 }
 function get_dot_eth_label(name) {
 	let v = name.split('.');
-	return v.length == 2 && v[1] == 'eth' ? v[0] : undefined;
+	return v.length == 2 && v[1].toLowerCase() == 'eth' ? v[0] : undefined;
 }
 function create_opensea_link(name) {
 	// add opensea if ENS
@@ -623,16 +642,14 @@ function create_opensea_link(name) {
 	return a;
 }
 
-function create_exploded_row(label, name, is_norm, downgrade_disallowed) {	
-	let tokens_div = dom_from_tokens(ens_tokenize(name), is_norm);
+function make_exploded(row, name, is_norm, downgrade_disallowed) {	
+	let tokens_div = dom_from_tokens(Array.isArray(name) ? name : ens_tokenize(name), is_norm);
 	if (downgrade_disallowed) {
 		for (let x of tokens_div.querySelectorAll('.disallowed')) {
 			x.classList.add('ignored');
 			x.classList.remove('disallowed');
 		}
 	}
-	let tags = document.createElement('div');
-	tags.classList.add('tags');
 	let n_cp = [...name].length;
 	let n_u8 = unescape(encodeURIComponent(name)).length;
 	let count = document.createElement('span');
@@ -640,37 +657,43 @@ function create_exploded_row(label, name, is_norm, downgrade_disallowed) {
 	count.addEventListener('click', () => {
 		input_field.value = apply_escapes(name);
 	});
-	tags.append(count);
+	add_row_tag(row, count);
 	if (n_cp != n_u8) {
 		count.innerHTML = `${n_cp}<sub>ch</sub>`;	
 		let bytes = document.createElement('span');
 		bytes.classList.add('bytes');
 		bytes.innerHTML = `${n_u8}<sub>bytes</sub>`;
-		tags.append(bytes); 
+		add_row_tag(row, bytes); 
 	} else {
 		count.innerHTML = `${n_cp}<sub>chytes</sub>`;
 		count.title = '1-byte Characters';
 	}	
+
 	let exploded = document.createElement('div');
 	exploded.classList.add('exploded');
-	exploded.append(tokens_div, tags);
-	let row = create_row(label);
+	exploded.append(tokens_div, row.querySelector('.tags'));
 	row.append(exploded);
-	return row;
 }
 
-function apply_warn_grade(span, s) {
-	span.classList.add('warn');
-	span.innerHTML = `⚠️ ${s}`;
+function apply_grade(span, type, s) {
+	span.classList.remove(...span.classList);
+	span.classList.add(type);
+	switch (type) {
+		case 'warn': 
+			span.innerHTML = `⚠️ ${s}`;
+			break;
+		case 'best': 
+			span.innerHTML = `✅️ ${s}`;
+			break;
+		case 'good': 
+			span.innerHTML = s;
+			break;
+		case 'fail': 
+			span.innerHTML = `❌ ${s}`;
+			break;
+	}
 }
-function apply_best_grade(span, s) {
-	span.classList.add('best');
-	span.innerHTML = `✅️ ${s}`;
-}
-function apply_fail_grade(span, s) {
-	span.classList.add('fail');
-	span.innerHTML = `❌ ${s}`;
-}
+
 function apply_input_grade(span, name) {
 	span.classList.add('okay');
 	if (is_printable_ascii(name)) {
@@ -715,25 +738,32 @@ function create_hashes_row(name) {
 	return row;
 }
 
-
-function output_append(row) {
-	if (resolve_timer) return;
-	output_div.append(row);
-}
-
-function create_row(label) {
+function create_row(label, waiting) {
 	let row = document.createElement('div');
 	row.classList.add('row');
 	if (label) {
 		row.append(create_row_label(label));
 	}
+	if (waiting) {
+		let div = document.createElement('div');
+		div.classList.add('temporary');
+		div.innerHTML = '<div class="arrows"></div>';
+		row.append(div);
+	}
 	return row;
 }
+
+function remove_temporary(row) {
+	for (let x of row.querySelectorAll('.temporary')) {
+		x.remove();
+	}
+}
+
 
 function create_error_row(label, error, long = true) {
 	let span = document.createElement('span');
 	if (long) span.classList.add('long');
-	apply_warn_grade(span, error);
+	apply_grade(span, 'warn', error);
 	let row = create_row(label);
 	row.classList.add('error');
 	add_row_tag(row, span);
@@ -789,316 +819,473 @@ function resolve(...a) {
 	}
 	window.location = '#' + encodeURIComponent(input);
 	document.title = `${title}: ${input}`;
+	if (!parse()) {
+		primary_arrows.classList.add('hide');
+		return;
+	}
 	resolve_btn.disabled = true;
-	arrows.classList.remove('hide');
+	primary_arrows.classList.remove('hide');
+	resolve_date0 = new Date();
 	resolve0(input, ...a).then(() => {
 		resolve_btn.disabled = false;
 		if (resolve_timer === true) { // schedule again
 			resolve_timer = false;
 			schedule_resolve();
 		} else {
-			arrows.classList.add('hide');
+			primary_arrows.classList.add('hide');
 		}
 	});
 }
-async function resolve0(name0, override_skip_norm) {
-	let date0 = new Date();
-	function create_elapsed() {
-		let now = new Date();
-		let span = document.createElement('span');
-		span.classList.add('elapsed');
-		span.innerHTML = format_dur(now - date0);
-		date0 = now;
-		return span;
-	}
+
+
+function create_elapsed() {
+	let now = new Date();
+	let span = document.createElement('span');
+	span.classList.add('elapsed');
+	span.innerHTML = format_dur(now - resolve_date0);
+	resolve_date0 = now;
+	return span;
+}
+
+async function resolve0(input0, override_skip_norm) {
 	output_div.innerHTML = '';
 
 	document.querySelector('#provider').innerHTML = `using ${await ens.get_provider().then(source_from_provider)}`;
 
 	// replace escapes
-	let input_name = replace_escapes(name0);
-	let input_norm = false;
-	let input_grade = document.createElement('span');
-	
-	let name;
-		
+	let input = replace_escapes(input0);
+	let input_is_address = is_checksum_address(input);
 	let skip_norm = override_skip_norm || skip_norm_check.checked;
-	let address;
 	
-	if (is_checksum_address(input_name)) {
+	let input_grade = document.createElement('span');
+	let input_row;
+	let name_norm;
+
+	if (input_is_address) {
+
+		// the input is an address
+		input_row = create_row('Address');
+		input_row.append(create_etherscan_address_link(input));
+		// note: input_grade not added yet
+		output_div.append(input_row);
 		
-		let input_row = create_row('Address');
-		input_row.append(create_etherscan_address_link(input_name));
-		output_append(input_row);
+		// lookup the address
+		let primary;
+		let reverse_row = create_row('Reverse', true);
+		output_div.append(reverse_row);
+		try {
+			primary = await ens.primary_from_address(input);
+		} catch (err) {			
+			reverse_row.classList.add('error');
+			let span = document.createElement('span');
+			apply_grade(span, 'warn', err.message);
+			span.classList.add('long');
+			add_row_tag(reverse_row, span);
+			return; // network error, nothing more we can do
+		} finally {
+			remove_temporary(reverse_row);
+		}
+		if (resolve_timer) return;
+		add_row_tag(reverse_row, create_elapsed());
+
+		// the address doesn't correspond to an owner
+		if (primary === null) {
+			let span = document.createElement('span');
+			apply_grade(span, 'warn', 'No Owner');
+			add_row_tag(reverse_row, span);
+			return;
+		}
+
+		// primary not set
+		if (!primary) {
+			let span = document.createElement('span');
+			apply_grade(span, 'warn', 'Primary Not Set');
+			add_row_tag(reverse_row, span);
+			add_row_tag(reverse_row, create_elapsed());
+			return;
+		}
+
+		// primary exists!
+		make_exploded(reverse_row, primary, false);
+		output_div.append(create_hashes_row(primary));
+			
+		// lets check if it's normalized
+		try {
+			name_norm = ens_normalize(primary);
+		} catch (err) {
+			reverse_row.classList.add('error');
+			let span = document.createElement('span');
+			apply_grade(span, 'warn', `Invalid name: ${err.message}`);
+			add_row_tag(reverse_row, span);
+			return;
+		}
 		
-		// resolve as an address
-		name = await ens.resolve(input_name, true); 
+		// primary was normalized
+		if (name_norm === primary) {
+			reverse_row.classList.add('normalized');
+			let span = document.createElement('span');
+			apply_grade(span, 'good', 'Normalized');
+			add_row_tag(reverse_row, span);
+			add_row_tag(reverse_row, create_resolve_btn(primary));
+
+		// primary was valid but wasn't normalized 
+		} else if (name_norm) {
+			// mark the reverse as bad
+			let span = document.createElement('span');
+			apply_grade(span, 'fail', 'Normalized');
+			add_row_tag(reverse_row, span);
+			// create norm now
+			let row = create_row('Normalized Reverse');
+			row.classList.add('normalized');
+			make_exploded(row, name_norm, true);
+			add_row_tag(row, create_copy_btn(name_norm));
+			add_row_tag(row, create_resolve_btn(name_norm));
+			output_div.append(row);
+			output_div.append(create_hashes_row(name_norm));
+		}	
 
 	} else {
-	
-		// create name row
-		let input_row = create_exploded_row('Input', input_name, false, ignore_disallowed_check.checked);
-		apply_input_grade(input_grade, input_name);
+
+		// the input is a name
+		input_row = create_row('Name');
+		make_exploded(input_row, input, false);
+		apply_input_grade(input_grade, input);
 		add_row_tag(input_row, input_grade);
-		add_row_tag(input_row, create_ens_link(input_name));
-		add_row_tag(input_row, create_opensea_link(input_name));
-		output_append(input_row);
-
-		// create name hashes
-		let input_hashes = create_hashes_row(input_name);
-		output_append(input_hashes);
-
-		let norm_ens_btn;
+		add_row_tag(input_row, create_ens_link(input));
+		output_div.append(input_row);
+		output_div.append(create_hashes_row(input));
+		
+		// lets check if it's normalized
+		
 		if (skip_norm) {
-			input_norm = input_name; // yolo
-
-			// add a warning
+			let row = create_row('Normalization');
 			let span = document.createElement('span');
-			apply_fail_grade(span, 'Skipped');
-
-			// create norm row
-		 	let norm_row = create_row('Normalization');
-			add_row_tag(norm_row, span);
-			output_append(norm_row);
-
-		} else {	
-
-			// normalize the name
+			apply_grade(span, 'fail', 'Skipped');
+			add_row_tag(row, span);
+			output_div.append(row);
+			name_norm = input; // yolo
+		} else {
 			try {
-				input_norm = ens_normalize_input(input_name);
+				name_norm = ens_normalize(input);
 			} catch (err) {
 				input_row.classList.add('error');
-				apply_warn_grade(input_grade, err.message);
-				input_grade.parentNode.prepend(input_grade);
+				apply_grade(input_grade, 'warn', err.message);
+				input_grade.parentNode.prepend(input_grade); // move to front
 				return;
 			}	
-			let norm_row = create_exploded_row('Normalized', input_norm, true);
-			norm_row.classList.add('normalized');
-			if (input_norm === input_name) { // already normalized
-				input_grade.innerHTML = 'Normalized';
-				input_grade.classList.add('good');
-
-				add_row_tag(norm_row, input_row.querySelector('.ens')); // steal it
-				output_append(norm_row);
-				output_append(input_hashes); // steal it
-			} else {
-				// add warning to input
+		
+			// name was normalized
+			if (name_norm === input) {
+				input_row.classList.add('normalized');
+				apply_grade(input_grade, 'good', 'Normalized');
+				add_row_tag(input_row, create_opensea_link(input));
+			} else if (name_norm) {
+				// mark the name as bad
 				let span = document.createElement('span');
-				span.classList.add('fail');
-				span.innerHTML = '❌ Normalized';
+				apply_grade(span, 'fail', 'Normalized');
 				add_row_tag(input_row, span);
-		
-				// add norm row
-				add_row_tag(norm_row, create_copy_btn(input_norm));
-				norm_ens_btn = create_ens_link(input_norm);
-				add_row_tag(norm_row, norm_ens_btn);
-				add_row_tag(norm_row, create_opensea_link(input_norm));
-				output_append(norm_row);
-		
-				// show different labels
-				output_append(create_hashes_row(input_norm));
+				input_row.querySelector('.ens').remove(); // pointless
+				// create norm row
+				let row = create_row('Normalized');
+				row.classList.add('normalized');
+				make_exploded(row, name_norm, true);
+				add_row_tag(row, create_copy_btn(name_norm));
+				add_row_tag(row, create_ens_link(name_norm));
+				add_row_tag(row, create_opensea_link(name_norm));
+				output_div.append(row);
+				output_div.append(create_hashes_row(name_norm));
 			}
-		}
-
-		// resolve as a name
-		name = await ens.resolve(input_norm, false);
-		if (resolve_timer) return;
-		if (name.input_error) {
-			output_append(create_error_row('Resolver', name.input_error));
-			return;
-		}
-		
-		if (!name.resolver) {
-			output_append(create_error_row('Resolver', `ENS Name Not Found`, true));
-			let label = get_dot_eth_label(input_norm);
-			if (label) {
-				try {
-					let available = await ens.is_dot_eth_available(label);
-					if (resolve_timer) return;
-					let row = create_row('Availability');
-					let span_avail = document.createElement('span');
-					let len = [...label].length;
-					if (available) {
-						if (len < 3) {
-							apply_warn_grade(span_avail, `Too Short`);
-						} else {
-							span_avail.classList.add('good');
-							span_avail.innerHTML = 'Available';
-						}
-					} else {
-						apply_fail_grade(span_avail, `Not Available`);
-					}
-					add_row_tag(row, span_avail);
-
-					let span_len = document.createElement('span');
-					span_len.classList.add('length');
-					span_len.innerHTML = `${len}<sub>ch</sub>`;
-					add_row_tag(row, span_len);
-
-					norm_ens_btn?.remove();// remove duplicate
-					add_row_tag(row, create_ens_link(input_norm));
-					output_append(row);
-				} catch (err) {
-					output_append(create_error_row('Available', err.message));
-				}
-			}			
-			return;
-		}
-
-		// add address
-		let resolver_row = create_row('Resolver');
-		resolver_row.append(create_etherscan_address_link(name.resolver));
-		add_row_tag(resolver_row, create_elapsed());
-		output_append(resolver_row);
-
-		// check display name
-		let display_name = await name.get_text('display').catch(() => false);
-		if (resolve_timer) return;
-		if (display_name && display_name != input_norm) {
-			let row = create_exploded_row('Display', display_name, false);
-			row.classList.add('display');
-			try {
-				let display_norm = ens_normalize(display_name);
-				if (display_norm == input_norm) {
-					let fake_tokens = dom_from_tokens([{v:explode_cp(display_name)}], true);
-					let prev_tokens = row.querySelector('.tokens');
-					prev_tokens.parentNode.replaceChild(fake_tokens, prev_tokens);
-					apply_best_grade(input_grade, 'Matches Display');
-					input_row.querySelector('.ens')?.remove(); // no purpose
-					input_row.querySelector('.opensea')?.remove(); // no purpose
-				} else {
-					let span = document.createElement('span');
-					apply_warn_grade(span, `Does Not Match`);
-					add_row_tag(row, span);
-					row.classList.add('error');
-				}
-			} catch (err) {
-				let span = document.createElement('span');
-				apply_fail_grade(span, `Normalized: ${err.message}`);
-				add_row_tag(row, span);
-			}
-			add_row_tag(row, create_elapsed());
-			output_append(row);
-		}		
-		
-		// add address
-		let address;
-		try {
-			address = await name.get_address();
-		} catch (err) {
-			output_append(create_error_row('Address', err.message));
-		}
-		if (resolve_timer) return;
-		let address_row = create_row('Address');
-		address_row.append(create_etherscan_address_link(address));
-		add_row_tag(address_row, create_elapsed());
-		output_append(address_row);
-
-		let owner;
-		try {
-			owner = await name.get_owner();		
-		} catch (err) {
-			output_append(create_error_row('Owner', err.message));
-		}
-		if (resolve_timer) return;
-		if (owner === address) {
-			let span = document.createElement('span');
-			span.innerHTML = '✓ Same as Owner';
-			add_row_tag(address_row, span);
-		} else {
-			let owner_row = create_row('Owner');
-			owner_row.classList.add('owner');
-			owner_row.append(create_etherscan_address_link(owner));
-			add_row_tag(owner_row, create_elapsed());
-			output_append(owner_row);
 		}
 	}
 
-	// reverse-lookup the address
-	let reverse_name;
+	// at this point, we have a name
+	// lookup the name
+	let name;
+	let resolver_row = create_row('Resolver', true);
+	output_div.append(resolver_row);
 	try {
-		reverse_name = await name.get_primary();
+		name = await ens.resolve(name_norm);
 	} catch (err) {
-		output_append(create_error_row('Reverse', err.message));
+		resolver_row.classList.add('error');
+		let span = document.createElement('span');
+		apply_grade(span, 'warn', err.message);
+		span.classList.add('long');
+		add_row_tag(resolver_row, span);
+		return;	
+	} finally {
+		remove_temporary(resolver_row);
+	}
+	if (resolve_timer) return;
+	
+	// name doesn't exist
+	if (!name.resolver) { 
+		let span = document.createElement('span');
+		apply_grade(span, 'warn', `Name Not Found`);
+		add_row_tag(resolver_row, span);
+
+		// check if *.eth
+		let label = get_dot_eth_label(name_norm);
+		if (label) {
+			let avail_row = create_row('Availability', true);
+			output_div.append(avail_row);
+			try {
+				let available = await ens.is_dot_eth_available(label);	
+				let span_avail = document.createElement('span');
+				let len = [...label].length;
+				if (available) {
+					if (len < 3) {
+						apply_grade(span_avail, 'warn', `Too Short`);
+					} else {
+						apply_grade(span_avail, 'good', 'Available');
+					}
+				} else {
+					apply_grade(span_avail, 'fail', `Not Available`);
+				}
+				add_row_tag(avail_row, span_avail);
+
+				let span_len = document.createElement('span');
+				span_len.classList.add('length');
+				span_len.innerHTML = `${len}<sub>ch</sub>`;
+				add_row_tag(avail_row, span_len);
+
+				add_row_tag(avail_row, create_ens_link(name_norm));	
+				add_row_tag(avail_row, create_elapsed());
+
+			} catch (err) {
+				avail_row.classList.add('error');
+				let span = document.createElement('span');
+				apply_grade(span, 'warn', err.message);
+				span.classList.add('long');
+				add_row_tag(avail_row, span);
+			} finally {
+				remove_temporary(avail_row);
+			}
+		}			
 		return;
+	}
+
+	// resolver exists
+	resolver_row.append(create_etherscan_address_link(name.resolver));
+	add_row_tag(resolver_row, create_elapsed());
+	
+	// check the display name
+	let display_name;
+	let display_row = create_row('Display', true);
+	output_div.append(display_row);
+	try {
+		display_name = await name.get_text('display');
+	} catch (err) {
+		display_row.classList.add('error');
+		let span = document.createElement('span');
+		apply_grade(span, 'warn', err.message);
+		span.classList.add('long');
+	} finally {
+		remove_temporary(display_row);
+	}
+	if (resolve_timer) return;
+	add_row_tag(display_row, create_elapsed());
+
+	if (!display_name) {
+		let span = document.createElement('span');
+		apply_grade(span, 'warn', `Not Set`);
+		add_row_tag(display_row, span);
+	} else {
+		try {
+			let display_norm = ens_normalize(display_name);
+			display_row.classList.add('display');
+			if (display_norm === name_norm) { // display is valid
+				make_exploded(display_row, [{v:explode_cp(display_name)}], true); // fake display
+				if (!input_is_address && input === display_name) { // input matches display
+					apply_grade(input_grade, 'best', 'Matches Display');
+					input_row.classList.add('display');
+					input_row.querySelector('.ens')?.remove(); // no purpose
+					input_row.querySelector('.opensea')?.remove(); // no purpose
+					let span = document.createElement('span');
+					span.innerHTML = 'Same as Input';
+					add_row_tag(display_row, span);				
+				}
+			} else { // the display norm is goofy
+				make_exploded(display_row, display_norm, true);
+				let span = document.createElement('span');
+				apply_grade(span, 'warn', `Does Not Match`);
+				add_row_tag(display_row, span);
+			}
+		} catch (err) { // the display doesn't normalize
+			make_exploded(display_row, display_name, false);
+			let span = document.createElement('span');
+			apply_grade(span, 'fail', err.message);
+			add_row_tag(display_row, span);
+		}
+	}
+	
+	// get the owner
+	let owner;
+	let owner_row = create_row('Owner', true);
+	output_div.append(owner_row);
+	try {
+		owner = await name.get_owner();
+	} catch (err) {
+		owner_row.classList.add('error');
+		let span = document.createElement('span');
+		apply_grade(span, 'warn', err.message);
+		span.classList.add('long');
+		return; // required to continue
+	} finally {
+		remove_temporary(owner_row);
 	}
 	if (resolve_timer) return;
 
-	// check if not primary
-	if (!reverse_name) {
-		let row = create_row('Reverse');
-		let span = document.createElement('span');
-		apply_warn_grade(span, 'Primary ENS Name Not Set');
-		add_row_tag(row, span);
-		output_append(row);
-		return;
+	// we got the owner
+	owner_row.classList.add('owner');
+	owner_row.append(create_etherscan_address_link(owner.address));
+	add_row_tag(owner_row, create_elapsed());
+
+	// if the input was an address, we can validate
+	if (input_is_address) {
+		if (owner.address === input) {
+			apply_grade(input_grade, 'best', 'Matches Owner');
+			add_row_tag(input_row, input_grade);
+			let span = document.createElement('span');
+			span.innerHTML = 'Same as Input';
+			add_row_tag(owner_row, span);
+		} else {
+			apply_grade(input_grade, 'fail', 'Different from Owner');
+			add_row_tag(input_row, input_grade);
+		}
+	}
+	if (owner.address !== input) {
+		add_row_tag(owner_row, create_resolve_btn(owner.address));
 	}
 
-	// adjust the grade
-	if (input_name === reverse_name && !input_grade.classList.contains('best')) {
-		apply_best_grade(input_grade, 'Matches Reverse');
-	}
 
-	// create reverse row
-	let reverse_name_row = create_exploded_row('Reverse', reverse_name, true);
-	add_row_tag(reverse_name_row, create_elapsed());
-	if (input_norm === reverse_name) { 
-		let span = document.createElement('span');
-		span.innerHTML = '✓ Same as Normalized';
-		add_row_tag(reverse_name_row, span);
-	} else if (input_norm) { // we might not have a norm
-		let span = document.createElement('span');
-		apply_warn_grade(span, 'Different from Input');
-		add_row_tag(reverse_name_row, span);
-	}
-	output_append(reverse_name_row);
-	
-	// stop if theres nothing more to do
-	if (input_norm === reverse_name) return;
-
-	// add hashes because they're different
-	let reverse_hashes = create_hashes_row(reverse_name);
-
-	// normalize the reverse name
-	let reverse_norm;
+	// add address
+	let address;
+	let address_row = create_row('Address', true);
+	output_div.append(address_row);	
 	try {
-		reverse_norm = ens_normalize(reverse_name);
+		address = await name.get_address();
+		// the eth address is valid
+		address_row.append(create_etherscan_address_link(address));
+		add_row_tag(address_row, create_elapsed());
+		if (input_is_address) {
+			if (address === input) {
+				let span = document.createElement('span');
+				span.innerHTML = 'Same as Input';
+				add_row_tag(address_row, span);
+			} else if (address) {
+				add_row_tag(address_row, create_resolve_btn(address));
+				let span = document.createElement('span');
+				apply_grade(span, 'warn', 'Different from Owner');
+				add_row_tag(address_row, span);	
+			}
+		} else {
+			if (owner.address === address) {
+				let span = document.createElement('span');
+				apply_grade(span, 'good', 'Same as Owner');
+				add_row_tag(address_row, span);		
+			} else {
+				add_row_tag(address_row, create_resolve_btn(address));
+				let span = document.createElement('span');
+				apply_grade(span, 'warn', 'Not Owner');
+				add_row_tag(address_row, span);	
+			}
+		}
 	} catch (err) {
-		output_append(create_error_row('Normalized Reverse', err.message));
+		address_row.classList.add('error');
+		let span = document.createElement('span');
+		apply_grade(span, 'warn', err.message);
+		span.classList.add('long');
+		add_row_tag(address_row, span);
+	} finally {
+		remove_temporary(address_row);
+	}
+	if (resolve_timer) return;
+
+	if (input_is_address) return; // nothing more to do
+
+	// lookup primary
+	let primary;
+	let primary_row = create_row('Primary', true);
+	output_div.append(primary_row);
+	try {
+		//throw new Error('wtf');
+		primary = await ens.primary_from_address(owner.address);
+		//primary = primary.toUpperCase();
+	} catch (err) {
+		primary_row.classList.add('error');
+		let span = document.createElement('span');
+		apply_grade(span, 'warn', err.message);
+		span.classList.add('long');
+		add_row_tag(primary_row, span);
 		return;
+	} finally {
+		remove_temporary(primary_row);
+	}
+	if (resolve_timer) return;
+	add_row_tag(primary_row, create_elapsed());
+
+	// primary not set
+	if (!primary) {
+		let span = document.createElement('span');
+		apply_grade(span, 'warn', 'Not Set');
+		add_row_tag(primary_row, span);
+		return;
+	}
+
+	// primary exists
+	make_exploded(primary_row, primary, false);
+	output_div.append(create_hashes_row(primary));
+
+	// lets check if it's normalized
+	let primary_norm;
+	try {
+		primary_norm = ens_normalize(primary);
+	} catch (err) {
+		primary_row.classList.add('error');
+		let span = document.createElement('span');
+		apply_grade(span, 'warn', `Invalid name: ${err.message}`);
+		add_row_tag(primary_row, span);
+	}
+	
+	// primary was normalized
+	if (primary === primary_norm) {
+		primary_row.classList.add('normalized');
+		let span = document.createElement('span');
+		apply_grade(span, 'good', 'Normalized');
+		add_row_tag(primary_row, span);
+		if (name_norm !== primary_norm) {
+			add_row_tag(primary_row, create_copy_btn(primary_norm));
+			add_row_tag(primary_row, create_resolve_btn(primary_norm));
+		}
+
+	// primary was valid but not normalized
+	} else if (primary_norm) {
+		// mark the name as bad
+		let span = document.createElement('span');
+		apply_grade(span, 'fail', 'Normalized');
+		add_row_tag(primary_row, span);
+		// create norm row
+		let row = create_row('Normalized Primary');
+		row.classList.add('normalized');
+		make_exploded(row, primary_norm, true);
+		
+		add_row_tag(row, create_copy_btn(primary_norm));
+		add_row_tag(row, create_ens_link(primary_norm));
+		add_row_tag(row, create_opensea_link(primary_norm));
+		if (name_norm !== primary_norm) {
+			add_row_tag(row, create_resolve_btn(primary_norm));
+		}
+
+		output_div.append(row);
+		output_div.append(create_hashes_row(primary_norm));
 	}	
 
-	// create reverse norm row
-	let reverse_norm_row = create_exploded_row('Normalized Reverse', reverse_norm, true);
-	reverse_norm_row.classList.add('normalized');
-	if (reverse_name === reverse_norm) {
-		let span = document.createElement('span');
-		span.classList.add('good');
-		span.innerHTML = 'Normalized';
-		add_row_tag(reverse_name_row, span);
-	}
-
-	// add some helpers since reverse != input
-	add_row_tag(reverse_norm_row, create_copy_btn(reverse_norm));
-	add_row_tag(reverse_norm_row, create_ens_link(reverse_norm));
-
-	// make it easy to resolve this new name
-	let again_btn = document.createElement('button');
-	again_btn.classList.add('main');
-	again_btn.innerHTML = 'Resolve';	
-	again_btn.addEventListener('click', () => {
-		input_field.value = reverse_name;
-		resolve();
-	});
-	add_row_tag(reverse_norm_row, again_btn);	
-	output_append(reverse_norm_row);
-
-	if (reverse_name === reverse_norm) {
-		output_append(reverse_hashes); // steal from above
- 	} else {
-		output_append(create_hashes_row(reverse_norm)); // add because different
+	if (primary_norm && name_norm === primary_norm && !input_grade.classList.contains('best')) {
+		apply_grade(input_grade, 'best', 'Matches Primary');
 	}
 }
+
+
 </script>
 </body>
 </html>
