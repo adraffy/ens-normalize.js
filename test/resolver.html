@@ -412,8 +412,8 @@ Arabic-Indic:
 <footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
 <script type="module">
 import {
-	Providers, FetchProvider, 
-	determine_window_provider, source_from_provider,
+	Providers, WebSocketProvider, 
+	determine_window_provider,
 	is_checksum_address, namehash, labelhash, ENS
 } from '../../eth-tools.js/dist/eth-tools.min.js';
 import {escape_name_for_html, is_printable_ascii, explode_cp, hex_cp} from '../build/utils.js';
@@ -422,7 +422,7 @@ import {ens_normalize as ens_normalize_xbidi} from '../dist/ens-normalize-xbidi.
 import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
 
 const providers = new Providers()
-	.add_static(1, new FetchProvider({url: 'https://mainnet.infura.io/v3/f36f6a8638134ac09f9400d3a7008dfe', source: 'Infura'}));
+	.add_static(1, new WebSocketProvider({url: 'wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe', source: 'Infura'}));
 
 let window_provider;
 determine_window_provider().then(p => {
@@ -850,7 +850,7 @@ function create_elapsed() {
 async function resolve0(input0, override_skip_norm) {
 	output_div.innerHTML = '';
 
-	document.querySelector('#provider').innerHTML = `using ${await ens.get_provider().then(source_from_provider)}`;
+	document.querySelector('#provider').innerHTML = `using ${await ens.get_provider().then(x => x.source)}`;
 
 	// replace escapes
 	let input = replace_escapes(input0);
@@ -1066,7 +1066,7 @@ async function resolve0(input0, override_skip_norm) {
 	}
 
 	// resolver exists
-	resolver_row.append(create_etherscan_address_link(name.resolver));
+	resolver_row.append(create_etherscan_address_link(name.resolver.address));
 	add_row_tag(resolver_row, create_elapsed());
 	
 	// check the display name

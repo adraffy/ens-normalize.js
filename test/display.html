@@ -6,7 +6,7 @@
 <title>ENS Display Name</title>
 <style>
 .hide {
-	display: none;
+	display: none !important;
 }
 .arrows {
 	width: 3rem;
@@ -30,11 +30,31 @@ header {
 }
 h1 {
 	margin: 0;
-	white-space: pre;
 	flex-grow: 1;
+	white-space: pre;
+}
+#provider {
+	font-size: 10pt;
+	color: #666;
 }
 #version {
 	text-align: right;
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+}
+#network {
+	margin-top: 0.5rem;
+	display: flex;
+	gap: 0.5rem;
+	flex-wrap: wrap;
+	align-items: center;
+}
+#network select {
+	font-size: 100%;
+}
+#network .switching .arrows {
+	width: 1rem;
 }
 #examples {
 	margin: 0.5rem 0;
@@ -135,9 +155,19 @@ h1 {
 </head>
 <body>
 <header>
-<h1>ENS Display Name</h1>
-<div id="version"><a href="https://github.com/adraffy/eth-tools.js">@adraffy/eth-tools.js</a></div>
+<h1><a href="https://ens.domains/">ENS</a> Display Name</h1>
+<div id="version">
+<a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a>
+<a href="https://github.com/adraffy/eth-tools.js">@adraffy/eth-tools.js</a>
+</div>
 </header>
+<div id="network">
+<div class="switching"><div class="arrows"></div></div>
+<select></select>
+<button id="switch_default_btn" class="hide">Switch</button>
+<button id="connected_btn" class="hide">Connect</button>
+<span id="provider"></span>
+</div>
 <div id="key">
 <span class="display">Display</span>
 <span class="norm">Normalized</span>
@@ -161,26 +191,57 @@ h1 {
 <script type="module">
 import {ens_normalize} from '../dist/ens-normalize-debug.js';
 import {
-	FetchProvider, Providers, 
+	WebSocketProvider, Providers, 
 	determine_window_provider, ENS,
-	is_valid_address
+	is_valid_address, short_address, 
+	find_chain, ensure_chain, ABIEncoder
 } from '../../eth-tools.js/dist/eth-tools.js';
 
 const providers = new Providers()
-	.add_static(1, new FetchProvider({url: 'https://mainnet.infura.io/v3/f36f6a8638134ac09f9400d3a7008dfe'}));
+	.add_static(1, new WebSocketProvider({url: 'wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe'}))
+	.add_static(4, new WebSocketProvider({url: 'wss://rinkeby.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe'}));
 
-determine_window_provider().then(p => {
-	providers.add_dynamic(p);
-}).catch(() => {});
+const DEFAULT_CHAIN = ensure_chain(1);
 
-const ens = new ENS({provider: providers.view(1), ens_normalize});
+let selected_chain = DEFAULT_CHAIN;
+let window_provider;
+let last_resolve_chain;
+
+const ENS_CACHE = {};
 
 const input_field = document.querySelector('#input_field');
 const output_div = document.querySelector('#output_div');
-const arrows = document.querySelector('#arrows');
+const primary_arrows = document.querySelector('#arrows');
+const network_div = document.querySelector('#network');
+const chain_select = document.querySelector('#network select');
+const switch_default_btn = document.querySelector('#switch_default_btn');
+const connected_btn = document.querySelector('#connected_btn');
 
 let update_timer;
 let dirty = false;
+let waiting_for_window = true;
+
+determine_window_provider().then(p => {
+	window_provider = p;
+	providers.add_dynamic(p);
+	p.on('connect', () => {
+		update_network();	
+	});
+	p.on('chainChanged', () => {
+		update_network();
+	});
+	p.request({method: 'eth_chainId'}).catch(() => {}).then(() => {
+		// we might of missed the connect event
+		// this is a noop if already connected
+		waiting_for_window = false;
+		update_network();
+		mark_dirty();
+	});
+}).catch(() => {
+	waiting_for_window = false;
+	update_network();
+	mark_dirty();
+});
 
 input_field.addEventListener('input', mark_dirty);
 input_field.addEventListener('keydown', e => {
@@ -194,7 +255,80 @@ for (let el of document.querySelectorAll('#examples button')) {
 		mark_dirty();
 	});
 }
-if (input_field.value) mark_dirty();
+
+for (let [chain, provider] of providers.available_providers()) {	
+	chain_select.append(create_network_option(chain));
+}
+chain_select.addEventListener('change', () => {
+	switch_network(chain_select.selectedOptions[0].dataset.chain);
+});
+switch_default_btn.innerHTML = `♻️ Switch to ${DEFAULT_CHAIN.name}`;
+switch_default_btn.addEventListener('click', () => {
+	switch_network(DEFAULT_CHAIN);
+});
+connected_btn.addEventListener('click', () => {
+	if (is_connected()) {
+		window.localStorage.removeItem('connected');
+	} else {
+		window.localStorage.setItem('connected', '1');
+	}
+	update_network();
+});
+
+function set_switching(b) {
+	chain_select.disabled = b;
+	switch_default_btn.disabled = b;
+	network_div.querySelector('.switching').classList.toggle('hide', !b);
+}
+function switch_network(chain_like) {
+	let chain = find_chain(chain_like);
+	if (is_connected()) {
+		set_switching(true);
+		window_provider.request({method: 'wallet_switchEthereumChain', params:[{chainId: chain.id}]}).catch(err => {
+			set_switching(false);
+		});
+	} else {
+		selected_chain = chain;
+		update_network();
+	}
+}
+function current_chain() {
+	return !waiting_for_window && is_connected() ? ensure_chain(window_provider.chain_id) : selected_chain;
+}
+
+function update_network() {	
+	set_switching(waiting_for_window);
+	let chain = current_chain();
+	chain_select.querySelector('.temporary')?.remove();
+	let opt = chain_select.querySelector(`option[data-chain="${chain.id}"]`);
+	if (!opt) {
+		opt = create_network_option(chain);
+		opt.classList.add('temporary');
+		chain_select.append(opt);
+	}
+	chain_select.selectedIndex = [...chain_select.children].indexOf(opt);
+	switch_default_btn.classList.toggle('hide', chain === DEFAULT_CHAIN);
+	connected_btn.innerHTML = is_connected() ? '❌ Unpair from Browser' : '🔗 Pair with Browser';
+	connected_btn.classList.toggle('hide', waiting_for_window);
+	
+	providers.find_provider(chain).then(p => {
+		network_div.querySelector('#provider').innerHTML = p.source;
+	}).catch(() => {});
+
+	if (last_resolve_chain && last_resolve_chain !== chain) {
+		mark_dirty();
+	}
+}
+function create_network_option(chain) {
+	let opt = document.createElement('option');
+	opt.dataset.chain = chain.id;
+	opt.innerHTML = chain.name;
+	return opt;
+}
+
+function is_connected() {
+	return window.localStorage.getItem('connected');
+}
 
 function mark_dirty() {
 	dirty = true;
@@ -204,10 +338,11 @@ function mark_dirty() {
 
 function update() {
 	if (!dirty || update_timer) return;
-	update_timer = setTimeout(resolve, 500);
-	arrows.classList.remove('hide');	
+	primary_arrows.classList.remove('hide');	
 	remove_classes(input_field);
 	input_field.classList.add('working');
+	if (waiting_for_window) return; // will get called later
+	update_timer = setTimeout(resolve, 500);	
 }
 
 function remove_classes(x) {
@@ -215,9 +350,19 @@ function remove_classes(x) {
 }
 
 async function resolve() {
-	dirty = false;
 	clearTimeout(update_timer);
+	dirty = false;
 	output_div.innerHTML = '';
+
+	let chain = last_resolve_chain = current_chain();
+	let ens = ENS_CACHE[chain];
+	if (!ens) {
+		ens = ENS_CACHE[chain] = new ENS({
+			provider: providers.view(chain), 
+			ens_normalize
+		});
+	}
+
 	let input = input_field.value.trim();
 	try {
 		if (is_valid_address(input)) {
@@ -238,29 +383,85 @@ async function resolve() {
 			}
 		} else if (input) {
 			let name = await ens.resolve(input);
+			let is_display = false;
 			if (name.is_input_normalized()) {
 				input_field.classList.add('norm');
 			} else if (await name.is_input_display().catch(err => {
 				output_div.innerHTML = `<div class="error">⚠️ <b>${err.message}</b></div>`;
 				return false;
 			})) {
-				remove_classes(input_field);
+				is_display = true;
 				input_field.classList.add('display');
 			} else {
 				input_field.classList.add('unnorm');
 			}
-			let address = await name.get_address().catch(err => {
-				output_div.innerHTML += `<div class="error">⚠️ <b>${err.message}</b></div>`;
-			});
-			if (address) {
-				let div = document.createElement('div');
-				div.id = 'address';
-				div.innerHTML = `<a class="address" href="https://etherscan.io/address/${address}">${address}</a>`;
-				let btn = document.createElement('button');
-				btn.innerHTML = 'Copy';
-				btn.addEventListener('click', () => navigator.clipboard.writeText(address));
-				div.append(btn);
-				output_div.append(div);
+			
+			let a_ens = document.createElement('a');
+			a_ens.innerHTML = 'View on ENS';
+			a_ens.href = `https://app.ens.domains/name/${name.name}/details`;
+			output_div.append(a_ens);
+
+			if (name.resolver) {
+
+				let address = await name.get_address().catch(err => {
+					output_div.innerHTML += `<div class="error">⚠️ <b>${err.message}</b></div>`;
+				});
+				if (address) {
+					let div = document.createElement('div');
+					div.id = 'address';
+					div.innerHTML = `<a class="address" href="${chain.explorer_address_uri(address)}">${address}</a>`;
+					let copy_btn = document.createElement('button');
+					copy_btn.innerHTML = 'Copy';
+					copy_btn.addEventListener('click', () => navigator.clipboard.writeText(address));
+					div.append(copy_btn);
+					output_div.append(div);
+				}
+
+				if (window_provider && is_connected() && await name.resolver.supports_text()) {
+					let accounts =  await window_provider.request({method: 'eth_accounts'}).catch(() => []);
+					if (accounts.length > 0) {
+						let owner = await name.get_owner_address();
+						if (accounts[0].toLowerCase() !== owner.toLowerCase()) {
+							let span = document.createElement('span');
+							span.innerHTML = `⚠️ Not owned by you: <code>${short_address(accounts[0])}</code>`;
+							output_div.append(span);
+						} else if (is_display) {
+							let span = document.createElement('span');
+							span.innerHTML = `✔️ Display for <b>${name.name}</b>`;
+							output_div.append(span);
+						} else {
+							let set_btn = document.createElement('button');
+							set_btn.innerHTML = `✏️ Set as Display for <b>${name.name}</b>`;
+							set_btn.addEventListener('click', () => {
+								window_provider.request({
+									method: 'wallet_switchEthereumChain', 
+									params:[{chainId: chain.id}]
+								}).then(() => window_provider.request({
+									method: 'eth_sendTransaction',
+									params: [{
+										to: name.resolver.address,
+										from: accounts[0],
+										data: ABIEncoder.method('setText(bytes32,string,string)').number(name.node).string('display').string(input).build_hex()
+									}]
+								})).then(tx => {
+									mark_dirty();
+								}).catch(err => {
+									console.log(err);
+								});
+							});
+							output_div.append(set_btn);
+						}
+					} else {
+						let connect_btn = document.createElement('button');
+						connect_btn.innerHTML = 'Connect to Set as Display';
+						connect_btn.addEventListener('click', () => {
+							window_provider.request({method: 'eth_requestAccounts'}).then(() => {
+								mark_dirty();
+							}).catch(() => {});
+						});	
+						output_div.append(connect_btn);	
+					}
+				}
 			}
 		}
 	} catch (err) {
@@ -271,8 +472,10 @@ async function resolve() {
 			output_div.innerHTML = `<div class="error">❌ <b>${err.message}</b></div>`;
 		}		
 	}
+
+
 	input_field.classList.remove('working');
-	arrows.classList.add('hide');
+	primary_arrows.classList.add('hide');
 	update_timer = false;
 	if (dirty) update();
 }
