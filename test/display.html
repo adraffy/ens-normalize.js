@@ -273,6 +273,7 @@ connected_btn.addEventListener('click', () => {
 		window.localStorage.setItem('connected', '1');
 	}
 	update_network();
+	mark_dirty();
 });
 
 function set_switching(b) {
