@@ -801,7 +801,7 @@ function is_working() {
 	return resolve_btn.disabled;
 }
 
-function resolve(...a) {
+function resolve(skip_norm) {
 	if (is_working()) return;
 	clearTimeout(resolve_timer);
 	resolve_timer = undefined;
@@ -819,14 +819,14 @@ function resolve(...a) {
 	}
 	window.location = '#' + encodeURIComponent(input);
 	document.title = `${title}: ${input}`;
-	if (!parse()) {
+	if (!skip_norm && !parse()) {
 		primary_arrows.classList.add('hide');
 		return;
 	}
 	resolve_btn.disabled = true;
 	primary_arrows.classList.remove('hide');
 	resolve_date0 = new Date();
-	resolve0(input, ...a).then(() => {
+	resolve0(input, skip_norm).then(() => {
 		resolve_btn.disabled = false;
 		if (resolve_timer === true) { // schedule again
 			resolve_timer = false;
@@ -847,7 +847,7 @@ function create_elapsed() {
 	return span;
 }
 
-async function resolve0(input0, override_skip_norm) {
+async function resolve0(input0, skip_norm) {
 	output_div.innerHTML = '';
 
 	document.querySelector('#provider').innerHTML = `using ${await ens.get_provider().then(x => x.source)}`;
@@ -855,11 +855,10 @@ async function resolve0(input0, override_skip_norm) {
 	// replace escapes
 	let input = replace_escapes(input0);
 	let input_is_address = is_checksum_address(input);
-	let skip_norm = override_skip_norm || skip_norm_check.checked;
-	
 	let input_grade = document.createElement('span');
 	let input_row;
 	let name_norm;
+	skip_norm |= skip_norm_check.checked;
 
 	if (input_is_address) {
 

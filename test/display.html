@@ -146,6 +146,23 @@ h1 {
 	border: 1px solid #aaa;
 	border-radius: 0.5rem;
 }
+#txs {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.tx {
+	margin-top: 1rem;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	background: #fff;
+	padding: 0.5rem;
+	border-radius: 1rem;
+}
+.tx .arrows {
+	width: 1.5rem;
+}
 @media only screen and (max-width: 800px) { 
 	body {
 		margin: 1rem;
@@ -191,6 +208,7 @@ h1 {
 <div id="arrows" class="hide"><div class="arrows"></div></div>
 </div>
 <div id="output_div"></div>
+<div id="txs"></div>
 <script type="module">
 import {ens_normalize} from '../dist/ens-normalize-debug.js';
 import {
@@ -202,7 +220,9 @@ import {
 
 const providers = new Providers()
 	.add_static(1, new WebSocketProvider({url: 'wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe'}))
-	.add_static(4, new WebSocketProvider({url: 'wss://rinkeby.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe'}));
+	.add_static(3, new WebSocketProvider({url: 'wss://ropsten.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe'}))
+	.add_static(4, new WebSocketProvider({url: 'wss://rinkeby.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe'}))
+	.add_static(5, new WebSocketProvider({url: 'wss://goerli.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe'}));
 
 const DEFAULT_CHAIN = ensure_chain(1);
 const ENS_CACHE = {};
@@ -215,6 +235,7 @@ const network_div = document.querySelector('#network');
 const chain_select = document.querySelector('#network select');
 const switch_default_btn = document.querySelector('#switch_default_btn');
 const pair_btn = document.querySelector('#pair_btn');
+const txs_div = document.querySelector('#txs');
 
 let selected_chain = DEFAULT_CHAIN;
 let last_resolve_chain;
@@ -420,14 +441,11 @@ async function resolve() {
 			}
 		} else if (input) {
 			let name = await ens.resolve(input);
-			let is_display = false;
+			let display = await name.get_text('display').catch(() => false);
+			let is_display = await name.is_input_display().catch(() => false);
 			if (name.is_input_normalized()) {
 				input_field.classList.add('norm');
-			} else if (await name.is_input_display().catch(err => {
-				output_div.innerHTML = `<div class="error">⚠️ <b>${err.message}</b></div>`;
-				return false;
-			})) {
-				is_display = true;
+			} else if (is_display) {
 				input_field.classList.add('display');
 			} else {
 				input_field.classList.add('unnorm');
@@ -438,10 +456,10 @@ async function resolve() {
 			a_ens.href = `https://app.ens.domains/name/${name.name}/details`;
 			output_div.append(a_ens);
 
-			if (name.resolver) {
-				let address = await name.get_address().catch(err => {
-					output_div.innerHTML += `<div class="error">⚠️ <b>${err.message}</b></div>`;
-				});
+			if (!name.resolver) {
+				output_div.innerHTML += `<div class="error">⚠️ <b>No resolver</b></div>`;
+			} else {
+				let address = await name.get_address().catch(() => 0);
 				if (address) {
 					let div = document.createElement('div');
 					div.id = 'address';
@@ -452,7 +470,7 @@ async function resolve() {
 					div.append(copy_btn);
 					output_div.append(div);
 				}
-				if (window_provider && is_paired()) {
+				if (window_provider) {
 					let accounts = await window_provider.request({method: 'eth_accounts'}).catch(() => []);
 					if (accounts.length > 0) {
 						let owner = await name.get_owner_address();
@@ -462,16 +480,16 @@ async function resolve() {
 							output_div.append(span);
 						} else if (is_display) {
 							let span = document.createElement('span');
-							span.innerHTML = `✅ Current Display Name for <b>${name.name}</b>`;
+							span.innerHTML = `✅ Display for <b>${name.name}</b>`;
 							output_div.append(span);
 						} else {
 							let set_btn = document.createElement('button');
-							set_btn.innerHTML = `✏️ Set as Display Name for <b>${name.name}</b>`;
+							set_btn.innerHTML = `✏️ ${display} &rarr; <b>${input}</b>`;
 							set_btn.addEventListener('click', () => {
 								let div = document.createElement('div');
 								div.classList.add('tx');
-								div.innerHTML = `<div class="arrows"></div>Waiting for Set Text: <b>${input}</b>`;
-								output_div.insertAdjacentElement(div, 'afterend');
+								div.innerHTML = `<div class="working"><div class="arrows"></div></div><div class="info">Waiting for Signature</div>`;
+								txs_div.append(div);
 								window_provider.request({
 									method: 'wallet_switchEthereumChain', 
 									params:[{chainId: chain.id}]
@@ -483,11 +501,39 @@ async function resolve() {
 										data: ABIEncoder.method('setText(bytes32,string,string)').number(name.node).string('display').string(input).build_hex()
 									}]
 								})).then(tx => {
-									
-									mark_dirty();
-									div.remove();
-								}).catch(err => {
-									console.log(err);
+									div.querySelector('.info').innerHTML = `${display} &rarr; <b>${input}</b>`;
+									let a = document.createElement('a');
+									a.href = chain.explorer_tx_uri(tx);
+									a.classList.add('hash');
+									a.target = '_blank';
+									a.innerHTML = 'View Transaction';
+									div.append(a);
+									return window_provider.request({
+										method: 'eth_subscribe',
+										params: ['logs', {
+											address: name.resolver.address,
+											topics: ['0xd8c9334b1a9c2f9da342a0a2b32629c1a229b6445dad78947f674b44444a7550']
+										}]
+									}).then(sub => [tx, sub]);
+								}).then(([tx, sub]) => new Promise((ful, rej) => {
+									window_provider.on('message', ({type, data}) => {
+										if (type !== 'eth_subscription') return;
+										let {subscription, result} = data;
+										if (subscription !== sub) return;
+										if (result.removed) return;
+										if (result.transactionHash !== tx) return;
+										div.querySelector('.working').innerHTML = '✅ <b>Success!</b>';
+										if (input_field.value === input) {
+											mark_dirty();
+										}
+										ful();
+									});
+								})).catch(err => {
+									if (err.code == 4001) {
+										div.remove();
+										return;
+									}
+									div.innerHTML = `❌ ${err.message}`;
 								});
 							});
 							output_div.append(set_btn);
