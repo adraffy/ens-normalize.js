@@ -470,6 +470,18 @@ async function resolve() {
 					div.append(copy_btn);
 					output_div.append(div);
 				}
+
+				if (is_display) {
+					let span = document.createElement('span');
+					span.innerHTML = `✅ <b>Display Name</b>`;
+					output_div.append(span);
+				} else if (display) {
+					let span = document.createElement('span');
+					span.innerHTML = `<b>Display Name:</b> ${display}`;
+					output_div.append(span);
+				}
+
+
 				if (window_provider) {
 					let accounts = await window_provider.request({method: 'eth_accounts'}).catch(() => []);
 					if (accounts.length > 0) {
@@ -478,13 +490,9 @@ async function resolve() {
 							let span = document.createElement('span');
 							span.innerHTML = `⚠️ Not owned by you: <code>${short_address(accounts[0])}</code>`;
 							output_div.append(span);
-						} else if (is_display) {
-							let span = document.createElement('span');
-							span.innerHTML = `✅ Display for <b>${name.name}</b>`;
-							output_div.append(span);
-						} else {
+						} else if (!is_display) {
 							let set_btn = document.createElement('button');
-							set_btn.innerHTML = `✏️ ${display} &rarr; <b>${input}</b>`;
+							set_btn.innerHTML = `✏️ Set Display: <b>${input}</b>`;
 							set_btn.addEventListener('click', () => {
 								let div = document.createElement('div');
 								div.classList.add('tx');
@@ -540,7 +548,7 @@ async function resolve() {
 						}
 					} else {
 						let connect_btn = document.createElement('button');
-						connect_btn.innerHTML = '<b>Connect</b> to Set as Display Name';
+						connect_btn.innerHTML = '<b>Connect</b> to Set Display Name';
 						connect_btn.addEventListener('click', () => {
 							window_provider.request({method: 'eth_requestAccounts'}).then(() => {
 								mark_dirty();
