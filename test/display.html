@@ -392,7 +392,7 @@ async function resolve() {
 				});
 				output_div.append(btn);
 			} else {
-				output_div.innerHTML = `<div class="error">❌ <b>Reverse Name</b></div>`; 
+				output_div.innerHTML = `<div class="error">❌ <b>Primary Not Set</b></div>`; 
 			}
 		} else if (input) {
 			let name = await ens.resolve(input);
@@ -430,7 +430,7 @@ async function resolve() {
 					output_div.append(div);
 				}
 
-				if (window_provider && is_paired() && await name.resolver.supports_text()) {
+				if (window_provider && is_paired()) {
 					let accounts =  await window_provider.request({method: 'eth_accounts'}).catch(() => []);
 					if (accounts.length > 0) {
 						let owner = await name.get_owner_address();
