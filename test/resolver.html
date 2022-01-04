@@ -286,7 +286,7 @@ footer {
 <b>Subdomain:</b>
 <button data-name="nowzad.loopring.eth">loopring</button>
 
-<b>Display:</b>
+<a href="./display.html"><b>Display:</b></a>
 <button>ADRaffy</button>
 
 <b>Address:</b>
@@ -1080,42 +1080,45 @@ async function resolve0(input0, override_skip_norm) {
 		let span = document.createElement('span');
 		apply_grade(span, 'warn', err.message);
 		span.classList.add('long');
+		add_row_tag(display_row, span);
 	} finally {
 		remove_temporary(display_row);
 	}
 	if (resolve_timer) return;
 	add_row_tag(display_row, create_elapsed());
 
-	if (!display_name) {
-		let span = document.createElement('span');
-		apply_grade(span, 'warn', `Not Set`);
-		add_row_tag(display_row, span);
-	} else {
-		try {
-			let display_norm = ens_normalize(display_name);
-			display_row.classList.add('display');
-			if (display_norm === name_norm) { // display is valid
-				make_exploded(display_row, [{v:explode_cp(display_name)}], true); // fake display
-				if (!input_is_address && input === display_name) { // input matches display
-					apply_grade(input_grade, 'best', 'Matches Display');
-					input_row.classList.add('display');
-					input_row.querySelector('.ens')?.remove(); // no purpose
-					input_row.querySelector('.opensea')?.remove(); // no purpose
+	if (typeof display_name === 'string') {
+		if (!display_name) {
+			let span = document.createElement('span');
+			apply_grade(span, 'warn', `Not Set`);
+			add_row_tag(display_row, span);
+		} else {
+			try {
+				let display_norm = ens_normalize(display_name);
+				display_row.classList.add('display');
+				if (display_norm === name_norm) { // display is valid
+					make_exploded(display_row, [{v:explode_cp(display_name)}], true); // fake display
+					if (!input_is_address && input === display_name) { // input matches display
+						apply_grade(input_grade, 'best', 'Matches Display');
+						input_row.classList.add('display');
+						input_row.querySelector('.ens')?.remove(); // no purpose
+						input_row.querySelector('.opensea')?.remove(); // no purpose
+						let span = document.createElement('span');
+						span.innerHTML = 'Same as Input';
+						add_row_tag(display_row, span);				
+					}
+				} else { // the display norm is goofy
+					make_exploded(display_row, display_norm, true);
 					let span = document.createElement('span');
-					span.innerHTML = 'Same as Input';
-					add_row_tag(display_row, span);				
+					apply_grade(span, 'warn', `Does Not Match`);
+					add_row_tag(display_row, span);
 				}
-			} else { // the display norm is goofy
-				make_exploded(display_row, display_norm, true);
+			} catch (err) { // the display doesn't normalize
+				make_exploded(display_row, display_name, false);
 				let span = document.createElement('span');
-				apply_grade(span, 'warn', `Does Not Match`);
+				apply_grade(span, 'fail', err.message);
 				add_row_tag(display_row, span);
 			}
-		} catch (err) { // the display doesn't normalize
-			make_exploded(display_row, display_name, false);
-			let span = document.createElement('span');
-			apply_grade(span, 'fail', err.message);
-			add_row_tag(display_row, span);
 		}
 	}
 	
@@ -1164,10 +1167,20 @@ async function resolve0(input0, override_skip_norm) {
 	let address_row = create_row('Address', true);
 	output_div.append(address_row);	
 	try {
-		address = await name.get_address();
-		// the eth address is valid
+		address = await name.get_address();		
+	} catch (err) {
+		address_row.classList.add('error');
+		let span = document.createElement('span');
+		apply_grade(span, 'warn', err.message);
+		span.classList.add('long');
+		add_row_tag(address_row, span);
+	} finally {
+		remove_temporary(address_row);
+	}
+	if (resolve_timer) return;
+		
+	if (typeof address === 'string') {
 		address_row.append(create_etherscan_address_link(address));
-		add_row_tag(address_row, create_elapsed());
 		if (input_is_address) {
 			if (address === input) {
 				let span = document.createElement('span');
@@ -1191,17 +1204,9 @@ async function resolve0(input0, override_skip_norm) {
 				add_row_tag(address_row, span);	
 			}
 		}
-	} catch (err) {
-		address_row.classList.add('error');
-		let span = document.createElement('span');
-		apply_grade(span, 'warn', err.message);
-		span.classList.add('long');
-		add_row_tag(address_row, span);
-	} finally {
-		remove_temporary(address_row);
 	}
-	if (resolve_timer) return;
-
+	add_row_tag(address_row, create_elapsed());
+	
 	if (input_is_address) return; // nothing more to do
 
 	// lookup primary
