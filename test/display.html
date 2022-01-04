@@ -248,6 +248,12 @@ for (let el of document.querySelectorAll('#examples button')) {
 	});
 }
 
+
+window.addEventListener('hashchange', () => {
+	apply_location_hash();
+});
+
+
 input_field.addEventListener('input', mark_dirty);
 input_field.addEventListener('keydown', e => {
 	if (e.key === 'Enter') {
@@ -271,6 +277,31 @@ pair_btn.addEventListener('click', () => {
 	mark_dirty();
 });
 
+apply_location_hash();
+
+function apply_location_hash() {
+	let s = decodeURIComponent(window.location.hash.slice(1));
+	let pos = s.lastIndexOf('@');
+	if (pos >= 0) {
+		let chain = s.slice(pos + 1).trim();
+		try {
+			chain = ensure_chain(chain);
+			if (current_chain() !== chain) {
+				// forcing a wallet switch is stupid
+				// so unpair then switch
+				set_paired(false); 
+				switch_network(chain);
+				if (!waiting_for_window) {
+					update_network();
+				}
+			}
+			s = s.slice(0, pos);
+		} catch (err) {
+		}		
+	}
+	input_field.value = s;
+	mark_dirty();
+}
 function set_paired(b) {
 	if (b) {
 		window.localStorage.setItem(STORAGE_KEY, '1');
@@ -281,7 +312,6 @@ function set_paired(b) {
 function is_paired() {
 	return window.localStorage.getItem(STORAGE_KEY);
 }
-
 function set_switching(b) {
 	chain_select.disabled = b;
 	switch_default_btn.disabled = b;
@@ -306,7 +336,6 @@ function current_chain() {
 		return selected_chain;
 	}
 }
-
 function update_network() {	
 	set_switching(waiting_for_window);
 	let chain = current_chain();
@@ -348,20 +377,14 @@ function mark_dirty() {
 	output_div.innerHTML = '';
 	update();
 }
-
 function update() {
 	if (!dirty || update_timer) return;
 	primary_arrows.classList.remove('hide');	
-	remove_classes(input_field);
+	input_field.classList.remove(...input_field.classList);
 	input_field.classList.add('working');
 	if (waiting_for_window) return; // will get called later
 	update_timer = setTimeout(resolve, 500);	
 }
-
-function remove_classes(x) {
-	x.classList.remove(...x.classList);
-}
-
 async function resolve() {
 	clearTimeout(update_timer);
 	dirty = false;
@@ -377,6 +400,7 @@ async function resolve() {
 	}
 
 	let input = input_field.value.trim();
+	window.history.replaceState('', null, input ? `#${input}@${chain.id}` : ' ');
 	try {
 		if (is_valid_address(input)) {
 			input_field.classList.add('address');
@@ -415,7 +439,6 @@ async function resolve() {
 			output_div.append(a_ens);
 
 			if (name.resolver) {
-
 				let address = await name.get_address().catch(err => {
 					output_div.innerHTML += `<div class="error">⚠️ <b>${err.message}</b></div>`;
 				});
@@ -429,9 +452,8 @@ async function resolve() {
 					div.append(copy_btn);
 					output_div.append(div);
 				}
-
 				if (window_provider && is_paired()) {
-					let accounts =  await window_provider.request({method: 'eth_accounts'}).catch(() => []);
+					let accounts = await window_provider.request({method: 'eth_accounts'}).catch(() => []);
 					if (accounts.length > 0) {
 						let owner = await name.get_owner_address();
 						if (accounts[0].toLowerCase() !== owner.toLowerCase()) {
@@ -440,11 +462,11 @@ async function resolve() {
 							output_div.append(span);
 						} else if (is_display) {
 							let span = document.createElement('span');
-							span.innerHTML = `✔️ Display for <b>${name.name}</b>`;
+							span.innerHTML = `✅ Current Display Name for <b>${name.name}</b>`;
 							output_div.append(span);
 						} else {
 							let set_btn = document.createElement('button');
-							set_btn.innerHTML = `✏️ Set as Display for <b>${name.name}</b>`;
+							set_btn.innerHTML = `✏️ Set as Display Name for <b>${name.name}</b>`;
 							set_btn.addEventListener('click', () => {
 								let div = document.createElement('div');
 								div.classList.add('tx');
@@ -472,7 +494,7 @@ async function resolve() {
 						}
 					} else {
 						let connect_btn = document.createElement('button');
-						connect_btn.innerHTML = 'Connect to Set as Display';
+						connect_btn.innerHTML = '<b>Connect</b> to Set as Display Name';
 						connect_btn.addEventListener('click', () => {
 							window_provider.request({method: 'eth_requestAccounts'}).then(() => {
 								mark_dirty();
@@ -491,8 +513,6 @@ async function resolve() {
 			output_div.innerHTML = `<div class="error">❌ <b>${err.message}</b></div>`;
 		}		
 	}
-
-
 	input_field.classList.remove('working');
 	primary_arrows.classList.add('hide');
 	update_timer = false;
