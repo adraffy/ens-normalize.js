@@ -70,7 +70,10 @@ await build(join(base_dir, 'lib-nf.js'), 'nf');
 await build(join(base_dir, 'lib-bidi.js'), 'bidi');
 await build(join(base_dir, 'lib-parts.js'), 'parts');
 
-unlinkSync(tmp_file);
+try {
+	unlinkSync(tmp_file);
+} catch (ignored) {	
+}
 
 async function build(lib_file, dist_name) {
 	let bundle = await rollup({

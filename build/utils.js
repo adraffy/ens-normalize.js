@@ -73,7 +73,7 @@ export function escape_name_for_html(s, quoter) {
 	// html: 0x26 &, 0x3C <, 0x3E >
 	// quote: 0x00-0x20 control, 0x7F DEL, whitespace, joiners
 	if (!quoter) quoter = quote_cp;
-	return s.replace(/(?:([\x00-\x20\x7F\xA0\u200C\u200D\s])|([^\x21-\x25\x27-\x3B\x3D\x3F-\x7E]))/gu, 
+	return s.replace(/(?:([\x00-\x20\x7F\xA0\s\u200C\u200D\u{E0020}-\u{E007F}])|([^\x21-\x25\x27-\x3B\x3D\x3F-\x7E]))/gu, 
 		(_, a, b) => a ? quoter(a.codePointAt(0)) : `&#${b.codePointAt(0)};`);
 }
 
