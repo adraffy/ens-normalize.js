@@ -18,16 +18,20 @@ import {join} from 'path';
 import {parse_cp_sequence} from '../build/utils.js';
 
 let base_dir = new URL('.', import.meta.url).pathname;
-let tests = JSON.parse(readFileSync(join(base_dir, 'data/emoji-20211221.json')));
+let tests = JSON.parse(readFileSync(join(base_dir, 'data/emoji-20220104.json')));
 
 export function test_emoji(ens_normalize) {
 	let errors = [];
-	for (let {input, error} of tests) {
+	for (let {input, norm, error} of tests) {
 		try {
 			let name = String.fromCodePoint(...parse_cp_sequence(input));
+			norm = norm ? String.fromCodePoint(...parse_cp_sequence(norm)) : name;
 			let result = ens_normalize(name);
 			if (error) {
 				errors.push({type: 'expected-error', input, error, result});
+			}
+			if (result !== norm) {
+				errors.push({type: 'diff', input, norm, result});
 			}
 		} catch (err) {
 			if (!error) {

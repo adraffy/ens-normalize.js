@@ -247,9 +247,9 @@ async function main() {
 	await add_sequences('ZWJ Sequences', zwjs);
 	await add_characters('Non-Emoji Pictographs', picto);
 
-	// jump to anchor
-	window.location.hash = window.location.hash.toString();
-	
+	// jump to anchor when finished
+	window.location.hash = window.location.hash;
+
 	document.querySelector('#loading').remove();
 }
 

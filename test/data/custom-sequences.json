@@ -4,8 +4,10 @@
 	{"src": "200D 200D", "desc": "double ZWJ"},
 	{"src": "200C 200C", "desc": "double ZWNJ"},
 	{"src": "1F4A9 200D 1F4A9", "desc": "poop joiner"},
-	{"src": "1F4A9 200D 200D 1F4A9", "desc": "poop with double joiner"},
-	{"src": "1F4A9 FE0E 200D 1F4A9 FE0E", "desc": "text joiner"},
-	{"src": "1F635 FE0E 200D 1F4AB", "desc": "text joiner"},
-	{"src": "1F1E6", "desc": "single regional indicator"}
+	{"src": "1F4A9 200D 200D 1F4A9", "desc": "poop 2x joiner"},
+	{"src": "1F4A9 FE0E 200D 1F4A9 FE0E", "desc": "text poop joiner"},
+	{"src": "1F4A9 FE0E 200D 1F4A9 FE0F", "desc": "mixed poop joiner"},
+	{"src": "1F4A9 FE0F 200D 1F4A9 FE0E", "desc": "mixed poop joiner"},
+	{"src": "1F1E6", "desc": "single regional indicator"},
+	{"src": "1F3F4 E0077 E0074 E0066 E007F", "desc": "non-RGI tag sequence"}
 ]

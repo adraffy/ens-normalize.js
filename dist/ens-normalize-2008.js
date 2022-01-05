@@ -173,126 +173,28 @@ function read_replacement_table(w, next) {
 	return m.map(v => [v[0], v.slice(1)]);
 }
 
-function read_zwj_seqs(next, lookup) {
-	let seqs = [];
+// abc => {a:{b:{c:{'':1}}}}
+function read_tree(next, read_lens, lookup) {
+	let root = {};
 	while (true) {
-		let lens = read_zero_terminated_array(next);
+		let lens = read_lens(next); // should return array of positive integers
 		if (lens.length == 0) break;
 		let n = 1 + next();
-		seqs.push(...lens.reduce(
-			(m, w) => read_transposed(n, w, next, lookup).map((v, i) => m[i].concat(0x200D, v)), 
-			read_transposed(n, lens.shift(), next, lookup)
-		));
-	}
-	return new Set(seqs.map(v => String.fromCodePoint(...v)));
-}
-
-/*
-
-
-/*
-function read_ys_transposed1(n, w, next) {
-	if (w == 0) return [];
-	let m = [read_deltas(n, next)];
-	for (let j = 1; j < w; j++) {
-		let v = Array(n);
-		let prev = m[j - 1];
-		for (let i = 0; i < n; i++) {
-			v[i] = prev[i] + signed(next());
+		let nodes = Array(n).fill(root);
+		for (let w of lens) {
+			nodes = read_transposed(n, w, next, lookup).map((v, i) => {
+				let parent = nodes[i];
+				let key = String.fromCodePoint(...v);
+				let child = parent[key];
+				if (!child) child = parent[key] = {};
+				return child;
+			});
 		}
-		m.push(v);
+		// mark nodes as terminating
+		nodes.forEach(x => x[''] = 1);
 	}
-	return m;
+	return root;
 }
-
-function read_replacement_table1(w, next) { 
-	let n = 1 + next();
-	let vX = read_ascending(n, next);
-	let mY = read_ys_transposed(n, w, next);
-	return vX.map((x, i) => [x, mY.map(v => v[i])])
-}
-
-function read_linear_table1(w, next) {
-	let dx = 1 + next();
-	let dy = next();
-	let n = 1 + next();
-	let vX = read_ascending(n, next);
-	let vN = read_counts(n, next);
-	let mY = read_ys_transposed(n, w, next);
-	return vX.map((x, i) => [x, mY.map(v => v[i]), vN[i], dx, dy]);
-}
-
-export function read_zwj_emoji(next) {
-	let buckets = [];
-	for (let k = next(); k > 0; k--) {
-		let n = 1 + next(); // group size
-		let w = 1 + next(); // group width w/o ZWJ
-		let p = 1 + next(); // bit positions of zwj
-		let z = []; // position of zwj
-		let m = []; // emoji vectors
-		for (let i = 0; i < n; i++) m.push([]);
-		for (let i = 0; i < w; i++) {
-			if (p & (1 << (i - 1))) {
-				w++; // increase width
-				z.push(i); // remember position
-				m.forEach(v => v.push(0x200D)); // insert zwj
-			} else {
-				read_deltas(n, next).forEach((x, i) => m[i].push(x));
-			}
-		}
-		for (let b of z) {
-			let bucket = buckets[b];
-			if (!bucket) buckets[b] = bucket = [];
-			bucket.push(...m);
-		}
-	}
-	return buckets;
-}
-
-export function read_emoji(next, sep) {
-	let ret = {};
-	for (let k = next(); k > 0; k--) {
-		let n = 1 + next(); // group size
-		let w = 1 + next(); // group width w/o sep
-		let p = 1 + next(); // bit positions of sep
-		let z = []; // position of sep
-		let m = []; // emoji vectors
-		for (let i = 0; i < n; i++) m.push([]);
-		for (let i = 0; i < w; i++) {
-			if (p & (1 << (i - 1))) {
-				w++; // increase width
-				z.push(i); // remember position
-				m.forEach(v => v.push(sep)); // insert 
-			} else {
-				read_deltas(n, next).forEach((x, i) => m[i].push(x));
-			}
-		}
-		for (let v of m) {
-			let bucket = ret[v[0]];
-			if (!bucket) bucket = ret[v[0]] = [];
-			bucket.push(v.slice(1));
-		}
-	}
-	for (let bucket of Object.values(ret)) {
-		bucket.sort((a, b) => b.length - a.length);
-	}
-	return ret;
-}
-
-export function read_member_function(r) {
-	let table = read_member_table(r);
-	return cp => lookup_member(table, cp);
-}
-
-export function lookup_member(table, cp) {
-	for (let [x, n] of table) {
-		let d = cp - x;
-		if (d < 0) break;
-		if (d < n) return true;
-	}
-	return false;
-}
-*/
 
 function lookup_mapped(table, cp) {
 	for (let [x, ys, n, dx, dy] of table) {
@@ -439,17 +341,29 @@ function emoji_parser_factory(r) {
 	const MODIFIER = read_member_set(r);
 	const MODIFIER_BASE = read_member_set(r);
 	const TAG_SPEC = read_member_set(r); 
-	const ZWJ_SEQS = read_zwj_seqs(r, [...STYLE_DROP, ...STYLE_OPT].sort((a, b) => a - b));
-	//const TAG_SPEC_VALID = read_member_function(r);
-	
+
+	// read whitelist for exact sequences
+	const SEQ_ROOT = read_tree(r, x => Array(x()).fill(1));
+
+	// read whitelist for zwj sequences (optional)
+	const ZWJ_ANY = 1;
+	const ZWJ_ROOT = r() ? read_tree(r, read_zero_terminated_array, [...STYLE_DROP, ...STYLE_OPT].sort((a, b) => a - b)) : ZWJ_ANY;
+
 	const FE0F = 0xFE0F;
 	const ZWJ = 0x200D;
 	const KEYCAP_END = 0x20E3;
 	const TAG_END = 0xE007F;
 
+	function follow_zwj(parent, cps) {
+		if (parent === ZWJ_ANY) return ZWJ_ANY; 
+		let key = String.fromCodePoint(...cps.filter(cp => cp != FE0F));
+		if (parent.hasOwnProperty(key)) return parent[key];		
+	}
+
 	function find_emoji_chr_mod_pre(cps, pos) {
 		let cp = cps[pos];
-		let cp2 = cps[pos+1]; // out of bounds, but unassigned
+		if (!cp) return;
+		let cp2 = cps[pos+1]; 
 		// emoji_modifier_sequence := emoji_modifier_base emoji_modifier
 		if (MODIFIER_BASE.has(cp) && cp2 && MODIFIER.has(cp2)) {
 			return [2, [cp, cp2]];
@@ -471,80 +385,111 @@ function emoji_parser_factory(r) {
 		}
 	}
 
-	return function(cps, pos) {
-		let cp = cps[pos];
-		let len = cps.length;
+	// note: this doesn't use any bound checks
+	return function(cps, pos0) {
+		let cp0 = cps[pos0];
+		
+		// check whitelist for a match
+		let seq_key = String.fromCodePoint(cp0);
+		if (SEQ_ROOT.hasOwnProperty(seq_key)) { // potential match
+			let node = SEQ_ROOT[seq_key];
+			let pos = pos0 + 1; // check remaining chars
+			while (true) {
+				let cp = cps[pos];
+				if (!cp) break; // end of string
+				let key = String.fromCodePoint(cp);
+				if (!node.hasOwnProperty(key)) break; // no more possibilities
+				node = node[key];
+				pos++;
+			}
+			if (node.hasOwnProperty('')) { // this was a terminator
+				return [pos - pos0, cps.slice(pos0, pos)];
+			}
+		}
+		let cp1 = cps[pos0+1];
+
 		// [ED-14] emoji flag sequence
 		// https://www.unicode.org/reports/tr51/#def_emoji_flag_sequence
 		// A sequence of two Regional Indicator characters, where the corresponding ASCII characters are valid region sequences as specified 
-		if (pos+2 <= len && REGIONAL.has(cp)) {
+		if (REGIONAL.has(cp0) && REGIONAL.has(cp1)) {
 			// emoji_flag_sequence := regional_indicator regional_indicator
-			let cp2 = cps[pos+1];
-			if (REGIONAL.has(cp2)) {
-				return [2, [cp, cp2]];
-			} else if (!find_emoji_chr_mod_pre(cps, pos)) {
-				// A singleton Regional Indicator character is not a well-formed emoji flag sequence.
-				//throw new Error(`Invalid Emoji: ${cp}`);
-				return [0];
-			}
+			return [2, [cp0, cp1]];
 		} 
 		// [ED-14c] emoji keycap sequence
 		// https://unicode.org/reports/tr51/#def_emoji_keycap_sequence
 		// A sequence of the following form: 
 		// emoji_keycap_sequence := [0-9#*] \x{FE0F 20E3}
-		let keycap_og = KEYCAP_DROP.has(cp);
-		if (pos+2 <= len && keycap_og && cps[pos+1] == KEYCAP_END) {
-			return [2, [cp, KEYCAP_END]];
-		} else if (pos+3 <= len && (keycap_og || KEYCAP_REQ.has(cp)) && cps[pos+1] == FE0F && cps[pos+2] == KEYCAP_END) {
-			return [3, keycap_og ? [cp, KEYCAP_END] : [cp, FE0F, KEYCAP_END]];		
+		let keycap_og = KEYCAP_DROP.has(cp0);
+		if (keycap_og && cp1 === KEYCAP_END) {
+			return [2, [cp0, KEYCAP_END]];
+		} else if ((keycap_og || KEYCAP_REQ.has(cp0)) && cp1 === FE0F && cps[pos0+2] === KEYCAP_END) {
+			return [3, keycap_og ? [cp0, KEYCAP_END] : [cp0, FE0F, KEYCAP_END]];		
 		}
 		// [ED-15] emoji core sequence
-		// emoji_core_sequence := emoji_character | emoji_presentation_sequence | emoji_keycap_sequence | emoji_modifier_sequence | emoji_flag_sequence 
-		// [ED-15a] emoji zwj element
-		// emoji_zwj_element := emoji_character | emoji_presentation_sequence | emoji_modifier_sequence
-		// [ED-16] emoji zwj sequence 
-		// emoji_zwj_sequence := emoji_zwj_element ( \x{200d} emoji_zwj_element )+
+		// emoji_core_sequence := emoji_keycap_sequence | emoji_flag_sequence | chr_mod_pre
+		// chr_mod_pre = emoji_character | emoji_presentation_sequence | emoji_modifier_sequence
+		// 
+		// we've handed keycap and flag already
+		let emoji0 = find_emoji_chr_mod_pre(cps, pos0); // chr_mod_pre?
+		if (!emoji0) return [0]; // nope
 		// [ED-17] emoji sequence
-		// emoji_sequence := emoji_core_sequence | emoji_zwj_sequence | emoji_tag_sequence 
-		let emoji0 = find_emoji_chr_mod_pre(cps, pos);
-		if (!emoji0) return [0];
-		let pos2 = emoji0[0] + pos;
-		let stack = emoji0[1].slice(); // make a copy
-		let zwj = false;
-		while (pos2+1 < len && cps[pos2] === ZWJ) {
-			let emoji = find_emoji_chr_mod_pre(cps, pos2 + 1);
-			if (!emoji) break;
-			zwj = true;
-			pos2 += 1 + emoji[0];
-			stack.push(ZWJ, ...emoji[1]);
-		}
-		if (zwj) {
-			// the emoji sequence must be a member of ZWJ_SEQS
-			let s = String.fromCodePoint(...stack);
-			if (!ZWJ_SEQS.has(s.replace(/\u{FE0F}/gu, ''))) {
-				//throw new Error(`Invalid Emoji Sequence: ${escape_unicode(s)}`);
-				return emoji0;
-			}
-		} else {
-			// [ED-14a] emoji tag sequence (ETS) 
-			// https://www.unicode.org/reports/tr51/#def_emoji_tag_sequence
-			// A sequence of the following form:
-			//  emoji_tag_sequence := tag_base tag_spec tag_end
-			//   tag_base := emoji_character 
-			//             | emoji_modifier_sequence     => emoji_modifier_base emoji_modifier
-			//             | emoji_presentation_sequence => emoji_character \x{FE0F}
-			//   tag_spec := [\x{E0020}-\x{E007E}]+
-			//   tag_end  := \x{E007F}		
-			if (pos2+2 < len && TAG_SPEC.has(cps[pos2])) {
-				let pos3 = pos2 + 1;
-				while (pos3+1 < len && TAG_SPEC.has(cps[pos3])) pos3++;
-				if (cps[pos3++] == TAG_END) {
-					//stack.push(...cps.slice(pos2, pos3 - pos2).filter(TAG_SPEC_VALID));
-					return [pos3 - pos, stack];
+		// emoji_sequence := chr_mod_pre | emoji_zwj_sequence | emoji_tag_sequence 
+		let [n0, v0] = emoji0;
+		let pos1 = pos0 + n0;
+		cp1 = cps[pos1]; // the character following the emoji
+		if (cp1 === ZWJ) { // maybe...
+			// [ED-16] emoji zwj sequence 
+			// emoji_zwj_sequence := emoji_zwj_element ( \x{200d} emoji_zwj_element )+		
+			// [ED-15a] emoji zwj element
+			// emoji_zwj_element := emoji_character | emoji_presentation_sequence | emoji_modifier_sequence		
+			let node = follow_zwj(ZWJ_ROOT, v0); 
+			if (node) { // whitelist or disabled
+				let queue = [];
+				let pos = pos1;
+				let pos_last;
+				while (cps[pos++] === ZWJ) { // zwj?
+					let emoji = find_emoji_chr_mod_pre(cps, pos); // zwj+emoji?
+					if (!emoji) break;
+					let [n, v] = emoji;
+					node = follow_zwj(node, v); // traverse the tree
+					if (!node) break;
+					pos += n; 
+					if (node === ZWJ_ANY) {
+						v0.push(ZWJ, ...v);
+						pos_last = pos;
+					} else {
+						queue.push(ZWJ, ...v); // save chars that dont form a complete sequence yet
+						if (node.hasOwnProperty('')) { // this is a valid sequence
+							v0.push(...queue); // drain queue
+							queue.length = 0;
+							pos_last = pos;
+						}
+					}
+				}
+				if (pos_last) {
+					// if set, v0 correponds to the longest zwj sequence
+					// that matches the whitelist
+					return [pos_last - pos0, v0];
 				}
 			}
 		}
-		return [pos2 - pos, stack];
+		// [ED-14a] emoji tag sequence (ETS) 
+		// https://www.unicode.org/reports/tr51/#def_emoji_tag_sequence
+		// A sequence of the following form:
+		//  emoji_tag_sequence := tag_base tag_spec tag_end
+		//   tag_base := emoji_character 
+		//             | emoji_modifier_sequence     => emoji_modifier_base emoji_modifier
+		//             | emoji_presentation_sequence => emoji_character \x{FE0F}
+		//   tag_spec := [\x{E0020}-\x{E007E}]+
+		//   tag_end  := \x{E007F}		
+		if (TAG_SPEC.has(cp1)) {
+			let pos = pos1 + 1;
+			while (TAG_SPEC.has(cps[pos])) pos++;
+			if (cps[pos++] === TAG_END) {
+				return [pos - pos0, v0.concat(cps.slice(pos1, 1 + pos - pos1))];
+			}
+		}
+		return emoji0;
 	};
 }
 
@@ -736,8 +681,8 @@ const SCRIPT_GREEK = read_member_set(r$1);
 const SCRIPT_HEBREW = read_member_set(r$1);
 const SCRIPT_HKH = read_member_set(r$1);
 
-// chunks is a list of textual code-points
-// chunks can be empty and contain empty lists
+// cps is a list of codepoints
+// could be empty
 function validate_context(cps) {
 	// apply relative checks
 	for (let i = 0, e = cps.length - 1; i <= e; i++) {
@@ -824,9 +769,9 @@ function validate_context(cps) {
 
 var PAYLOAD = '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';
 
-const BUILT = '2021-12-31T08:32:24.663Z';
+const BUILT = '2022-01-05T07:15:53.378Z';
 const UNICODE = '14.0.0';
-const VERSION = '1.3.8';
+const VERSION = '1.3.9';
 const IDNA = '2008';
 let r = decode_payload(PAYLOAD);
 const STOP = read_member_set(r);
@@ -895,30 +840,28 @@ function ens_normalize(name) {
 		// [Processing] 4.) Convert/Validate
 		if (cps.length >= 4 && cps[2] == HYPHEN && cps[3] == HYPHEN) { // "**--"
 			if (cps[0] == 0x78 && cps[1] == 0x6E) { // "xn--"
-				let cps_decoded;
 				try {
 					// Attempt to convert the rest of the label to Unicode according to Punycode [RFC3492].
 					// If that conversion fails, record that there was an error, and continue with the next label.
-					cps_decoded = puny_decode(cps.slice(4));
+					let cps_decoded = puny_decode(cps.slice(4));
 					// With either Transitional or Nontransitional Processing, sources already in Punycode are validated without mapping. 
 					// In particular, Punycode containing Deviation characters, such as href="xn--fu-hia.de" (for fuß.de) is not remapped. 
 					// This provides a mechanism allowing explicit use of Deviation characters even during a transition period. 
 					[tokens] = tokenized_idna(cps_decoded, EMOJI_PARSER, cp => VALID.has(cp) ? [cp] : []);
 					let expected = flatten_tokens(tokens);
 					if (cps_decoded.length != expected.length || !cps_decoded.every((x, i) => x == expected[i])) throw new Error('not normalized');
+					// Otherwise replace the original label in the string by the results of the conversion. 
+					cps = cps_decoded;
+					// warning: this could be empty
+					// warning: this could be "**--"
 				} catch (err) {
 					throw label_error(cps, `punycode: ${err.message}`);
 				}
-				// Otherwise replace the original label in the string by the results of the conversion. 
-				cps = cps_decoded;
-				// warning: this could be empty
-				// warning: this could be "**--"
 			}
 		}
 		// flatten textual part of token to a single list of code-points
-		// emoji should be invisible to context and bidi rules
-		// could replace emoji w/a generic character 
-		let text = tokens.flatMap(({v}) => v ?? []);
+		// emoji are replaced by FE0F (which is NSM) 
+		let text = tokens.flatMap(({v}) => v ?? [0xFE0F]);
 		if (cps.length > 0) {
 			// [Validity] 1.) The label must be in Unicode Normalization Form NFC.
 			// => satsified by nfc() via flatten_label_tokens()
@@ -935,10 +878,9 @@ function ens_normalize(name) {
 			// [Validity] 6.) For Nontransitional Processing, each value must be either valid or deviation.
 			// => satisfied by tokenized_idna()
 			// [Validity] 7.) If CheckJoiners, the label must satisify the ContextJ rules
-			// this also does ContextO
 			/*CONTEXT*/
 			try {
-				validate_context(text);
+				validate_context(text); // this also does ContextO
 			} catch (err) {
 				throw label_error(cps, err.message);
 			}

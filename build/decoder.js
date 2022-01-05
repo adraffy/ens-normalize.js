@@ -153,7 +153,7 @@ export function read_mapped_table(next) {
 	return ret.flat().sort((a, b) => a[0] - b[0]);
 }
 
-function read_zero_terminated_array(next) {
+export function read_zero_terminated_array(next) {
 	let v = [];
 	while (true) {
 		let i = next();
@@ -185,126 +185,28 @@ function read_replacement_table(w, next) {
 	return m.map(v => [v[0], v.slice(1)]);
 }
 
-export function read_zwj_seqs(next, lookup) {
-	let seqs = [];
+// abc => {a:{b:{c:{'':1}}}}
+export function read_tree(next, read_lens, lookup) {
+	let root = {};
 	while (true) {
-		let lens = read_zero_terminated_array(next);
+		let lens = read_lens(next); // should return array of positive integers
 		if (lens.length == 0) break;
 		let n = 1 + next();
-		seqs.push(...lens.reduce(
-			(m, w) => read_transposed(n, w, next, lookup).map((v, i) => m[i].concat(0x200D, v)), 
-			read_transposed(n, lens.shift(), next, lookup)
-		));
-	}
-	return new Set(seqs.map(v => String.fromCodePoint(...v)));
-}
-
-/*
-
-
-/*
-function read_ys_transposed1(n, w, next) {
-	if (w == 0) return [];
-	let m = [read_deltas(n, next)];
-	for (let j = 1; j < w; j++) {
-		let v = Array(n);
-		let prev = m[j - 1];
-		for (let i = 0; i < n; i++) {
-			v[i] = prev[i] + signed(next());
+		let nodes = Array(n).fill(root);
+		for (let w of lens) {
+			nodes = read_transposed(n, w, next, lookup).map((v, i) => {
+				let parent = nodes[i];
+				let key = String.fromCodePoint(...v);
+				let child = parent[key];
+				if (!child) child = parent[key] = {};
+				return child;
+			});
 		}
-		m.push(v);
+		// mark nodes as terminating
+		nodes.forEach(x => x[''] = 1);
 	}
-	return m;
+	return root;
 }
-
-function read_replacement_table1(w, next) { 
-	let n = 1 + next();
-	let vX = read_ascending(n, next);
-	let mY = read_ys_transposed(n, w, next);
-	return vX.map((x, i) => [x, mY.map(v => v[i])])
-}
-
-function read_linear_table1(w, next) {
-	let dx = 1 + next();
-	let dy = next();
-	let n = 1 + next();
-	let vX = read_ascending(n, next);
-	let vN = read_counts(n, next);
-	let mY = read_ys_transposed(n, w, next);
-	return vX.map((x, i) => [x, mY.map(v => v[i]), vN[i], dx, dy]);
-}
-
-export function read_zwj_emoji(next) {
-	let buckets = [];
-	for (let k = next(); k > 0; k--) {
-		let n = 1 + next(); // group size
-		let w = 1 + next(); // group width w/o ZWJ
-		let p = 1 + next(); // bit positions of zwj
-		let z = []; // position of zwj
-		let m = []; // emoji vectors
-		for (let i = 0; i < n; i++) m.push([]);
-		for (let i = 0; i < w; i++) {
-			if (p & (1 << (i - 1))) {
-				w++; // increase width
-				z.push(i); // remember position
-				m.forEach(v => v.push(0x200D)); // insert zwj
-			} else {
-				read_deltas(n, next).forEach((x, i) => m[i].push(x));
-			}
-		}
-		for (let b of z) {
-			let bucket = buckets[b];
-			if (!bucket) buckets[b] = bucket = [];
-			bucket.push(...m);
-		}
-	}
-	return buckets;
-}
-
-export function read_emoji(next, sep) {
-	let ret = {};
-	for (let k = next(); k > 0; k--) {
-		let n = 1 + next(); // group size
-		let w = 1 + next(); // group width w/o sep
-		let p = 1 + next(); // bit positions of sep
-		let z = []; // position of sep
-		let m = []; // emoji vectors
-		for (let i = 0; i < n; i++) m.push([]);
-		for (let i = 0; i < w; i++) {
-			if (p & (1 << (i - 1))) {
-				w++; // increase width
-				z.push(i); // remember position
-				m.forEach(v => v.push(sep)); // insert 
-			} else {
-				read_deltas(n, next).forEach((x, i) => m[i].push(x));
-			}
-		}
-		for (let v of m) {
-			let bucket = ret[v[0]];
-			if (!bucket) bucket = ret[v[0]] = [];
-			bucket.push(v.slice(1));
-		}
-	}
-	for (let bucket of Object.values(ret)) {
-		bucket.sort((a, b) => b.length - a.length);
-	}
-	return ret;
-}
-
-export function read_member_function(r) {
-	let table = read_member_table(r);
-	return cp => lookup_member(table, cp);
-}
-
-export function lookup_member(table, cp) {
-	for (let [x, n] of table) {
-		let d = cp - x;
-		if (d < 0) break;
-		if (d < n) return true;
-	}
-	return false;
-}
-*/
 
 export function lookup_mapped(table, cp) {
 	for (let [x, ys, n, dx, dy] of table) {

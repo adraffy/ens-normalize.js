@@ -3,7 +3,7 @@ import {join} from 'path';
 import {Encoder, is_better_member_compression, base64} from './encoder.js';
 import {
 	hex_cp, parse_cp, parse_cp_range, parse_cp_sequence, parse_cp_multi_ranges,
-	map_values, take_from, set_union, set_intersect, split_on, compare_arrays
+	map_values, take_from, set_union, set_intersect, split_on, compare_arrays, explode_cp, escape_unicode
 } from './utils.js';
 import {read_parsed} from './nodejs-utils.js';
 
@@ -78,10 +78,10 @@ class UTS51 {
 		this.TAG_SPEC = new Set();
 		this.MOD_BASE = new Set();
 		this.MODIFIER = new Set();
-		//let emoji_MAP = {};
+		this.SEQS = new Set();
+		this.ZWJS = new Set();
 		//this.data = data;
 		this.emoji = new Set(data.Emoji);
-		this.zwj = data.zwj;
 		this.picto = data.Extended_Pictographic.filter(cp => !this.emoji.has(cp));
 		// check that Emoji_Presentation is a subset of emoji
 		if (data.Emoji_Presentation.some(cp => !this.emoji.has(cp))) {
@@ -114,7 +114,7 @@ class UTS51 {
 		}
 		// assign tag spec
 		for (let cp of data.tag_spec) {
-			this.TAG_SPEC.add(cp); // these are not emoji
+			this.TAG_SPEC.add(cp); // note: these are not emoji
 		}
 		// assign keycaps
 		for (let cp of data.keycaps) {
@@ -137,19 +137,32 @@ class UTS51 {
 		if (this.STYLE_REQ.delete(cp)) return true;
 		return false;
 	}
+	group_seq() {
+		let groups = {};
+		for (let seq of this.SEQS) {
+			let cps = explode_cp(seq);
+			let key = cps.length;
+			let bucket = groups[key];
+			if (!bucket) groups[key] = bucket = [];
+			bucket.push(cps);
+		}
+		return groups;		
+	}
 	group_zwj() {
 		// we dont include STYLE_REQ because we're dropping FE0F
 		let valid_set = set_union(this.STYLE_DROP, this.STYLE_OPT); 
 		let valid_idx = [...valid_set].sort((a, b) => a - b);
 		let groups = {};
-		for (let seq of this.zwj) {
-			let parts = split_on(seq.filter(cp => cp != 0xFE0F), 0x200D);
-			if (parts.length == 0) {
+		for (let seq of this.ZWJS) {
+			let cps0 = explode_cp(seq);
+			let parts = split_on(cps0.filter(cp => cp != 0xFE0F), 0x200D);
+			if (parts.length == 1) {
+				console.error(cps0);
 				throw new Error(`Assumption wrong: ZWJ sequence without ZWJ`);
-			}
-			let cps = parts.flat();
+			} 
+			let cps = parts.flat(); // joiners removed
 			if (cps.some(cp => !valid_set.has(cp))) {
-				console.log(cps);
+				console.error(cps0);
 				throw new Error(`Assumption wrong: ZWJ sequence contains invalid emoji`);
 			}
 			let key = parts.map(v => v.length).join();
@@ -203,10 +216,42 @@ switch (mode) {
 		//console.log(JSON.stringify(missing));
 		break;
 	}
+	case 'emoji-zwj': {
+		// find the RGI zwj sequences
+		let seqs = read_parsed('emoji-zwj-sequences').map(({src}) => parse_cp_sequence(src));
+		if (argv.length == 0) { // just output to console
+			console.log(seqs);
+			break;
+		}
+		writeFileSync(join(ensure_dir('rules'), 'emoji-zwj.js'), [
+			`// generated: ${new Date().toJSON()}`,
+			`export default [`,
+			...seqs.map(v => `{ty: 'emoji-zwj', src: '${v.map(hex_cp).join(' ')}'}, // ${String.fromCodePoint(...v)}`),
+			'];'
+		].join('\n'));
+		break;
+	}
+	case 'emoji-seq': {
+		// find all the remaining sequences
+		// as of 20220104: this is just Tags
+		let tags = read_parsed('emoji-sequences').RGI_Emoji_Tag_Sequence.map(({src}) => parse_cp_sequence(src));
+		if (argv.length == 0) {
+			console.log(tags);
+			break;
+		}
+		writeFileSync(join(ensure_dir('rules'), 'emoji-seq.js'), [
+			`// generated: ${new Date().toJSON()}`,
+			`export default [`,
+			...tags.map(v => `{ty: 'emoji-seq', src: '${v.map(hex_cp).join(' ')}'}, // ${String.fromCodePoint(...v)}`),
+			'];'
+		].join('\n'));
+		break;
+	}
 	case 'style-drop': {	
 		// find the emoji that are valid in ENS0
 		let {idna} = read_rules_for_ENS0();
-		let valid = read_emoji_data().Emoji.filter(cp => idna.valid.has(cp));
+		let {Emoji} = read_emoji_data();
+		let valid = Emoji.filter(cp => idna.valid.has(cp));
 		if (argv.length == 0) { // just output to console
 			console.log(valid);
 			break;
@@ -256,8 +301,9 @@ async function create_payload(name) {
 		}
 		case 'uts51': {
 			let idna = new IDNA();
-			idna.ignored.add(0xFE0E); // meh
+			idna.ignored.add(0xFE0E); // only non-emoji character allowed
 			let uts51 = new UTS51(read_emoji_data());
+			uts51.ZWJS = undefined; // disable whitelist
 			apply_rules(idna, uts51, []);
 			write_rules_payload('idna-uts51', {idna, stops: new Set(), uts51, combining_marks: new Set()});
 			break;
@@ -297,15 +343,12 @@ async function create_payload(name) {
 function read_emoji_data() {
 	return {
 		...map_values(read_parsed('emoji-data'), e => e.flatMap(parse_cp_range)),
-		// RGI_Emoji_ZWJ_Sequence
-		zwj: read_parsed('emoji-zwj-sequences').map(({src}) => parse_cp_sequence(src)),
-		//
-		// these following exist in emoji-data
-		// but can only be identified by parsing the comments
-		// regional and tag_spec
-		...read_parsed('emoji-missing'),
-		// keycaps
-		keycaps: read_parsed('emoji-sequences').Emoji_Keycap_Sequence.map(({src}) => parse_cp_sequence(src)[0])
+		// these exist in emoji-data
+		// but can only be identified 
+		// by parsing the comments
+		keycaps: parse_cp_multi_ranges('23 2A 30..39'),
+		regional: parse_cp_multi_ranges('1F1E6..1F1FF'),
+		tag_spec: parse_cp_multi_ranges('E0020..E007E')
 	};
 }
 
@@ -527,16 +570,25 @@ function write_rules_payload(name, {idna, stops, uts51, combining_marks}) {
 		enc.write_member(uts51.MOD_BASE);
 		enc.write_member(uts51.TAG_SPEC);
 
-		let zwj = Object.entries(uts51.group_zwj());
-		for (let [key, m] of zwj) {
-			// '1,2,3' => [1,2,3] => [[_],[_,_],[_,_,_]]
-			let lens = key.split(',').map(x => parseInt(x));
-			for (let x of lens) enc.unsigned(x);
-			enc.unsigned(0);
+		for (let m of Object.values(uts51.group_seq())) {
+			enc.unsigned(m[0].length);
 			enc.positive(m.length);
 			enc.write_transposed(m.sort(compare_arrays));
 		}
 		enc.unsigned(0);
+
+		if (uts51.ZWJS) {
+			enc.unsigned(1); // whitelist enabled
+			for (let [key, m] of Object.entries(uts51.group_zwj())) {
+				// '1,2,3' => [1,2,3] => [[_],[_,_],[_,_,_]]
+				let lens = key.split(',').map(x => parseInt(x));
+				for (let x of lens) enc.unsigned(x);
+				enc.unsigned(0);
+				enc.positive(m.length);
+				enc.write_transposed(m.sort(compare_arrays));
+			}
+			enc.unsigned(0);
+		}
 
 		// experimental
 		enc.write_member(uts51.NON_SOLO); 
@@ -574,6 +626,11 @@ function apply_rules(idna, uts51, rules) {
 		try {
 			let {ty, src, dst} = rule;
 			switch (ty) {			
+				case 'disable-tags': {
+					// remove tags
+					uts51.TAG_SPEC.clear();
+					break;
+				}
 				case 'keycap-drop': {
 					// proper keycaps are $CAP FE0F 20E3
 					// dropped keycaps match this pattern, but strip the FE0F
@@ -596,6 +653,18 @@ function apply_rules(idna, uts51, rules) {
 					for (let cp of parse_cp_multi_ranges(src)) {
 						uts51.set_style(cp, ty);
 					}
+					continue;
+				}
+				case 'emoji-zwj': {
+					// add a zwj sequence
+					let cps = parse_cp_sequence(src);
+					uts51.ZWJS.add(String.fromCodePoint(...cps));
+					continue;
+				}
+				case 'emoji-seq': {
+					// add an emoji sequence that terminates
+					let cps = parse_cp_sequence(src);
+					uts51.SEQS.add(String.fromCodePoint(...cps));
 					continue;
 				}
 				case 'demoji': {

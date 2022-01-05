@@ -98,9 +98,8 @@ export function ens_normalize(name) {
 			}
 		}
 		// flatten textual part of token to a single list of code-points
-		// emoji should be invisible to context and bidi rules
-		// could replace emoji w/a generic character 
-		let text = tokens.flatMap(({v}) => v ?? []);
+		// emoji are replaced by FE0F (which is NSM) 
+		let text = tokens.flatMap(({v}) => v ?? [0xFE0F]);
 		if (cps.length > 0) {
 			// [Validity] 1.) The label must be in Unicode Normalization Form NFC.
 			// => satsified by nfc() via flatten_label_tokens()

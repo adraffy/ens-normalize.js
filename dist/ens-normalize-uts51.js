@@ -173,126 +173,28 @@ function read_replacement_table(w, next) {
 	return m.map(v => [v[0], v.slice(1)]);
 }
 
-function read_zwj_seqs(next, lookup) {
-	let seqs = [];
+// abc => {a:{b:{c:{'':1}}}}
+function read_tree(next, read_lens, lookup) {
+	let root = {};
 	while (true) {
-		let lens = read_zero_terminated_array(next);
+		let lens = read_lens(next); // should return array of positive integers
 		if (lens.length == 0) break;
 		let n = 1 + next();
-		seqs.push(...lens.reduce(
-			(m, w) => read_transposed(n, w, next, lookup).map((v, i) => m[i].concat(0x200D, v)), 
-			read_transposed(n, lens.shift(), next, lookup)
-		));
-	}
-	return new Set(seqs.map(v => String.fromCodePoint(...v)));
-}
-
-/*
-
-
-/*
-function read_ys_transposed1(n, w, next) {
-	if (w == 0) return [];
-	let m = [read_deltas(n, next)];
-	for (let j = 1; j < w; j++) {
-		let v = Array(n);
-		let prev = m[j - 1];
-		for (let i = 0; i < n; i++) {
-			v[i] = prev[i] + signed(next());
+		let nodes = Array(n).fill(root);
+		for (let w of lens) {
+			nodes = read_transposed(n, w, next, lookup).map((v, i) => {
+				let parent = nodes[i];
+				let key = String.fromCodePoint(...v);
+				let child = parent[key];
+				if (!child) child = parent[key] = {};
+				return child;
+			});
 		}
-		m.push(v);
+		// mark nodes as terminating
+		nodes.forEach(x => x[''] = 1);
 	}
-	return m;
+	return root;
 }
-
-function read_replacement_table1(w, next) { 
-	let n = 1 + next();
-	let vX = read_ascending(n, next);
-	let mY = read_ys_transposed(n, w, next);
-	return vX.map((x, i) => [x, mY.map(v => v[i])])
-}
-
-function read_linear_table1(w, next) {
-	let dx = 1 + next();
-	let dy = next();
-	let n = 1 + next();
-	let vX = read_ascending(n, next);
-	let vN = read_counts(n, next);
-	let mY = read_ys_transposed(n, w, next);
-	return vX.map((x, i) => [x, mY.map(v => v[i]), vN[i], dx, dy]);
-}
-
-export function read_zwj_emoji(next) {
-	let buckets = [];
-	for (let k = next(); k > 0; k--) {
-		let n = 1 + next(); // group size
-		let w = 1 + next(); // group width w/o ZWJ
-		let p = 1 + next(); // bit positions of zwj
-		let z = []; // position of zwj
-		let m = []; // emoji vectors
-		for (let i = 0; i < n; i++) m.push([]);
-		for (let i = 0; i < w; i++) {
-			if (p & (1 << (i - 1))) {
-				w++; // increase width
-				z.push(i); // remember position
-				m.forEach(v => v.push(0x200D)); // insert zwj
-			} else {
-				read_deltas(n, next).forEach((x, i) => m[i].push(x));
-			}
-		}
-		for (let b of z) {
-			let bucket = buckets[b];
-			if (!bucket) buckets[b] = bucket = [];
-			bucket.push(...m);
-		}
-	}
-	return buckets;
-}
-
-export function read_emoji(next, sep) {
-	let ret = {};
-	for (let k = next(); k > 0; k--) {
-		let n = 1 + next(); // group size
-		let w = 1 + next(); // group width w/o sep
-		let p = 1 + next(); // bit positions of sep
-		let z = []; // position of sep
-		let m = []; // emoji vectors
-		for (let i = 0; i < n; i++) m.push([]);
-		for (let i = 0; i < w; i++) {
-			if (p & (1 << (i - 1))) {
-				w++; // increase width
-				z.push(i); // remember position
-				m.forEach(v => v.push(sep)); // insert 
-			} else {
-				read_deltas(n, next).forEach((x, i) => m[i].push(x));
-			}
-		}
-		for (let v of m) {
-			let bucket = ret[v[0]];
-			if (!bucket) bucket = ret[v[0]] = [];
-			bucket.push(v.slice(1));
-		}
-	}
-	for (let bucket of Object.values(ret)) {
-		bucket.sort((a, b) => b.length - a.length);
-	}
-	return ret;
-}
-
-export function read_member_function(r) {
-	let table = read_member_table(r);
-	return cp => lookup_member(table, cp);
-}
-
-export function lookup_member(table, cp) {
-	for (let [x, n] of table) {
-		let d = cp - x;
-		if (d < 0) break;
-		if (d < n) return true;
-	}
-	return false;
-}
-*/
 
 function lookup_mapped(table, cp) {
 	for (let [x, ys, n, dx, dy] of table) {
@@ -439,17 +341,29 @@ function emoji_parser_factory(r) {
 	const MODIFIER = read_member_set(r);
 	const MODIFIER_BASE = read_member_set(r);
 	const TAG_SPEC = read_member_set(r); 
-	const ZWJ_SEQS = read_zwj_seqs(r, [...STYLE_DROP, ...STYLE_OPT].sort((a, b) => a - b));
-	//const TAG_SPEC_VALID = read_member_function(r);
-	
+
+	// read whitelist for exact sequences
+	const SEQ_ROOT = read_tree(r, x => Array(x()).fill(1));
+
+	// read whitelist for zwj sequences (optional)
+	const ZWJ_ANY = 1;
+	const ZWJ_ROOT = r() ? read_tree(r, read_zero_terminated_array, [...STYLE_DROP, ...STYLE_OPT].sort((a, b) => a - b)) : ZWJ_ANY;
+
 	const FE0F = 0xFE0F;
 	const ZWJ = 0x200D;
 	const KEYCAP_END = 0x20E3;
 	const TAG_END = 0xE007F;
 
+	function follow_zwj(parent, cps) {
+		if (parent === ZWJ_ANY) return ZWJ_ANY; 
+		let key = String.fromCodePoint(...cps.filter(cp => cp != FE0F));
+		if (parent.hasOwnProperty(key)) return parent[key];		
+	}
+
 	function find_emoji_chr_mod_pre(cps, pos) {
 		let cp = cps[pos];
-		let cp2 = cps[pos+1]; // out of bounds, but unassigned
+		if (!cp) return;
+		let cp2 = cps[pos+1]; 
 		// emoji_modifier_sequence := emoji_modifier_base emoji_modifier
 		if (MODIFIER_BASE.has(cp) && cp2 && MODIFIER.has(cp2)) {
 			return [2, [cp, cp2]];
@@ -471,80 +385,111 @@ function emoji_parser_factory(r) {
 		}
 	}
 
-	return function(cps, pos) {
-		let cp = cps[pos];
-		let len = cps.length;
+	// note: this doesn't use any bound checks
+	return function(cps, pos0) {
+		let cp0 = cps[pos0];
+		
+		// check whitelist for a match
+		let seq_key = String.fromCodePoint(cp0);
+		if (SEQ_ROOT.hasOwnProperty(seq_key)) { // potential match
+			let node = SEQ_ROOT[seq_key];
+			let pos = pos0 + 1; // check remaining chars
+			while (true) {
+				let cp = cps[pos];
+				if (!cp) break; // end of string
+				let key = String.fromCodePoint(cp);
+				if (!node.hasOwnProperty(key)) break; // no more possibilities
+				node = node[key];
+				pos++;
+			}
+			if (node.hasOwnProperty('')) { // this was a terminator
+				return [pos - pos0, cps.slice(pos0, pos)];
+			}
+		}
+		let cp1 = cps[pos0+1];
+
 		// [ED-14] emoji flag sequence
 		// https://www.unicode.org/reports/tr51/#def_emoji_flag_sequence
 		// A sequence of two Regional Indicator characters, where the corresponding ASCII characters are valid region sequences as specified 
-		if (pos+2 <= len && REGIONAL.has(cp)) {
+		if (REGIONAL.has(cp0) && REGIONAL.has(cp1)) {
 			// emoji_flag_sequence := regional_indicator regional_indicator
-			let cp2 = cps[pos+1];
-			if (REGIONAL.has(cp2)) {
-				return [2, [cp, cp2]];
-			} else if (!find_emoji_chr_mod_pre(cps, pos)) {
-				// A singleton Regional Indicator character is not a well-formed emoji flag sequence.
-				//throw new Error(`Invalid Emoji: ${cp}`);
-				return [0];
-			}
+			return [2, [cp0, cp1]];
 		} 
 		// [ED-14c] emoji keycap sequence
 		// https://unicode.org/reports/tr51/#def_emoji_keycap_sequence
 		// A sequence of the following form: 
 		// emoji_keycap_sequence := [0-9#*] \x{FE0F 20E3}
-		let keycap_og = KEYCAP_DROP.has(cp);
-		if (pos+2 <= len && keycap_og && cps[pos+1] == KEYCAP_END) {
-			return [2, [cp, KEYCAP_END]];
-		} else if (pos+3 <= len && (keycap_og || KEYCAP_REQ.has(cp)) && cps[pos+1] == FE0F && cps[pos+2] == KEYCAP_END) {
-			return [3, keycap_og ? [cp, KEYCAP_END] : [cp, FE0F, KEYCAP_END]];		
+		let keycap_og = KEYCAP_DROP.has(cp0);
+		if (keycap_og && cp1 === KEYCAP_END) {
+			return [2, [cp0, KEYCAP_END]];
+		} else if ((keycap_og || KEYCAP_REQ.has(cp0)) && cp1 === FE0F && cps[pos0+2] === KEYCAP_END) {
+			return [3, keycap_og ? [cp0, KEYCAP_END] : [cp0, FE0F, KEYCAP_END]];		
 		}
 		// [ED-15] emoji core sequence
-		// emoji_core_sequence := emoji_character | emoji_presentation_sequence | emoji_keycap_sequence | emoji_modifier_sequence | emoji_flag_sequence 
-		// [ED-15a] emoji zwj element
-		// emoji_zwj_element := emoji_character | emoji_presentation_sequence | emoji_modifier_sequence
-		// [ED-16] emoji zwj sequence 
-		// emoji_zwj_sequence := emoji_zwj_element ( \x{200d} emoji_zwj_element )+
+		// emoji_core_sequence := emoji_keycap_sequence | emoji_flag_sequence | chr_mod_pre
+		// chr_mod_pre = emoji_character | emoji_presentation_sequence | emoji_modifier_sequence
+		// 
+		// we've handed keycap and flag already
+		let emoji0 = find_emoji_chr_mod_pre(cps, pos0); // chr_mod_pre?
+		if (!emoji0) return [0]; // nope
 		// [ED-17] emoji sequence
-		// emoji_sequence := emoji_core_sequence | emoji_zwj_sequence | emoji_tag_sequence 
-		let emoji0 = find_emoji_chr_mod_pre(cps, pos);
-		if (!emoji0) return [0];
-		let pos2 = emoji0[0] + pos;
-		let stack = emoji0[1].slice(); // make a copy
-		let zwj = false;
-		while (pos2+1 < len && cps[pos2] === ZWJ) {
-			let emoji = find_emoji_chr_mod_pre(cps, pos2 + 1);
-			if (!emoji) break;
-			zwj = true;
-			pos2 += 1 + emoji[0];
-			stack.push(ZWJ, ...emoji[1]);
-		}
-		if (zwj) {
-			// the emoji sequence must be a member of ZWJ_SEQS
-			let s = String.fromCodePoint(...stack);
-			if (!ZWJ_SEQS.has(s.replace(/\u{FE0F}/gu, ''))) {
-				//throw new Error(`Invalid Emoji Sequence: ${escape_unicode(s)}`);
-				return emoji0;
-			}
-		} else {
-			// [ED-14a] emoji tag sequence (ETS) 
-			// https://www.unicode.org/reports/tr51/#def_emoji_tag_sequence
-			// A sequence of the following form:
-			//  emoji_tag_sequence := tag_base tag_spec tag_end
-			//   tag_base := emoji_character 
-			//             | emoji_modifier_sequence     => emoji_modifier_base emoji_modifier
-			//             | emoji_presentation_sequence => emoji_character \x{FE0F}
-			//   tag_spec := [\x{E0020}-\x{E007E}]+
-			//   tag_end  := \x{E007F}		
-			if (pos2+2 < len && TAG_SPEC.has(cps[pos2])) {
-				let pos3 = pos2 + 1;
-				while (pos3+1 < len && TAG_SPEC.has(cps[pos3])) pos3++;
-				if (cps[pos3++] == TAG_END) {
-					//stack.push(...cps.slice(pos2, pos3 - pos2).filter(TAG_SPEC_VALID));
-					return [pos3 - pos, stack];
+		// emoji_sequence := chr_mod_pre | emoji_zwj_sequence | emoji_tag_sequence 
+		let [n0, v0] = emoji0;
+		let pos1 = pos0 + n0;
+		cp1 = cps[pos1]; // the character following the emoji
+		if (cp1 === ZWJ) { // maybe...
+			// [ED-16] emoji zwj sequence 
+			// emoji_zwj_sequence := emoji_zwj_element ( \x{200d} emoji_zwj_element )+		
+			// [ED-15a] emoji zwj element
+			// emoji_zwj_element := emoji_character | emoji_presentation_sequence | emoji_modifier_sequence		
+			let node = follow_zwj(ZWJ_ROOT, v0); 
+			if (node) { // whitelist or disabled
+				let queue = [];
+				let pos = pos1;
+				let pos_last;
+				while (cps[pos++] === ZWJ) { // zwj?
+					let emoji = find_emoji_chr_mod_pre(cps, pos); // zwj+emoji?
+					if (!emoji) break;
+					let [n, v] = emoji;
+					node = follow_zwj(node, v); // traverse the tree
+					if (!node) break;
+					pos += n; 
+					if (node === ZWJ_ANY) {
+						v0.push(ZWJ, ...v);
+						pos_last = pos;
+					} else {
+						queue.push(ZWJ, ...v); // save chars that dont form a complete sequence yet
+						if (node.hasOwnProperty('')) { // this is a valid sequence
+							v0.push(...queue); // drain queue
+							queue.length = 0;
+							pos_last = pos;
+						}
+					}
+				}
+				if (pos_last) {
+					// if set, v0 correponds to the longest zwj sequence
+					// that matches the whitelist
+					return [pos_last - pos0, v0];
 				}
 			}
 		}
-		return [pos2 - pos, stack];
+		// [ED-14a] emoji tag sequence (ETS) 
+		// https://www.unicode.org/reports/tr51/#def_emoji_tag_sequence
+		// A sequence of the following form:
+		//  emoji_tag_sequence := tag_base tag_spec tag_end
+		//   tag_base := emoji_character 
+		//             | emoji_modifier_sequence     => emoji_modifier_base emoji_modifier
+		//             | emoji_presentation_sequence => emoji_character \x{FE0F}
+		//   tag_spec := [\x{E0020}-\x{E007E}]+
+		//   tag_end  := \x{E007F}		
+		if (TAG_SPEC.has(cp1)) {
+			let pos = pos1 + 1;
+			while (TAG_SPEC.has(cps[pos])) pos++;
+			if (cps[pos++] === TAG_END) {
+				return [pos - pos0, v0.concat(cps.slice(pos1, 1 + pos - pos1))];
+			}
+		}
+		return emoji0;
 	};
 }
 
@@ -736,8 +681,8 @@ const SCRIPT_GREEK = read_member_set(r$1);
 const SCRIPT_HEBREW = read_member_set(r$1);
 const SCRIPT_HKH = read_member_set(r$1);
 
-// chunks is a list of textual code-points
-// chunks can be empty and contain empty lists
+// cps is a list of codepoints
+// could be empty
 function validate_context(cps) {
 	// apply relative checks
 	for (let i = 0, e = cps.length - 1; i <= e; i++) {
@@ -822,11 +767,11 @@ function validate_context(cps) {
 	}
 }
 
-var PAYLOAD = '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';
+var PAYLOAD = 'AA4AFQAyAB0ADAAQAAoADgAJAAYADQCFABMABwDA/QQA8NwPGSY8GXQegwLODADknOjpQwsWCBMDFiERPwQEAoYD0AIBTwC8YMC0gQoCTQ0JGuv1SCYgWQoAZsQEAKdGCQMBBQwOCQILBiAVBScAlADGCwDFSgMIZSYTpRlnSv0/FAwABAIGBAATe0AD4gAhJQAAHgUVBQUFBQABF2VI/DQNSzsBJK4SAADy8QglE9EAy4E3qggOxQsACBIBATUMRjkMJgAAy61tFRDkFqVeAVkNAW4K5yIACAIM/xZUAM2hWbt2CEAMf8nzHIOMa2zrt2AYbuxMow3TQYJkPeEDpO+hAwd1n55c92pt2kANhtW2rIDAaGoY1furjDSKrZGBpzbzu7q5g/Hg3ZGj1aoOYNaaNvfnWjvWFpX9gnfo+WKXaCZ06oujHi5O7ueeq8d3nLXTm6r1pBuAyX7jr2A=';
 
-const BUILT = '2021-12-31T08:32:24.663Z';
+const BUILT = '2022-01-05T07:15:53.378Z';
 const UNICODE = '14.0.0';
-const VERSION = '1.3.8';
+const VERSION = '1.3.9';
 const IDNA = 'uts51';
 let r = decode_payload(PAYLOAD);
 const STOP = read_member_set(r);
@@ -895,30 +840,28 @@ function ens_normalize(name) {
 		// [Processing] 4.) Convert/Validate
 		if (cps.length >= 4 && cps[2] == HYPHEN && cps[3] == HYPHEN) { // "**--"
 			if (cps[0] == 0x78 && cps[1] == 0x6E) { // "xn--"
-				let cps_decoded;
 				try {
 					// Attempt to convert the rest of the label to Unicode according to Punycode [RFC3492].
 					// If that conversion fails, record that there was an error, and continue with the next label.
-					cps_decoded = puny_decode(cps.slice(4));
+					let cps_decoded = puny_decode(cps.slice(4));
 					// With either Transitional or Nontransitional Processing, sources already in Punycode are validated without mapping. 
 					// In particular, Punycode containing Deviation characters, such as href="xn--fu-hia.de" (for fuß.de) is not remapped. 
 					// This provides a mechanism allowing explicit use of Deviation characters even during a transition period. 
 					[tokens] = tokenized_idna(cps_decoded, EMOJI_PARSER, cp => VALID.has(cp) ? [cp] : []);
 					let expected = flatten_tokens(tokens);
 					if (cps_decoded.length != expected.length || !cps_decoded.every((x, i) => x == expected[i])) throw new Error('not normalized');
+					// Otherwise replace the original label in the string by the results of the conversion. 
+					cps = cps_decoded;
+					// warning: this could be empty
+					// warning: this could be "**--"
 				} catch (err) {
 					throw label_error(cps, `punycode: ${err.message}`);
 				}
-				// Otherwise replace the original label in the string by the results of the conversion. 
-				cps = cps_decoded;
-				// warning: this could be empty
-				// warning: this could be "**--"
 			}
 		}
 		// flatten textual part of token to a single list of code-points
-		// emoji should be invisible to context and bidi rules
-		// could replace emoji w/a generic character 
-		let text = tokens.flatMap(({v}) => v ?? []);
+		// emoji are replaced by FE0F (which is NSM) 
+		let text = tokens.flatMap(({v}) => v ?? [0xFE0F]);
 		if (cps.length > 0) {
 			// [Validity] 1.) The label must be in Unicode Normalization Form NFC.
 			// => satsified by nfc() via flatten_label_tokens()
@@ -935,10 +878,9 @@ function ens_normalize(name) {
 			// [Validity] 6.) For Nontransitional Processing, each value must be either valid or deviation.
 			// => satisfied by tokenized_idna()
 			// [Validity] 7.) If CheckJoiners, the label must satisify the ContextJ rules
-			// this also does ContextO
 			/*CONTEXT*/
 			try {
-				validate_context(text);
+				validate_context(text); // this also does ContextO
 			} catch (err) {
 				throw label_error(cps, err.message);
 			}

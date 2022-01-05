@@ -8,6 +8,10 @@ function quote_cp(cp) {
 	return `{${hex_cp(cp)}}`;
 }
 
+function is_printable_ascii(s) {	
+	return /^[\x21-\x25\x27-\x3B\x3D\x3F-\x7E]+$/gu.test(s);
+}
+
 function escape_name_for_html(s, quoter) {
 	// printable w/o:
 	// html: 0x26 &, 0x3C <, 0x3E >
@@ -45,22 +49,35 @@ function dom_from_tokens(tokens, show_mapped = true) {
 			el.classList.add('glyph');
 			for (let cp of cps) {
 				let span = document.createElement('span');
-				span.classList.add('mod');
 				if (cp == 0x200D) {
-					span.classList.add('zwj');
+					span.classList.add('mod', 'zwj');
 					span.innerHTML = 'ZWJ';
 				} else if (cp == 0xFE0F) {
-					span.classList.add('dropped', 'style');
+					span.classList.add('mod', 'dropped', 'style');
 					span.innerHTML = 'FE0F';
 				} else if (cp == 0x20E3) {
-					span.classList.add('keycap');
+					span.classList.add('mod', 'keycap');
 					span.innerHTML = 'Keycap';
-				} else if (!e.includes(cp)) {
+				} else if (cp >= 0xE0020 && cp <= 0xE007F) {
+					cp -= 0xE0000;
+					let ch = String.fromCodePoint(cp);
+					if (cp === 0x7F) {
+						span.classList.add('mod');
+						span.innerHTML = 'TagEnd';
+					} else {
+						span = document.createElement('code');
+						if (is_printable_ascii(ch)) {
+							span.innerHTML = ch;
+						} else {
+							span.innerHTML = hex_cp(cp);
+						}
+						span.classList.add('mod', 'tag');
+					}
+				} else if (!e.includes(cp)) { 
 					span = document.createElement('code');
-					span.classList.add('dropped'); 
+					span.classList.add('mod', 'dropped'); 
 					span.innerHTML = hex_cp(cp);
 				} else {
-					span.classList.remove('mod');
 					span.classList.add('emoji');
 					span.innerHTML = String.fromCodePoint(cp);
 				}
@@ -160,6 +177,9 @@ function use_default_style() {
 	}
 	.tokens .mod.zwj {
 		background: #0aa;
+	}
+	.tokens .mod.tag {
+		background: #33f;
 	}
 	.tokens .mod.dropped {
 		background: #aaa;

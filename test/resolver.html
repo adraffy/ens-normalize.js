@@ -328,8 +328,16 @@ footer {
 <button>😵💫😵💫😵💫</button>
 <button>👩🏽‍⚕️</button>
 <button>👨‍👩‍👦</button>
-<button>👨👩👦</button>
-<button>🟧🟧🟧</button>
+
+<button data-name="💩{200D}💩">💩+💩</button>
+
+<a href="./report-emoji.html#RGI_Emoji_Tag_Sequence"><b>Tag:</b></a>
+<button data-name="{1F3F4}{E0067}{E0062}{E0065}{E006E}{E0067}{E007F}" data-replace="1"></button>
+<button data-name="{1F3F4}{E0067}{E0062}{E0073}{E0063}{E0074}{E007F}" data-replace="1"></button>
+<button data-name="{1F3F4}{E0067}{E0062}{E0077}{E006C}{E0073}{E007F}" data-replace="1"></button>
+<button data-name="{1F3F4}{E0077}{E0074}{E0066}{E007F}">❌</button>
+<button data-name="{1F3F4}">"🏴"</button>
+
 
 <a href="./report-emoji.html"><b>Picto:</b></a>
 <button>mmm</button>
@@ -420,21 +428,14 @@ import {escape_name_for_html, is_printable_ascii, explode_cp, hex_cp} from '../b
 import {ens_normalize as ens_normalize_0, ens_tokenize, VERSION, BUILT, IDNA, UNICODE} from '../dist/ens-normalize-debug.min.js';
 import {ens_normalize as ens_normalize_xbidi} from '../dist/ens-normalize-xbidi.min.js'; // load without bidi
 import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
+use_default_style();
+
+document.querySelector('#version').innerHTML += ` (v${VERSION}+${IDNA}+U${UNICODE})<br><code>${BUILT}</code>`;
 
 const providers = new Providers()
 	.add_static(1, new WebSocketProvider({url: 'wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe', source: 'Infura'}));
 
-let window_provider;
-determine_window_provider().then(p => {
-	window_provider = p;
-	providers.add_dynamic(p);
-}).catch(() => {});
-
 const ens = new ENS({provider: providers.view(1)});
-
-document.querySelector('#version').innerHTML += ` (v${VERSION}+${IDNA}+U${UNICODE})<br><code>${BUILT}</code>`;
-
-use_default_style();
 
 const input_field = document.querySelector('#input_field');
 const resolve_btn = document.querySelector('#resolve_btn');
@@ -449,19 +450,18 @@ const readme_rows = [...output_div.childNodes]; // save initial ux
 let resolve_timer;
 let resolve_date0;
 
-function ens_normalize(name) {
-	if (ignore_bidi_check.checked) {
-		return ens_normalize_xbidi(name);
-	} else {
-		return ens_normalize_0(name);
-	}
-}
+let window_provider;
+determine_window_provider().then(p => {
+	window_provider = p;
+	providers.add_dynamic(p);
+}).catch(() => {});
 
 for (let btn of document.querySelectorAll('.examples button, button[data-name]')) {
 	let name = replace_escapes(btn.dataset.name ?? btn.innerHTML);
 	if (btn.dataset.replace) btn.innerHTML = name;
 	if (!name.includes('.') && !is_checksum_address(name)) name += '.eth';
 	if (btn.dataset.escape) name = apply_escapes(name, false);
+	if (!btn.title) btn.title = `${name}\n${explode_cp(name).map(hex_cp).join(' ')}`;
 	btn.addEventListener('click', () => {
 		input_field.value = name;
 		resolve(btn.dataset.skip);
@@ -513,6 +513,15 @@ window.addEventListener('hashchange', () => {
 	input_field.value = decode_location_hash();
 	resolve();
 });
+
+
+function ens_normalize(name) {
+	if (ignore_bidi_check.checked) {
+		return ens_normalize_xbidi(name);
+	} else {
+		return ens_normalize_0(name);
+	}
+}
 
 function decode_location_hash() {
 	return decodeURIComponent(window.location.hash.slice(1));
@@ -582,10 +591,10 @@ function parse() {
 	}
 }
 
-
 function apply_escapes(s, forced) {
 	return [...s].map(x => !forced && is_printable_ascii(x) ? x : `{${hex_cp(x.codePointAt(0))}}`).join('');
 }
+
 function replace_escapes(s) {
 	// match: {HEX}, [0xHEX], [DEC]
 	return s.replace(/(?:(?:\{([0-9a-f]+)\})|(?:\[((?:0x[0-9a-f]+)|[0-9]+)\]))/uig, (_, a, b) => {
@@ -603,17 +612,20 @@ function create_link(url, s) {
 	a.innerHTML = s ?? url;
 	return a;
 }
+
 function create_etherscan_address_link(s) {
 	let a = create_link(`https://etherscan.io/address/${s}`, s);
 	a.classList.add('hash');
 	return a;	
 }
+
 function create_copy_btn(s, title = 'Copy') {
 	let btn = document.createElement('button');
 	btn.addEventListener('click', () => navigator.clipboard.writeText(s));
 	btn.innerHTML = title;
 	return btn;
 }
+
 function create_resolve_btn(s) {
 	let btn = document.createElement('button');
 	btn.innerHTML = 'Resolve';	
@@ -623,20 +635,22 @@ function create_resolve_btn(s) {
 	});
 	return btn;
 }
+
 function create_ens_link(s) {
 	let a = create_link(`https://app.ens.domains/name/${encodeURIComponent(s)}`, 'ENS');
 	a.classList.add('ens');
 	a.title = `ENS: ${s}`;
 	return a;
 }
+
 function get_dot_eth_label(name) {
 	let v = name.split('.');
 	return v.length == 2 && v[1].toLowerCase() == 'eth' ? v[0] : undefined;
 }
+
 function create_opensea_link(name) {
-	// add opensea if ENS
 	let label = get_dot_eth_label(name);
-	if (!label) return;
+	if (!label) return ''; // only if 2LD .eth	
 	let a = create_link(`https://opensea.io/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/${labelhash(label).hex}`, 'Opensea');
 	a.classList.add('opensea');
 	return a;
@@ -742,7 +756,10 @@ function create_row(label, waiting) {
 	let row = document.createElement('div');
 	row.classList.add('row');
 	if (label) {
-		row.append(create_row_label(label));
+		let span = document.createElement('span');
+		span.classList.add('row-label');
+		span.innerHTML = `${label}:`;
+		row.append(span);
 	}
 	if (waiting) {
 		let div = document.createElement('div');
@@ -757,24 +774,6 @@ function remove_temporary(row) {
 	for (let x of row.querySelectorAll('.temporary')) {
 		x.remove();
 	}
-}
-
-
-function create_error_row(label, error, long = true) {
-	let span = document.createElement('span');
-	if (long) span.classList.add('long');
-	apply_grade(span, 'warn', error);
-	let row = create_row(label);
-	row.classList.add('error');
-	add_row_tag(row, span);
-	return row;
-}
-
-function create_row_label(label) {
-	let span = document.createElement('span');
-	span.classList.add('row-label');
-	span.innerHTML = `${label}:`;
-	return span;
 }
 
 function add_row_tag(row, tag) {
@@ -806,6 +805,9 @@ function resolve(skip_norm) {
 	clearTimeout(resolve_timer);
 	resolve_timer = undefined;
 	let input = input_field.value;
+	if (/^[0-9a-f]{2,}( [0-9a-f]{2,})+$/i.test(input)) {
+		input_field.value = input = input.split(' ').map(x => `{${x}}`).join('');	
+	}
 	const title = 'ENS Resolver';
 	if (!input) {
 		if (window.location.hash) {
@@ -1024,11 +1026,12 @@ async function resolve0(input0, skip_norm) {
 
 		// check if *.eth
 		let label = get_dot_eth_label(name_norm);
+		let available;
 		if (label) {
 			let avail_row = create_row('Availability', true);
 			output_div.append(avail_row);
 			try {
-				let available = await ens.is_dot_eth_available(label);	
+				available = await ens.is_dot_eth_available(label);	
 				let span_avail = document.createElement('span');
 				let len = [...label].length;
 				if (available) {
@@ -1048,7 +1051,6 @@ async function resolve0(input0, skip_norm) {
 				add_row_tag(avail_row, span_len);
 
 				add_row_tag(avail_row, create_ens_link(name_norm));	
-				add_row_tag(avail_row, create_elapsed());
 
 			} catch (err) {
 				avail_row.classList.add('error');
@@ -1058,6 +1060,28 @@ async function resolve0(input0, skip_norm) {
 				add_row_tag(avail_row, span);
 			} finally {
 				remove_temporary(avail_row);
+			}
+			add_row_tag(avail_row, create_elapsed());
+			if (resolve_timer) return;
+
+			if (!available) {
+				let nft_row = create_row('NFT Owner', true);
+				output_div.append(nft_row);
+				try {
+					let nft_owner = await ens.get_dot_eth_owner(label);	
+					nft_row.append(create_etherscan_address_link(nft_owner.address));
+					nft_row.append(create_copy_btn(nft_owner.address));
+					nft_row.append(create_resolve_btn(nft_owner.address));
+				} catch (err) {
+					nft_row.classList.add('error');
+					let span = document.createElement('span');
+					apply_grade(span, 'warn', err.message);
+					span.classList.add('long');
+					add_row_tag(nft_row, span);
+				} finally {
+					remove_temporary(nft_row);
+				}
+				add_row_tag(nft_row, create_elapsed());
 			}
 		}			
 		return;

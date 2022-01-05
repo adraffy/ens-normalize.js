@@ -498,6 +498,7 @@ async function resolve() {
 								div.classList.add('tx');
 								div.innerHTML = `<div class="working"><div class="arrows"></div></div><div class="info">Waiting for Signature</div>`;
 								txs_div.append(div);
+								// fix this: this is dogshit
 								window_provider.request({
 									method: 'wallet_switchEthereumChain', 
 									params:[{chainId: chain.id}]

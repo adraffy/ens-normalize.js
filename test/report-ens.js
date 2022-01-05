@@ -1,7 +1,7 @@
 import {mkdirSync, writeFileSync} from 'fs';
 import {join} from 'path';
 import {escape_unicode, escape_name_for_html, parse_cp} from '../build/utils.js';
-import LABELS from './registered_labels.js';
+import LABELS from './registered-labels.js';
 
 // adraffy
 import {ens_normalize} from '../index.js';
