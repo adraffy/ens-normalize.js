@@ -234,6 +234,7 @@ export default [
 
 	{ty: 'valid', src: '27E0'}, // ⟠
 	{ty: 'valid', src: '29EB'}, // ⧫
+	{ty: 'valid', src: '2630'}, // ☰
 
 	// math
 	{ty: 'valid', src: '2206'}, // ∆
