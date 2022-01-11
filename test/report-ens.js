@@ -4,17 +4,13 @@ import {escape_unicode, escape_name_for_html, parse_cp} from '../build/utils.js'
 import LABELS from './registered-labels.js';
 
 // adraffy
-import {ens_normalize} from '../index.js';
+//import {ens_normalize} from '../index.js';
+import {ens_normalize} from '../dist/ens-normalize-compat.js';
 // ens
 import lib from 'eth-ens-namehash';
 
 let output_dir = new URL('./output/', import.meta.url).pathname;
 mkdirSync(output_dir, {recursive: true});
-
-async function explode(s) {
-	//return {label: s, points: [...s].map(x => x.codePointAt(0)).join(' '), owner: await get_owner(`${s}.eth`)};
-	return {label: s, points: [...s].map(x => x.codePointAt(0)).join(' ')};
-}
 
 let buckets = {};
 for (let label of LABELS) {
@@ -115,5 +111,5 @@ for (let [type, bucket] of buckets) {
 }
 html += `</body></html>`;
 
-writeFileSync(join(output_dir, 'ens3.html'), html);
+writeFileSync(join(output_dir, 'ens-compat.html'), html);
 //writeFileSync(join(output_dir, 'ens.json'), JSON.stringify(buckets));

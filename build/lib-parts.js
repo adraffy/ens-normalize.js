@@ -44,10 +44,10 @@ export function dom_from_tokens(tokens, show_mapped = true) {
 						span.classList.add('mod');
 						span.innerHTML = 'TagEnd';
 					} else {
-						span = document.createElement('code');
 						if (is_printable_ascii(ch)) {
 							span.innerHTML = ch;
 						} else {
+							span = document.createElement('code');
 							span.innerHTML = hex_cp(cp);
 						}
 						span.classList.add('mod', 'tag');

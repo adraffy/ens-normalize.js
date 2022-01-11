@@ -58,6 +58,9 @@ await build(generate_lib({idna, nfc: false}), 'ens-normalize-xnfc');
 await build(generate_lib({idna, bidi: false, nfc: false}), 'ens-normalize-xnfc-xbidi');
 await build(generate_lib({idna, debug: true, version: true}), 'ens-normalize-debug');
 
+// build compat version
+await build(generate_lib({idna: 'adraffy-compat', version: true}), `ens-normalize-compat`);
+
 // build alt versions
 await build(generate_lib({idna: '2003', version: true}), `ens-normalize-2003`);
 await build(generate_lib({idna: '2008', version: true}), `ens-normalize-2008`);

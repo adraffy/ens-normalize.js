@@ -294,9 +294,20 @@ async function create_payload(name) {
 		case 'adraffy': {
 			let idna = read_idna_rules({version: 2008});
 			let uts51 = new UTS51(read_emoji_data());
-			apply_rules(idna, uts51, (await import('./rules/adraffy.js')).default);
+			apply_rules(idna, uts51, [
+				(await import('./rules/adraffy.js')).default,
+				(await import('./rules/whitelist.js')).default
+			].flat());
 			idna.check_uts46_assumptions();
 			write_rules_payload('idna-adraffy', {idna, uts51});
+			break;
+		}
+		case 'adraffy-compat': {
+			let idna = read_idna_rules({version: 2003, valid_deviations: true});
+			let uts51 = new UTS51(read_emoji_data());
+			apply_rules(idna, uts51, (await import('./rules/adraffy.js')).default);
+			idna.check_uts46_assumptions();
+			write_rules_payload('idna-adraffy-compat', {idna, uts51});
 			break;
 		}
 		case 'uts51': {
@@ -307,7 +318,7 @@ async function create_payload(name) {
 			apply_rules(idna, uts51, []);
 			write_rules_payload('idna-uts51', {idna, stops: new Set(), uts51, combining_marks: new Set()});
 			break;
-		}
+		}		
 		case 'others': {
 			// this is current ENS 
 			write_rules_payload('idna-ENS0', read_rules_for_ENS0());

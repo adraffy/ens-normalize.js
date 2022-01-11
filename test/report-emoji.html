@@ -137,10 +137,11 @@ Sequences have a known appearance:
 <script type="module">
 import {escape_name_for_html, parse_cp_range, parse_cp_sequence, hex_cp, map_values, compare_arrays} from '../build/utils.js';
 import {ens_normalize, ens_tokenize, BUILT, VERSION, UNICODE} from '../dist/ens-normalize-debug.min.js';
+import {ens_normalize as normCompat, ens_tokenize as tokenizeCompat} from '../dist/ens-normalize-compat.min.js';
 import {ens_normalize as norm2003, ens_tokenize as tokenize2003} from '../dist/ens-normalize-2003.js';
 import {ens_normalize as norm2008, ens_tokenize as tokenize2008} from '../dist/ens-normalize-2008.min.js';
 import {ens_normalize as normENS0, ens_tokenize as tokenizeENS0} from '../dist/ens-normalize-ENS0.min.js';
-import {ens_normalize as normUTS51,ens_tokenize as tokenizeUTS51} from '../dist/ens-normalize-uts51.min.js';
+import {ens_normalize as normUTS51, ens_tokenize as tokenizeUTS51} from '../dist/ens-normalize-uts51.min.js';
 import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
 
 use_default_style();
@@ -149,10 +150,11 @@ const PRIMARY = 'adraffy';
 
 const VERSIONS = [
 	{idna: PRIMARY},
-	{idna: 'UTS51',tokenize: tokenizeUTS51,normalize: normUTS51},
-	{idna: 'ENS0', tokenize: tokenizeENS0, normalize: normENS0},
-	{idna: '2003', tokenize: tokenize2003, normalize: norm2003},
-	{idna: '2008', tokenize: tokenize2008, normalize: norm2008},
+	{idna: 'Compat', normalize: normCompat, tokenize: tokenizeCompat},
+	{idna: 'UTS51', normalize: normUTS51, tokenize: tokenizeUTS51},
+	{idna: 'ENS0', normalize: normENS0, tokenize: tokenizeENS0},
+	{idna: '2003', normalize: norm2003, tokenize: tokenize2003},
+	{idna: '2008', normalize: norm2008, tokenize: tokenize2008},
 ];
 
 document.querySelector('#versions').innerHTML += ` (v${VERSION}+U${UNICODE})<br>${VERSIONS.map(x => x.idna).join(', ')}<br><code>${BUILT}</code>`;
@@ -223,7 +225,7 @@ async function main() {
 
 	zwjs = zwjs.map(({src, desc}) => ({cps: parse_cp_sequence(src), desc}));
 	let custom_chrs = [];
-	custom_seqs = custom_seqs.map(({src, desc}) => ({cps: parse_cp_sequence(src), desc}));
+	custom_seqs = custom_seqs.map(({src, desc, error}) => ({cps: parse_cp_sequence(src), desc, error}));
 	emojipedia = emojipedia.map(({src, desc}) => ({cps: parse_cp_sequence(src), desc}));
 
 	basic = [...basic].sort((a, b) => a - b);
@@ -263,7 +265,7 @@ async function add_sequences(name, seqs, show_errors = false) {
 
 	let types = ['error', 'disallowed', 'different', 'verbatim'];
 	
-	let rows = seqs.map(({cps, desc}) => {
+	let rows = seqs.map(({cps, desc, error}) => {
 		let emoji = String.fromCodePoint(...cps);
 
 		let type;
@@ -279,7 +281,11 @@ async function add_sequences(name, seqs, show_errors = false) {
 				td0.append(dom_from_tokens(tokens));
 			}
 		} catch (err) {
-			type = 'error';
+			if (error) {
+				type = 'valid';
+			} else {
+				type = 'error';
+			}
 			td0.innerHTML = err.message;
 		}
 		td0.classList.add(type);
@@ -301,9 +307,10 @@ async function add_sequences(name, seqs, show_errors = false) {
 					td.append(dom_from_tokens(tokenize(emoji)));
 				}
 			} catch (err) {
-				td.classList.add('disallowed');
-				if (show_errors) {
-					td.innerHTML = err.message;
+				if (error) {
+					td.classList.add('valid');
+				} else {
+					td.classList.add('disallowed');
 				}
 			}
 			return td;

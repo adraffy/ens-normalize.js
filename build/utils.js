@@ -58,14 +58,18 @@ export function quote_cp(cp) {
 }
 
 export function is_printable_ascii(s) {	
-	return /^[\x21-\x25\x27-\x3B\x3D\x3F-\x7E]+$/gu.test(s);
+	// printable w/o:
+	// 0x20 (space)
+	// 0x7F (delete)
+	return /^[\x21-\x7E]+$/gu.test(s);
 }
 
 export function escape_unicode(s) {
 	// printable w/o:
-	// 0x22 " (double-quote)
-	// 0x7F DEL
-	return s.replace(/[^\x20-\x21\x23-\x7E]/gu, x => quote_cp(x.codePointAt(0)));
+	// 0x22 (double-quote)
+	// 0x7B/0x7D (curly-brace, used for escaping)
+	// 0x7F (delete)
+	return s.replace(/[^\x20-\x21\x23-\x7A\x7C\x7E]/gu, x => quote_cp(x.codePointAt(0)));
 }
 
 export function escape_name_for_html(s, quoter) {

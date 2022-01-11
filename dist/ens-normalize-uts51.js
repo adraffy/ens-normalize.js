@@ -223,9 +223,10 @@ function quote_cp(cp) {
 
 function escape_unicode(s) {
 	// printable w/o:
-	// 0x22 " (double-quote)
-	// 0x7F DEL
-	return s.replace(/[^\x20-\x21\x23-\x7E]/gu, x => quote_cp(x.codePointAt(0)));
+	// 0x22 (double-quote)
+	// 0x7B/0x7D (curly-brace, used for escaping)
+	// 0x7F (delete)
+	return s.replace(/[^\x20-\x21\x23-\x7A\x7C\x7E]/gu, x => quote_cp(x.codePointAt(0)));
 }
 
 function explode_cp(s) {
@@ -769,9 +770,9 @@ function validate_context(cps) {
 
 var PAYLOAD = 'AA4AFQAyAB0ADAAQAAoADgAJAAYADQCFABMABwDA/QQA8NwPGSY8GXQegwLODADknOjpQwsWCBMDFiERPwQEAoYD0AIBTwC8YMC0gQoCTQ0JGuv1SCYgWQoAZsQEAKdGCQMBBQwOCQILBiAVBScAlADGCwDFSgMIZSYTpRlnSv0/FAwABAIGBAATe0AD4gAhJQAAHgUVBQUFBQABF2VI/DQNSzsBJK4SAADy8QglE9EAy4E3qggOxQsACBIBATUMRjkMJgAAy61tFRDkFqVeAVkNAW4K5yIACAIM/xZUAM2hWbt2CEAMf8nzHIOMa2zrt2AYbuxMow3TQYJkPeEDpO+hAwd1n55c92pt2kANhtW2rIDAaGoY1furjDSKrZGBpzbzu7q5g/Hg3ZGj1aoOYNaaNvfnWjvWFpX9gnfo+WKXaCZ06oujHi5O7ueeq8d3nLXTm6r1pBuAyX7jr2A=';
 
-const BUILT = '2022-01-05T07:15:53.378Z';
+const BUILT = '2022-01-11T08:39:45.029Z';
 const UNICODE = '14.0.0';
-const VERSION = '1.3.9';
+const VERSION = '1.3.10';
 const IDNA = 'uts51';
 let r = decode_payload(PAYLOAD);
 const STOP = read_member_set(r);
