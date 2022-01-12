@@ -37,6 +37,9 @@ class IDNA {
 	is_disallowed(cp) {
 		return !this.valid.has(cp) && !this.ignored.has(cp) && !this.is_mapped(cp);
 	}
+	allowed_set() {
+		return new Set([...this.valid, ...this.mapped.map(([x]) => x)]);
+	}
 	check_invariants() {
 		// everything in the mapped output should be valid
 		for (let [x, ys] of this.mapped) {
@@ -329,6 +332,14 @@ async function create_payload(name) {
 			write_rules_payload('idna-2008', {idna: read_idna_rules({version: 2008})});
 			break;
 		}
+		case 'cm': {
+			let v = [...set_intersect(
+				read_combining_marks(), 
+				read_idna_rules({version: 2008}).allowed_set()
+			)];
+			console.log(v);
+			break;
+		}
 		case 'nf': {
 			let enc = new Encoder();
 			encode_nf(enc, read_nf_rules());
@@ -561,7 +572,7 @@ function write_rules_payload(name, {idna, stops, uts51, combining_marks}) {
 		// find everything that maps to ".'
 		stops = extract_stops(idna);
 	}
-	let allowed = new Set([...idna.valid, ...idna.mapped.map(([x]) => x)]);
+	let allowed = idna.allowed_set();
 	if (!combining_marks) {
 		// use default combining marks if not specified
 		combining_marks = read_combining_marks();

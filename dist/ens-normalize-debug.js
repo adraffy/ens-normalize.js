@@ -804,9 +804,9 @@ function norm(form, cps) {
 function nfc(cps) { return norm('NFC', cps); }
 function nfd(cps) { return norm('NFD', cps); }
 
-const BUILT = '2022-01-11T08:39:45.029Z';
+const BUILT = '2022-01-12T22:50:27.708Z';
 const UNICODE = '14.0.0';
-const VERSION = '1.3.10';
+const VERSION = '1.3.11';
 const IDNA = 'adraffy';
 let r = decode_payload(PAYLOAD);
 const STOP = read_member_set(r);
@@ -895,8 +895,14 @@ function ens_normalize(name) {
 			}
 		}
 		// flatten textual part of token to a single list of code-points
-		// emoji are replaced by FE0F (which is NSM) 
-		let text = tokens.flatMap(({v}) => v ?? [0xFE0F]);
+		let text = tokens.reduce((a, {v}) => {
+			if (v) {
+				a.push(...v);
+			} else if (a.length > 0) { // emoji at the start of the label are deleted
+				a.push(0xFE0F); // remaining emoji are replaced by FE0F (which is NSM) 
+			}
+			return a;
+		}, []);
 		if (cps.length > 0) {
 			// [Validity] 1.) The label must be in Unicode Normalization Form NFC.
 			// => satsified by nfc() via flatten_label_tokens()
