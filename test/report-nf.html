@@ -54,8 +54,7 @@ tbody tr:nth-child(odd) {
 <div id="loading">Computing..</div>
 <script type="module">
 import {nfc_adraffy, nfd_adraffy, nfc_default, nfd_default} from '../dist/nf.min.js';
-
-//document.querySelector('#version').innerHTML = ` v${VERSION} for Unicode ${UNICODE}`;
+import {escape_name_for_html, explode_cp} from '../build/utils.js';
 
 try {
 	main();
@@ -66,25 +65,9 @@ try {
 	console.error(err);
 }
 
-function escape_unicode(cps) {
-	return cps.map(cp => {
-		let s = String.fromCodePoint(cp);
-		return /[\.\-a-z0-9]/.test(s) ? s : `{${cp.toString(16).toUpperCase()}}`;
-	}).join('');
-}
-function cps_from_sequence(s) {
-	return s.split(/\s+/).map(x => parseInt(x, 16));
-}
-
-function compare_array(a, b) {
-	let {length: n} = a;
-	let c = n - b.length;
-	for (let i = 0; c == 0 && i < n; i++) c = a[i] - b[i];
-	return c;
-}
-
 async function main() {	
 	let res = await fetch('../build/unicode-json/NormalizationTest.json');
+	//let res = await fetch('../build/unicode-json/NormalizationTestOld.json');
 	if (res.status !== 200) throw new Error('download error');
 	let tests = await res.json();
 	tests = Object.entries(tests).sort((a, b) => b[1].length - a[1].length);
@@ -100,24 +83,26 @@ async function main() {
 		<tr><th>Expected</th><th>adraffy</th><th>Browser</th><th>Expected</th><th>adraffy</th><th>Browser</th></tr>
 		</tr></thead><tbody>`;
 		let errors = {};
-		function compare_cell(v0, v1, key) {
-			if (v0.length == v1.length && v0.every((x, i) => x == v1[i])) {
+		function compare_cell(expect, cps, key) {
+			let result = String.fromCodePoint(...cps);
+			if (result === expect) {
 				return '<td class="same"></td>';
 			} else {
 				errors[key] = (errors[key] ?? 0) + 1;
-				return `<td class="diff">${escape_unicode(v1)}</td>`;
+				return `<td class="diff">${escape_name_for_html(result)}</td>`;
 			}
 		}
 		for (let args of cases) {
-			let [src, nfc0, nfd0] = args.map(cps_from_sequence);
+			let [src, nfc0, nfd0] = args;
+			let cps = explode_cp(src);
 			html += '<tr>' + [
-				`<td class="input">${escape_unicode(src)}</td>`,
-				`<td class="expect">${escape_unicode(nfd0)}</td>`,
-				compare_cell(nfd0, nfd_adraffy(src), 'nfc_adraffy'),
-				compare_cell(nfd0, nfd_default(src), 'nfd_default'),
-				`<td class="expect">${escape_unicode(nfc0)}</td>`,
-				compare_cell(nfc0, nfc_adraffy(src), 'nfd_adraffy'),
-				compare_cell(nfc0, nfc_default(src), 'nfc_default')
+				`<td class="input">${escape_name_for_html(src)}</td>`,
+				`<td class="expect">${escape_name_for_html(nfd0)}</td>`,
+				compare_cell(nfd0, nfd_adraffy(cps), 'nfc_adraffy'),
+				compare_cell(nfd0, nfd_default(cps), 'nfd_default'),
+				`<td class="expect">${escape_name_for_html(nfc0)}</td>`,
+				compare_cell(nfc0, nfc_adraffy(cps), 'nfd_adraffy'),
+				compare_cell(nfc0, nfc_default(cps), 'nfc_default')
 			].join('') + '</tr>';
 		}
 		html += '</body></table>';
@@ -125,7 +110,6 @@ async function main() {
 		let section = document.createElement('section');
 		section.innerHTML = html;
 		document.body.append(section);
-
 
 		function total_cell(key) {
 			let total = errors[key];

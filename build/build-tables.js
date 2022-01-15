@@ -3,7 +3,7 @@ import {join} from 'path';
 import {Encoder, is_better_member_compression, base64} from './encoder.js';
 import {
 	hex_cp, parse_cp, parse_cp_range, parse_cp_sequence, parse_cp_multi_ranges,
-	map_values, take_from, set_union, set_intersect, split_on, compare_arrays, explode_cp, escape_unicode
+	map_values, take_from, set_union, set_intersect, split_on, compare_arrays, explode_cp
 } from './utils.js';
 import {read_parsed} from './nodejs-utils.js';
 
@@ -74,7 +74,7 @@ class UTS51 {
 		this.STYLE_DROP = new Set();
 		this.STYLE_OPT = new Set();
 		this.STYLE_REQ = new Set();
-		this.NON_SOLO = new Set(); // currently not used
+		this.NON_SOLO = new Set(); // experimental
 		this.KEYCAP_DROP = new Set();
 		this.KEYCAP_REQ = new Set();
 		this.REGIONAL = new Set();
@@ -181,16 +181,21 @@ class UTS51 {
 const VIRAMA_COMBINING_CLASS = 9;
 
 let [mode, ...argv] = process.argv.slice(2);
-
 switch (mode) {
+	// ============================================================
+	// build various payloads
+	// ============================================================
 	case 'all': {
-		['context', 'nf', 'bidi', 'adraffy', 'uts51', 'others'].forEach(create_payload);
+		['context', 'nf', 'bidi', 'adraffy', 'adraffy-compat', 'uts51', 'others'].forEach(create_payload);
 		break;
 	}
 	case 'sub': {
 		['context', 'nf', 'bidi'].forEach(create_payload);
 		break;
 	}
+	// ============================================================
+	// simple queries
+	// ============================================================
 	case 'emoji-data': {
 		let emoji = read_emoji_data();
 		if (argv.length == 0) { // just output to console
@@ -219,6 +224,19 @@ switch (mode) {
 		//console.log(JSON.stringify(missing));
 		break;
 	}
+	case 'cm': {
+		// dump the combining marks that are valid in IDNA 2008
+		let v = [...set_intersect(
+			read_combining_marks(), 
+			read_idna_rules({version: 2008}).allowed_set()
+		)].sort((a, b) => a - b);
+		console.log(v.map(cp => ({dec: cp, hex: hex_cp(cp)})));
+		//console.log(JSON.stringify(v));
+		break;
+	}	
+	// ============================================================
+	// dump generated rule files
+	// ============================================================
 	case 'emoji-zwj': {
 		// find the RGI zwj sequences
 		let seqs = read_parsed('emoji-zwj-sequences').map(({src}) => parse_cp_sequence(src));
@@ -332,14 +350,6 @@ async function create_payload(name) {
 			write_rules_payload('idna-2008', {idna: read_idna_rules({version: 2008})});
 			break;
 		}
-		case 'cm': {
-			let v = [...set_intersect(
-				read_combining_marks(), 
-				read_idna_rules({version: 2008}).allowed_set()
-			)];
-			console.log(v);
-			break;
-		}
 		case 'nf': {
 			let enc = new Encoder();
 			encode_nf(enc, read_nf_rules());
@@ -401,7 +411,7 @@ function read_idna_rules({use_STD3 = true, version = 2008, valid_deviations}) {
 		...extra
 	} = read_parsed('IdnaMappingTable');
 	if (Object.keys(extra).length > 0) {
-		throw new Error(`Assumption wrong: Unknown IDNA Keys`);
+		throw new Error(`Assumption wrong: Unknown IDNA Keys: ${Object.keys(extra)}`);
 	}
 	if (!use_STD3) {
 		// disallowed_STD3_valid: the status is disallowed if UseSTD3ASCIIRules=true (the normal case); 
@@ -443,6 +453,7 @@ function encode_idna(enc, {valid, ignored, mapped}, stops) {
 	enc.write_member(valid);
 	// ignored is the same thing as map to []
 	// but it doesn't compress as well
+	// likely because it breaks ranges
 	enc.write_member(ignored);
 	enc.write_mapped([
 		[1, 1, 1], // alphabets: ABC
@@ -513,19 +524,16 @@ function read_context_rules() {
 	return {T, L, R, D, Greek, Hebrew, Hiragana, Katakana, Han, Virama};
 }
 function encode_context(enc, {T, L, R, D, Greek, Hebrew, Hiragana, Katakana, Han, Virama}, virama_index) {
-
 	let LD = set_union(L, D);
 	let RD = set_union(R, D);
 	if (!is_better_member_compression([LD, RD], [L, R, D])) {
 		throw new Error('Assumption wrong: LRD');
 	}
-	
 	let HKH_parts = [Hiragana, Katakana, Han];
 	let HKH = set_union(...HKH_parts);
 	if (!is_better_member_compression([HKH], HKH_parts)) {
 		throw new Error(`Assumption wrong: HKH`);
 	}
-
 	/*
 	if (virama_index) {
 		enc.unsigned(virama_index);
@@ -569,7 +577,7 @@ function write_payload(name, enc) {
 
 function write_rules_payload(name, {idna, stops, uts51, combining_marks}) {
 	if (!stops) {
-		// find everything that maps to ".'
+		// find everything that maps to "."
 		stops = extract_stops(idna);
 	}
 	let allowed = idna.allowed_set();
@@ -592,6 +600,7 @@ function write_rules_payload(name, {idna, stops, uts51, combining_marks}) {
 		enc.write_member(uts51.MOD_BASE);
 		enc.write_member(uts51.TAG_SPEC);
 
+		// whitelisted emoji sequences
 		for (let m of Object.values(uts51.group_seq())) {
 			enc.unsigned(m[0].length);
 			enc.positive(m.length);
@@ -599,6 +608,8 @@ function write_rules_payload(name, {idna, stops, uts51, combining_marks}) {
 		}
 		enc.unsigned(0);
 
+		// whitelisted emoji zwj sequences
+		// when disabled, uses algorithmic rules
 		if (uts51.ZWJS) {
 			enc.unsigned(1); // whitelist enabled
 			for (let [key, m] of Object.entries(uts51.group_zwj())) {
@@ -613,7 +624,7 @@ function write_rules_payload(name, {idna, stops, uts51, combining_marks}) {
 		}
 
 		// experimental
-		enc.write_member(uts51.NON_SOLO); 
+		//enc.write_member(uts51.NON_SOLO); 
 	}
 	write_payload(name, enc);
 }

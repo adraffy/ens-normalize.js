@@ -204,6 +204,8 @@ export default [
 	{ty: 'valid', src: '20AC'}, // €
 	{ty: 'valid', src: '20BF'}, // ₿
 
+	
+
 
 	//'2596..259F', // QUADRANTS
 	//'25A0..25EF', // SHAPES

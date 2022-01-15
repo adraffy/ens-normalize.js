@@ -5,6 +5,7 @@ import LABELS from './registered-labels.js';
 
 // ens
 import lib from 'eth-ens-namehash';
+import { UNICODE } from '../dist/ens-normalize-compat.js';
 const namehash = lib.normalize.bind(lib);
 function ens_error(s) {
 	let match = s.match(/Illegal char (.*)/);
@@ -19,11 +20,11 @@ function adraffy_error(s) {
 let output_dir = new URL('./output/', import.meta.url).pathname;
 mkdirSync(output_dir, {recursive: true});
 
-genereate_report(output_dir, await import('../dist/ens-normalize-compat.js'));
 genereate_report(output_dir, await import('../dist/ens-normalize-debug.js'));
+genereate_report(output_dir, await import('../dist/ens-normalize-compat.js'));
 
 function genereate_report(dir, module) {
-	const {ens_normalize, IDNA, VERSION} = module;
+	const {ens_normalize, IDNA, BUILT, VERSION} = module;
 
 	let buckets = {};
 	for (let label of LABELS) {
@@ -68,25 +69,27 @@ function genereate_report(dir, module) {
 
 		console.log(`${type}[${bucket.length}] = ${escape_unicode(label)}`);
 	}
-	buckets = Object.entries(buckets);
 
-	const title = `eth-ens-namehash (ens) vs adraffy`;
+	const title = `eth-ens-namehash (ens) vs ${IDNA} (${VERSION})`;
 
 	let html = `<!doctype html><html><head><meta charset="utf-8"><title>${title}</title><style>
+	body { margin: 1rem; }
 	table { border-collapse: collapse; width: 100%; }
 	td { border: 1px solid #ccc; line-break: anywhere; width: 25% }
 	tbody tr:nth-child(odd) { background: #eee; }
 	#ens-error td:nth-child(3), #adraffy-error td:nth-child(4) { background: #fdd; }
 	#overall td, #overall th { text-align: right; }
-	</style></head><body><h1>${title}</h1>`;
+	#version { position: absolute; right: 1rem; top: 1rem; text-align: right; }
+	</style></head><body><h1>${title}</h1><div id="version">
+	<a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a><br><code>${BUILT}</code></div>`;
 
 	html += `<table id="overall"><thead><tr><th>Type</th><th>#</th><th>%</th></tr></thead><tbody>`
-	for (let [type, bucket] of buckets) {
-		html += `<tr><td><a href="#${type}">${type}</a></td><td>${bucket.length}</td><td>${(100 * bucket.length / LABELS.length).toFixed(3)}%</td></tr>`;
+	for (let [type, bucket] of Object.entries(buckets)) {
+		html += `<tr><td><a href="#${type}">${type}</a></td><td>${bucket.length}</td><td>${(100 * bucket.length / LABELS.size).toFixed(3)}%</td></tr>`;
 	}
 	html += '</tbody></table>';
 
-	for (let [type, bucket] of buckets) {
+	for (let [type, bucket] of Object.entries(buckets)) {
 		let temp = `<a name="${type}"><h2>${type} (${bucket.length})</h2></a><table id="${type}"><thead><tr>
 		<th colspan="2">Unicode</th><th>ens</th><th>adraffy</th>
 		</tr></thead><tbody>`;

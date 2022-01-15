@@ -3,7 +3,7 @@ import {writeFile, mkdir, access} from 'fs/promises';
 import {join} from 'path';
 import {createReadStream} from 'fs';
 import {createInterface} from 'readline/promises';
-import {parse_cp, parse_cp_sequence, parse_cp_range} from './utils.js';
+import {parse_cp, parse_cp_sequence, parse_cp_range, map_values} from './utils.js';
 
 // https://www.unicode.org/versions/latest/
 const major = 14;
@@ -379,9 +379,8 @@ async function parse(argv) {
 			} else {
 				let {test} = this;
 				if (!test) throw new Error('expected test');
-				this.get_bucket(test).push([src, nfc, nfd]);
+				this.get_bucket(test).push([src, nfc, nfd].map(s => String.fromCodePoint(...parse_cp_sequence(s))));
 			}
 		}	
 	});
-
 }

@@ -1,6 +1,6 @@
 import {readFileSync} from 'fs';
 import {join} from 'path';
-import {compare_array, parse_cp_sequence} from '../build/utils.js';
+import {compare_arrays, explode_cp} from '../build/utils.js';
 
 let base_dir = new URL('.', import.meta.url).pathname;
 let tests = JSON.parse(readFileSync(join(base_dir, '../build/unicode-json/NormalizationTest.json')));
@@ -11,14 +11,14 @@ function test_nf(nfd, nfc) {
 		let nfd_errors = 0;
 		let nfc_errors = 0;
 		for (let args of cases) {
-			let [src, nfc0, nfd0] = args.map(parse_cp_sequence);
+			let [src, nfc0, nfd0] = args.map(explode_cp);
 			let ndf1 = nfd(src);
-			if (compare_array(nfd0, ndf1) != 0) {
+			if (compare_arrays(nfd0, ndf1) != 0) {
 				nfd_errors++;
 				errors.push({src, nfd0, ndf1});
 			}
 			let nfc1 = nfc(src);
-			if (compare_array(nfc0, nfc1) != 0) {
+			if (compare_arrays(nfc0, nfc1) != 0) {
 				nfc_errors++;
 				errors.push({src, nfc0, nfc1});
 			}
