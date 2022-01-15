@@ -16,7 +16,7 @@ table {
 th {
 	background: #ddd;
 }
-th[colspan] {
+th.big {
 	font-size: 20pt;
 }
 td, th {
@@ -54,7 +54,7 @@ tbody tr:nth-child(odd) {
 <div id="loading">Computing..</div>
 <script type="module">
 import {nfc_adraffy, nfd_adraffy, nfc_default, nfd_default} from '../dist/nf.min.js';
-import {escape_name_for_html, explode_cp} from '../build/utils.js';
+import {escape_name_for_html, escape_unicode, explode_cp, quote_cp} from '../build/utils.js';
 
 try {
 	main();
@@ -63,6 +63,11 @@ try {
 	div.innerHTML = err.message;
 	document.body.append(div);
 	console.error(err);
+}
+
+function raw_str(s) {
+	//return explode_cp(nfc0).map(quote_cp).join('');
+	return escape_name_for_html(escape_unicode(s));
 }
 
 async function main() {	
@@ -79,8 +84,8 @@ async function main() {
 		}
 		let [name, cases] = tests.pop();
 		let html = `<a name="${name}"></a><h2>${name}(${cases.length})</h2><table><thead>
-		<tr><th rowspan="2">Input</th><th colspan="3">NFD</th><th colspan="3">NFC</th></tr>
-		<tr><th>Expected</th><th>adraffy</th><th>Browser</th><th>Expected</th><th>adraffy</th><th>Browser</th></tr>
+		<tr><th rowspan="2">Input</th><th class="big" colspan="4">NFD</th><th class="big" colspan="4">NFC</th></tr>
+		<tr><th colspan="2">Expected</th><th>adraffy</th><th>Browser</th><th colspan="2">Expected</th><th>adraffy</th><th>Browser</th></tr>
 		</tr></thead><tbody>`;
 		let errors = {};
 		function compare_cell(expect, cps, key) {
@@ -89,7 +94,7 @@ async function main() {
 				return '<td class="same"></td>';
 			} else {
 				errors[key] = (errors[key] ?? 0) + 1;
-				return `<td class="diff">${escape_name_for_html(result)}</td>`;
+				return `<td class="diff raw">${raw_str(result)}</td>`;
 			}
 		}
 		for (let args of cases) {
@@ -98,9 +103,11 @@ async function main() {
 			html += '<tr>' + [
 				`<td class="input">${escape_name_for_html(src)}</td>`,
 				`<td class="expect">${escape_name_for_html(nfd0)}</td>`,
+				`<td class="expect raw">${raw_str(nfd0)}</td>`,
 				compare_cell(nfd0, nfd_adraffy(cps), 'nfc_adraffy'),
 				compare_cell(nfd0, nfd_default(cps), 'nfd_default'),
 				`<td class="expect">${escape_name_for_html(nfc0)}</td>`,
+				`<td class="expect raw">${raw_str(nfc0)}</td>`,
 				compare_cell(nfc0, nfc_adraffy(cps), 'nfd_adraffy'),
 				compare_cell(nfc0, nfc_default(cps), 'nfc_default')
 			].join('') + '</tr>';
