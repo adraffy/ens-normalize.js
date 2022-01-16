@@ -25,6 +25,16 @@ export function set_intersect(...sets) {
 	return inter;
 }
 
+export function set_complement(set0, ...sets) {
+	let comp = new Set(set0);
+	for (let set of sets) {
+		for (let x of set) {
+			comp.delete(x);
+		}
+	}
+	return comp;
+}
+
 export function set_union(...sets) {
 	let union = new Set();
 	for (let set of sets) {

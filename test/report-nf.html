@@ -5,9 +5,10 @@
 <title>NormalizationTest</title>
 <style>
 #version {
-	padding-left: 1rem;
-	font-size: 16pt;
-	font-weight: normal;
+	position: absolute;
+	right: 1rem;
+	top: 1rem;
+	text-align: right;
 }
 table {
 	width: 100%;
@@ -47,11 +48,12 @@ tbody tr:nth-child(odd) {
 </head>
 <body>
 <h1><a href="../build/unicode-raw/NormalizationTest.txt">NormalizationTest</a></h1>
+<div id="version"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a></div>
 <table id="summary"><thead>
 <tr><th rowspan="2">Test</th><th rowspan="2">Cases</th><th colspan="2">adraffy</th><th colspan="2">Browser</th></tr>
 <tr><th>NFD</th><th>NFC</th><th>NFD</th><th>NFC</th></tr>
 </thead><tbody></tbody></table>
-<div id="loading">Computing..</div>
+<div id="loading">Computing...</div>
 <script type="module">
 import {nfc_adraffy, nfd_adraffy, nfc_default, nfd_default} from '../dist/nf.min.js';
 import {escape_name_for_html, escape_unicode, explode_cp, quote_cp} from '../build/utils.js';
@@ -70,11 +72,15 @@ function raw_str(s) {
 	return escape_name_for_html(escape_unicode(s));
 }
 
+async function fetch_json(url) {
+	let res = await fetch(url);
+	if (res.status !== 200) throw new Error(`Download failed: HTTP Code ${res.status}`);
+	return res.json();
+}
+
 async function main() {	
-	let res = await fetch('../build/unicode-json/NormalizationTest.json');
-	//let res = await fetch('../build/unicode-json/NormalizationTestOld.json');
-	if (res.status !== 200) throw new Error('download error');
-	let tests = await res.json();
+	let tests = await fetch_json('../build/unicode-json/NormalizationTest.json');
+	//let tests = await fetch_json('../build/unicode-json/NormalizationTestOld.json');
 	tests = Object.entries(tests).sort((a, b) => b[1].length - a[1].length);
 	next();
 	function next() {

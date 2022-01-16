@@ -3,7 +3,7 @@ import {join} from 'path';
 import {Encoder, is_better_member_compression, base64} from './encoder.js';
 import {
 	hex_cp, parse_cp, parse_cp_range, parse_cp_sequence, parse_cp_multi_ranges,
-	map_values, take_from, set_union, set_intersect, split_on, compare_arrays, explode_cp
+	map_values, take_from, set_union, set_intersect, set_complement, split_on, compare_arrays, explode_cp
 } from './utils.js';
 import {read_parsed} from './nodejs-utils.js';
 
@@ -223,6 +223,24 @@ switch (mode) {
 		let missing = [basic, styled].flat().filter(cp => idna.is_disallowed(cp)).sort((a, b) => a - b); // sort
 		console.log(missing.map(cp => ({dec: cp, hex: hex_cp(cp)})));
 		//console.log(JSON.stringify(missing));
+		break;
+	}
+	case 'diff': {
+		// find the differences in allowed between the two
+		let {idna: idna_ENS0} = read_rules_for_ENS0();
+		let idna_2008 = read_idna_rules({version: 2008});
+		let only_ENS0 = set_complement(idna_ENS0.allowed_set(), idna_2008.allowed_set()); // valid + mapped
+		let only_2008 = set_complement(idna_2008.allowed_set(), idna_ENS0.allowed_set());
+		if (only_2008.size !== 0) {
+			console.log([...only_2008]);
+			throw new Error('Assumption wrong: IDNA 2008 enabled something');
+		}
+		let without_emoji = set_complement(only_ENS0, read_emoji_data().Emoji); // remove emoji
+		if (argv.length == 0) { // just output to console
+			console.log([...without_emoji]);
+			break;
+		}
+		writeFileSync(join(ensure_dir('output'), 'idna-diff-ENS0vs2008.json'), JSON.stringify([...without_emoji]));
 		break;
 	}
 	case 'cm': {

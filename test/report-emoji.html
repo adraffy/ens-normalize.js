@@ -170,7 +170,7 @@ try {
 
 async function fetch_json(url) {
 	let res = await fetch(url);
-	if (res.status !== 200) throw new Error('download failed');
+	if (res.status !== 200) throw new Error(`Download failed: HTTP Code ${res.status}`);
 	return res.json();
 }
 
