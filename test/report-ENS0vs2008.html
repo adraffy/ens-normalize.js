@@ -26,6 +26,7 @@ table {
 	border-collapse: collapse;
 	table-layout: fixed;
 	width: 100%;
+	font-size: 16pt;
 }
 td { 
 	border: 1px solid #aaa; 
@@ -37,6 +38,17 @@ tbody tr:nth-child(odd) {
 .form + .hex {
 	border-left-width: 5px;
 }
+.form.valid {
+	background: #cfc;
+}
+.mapping {
+	display: flex;
+	gap: 2px;
+	align-items: center;
+}
+.tokens .disallowed {
+	background: #fcc !important; 
+}
 </style>
 </head>
 <body>
@@ -45,6 +57,11 @@ tbody tr:nth-child(odd) {
 <div id="loading">Computing...</div>	
 <script type="module">
 import {escape_name_for_html, hex_cp} from '../build/utils.js';
+import {ens_tokenize, VERSION, IDNA, UNICODE, BUILT} from '../dist/ens-normalize-debug.min.js';
+import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
+use_default_style();
+
+document.querySelector('#version').innerHTML += ` (v${VERSION}+${IDNA}+U${UNICODE})<br><code>${BUILT}</code>`;
 
 try {
 	main();
@@ -77,8 +94,22 @@ async function main() {
 		let tr = document.createElement('tr');
 		tr.innerHTML = `
 		<td class="hex"><a href="https://www.compart.com/en/unicode/U+${cp.toString(16).padStart(4, '0')}">${hex_cp(cp)}</td>
-		<td class="form">${escape_name_for_html(String.fromCodePoint(cp))}</td>
+		<td class="form"></td>
 		`;
+		let td = tr.querySelector('.form');
+		let tokens = ens_tokenize(String.fromCodePoint(cp));		
+		if (tokens[0].m) { // show mapping
+			let div = document.createElement('div');
+			div.classList.add('mapping');
+			div.append(dom_from_tokens(tokens, false));
+			let span = document.createElement('span');
+			span.innerHTML = '&rarr;'
+			div.append(span);
+			div.append(dom_from_tokens(tokens, true));
+			td.append(div);
+		} else {
+			td.append(dom_from_tokens(tokens));
+		}
 		buf.push(tr);
 		if (buf.length == width) {
 			drain();
