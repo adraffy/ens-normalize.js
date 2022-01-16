@@ -1,4 +1,4 @@
-import {decode_payload, read_member_set, read_mapped_table, lookup_mapped} from './decoder.js';
+import {read_member_set, read_mapped_table, lookup_mapped} from './decoder.js';
 import {explode_cp, escape_unicode} from './utils.js';
 import {puny_decode} from './puny.js';
 import {tokenized_idna} from './idna.js';
@@ -10,8 +10,7 @@ import {nfc} from './nf.js';
 // the following is deleted when using "-context"
 /*CONTEXT*/import {validate_context} from './context.js';/*~CONTEXT*/
 // the following is replaced by different idna versions
-import PAYLOAD from './output/idna-adraffy.js';
-let r = decode_payload(PAYLOAD);
+import r from './output/idna-adraffy.js';
 const STOP = read_member_set(r);
 const VALID = read_member_set(r);
 const IGNORED = read_member_set(r);

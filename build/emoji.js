@@ -2,7 +2,7 @@ import {read_member_set, read_tree, read_zero_terminated_array} from './decoder.
 
 // returns an emoji parser
 export default function(r) {	
-	const REGIONAL = read_member_set(r);
+	const REGIONAL = read_member_set(r);	
 	const KEYCAP_DROP = read_member_set(r);
 	const KEYCAP_REQ = read_member_set(r);
 	const STYLE_DROP = read_member_set(r);

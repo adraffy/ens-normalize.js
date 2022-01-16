@@ -1,7 +1,5 @@
-import {decode_payload, read_member_set} from './decoder.js';
-import PAYLOAD from './output/bidi.js';
-
-let r = decode_payload(PAYLOAD);
+import {read_member_set} from './decoder.js';
+import r from './output/bidi.js';
 const R_AL = read_member_set(r);
 const L = read_member_set(r);
 const AN = read_member_set(r);

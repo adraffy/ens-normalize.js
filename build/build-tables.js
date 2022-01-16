@@ -181,6 +181,7 @@ class UTS51 {
 const VIRAMA_COMBINING_CLASS = 9;
 
 let [mode, ...argv] = process.argv.slice(2);
+if (mode === undefined) throw new Error('expected mode');
 switch (mode) {
 	// ============================================================
 	// build various payloads
@@ -508,7 +509,7 @@ function read_nf_rules() {
 	return {combining_class, virama_index, comp_exclusions, decomp};
 }
 function encode_nf(enc, {combining_class, comp_exclusions, decomp}) {
-	enc.positive(combining_class.length);
+	enc.unsigned(combining_class.length);
 	for (let c of combining_class) enc.write_member(c);
 	enc.write_mapped([	
 		[1, 1, 1],
@@ -569,8 +570,18 @@ function extract_stops({valid, mapped}) {
 function write_payload(name, enc) {
 	let buf = Buffer.from(enc.compress_arithmetic());
 	let dir = ensure_dir('output');
-	writeFileSync(join(dir, `${name}.js`), `export default '${base64(buf)}'`);
+	writeFileSync(join(dir, `${name}.js`), `
+		import {read_compressed_payload} from '../decoder.js';
+		export default read_compressed_payload('${base64(buf)}');
+	`);
+	// no compression overhead (much larger files)
+	writeFileSync(join(dir, `${name}-xcompress.js`), `
+		import {read_payload} from '../decoder.js';
+		export default read_payload(${JSON.stringify(enc.values)});
+	`);
+	// raw arithmetic bits
 	writeFileSync(join(dir, `${name}.bin`), buf);
+	// raw symbols
 	writeFileSync(join(dir, `${name}.json`), JSON.stringify(enc.values));
 	console.log(`Wrote payload ${name}: ${buf.length} bytes`);
 }
@@ -589,7 +600,7 @@ function write_rules_payload(name, {idna, stops, uts51, combining_marks}) {
 	encode_idna(enc, idna, stops);
 	enc.write_member(set_intersect(combining_marks, allowed));
 	if (uts51) {
-		enc.unsigned(1);
+		enc.unsigned(1); // emoji enabled
 		enc.write_member(uts51.REGIONAL);
 		enc.write_member(uts51.KEYCAP_DROP);
 		enc.write_member(uts51.KEYCAP_REQ);

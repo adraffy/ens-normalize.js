@@ -73,6 +73,10 @@ await build(join(base_dir, 'lib-nf.js'), 'nf');
 await build(join(base_dir, 'lib-bidi.js'), 'bidi');
 await build(join(base_dir, 'lib-parts.js'), 'parts');
 
+// compute compression overhead
+// as of 20220115: ~2KB
+// await build(join(base_dir, 'lib-overhead.js'), 'overhead');
+
 try {
 	unlinkSync(tmp_file);
 } catch (ignored) {	

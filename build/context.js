@@ -1,8 +1,6 @@
-import {decode_payload, read_member_set} from './decoder.js';
+import {read_member_set} from './decoder.js';
 import {escape_unicode} from './utils.js';
-import PAYLOAD from './output/context.js';
-
-let r = decode_payload(PAYLOAD);
+import r from './output/context.js';
 const VIRAMA = read_member_set(r);
 const JOIN_T = read_member_set(r);
 const JOIN_LD = read_member_set(r);

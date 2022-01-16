@@ -1,8 +1,6 @@
-import {decode_payload, read_member_set, read_mapped_table, lookup_mapped} from './decoder.js';
-import PAYLOAD from './output/nf.js';
-
-let r = decode_payload(PAYLOAD);
-const COMBINING_RANK = Array(1 + r()).fill().map(() => read_member_set(r));
+import {read_member_set, read_mapped_table, lookup_mapped} from './decoder.js';
+import r from './output/nf.js';
+const COMBINING_RANK = Array(r()).fill().map(() => read_member_set(r));
 const DECOMP = read_mapped_table(r);
 const COMP_EXCLUSIONS = read_member_set(r);
 

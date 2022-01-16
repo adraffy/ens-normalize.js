@@ -80,11 +80,22 @@ export function decode_arithmetic(bytes) {
 	});
 }	
 
-// returns an iterator which returns the next symbol
-export function decode_payload(s) {
-	let values = decode_arithmetic(Uint8Array.from(atob(s), c => c.charCodeAt(0)));
+/*
+export function read_payload(v) {
 	let pos = 0;
-	return () => values[pos++];
+	let r = () => v[pos++];
+	r.more = () => pos < v.length;
+	return r;
+}
+*/
+
+// returns an iterator which returns the next symbol
+export function read_payload(v) {
+	let pos = 0;
+	return () => v[pos++];
+}
+export function read_compressed_payload(s) {
+	return read_payload(decode_arithmetic(Uint8Array.from(atob(s), c => c.charCodeAt(0))));
 }
 
 // eg. [0,1,2,3...] => [0,-1,1,-2,...]
