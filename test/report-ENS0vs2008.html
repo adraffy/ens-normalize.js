@@ -80,6 +80,7 @@ async function fetch_json(url) {
 
 async function main() {
 	let cps = await fetch_json('../build/output/idna-diff-ENS0vs2008.json');
+	let disallowed = 0;
 	let width = 5;
 	let cols = `<th>Form</th><th>Hex</th>`;
 	let rows = [];
@@ -97,7 +98,8 @@ async function main() {
 		<td class="form"></td>
 		`;
 		let td = tr.querySelector('.form');
-		let tokens = ens_tokenize(String.fromCodePoint(cp));		
+		let tokens = ens_tokenize(String.fromCodePoint(cp));
+		if (tokens[0].d !== undefined) disallowed++;
 		if (tokens[0].m) { // show mapping
 			let div = document.createElement('div');
 			div.classList.add('mapping');
@@ -118,7 +120,7 @@ async function main() {
 	if (buf.length > 0) drain();
 	width = Math.min(width, rows.length);
 	
-	document.querySelector('h1').innerHTML +=  ` (${cps.length})`;
+	document.querySelector('h1').innerHTML +=  ` (${cps.length}, ${cps.length - disallowed} WL)`;
 
 	let table = document.createElement('table');
 	table.innerHTML = `<table><thead><tr>${Array(width).fill(cols).join('')}</tr></thead><tbody></tbody></table>`;
