@@ -41,10 +41,8 @@ tbody tr:nth-child(odd) {
 .form.valid {
 	background: #cfc;
 }
-.mapping {
-	display: flex;
-	gap: 2px;
-	align-items: center;
+.form .tokens {
+	display: inline-flex;
 }
 .tokens .disallowed {
 	background: #fcc !important; 
@@ -79,7 +77,11 @@ async function fetch_json(url) {
 }
 
 async function main() {
-	let cps = await fetch_json('../build/output/idna-diff-ENS0vs2008.json');
+	let [cps, tally] = await Promise.all([
+		fetch_json('../build/output/idna-diff-ENS0vs2008.json'),
+		fetch_json('./output/reg-dis-chars.json')
+	]);
+	let map = Object.fromEntries(tally.map(x => [x.str, x.n]));
 	let disallowed = 0;
 	let width = 5;
 	let cols = `<th>Form</th><th>Hex</th>`;
@@ -93,24 +95,28 @@ async function main() {
 	}
 	for (let cp of cps) {		
 		let tr = document.createElement('tr');
+		let form = String.fromCodePoint(cp);
+		let tokens = ens_tokenize(form);
+		let occ = map[form] ?? 0;
 		tr.innerHTML = `
 		<td class="hex"><a href="https://www.compart.com/en/unicode/U+${cp.toString(16).padStart(4, '0')}">${hex_cp(cp)}</td>
 		<td class="form"></td>
 		`;
 		let td = tr.querySelector('.form');
-		let tokens = ens_tokenize(String.fromCodePoint(cp));
 		if (tokens[0].d !== undefined) disallowed++;
 		if (tokens[0].m) { // show mapping
-			let div = document.createElement('div');
-			div.classList.add('mapping');
-			div.append(dom_from_tokens(tokens, false));
 			let span = document.createElement('span');
-			span.innerHTML = '&rarr;'
-			div.append(span);
-			div.append(dom_from_tokens(tokens, true));
-			td.append(div);
+			span.innerHTML = ' &rarr; '
+			td.append(
+				dom_from_tokens(tokens, false),
+				span,
+				dom_from_tokens(tokens, true)
+			);
 		} else {
 			td.append(dom_from_tokens(tokens));
+		}
+		if (occ > 0) {
+			td.append(` [${occ}]`); // number of occurrences in last report
 		}
 		buf.push(tr);
 		if (buf.length == width) {
