@@ -80,8 +80,9 @@ async function fetch_json(url) {
 	return res.json();
 }
 
-function token_key(t) { 
-	return JSON.stringify(t, (k, v) => k === 'u' ? undefined : v); 
+function key_from_tokens(tokens) { 
+	return String.fromCodePoint(...tokens.flatMap(t => t.e ?? t.v ?? t.m ?? t.i ?? t.d ?? []));
+	//return JSON.stringify(t, (k, v) => k === 'u' ? undefined : v); 
 }
 
 
@@ -101,7 +102,7 @@ async function main() {
 		for (let match of matches) {
 			let v = parse_cp_sequence(match);
 			let t = ens_tokenize(String.fromCodePoint(...v));
-			let key = token_key(t);
+			let key = key_from_tokens(t);
 			let bucket = buckets[key];
 			if (!bucket) buckets[key] = bucket = [];
 			bucket.push(t)
