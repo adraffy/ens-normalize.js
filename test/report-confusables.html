@@ -85,7 +85,6 @@ function key_from_tokens(tokens) {
 	//return JSON.stringify(t, (k, v) => k === 'u' ? undefined : v); 
 }
 
-
 async function main() {
 	// this is target -> [src, src2, ...]
 	let confusables = await fetch_json('../build/unicode-json/confusables.json');
@@ -110,7 +109,6 @@ async function main() {
 		buckets = Object.values(buckets).sort((a, b) => b.length - a.length);
 		group_count += buckets.length;
 		
-		
 		let tr = document.createElement('tr');
 		tr.innerHTML = `
 			<td class="form">${form}</td>
@@ -128,7 +126,7 @@ async function main() {
 				div.innerHTML = `<span class="count">${bucket.length}</span>`;
 				div.append(dom_from_tokens(bucket[0], true));
 				let span = document.createElement('span');
-				span.innerHTML = '🡰'
+				span.innerHTML = '←';
 				div.append(span);
 				div.append(...bucket.map(tokens => dom_from_tokens(tokens, false)));
 			}
@@ -153,7 +151,6 @@ async function main() {
 		
 	document.querySelector('#loading').remove();
 }
-
 </script>
 </body>
 </html>
