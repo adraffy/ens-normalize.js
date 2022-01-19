@@ -16,7 +16,7 @@ const VALID = read_member_set(r);
 const IGNORED = read_member_set(r);
 const MAPPED = read_mapped_table(r);
 const COMBINING_MARKS = read_member_set(r);
-const EMOJI_PARSER = r() && emoji_parser_factory(r);
+const EMOJI_PARSER = r() && emoji_parser_factory(r); // this is optional
 
 // emoji tokens are as-is
 // text tokens are normalized
@@ -75,28 +75,26 @@ export function ens_normalize(name) {
 	}).map(tokens => {
 		let cps = flatten_tokens(tokens);
 		// [Processing] 4.) Convert/Validate
-		if (cps.length >= 4 && cps[2] == HYPHEN && cps[3] == HYPHEN) { // "**--"
-			if (cps[0] == 0x78 && cps[1] == 0x6E) { // "xn--"
-				try {
-					// Attempt to convert the rest of the label to Unicode according to Punycode [RFC3492].
-					// If that conversion fails, record that there was an error, and continue with the next label.
-					let cps_decoded = puny_decode(cps.slice(4));
-					// With either Transitional or Nontransitional Processing, sources already in Punycode are validated without mapping. 
-					// In particular, Punycode containing Deviation characters, such as href="xn--fu-hia.de" (for fuß.de) is not remapped. 
-					// This provides a mechanism allowing explicit use of Deviation characters even during a transition period. 
-					[tokens] = tokenized_idna(cps_decoded, EMOJI_PARSER, cp => VALID.has(cp) ? [cp] : []);
-					let expected = flatten_tokens(tokens);
-					if (cps_decoded.length != expected.length || !cps_decoded.every((x, i) => x == expected[i])) throw new Error('not normalized');
-					// Otherwise replace the original label in the string by the results of the conversion. 
-					cps = cps_decoded;
-					// warning: this could be empty
-					// warning: this could be "**--"
-				} catch (err) {
-					throw label_error(cps, `punycode: ${err.message}`);
-				}
+		if (cps.length >= 4 && cps[0] == 0x78 && cps[1] == 0x6E && cps[2] == HYPHEN && cps[3] == HYPHEN) { // "xn--"
+			try {
+				// Attempt to convert the rest of the label to Unicode according to Punycode [RFC3492].
+				// If that conversion fails, record that there was an error, and continue with the next label.
+				let cps_decoded = puny_decode(cps.slice(4));
+				// With either Transitional or Nontransitional Processing, sources already in Punycode are validated without mapping. 
+				// In particular, Punycode containing Deviation characters, such as href="xn--fu-hia.de" (for fuß.de) is not remapped. 
+				// This provides a mechanism allowing explicit use of Deviation characters even during a transition period. 
+				[tokens] = tokenized_idna(cps_decoded, EMOJI_PARSER, cp => VALID.has(cp) ? [cp] : []);
+				let expected = flatten_tokens(tokens);
+				if (cps_decoded.length != expected.length || !cps_decoded.every((x, i) => x == expected[i])) throw new Error('not normalized');
+				// Otherwise replace the original label in the string by the results of the conversion. 
+				cps = cps_decoded;
+				// warning: this could be empty
+				// warning: this could be "**--"
+			} catch (err) {
+				throw label_error(cps, `punycode: ${err.message}`);
 			}
 		}
-		// flatten textual part of token to a single list of code-points
+		// flatten textual part of label into a single list of code-points
 		let text = tokens.reduce((a, {v}) => {
 			if (v) {
 				a.push(...v);
@@ -107,7 +105,7 @@ export function ens_normalize(name) {
 		}, []);
 		if (cps.length > 0) {
 			// [Validity] 1.) The label must be in Unicode Normalization Form NFC.
-			// => satsified by nfc() via flatten_label_tokens()
+			// => satsified by nfc() via flatten_tokens()
 			// [Validity] 2.) If CheckHyphens, the label must not contain a U+002D HYPHEN-MINUS character in both the third and fourth positions.
 			// note: we check this here (rather than above) because puny can expand into "aa--bb"
 			if (cps.length >= 4 && cps[2] == HYPHEN && cps[3] == HYPHEN) throw label_error(cps, `invalid label extension`);

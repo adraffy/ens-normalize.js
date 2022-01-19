@@ -1072,8 +1072,8 @@ async function resolve0(input0, skip_norm) {
 					let nft_owner = await ens.get_dot_eth_owner(label);	
 					if (nft_owner) {
 						nft_row.append(create_etherscan_address_link(nft_owner.address));
-						nft_row.append(create_copy_btn(nft_owner.address));
-						nft_row.append(create_resolve_btn(nft_owner.address));
+						add_row_tag(nft_row, create_copy_btn(nft_owner.address));
+						add_row_tag(nft_row, create_resolve_btn(nft_owner.address));
 					} else {
 						let span = document.createElement('span');
 						span.innerHTML = 'Expired (Grace Period)';
@@ -1096,6 +1096,7 @@ async function resolve0(input0, skip_norm) {
 
 	// resolver exists
 	resolver_row.append(create_etherscan_address_link(name.resolver.address));
+	add_row_tag(resolver_row, create_copy_btn(name.resolver.address));
 	add_row_tag(resolver_row, create_elapsed());
 	
 	// check the display name
@@ -1171,6 +1172,7 @@ async function resolve0(input0, skip_norm) {
 	// we got the owner
 	owner_row.classList.add('owner');
 	owner_row.append(create_etherscan_address_link(owner.address));
+	add_row_tag(owner_row, create_copy_btn(owner.address));
 	add_row_tag(owner_row, create_elapsed());
 
 	// if the input was an address, we can validate
@@ -1216,6 +1218,7 @@ async function resolve0(input0, skip_norm) {
 				span.innerHTML = 'Same as Input';
 				add_row_tag(address_row, span);
 			} else if (address) {
+				add_row_tag(address_row, create_copy_btn(address));
 				add_row_tag(address_row, create_resolve_btn(address));
 				let span = document.createElement('span');
 				apply_grade(span, 'warn', 'Different from Owner');
@@ -1227,6 +1230,7 @@ async function resolve0(input0, skip_norm) {
 				apply_grade(span, 'good', 'Same as Owner');
 				add_row_tag(address_row, span);		
 			} else {
+				add_row_tag(address_row, create_copy_btn(address));
 				add_row_tag(address_row, create_resolve_btn(address));
 				let span = document.createElement('span');
 				apply_grade(span, 'warn', 'Not Owner');

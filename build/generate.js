@@ -2,6 +2,14 @@ import {ens_normalize} from './lib-normalize.js';
 import {parse_cp_range, map_values, quote_cp, random_choice} from './utils.js';
 import {read_parsed} from './nodejs-utils.js';
 
+function random_choices(v, max) {
+	let ret = [];
+	for (let n = (Math.random() * max)|0; n > 0; n--) {
+		ret.push(random_choice(v));
+	}
+	return ret;
+}
+
 export function generate_contextj_zwnj_rule2() {
 	let {T, L, R, D} = map_values(read_parsed('DerivedJoiningType'), x => x.flatMap(parse_cp_range));
 	let LD = [...new Set([...L, ...D])];
@@ -11,9 +19,9 @@ export function generate_contextj_zwnj_rule2() {
 			try {
 				let cps = [
 					random_choice(LD),
-					random_choice(T),
+					random_choices(T, 3),
 					0x200C,
-					random_choice(T),
+					random_choices(T, 3),
 					random_choice(RD)
 				];
 				let name = String.fromCodePoint(...cps);

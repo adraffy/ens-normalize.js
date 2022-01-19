@@ -77,14 +77,14 @@ async function fetch_json(url) {
 }
 
 async function main() {
-	let [cps, tally] = await Promise.all([
+	let [cps, dis] = await Promise.all([
 		fetch_json('../build/output/idna-diff-ENS0vs2008.json'),
 		fetch_json('./output/reg-dis-chars.json')
 	]);
-	let map = Object.fromEntries(tally.map(x => [x.str, x.n]));
+	let occ_map = Object.fromEntries(dis.map(x => [x.str, x.n]));
 	let disallowed = 0;
 	let width = 5;
-	let cols = `<th>Form</th><th>Hex</th>`;
+	let cols = `<th>Hex</th><th>Form</th>`;
 	let rows = [];
 	let buf = [];
 	function drain() {
@@ -97,7 +97,7 @@ async function main() {
 		let tr = document.createElement('tr');
 		let form = String.fromCodePoint(cp);
 		let tokens = ens_tokenize(form);
-		let occ = map[form] ?? 0;
+		let occ = occ_map[form] ?? 0;
 		tr.innerHTML = `
 		<td class="hex"><a href="https://www.compart.com/en/unicode/U+${cp.toString(16).padStart(4, '0')}">${hex_cp(cp)}</td>
 		<td class="form"></td>

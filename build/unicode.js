@@ -3,21 +3,24 @@ import {writeFile, mkdir, access} from 'fs/promises';
 import {join} from 'path';
 import {createReadStream} from 'fs';
 import {createInterface} from 'readline/promises';
-import {parse_cp, parse_cp_sequence, parse_cp_range, map_values} from './utils.js';
+import {parse_cp, parse_cp_sequence, parse_cp_range} from './utils.js';
 
 // https://www.unicode.org/versions/latest/
 const major = 14;
 const minor = 0;
 const patch = 0;
 
-function url_for_spec(name) {
-	return `https://www.unicode.org/Public/${major}.${minor}.${patch}/${name}`;
+function url_for_spec(s) {
+	return `https://www.unicode.org/Public/${major}.${minor}.${patch}/${s}`;
 }
-function url_for_idna(name) {
-	return `https://www.unicode.org/Public/idna/${major}.${minor}.${patch}/${name}`;
+function url_for_idna(s) {
+	return `https://www.unicode.org/Public/idna/${major}.${minor}.${patch}/${s}`;
 }
-function url_for_emoji(name) {
-	return `https://unicode.org/Public/emoji/${major}.${minor}/${name}`;
+function url_for_emoji(s) {
+	return `https://unicode.org/Public/emoji/${major}.${minor}/${s}`;
+}
+function url_for_security(s) {
+	return `https://www.unicode.org/Public/security/${major}.${minor}.${patch}/${s}`;
 }
 
 let urls = [
@@ -44,7 +47,9 @@ let urls = [
 	url_for_emoji('emoji-zwj-sequences.txt'),
 	url_for_emoji('emoji-test.txt'),
 	url_for_spec('ucd/emoji/emoji-variation-sequences.txt'),
-	url_for_spec('ucd/emoji/emoji-data.txt')
+	url_for_spec('ucd/emoji/emoji-data.txt'),
+
+	url_for_security('confusables.txt')
 
 	// note: this isn't versioned by url
 	// https://www.unicode.org/Public/UNIDATA/NamesList.txt
@@ -383,4 +388,15 @@ async function parse(argv) {
 			}
 		}	
 	});
+
+	// 05AD ;	0596 ;	MA	# ( ֭ → ֖ ) HEBREW ACCENT DEHI → HEBREW ACCENT TIPEHA	# 
+	// Field 1 is the source, Field 2 is the target, 
+	// Field 3 is obsolete, always containing the letters “MA” for backwards compatibility. 
+	await write_simple_file({
+		input: 'confusables',
+		row([src, dst]) {
+			this.get_bucket(dst).push(src);
+		}
+	});
+
 }

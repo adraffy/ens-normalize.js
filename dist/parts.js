@@ -36,8 +36,8 @@ function str(...v) {
 	});
 }
 
-function tooltip(cp) {
-	return `Hex: 0x${hex_cp(cp)}\nDec: ${cp}`;
+function tooltip(cps) {
+	return `Hex: 0x${cps.map(hex_cp).join(' ')}\nDec: ${cps.join(' ')}`;
 }
 
 function dom_from_tokens(tokens, show_mapped = true) {
@@ -90,25 +90,26 @@ function dom_from_tokens(tokens, show_mapped = true) {
 			el = document.createElement('div');
 			if (v) {
 				el.innerHTML = str(...v);
-				el.classList.add('valid');
+				el.title = tooltip(v);
+				el.classList.add('valid');				
 			} else if (m) {
 				el.classList.add('mapped');
 				for (let cp of (show_mapped ? m : u)) {
 					let span = document.createElement('span');
 					span.innerHTML = str(cp);	
-					span.title = tooltip(cp);
+					span.title = tooltip([cp]);
 					el.append(span);
 				}
 			} else if (i) {
 				//if (is_norm) return []; // hide
 				el = document.createElement('code');
 				el.innerHTML = hex_cp(i); 
-				el.title = tooltip(i);
+				el.title = tooltip([i]);
 				el.classList.add('ignored');		
 			} else if (d !== undefined) {			
 				el.classList.add('disallowed');
 				el.innerHTML = str(d);
-				el.title = tooltip(d);
+				el.title = tooltip([d]);
 			} else {
 				el.classList.add('stop');
 				el.innerHTML = '.';
