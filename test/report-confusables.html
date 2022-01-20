@@ -97,6 +97,7 @@ async function main() {
 		let cps = parse_cp_sequence(target);
 		let form = String.fromCodePoint(...cps);
 		
+		// group confusables by normalized form
 		let buckets = {};
 		for (let match of matches) {
 			let v = parse_cp_sequence(match);
@@ -120,10 +121,18 @@ async function main() {
 		for (let bucket of buckets) {
 			let div = document.createElement('div');
 			div.classList.add('bucket');
-			if (bucket.length == 1) {
-				div.append(dom_from_tokens(bucket[0], true));
-			} else {
-				div.innerHTML = `<span class="count">${bucket.length}</span>`;
+			let simple = false;
+			if (bucket.length == 1 && bucket[0].length == 1) {
+				let keys = Object.keys(bucket[0][0]);				
+				if (!keys.includes('m')) {
+					div.append(dom_from_tokens(bucket[0], true));
+					simple = true;
+				}
+			} 
+			if (!simple) {
+				if (bucket.length > 1) {
+					div.innerHTML = `<span class="count">${bucket.length}</span>`;
+				}
 				div.append(dom_from_tokens(bucket[0], true));
 				let span = document.createElement('span');
 				span.innerHTML = '←';
