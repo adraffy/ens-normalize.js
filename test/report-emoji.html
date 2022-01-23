@@ -160,13 +160,16 @@ const VERSIONS = [
 document.querySelector('#versions').innerHTML += ` (v${VERSION}+U${UNICODE})<br>${VERSIONS.map(x => x.idna).join(', ')}<br><code>${BUILT}</code>`;
 
 try {
-	main();
+	await main();
+	// jump to anchor when finished
+	window.location.hash = window.location.hash;
 } catch (err) {
 	let div = document.createElement('div');
 	div.innerHTML = err.message;
 	document.body.append(div);
 	console.error(err);
 }
+document.querySelector('#loading').remove();
 
 async function fetch_json(url) {
 	let res = await fetch(url);
@@ -248,11 +251,6 @@ async function main() {
 	}
 	await add_sequences('ZWJ Sequences', zwjs);
 	await add_characters('Non-Emoji Pictographs', picto);
-
-	// jump to anchor when finished
-	window.location.hash = window.location.hash;
-
-	document.querySelector('#loading').remove();
 }
 
 function str_from_tokens(tokens) {
@@ -344,7 +342,7 @@ async function add_characters(name, chars, show_errors = false, width = 3) {
 	await update_state(`${name} (${chars.length})`);
 
 	//<th>Dec</th>
-	let cols = `<th>Form</th><th>Hex</th>${VERSIONS.map(x => `<th>${x.idna}</th>`).join('')}`;
+	let cols = `<th>Hex</th><th>Form</th>${VERSIONS.map(x => `<th>${x.idna}</th>`).join('')}`;
 	let rows = [];
 	let buf = [];
 	function drain() {
@@ -359,8 +357,7 @@ async function add_characters(name, chars, show_errors = false, width = 3) {
 		let hex = hex_cp(cp);
 		let tr = document.createElement('tr');
 		//<td class="dec">${cp}</td>
-		tr.innerHTML = `<td class="form">${escape_name_for_html(styled)}</td>
-		<td><a href="https://www.compart.com/en/unicode/U+${hex}">${hex}</td>`;
+		tr.innerHTML = `<td><a href="https://www.compart.com/en/unicode/U+${hex}">${hex}</td><td class="form">${escape_name_for_html(styled)}</td>`;
 
 		let td0 = document.createElement('td');
 		let norm0;

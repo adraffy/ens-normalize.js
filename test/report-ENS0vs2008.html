@@ -62,13 +62,14 @@ use_default_style();
 document.querySelector('#version').innerHTML += ` (v${VERSION}+${IDNA}+U${UNICODE})<br><code>${BUILT}</code>`;
 
 try {
-	main();
+	await main();
 } catch (err) {
 	let div = document.createElement('div');
 	div.innerHTML = err.message;
 	document.body.append(div);
 	console.error(err);
 }
+document.querySelector('#loading').remove();
 
 async function fetch_json(url) {
 	let res = await fetch(url);
@@ -132,8 +133,6 @@ async function main() {
 	table.innerHTML = `<table><thead><tr>${Array(width).fill(cols).join('')}</tr></thead><tbody></tbody></table>`;
 	table.querySelector('tbody').append(...rows);
 	document.body.append(table);
-		
-	document.querySelector('#loading').remove();
 }
 
 </script>

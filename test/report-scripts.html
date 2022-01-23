@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Scripts</title>
+<style>
+body {
+	margin: 1rem;
+}
+#version {
+	position: absolute;
+	right: 1rem;
+	top: 1rem;
+	text-align: right;
+}
+#loading {
+	display: inline-block;
+	background: #ffc;
+	border-radius: 1rem;
+	padding: 1rem 2rem;
+	font-size: 24pt;
+	border: 1px solid #ccc;
+}
+table {
+	border-collapse: collapse;
+	table-layout: fixed;
+	width: 100%;	
+}
+td{ 
+	border: 1px solid #aaa; 
+	text-align: center;
+}
+td.form + td.hex {
+	border-left-width: 5px;
+}
+tbody tr:nth-child(odd) {
+	background: #eee; 
+}
+#toc {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+	padding: 0;
+}
+#toc li {
+	list-style: none;
+	background: #eee;
+}
+</style>
+</head>
+<body>
+<h1><a href="../build/unicode-raw/scripts.txt">Scripts</a></h1>
+<div id="version"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a></div>
+<div id="loading"><span>Computing...</span></div>
+<ul id="toc"></ul>
+<script type="module">
+import {escape_name_for_html, parse_cp_range} from '../build/utils.js';
+
+/*
+import {ens_normalize, ens_tokenize, VERSION, IDNA, UNICODE, BUILT} from '../dist/ens-normalize-2008.min.js';
+document.querySelector('#version').innerHTML += ` (v${VERSION}+${IDNA}+U${UNICODE})<br><code>${BUILT}</code>`;
+*/
+
+try {
+	await main();
+} catch (err) {
+	let div = document.createElement('div');
+	div.innerHTML = err.message;
+	document.body.append(div);
+	console.error(err);
+}
+document.querySelector('#loading').remove();
+
+async function fetch_json(url) {
+	let res = await fetch(url);
+	if (res.status !== 200) throw new Error(`Download failed: HTTP Code ${res.status}`);
+	return res.json();
+}
+
+
+async function update_state(state) {
+	document.querySelector('#loading span').innerHTML = state;
+	return new Promise(ful => {
+		requestAnimationFrame(() => {
+			requestAnimationFrame(ful);
+		});
+	});
+}
+
+async function main() {
+	let [scripts, emoji] = await Promise.all([
+		fetch_json('../build/unicode-json/Scripts.json'),
+		fetch_json('../build/unicode-json/emoji-data.json')
+	]);
+
+	await update_state('Computing');
+
+	emoji = new Set([
+		...emoji.Emoji,
+		...emoji.Emoji_Component
+	].flatMap(parse_cp_range));
+
+	let count = 0;
+	let width = 12;
+	let cols = `<th>Form</th><th>Hex</th>`;
+	let rows = [];
+	let buf = [];
+	function drain() {
+		let tr = document.createElement('tr');
+		tr.append(...buf.flatMap(tr => [...tr.children]));
+		rows.push(tr);
+		buf.length = 0;
+	}
+
+	for (let [name, ranges] of Object.entries(scripts)) {		
+		let cps = ranges.flatMap(parse_cp_range).sort((a, b) => a - b).filter(cp => !emoji.has(cp));
+		await update_state(`${name} (${cps.length})`);
+		count += cps.length;
+		for (let cp of cps) {		
+			let form = String.fromCodePoint(cp);
+			let hex = cp.toString(16).padStart(4, '0').toUpperCase();
+			let tr = document.createElement('tr');
+			tr.innerHTML = `<td class="hex"><a href="https://www.compart.com/en/unicode/U+${hex}">${hex}</td>
+				<td class="form">${escape_name_for_html(form)}</td>`;
+				
+			buf.push(tr);
+			if (buf.length == width) drain();
+		}	
+		if (buf.length > 0) drain();
+	
+		let section = document.createElement('section');
+		section.innerHTML = `<section>
+			<h2><a name="${name}">${name}</a> (${cps.length})</h2>
+			<table><thead><tr>${Array(Math.min(width, cps.length)).fill(cols).join('')}</tr></thead><tbody></tbody></table>`;
+		section.querySelector('tbody').append(...rows);
+		document.body.append(section);
+		rows.length = 0;	
+
+		document.querySelector('#toc').innerHTML += `<li><a href="#${name}">${name}</a> (${cps.length})</li>`;
+	}
+	
+	document.querySelector('h1').innerHTML += ` (${Object.keys(scripts).length} groups, ${count} chars)`;
+}
+</script>
+</body>
+</html>

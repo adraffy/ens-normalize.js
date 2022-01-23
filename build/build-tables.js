@@ -350,6 +350,16 @@ async function create_payload(name) {
 			write_rules_payload('idna-adraffy-compat', {idna, uts51});
 			break;
 		}
+		case 'adraffy-v2': {
+			let idna = new IDNA();
+			let uts51 = new UTS51(read_emoji_data());
+			apply_rules(idna, uts51, [
+				(await import('./rules/adraffy.js')).default,
+				(await import('./rules/v2.js')).default
+			]);
+			write_rules_payload('idna-adraffy-v2', {idna, uts51});
+			break;
+		}	
 		case 'uts51': {
 			let idna = new IDNA();
 			idna.ignored.add(0xFE0E); // only non-emoji character allowed

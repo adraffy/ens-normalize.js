@@ -1,17 +1,21 @@
 import {writeFileSync} from 'fs';
 import {join} from 'path';
-import {tally, hex_cp} from '../build/utils.js';
+import {tally, hex_cp, explode_cp} from '../build/utils.js';
 import LABELS from './registered-labels.js';
 import {ens_normalize, ens_tokenize} from '../dist/ens-normalize.js';
 
 let base_dir = new URL('.', import.meta.url).pathname;
 
-for (let label of LABELS) {
-	if (label.includes('х')) {
-		console.log(label);
-	}
-}
-throw new Error(1);
+// ============================================================\
+// find all the characters in any name
+// tally them
+// sort by frequency
+let all_tally = tally([...LABELS].flatMap(explode_cp));
+all_tally = Object.entries(all_tally).map(([k, n]) => [parseInt(k), n]).sort((a, b) => b[1] - a[1]);
+writeFileSync(join(base_dir, './output/reg-all-chars.json'), JSON.stringify(all_tally.map(([cp, n]) => {
+	return {n, hex: hex_cp(cp), str: String.fromCodePoint(cp)};
+})));
+throw 1;
 
 
 // ============================================================

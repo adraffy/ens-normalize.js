@@ -140,8 +140,10 @@ async function write_simple_file(impl) {
 	if (!output) output = input;
 	try {
 		let root = await parse_semicolon_file(join(downloaded_dir, `${input}.txt`), impl);
+		//if (output === 'Names') {
 		await writeFile(join(parsed_dir, `${output}.json`), JSON.stringify(root));
 		console.log(`Wrote: ${output}`);
+		//}
 		return root;
 	} catch (cause) {
 		console.error(cause);
@@ -287,6 +289,13 @@ async function parse(argv) {
 			// "" | "<tag>" | "XXXX YYYY" | "<tag>XXXX YYYY"
 			if (!decomp || decomp.indexOf('>') >= 0) return;
 			this.root.push([src, decomp]);
+		}
+	});
+	await write_simple_file({
+		input: 'UnicodeData',
+		output: 'Names',
+		row([src, name]) {
+			this.root[src] = name;
 		}
 	});
 

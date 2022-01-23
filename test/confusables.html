@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Confusables</title>
+<style>
+body {
+	margin: 1rem;
+}
+#version {
+	position: absolute;
+	right: 1rem;
+	top: 1rem;
+	text-align: right;
+}
+#loading {
+	display: inline-block;
+	margin-top: 1rem;
+	background: #ffc;
+	border-radius: 1rem;
+	padding: 1rem 2rem;
+	font-size: 24pt;
+	border: 1px solid #ccc;
+}
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+td { 
+	border: 1px solid #aaa; 
+	text-align: center;
+}
+tbody tr:nth-child(odd) {
+	background: #eee; 
+}
+.form {
+	font-size: 20pt;
+	font-weight: bold;
+}
+.groups > div {
+	padding: 5px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+}
+.bucket {
+	display: flex;
+	gap: 2px;
+	padding: 2px;
+	align-items: center;
+	background: #ccc;
+	border: 1px solid #aaa;
+}
+</style>
+</head>
+<body>
+<h1><a href="../build/unicode-raw/confusables.txt">Confusables</a></h1>
+<div id="version"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a></div>
+<div id="loading">Computing...</div>	
+<script type="module">
+import {escape_name_for_html, compare_arrays, hex_cp, parse_cp, parse_cp_sequence} from '../build/utils.js';
+import {ens_normalize, ens_tokenize, VERSION, IDNA, UNICODE, BUILT} from '../dist/ens-normalize-2008.min.js';
+import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
+use_default_style();
+
+document.querySelector('#version').innerHTML += ` (v${VERSION}+${IDNA}+U${UNICODE})<br><code>${BUILT}</code>`;
+
+try {
+	main();
+} catch (err) {
+	let div = document.createElement('div');
+	div.innerHTML = err.message;
+	document.body.append(div);
+	console.error(err);
+}
+
+async function fetch_json(url) {
+	let res = await fetch(url);
+	if (res.status !== 200) throw new Error(`Download failed: HTTP Code ${res.status}`);
+	return res.json();
+}
+
+function key_from_tokens(tokens) { 
+	return String.fromCodePoint(...tokens.flatMap(t => t.e ?? t.v ?? t.m ?? t.i ?? t.d ?? []));
+	//return JSON.stringify(t, (k, v) => k === 'u' ? undefined : v); 
+}
+
+async function main() {
+	// this is target -> [src, src2, ...]
+	let confusables = await fetch_json('../build/unicode-json/confusables.json');
+
+	let group_count = 0;
+
+	let rows = [];
+
+	for (let [target, matches] of Object.entries(confusables)) {		
+		let cps = parse_cp_sequence(target);
+		let form = String.fromCodePoint(...cps);
+		
+		// group confusables by normalized form
+		let buckets = {};
+		for (let match of matches) {
+			let v = parse_cp_sequence(match);
+			let t = ens_tokenize(String.fromCodePoint(...v));
+			let key = key_from_tokens(t);
+			let bucket = buckets[key];
+			if (!bucket) buckets[key] = bucket = [];
+			bucket.push(t)
+		}
+		buckets = Object.values(buckets).sort((a, b) => b.length - a.length);
+		group_count += buckets.length;
+		
+		let tr = document.createElement('tr');
+		tr.innerHTML = `
+			<td class="form">${form}</td>
+			<td>${matches.length}</td>
+			<td>${buckets.length}</td>
+			<td class="groups"><div></div></td>`;
+
+		let container = tr.querySelector('.groups div');
+		for (let bucket of buckets) {
+			let div = document.createElement('div');
+			div.classList.add('bucket');
+			let simple = false;
+			if (bucket.length == 1 && bucket[0].length == 1) {
+				let keys = Object.keys(bucket[0][0]);				
+				if (!keys.includes('m')) {
+					div.append(dom_from_tokens(bucket[0], true));
+					simple = true;
+				}
+			} 
+			if (!simple) {
+				if (bucket.length > 1) {
+					div.innerHTML = `<span class="count">${bucket.length}</span>`;
+				}
+				div.append(dom_from_tokens(bucket[0], true));
+				let span = document.createElement('span');
+				span.innerHTML = '←';
+				div.append(span);
+				div.append(...bucket.map(tokens => dom_from_tokens(tokens, false)));
+			}
+			container.append(div);
+		}
+
+		rows.push([matches.length, cps, tr]);		
+	}
+	
+	rows = rows.sort((a, b) => {
+		let c = b[0] - a[0]; // sort by count
+		if (c == 0) c = compare_arrays(a[1], b[1]); // then lex
+		return c;
+	}).map(x => x[2]);
+
+	let table = document.createElement('table');
+	table.innerHTML = `<table><thead><tr><th>Confusable</th><th>#Ch</th><th>#Gr</th><th>Normalized Groups</th></tr></thead><tbody></tbody></table>`;
+	table.querySelector('tbody').append(...rows);
+	document.body.append(table);
+
+	document.querySelector('h1').innerHTML += ` (${group_count} groups)`;
+		
+	document.querySelector('#loading').remove();
+}
+</script>
+</body>
+</html>
