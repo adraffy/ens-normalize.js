@@ -15,8 +15,6 @@ all_tally = Object.entries(all_tally).map(([k, n]) => [parseInt(k), n]).sort((a,
 writeFileSync(join(base_dir, './output/reg-all-chars.json'), JSON.stringify(all_tally.map(([cp, n]) => {
 	return {n, hex: hex_cp(cp), str: String.fromCodePoint(cp)};
 })));
-throw 1;
-
 
 // ============================================================
 // find all the disallowed characters

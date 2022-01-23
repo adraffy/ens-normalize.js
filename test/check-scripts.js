@@ -1,5 +1,5 @@
 
-import {writeFileSync} from 'fs';
+import {writeFileSync, mkdirSync} from 'fs';
 import {join} from 'path';
 import {map_values, parse_cp_range, set_intersect, split_between} from '../build/utils.js';
 
@@ -33,9 +33,9 @@ function script_from_cp(cp) {
 	throw new Error(`unknown script: ${cp}`);
 }
 
-let tally1 = {};
-let tally2 = {};
-let tally3 = {};
+let tally_unsorted = {};
+let tally_sorted = {};
+let tally_count = {};
 for (let label of LABELS) {
 	let tokens = ens_tokenize(label);
 	let scripts = tokens.flatMap(t => {
@@ -49,23 +49,20 @@ for (let label of LABELS) {
 
 	let set = new Set(scripts);
 
-	/*
-	let key1 = scripts.join(',');
-	tally1[key1] = (tally1[key1] ?? 0) + 1;
+	// unsorted
+	let unsorted = scripts.join(',');
+	tally_unsorted[unsorted] = (tally_unsorted[unsorted] ?? 0) + 1;
 
-	let key2 = [...set].sort((a, b) => a.localeCompare(b));
-	tally2[key2] = (tally2[key2] ?? 0) + 1;
-	*/
+	// sorted
+	let sorted = [...set].sort((a, b) => a.localeCompare(b)).join(',');
+	tally_sorted[sorted] = (tally_sorted[sorted] ?? 0) + 1;
 
-	set.delete('Emoji');
-	let key3 = [...set].sort((a, b) => a.localeCompare(b));
-	tally3[key3] = (tally3[key3] ?? 0) + 1;
-
+	// tally
+	for (let key of scripts) {
+		tally_count[key] = (tally_count[key] ?? 0) + 1;
+	}
 }
 
-//console.log(tally1);
-
-//writeFileSync(join(output_dir, 'script-tally.json'), JSON.stringify(tally1));
-//writeFileSync(join(output_dir, 'script-tally2.json'), JSON.stringify(tally2));
-
-writeFileSync(join(output_dir, 'script-tally3.json'), JSON.stringify(tally3));
+writeFileSync(join(output_dir, 'script-tally-unsorted.json'), JSON.stringify(tally_unsorted));
+writeFileSync(join(output_dir, 'script-tally-sorted.json'), JSON.stringify(tally_sorted));
+writeFileSync(join(output_dir, 'script-tally-count.json'), JSON.stringify(tally_count));
