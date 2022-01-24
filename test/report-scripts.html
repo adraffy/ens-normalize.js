@@ -124,12 +124,20 @@ async function main() {
 		fetch_json('../build/unicode-json/Names.json')
 	]);
 
+	// custom additions
+	scripts['ASCII'] = ['00..7F'];
+
 	await update_state('Computing');
 
 	emoji = new Set([
 		...emoji.Emoji,
 		...emoji.Emoji_Component
 	].flatMap(parse_cp_range));
+
+	// remove digits
+	emoji.delete(0x2A);
+	emoji.delete(0x23);
+	for (let i = 0; i < 10; i++) emoji.delete(0x30 + i);
 
 	let count = 0;
 	let width = 12;
@@ -152,13 +160,13 @@ async function main() {
 			let token = ens_tokenize(form)[0];
 			let hex = cp.toString(16).padStart(4, '0').toUpperCase();
 			let cls;
-			if (token.v) {
+			if ('v' in token) {
 				cls = 'valid';
-			} else if (token.m) {
+			} else if ('m' in token) {
 				cls = 'mapped';
-			} else if (token.d) {
+			} else if ('d' in token) {
 				cls = 'disallowed';
-			} else if (token.i) {
+			} else if ('i' in token) {
 				cls = 'ignored';
 			} else {
 				cls = 'special';
