@@ -295,7 +295,7 @@ async function parse(argv) {
 		input: 'UnicodeData',
 		output: 'Names',
 		row([src, name]) {
-			this.root[src] = name;
+			this.root[parse_cp(src)] = name;
 		}
 	});
 

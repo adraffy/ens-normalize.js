@@ -86,8 +86,11 @@ function key_from_tokens(tokens) {
 }
 
 async function main() {
-	// this is target -> [src, src2, ...]
-	let confusables = await fetch_json('../build/unicode-json/confusables.json');
+	
+	let [confusables, names] = await Promise.all([
+		fetch_json('../build/unicode-json/confusables.json'), // target -> [src, src2, ...]
+		fetch_json('../build/unicode-json/Names.json') // dec -> str
+	]);
 
 	let group_count = 0;
 
@@ -138,6 +141,9 @@ async function main() {
 				span.innerHTML = '←';
 				div.append(span);
 				div.append(...bucket.map(tokens => dom_from_tokens(tokens, false)));
+			}
+			for (let el of div.querySelectorAll('*[title]')) {
+				el.title = `${names[el.innerHTML.codePointAt(0)]}\n${el.title}`;
 			}
 			container.append(div);
 		}

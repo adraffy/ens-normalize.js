@@ -46,6 +46,22 @@ tbody tr:nth-child(odd) {
 	list-style: none;
 	background: #eee;
 }
+.valid {
+	background: #cfc;
+}
+.ignored {
+	background: #aaa;
+}
+.disallowed {
+	background: #f66;	
+}
+.mapped {
+	background: #ccf;
+}
+.unknown {
+	background: #000;
+	color: #fff;
+}
 </style>
 </head>
 <body>
@@ -55,11 +71,8 @@ tbody tr:nth-child(odd) {
 <ul id="toc"></ul>
 <script type="module">
 import {escape_name_for_html, parse_cp_range} from '../build/utils.js';
-
-/*
-import {ens_normalize, ens_tokenize, VERSION, IDNA, UNICODE, BUILT} from '../dist/ens-normalize-2008.min.js';
+import {ens_tokenize, VERSION, IDNA, UNICODE, BUILT} from '../dist/ens-normalize-2008.min.js';
 document.querySelector('#version').innerHTML += ` (v${VERSION}+${IDNA}+U${UNICODE})<br><code>${BUILT}</code>`;
-*/
 
 try {
 	await main();
@@ -88,9 +101,10 @@ async function update_state(state) {
 }
 
 async function main() {
-	let [scripts, emoji] = await Promise.all([
+	let [scripts, emoji, names] = await Promise.all([
 		fetch_json('../build/unicode-json/Scripts.json'),
-		fetch_json('../build/unicode-json/emoji-data.json')
+		fetch_json('../build/unicode-json/emoji-data.json'),
+		fetch_json('../build/unicode-json/Names.json')
 	]);
 
 	await update_state('Computing');
@@ -118,10 +132,23 @@ async function main() {
 		count += cps.length;
 		for (let cp of cps) {		
 			let form = String.fromCodePoint(cp);
+			let token = ens_tokenize(form)[0];
 			let hex = cp.toString(16).padStart(4, '0').toUpperCase();
+			let cls;
+			if (token.v) {
+				cls = 'valid';
+			} else if (token.m) {
+				cls = 'mapped';
+			} else if (token.d) {
+				cls = 'disallowed';
+			} else if (token.i) {
+				cls = 'ignored';
+			} else {
+				cls = 'unknown';
+			}
 			let tr = document.createElement('tr');
 			tr.innerHTML = `<td class="hex"><a href="https://www.compart.com/en/unicode/U+${hex}">${hex}</td>
-				<td class="form">${escape_name_for_html(form)}</td>`;
+				<td class="form ${cls}" title="${names[cp]}">${escape_name_for_html(form)}</td>`;
 				
 			buf.push(tr);
 			if (buf.length == width) drain();
