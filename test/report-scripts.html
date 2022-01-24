@@ -23,6 +23,8 @@ body {
 }
 table {
 	border-collapse: collapse;
+}
+section table {
 	table-layout: fixed;
 	width: 100%;	
 }
@@ -58,15 +60,30 @@ tbody tr:nth-child(odd) {
 .mapped {
 	background: #ccf;
 }
-.unknown {
+.special {
 	background: #000;
 	color: #fff;
+}
+#legend {
+	margin: 1rem 0;
+}
+#legend td {
+	padding: 2px 5px;
 }
 </style>
 </head>
 <body>
 <h1><a href="../build/unicode-raw/scripts.txt">Scripts</a></h1>
 <div id="version"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a></div>
+<div id="legend">
+<table><tr>
+<td class="valid">Valid</td>
+<td class="mapped">Mapped</td>
+<td class="ignored">Ignored</td>
+<td class="disallowed">Disallowed</td>
+<td class="special">Special</td>
+</tr></table></div>
+</div>
 <div id="loading"><span>Computing...</span></div>
 <ul id="toc"></ul>
 <script type="module">
@@ -144,7 +161,7 @@ async function main() {
 			} else if (token.i) {
 				cls = 'ignored';
 			} else {
-				cls = 'unknown';
+				cls = 'special';
 			}
 			let tr = document.createElement('tr');
 			tr.innerHTML = `<td class="hex"><a href="https://www.compart.com/en/unicode/U+${hex}">${hex}</td>
