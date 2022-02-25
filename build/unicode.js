@@ -1,26 +1,28 @@
 import fetch from 'node-fetch';
 import {writeFile, mkdir, access} from 'fs/promises';
 import {join} from 'path';
-import {createReadStream} from 'fs';
-import {createInterface} from 'readline/promises';
 import {parse_cp, parse_cp_sequence, parse_cp_range} from './utils.js';
+import {parse_semicolon_file} from './nodejs-utils.js';
 
 // https://www.unicode.org/versions/latest/
 const major = 14;
 const minor = 0;
 const patch = 0;
 
+function url_for_public(s) {
+	return `https://www.unicode.org/Public/${s}`;
+}
 function url_for_spec(s) {
-	return `https://www.unicode.org/Public/${major}.${minor}.${patch}/${s}`;
+	return url_for_public(`${major}.${minor}.${patch}/${s}`);
 }
 function url_for_idna(s) {
-	return `https://www.unicode.org/Public/idna/${major}.${minor}.${patch}/${s}`;
+	return url_for_public(`idna/${major}.${minor}.${patch}/${s}`);
 }
 function url_for_emoji(s) {
-	return `https://unicode.org/Public/emoji/${major}.${minor}/${s}`;
+	return url_for_public(`emoji/${major}.${minor}/${s}`);
 }
 function url_for_security(s) {
-	return `https://www.unicode.org/Public/security/${major}.${minor}.${patch}/${s}`;
+	return url_for_public(`/security/${major}.${minor}.${patch}/${s}`);
 }
 
 let urls = [
@@ -49,10 +51,11 @@ let urls = [
 	url_for_spec('ucd/emoji/emoji-variation-sequences.txt'),
 	url_for_spec('ucd/emoji/emoji-data.txt'),
 
-	url_for_security('confusables.txt')
+	url_for_security('confusables.txt'),
 
+	// alternative names
 	// note: this isn't versioned by url
-	// https://www.unicode.org/Public/UNIDATA/NamesList.txt
+	url_for_public('UNIDATA/NamesList.txt')
 ];
 
 let base_dir = new URL('.', import.meta.url).pathname;
@@ -103,35 +106,6 @@ async function download(argv) {
 			console.log(`Download "${name}" failed: ${err.message}`);
 		}
 	}));
-}
-
-async function parse_semicolon_file(path, impl) {
-	let scope = {
-		root: {},
-		...impl,
-		get_bucket(key) {
-			if (!key) throw new Error(`empty bucket key`);
-			let bucket = root[key];
-			if (!bucket) bucket = root[key] = [];
-			return bucket;
-		} 
-	};
-	let {root, row, comment} = scope;
-	let rl = createInterface({input: createReadStream(path)});
-	for await (let line of rl) {
-		let rest;
-		let pos = line.indexOf('#');
-		if (pos >= 0) {
-			rest = line.slice(pos + 1).trim();
-			line = line.slice(0, pos).trim();
-		}
-		if (line) {
-			row?.call(scope, line.split(';').map(s => s.trim()), rest);
-		} else if (rest) {
-			comment?.call(scope, rest);
-		}
-	}
-	return root;
 }
 
 
@@ -407,5 +381,8 @@ async function parse(argv) {
 			this.get_bucket(dst).push(src);
 		}
 	});
+
+
+
 
 }

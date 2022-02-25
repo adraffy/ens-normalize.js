@@ -197,6 +197,18 @@ switch (mode) {
 	// ============================================================
 	// simple queries
 	// ============================================================
+	/*
+	case 'adraffy-emoji': {
+		let idna = new IDNA();
+		let uts51 = new UTS51(read_emoji_data());
+		apply_rules(idna, uts51, (await import('./rules/adraffy.js')).default);
+		if (argv.length == 0) { // just output to console
+			console.log(emoji);
+			break;
+		}
+		writeFileSync(join(ensure_dir('output'), 'adraffy-emoji.json'), JSON.stringify(emoji));
+		break
+	}*/
 	case 'emoji-data': {
 		let emoji = read_emoji_data();
 		if (argv.length == 0) { // just output to console
