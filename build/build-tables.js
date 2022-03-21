@@ -16,7 +16,8 @@ function ensure_dir(name) {
 }
 
 class IDNA {
-	constructor() {
+	constructor(config = {}) {
+		this.config = config;
 		this.valid = new Set();
 		this.ignored = new Set();
 		this.mapped = [];
@@ -71,7 +72,8 @@ class IDNA {
 
 class UTS51 {
 	constructor(data) {
-		this.STYLE_DROP = new Set();
+		// sets of codepoints
+		this.STYLE_DROP = new Set(); 
 		this.STYLE_OPT = new Set();
 		this.STYLE_REQ = new Set();
 		this.NON_SOLO = new Set(); // experimental
@@ -81,11 +83,12 @@ class UTS51 {
 		this.TAG_SPEC = new Set();
 		this.MOD_BASE = new Set();
 		this.MODIFIER = new Set();
-		this.SEQS = new Set();
-		this.ZWJS = new Set();
+		// sets of strings
+		this.SEQS = new Set(); 
+		this.ZWJS = new Set(); 
 		//this.data = data;
 		this.emoji = new Set(data.Emoji);
-		this.picto = data.Extended_Pictographic.filter(cp => !this.emoji.has(cp));
+		//this.picto = data.Extended_Pictographic.filter(cp => !this.emoji.has(cp));
 		// check that Emoji_Presentation is a subset of emoji
 		if (data.Emoji_Presentation.some(cp => !this.emoji.has(cp))) {
 			throw new Error(`Assumption wrong: Emoji_Presentation not emoji`);
@@ -197,18 +200,6 @@ switch (mode) {
 	// ============================================================
 	// simple queries
 	// ============================================================
-	/*
-	case 'adraffy-emoji': {
-		let idna = new IDNA();
-		let uts51 = new UTS51(read_emoji_data());
-		apply_rules(idna, uts51, (await import('./rules/adraffy.js')).default);
-		if (argv.length == 0) { // just output to console
-			console.log(emoji);
-			break;
-		}
-		writeFileSync(join(ensure_dir('output'), 'adraffy-emoji.json'), JSON.stringify(emoji));
-		break
-	}*/
 	case 'emoji-data': {
 		let emoji = read_emoji_data();
 		if (argv.length == 0) { // just output to console
@@ -346,15 +337,25 @@ async function create_payload(name) {
 		case 'adraffy': {
 			let idna = read_idna_rules({version: 2008});
 			let uts51 = new UTS51(read_emoji_data());
+			apply_rules(idna, uts51, (await import('./rules/adraffy.js')).default);
+			idna.check_uts46_assumptions();
+			write_rules_payload('idna-adraffy', {idna, uts51});
+			break;
+		}
+		case 'adraffy-exp': {
+			// adraffy with additional whitelist
+			let idna = read_idna_rules({version: 2008});
+			let uts51 = new UTS51(read_emoji_data());
 			apply_rules(idna, uts51, [
 				(await import('./rules/adraffy.js')).default,
 				(await import('./rules/whitelist.js')).default
 			].flat());
 			idna.check_uts46_assumptions();
-			write_rules_payload('idna-adraffy', {idna, uts51});
+			write_rules_payload('idna-adraffy-exp', {idna, uts51});
 			break;
 		}
 		case 'adraffy-compat': {
+			// ENS0 with emoji
 			let idna = read_idna_rules({version: 2003, valid_deviations: true});
 			let uts51 = new UTS51(read_emoji_data());
 			apply_rules(idna, uts51, (await import('./rules/adraffy.js')).default);
@@ -362,16 +363,6 @@ async function create_payload(name) {
 			write_rules_payload('idna-adraffy-compat', {idna, uts51});
 			break;
 		}
-		case 'adraffy-v2': {
-			let idna = new IDNA();
-			let uts51 = new UTS51(read_emoji_data());
-			apply_rules(idna, uts51, [
-				(await import('./rules/adraffy.js')).default,
-				(await import('./rules/v2.js')).default
-			]);
-			write_rules_payload('idna-adraffy-v2', {idna, uts51});
-			break;
-		}	
 		case 'uts51': {
 			let idna = new IDNA();
 			idna.ignored.add(0xFE0E); // only non-emoji character allowed
@@ -437,9 +428,9 @@ function read_rules_for_ENS0() {
 		combining_marks: new Set()
 	};
 }
-function read_idna_rules({use_STD3 = true, version = 2008, valid_deviations}) {
+function read_idna_rules({use_STD3 = true, version = 2008, valid_deviations = false}) {
 	let {
-		ignored, 		
+		ignored,
 		mapped,
 		valid, 
 		valid_NV8,
@@ -478,7 +469,7 @@ function read_idna_rules({use_STD3 = true, version = 2008, valid_deviations}) {
 		mapped.push(...deviation_mapped);
 		ignored.push(...deviation_ignored);
 	}
-	let idna = new IDNA();
+	let idna = new IDNA({use_STD3, version, valid_deviations});
 	idna.valid = new Set(valid.flatMap(parse_cp_range));
 	idna.ignored = new Set(ignored.flatMap(parse_cp_range));
 	// x:[char] => ys:[char, char, ...]
@@ -607,9 +598,10 @@ function extract_stops({valid, mapped}) {
 	return stops;
 }
 
-function write_payload(name, enc) {
-	let buf = Buffer.from(enc.compress_arithmetic());
+function write_payload(name, enc, hr) {
 	let dir = ensure_dir('output');
+	// compressed
+	let buf = Buffer.from(enc.compress_arithmetic());
 	writeFileSync(join(dir, `${name}.js`), `
 		import {read_compressed_payload} from '../decoder.js';
 		export default read_compressed_payload('${base64(buf)}');
@@ -623,6 +615,15 @@ function write_payload(name, enc) {
 	writeFileSync(join(dir, `${name}.bin`), buf);
 	// raw symbols
 	writeFileSync(join(dir, `${name}.json`), JSON.stringify(enc.values));
+	// human readable
+	if (hr) writeFileSync(join(dir, `${name}-hr.json`), JSON.stringify(hr, (_, x) => {
+		if (x instanceof Set) {
+			return [...x];
+		} else {
+			return x;
+		}
+	}));
+	// print compressed size
 	console.log(`Wrote payload ${name}: ${buf.length} bytes`);
 }
 
@@ -636,10 +637,22 @@ function write_rules_payload(name, {idna, stops, uts51, combining_marks}) {
 		// use default combining marks if not specified
 		combining_marks = read_combining_marks();
 	}
+	combining_marks = set_intersect(combining_marks, allowed);
+
 	let enc = new Encoder();
 	encode_idna(enc, idna, stops);
-	enc.write_member(set_intersect(combining_marks, allowed));
+	enc.write_member(combining_marks);
+
+	let hr = {
+		name,
+		idna: {...idna},
+		stops,
+		combining_marks
+	};
+
 	if (uts51) {
+		hr.uts51 = {...uts51};
+
 		enc.unsigned(1); // emoji enabled
 		enc.write_member(uts51.REGIONAL);
 		enc.write_member(uts51.KEYCAP_DROP);
@@ -677,7 +690,7 @@ function write_rules_payload(name, {idna, stops, uts51, combining_marks}) {
 		// experimental
 		//enc.write_member(uts51.NON_SOLO); 
 	}
-	write_payload(name, enc);
+	write_payload(name, enc, hr);
 }
 
 /*

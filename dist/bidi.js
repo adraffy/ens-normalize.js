@@ -80,7 +80,6 @@ function decode_arithmetic(bytes) {
 	});
 }	
 
-// returns an iterator which returns the next symbol
 /*
 export function read_payload(v) {
 	let pos = 0;
@@ -89,6 +88,8 @@ export function read_payload(v) {
 	return r;
 }
 */
+
+// returns an iterator which returns the next symbol
 function read_payload(v) {
 	let pos = 0;
 	return () => v[pos++];

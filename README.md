@@ -12,7 +12,7 @@
 ---
 * [Demo: Resolver](https://adraffy.github.io/ens-normalize.js/test/resolver.html) 
 * [Demo: Display Name](https://adraffy.github.io/ens-normalize.js/test/display.html)
-* Generated Report vs `eth-ens-namehash` [Latest version](https://adraffy.github.io/ens-normalize.js/test/output/ens3.html) • [Prior (IDNA2003)](https://adraffy.github.io/ens-normalize.js/test/output/ens.html)
+* Generated Report vs `eth-ens-namehash` [Latest version](https://adraffy.github.io/ens-normalize.js/test/output/ens-adraffy-1.3.13.html)
 
 ```Javascript
 import {ens_normalize} from '@adraffy/ens-normalize';
@@ -84,6 +84,6 @@ import {dom_from_tokens, use_default_style} from 'dist/parts.min.js';
 * Run `node build/unicode.js download` to download data from [unicode.org](https://www.unicode.org/Public/).
 * Run `node build/unicode.js parse` to parse those files into JSON files.
 * Run `node build/build-tables.js all` to build compressed rule payloads.
-* Run `npm run test-source` to test `build/lib-normalize.js`.
-* Run `npm run build ` or `node build/build.js all` to inject the compressed tables into the source template and create the readable and minified `dist/` files.
-* Run `npm run test-build` to test `dist/ens-normalize.js`.
+* Run `node test/test-lib.js build/lib-normalize.js` to test the source template.
+* Run `node build/build.js` to inject the compressed tables into the source template and create `dist/` files.
+* Run `node test/test-lib.js dist/ens-normalize.js` to test the generated library.
