@@ -12,7 +12,7 @@
 ---
 * [Demo: Resolver](https://adraffy.github.io/ens-normalize.js/test/resolver.html) 
 * [Demo: Display Name](https://adraffy.github.io/ens-normalize.js/test/display.html)
-* Generated Report vs `eth-ens-namehash` [Latest version](https://adraffy.github.io/ens-normalize.js/test/output/ens-adraffy-1.3.13.html)
+* Generated Report vs `eth-ens-namehash` [Latest version](https://adraffy.github.io/ens-normalize.js/test/output/ens-adraffy-1.3.14.html)
 
 ```Javascript
 import {ens_normalize} from '@adraffy/ens-normalize';
