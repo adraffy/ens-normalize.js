@@ -5,7 +5,6 @@ import LABELS from './registered-labels.js';
 
 // ens
 import lib from 'eth-ens-namehash';
-import { UNICODE } from '../dist/ens-normalize-compat.js';
 const namehash = lib.normalize.bind(lib);
 function ens_error(s) {
 	let match = s.match(/Illegal char (.*)/);
