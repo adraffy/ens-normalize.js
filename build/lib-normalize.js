@@ -97,7 +97,7 @@ export function ens_normalize(name) {
 		// flatten textual part of label into a single list of code-points
 		let text = tokens.reduce((a, {v}) => {
 			if (v) {
-				a.push(...v);
+				a.push(...nfc(v)); // required for Context/Bidi
 			} else if (a.length > 0) { // emoji at the start of the label are deleted
 				a.push(0xFE0F); // remaining emoji are replaced by FE0F (which is NSM) 
 			}

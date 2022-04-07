@@ -18,7 +18,7 @@ export default  [
 	{ty: 'demoji', src: '30..39'},
 
 	// permit solo regional emojis
-	{ty: 'style-opt', src: '1F1E6..1F1FF'}, 
+	{ty: 'style-drop', src: '1F1E6..1F1FF'}, 
 
 	// add whitelist zwjs 
 	...EMOJI_ZWJ,

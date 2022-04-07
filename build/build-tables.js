@@ -190,7 +190,7 @@ switch (mode) {
 	// build various payloads
 	// ============================================================
 	case 'all': {
-		['context', 'nf', 'bidi', 'adraffy', 'adraffy-compat', 'uts51', 'others'].forEach(create_payload);
+		['context', 'nf', 'bidi', 'adraffy', 'adraffy-exp', 'adraffy-compat', 'uts51', 'others'].forEach(create_payload);
 		break;
 	}
 	case 'sub': {

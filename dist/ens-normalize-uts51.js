@@ -778,9 +778,9 @@ function validate_context(cps) {
 
 var r = read_compressed_payload('AA4AEwAyAB0ADAAQAAoADgAJAAYADQCFABMABwDA/QQA8NwPGSY8GXQegwLODADknOjpQwsWCBMDFiERPwQEAoYD0AIBTwC8YMC0gQoCTQ0JGuv1SCYgWQoAZsQEAKdGCQMBBQwOCQILBiAVBScAlADGCwDFSgMIZSYTpRlnSv0/FAwABAIGBAATe0AD4gAhJQAAHgUVBQUFBQABF2VI/DQNSzsBJK4SAADy8QglE9EAy4E3qggOxQsACBIBATUMRjkMJgAAy61tFRDkFqVeAVkNAW4K5yIACAIM/xZUAM2Raa1oojhYAnlFaneDL37617VezdtM3exCFktwcMTz3IE3r3p/2kBtcmwR3QmZJMh+5eYi5vBHjtwwzBFZKxrXSEsDqtsYadOiXRNxIJsgaF/ALX3gyhu5n7f6YvfL0Y+HWk3R1Iw+x11c0XLnlWdDy7Emx7rOy6tLlfns4A==');
 
-const BUILT = '2022-03-21T06:17:31.321Z';
+const BUILT = '2022-04-07T08:39:56.185Z';
 const UNICODE = '14.0.0';
-const VERSION = '1.3.13';
+const VERSION = '1.3.14';
 const IDNA = 'uts51';
 const STOP = read_member_set(r);
 const VALID = read_member_set(r);
@@ -868,7 +868,7 @@ function ens_normalize(name) {
 		// flatten textual part of label into a single list of code-points
 		let text = tokens.reduce((a, {v}) => {
 			if (v) {
-				a.push(...v);
+				a.push(...nfc(v)); // required for Context/Bidi
 			} else if (a.length > 0) { // emoji at the start of the label are deleted
 				a.push(0xFE0F); // remaining emoji are replaced by FE0F (which is NSM) 
 			}
