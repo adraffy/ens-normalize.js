@@ -1,10 +1,11 @@
-import {mkdirSync, writeFileSync} from 'fs';
+import {mkdirSync, readFileSync, writeFileSync} from 'fs';
 import {join} from 'path';
 import {escape_unicode, escape_name_for_html, parse_cp} from '../build/utils.js';
 import LABELS from './registered-labels.js';
 
 // ens
-import lib from 'eth-ens-namehash';
+//import lib from 'eth-ens-namehash';
+import lib from '@ensdomains/eth-ens-namehash';
 const namehash = lib.normalize.bind(lib);
 function ens_error(s) {
 	let match = s.match(/Illegal char (.*)/);
@@ -16,8 +17,11 @@ function adraffy_error(s) {
 	return s.replaceAll(/{([0-9A-F]+)}/g, (_, x) => escape_name_for_html(String.fromCodePoint(parse_cp(x))));
 }
 
-let output_dir = new URL('./output/', import.meta.url).pathname;
+let base_dir = new URL('./', import.meta.url).pathname;
+let output_dir = join(base_dir, 'output');
 mkdirSync(output_dir, {recursive: true});
+
+const ENS_VERSION = JSON.parse(readFileSync(join(base_dir, 'node_modules/@ensdomains/eth-ens-namehash/package.json'))).version;
 
 genereate_report(output_dir, await import('../dist/ens-normalize-debug.js'));
 genereate_report(output_dir, await import('../dist/ens-normalize-compat.js'));
@@ -69,7 +73,7 @@ function genereate_report(dir, module) {
 		console.log(`${type}[${bucket.length}] = ${escape_unicode(label)}`);
 	}
 
-	const title = `eth-ens-namehash (ens) vs ${IDNA} (${VERSION})`;
+	const title = `eth-ens-namehash (${ENS_VERSION}) vs ${IDNA} (${VERSION})`;
 
 	let html = `<!doctype html><html><head><meta charset="utf-8"><title>${title}</title><style>
 	body { margin: 1rem; }
@@ -112,8 +116,8 @@ function genereate_report(dir, module) {
 	}
 	html += `</body></html>`;
 	
-	writeFileSync(join(dir, `ens-${IDNA}-${VERSION}.html`), html);
-	writeFileSync(join(dir, `ens-${IDNA}-${VERSION}.json`), JSON.stringify(buckets));
+	writeFileSync(join(dir, `ens-${ENS_VERSION}-${IDNA}-${VERSION}.html`), html);
+	writeFileSync(join(dir, `ens-${ENS_VERSION}-${IDNA}-${VERSION}.json`), JSON.stringify(buckets));
 }
 
 function escape_unicode_for_html(s) {
