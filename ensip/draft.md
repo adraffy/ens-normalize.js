@@ -43,9 +43,9 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 * Input is processed left-to-right, first looking for emoji sequences according to [UTS-51](https://unicode.org/reports/tr51/), and then text sequences according to [UTS-46](https://unicode.org/reports/tr46/).  
 
 * UTS-51 parsing has the following changes:
-	* <a href="#WhiteSEQ">Whitelisted sequences</a> are matched first.
+	* [Whitelisted sequences](#whitelisted-emoji-sequences) are matched first.
     * `FE0E` is never matched.
-    * <a href="#Demoji">A small set of emoji</a> are demoted from the emoji set because they were disallowed or mapped by legacy normalization:  
+    * [A small set of emoji](#demoted-emoji-characters) are demoted from the emoji set because they were disallowed or mapped by legacy normalization:  
         * `[0-9] FE0F` was normalized to `[0-9]` which is ambiguous with the corresponding digit character.
         * `[#*] FE0F` was normalized to `[#*]` which is disallowed.
         * Some emoji were mapped to non-emoji sequences.
@@ -55,11 +55,11 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 		* `[0-9] FE0F? 20E3` (where `FE0F` is optional) is parsed as `[0-9] 20E3`
 		* `[#*] FE0F 20E3` is parsed verbatim
 	* [Presentation Sequences](https://www.unicode.org/reports/tr51/#def_emoji_presentation_sequence) have a special case to account for legacy normalization:
-        * `XXX FE0F` is parsed verbatim<br>where `XXX` is the <a href="#StyleREQ">set of all new and future emoji</a>
-        * `XXX FE0F?` (where `FE0F` is optional) is parsed as `XXX`<br>where `XXX` is the <a href="#StyleDROP">set of all emoji that were valid in IDNA 2003</a>
+        * `XXX FE0F` is parsed verbatim<br>where `XXX` is the [set of all new and future emoji](#emoji-that-require-fe0f)
+        * `XXX FE0F?` (where `FE0F` is optional) is parsed as `XXX`<br>where `XXX` is the [set of all emoji that were valid in IDNA 2003](#emoji-that-drop-fe0f)
     * [ZWJ Sequences](https://www.unicode.org/reports/tr51/#def_emoji_zwj_sequence) are either:
 		* [RGI Sequences](https://unicode.org/Public/emoji/14.0/emoji-zwj-sequences.txt)
-		* <a href="#WhiteNonRGI">Whitelisted Non-RGI Sequences</a>
+		* [Whitelisted Non-RGI Sequences](#whitelisted-non-rgi-emoji-sequences)
     
 	
 * UTS-46 parsing has the following settings and changes:
@@ -230,7 +230,6 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 
 ## Appendix: Datasets 
 
-<a name="#WhiteSEQ"></a>
 ### Whitelisted Emoji Sequences
 
 ```Javascript
@@ -241,7 +240,6 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 ]
 ```
 
-<a name="#WhiteNonRGI"></a>
 ### Whitelisted Non-RGI Emoji Sequences
 
 ```Javascript
@@ -254,7 +252,6 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 ]
 ```
 
-<a name="#Demoji"></a>
 ### Demoted Emoji Characters
 
 ```Javascript
@@ -300,7 +297,6 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 ]
 ```
 
-<a name="#StyleREQ"></a>
 ### Emoji That Require `FE0F`
 
 ```Javascript
@@ -310,7 +306,6 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 ]
 ```
 
-<a name="#StyleDROP"></a>
 ### Emoji That Drop `FE0F`
 
 ```Javascript
