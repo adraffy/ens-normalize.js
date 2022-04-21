@@ -9,7 +9,7 @@
 
 This ENSIP standardizes, versions, and resolves implementation details of the Ethereum Name Service (ENS) name normalization process outlined in [ENSIP-1 § Name Syntax](https://docs.ens.domains/ens-improvement-proposals/ensip-1-ens#name-syntax).  Since ENSIP-1 was finalized in 2016, Unicode has [evolved](https://unicode.org/history/publicationdates.html) from version 8.0.0 to 14.0.0 and incorporated many new characters, including complex emoji sequences.
 
-The goal of this ENSIP to standardize the exact normalization algorithm, pin an explicit Unicode version, and elucidate many implementation details and edge cases.  This ENSIP introduces an explicit set of modifications to the existing standard to reduce visually-confusing names and improve compatibility with future Unicode updates.  Additionally, a test set of names is provided for implementation validation.
+The goal of this ENSIP to standardize the exact normalization algorithm, pin an explicit Unicode version, and elucidate many implementation details and edge cases.  This ENSIP introduces an explicit set of modifications to the existing standard to reduce visually-confusing names and improve compatibility with future Unicode updates.  Additionally, a validation set of names is provided for implementation testing.
 
 As of this ENSIP, over 580K names have been registered on chain.  Great effort has been made to preserve as many names as possible, however some names will become unreachable if the normalization outlined in this ENSIP is applied.
 
@@ -19,9 +19,9 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 
 * ENSIP-1 implies but does not state an explicit flavor of IDNA processing. 
 
-* Unicode support is non-uniform across all platforms, including language-level String functions, like [Unicode Normalization Form C](https://unicode.org/reports/tr15/).
+* Unicode support is non-uniform across all platforms, including language-level functions, like [Normalization Form C](https://unicode.org/reports/tr15/).
 
-* [UTS-46](https://unicode.org/reports/tr46/) is insufficient to correctly normalize emoji. Correct emoji parsing is only possible with [UTS-51](https://www.unicode.org/reports/tr51/).
+* [UTS-46](https://unicode.org/reports/tr46/) is insufficient to correctly normalize emoji sequences. Correct emoji parsing is only possible with [UTS-51](https://www.unicode.org/reports/tr51/).
 
 * There does not exist a validation set of unormalized and normalized names.
 
