@@ -122,6 +122,107 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 * [emoji-variation-sequences.txt](https://unicode.org/Public/14.0.0/ucd/emoji/emoji-variation-sequences.txt)
 * [emoji-data.txt](https://unicode.org/Public/14.0.0/ucd/emoji/emoji-data.txt)
 
+## Appendix: Test Cases
+
+### Expect Pass: Unchanged
+```Javascript
+[
+	"", // empty
+	".", // null labels
+	".eth", // null labels
+	"..eth", // null labels
+	"vitalik.eth",
+	"brantly.cash", // non-eth tld
+	"öbb.at",
+	"nowzad.loopring.eth", // subdomain
+	"ß.eth", // deviation
+	"ς.eth", // deviation
+	"te_t.eth", // allowed underscore
+	"te$t.eth", // allowed dollar
+	"🚀🚀🚀.eth", 
+	"💩💩💩.eth",
+	"🌈rainbow.eth", // emoji + text
+	"#️⃣*️⃣.eth", // modern keycap
+	"🧟‍♂.eth", // zombie
+	"🧟♂.eth",  // zombie w/gender
+	"😵💫😵💫😵💫.eth", // no zwj
+	"😵‍💫😵‍💫😵‍💫.eth", // zwj seq,
+	"🏴.eth", // solo flag
+	"🏴󠁧󠁢󠁥󠁮󠁧󠁿.eth", // whitelisted seq
+	"🏴󠁧󠁢󠁳󠁣󠁴󠁿.eth", 
+	"🏴󠁧󠁢󠁷󠁬󠁳󠁿.eth",
+	"a्‌.eth", // ContextJ: ZWNJ Rule 1
+	"ࡃ࣭‌߲ܓ.eth", // ContextJ: ZWNJ Rule 2
+	"a्‍.eth", // ContextJ: ZWJ
+	"l·l.eth", // ContextO: Middle Dot
+	"ab͵ͷ.eth", // ContextO: Greek Keraia
+	"ב֑׳.eth", // ContextO: Hebrew Geresh
+	"ぁァ・.eth", // ContextO: Katakana
+	"א٠١٢.eth", // ContextO: [Arabic]-Indic
+	"א۰۱۲.eth", // ContextO: Arabic-[Indic]
+	"פעילותהבינאום.eth", // CheckBidi
+	"ކޮންޕީޓަރު.eth", // CheckBidi: Dhivehi
+	"יִואָ.eth", // CheckBidi: Yiddish,
+	"bahrain.مصر", // CheckBidi: separate LTR and RTL
+	"🇸🇦سلمان.eth", // CheckBidi: emoji + RTL 
+	"‼️‼️‼️.eth",
+	"⁉️⁉️⁉️.eth"
+]
+```
+### Expect Pass: Transformed
+```Javascript
+[
+	{name: "bRAnTlY.eTh", norm: "brantly.eth"}, // mapping
+	{name: "xn--ls8h.eth", norm: "💩.eth"}, // punycode
+	{name: "xn--bb-eka.eth", norm: "öbb.eth"},  // punycode
+	{name: "Ⅷ", norm: "viii"}, // IDNA mapping
+	{name: "︎\u{FE0E}.eth", norm: ".eth"}, // ignored emoji w/text styling
+	{name: "Öbb.at", norm: "öbb.at"}, 
+	{name: "🚴‍♂️.eth", norm: "🚴‍♂.eth"}, // drop FE0F
+	{name: "🏳️‍🌈.eth", norm: "🏳‍🌈.eth"},
+	{name: "👩🏽‍⚕️.eth", norm: "👩🏽‍⚕.eth"},
+	{name: "👁️‍🗨️.eth", norm: "👁‍🗨.eth"}, // drop 2x FE0F
+	{name: "6️⃣9️⃣.eth", norm: "6⃣9⃣.eth"}, // legacy keycaps,
+	{name: "ⓂⓂⓂ.eth", norm: "mmm.eth"}, // mapping
+	{name: "Ⓜ️Ⓜ️Ⓜ️.eth", norm: "mmm.eth"}, // mapping
+]
+```
+### Expect Fail
+```Javascript
+[
+	"◌̈bb.at",
+	"💩‍💩.eth", // poop joiner
+	"🏴󠁷󠁴󠁦󠁿.eth", // invalid tag sequence
+
+	"🅜🅜🅜.eth", 
+	"🅼🅼🅼.eth", 
+	"❻❻❻.eth",
+	"➏➏➏.eth",
+	"te[st.eth",
+
+	"te--st.eth", // CheckHyphens: Section 4.1 Rule #2	
+	"test-.eth", // CheckHyphens: Section 4.1 Rule #3A
+	"-test.eth", // CheckHyphens: Section 4.1 Rule #3B
+
+	"test\u{FF0E}eth", // Disallowed Alternative Stops
+	"test\u{3002}eth", // Disallowed Alternative Stops
+	"test\u{FF61}eth", // Disallowed Alternative Stops
+
+	"a‌b.eth", // ContextJ: ZWNJ Rule 2
+	"🧞‌‌.eth", // ContextJ: ZWNJ
+	"a‍b.eth", // ContextJ: ZWJ
+	"a·b.eth", // ContextO: Middle Dot
+	"ab͵.eth", // ContextO: Greek Keraia
+	"ab׳.eth", // ContextO: Hebrew Geresh
+	"ab・.eth", // ContextO: Katakana
+	"٠۰.eth", // ContextO: Arabic-Indic
+
+	"\u{202E}elgoog\u{202D}.eth", // CheckBidi: direction modifier
+	"\u{202E}hte.elgoog", // CheckBidi: direction modifier
+	"bahrainمصر.eth", // CheckBidi: mixed LTR+RTL
+]
+```
+
 ## Appendix: Datasets 
 
 <a name="#WhiteSEQ"></a>
@@ -138,11 +239,11 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 ### Whitelisted Non-RGI Emoji Sequences
 ```Javascript
 [
-	'1F93C 1F3FB 200D 2642',
-	'1F93C 1F3FC 200D 2642',
-	'1F93C 1F3FD 200D 2642',
-	'1F93C 1F3FE 200D 2642',
-	'1F93C 1F3FF 200D 2642',
+	'1F93C 1F3FB 200D 2640',
+	'1F93C 1F3FC 200D 2640',
+	'1F93C 1F3FD 200D 2640',
+	'1F93C 1F3FE 200D 2640',
+	'1F93C 1F3FF 200D 2640',
 ]
 ```
 
@@ -173,10 +274,10 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 	{src: '1F250', dst: '5F97'}, // 🉐 -> 得
 	{src: '1F251', dst: '53EF'}, // 🉑 -> 可
 	
-    {src: '203C'}, // ‼
+	{src: '203C'}, // ‼
 	{src: '2049'}, // ⁉
-   
-    {src: '23'}, // #
+
+	{src: '23'}, // #
 	{src: '2A'}, // *
 	{src: '30'}, // 0
 	{src: '31'}, // 1
