@@ -9,7 +9,7 @@
 
 This ENSIP standardizes, versions, and resolves implementation details of the Ethereum Name Service (ENS) name normalization process outlined in [ENSIP-1 § Name Syntax](https://docs.ens.domains/ens-improvement-proposals/ensip-1-ens#name-syntax).  Since ENSIP-1 was finalized in 2016, Unicode has [evolved](https://unicode.org/history/publicationdates.html) from version 8.0.0 to 14.0.0 and incorporated many new characters, including complex emoji sequences.
 
-The goal of this ENSIP to standardize the exact normalization algorithm, pin an explicit Unicode verison, and elucidate many implementation details and edge cases.  This ENSIP introduces an explicit set of modifications to the existing standard to reduce visually-confusing names and improve compatibility with future Unicode updates.  Additionally, a test set of 
+The goal of this ENSIP to standardize the exact normalization algorithm, pin an explicit Unicode version, and elucidate many implementation details and edge cases.  This ENSIP introduces an explicit set of modifications to the existing standard to reduce visually-confusing names and improve compatibility with future Unicode updates.  Additionally, a test set of names is provided.
 
 As of this ENSIP, over 580K names have been registered on chain.  Great effort has been made to preserve as many names as possible, however some names will become unreachable if the normalization outlined in this ENSIP is applied.
 
@@ -44,7 +44,7 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 
 * Input is processed left-to-right, first looking for emoji sequences according to [UTS-51](https://unicode.org/reports/tr51/), and then text sequences according to [UTS-46](https://unicode.org/reports/tr46/).  
 
-* UTS-51 parsing has the following **<u>changes</u>**:
+* UTS-51 parsing has the following changes:
 	* <a href="#WhiteSEQ">Whitelisted sequences</a> are matched first.
     * `FE0E` is never matched.
     * <a href="#Demoji">A small set of emoji</a> are demoted from emoji because they were disallowed or mapped by legacy IDNA 2003 logic:  
@@ -64,7 +64,7 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 		* <a href="#WhiteNonRGI">Whitelisted Non-RGI Sequences</a>
     
 	
-* UTS-46 parsing has the following settings or **<u>changes</u>**:
+* UTS-46 parsing has the following settings and changes:
     * *UseSTD3ASCIIRules* is `true`
     * *Transitional* is `false`
         * IDNA 2008 
@@ -88,7 +88,10 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 
 * Like ENSIP-1, labels are formed from runs of emoji and text separated by a stop character.  The only valid stop character is ASCII period: `002E (.) FULL STOP`
 
-* Each label 
+* *ContextO*, *ContextJ* and *CheckBidi* must operate on the "textual form" of each label, where emoji before the first non-emoji character are ignored, emoji afterwards are replaced with `FE0F`.
+
+* *CheckBidi* should only be applied if the name is [Bidi domain name](https://unicode.org/reports/tr46/#Notation): "a domain name containing at least one character with BIDI_Class R, AL, or AN".  This cannot be determined until all labels are decoded and processed.
+
 
 
 ## Algorithm
