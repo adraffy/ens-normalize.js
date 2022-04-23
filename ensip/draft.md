@@ -16,84 +16,101 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 ## Motivation
 
 * Since ENSIP-1, Unicode has evolved from version 8.0.0 to 14.0.0 (6 major bumps) and ENSIP does not state an explicit version number. 
-
 * ENSIP-1 implies but does not state an explicit flavor of IDNA processing. 
-
-* Unicode support is non-uniform across all platforms, including language-level functions, like [Normalization Form C](https://unicode.org/reports/tr15/).
-
 * [UTS-46](https://unicode.org/reports/tr46/) is insufficient to correctly normalize emoji sequences. Correct emoji parsing is only possible with [UTS-51](https://www.unicode.org/reports/tr51/).
-
 * There does not exist a validation set of unormalized and normalized names.
-
 * The success of ENS has encouraged spoofing&mdash;registering a visually similar name with exotic characters&mdash;via the following techniques:
-
-	* Insertion of Zero-width Characters
-	* Replacement of Look-alike (Confusable) Characters
+	* Insertion of zero-width characters
+	* Replacement of look-alike (confusable) characters
 	* Using names which normalize differently between available algorithms 
 
-
 ## Specification
+
+* Unicode version is `14.0.0`
 
 * Normalization is the process of converting an arbitrary string into a canonical form.  It either produces a string or throws an error.
 
 * It is idempotent:  applying normalization mutliple times produces the same result.
 
-* The Unicode version is `14.0.0`
+* Input is processed left-to-right, first looking for emoji sequences according to [UTS-51](https://unicode.org/reports/tr51/), and then text sequences according to [UTS-46](https://unicode.org/reports/tr46/).
 
-* Input is processed left-to-right, first looking for emoji sequences according to [UTS-51](https://unicode.org/reports/tr51/), and then text sequences according to [UTS-46](https://unicode.org/reports/tr46/).  
-
-* UTS-51 parsing has the following changes:
-	* [Whitelisted sequences](#whitelisted-emoji-sequences) are matched first.
-    * `FE0E` is never matched.
-    * [A small set of emoji](#demoted-emoji-characters) are demoted from the emoji set because they were disallowed or mapped by legacy normalization:  
-        * `[0-9] FE0F` was normalized to `[0-9]` which is ambiguous with the corresponding digit character.
-        * `[#*] FE0F` was normalized to `[#*]` which is disallowed.
-        * Some emoji were mapped to non-emoji sequences.
-	* [Tag Sequences](https://www.unicode.org/reports/tr51/#def_emoji_tag_sequence) are disallowed (because they can hide arbitrary data.)
-	* [Flag Sequences](https://www.unicode.org/reports/tr51/#def_emoji_flag_sequence) are ignored and singleton *Regional Indicators* are allowed instead. 
+* UTS-51 parsing has the following modifications:
+	* [Whitelisted sequences](#whitelisted-emoji-sequences) are matched first
+	* [A small set of emoji](#demoted-emoji-characters) are demoted and not processed
+	* [Tag Sequences](https://www.unicode.org/reports/tr51/#def_emoji_tag_sequence) are not processed	
+		 * Tag Sequences can embed arbitrary data
+	* [Flag Sequences](https://www.unicode.org/reports/tr51/#def_emoji_flag_sequence) are not processed
+		* Instead, singleton *Regional Indicators* are permitted
 	* [Keycap Sequences](https://www.unicode.org/reports/tr51/#def_emoji_keycap_sequence) have a special case to account for legacy normalization:
-		* `[0-9] FE0F? 20E3` (where `FE0F` is optional) is parsed as `[0-9] 20E3`
 		* `[#*] FE0F 20E3` is parsed verbatim
+		* `[0-9] FE0F? 20E3` (where `FE0F` is optional) is parsed as `[0-9] 20E3`
 	* [Presentation Sequences](https://www.unicode.org/reports/tr51/#def_emoji_presentation_sequence) have a special case to account for legacy normalization:
-        * `XXX FE0F` is parsed verbatim<br>where `XXX` is the [set of all new and future emoji](#emoji-that-require-fe0f)
-        * `XXX FE0F?` (where `FE0F` is optional) is parsed as `XXX`<br>where `XXX` is the [set of all emoji that were valid in IDNA 2003](#emoji-that-drop-fe0f)
-    * [ZWJ Sequences](https://www.unicode.org/reports/tr51/#def_emoji_zwj_sequence) are either:
+		* `XXX FE0F` is parsed verbatim<br>where `XXX` is the [set of all new and future emoji](#emoji-that-require-fe0f)
+		* `XXX FE0F?` (where `FE0F` is optional) is parsed as `XXX`<br>where `XXX` is the [set of all emoji that were valid in IDNA 2003](#emoji-that-drop-fe0f)
+	* [ZWJ Sequences](https://www.unicode.org/reports/tr51/#def_emoji_zwj_sequence) are either:
 		* [RGI Sequences](https://unicode.org/Public/emoji/14.0/emoji-zwj-sequences.txt)
 		* [Whitelisted Non-RGI Sequences](#whitelisted-non-rgi-emoji-sequences)
-    
 	
-* UTS-46 parsing has the following settings and changes:
-    * *UseSTD3ASCIIRules* is `true`
-    * *Transitional* is `false`
-        * IDNA 2008 
-        * Deviations are Valid
-        * Includes NV8 and XV8
-    * *CheckHyphens* is `true`
-    * *CheckBidi* is `true`
-    * *CheckJoiners* is `true` and uses *ContextJ* and *ContextO* rules
-    * The following characters are disallowed: 
-        * `(。) 3002 Ideographic Full Stop`
-        * `(．) FF0E Fullwidth Full Stop`
-        * `(｡) FF61 Halfwidth Ideographic Full Stop`
-        * `(◌̲) 0332 Combining Low Line`
-    * The following characters are allowed:
-        * `(_) 005F Underscore`
-        * `($) 0024 Dollar Sign`
-        * `(£) 0024 Pound Sign`
-        * `(¥) 00A5 Yen Sign`
-        * `(€) 20AC Euro Sign`
-        * `(₿) 20BF Bitcoin Sign`
-	* The only valid stop character is ASCII period: `002E (.) FULL STOP`
+* UTS-46 parsing has the following modifications:
+	* *UseSTD3ASCIIRules* = `true`
+	* *Transitional* = `false`
+		* IDNA 2008 
+		* [Deviations](https://unicode.org/reports/tr46/#IDNA2008-Section) are Valid
+		* [NV8 and XV8](https://unicode.org/reports/tr46/#Table_Data_File_Fields) are Disallowed
+	* *CheckHyphens* = `false`
+		* Punycode is not processed
+	* *CheckBidi* = `true`
+		* Must operate on the "textual form" of each label, where emoji before the first non-emoji character are ignored, emoji afterwards are replaced with `FE0F`.  
+		* This permits unrestricted emoji placement in right-to-left labels.
+	* *CheckJoiners* = `true` &rarr; ContextJ:
+		* [Zero Width Non-Joiner](https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.1)
+		* [Zero Width Joiner](https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.2)
+	* ContextO:
+		* [Middle Dot](https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.3)
+		* [Greek Keraia](https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.4)
+		* [Hebrew Geresh](https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.5)
+		* [Hebrew Gershayim](https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.6)
+		* [Katakana Middle Dot](https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.7)
+		* [Arabic-Indic Digits](https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.8)
+		* [Extended Arabic-Indic Digits](https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.9)
+	* The following [characters are valid](#idna-valid-characters)
+	* The following [characters are disallowed](#idna-disallowed-characters)
 
-* ContextO, ContextJ and CheckBidi must operate on the "textual form" of each label, where emoji before the first non-emoji character are ignored, emoji afterwards are replaced with `FE0F`.
+* The only valid stop character is ASCII period: `002E (.) FULL STOP`
+	* This permits unnormalized label extraction.
 
-* CheckBidi should only be applied if the name is [Bidi domain name](https://unicode.org/reports/tr46/#Notation): "a domain name containing at least one character with BIDI_Class R, AL, or AN".  This cannot be determined until all labels are decoded and processed.
-
-* `// TODO: Punycode comments`
-
-* `// TODO: NFC comments`
+* [NFC (Unicode Normalization Form C)](https://unicode.org/reports/tr15/) should use the same Unicode version.  Language-level NFC functions, like [`String.normalize()`](https://tc39.es/ecma262/multipage/text-processing.html#sec-string.prototype.normalize), may produce inconsistent results on different platforms.
 
 * `// TODO: Single-script Confusables`
+
+## Legacy Implementation Notes
+
+* The most common implementation prior to this ENSIP was just UTS-46 processing with the following:
+	* *UseSTD3ASCIIRules* = `true`
+	* *Transitional* = `false`
+		* IDNA 2003
+		* Deviations are Valid
+	* *CheckHyphens* = `true`
+	* *CheckBidi* = `false`
+	* *CheckJoiners* = `false` &rarr; No ContextJ
+	* No ContextO
+	* Unversioned NFC
+	* No [Combining Mark](https://unicode.org/reports/tr46/#Validity_Criteria) Check
+* Certain emoji exist in [multiple forms](https://www.unicode.org/reports/tr51/#Emoji_Variation_Sequences): 
+	* Unstyled (`XXX`, eg. `💩`)
+	* Text-styled (`XXX FE0E`, eg. `💩︎`)
+	* Emoji-styled  (`XXX FE0F`, eg. `💩️`). 
+* IDNA 2003 disallowed `FE0E` and `FE0F` so there is no way to differentiate emoji styling in already-registered names.
+* [Legacy emoji](#emoji-that-drop-fe0f) are accepted as Emoji-styled or Unstyled for backwards compatibility.
+* [New emoji](#emoji-that-require-fe0f) are only accepted as Emoji-styled.  This avoids confusion between names only differing by styling and makes the usage of emoji explicit.
+* Because neither emoji forms accept text-styled emoji and [ZWJ Sequences](https://www.unicode.org/reports/tr51/#def_emoji_zwj_sequence) require emoji-styled emoji, any `FE0E` effectively terminates UTS-51 processing.  For reference, both `FE0E` and `FE0F` are ignored by `UTS-46`.
+* Some emoji were mapped by IDNA 2003 to non-emoji characters and must be [demoted](#demoted-emoji-characters) for backwards compatibility.
+* Characters `[0-9#*]` are [demoted](#demoted-emoji-characters) because they are visually-indistinguishable from their emoji counterpart with text-styling.  For example:
+	* `(1)` Digit One: `0031`
+	* `(1︎)` Emoji Digit One w/Text-styling: `0031 FE0E`
+	* `(1️)` Emoji Digit One w/Emoji-styling: `0031 FE0F`
+	* `(1️⃣)` Keycap Digit One: `0031 FE0F 20E3`
+* Since the emoji forms of `[0-9#*]` are disabled, their corresponding keycap forms can be safely and unabigiously enabled.
 
 ## Algorithm
 
@@ -105,9 +122,11 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 * [UTS-46: IDNA Compatibility Processing](https://unicode.org/reports/tr46/)
 * [UTS-51: Emoji](https://www.unicode.org/reports/tr51)
 * [UTS-39: Security Mechanisms](https://www.unicode.org/reports/tr39/)
-* [RFC-5892: IDNA](https://datatracker.ietf.org/doc/html/rfc5892)
-* [RFC-3492: Punycode](https://datatracker.ietf.org/doc/html/rfc3492)
+* [RFC-5891: IDNA: Protocol](https://datatracker.ietf.org/doc/html/rfc5891) 
+* [RFC-5892: The Unicode Code Points and IDNA](https://datatracker.ietf.org/doc/html/rfc5892)
+* [RFC-5893: Right-to-Left Scripts for IDNA](https://datatracker.ietf.org/doc/html/rfc5893)
 * [UAX-15: Normalization Forms](https://unicode.org/reports/tr15/)
+* ~~[RFC-3492: Punycode](https://datatracker.ietf.org/doc/html/rfc3492)~~
 
 ## Appendix: Unicode Data Sources
 
@@ -132,103 +151,130 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 ### Expect Pass: Unchanged
 ```Javascript
 [
-	"", // empty
-	".", // null labels
-	".eth", // null labels
-	"..eth", // null labels
-	"vitalik.eth",
-	"brantly.cash", // non-eth tld
-	"öbb.at",
-	"nowzad.loopring.eth", // subdomain
-	"ß.eth", // deviation
-	"ς.eth", // deviation
-	"te_t.eth", // allowed underscore
-	"te$t.eth", // allowed dollar
-	"🚀🚀🚀.eth", 
-	"💩💩💩.eth",
-	"🌈rainbow.eth", // emoji + text
-	"#️⃣*️⃣.eth", // modern keycap
-	"🧟‍♂.eth", // zombie
-	"🧟♂.eth",  // zombie w/gender
-	"😵💫😵💫😵💫.eth", // no zwj
-	"😵‍💫😵‍💫😵‍💫.eth", // zwj seq,
-	"🏴.eth", // solo flag
-	"🏴󠁧󠁢󠁥󠁮󠁧󠁿.eth", // whitelisted seq
-	"🏴󠁧󠁢󠁳󠁣󠁴󠁿.eth", 
-	"🏴󠁧󠁢󠁷󠁬󠁳󠁿.eth",
-	"a्‌.eth", // ContextJ: ZWNJ Rule 1
-	"ࡃ࣭‌߲ܓ.eth", // ContextJ: ZWNJ Rule 2
-	"a्‍.eth", // ContextJ: ZWJ
-	"l·l.eth", // ContextO: Middle Dot
-	"ab͵ͷ.eth", // ContextO: Greek Keraia
-	"ב֑׳.eth", // ContextO: Hebrew Geresh
-	"ぁァ・.eth", // ContextO: Katakana
-	"א٠١٢.eth", // ContextO: [Arabic]-Indic
-	"א۰۱۲.eth", // ContextO: Arabic-[Indic]
-	"פעילותהבינאום.eth", // CheckBidi
-	"ކޮންޕީޓަރު.eth", // CheckBidi: Dhivehi
-	"יִואָ.eth", // CheckBidi: Yiddish,
-	"bahrain.مصر", // CheckBidi: separate LTR and RTL
-	"🇸🇦سلمان.eth", // CheckBidi: emoji + RTL 
-	"‼️‼️‼️.eth",
-	"⁉️⁉️⁉️.eth"
+	'', // empty
+	'.', // null labels
+	'.eth', // null labels
+	'..eth', // null labels
+	'vitalik.eth',
+	'brantly.cash', // non-eth tld
+	'öbb.at',
+	'nowzad.loopring.eth', // subdomain
+	'ß.eth', // deviation
+	'ς.eth', // deviation
+	'te_t.eth', // valid underscore
+	'te$t.eth', // allowed dollar
+	'🇦', // single regional indicator
+	'🇺🇸', // double regional indicator: flag sequence
+	'🇸🇺', // double regional indicator: invalid flag sequence
+	'🚀🚀🚀.eth', 
+	'💩💩💩.eth',
+	'🌈rainbow.eth', // emoji + text
+	'#️⃣*️⃣.eth', // modern keycap
+	'🧟‍♂.eth', // zombie
+	'🧟♂.eth',  // zombie w/gender
+	'😵💫😵💫😵💫.eth', // no zwj
+	'😵‍💫😵‍💫😵‍💫.eth', // zwj seq,
+	'🏴.eth', // solo flag
+	'🏴󠁧󠁢󠁥󠁮󠁧󠁿.eth', // whitelisted seq
+	'🏴󠁧󠁢󠁳󠁣󠁴󠁿.eth', 
+	'🏴󠁧󠁢󠁷󠁬󠁳󠁿.eth',
+	'a्‌.eth', // ContextJ: ZWNJ Rule 1
+	'ࡃ࣭‌߲ܓ.eth', // ContextJ: ZWNJ Rule 2
+	'a्‍.eth', // ContextJ: ZWJ
+	'l·l.eth', // ContextO: Middle Dot
+	'ab͵ͷ.eth', // ContextO: Greek Keraia
+	'ב֑׳.eth', // ContextO: Hebrew Geresh
+	'ぁァ・.eth', // ContextO: Katakana
+	'א٠١٢.eth', // ContextO: [Arabic]-Indic
+	'א۰۱۲.eth', // ContextO: Arabic-[Indic]
+	'פעילותהבינאום.eth', // CheckBidi
+	'ކޮންޕީޓަރު.eth', // CheckBidi: Dhivehi
+	'יִואָ.eth', // CheckBidi: Yiddish,
+	'bahrain.مصر', // CheckBidi: separate LTR and RTL
+	'🇸🇦سلمان.eth', // CheckBidi: emoji + RTL 
+	'‼️‼️‼️.eth',
+	'⁉️⁉️⁉️.eth'
 ]
 ```
 ### Expect Pass: Transformed
 ```Javascript
 [
-	{name: "bRAnTlY.eTh", norm: "brantly.eth"}, // mapping
-	{name: "xn--ls8h.eth", norm: "💩.eth"}, // punycode
-	{name: "xn--bb-eka.eth", norm: "öbb.eth"},  // punycode
-	{name: "Ⅷ", norm: "viii"}, // IDNA mapping
-	{name: "︎\u{FE0E}.eth", norm: ".eth"}, // ignored emoji w/text styling
-	{name: "Öbb.at", norm: "öbb.at"}, 
-	{name: "🚴‍♂️.eth", norm: "🚴‍♂.eth"}, // drop FE0F
-	{name: "🏳️‍🌈.eth", norm: "🏳‍🌈.eth"},
-	{name: "👩🏽‍⚕️.eth", norm: "👩🏽‍⚕.eth"},
-	{name: "👁️‍🗨️.eth", norm: "👁‍🗨.eth"}, // drop 2x FE0F
-	{name: "6️⃣9️⃣.eth", norm: "6⃣9⃣.eth"}, // legacy keycaps,
-	{name: "ⓂⓂⓂ.eth", norm: "mmm.eth"}, // mapping
-	{name: "Ⓜ️Ⓜ️Ⓜ️.eth", norm: "mmm.eth"}, // mapping
+	{name: 'bRAnTlY.eTh', norm: 'brantly.eth'}, // mapping
+	{name: 'xn--ls8h.eth', norm: '💩.eth'}, // punycode
+	{name: 'xn--bb-eka.eth', norm: 'öbb.eth'},  // punycode
+	{name: 'Ⅷ', norm: 'viii'}, // IDNA mapping
+	{name: '︎\u{FE0E}.eth', norm: '.eth'}, // ignored emoji w/text styling
+	{name: 'Öbb.at', norm: 'öbb.at'}, 
+	{name: '🚴‍♂️.eth', norm: '🚴‍♂.eth'}, // drop FE0F
+	{name: '🏳️‍🌈.eth', norm: '🏳‍🌈.eth'},
+	{name: '👩🏽‍⚕️.eth', norm: '👩🏽‍⚕.eth'},
+	{name: '👁️‍🗨️.eth', norm: '👁‍🗨.eth'}, // drop 2x FE0F
+	{name: '6️⃣9️⃣.eth', norm: '6⃣9⃣.eth'}, // legacy keycaps,
+	{name: 'ⓂⓂⓂ.eth', norm: 'mmm.eth'}, // mapping
+	{name: 'Ⓜ️Ⓜ️Ⓜ️.eth', norm: 'mmm.eth'}, // mapping
 ]
 ```
 ### Expect Fail
 ```Javascript
 [
-	"◌̈bb.at",
-	"💩‍💩.eth", // poop joiner
-	"🏴󠁷󠁴󠁦󠁿.eth", // invalid tag sequence
+	'◌̈bb.at',
+	'💩\u{200D}💩.eth', // Invalid ZWJ Sequence
+	'🏴󠁷󠁴󠁦󠁿\u{E0077}\u{E0074}\u{E0066}\u{E007F}.eth', // Invalid Tag Sequence
 
-	"🅜🅜🅜.eth", 
-	"🅼🅼🅼.eth", 
-	"❻❻❻.eth",
-	"➏➏➏.eth",
-	"te[st.eth",
+	'🅜🅜🅜.eth', 
+	'🅼🅼🅼.eth', 
+	'❻❻❻.eth',
+	'➏➏➏.eth',
+	'te[st.eth',
 
-	"te--st.eth", // CheckHyphens: Section 4.1 Rule #2	
-	"test-.eth", // CheckHyphens: Section 4.1 Rule #3A
-	"-test.eth", // CheckHyphens: Section 4.1 Rule #3B
+	'te--st.eth', // CheckHyphens: Section 4.1 Rule #2	
+	'test-.eth', // CheckHyphens: Section 4.1 Rule #3A
+	'-test.eth', // CheckHyphens: Section 4.1 Rule #3B
 
-	"test\u{FF0E}eth", // Disallowed Alternative Stops
-	"test\u{3002}eth", // Disallowed Alternative Stops
-	"test\u{FF61}eth", // Disallowed Alternative Stops
+	'test\u{FF0E}eth', // Disallowed Alternative Stops
+	'test\u{3002}eth', // Disallowed Alternative Stops
+	'test\u{FF61}eth', // Disallowed Alternative Stops
 
-	"a‌b.eth", // ContextJ: ZWNJ Rule 2
-	"🧞‌‌.eth", // ContextJ: ZWNJ
-	"a‍b.eth", // ContextJ: ZWJ
-	"a·b.eth", // ContextO: Middle Dot
-	"ab͵.eth", // ContextO: Greek Keraia
-	"ab׳.eth", // ContextO: Hebrew Geresh
-	"ab・.eth", // ContextO: Katakana
-	"٠۰.eth", // ContextO: Arabic-Indic
+	'a‌b.eth', // ContextJ: ZWNJ Rule 2
+	'🧞‌‌.eth', // ContextJ: ZWNJ
+	'a‍b.eth', // ContextJ: ZWJ
+	'a·b.eth', // ContextO: Middle Dot
+	'ab͵.eth', // ContextO: Greek Keraia
+	'ab׳.eth', // ContextO: Hebrew Geresh
+	'ab・.eth', // ContextO: Katakana
+	'٠۰.eth', // ContextO: Arabic-Indic
 
-	"\u{202E}elgoog\u{202D}.eth", // CheckBidi: direction modifier
-	"\u{202E}hte.elgoog", // CheckBidi: direction modifier
-	"bahrainمصر.eth", // CheckBidi: mixed LTR+RTL
+	'\u{202E}elgoog\u{202D}.eth', // CheckBidi: direction modifier
+	'\u{202E}hte.elgoog', // CheckBidi: direction modifier
+	'bahrainمصر.eth', // CheckBidi: mixed LTR+RTL
 ]
 ```
 
 ## Appendix: Datasets 
+
+### Valid Text Characters
+
+```Javascript
+[
+	'005F', // (_) Underscore
+	'0024',	// ($) Dollar Sign
+	'00A3', // (£) Pound Sign
+	'00A5', // (¥) Yen Sign
+	'20AC', // (€) Euro Sign
+	'20BF', // (₿) Bitcoin Sign
+]
+```
+
+### Disallowed Text Characters
+
+```Javascript
+[
+	'3002', // (。) Ideographic Full Stop
+	'FF0E', // (．) Fullwidth Full Stop
+	'FF61', // (｡) Halfwidth Ideographic Full Stop
+	'0332', // (◌̲) Combining Low Line`
+]
+```
 
 ### Whitelisted Emoji Sequences
 
@@ -255,45 +301,42 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 ### Demoted Emoji Characters
 
 ```Javascript
-// src -> dst => IDNA mapped 
-// src (only) => IDNA valid 
 [
-	{src: '2122', dst: '74 6D'}, // ™ -> tm
-	{src: '2139', dst: '69'}, // ℹ -> i
-	{src: '24C2', dst: '6D'}, // Ⓜ -> m
-	{src: '3297', dst: '795D'}, // ㊗ -> 祝
-	{src: '3299', dst: '79D8'}, // ㊙ -> 秘
-	{src: '1F201', dst: '30B3 30B3'}, // 🈁 -> ココ
-	{src: '1F202', dst: '30B5'}, // 🈂 -> サ
-	{src: '1F21A', dst: '7121'}, // 🈚 -> 無
-	{src: '1F22F', dst: '6307'}, // 🈯 -> 指
-	{src: '1F232', dst: '7981'}, // 🈲 -> 禁
-	{src: '1F233', dst: '7A7A'}, // 🈳 -> 空
-	{src: '1F234', dst: '5408'}, // 🈴 -> 合
-	{src: '1F235', dst: '6E80'}, // 🈵 -> 満
-	{src: '1F236', dst: '6709'}, // 🈶 -> 有
-	{src: '1F237', dst: '6708'}, // 🈷 -> 月
-	{src: '1F238', dst: '7533'}, // 🈸 -> 申
-	{src: '1F239', dst: '5272'}, // 🈹 -> 割
-	{src: '1F23A', dst: '55B6'}, // 🈺 -> 営
-	{src: '1F250', dst: '5F97'}, // 🉐 -> 得
-	{src: '1F251', dst: '53EF'}, // 🉑 -> 可
+	// mapped by IDNA 2003
+	'2122', // ™ -> tm
+	'2139', // ℹ -> i
+	'24C2', // Ⓜ -> m
+	'3297', // ㊗ -> 祝
+	'3299', // ㊙ -> 秘
+	'1F201', // 🈁 -> ココ
+	'1F202', // 🈂 -> サ
+	'1F21A', // 🈚 -> 無
+	'1F22F', // 🈯 -> 指
+	'1F232', // 🈲 -> 禁
+	'1F233', // 🈳 -> 空
+	'1F234', // 🈴 -> 合
+	'1F235', // 🈵 -> 満
+	'1F236', // 🈶 -> 有
+	'1F237', // 🈷 -> 月
+	'1F238', // 🈸 -> 申
+	'1F239', // 🈹 -> 割
+	'1F23A', // 🈺 -> 営
+	'1F250', // 🉐 -> 得
+	'1F251', // 🉑 -> 可
 	
-	{src: '203C'}, // ‼
-	{src: '2049'}, // ⁉
-
-	{src: '23'}, // #
-	{src: '2A'}, // *
-	{src: '30'}, // 0
-	{src: '31'}, // 1
-	{src: '32'}, // 2
-	{src: '33'}, // 3
-	{src: '34'}, // 4
-	{src: '35'}, // 5
-	{src: '36'}, // 6
-	{src: '37'}, // 7
-	{src: '38'}, // 8
-	{src: '39'}, // 9
+	// solo character ambiguious with text-styled emoji
+	'23', // #
+	'2A', // *
+	'30', // 0
+	'31', // 1
+	'32', // 2
+	'33', // 3
+	'34', // 4
+	'35', // 5
+	'36', // 6
+	'37', // 7
+	'38', // 8
+	'39', // 9
 ]
 ```
 
