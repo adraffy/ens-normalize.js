@@ -154,9 +154,10 @@ async function main() {
 				div.append(dom_from_tokens(bucket[0], true));
 
 				let set = new Set(bucket[0].flatMap(t => t.e ?? t.v ?? t.m ?? []).map(script_from_cp));
+				set.delete(script_name);
 				set.delete('Common');
 				set.delete('Unknown');
-				if (set.size > 1) {
+				if (set.size > 0) {
 					div.classList.add('multi');
 				}
 
