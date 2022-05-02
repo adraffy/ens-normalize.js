@@ -11,18 +11,13 @@
 * Ignores [Punycode](https://datatracker.ietf.org/doc/html/rfc3492)
 
 ---
-* [Demo: Resolver](https://adraffy.github.io/ens-normalize.js/test/resolver.html) 
-* [Demo: Display Name](https://adraffy.github.io/ens-normalize.js/test/display.html)
-* Generated Report vs `eth-ens-namehash` [Latest version](https://adraffy.github.io/ens-normalize.js/test/output/ens-adraffy-1.3.14.html)
+* [Demo: Resolver](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
+* Generated Report vs `eth-ens-namehash` [Latest version](https://adraffy.github.io/ens-normalize.js/test/output/ens-2.0.15-adraffy-1.3.16.html)
 
 ```Javascript
 import {ens_normalize} from '@adraffy/ens-normalize';
 // browser: 
 // 'https://unpkg.com/@adraffy/ens-normalize@latest/dist/ens-normalize.min.js'
-// alternatives:
-// - ens-normalize-xbidi.min.js (no CheckBidi)
-// - ens-normalize-xnfc.min.js (use default String.normalize)
-// see: /dist/ for more
 
 // Primary API: string -> string
 let normalized = ens_normalize('🚴‍♂️.eth'); // throws 
@@ -31,9 +26,6 @@ let normalized = ens_normalize('🚴‍♂️.eth'); // throws
 // errors:
 // - not a string
 // - contains disallowed character
-// - punycode error
-// - label has double-hyphen
-// - label starts/ends with hyphen
 // - label starts with combining mark
 // - character out of context
 // - bidi error

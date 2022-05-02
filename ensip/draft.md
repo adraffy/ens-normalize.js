@@ -113,13 +113,10 @@ The most common implementation (prior to this ENSIP) was only UTS-46 processing 
 
 ## Effects on Registered Names
 
+* `TODO`
 * Moving from IDNA 2003 to IDNA 2008 will make some names invalid.
 * All names that include ZWJ/ZWNJ outside of ContextJ or ZWJ Sequences are invalid.
 * Names with bidirectional characters have additional constraints.
-
-The following names will be an error under this ENSIP: 
-
-* Any name that contains an ZWJ/ZWNJ outside of valid ZWJ Sequences or ContextJ 
 
 ## Appendix: Reference Specifications
 
