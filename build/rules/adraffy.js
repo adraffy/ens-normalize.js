@@ -1,6 +1,7 @@
 import STYLE_DROP from './style-drop.js';
 import DEMOJI from './demoji.js';
 import EMOJI_ZWJ from './emoji-zwj.js';
+import EMOJI_ZWJ_CUSTOM from './emoji-zwj-custom.js';
 import EMOJI_SEQ from './emoji-seq.js';
 
 export default  [
@@ -20,17 +21,11 @@ export default  [
 	// permit solo regional emojis
 	{ty: 'style-drop', src: '1F1E6..1F1FF'}, 
 
-	// add whitelist zwjs 
+	// add zwjs 
 	...EMOJI_ZWJ,
-
-	// add reasonable non-RGI zwjs
-	{ty: 'emoji-zwj', src: '1F93C 1F3FB 200D 2642'}, // women wrestling 
-	{ty: 'emoji-zwj', src: '1F93C 1F3FC 200D 2642'}, // w/ skin colors
-	{ty: 'emoji-zwj', src: '1F93C 1F3FD 200D 2642'},
-	{ty: 'emoji-zwj', src: '1F93C 1F3FE 200D 2642'},
-	{ty: 'emoji-zwj', src: '1F93C 1F3FF 200D 2642'},
-
-	// add whitelist seqs
+	// add custom non-RGI zwjs
+	...EMOJI_ZWJ_CUSTOM,
+	// add seqs
 	...EMOJI_SEQ,
 
 	// prevent arbitrary tag-seqs
@@ -47,5 +42,17 @@ export default  [
 	// allow underscore
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/26
 	{ty: 'valid', src: '5F'}, // _
+
+	// disable combining low line
+	// https://discuss.ens.domains/t/ens-name-normalization/8652/62
+	{ty: 'disallow', src: '332'},
+
+	// allow capital currencies
+	{ty: 'valid', src: '24'}, // $
+	//{ty: 'valid', src: 'A2'}, // ¢
+	{ty: 'valid', src: 'A3'}, // £
+	{ty: 'valid', src: 'A5'}, // ¥
+	{ty: 'valid', src: '20AC'}, // €
+	{ty: 'valid', src: '20BF'}, // ₿
 
 ];

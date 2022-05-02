@@ -279,9 +279,8 @@ footer {
 <button>Öbb.at</button>
 <button>◌̈bb.at</button>
 
-<b>Puny:</b>
+<b style="text-decoration: line-through">Punycode:</b>
 <button>xn--ls8h</button>
-<button>xn--bb-eka</button>
 
 <b>Subdomain:</b>
 <button data-name="nowzad.loopring.eth">loopring</button>
@@ -304,7 +303,12 @@ footer {
 
 <b>Disallowed:</b>
 <button>te[st</button>
-<button>tes_t</button>
+<button data-name="a{0332}" data-replace="1"></button>
+
+<b>Stops:</b>
+<button>。</button>
+<button>．</button>
+<button>｡</button>
 
 <a href="https://unicode.org/reports/tr46/#Validity_Criteria"><b>CheckHyphen:</b></a>
 <button>-test</button>
@@ -328,8 +332,15 @@ footer {
 <button>😵💫😵💫😵💫</button>
 <button>👩🏽‍⚕️</button>
 <button>👨‍👩‍👦</button>
+<button>🤼🏻‍♂️</button>
+<button>🤼🏻‍♀️</button>
 
-<button data-name="💩{200D}💩">💩+💩</button>
+<button data-name="💩{200D}💩">❌💩+💩</button>
+
+<b>Regional:</b>
+<button>🇦</button>
+<button>🇦🇦</button>
+<button>🇺🇸</button>
 
 <a href="./report-emoji.html#RGI_Emoji_Tag_Sequence"><b>Tag:</b></a>
 <button data-name="{1F3F4}{E0067}{E0062}{E0065}{E006E}{E0067}{E007F}" data-replace="1"></button>
@@ -353,11 +364,12 @@ ZWNJ:
 <button data-name="a{94D}{200C}">✅ #1</button>
 <button data-name="{843}{8ED}{200C}{7F2}{713}">✅ #2</button>
 <button data-name="a{200C}b">❌</button>
-<button data-name="🧞{200C}{200C}">"🧞.eth"</button>
+<button data-name="🧞{200C}">"🧞.eth"</button>
 • 
 ZWJ:
 <button data-name="a{94D}{200D}">✅</button>
 <button data-name="a{200D}b">❌</button>
+<button data-name="🧞{200D}">"🧞.eth"</button>
 <a href="https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.3"><b>ContextO:</b></a>
 Middle Dot: 
 <button data-name="{6C}{B7}{6C}">✅</button>
@@ -380,25 +392,26 @@ Arabic-Indic:
 <button data-name="{5D0}{6F0}{6F1}{6F2}">✅</button>
 <button data-name="{660}{6F0}.eth">❌</button>
 <a href="https://www.rfc-editor.org/rfc/rfc5893.html#section-2"><b>CheckBidi:</b></a>
-<button data-name="{202e}elgoog{202d}.eth" data-replace="1"></button>
-<button data-name="{202e}hte.elgoog" data-replace="1"></button>
 <button>פעילותהבינאום</button>
 <button data-name="{0786}{07AE}{0782}{07B0}{0795}{07A9}{0793}{07A6}{0783}{07AA}">Dhivehi</button>
 <button data-name="{05D9}{05B4}{05D5}{05D0}{05B8}">Yiddish</button>
 <button data-name="bahrainمصر">❌ Mixed LTR+RTL in Label</button>
+<button data-name="{202e}elgoog{202d}.eth" data-replace="1"></button>
+<button data-name="{202e}hte.elgoog" data-replace="1"></button>
 <button data-name="bahrain.مصر">Separate LTR and RTL Labels</button>
 <button data-name="{1F1F8}{1F1E6}{633}{644}{645}{627}{646}">Emoji + RTL</button>
 <b>Revived:</b>
-<button>‼️‼️‼️</button>
-<button>⁉️⁉️⁉️</button>
+<button>‼️</button>
+<button>⁉️</button>
 <button>*️⃣</button>
 <button>#️⃣</button>
+<b>Currency:</b>
+<button>$£¥€₿</button>
 </div>
 <div id="options">
 <label><input type="checkbox" id="auto_resolve_check" checked>Resolve on Input</label>
 <label><input type="checkbox" id="show_hashes_check" checked>Show Hashes</label>
 <span><input type="checkbox" id="skip_norm_check"><label class="nonstd" for="skip_norm_check">Skip Normalization</label></span>
-<span><input type="checkbox" id="ignore_bidi_check"><label class="nonstd" for="ignore_bidi_check">Disable CheckBidi</label></span>
 </div>
 <div id="input">
 <label for="input_field">Name or Address:</label>
@@ -426,12 +439,11 @@ import {
 	is_checksum_address, namehash, labelhash, ENS
 } from '../../eth-tools.js/dist/eth-tools.min.js';
 import {escape_name_for_html, is_printable_ascii, explode_cp, hex_cp} from '../build/utils.js';
-import {ens_normalize as ens_normalize_0, ens_tokenize, VERSION, BUILT, IDNA, UNICODE} from '../dist/ens-normalize-debug.min.js';
-import {ens_normalize as ens_normalize_xbidi} from '../dist/ens-normalize-xbidi.min.js'; // load without bidi
+import {ens_normalize, ens_tokenize, VERSION, BUILT, NAME, UNICODE} from '../dist/ens-normalize-debug.min.js';
 import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
 use_default_style();
 
-document.querySelector('#version').innerHTML += ` (v${VERSION}+${IDNA}+U${UNICODE})<br><code>${BUILT}</code>`;
+document.querySelector('#version').innerHTML += ` (v${VERSION}+${NAME}+U${UNICODE})<br><code>${BUILT}</code>`;
 
 const providers = new Providers()
 	.add_static(1, new WebSocketProvider({url: 'wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe', source: 'Infura'}));
@@ -443,7 +455,6 @@ const resolve_btn = document.querySelector('#resolve_btn');
 const primary_arrows = document.querySelector('#arrows');
 const auto_resolve_check = document.querySelector('#auto_resolve_check');
 const skip_norm_check = document.querySelector('#skip_norm_check');
-const ignore_bidi_check = document.querySelector('#ignore_bidi_check');
 const show_hashes_check = document.querySelector('#show_hashes_check');
 const output_div = document.querySelector('#output');
 const readme_rows = [...output_div.childNodes]; // save initial ux
@@ -494,7 +505,7 @@ document.querySelector('#link_btn').addEventListener('click', () => {
 	navigator.clipboard.writeText(window.location.href.split('#')[0] + '#' + encodeURIComponent(input_field.value));
 });
 
-for (let el of [auto_resolve_check, ignore_bidi_check, skip_norm_check]) {
+for (let el of [auto_resolve_check, skip_norm_check]) {
 	el.addEventListener('input', () => {
 		if (auto_resolve_check.checked && input_field.value) {
 			if (parse()) schedule_resolve();
@@ -515,14 +526,6 @@ window.addEventListener('hashchange', () => {
 	resolve();
 });
 
-
-function ens_normalize(name) {
-	if (ignore_bidi_check.checked) {
-		return ens_normalize_xbidi(name);
-	} else {
-		return ens_normalize_0(name);
-	}
-}
 
 function decode_location_hash() {
 	return decodeURIComponent(window.location.hash.slice(1));

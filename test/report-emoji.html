@@ -136,21 +136,17 @@ Sequences have a known appearance:
 <ul id="toc"></ul>
 <script type="module">
 import {escape_name_for_html, parse_cp_range, parse_cp_sequence, hex_cp, map_values, compare_arrays} from '../build/utils.js';
-import {ens_normalize, ens_tokenize, BUILT, VERSION, UNICODE} from '../dist/ens-normalize-debug.min.js';
-import {ens_normalize as normCompat, ens_tokenize as tokenizeCompat} from '../dist/ens-normalize-compat.min.js';
+import {ens_normalize, ens_tokenize, NAME, BUILT, VERSION, UNICODE} from '../dist/ens-normalize-debug.min.js';
 import {ens_normalize as norm2003, ens_tokenize as tokenize2003} from '../dist/ens-normalize-2003.js';
 import {ens_normalize as norm2008, ens_tokenize as tokenize2008} from '../dist/ens-normalize-2008.min.js';
 import {ens_normalize as normENS0, ens_tokenize as tokenizeENS0} from '../dist/ens-normalize-ENS0.min.js';
-import {ens_normalize as normUTS51, ens_tokenize as tokenizeUTS51} from '../dist/ens-normalize-uts51.min.js';
+import {ens_normalize as normUTS51, ens_tokenize as tokenizeUTS51} from '../dist/ens-normalize-UTS51.min.js';
 import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
 
 use_default_style();
 
-const PRIMARY = 'adraffy';
-
 const VERSIONS = [
-	{idna: PRIMARY},
-	{idna: 'Compat', normalize: normCompat, tokenize: tokenizeCompat},
+	{idna: NAME},
 	{idna: 'UTS51', normalize: normUTS51, tokenize: tokenizeUTS51},
 	{idna: 'ENS0', normalize: normENS0, tokenize: tokenizeENS0},
 	{idna: '2003', normalize: norm2003, tokenize: tokenize2003},
@@ -292,7 +288,7 @@ async function add_sequences(name, seqs, show_errors = false) {
 		tr.innerHTML = `<td class="desc">${desc}</td><td class="src">${cps.map(hex_cp).join(' ')}</td><td class="form">${emoji}</td>`;
 
 		tr.append(...VERSIONS.map(({idna, tokenize, normalize}) => {
-			if (idna == PRIMARY) return td0;
+			if (idna == NAME) return td0;
 			let td = document.createElement('td');
 			try {
 				let norm = normalize(emoji);
@@ -383,7 +379,7 @@ async function add_characters(name, chars, show_errors = false, width = 3) {
 		td0.classList.add(type);
 
 		tr.append(...VERSIONS.map(({idna, tokenize, normalize}) => {
-			if (idna == PRIMARY) return td0;	
+			if (idna == NAME) return td0;	
 			let td = document.createElement('td');
 			try {
 				let norm = normalize(styled);

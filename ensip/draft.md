@@ -11,7 +11,7 @@ This ENSIP standardizes, versions, and resolves implementation details of the Et
 
 The goal of this ENSIP to standardize the exact normalization algorithm, pin an explicit Unicode version, and elucidate many implementation details and edge cases.  This ENSIP introduces an explicit set of modifications to the existing standard to reduce visually-confusing names and improve compatibility with future Unicode updates.  Additionally, a validation set of names is provided for implementation testing.
 
-As of this ENSIP, over 580K names have been registered on chain.  Great effort has been made to preserve as many names as possible, however some names will become unreachable if the normalization outlined in this ENSIP is applied.
+As of this ENSIP, over 780K names have been registered on mainnet.  Great effort has been made to preserve as many names as possible while also improving future Unicode compatibility.  Unfortunately, some registered names will become unreachable if the normalization outlined in this ENSIP is applied.
 
 ## Motivation
 
@@ -26,31 +26,26 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 
 ## Specification
 
-* Unicode version is `14.0.0`
-
-* Normalization is the process of converting an arbitrary string into a canonical form.  It either produces a string or throws an error.
-
+* Normalization is the process of converting an ENS name into a canonical form.  It either produces a result or throws an error.
 * It is idempotent:  applying normalization mutliple times produces the same result.
-
+* All whitespace characters (without context) are disallowed.  For user convenience, leading and trailing whitespace can be trimmed before application.
 * Input is processed left-to-right, first looking for emoji sequences according to [UTS-51](https://unicode.org/reports/tr51/), and then text sequences according to [UTS-46](https://unicode.org/reports/tr46/).
-
+* Unicode version = `14.0.0`
 * UTS-51 parsing has the following modifications:
 	* [Whitelisted sequences](#whitelisted-emoji-sequences) are matched first
 	* [A small set of emoji](#demoted-emoji-characters) are demoted and not processed
 	* [Tag Sequences](https://www.unicode.org/reports/tr51/#def_emoji_tag_sequence) are not processed	
-		 * Tag Sequences can embed arbitrary data
-	* [Flag Sequences](https://www.unicode.org/reports/tr51/#def_emoji_flag_sequence) are not processed
-		* Instead, singleton *Regional Indicators* are permitted
+		* Tag Sequences can embed hidden data
+	* [Flag Sequences](https://www.unicode.org/reports/tr51/#def_emoji_flag_sequence) are not processed 
 	* [Keycap Sequences](https://www.unicode.org/reports/tr51/#def_emoji_keycap_sequence) have a special case to account for legacy normalization:
 		* `[#*] FE0F 20E3` is parsed verbatim
 		* `[0-9] FE0F? 20E3` (where `FE0F` is optional) is parsed as `[0-9] 20E3`
 	* [Presentation Sequences](https://www.unicode.org/reports/tr51/#def_emoji_presentation_sequence) have a special case to account for legacy normalization:
-		* `XXX FE0F` is parsed verbatim<br>where `XXX` is the [set of all new and future emoji](#emoji-that-require-fe0f)
-		* `XXX FE0F?` (where `FE0F` is optional) is parsed as `XXX`<br>where `XXX` is the [set of all emoji that were valid in IDNA 2003](#emoji-that-drop-fe0f)
+		* `X FE0F` is parsed verbatim, where `X` is a [new emoji](#emoji-that-require-fe0f).
+		* `X FE0F?` (where `FE0F` is optional) is parsed as `X`, where `X` is a [legacy emoji](#emoji-that-drop-fe0f).
 	* [ZWJ Sequences](https://www.unicode.org/reports/tr51/#def_emoji_zwj_sequence) are either:
 		* [RGI Sequences](https://unicode.org/Public/emoji/14.0/emoji-zwj-sequences.txt)
 		* [Whitelisted Non-RGI Sequences](#whitelisted-non-rgi-emoji-sequences)
-	
 * UTS-46 parsing has the following modifications:
 	* *UseSTD3ASCIIRules* = `true`
 	* *Transitional* = `false`
@@ -58,13 +53,13 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 		* [Deviations](https://unicode.org/reports/tr46/#IDNA2008-Section) are Valid
 		* [NV8 and XV8](https://unicode.org/reports/tr46/#Table_Data_File_Fields) are Disallowed
 	* *CheckHyphens* = `false`
-		* Punycode is not processed
 	* *CheckBidi* = `true`
 		* Must operate on the "textual form" of each label, where emoji before the first non-emoji character are ignored, emoji afterwards are replaced with `FE0F`.  
 		* This permits unrestricted emoji placement in right-to-left labels.
 	* *CheckJoiners* = `true` &rarr; ContextJ:
 		* [Zero Width Non-Joiner](https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.1)
 		* [Zero Width Joiner](https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.2)
+	* Punycode is [not processed](https://unicode.org/reports/tr46/#ProcessingStepConvertValidate)
 	* ContextO:
 		* [Middle Dot](https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.3)
 		* [Greek Keraia](https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.4)
@@ -75,53 +70,62 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 		* [Extended Arabic-Indic Digits](https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.9)
 	* The following [characters are valid](#idna-valid-characters)
 	* The following [characters are disallowed](#idna-disallowed-characters)
+* The only valid stop character is `002E (.) FULL STOP`
+	* This permits efficient label identification in unstructured text without normalization processing.
+* [NFC (Unicode Normalization Form C)](https://unicode.org/reports/tr15/) should use the same Unicode version.
+	* Language-level NFC functions, like [`String.normalize()`](https://tc39.es/ecma262/multipage/text-processing.html#sec-string.prototype.normalize), may produce inconsistent results on different platforms.
 
-* The only valid stop character is ASCII period: `002E (.) FULL STOP`
-	* This permits unnormalized label extraction.
+### (Approximate) Legacy Specification 
 
-* [NFC (Unicode Normalization Form C)](https://unicode.org/reports/tr15/) should use the same Unicode version.  Language-level NFC functions, like [`String.normalize()`](https://tc39.es/ecma262/multipage/text-processing.html#sec-string.prototype.normalize), may produce inconsistent results on different platforms.
+The most common implementation (prior to this ENSIP) was only UTS-46 processing with the following modifications:
 
-* `// TODO: Single-script Confusables`
+* *UseSTD3ASCIIRules* = `true`
+* *Transitional* = `false`
+	* IDNA 2003
+	* Deviations are Valid
+* *CheckHyphens* = `false`
+* *CheckBidi* = `false`
+* *CheckJoiners* = `false` &rarr; No ContextJ
+* No ContextO
+* Unversioned NFC
+* No [Combining Mark](https://unicode.org/reports/tr46/#Validity_Criteria) Check
 
-## Legacy Implementation Notes
+## Legacy Implementation Specifics
 
-* The most common implementation prior to this ENSIP was just UTS-46 processing with the following:
-	* *UseSTD3ASCIIRules* = `true`
-	* *Transitional* = `false`
-		* IDNA 2003
-		* Deviations are Valid
-	* *CheckHyphens* = `true`
-	* *CheckBidi* = `false`
-	* *CheckJoiners* = `false` &rarr; No ContextJ
-	* No ContextO
-	* Unversioned NFC
-	* No [Combining Mark](https://unicode.org/reports/tr46/#Validity_Criteria) Check
-* Certain emoji exist in [multiple forms](https://www.unicode.org/reports/tr51/#Emoji_Variation_Sequences): 
+* Certain emoji exist in [multiple styles](https://www.unicode.org/reports/tr51/#Emoji_Variation_Sequences): 
 	* Unstyled (`XXX`, eg. `💩`)
 	* Text-styled (`XXX FE0E`, eg. `💩︎`)
-	* Emoji-styled  (`XXX FE0F`, eg. `💩️`). 
-* IDNA 2003 disallowed `FE0E` and `FE0F` so there is no way to differentiate emoji styling in already-registered names.
+	* Emoji-styled  (`XXX FE0F`, eg. `💩️`)
+* Because `FE0E` and `FE0F` were ignored, styling cannot be distinguished.
 * [Legacy emoji](#emoji-that-drop-fe0f) are accepted as Emoji-styled or Unstyled for backwards compatibility.
-* [New emoji](#emoji-that-require-fe0f) are only accepted as Emoji-styled.  This avoids confusion between names only differing by styling and makes the usage of emoji explicit.
-* Because neither emoji forms accept text-styled emoji and [ZWJ Sequences](https://www.unicode.org/reports/tr51/#def_emoji_zwj_sequence) require emoji-styled emoji, any `FE0E` effectively terminates UTS-51 processing.  For reference, both `FE0E` and `FE0F` are ignored by `UTS-46`.
-* Some emoji were mapped by IDNA 2003 to non-emoji characters and must be [demoted](#demoted-emoji-characters) for backwards compatibility.
+	* Text-styled emoji should be interpeted as Unstyled followed by `FE0E`.
+* [New emoji](#emoji-that-require-fe0f) are only accepted as Emoji-styled.  
+	* This makes future use of emoji explicit.
+* [ZWJ Sequences](https://www.unicode.org/reports/tr51/#def_emoji_zwj_element) terminate when a Text-styled emoji is encountered.
+	* `emoji_zwj_element` is not a `text_presentation_sequence`
+* Some emoji were mapped by IDNA to non-emoji characters and must be [demoted](#demoted-emoji-characters) for backwards compatibility.
 * Characters `[0-9#*]` are [demoted](#demoted-emoji-characters) because they are visually-indistinguishable from their emoji counterpart with text-styling.  For example:
 	* `(1)` Digit One: `0031`
-	* `(1︎)` Emoji Digit One w/Text-styling: `0031 FE0E`
-	* `(1️)` Emoji Digit One w/Emoji-styling: `0031 FE0F`
+	* `(1︎)` Text-styled Emoji Digit One: `0031 FE0E`
+	* `(1️)` Emoji-styled Emoji Digit One: `0031 FE0F`
 	* `(1️⃣)` Keycap Digit One: `0031 FE0F 20E3`
-* Since the emoji forms of `[0-9#*]` are disabled, their corresponding keycap forms can be safely and unabigiously enabled.
+* Since the emoji forms of `[0-9#*]` are disabled, their corresponding keycap forms are allowed.
 
-## Algorithm
+## Effects on Registered Names
 
-`// TODO: Incorporate https://discuss.ens.domains/t/ens-name-normalization/8652/90`
+* Moving from IDNA 2003 to IDNA 2008 will make some names invalid.
+* All names that include ZWJ/ZWNJ outside of ContextJ or ZWJ Sequences are invalid.
+* Names with bidirectional characters have additional constraints.
+
+The following names will be an error under this ENSIP: 
+
+* Any name that contains an ZWJ/ZWNJ outside of valid ZWJ Sequences or ContextJ 
 
 ## Appendix: Reference Specifications
 
 * [ENSIP-1: ENS](https://docs.ens.domains/ens-improvement-proposals/ensip-1-ens)
 * [UTS-46: IDNA Compatibility Processing](https://unicode.org/reports/tr46/)
 * [UTS-51: Emoji](https://www.unicode.org/reports/tr51)
-* [UTS-39: Security Mechanisms](https://www.unicode.org/reports/tr39/)
 * [RFC-5891: IDNA: Protocol](https://datatracker.ietf.org/doc/html/rfc5891) 
 * [RFC-5892: The Unicode Code Points and IDNA](https://datatracker.ietf.org/doc/html/rfc5892)
 * [RFC-5893: Right-to-Left Scripts for IDNA](https://datatracker.ietf.org/doc/html/rfc5893)
@@ -144,7 +148,6 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 * [emoji-zwj-sequences.txt](https://unicode.org/Public/emoji/14.0/emoji-zwj-sequences.txt)
 * [emoji-variation-sequences.txt](https://unicode.org/Public/14.0.0/ucd/emoji/emoji-variation-sequences.txt)
 * [emoji-data.txt](https://unicode.org/Public/14.0.0/ucd/emoji/emoji-data.txt)
-* [confusables.txt](https://unicode.org/Public/security/14.0.0/confusables.txt)
 
 ## Appendix: Test Cases
 
@@ -161,57 +164,73 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 	'nowzad.loopring.eth', // subdomain
 	'ß.eth', // deviation
 	'ς.eth', // deviation
-	'te_t.eth', // valid underscore
-	'te$t.eth', // allowed dollar
+	't_e_s_t.eth', // valid underscore
+	'$£¥€₿.eth', // valid currency symbols
 	'🇦', // single regional indicator
+	'🇦🇦', // double regional indicator: invalid flag sequence
 	'🇺🇸', // double regional indicator: flag sequence
-	'🇸🇺', // double regional indicator: invalid flag sequence
+
+	// CheckHyphens is false
+	'te--st.eth', // Section 4.1 Rule #2	
+	'test-.eth',  // Section 4.1 Rule #3A
+	'-test.eth',  // Section 4.1 Rule #3B
+
+	// Punycode is ignored
+	'xn--ls8h.eth',  // valid
+	'xn--💩', // invalid
+
 	'🚀🚀🚀.eth', 
 	'💩💩💩.eth',
 	'🌈rainbow.eth', // emoji + text
-	'#️⃣*️⃣.eth', // modern keycap
 	'🧟‍♂.eth', // zombie
 	'🧟♂.eth',  // zombie w/gender
 	'😵💫😵💫😵💫.eth', // no zwj
-	'😵‍💫😵‍💫😵‍💫.eth', // zwj seq,
+	'😵\u{200D}💫😵\u{200D}💫😵\u{200D}💫.eth', // zwj seq,
 	'🏴.eth', // solo flag
 	'🏴󠁧󠁢󠁥󠁮󠁧󠁿.eth', // whitelisted seq
 	'🏴󠁧󠁢󠁳󠁣󠁴󠁿.eth', 
 	'🏴󠁧󠁢󠁷󠁬󠁳󠁿.eth',
-	'a्‌.eth', // ContextJ: ZWNJ Rule 1
-	'ࡃ࣭‌߲ܓ.eth', // ContextJ: ZWNJ Rule 2
-	'a्‍.eth', // ContextJ: ZWJ
-	'l·l.eth', // ContextO: Middle Dot
-	'ab͵ͷ.eth', // ContextO: Greek Keraia
-	'ב֑׳.eth', // ContextO: Hebrew Geresh
-	'ぁァ・.eth', // ContextO: Katakana
-	'א٠١٢.eth', // ContextO: [Arabic]-Indic
-	'א۰۱۲.eth', // ContextO: Arabic-[Indic]
-	'פעילותהבינאום.eth', // CheckBidi
-	'ކޮންޕީޓަރު.eth', // CheckBidi: Dhivehi
-	'יִואָ.eth', // CheckBidi: Yiddish,
-	'bahrain.مصر', // CheckBidi: separate LTR and RTL
-	'🇸🇦سلمان.eth', // CheckBidi: emoji + RTL 
-	'‼️‼️‼️.eth',
-	'⁉️⁉️⁉️.eth'
+
+	// ContextJ
+	'a्‌.eth', // ZWNJ Rule 1
+	'ࡃ࣭‌߲ܓ.eth', // ZWNJ Rule 2
+	'a्‍.eth', // ZWJ
+
+	// ContextO
+	'l·l.eth', // Middle Dot
+	'ab͵ͷ.eth', // Greek Keraia
+	'ב֑׳.eth', // Hebrew Geresh
+	'ぁァ・.eth', // Katakana
+	'א٠١٢.eth', // [Arabic]-Indic
+	'א۰۱۲.eth', // Arabic-[Indic]
+
+	// CheckBidi
+	'פעילותהבינאום.eth', 
+	'ކޮންޕީޓަރު.eth', // Dhivehi
+	'יִואָ.eth', //  Yiddish,
+	'bahrain.مصر', // separate LTR and RTL
+	'🇸🇦سلمان.eth', // emoji + RTL 
+
+	// new emoji
+	'‼️.eth',
+	'⁉️.eth',
+	'#️⃣*️⃣.eth', // modern keycap
 ]
 ```
 ### Expect Pass: Transformed
 ```Javascript
 [
-	{name: 'bRAnTlY.eTh', norm: 'brantly.eth'}, // mapping
-	{name: 'xn--ls8h.eth', norm: '💩.eth'}, // punycode
-	{name: 'xn--bb-eka.eth', norm: 'öbb.eth'},  // punycode
-	{name: 'Ⅷ', norm: 'viii'}, // IDNA mapping
-	{name: '︎\u{FE0E}.eth', norm: '.eth'}, // ignored emoji w/text styling
+	{name: 'bRAnTlY.eTh', norm: 'brantly.eth'}, // casefolding
 	{name: 'Öbb.at', norm: 'öbb.at'}, 
+	{name: 'Ⅷ', norm: 'viii'}, // mapping
+	{name: 'ⓂⓂⓂ.eth', norm: 'mmm.eth'},
+	{name: 'Ⓜ️Ⓜ️Ⓜ️.eth', norm: 'mmm.eth'},
+	{name: '︎\u{FE0E}\u{FE0E}.eth', norm: '.eth'}, // ignored emoji-styling
 	{name: '🚴‍♂️.eth', norm: '🚴‍♂.eth'}, // drop FE0F
 	{name: '🏳️‍🌈.eth', norm: '🏳‍🌈.eth'},
 	{name: '👩🏽‍⚕️.eth', norm: '👩🏽‍⚕.eth'},
 	{name: '👁️‍🗨️.eth', norm: '👁‍🗨.eth'}, // drop 2x FE0F
-	{name: '6️⃣9️⃣.eth', norm: '6⃣9⃣.eth'}, // legacy keycaps,
-	{name: 'ⓂⓂⓂ.eth', norm: 'mmm.eth'}, // mapping
-	{name: 'Ⓜ️Ⓜ️Ⓜ️.eth', norm: 'mmm.eth'}, // mapping
+	{name: '6️⃣9️⃣.eth', norm: '6⃣9⃣.eth'}, // legacy keycaps
 ]
 ```
 ### Expect Fail
@@ -225,28 +244,33 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 	'🅼🅼🅼.eth', 
 	'❻❻❻.eth',
 	'➏➏➏.eth',
-	'te[st.eth',
 
-	'te--st.eth', // CheckHyphens: Section 4.1 Rule #2	
-	'test-.eth', // CheckHyphens: Section 4.1 Rule #3A
-	'-test.eth', // CheckHyphens: Section 4.1 Rule #3B
+	'te[st.eth',
+	' test.eth', // Whitespace: leading
+	'test.eth ', // Whitespace: trailing
+	'te st.eth', // Whitespace: internal
 
 	'test\u{FF0E}eth', // Disallowed Alternative Stops
 	'test\u{3002}eth', // Disallowed Alternative Stops
 	'test\u{FF61}eth', // Disallowed Alternative Stops
 
-	'a‌b.eth', // ContextJ: ZWNJ Rule 2
-	'🧞‌‌.eth', // ContextJ: ZWNJ
-	'a‍b.eth', // ContextJ: ZWJ
-	'a·b.eth', // ContextO: Middle Dot
-	'ab͵.eth', // ContextO: Greek Keraia
-	'ab׳.eth', // ContextO: Hebrew Geresh
-	'ab・.eth', // ContextO: Katakana
-	'٠۰.eth', // ContextO: Arabic-Indic
+	// ContextJ
+	'a\u{200C}b.eth', // ZWNJ Rule 2
+	'🧞\u{200D}.eth', // ZWNJ
+	'a\u{200D}b.eth', // ZWJ
+	'🧞\u{200C}.eth', // ZWJ
 
-	'\u{202E}elgoog\u{202D}.eth', // CheckBidi: direction modifier
-	'\u{202E}hte.elgoog', // CheckBidi: direction modifier
-	'bahrainمصر.eth', // CheckBidi: mixed LTR+RTL
+	// ContextO
+	'a·b.eth', // Middle Dot
+	'ab͵.eth', // Greek Keraia
+	'ab׳.eth', // Hebrew Geresh
+	'ab・.eth', // Katakana
+	'٠۰.eth', // Arabic-Indic
+
+	// CheckBidi
+	'\u{202E}elgoog\u{202D}.eth', // direction modifier
+	'\u{202E}hte.elgoog', // direction modifier
+	'bahrainمصر.eth', // mixed LTR+RTL
 ]
 ```
 
@@ -290,6 +314,14 @@ As of this ENSIP, over 580K names have been registered on chain.  Great effort h
 
 ```Javascript
 [
+	// men wrestling
+	'1F93C 1F3FB 200D 2642',
+	'1F93C 1F3FC 200D 2642',
+	'1F93C 1F3FD 200D 2642',
+	'1F93C 1F3FE 200D 2642',
+	'1F93C 1F3FF 200D 2642',
+
+	// women wrestling
 	'1F93C 1F3FB 200D 2640',
 	'1F93C 1F3FC 200D 2640',
 	'1F93C 1F3FD 200D 2640',

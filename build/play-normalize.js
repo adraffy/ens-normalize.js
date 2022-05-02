@@ -1,9 +1,6 @@
 import {inspect} from 'util';
-import {ens_normalize, ens_tokenize} from './lib-normalize.js';
+import {ens_normalize, ens_tokenize} from './lib-normalize-release.js';
 import {escape_name_for_html, parse_cp_sequence} from './utils.js';
-
-
-console.log(escape_name_for_html(String.fromCodePoint(0x61, 0x26, 0x200D, 10)));
 
 console.log(inspect(ens_tokenize('🚴‍♂️.eth'), false, null, true));
 
@@ -36,10 +33,8 @@ try {
 	console.error(err);
 }
 
-
 console.log(ens_tokenize(String.fromCodePoint(...parse_cp_sequence('1F3F4 E0067 E0062 E0065 E006E E0067 E007F'))));
 
 console.log(ens_tokenize(String.fromCodePoint(...parse_cp_sequence('1F3F4 E0077 E007F'))));
-
 
 console.log(ens_normalize(String.fromCodePoint(...parse_cp_sequence('1F468 200D 2764 FE0F 200D 1F468'))));

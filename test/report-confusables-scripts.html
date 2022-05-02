@@ -63,11 +63,11 @@ tbody tr:nth-child(odd) {
 <div id="loading">Computing...</div>	
 <script type="module">
 import {escape_name_for_html, compare_arrays, hex_cp, explode_cp, parse_cp, parse_cp_range, parse_cp_sequence} from '../build/utils.js';
-import {ens_normalize, ens_tokenize, VERSION, IDNA, UNICODE, BUILT} from '../dist/ens-normalize-2008.min.js';
+import {ens_normalize, ens_tokenize, VERSION, NAME, UNICODE, BUILT} from '../dist/ens-normalize-2008.min.js';
 import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
 use_default_style();
 
-document.querySelector('#version').innerHTML += ` (v${VERSION}+${IDNA}+U${UNICODE})<br><code>${BUILT}</code>`;
+document.querySelector('#version').innerHTML += ` (v${VERSION}+${NAME}+U${UNICODE})<br><code>${BUILT}</code>`;
 
 try {
 	await main();

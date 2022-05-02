@@ -1,4 +1,3 @@
-
 import LABELS from './registered-labels.js';
 
 import {writeFileSync, mkdirSync, readFileSync} from 'fs';
@@ -64,10 +63,12 @@ let not_single_script = 0;
 let no_primary_script = [];
 let per_script = {};
 
-if (true) {
-	console.log(LABELS.size);
-	throw 1;
-}
+/*
+const LABELS = [
+	'634 6CC 631 627 632', 
+	'634 64A 631 627 632'
+].map(s => String.fromCodePoint(...parse_cp_sequence(s)));
+*/
 
 for (let label of LABELS) {
 	
@@ -75,6 +76,7 @@ for (let label of LABELS) {
 	try {
 		norm = ens_normalize(label);
 	} catch (ignored) {		
+		console.log(ignored);
 		not_norm++;
 		continue;
 	}
@@ -107,7 +109,7 @@ for (let label of LABELS) {
 				let form = String.fromCodePoint(...cps);
 				let conflict = conflicts[form];
 				if (!conflict) continue;
-				errors.push([i, n, conflict]);
+				errors.push([i, n, conflict, ]);
 			} 
 		}
 	}
@@ -122,7 +124,7 @@ for (let label of LABELS) {
 	}
 }
 
-writeFileSync(join(output_dir, 'single-script-confusable-labels.json'), JSON.stringify({
+writeFileSync(join(output_dir, 'single-script-confusable-labels-test.json'), JSON.stringify({
 	not_norm,
 	not_single_script,
 	no_primary_script,

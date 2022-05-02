@@ -8,7 +8,8 @@
 * Handles [Emoji ZWJ Sequences](https://unicode.org/emoji/charts/emoji-zwj-sequences.html)
 * Passes **100%** [Emoji Sequences](https://adraffy.github.io/ens-normalize.js/test/report-emoji.html) (Using `uts51` Payload)
 * Passes **100%** [NormalizationTests](https://adraffy.github.io/ens-normalize.js/test/report-nf.html)
-* Handles [Punycode](https://datatracker.ietf.org/doc/html/rfc3492), adapted from [mathiasbynens/punycode.js](https://github.com/mathiasbynens/punycode.js)
+* Ignores [Punycode](https://datatracker.ietf.org/doc/html/rfc3492)
+
 ---
 * [Demo: Resolver](https://adraffy.github.io/ens-normalize.js/test/resolver.html) 
 * [Demo: Display Name](https://adraffy.github.io/ens-normalize.js/test/display.html)

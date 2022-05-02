@@ -13,11 +13,40 @@ let {version: package_version} = JSON.parse(readFileSync(join(base_dir, '../pack
 
 let BUILD_TIME = new Date().toJSON();
 
-function generate_lib({idna, nfc = true, bidi = true, context = true, version = false, debug = false}) {
-	let code = readFileSync(join(base_dir, 'lib-normalize.js'), {encoding: 'utf8'});
+function inject_name_versions(code, name, version) { //, debug) {
+	if (version) {
+		// include version variables
+		code = [
+			`export const BUILT = '${BUILD_TIME}';`,
+			`export const UNICODE = '${unicode_version.major}.${unicode_version.minor}.${unicode_version.patch}';`,
+			`export const VERSION = '${package_version}';`,
+			`export const NAME = '${name}';`,
+			code
+		].join('\n');
+	} else {
+		code = `// built: ${BUILD_TIME}\n${code}`;
+	}
+	/*
+	if (debug) {
+		debug = readFileSync(join(base_dir, 'debug-includes.js'), {encoding: 'utf8'});
+		code = `${code}\n// *** DEBUG ***\n${debug}`;
+	}
+	*/
+	return code;
+}
+
+function generate_release_lib({name, file = 'lib-normalize-release.js', versions = false}) {
+	let code = readFileSync(join(base_dir, file), {encoding: 'utf8'});
+	code = inject_name_versions(code, name, versions);
+	writeFileSync(tmp_file, code);
+	return tmp_file;
+}
+
+function generate_dev_lib({rules, nfc = true, bidi = true, context = true}) {
+	let code = readFileSync(join(base_dir, 'lib-normalize-dev.js'), {encoding: 'utf8'});
 	// change version of idna (from default)
-	// this should match lib-normalize.js import statement
-	code = code.replace(/(output\/idna-).*(\.js)/m, (_, a, b) => a+idna+b);
+	// this should match import statement	
+	code = code.replace(/(output\/rules-).*(\.js)/m, (_, a, b) => a + rules + b);
 	if (!nfc) {
 		// swap to String.normalize()
 		code = code.replace('./nf.js', './nf0.js'); 
@@ -30,43 +59,33 @@ function generate_lib({idna, nfc = true, bidi = true, context = true, version = 
 		// remove context blocks
 		code = code.replaceAll(/\/\*CONTEXT\*\/(.*?)\/\*~CONTEXT\*\//smg, '');
 	}
-	if (version) {
-		// include version variables
-		code = [
-			`export const BUILT = '${BUILD_TIME}';`,
-			`export const UNICODE = '${unicode_version.major}.${unicode_version.minor}.${unicode_version.patch}';`,
-			`export const VERSION = '${package_version}';`,
-			`export const IDNA = '${idna}';`,
-			code
-		].join('\n');
-	} else {
-		code = `// built: ${BUILD_TIME}\n${code}`;
-	}
-	if (debug) {
-		debug = readFileSync(join(base_dir, 'debug-includes.js'), {encoding: 'utf8'});
-		code = `${code}\n// *** DEBUG ***\n${debug}`;
-	}
+	code = inject_name_versions(code, rules, true);
 	writeFileSync(tmp_file, code);
 	return tmp_file;
 }
 
-// build libraries
-let idna = 'adraffy';
-await build(generate_lib({idna}), 'ens-normalize');
-await build(generate_lib({idna, bidi: false}), 'ens-normalize-xbidi');
-await build(generate_lib({idna, nfc: false}), 'ens-normalize-xnfc');
-await build(generate_lib({idna, bidi: false, nfc: false}), 'ens-normalize-xnfc-xbidi');
-await build(generate_lib({idna, debug: true, version: true}), 'ens-normalize-debug');
+// build release
+await build(generate_release_lib({name: 'adraffy'}), 'ens-normalize');
+await build(generate_release_lib({name: 'adraffy', versions: true}), 'ens-normalize-debug');
 
-// build compat version
-await build(generate_lib({idna: 'adraffy-compat', version: true}), `ens-normalize-compat`);
+// build dev variants
+/*
+let rules = 'adraffy';
+let prefix = `ens-normalize-`;
+await build(generate_lib({rules}), `${prefix}-adraffy`);
+await build(generate_lib({rules, bidi: false}), `${prefix}-adraffy-xbidi`);
+await build(generate_lib({rules, nfc: false}), `${prefix}-adraffy-xnfc`);
+await build(generate_lib({rules, bidi: false, nfc: false}), `${prefix}-adraffy-xnfc-xbidi`);
+await build(generate_lib({rules: 'adraffy-exp'}), `${prefix}-adraffy-exp`);
+await build(generate_lib({rules: 'adraffy-compat'}), `${prefix}-adraffy-compat`);
+*/
 
 // build alt versions
-await build(generate_lib({idna: '2003', version: true}), `ens-normalize-2003`);
-await build(generate_lib({idna: '2008', version: true}), `ens-normalize-2008`);
-await build(generate_lib({idna: 'ENS0', version: true, context: false}), `ens-normalize-ENS0`);
-await build(generate_lib({idna: 'uts46', version: true}), `ens-normalize-uts46`);
-await build(generate_lib({idna: 'uts51', version: true}), `ens-normalize-uts51`);
+await build(generate_dev_lib({rules: '2003'}), `ens-normalize-2003`);
+await build(generate_dev_lib({rules: '2008'}), `ens-normalize-2008`);
+await build(generate_dev_lib({rules: 'UTS46'}), `ens-normalize-UTS46`);
+await build(generate_dev_lib({rules: 'UTS51'}), `ens-normalize-UTS51`);
+await build(generate_dev_lib({rules: 'ENS0', context: false, bidi: false, nfc: false}), `ens-normalize-ENS0`);
 
 // build sub-libraries
 await build(join(base_dir, 'lib-nf.js'), 'nf');
@@ -97,7 +116,7 @@ async function build(lib_file, dist_name) {
 		plugins: [terser({
 			compress: {
 				toplevel: true,
-				passes: 2,
+				passes: 1, 
 				dead_code: true
 			},
 			mangle: { 

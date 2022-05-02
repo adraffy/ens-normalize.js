@@ -58,7 +58,7 @@ class IDNA {
 			throw new Error(`Invalid rules: valid intersects ignored`);
 		}
 	}
-	check_uts46_assumptions() {
+	check_assumptions() {
 		// check some assumptions:
 		// 1.) emoji styling should be ignored
 		if (!this.ignored.has(0xFE0E)) throw new Error('Assumption wrong: FE0E not ignored');
@@ -66,7 +66,7 @@ class IDNA {
 		// 2.) joiners should be valid if using context rules
 		// note: this doesn't impact emoji zwj processing
 		if (!this.valid.has(0x200C)) throw new Error('Assumption wrong: ZWNJ not valid');
-		if (!this.valid.has(0x200D)) throw new Error('Assumption wrong: ZWJ not valid');
+		if (!this.valid.has(0x200D)) throw new Error('Assumption wrong: ZWJ not valid');		
 	}
 }
 
@@ -155,8 +155,7 @@ class UTS51 {
 		return groups;		
 	}
 	group_zwj() {
-		// we dont include STYLE_REQ because we're dropping FE0F
-		let valid_set = set_union(this.STYLE_DROP, this.STYLE_OPT); 
+		let valid_set = set_union(this.STYLE_DROP, this.STYLE_OPT, this.STYLE_REQ); 
 		let valid_idx = [...valid_set].sort((a, b) => a - b);
 		let groups = {};
 		for (let seq of this.ZWJS) {
@@ -178,6 +177,30 @@ class UTS51 {
 		}
 		return groups;
 	}
+	check_assumptions() {
+		// no SEQ or ZWJ should start with a modifier
+		for (let s of this.SEQS) {
+			if (this.MODIFIER.has(s.codePointAt(0))) {
+				throw new Error(`Assumption wrong: SEQ starts with MODIFIER: ${s}`);
+			}
+		}
+		for (let s of this.ZWJS) {
+			if (this.MODIFIER.has(s.codePointAt(0))) {
+				throw new Error(`Assumption wrong: ZWJ starts with MODIFIER: ${s} `);
+			}
+		}
+		// MOD_BASE/MODIFIER should be DROP
+		for (let cp of this.MOD_BASE) {
+			if (!this.STYLE_DROP.has(cp)) {
+				throw new Error(`Assumption wrong: MOD_BASE is not DROP: ${cp}`);
+			}
+		}
+		for (let cp of this.MODIFIER) {
+			if (!this.STYLE_DROP.has(cp)) {
+				throw new Error(`Assumption wrong: MODIFIER is not DROP: ${cp}`);
+			}
+		}
+	}
 }
 
 // this is used by two separate sub-libraries
@@ -190,7 +213,12 @@ switch (mode) {
 	// build various payloads
 	// ============================================================
 	case 'all': {
-		['context', 'nf', 'bidi', 'adraffy', 'adraffy-exp', 'adraffy-compat', 'uts51', 'others'].forEach(create_payload);
+		[
+			'context', 'nf', 'bidi', 
+			'release', 'adraffy', 
+			'adraffy-exp', 'adraffy-compat', 
+			'UTS51', 'others'
+		].forEach(create_payload);
 		break;
 	}
 	case 'sub': {
@@ -334,12 +362,22 @@ switch (mode) {
 
 async function create_payload(name) {
 	switch (name) {
+		case 'release': {
+			let idna = read_idna_rules({version: 2008});
+			let uts51 = new UTS51(read_emoji_data());
+			apply_rules(idna, uts51, (await import('./rules/adraffy.js')).default);
+			idna.check_assumptions();
+			uts51.check_assumptions();
+			write_release_payload_v1('1', {idna, uts51});
+			break;
+		}
 		case 'adraffy': {
 			let idna = read_idna_rules({version: 2008});
 			let uts51 = new UTS51(read_emoji_data());
 			apply_rules(idna, uts51, (await import('./rules/adraffy.js')).default);
-			idna.check_uts46_assumptions();
-			write_rules_payload('idna-adraffy', {idna, uts51});
+			idna.check_assumptions();
+			uts51.check_assumptions();
+			write_rules_payload('adraffy', {idna, uts51});
 			break;
 		}
 		case 'adraffy-exp': {
@@ -350,8 +388,9 @@ async function create_payload(name) {
 				(await import('./rules/adraffy.js')).default,
 				(await import('./rules/whitelist.js')).default
 			].flat());
-			idna.check_uts46_assumptions();
-			write_rules_payload('idna-adraffy-exp', {idna, uts51});
+			idna.check_assumptions();
+			uts51.check_assumptions();
+			write_rules_payload('adraffy-exp', {idna, uts51});
 			break;
 		}
 		case 'adraffy-compat': {
@@ -359,27 +398,28 @@ async function create_payload(name) {
 			let idna = read_idna_rules({version: 2003, valid_deviations: true});
 			let uts51 = new UTS51(read_emoji_data());
 			apply_rules(idna, uts51, (await import('./rules/adraffy.js')).default);
-			idna.check_uts46_assumptions();
-			write_rules_payload('idna-adraffy-compat', {idna, uts51});
+			idna.check_assumptions();
+			uts51.check_assumptions();
+			write_rules_payload('adraffy-compat', {idna, uts51});
 			break;
 		}
-		case 'uts51': {
+		case 'UTS51': {
 			let idna = new IDNA();
 			idna.ignored.add(0xFE0E); // only non-emoji character allowed
 			let uts51 = new UTS51(read_emoji_data());
 			uts51.ZWJS = undefined; // disable whitelist
 			apply_rules(idna, uts51, []);
-			write_rules_payload('idna-uts51', {idna, stops: new Set(), uts51, combining_marks: new Set()});
+			write_rules_payload('UTS51', {idna, stops: new Set(), uts51, combining_marks: new Set()});
 			break;
 		}		
 		case 'others': {
-			// this is current ENS 
-			write_rules_payload('idna-ENS0', read_rules_for_ENS0());
-			// for IDNATestV2
-			write_rules_payload('idna-uts46', {idna: read_idna_rules({version: 2003, valid_deviations: true})});
-			// these are the true specs
-			write_rules_payload('idna-2003', {idna: read_idna_rules({version: 2003})});
-			write_rules_payload('idna-2008', {idna: read_idna_rules({version: 2008})});
+			// legacy ENS 
+			write_rules_payload('ENS0', read_rules_for_ENS0());
+			// 2003 with deviations (for IDNATestV2)
+			write_rules_payload('UTS46', {idna: read_idna_rules({version: 2003, valid_deviations: true})});
+			// true specs
+			write_rules_payload('2003', {idna: read_idna_rules({version: 2003})});
+			write_rules_payload('2008', {idna: read_idna_rules({version: 2008})});
 			break;
 		}
 		case 'nf': {
@@ -400,6 +440,14 @@ async function create_payload(name) {
 			write_payload('context', enc);
 			break;
 		}
+		/*
+		case 'single-script': {
+			let enc = new Encoder();
+			encode_single_script(enc, read_single_script_rules());
+			write_payload('single-script', enc);
+			break;
+		}
+		*/
 		default: throw new Error(`unknown payload: ${name}`);
 	}
 }
@@ -480,8 +528,7 @@ function read_idna_rules({use_STD3 = true, version = 2008, valid_deviations = fa
 	});
 	return idna;
 }
-function encode_idna(enc, {valid, ignored, mapped}, stops) {	
-	enc.write_member(stops);
+function encode_idna(enc, {valid, ignored, mapped}) {	
 	enc.write_member(valid);
 	// ignored is the same thing as map to []
 	// but it doesn't compress as well
@@ -497,7 +544,15 @@ function encode_idna(enc, {valid, ignored, mapped}, stops) {
 }
 
 function read_bidi_rules() {
-	return map_values(read_parsed('DerivedBidiClass'), v => new Set(v.flatMap(parse_cp_range)));;
+	let src = read_parsed('DerivedBidiClass');
+	let ret = {};
+	for (let key of ['R', 'L', 'AL', 'AN', 'EN', 'ES', 'CS', 'ET', 'ON', 'BN', 'NSM']) {
+		let v = src[key];
+		if (!v) throw new Error(`Assumption wrong: Expected Bidi Class ${key}`);
+		ret[key] = new Set(v.flatMap(parse_cp_range));
+	}
+	return ret;
+	//return map_values(read_parsed('DerivedBidiClass'), v => new Set(v.flatMap(parse_cp_range)));
 }
 function encode_bidi(enc, {R, L, AL, AN, EN, ES, CS, ET, ON, BN, NSM}) {
 	let R_AL_parts = [R, AL];
@@ -524,11 +579,13 @@ function read_nf_rules() {
 	combining_class = Object.entries(combining_class)
 		.map(([k, v]) => [parseInt(k), new Set(v.flatMap(parse_cp_range))])
 		.sort((a, b) => a[0] - b[0]);
+	
 	let virama_index = combining_class.findIndex(([cls]) => cls == VIRAMA_COMBINING_CLASS);
 	if (virama_index < 0) {
 		throw new Error(`Assumption wrong: no virama`);
 	}
-	combining_class = combining_class.map(([_, v]) => v); // drop the class, we just need order
+	
+	let combining_rank = combining_class.map(([_, v]) => v); // drop the class, we just need order
 
 	// this does not contain hangul
 	let decomp = read_parsed('Decomposition_Mapping')
@@ -537,11 +594,11 @@ function read_nf_rules() {
 
 	let comp_exclusions = new Set(read_parsed('CompositionExclusions').flatMap(parse_cp_range));
 	
-	return {combining_class, virama_index, comp_exclusions, decomp};
+	return {combining_rank, comp_exclusions, decomp, virama_index};
 }
-function encode_nf(enc, {combining_class, comp_exclusions, decomp}) {
-	enc.unsigned(combining_class.length);
-	for (let c of combining_class) enc.write_member(c);
+function encode_nf(enc, {combining_rank, comp_exclusions, decomp}) {
+	enc.unsigned(combining_rank.length);
+	for (let c of combining_rank) enc.write_member(c);
 	enc.write_mapped([	
 		[1, 1, 1],
 		[1, 1, 0]
@@ -566,14 +623,11 @@ function encode_context(enc, {T, L, R, D, Greek, Hebrew, Hiragana, Katakana, Han
 	if (!is_better_member_compression([HKH], HKH_parts)) {
 		throw new Error(`Assumption wrong: HKH`);
 	}
-	/*
-	if (virama_index) {
+	if (Number.isInteger(virama_index)) {
 		enc.unsigned(virama_index);
 	} else {
 		enc.write_member(Virama);	
 	}
-	*/
-	enc.write_member(Virama);
 	enc.write_member(T);
 	enc.write_member(LD);
 	enc.write_member(RD);
@@ -581,7 +635,6 @@ function encode_context(enc, {T, L, R, D, Greek, Hebrew, Hiragana, Katakana, Han
 	enc.write_member(Hebrew);
 	enc.write_member(HKH);
 }
-
 
 function extract_stops({valid, mapped}) {
 	const STOP = 0x2E;
@@ -627,6 +680,27 @@ function write_payload(name, enc, hr) {
 	console.log(`Wrote payload ${name}: ${buf.length} bytes`);
 }
 
+function encode_seq(enc, uts51) {
+	for (let m of Object.values(uts51.group_seq())) {
+		enc.unsigned(m[0].length);
+		enc.positive(m.length);
+		enc.write_transposed(m.sort(compare_arrays));
+	}
+	enc.unsigned(0);
+}
+
+function encode_zwj(enc, uts51) {
+	for (let [key, m] of Object.entries(uts51.group_zwj())) {
+		// '1,2,3' => [1,2,3] => [[_],[_,_],[_,_,_]]
+		let lens = key.split(',').map(x => parseInt(x));
+		for (let x of lens) enc.unsigned(x);
+		enc.unsigned(0);
+		enc.positive(m.length);
+		enc.write_transposed(m.sort(compare_arrays));
+	}
+	enc.unsigned(0);
+}
+ 
 function write_rules_payload(name, {idna, stops, uts51, combining_marks}) {
 	if (!stops) {
 		// find everything that maps to "."
@@ -640,7 +714,8 @@ function write_rules_payload(name, {idna, stops, uts51, combining_marks}) {
 	combining_marks = set_intersect(combining_marks, allowed);
 
 	let enc = new Encoder();
-	encode_idna(enc, idna, stops);
+	enc.write_member(stops);
+	encode_idna(enc, idna);
 	enc.write_member(combining_marks);
 
 	let hr = {
@@ -665,58 +740,71 @@ function write_rules_payload(name, {idna, stops, uts51, combining_marks}) {
 		enc.write_member(uts51.TAG_SPEC);
 
 		// whitelisted emoji sequences
-		for (let m of Object.values(uts51.group_seq())) {
-			enc.unsigned(m[0].length);
-			enc.positive(m.length);
-			enc.write_transposed(m.sort(compare_arrays));
-		}
-		enc.unsigned(0);
+		encode_seq(enc, uts51);
 
 		// whitelisted emoji zwj sequences
 		// when disabled, uses algorithmic rules
 		if (uts51.ZWJS) {
 			enc.unsigned(1); // whitelist enabled
-			for (let [key, m] of Object.entries(uts51.group_zwj())) {
-				// '1,2,3' => [1,2,3] => [[_],[_,_],[_,_,_]]
-				let lens = key.split(',').map(x => parseInt(x));
-				for (let x of lens) enc.unsigned(x);
-				enc.unsigned(0);
-				enc.positive(m.length);
-				enc.write_transposed(m.sort(compare_arrays));
-			}
-			enc.unsigned(0);
+			encode_zwj(enc, uts51);
 		}
 
 		// experimental
 		//enc.write_member(uts51.NON_SOLO); 
 	}
-	write_payload(name, enc, hr);
+	write_payload(`rules-${name}`, enc, hr);
 }
 
-/*
-function write_library_payload(name, {emoji, idna, bidi, nf, context, combining_marks}) {
-	let allowed = new Set([...idna.valid, ...idna.mapped.map(([x]) => x)]);
-	// filter
-	combining_marks = set_intersect(combining_marks, allowed);
-	context = map_values(context, v => set_intersect(v, allowed));
-	if (nf) {
-		nf.combining_class = nf.combining_class.map(v => set_intersect(v, allowed));
-		nf.comp_exclusions = set_intersect(nf.comp_exclusions, allowed);
-		nf.decomp = nf.decomp.filter(([x]) => allowed.has(x));
-	}
-	if (bidi) {
-		bidi = map_values(bidi, v => set_intersect(v, allowed));
-	}
+function write_release_payload_v1(name, {idna, uts51}) {
+	if (uts51.STYLE_OPT.size > 0) throw new Error('optional style not allowed');
+
+	let stops = extract_stops(idna);
+	if (stops.size != 1 || !stops.has(0x2E)) throw new Error('invalid stop');
+	
+	let allowed = idna.allowed_set();
+	let combining_marks = set_intersect(read_combining_marks(), allowed);
+
 	let enc = new Encoder();
-	enc.write_member(combining_marks);
 	encode_idna(enc, idna);
-	if (emoji) encode_emoji(enc, emoji);
-	if (nf) encode_nf(enc, nf);
-	encode_context(enc, context);
-	if (bidi) encode_bidi(enc, bidi);
-	write_payload(name, enc);
+	enc.write_member(combining_marks);
+
+	enc.write_member(uts51.KEYCAP_DROP);
+	enc.write_member(uts51.KEYCAP_REQ);
+	enc.write_member(uts51.STYLE_DROP);
+	enc.write_member(uts51.STYLE_REQ);
+	enc.write_member(uts51.MODIFIER);
+	enc.write_member(uts51.MOD_BASE);
+
+	encode_seq(enc, uts51);
+	encode_zwj(enc, uts51);
+
+	let {virama_index, ...nf} = read_nf_rules();
+	encode_nf(enc, nf);
+
+	let context = read_context_rules();
+	encode_context(enc, context, virama_index);
+
+	let bidi = read_bidi_rules();
+	encode_bidi(enc, bidi);
+
+	write_payload(`release-${name}`, enc, {
+		valid: idna.valid,
+		mapped: idna.mapped,
+		ignored: idna.ignored,
+		combining_marks,
+		keycap_legacy: uts51.KEYCAP_DROP,
+		keycap_required: uts51.KEYCAP_REQ,
+		style_legacy: uts51.STYLE_DROP,
+		style_required: uts51.STYLE_REQ,
+		emoji_modifier: uts51.MODIFIER,
+		emoji_modifier_base: uts51.MOD_BASE,
+		whitelist_seq: [...uts51.SEQS].map(explode_cp),
+		whitelist_zwj: [...uts51.ZWJS].map(explode_cp),
+		context,
+		bidi,
+		normalized_forms: nf
+	});
 }
-*/
 
 function apply_rules(idna, uts51, rules) {
 	for (let rule of rules) {

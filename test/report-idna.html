@@ -73,9 +73,9 @@ td {
 </tr></thead><tbody></tbody></table>
 <div id="loading">Computing...</div>
 <script type="module">
-import {ens_normalize, VERSION, UNICODE, IDNA, BUILT} from '../dist/ens-normalize-uts46.min.js';
+import {ens_normalize, VERSION, UNICODE, NAME, BUILT} from '../dist/ens-normalize-UTS46.min.js';
 
-document.querySelector('#version').innerHTML += ` (v${VERSION}+${IDNA}+U${UNICODE})<br><code>${BUILT}</code>`;
+document.querySelector('#version').innerHTML += ` (v${VERSION}+${NAME}+U${UNICODE})<br><code>${BUILT}</code>`;
 
 let COLS = [...document.querySelectorAll('#summary .state')].map(x => x.innerHTML);
 

@@ -88,8 +88,8 @@ tbody tr:nth-child(odd) {
 <ul id="toc"></ul>
 <script type="module">
 import {escape_name_for_html, parse_cp_range} from '../build/utils.js';
-import {ens_tokenize, VERSION, IDNA, UNICODE, BUILT} from '../dist/ens-normalize-2008.min.js';
-document.querySelector('#version').innerHTML += ` (v${VERSION}+${IDNA}+U${UNICODE})<br><code>${BUILT}</code>`;
+import {ens_tokenize, VERSION, NAME, UNICODE, BUILT} from '../dist/ens-normalize-2008.min.js';
+document.querySelector('#version').innerHTML += ` (v${VERSION}+${NAME}+U${UNICODE})<br><code>${BUILT}</code>`;
 
 try {
 	await main();

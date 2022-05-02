@@ -85,6 +85,7 @@ export default function(r) {
 			// emoji_flag_sequence := regional_indicator regional_indicator
 			return [2, [cp0, cp1]];
 		} 
+
 		// [ED-14c] emoji keycap sequence
 		// https://unicode.org/reports/tr51/#def_emoji_keycap_sequence
 		// A sequence of the following form: 
@@ -95,6 +96,7 @@ export default function(r) {
 		} else if ((keycap_og || KEYCAP_REQ.has(cp0)) && cp1 === FE0F && cps[pos0+2] === KEYCAP_END) {
 			return [3, keycap_og ? [cp0, KEYCAP_END] : [cp0, FE0F, KEYCAP_END]];		
 		}
+
 		// [ED-15] emoji core sequence
 		// emoji_core_sequence := emoji_keycap_sequence | emoji_flag_sequence | chr_mod_pre
 		// chr_mod_pre = emoji_character | emoji_presentation_sequence | emoji_modifier_sequence
@@ -102,6 +104,7 @@ export default function(r) {
 		// we've handed keycap and flag already
 		let emoji0 = find_emoji_chr_mod_pre(cps, pos0); // chr_mod_pre?
 		if (!emoji0) return [0]; // nope
+
 		// [ED-17] emoji sequence
 		// emoji_sequence := chr_mod_pre | emoji_zwj_sequence | emoji_tag_sequence 
 		let [n0, v0] = emoji0;
@@ -143,6 +146,7 @@ export default function(r) {
 				}
 			}
 		}
+		
 		// [ED-14a] emoji tag sequence (ETS) 
 		// https://www.unicode.org/reports/tr51/#def_emoji_tag_sequence
 		// A sequence of the following form:

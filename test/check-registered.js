@@ -6,9 +6,6 @@ import {ens_normalize, ens_tokenize} from '../dist/ens-normalize.js';
 
 let base_dir = new URL('.', import.meta.url).pathname;
 
-console.log(LABELS.size);
-throw 1;
-
 // ============================================================\
 // find all the characters in any name
 // tally them
