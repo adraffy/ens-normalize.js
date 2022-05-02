@@ -655,7 +655,7 @@ function get_dot_eth_label(name) {
 function create_opensea_link(name) {
 	let label = get_dot_eth_label(name);
 	if (!label) return ''; // only if 2LD .eth	
-	let a = create_link(`https://opensea.io/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/${labelhash(label).hex}`, 'Opensea');
+	let a = create_link(`https://opensea.io/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/${labelhash(label).dec}`, 'Opensea');
 	a.classList.add('opensea');
 	return a;
 }
