@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Punycode Coder</title>
+<style>
+.hide {
+	display: none !important;
+}
+body { 
+	margin: 3rem; 
+	background: #eee;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+header {
+	display: flex;
+	justify-content: space-between;
+}
+h1 {
+	font-size: 24pt;
+	margin: 0;
+}
+input {
+	padding: 0.5rem;
+	font-size: 16pt;
+}
+p {
+	margin: 0;
+}
+pre {
+	margin: 0;
+	white-space: pre-wrap;
+}
+pre.error {
+	color: #c00;
+}
+footer {
+	text-align: center;
+	color: #666;
+}
+@media only screen and (max-width: 800px) { 
+	body {
+		margin: 1rem;
+	}
+	input {
+		font-size: 100%;
+	}
+}
+</style>
+</head>
+<body>
+<header>
+<h1><a href="https://datatracker.ietf.org/doc/html/rfc3492">Punycode</a> Coder</h1>
+<a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a>
+</header>
+<p>No ASCII character restrictions.  Use <code>{HEX}</code> to escape.</p>
+<input id="unicode" autocomplete="off">
+<pre></pre>
+<input id="punycode" autocomplete="off">
+<footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
+<script type="module">
+import {explode_cp, hex_cp} from '../build/utils.js';
+import {puny_decode, puny_encode} from '../build/puny.js';
+
+const unicode_field = document.querySelector('#unicode');
+const punycode_field = document.querySelector('#punycode');
+const codepoints = document.querySelector('pre');
+
+unicode_field.addEventListener('input', update_punycode);
+punycode_field.addEventListener('input', update_unicode);
+
+punycode_field.addEventListener('keydown', e => {
+	if (e.key == 'Tab') {
+		e.preventDefault();
+		unicode_field.select();
+	}
+});
+
+show_placeholder(true);
+
+function show_placeholder(b) {
+	unicode_field.placeholder = b ? '💩' : '';
+	punycode_field.placeholder = b ? 'xn--ls8h' : '';
+	codepoints.classList.toggle('hide', b);
+	if (b) {
+		unicode_field.value = '';
+		punycode_field.value = '';
+		unicode_field.classList.remove('error');
+		punycode_field.classList.remove('error');
+	}
+}
+
+function update_punycode() {
+	let s = unicode_field.value;
+	if (!s) {
+		show_placeholder(true);
+		return;
+	}
+	show_placeholder(false);
+	try {
+		let cps = explode_cp(s.replace(/\{([^\}]+)\}/ug, (_, x) => {
+			if (!/^[0-9a-f]+$/i.test(x)) {
+				throw new Error(`Invalid Escape: ${x}`);
+			}
+			try {
+				return String.fromCodePoint(parseInt(x, 16)); 
+			} catch (err) {
+				throw new Error(`Invalid Unicode: ${x}`);	
+			}
+		}));
+		update_codepoints(cps);
+		let encoded = puny_encode(cps, true);
+		punycode_field.value = String.fromCodePoint(...encoded);
+		/*
+		if (encoded === cps) {
+			punycode_field.value = `xn--${String.fromCodePoint(...cps)}-`;
+		} else {
+			punycode_field.value = String.fromCodePoint(...encoded);
+		}
+		*/
+	} catch (err) {
+		punycode_field.value = '';
+		codepoints.classList.add('error');
+		codepoints.innerHTML = err.message;
+	}
+}
+
+function update_unicode() {
+	let s = punycode_field.value;
+	if (!s) {
+		show_placeholder(true);
+		return;
+	}	
+	show_placeholder(false);
+	try {
+		if (!s.startsWith('xn--')) {
+			throw new Error('Expected "xn--" prefix');
+		}
+		let cps = explode_cp(s.slice(4));
+		let decoded = puny_decode(cps);
+		unicode_field.value = String.fromCodePoint(...decoded);
+		update_codepoints(decoded);
+	} catch (err) {
+		unicode_field.value = '';
+		codepoints.classList.add('error');
+		codepoints.innerHTML = err.message;
+	}
+}
+
+function update_codepoints(cps) {
+	codepoints.innerHTML = cps.length ? cps.map(hex_cp).join(' ') : '<i>empty string</i>';
+	codepoints.classList.remove('error');
+}
+</script>
+</body>
+</html>

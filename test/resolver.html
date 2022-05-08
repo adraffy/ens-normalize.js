@@ -17,6 +17,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	gap: 0.7rem;
+	overflow-y: scroll;
 }
 header {
 	display: flex;
@@ -234,9 +235,15 @@ ul.row {
 .tokens {
 	font-size: 16pt;
 }
-.error {
+.row.error {
 	background: #fcc;
 	border: 3px dashed #f00;
+}
+.dns {
+	background: #fff0ff;
+}
+.dns.invalid {
+	background: #fcc;
 }
 footer {
 	text-align: center;
@@ -281,6 +288,7 @@ footer {
 
 <b style="text-decoration: line-through">Punycode:</b>
 <button>xn--ls8h</button>
+<button>💷pound.eth</button>
 
 <b>Subdomain:</b>
 <button data-name="nowzad.loopring.eth">loopring</button>
@@ -304,6 +312,11 @@ footer {
 <b>Disallowed:</b>
 <button>te[st</button>
 <button data-name="a{0332}" data-replace="1"></button>
+
+<b>Whitespace:</b>
+<button data-name="te st">Inner</button>
+<button data-name=" test">Leading</button>
+<button data-name="test ">Trailing</button>
 
 <b>Stops:</b>
 <button>。</button>
@@ -361,15 +374,14 @@ footer {
 
 <a href="https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.1"><b>ContextJ:</b></a>
 ZWNJ:
-<button data-name="a{94D}{200C}">✅ #1</button>
-<button data-name="{843}{8ED}{200C}{7F2}{713}">✅ #2</button>
+<button data-name="ന്{200C}മ">✅ #1</button>
+<button data-name="نیم‌فاصله">✅ #2</button>
 <button data-name="a{200C}b">❌</button>
-<button data-name="🧞{200C}">"🧞.eth"</button>
-• 
+
 ZWJ:
-<button data-name="a{94D}{200D}">✅</button>
+<button data-name="ണ്‍">✅</button>
 <button data-name="a{200D}b">❌</button>
-<button data-name="🧞{200D}">"🧞.eth"</button>
+
 <a href="https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.3"><b>ContextO:</b></a>
 Middle Dot: 
 <button data-name="{6C}{B7}{6C}">✅</button>
@@ -395,11 +407,12 @@ Arabic-Indic:
 <button>פעילותהבינאום</button>
 <button data-name="{0786}{07AE}{0782}{07B0}{0795}{07A9}{0793}{07A6}{0783}{07AA}">Dhivehi</button>
 <button data-name="{05D9}{05B4}{05D5}{05D0}{05B8}">Yiddish</button>
+<button data-name="{1F1F8}{1F1E6}{633}{644}{645}{627}{646}">Emoji+RTL</button>
+<button data-name="{633}{644}{645}{627}{646}{1F1F8}{1F1E6}">RTL+Emoji</button>
+<button data-name="bahrain.مصر">Separate LTR and RTL Labels</button>
 <button data-name="bahrainمصر">❌ Mixed LTR+RTL in Label</button>
 <button data-name="{202e}elgoog{202d}.eth" data-replace="1"></button>
 <button data-name="{202e}hte.elgoog" data-replace="1"></button>
-<button data-name="bahrain.مصر">Separate LTR and RTL Labels</button>
-<button data-name="{1F1F8}{1F1E6}{633}{644}{645}{627}{646}">Emoji + RTL</button>
 <b>Revived:</b>
 <button>‼️</button>
 <button>⁉️</button>
@@ -440,6 +453,7 @@ import {
 } from '../../eth-tools.js/dist/eth-tools.min.js';
 import {escape_name_for_html, is_printable_ascii, explode_cp, hex_cp} from '../build/utils.js';
 import {ens_normalize, ens_tokenize, VERSION, BUILT, NAME, UNICODE} from '../dist/ens-normalize-debug.min.js';
+import {dns_from_normalized_ens} from '../dist/dns.min.js';
 import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
 use_default_style();
 
@@ -460,6 +474,7 @@ const output_div = document.querySelector('#output');
 const readme_rows = [...output_div.childNodes]; // save initial ux
 
 let resolve_timer;
+let resolve_args;
 let resolve_date0;
 
 let window_provider;
@@ -488,7 +503,7 @@ input_field.addEventListener('keydown', e => {
 	}
 });
 input_field.addEventListener('input', () => {
-	if (parse()) schedule_resolve();
+	if (parse()) schedule_resolve(1000);
 });
 
 document.querySelector('#escape_btn').addEventListener('click', () => {
@@ -508,7 +523,7 @@ document.querySelector('#link_btn').addEventListener('click', () => {
 for (let el of [auto_resolve_check, skip_norm_check]) {
 	el.addEventListener('input', () => {
 		if (auto_resolve_check.checked && input_field.value) {
-			if (parse()) schedule_resolve();
+			if (parse()) resolve();
 		}
 	});
 }
@@ -520,7 +535,7 @@ show_hashes_check.addEventListener('input', () => {
 
 input_field.focus();
 input_field.value = decode_location_hash();
-schedule_resolve(100, true);
+schedule_resolve(100);
 window.addEventListener('hashchange', () => {
 	input_field.value = decode_location_hash();
 	resolve();
@@ -531,14 +546,23 @@ function decode_location_hash() {
 	return decodeURIComponent(window.location.hash.slice(1));
 }
 
-function schedule_resolve(t = 1000, force) {
+function schedule_resolve(delay) {
+	if (!auto_resolve_check.checked) return;
+	resolve_args = undefined;
 	if (is_working()) {
 		resolve_timer = true;
-	} else if (!resolve_timer && (force || auto_resolve_check.checked)) {
-		resolve_timer = setTimeout(resolve, t);
+	} else if (!resolve_timer || resolve_timer === 'null') {
 		primary_arrows.classList.remove('hide');
+		resolve_timer = setTimeout(queued_resolve, delay);
 	}
 } 
+function queued_resolve() {
+	if (resolve_args) {
+		resolve(...resolve_args);
+	} else {
+		resolve();
+	}
+}
 
 function parse() {
 	output_div.innerHTML = '';
@@ -551,7 +575,7 @@ function parse() {
 		return;
 	}
 	if (resolve_timer === 'null') {
-		resolve_timer = false;
+		resolve_timer = undefined;
 	}
 	if (is_checksum_address(name)) {
 		let row = create_row('Address');
@@ -574,9 +598,9 @@ function parse() {
 			let norm_row = create_row('Normalized');
 			norm_row.classList.add('normalized');
 			make_exploded(norm_row, norm, true);
-			norm_row.classList.add('normalized');
 			output_div.append(norm_row, create_hashes_row(norm));
 		}
+		output_div.append(create_dns_row(norm));
 		return true;
 	} catch (err) {
 		row.classList.add('error');
@@ -593,6 +617,38 @@ function parse() {
 			add_row_tag(row, btn);
 		}		
 	}
+}
+
+function create_dns_row(ens_norm) {
+	let row = create_row('DNS');
+	row.classList.add('dns');
+	try {
+		let name = dns_from_normalized_ens(ens_norm);
+
+		let link = create_link(`https://${name}.limo`, name);
+		link.style.overflowWrap = 'anywhere';
+		row.append(link);
+
+		let same = name === ens_norm;
+		let span = document.createElement('span');	
+		if (same) {
+			apply_grade(span, 'good', 'Verbatim')
+		} else {
+			apply_grade(span, 'warn', 'Punycode Required');
+		}
+		add_row_tag(row, span);
+
+		if (!same) {
+			row.append(create_copy_btn(name));
+		}
+		//row.append(create_link(`https://whois.uniregistry.net/rdap/domain/${name}.link`, 'WHOIS'));
+	} catch (err) {
+		let span = document.createElement('span');
+		apply_grade(span, 'warn', err.message);
+		span.classList.add('long');
+		add_row_tag(row, span);
+	}
+	return row;
 }
 
 function apply_escapes(s, forced) {
@@ -805,7 +861,12 @@ function is_working() {
 }
 
 function resolve(skip_norm) {
-	if (is_working()) return;
+	if (is_working()) {
+		if (resolve_timer === true) return;
+		resolve_timer = true;
+		resolve_args = [skip_norm];
+		return;
+	}
 	clearTimeout(resolve_timer);
 	resolve_timer = undefined;
 	let input = input_field.value;
@@ -834,9 +895,9 @@ function resolve(skip_norm) {
 	resolve_date0 = new Date();
 	resolve0(input, skip_norm).then(() => {
 		resolve_btn.disabled = false;
-		if (resolve_timer === true) { // schedule again
+		if (resolve_timer === true) { 
 			resolve_timer = false;
-			schedule_resolve();
+			setTimeout(queued_resolve, 0);
 		} else {
 			primary_arrows.classList.add('hide');
 		}
@@ -1000,6 +1061,10 @@ async function resolve0(input0, skip_norm) {
 				output_div.append(create_hashes_row(name_norm));
 			}
 		}
+	}
+
+	if (name_norm) {
+		output_div.append(create_dns_row(name_norm));
 	}
 
 	// at this point, we have a name

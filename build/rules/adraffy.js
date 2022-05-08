@@ -48,10 +48,10 @@ export default  [
 	{ty: 'disallow', src: '332'},
 
 	// allow capital currencies
-	{ty: 'valid', src: '24'}, // $
-	//{ty: 'valid', src: 'A2'}, // ¢
-	{ty: 'valid', src: 'A3'}, // £
-	{ty: 'valid', src: 'A5'}, // ¥
+	{ty: 'valid', src: '24'}, // $ -> 💲 already exists
+	//{ty: 'valid', src: 'A2'}, // ¢ vs looks like little-c
+	{ty: 'valid', src: 'A3'}, // £ vs ₤
+	{ty: 'valid', src: 'A5'},   // ¥
 	{ty: 'valid', src: '20AC'}, // €
 	{ty: 'valid', src: '20BF'}, // ₿
 

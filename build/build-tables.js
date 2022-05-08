@@ -15,6 +15,12 @@ function ensure_dir(name) {
 	return dir;
 }
 
+// ascii stop
+const PRIMARY_STOP = 0x2E;
+
+// this is used by two separate sub-libraries
+const VIRAMA_COMBINING_CLASS = 9;
+
 class IDNA {
 	constructor(config = {}) {
 		this.config = config;
@@ -203,9 +209,6 @@ class UTS51 {
 	}
 }
 
-// this is used by two separate sub-libraries
-const VIRAMA_COMBINING_CLASS = 9;
-
 let [mode, ...argv] = process.argv.slice(2);
 if (mode === undefined) throw new Error('expected mode');
 switch (mode) {
@@ -214,15 +217,11 @@ switch (mode) {
 	// ============================================================
 	case 'all': {
 		[
-			'context', 'nf', 'bidi', 
+			'context', 'nf', 'bidi', 'dns',
 			'release', 'adraffy', 
 			'adraffy-exp', 'adraffy-compat', 
-			'UTS51', 'others'
+			'UTS51', 'UTS46', 'ENS0', '2003', '2008'
 		].forEach(create_payload);
-		break;
-	}
-	case 'sub': {
-		['context', 'nf', 'bidi'].forEach(create_payload);
 		break;
 	}
 	// ============================================================
@@ -283,7 +282,7 @@ switch (mode) {
 		console.log(v.map(cp => ({dec: cp, hex: hex_cp(cp)})));
 		//console.log(JSON.stringify(v));
 		break;
-	}	
+	}
 	// ============================================================
 	// dump generated rule files
 	// ============================================================
@@ -409,35 +408,60 @@ async function create_payload(name) {
 			let uts51 = new UTS51(read_emoji_data());
 			uts51.ZWJS = undefined; // disable whitelist
 			apply_rules(idna, uts51, []);
-			write_rules_payload('UTS51', {idna, stops: new Set(), uts51, combining_marks: new Set()});
+			write_rules_payload(name, {idna, stops: new Set(), uts51, combining_marks: new Set()});
 			break;
 		}		
-		case 'others': {
-			// legacy ENS 
-			write_rules_payload('ENS0', read_rules_for_ENS0());
+		case 'UTS46': {
 			// 2003 with deviations (for IDNATestV2)
-			write_rules_payload('UTS46', {idna: read_idna_rules({version: 2003, valid_deviations: true})});
-			// true specs
-			write_rules_payload('2003', {idna: read_idna_rules({version: 2003})});
-			write_rules_payload('2008', {idna: read_idna_rules({version: 2008})});
+			write_rules_payload(name, {idna: read_idna_rules({version: 2003, valid_deviations: true})});
+			break;
+		}
+		case 'ENS0': {
+			// legacy ENS 
+			write_rules_payload(name, read_rules_for_ENS0());
+			break;
+		}
+		case '2003': {
+			write_rules_payload(name, {idna: read_idna_rules({version: 2003})});
+			break;
+		}
+		case '2008': {
+			write_rules_payload(name, {idna: read_idna_rules({version: 2008})});
+			break;
+		}	
+		case 'dns': {
+			/*
+			let idna = read_idna_rules({version: 2008});
+			let enc = new Encoder();
+			enc.write_member(idna.valid);
+			write_payload(name, enc);
+			*/
+			// dump lower ascii from puny
+			let puny_ASCII = cp => cp < 128; // N from https://datatracker.ietf.org/doc/html/rfc3492#section-5
+			let idna2003 = [...read_idna_rules({version: 2003}).valid].filter(puny_ASCII);
+			let idna2008 = [...read_idna_rules({version: 2008}).valid].filter(puny_ASCII);
+			if (compare_arrays(idna2003, idna2008)) {
+				throw new Error('Assumption wrong: IDNA 2003 and 2008 have different Puny ASCII Sets');
+			}
+			writeFileSync(join(ensure_dir('output'), 'dns.js'), `export default ${JSON.stringify(String.fromCodePoint(...idna2003))}`);
 			break;
 		}
 		case 'nf': {
 			let enc = new Encoder();
 			encode_nf(enc, read_nf_rules());
-			write_payload('nf', enc);
+			write_payload(name, enc);
 			break;
 		}
 		case 'bidi': {
 			let enc = new Encoder();
 			encode_bidi(enc, read_bidi_rules());
-			write_payload('bidi', enc);
+			write_payload(name, enc);
 			break;
 		}
 		case 'context': {
 			let enc = new Encoder();
 			encode_context(enc, read_context_rules());
-			write_payload('context', enc);
+			write_payload(name, enc);
 			break;
 		}
 		/*
@@ -637,12 +661,11 @@ function encode_context(enc, {T, L, R, D, Greek, Hebrew, Hiragana, Katakana, Han
 }
 
 function extract_stops({valid, mapped}) {
-	const STOP = 0x2E;
-	let stops = new Set([STOP]);
-	if (!valid.delete(STOP)) {
+	let stops = new Set([PRIMARY_STOP]);
+	if (!valid.delete(PRIMARY_STOP)) {
 		throw new Error(`Assumption wrong: Stop is not valid`);
 	}
-	for (let [x, ys] of take_from(mapped, ([_, ys]) => ys.includes(STOP))) {
+	for (let [x, ys] of take_from(mapped, ([_, ys]) => ys.includes(PRIMARY_STOP))) {
 		if (ys.length != 1) {
 			throw new Error(`Assumption wrong: ${x} is mapped to a Stop with other characters`);
 		}
@@ -759,7 +782,7 @@ function write_release_payload_v1(name, {idna, uts51}) {
 	if (uts51.STYLE_OPT.size > 0) throw new Error('optional style not allowed');
 
 	let stops = extract_stops(idna);
-	if (stops.size != 1 || !stops.has(0x2E)) throw new Error('invalid stop');
+	if (stops.size != 1 || !stops.has(PRIMARY_STOP)) throw new Error('expected one stop');
 	
 	let allowed = idna.allowed_set();
 	let combining_marks = set_intersect(read_combining_marks(), allowed);

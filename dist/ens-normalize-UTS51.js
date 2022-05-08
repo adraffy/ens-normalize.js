@@ -240,61 +240,149 @@ function escape_unicode(s) {
 	return s.replace(/[^\x20-\x21\x23-\x7A\x7C\x7E]/gu, x => quote_cp(x.codePointAt(0)));
 }
 
+// str to cps
 function explode_cp(s) {
 	if (typeof s != 'string') throw new TypeError(`expected string`);	
 	return [...s].map(c => c.codePointAt(0));
 }
 
-// https://datatracker.ietf.org/doc/html/rfc3492
-// adapted from https://github.com/mathiasbynens/punycode.js
-// puny format: "xn--{ascii}-{0-9a-z}"
-// this function receives normalized cps such that:
-// * no uppercase 
-// * no overflow (#section-6.4)
+// returns list of lists
+// returns [[]] if empty
 
+// tokenizer: (cp) -> array or object (token)
+// different tokenizers can produce other tokens
+
+// (optional) emoji_parser: (cps, pos) -> [len, cps]
+
+// default tokens:
+// emoji: {e:[],u:[]} where e = cps, u = input
+// valid: {v:[]}      where v = cps
+
+function parse_tokens(cps, tokenizer, emoji_parser) {
+	let chars = [];
+	let tokens = [];
+	let labels = [tokens];
+	function drain() { 
+		if (chars.length > 0) {
+			tokens.push({v: chars}); 
+			chars = [];
+		}
+	}
+	for (let i = 0; i < cps.length; i++) {
+		if (emoji_parser) {
+			let [len, e] = emoji_parser(cps, i);
+			if (len > 0) {
+				drain();
+				tokens.push({e, u:cps.slice(i, i+len)}); // these are emoji tokens
+				i += len - 1;
+				continue;
+			}
+		} 
+		let cp = cps[i];
+		let token = tokenizer(cp);
+		if (Array.isArray(token)) { // this is more characters
+			chars.push(...token);
+		} else {
+			drain();
+			if (token) { // this is a token
+				tokens.push(token);
+			} else { // this is a label separator
+				tokens = []; // create a new label
+				labels.push(tokens);
+			}
+		}
+	}
+	drain();
+	return labels;
+}
+
+// https://datatracker.ietf.org/doc/html/rfc3492
+
+// "xn--{encoded}"
+// "xn--{lower-ascii}-{encoded}"
+
+// overflow calculation:
+// https://datatracker.ietf.org/doc/html/rfc3492#section-6.4
+// max unicode = 0x10FFFF => 21 bits
+// max safe int = 53 bits (same as string length)
+// (32 - 21) => 11-bit label length => 2KB unsigned
+// (53 - 21) => 32-bit label length => 4GB unsigned
+// decision: use IEEE-754 math, ignore bounds check
+
+// Bootstring for Punycode
+// https://datatracker.ietf.org/doc/html/rfc3492#section-5
+const BASE = 36; 
+const T_MIN = 1;
+const T_MAX = 26;
+const SKEW = 38;
+const DAMP = 700;
+const N = 128;
+const BIAS = 72;
+
+const SHIFT_BASE = BASE - T_MIN;
+const MAX_DELTA = SHIFT_BASE * T_MAX >> 1;
+
+const HYPHEN = 0x2D;
+
+// A decoder MUST recognize the letters in both uppercase and lowercase
+// forms (including mixtures of both forms).
+function basic_from_cp(cp) {
+	if (cp >= 48 && cp <= 57) { // 0-9
+		return cp - 22; 
+	} else if (cp >= 97 && cp <= 122) { // a-z
+		return cp - 97;
+	} else if (cp >= 65 && cp <= 90) { // A-Z 
+		return cp - 65;
+	} else {
+		throw new Error(`Expected basic character: ${cp}`);
+	}
+}
+
+function trim_bias(k, bias) {
+	let delta = k - bias;
+	return delta <= 0 ? T_MIN : delta >= T_MAX ? T_MAX : delta;
+}
+
+// https://datatracker.ietf.org/doc/html/rfc3492#section-6.1
+function adapt(delta, n, first) {
+	delta = Math.floor(delta / (first ? DAMP : 2));
+	delta += Math.floor(delta / n);
+	let k = 0;
+	while (delta > MAX_DELTA) {
+		delta = Math.floor(delta / SHIFT_BASE);
+		k += BASE;
+	}
+	return k + Math.floor((1 + SHIFT_BASE) * delta / (delta + SKEW));
+}
+
+// https://datatracker.ietf.org/doc/html/rfc3492#section-6.2
+// cps -> cps
+// assumes "xn--" prefix is already removed
+// assumes cps is normalized: [0-9a-z\-]+
 function puny_decode(cps) {
 	let ret = [];
-	let pos = cps.lastIndexOf(0x2D); // hyphen
+	let pos = cps.lastIndexOf(HYPHEN);
 	for (let i = 0; i < pos; i++) {
 		let cp = cps[i];
-		if (cp >= 0x80) throw new Error('expected ASCII');
+		//if (cp != HYPHEN) cp = cp_from_basic(basic_from_cp(cp));
+		if (cp >= N) throw new Error('Expected ASCII');
 		ret.push(cp);
 	}
 	pos++; // skip hyphen
-	// #section-5
-	const BASE = 36; 
-	const T_MIN = 1;
-	const T_MAX = 26;
-	const SKEW = 38;
-	const DAMP = 700;
-	const MAX_DELTA = (BASE - T_MIN) * T_MAX >> 1;
-	let i = 0, n = 128, bias = 72;
+	let i = 0, n = N, bias = BIAS;
 	while (pos < cps.length) {
 		let prev = i;
 		for (let w = 1, k = BASE; ; k += BASE) {
-			if (pos >= cps.length) throw new Error(`invalid encoding`);
-			let cp = cps[pos++];
-			if (cp >= 0x30 && cp <= 0x39) { // 0-9
-				cp -= 0x16; // 26 + (code - 0x30)
-			} else if (cp >= 0x61 && cp <= 0x7A) { // a-z
-				cp -= 0x61;
-			} else {
-				throw new Error(`invalid character ${cp}`);
-			}
-			i += cp * w;
-			const t = k <= bias ? T_MIN : (k >= bias + T_MAX ? T_MAX : k - bias);
-			if (cp < t) break;
+			if (pos >= cps.length) throw new Error(`Invalid Encoding`);
+			let basic = basic_from_cp(cps[pos++]);
+			i += basic * w;
+			let t = trim_bias(k, bias);
+			if (basic < t) break;
 			w *= BASE - t;
 		}
 		let len = ret.length + 1;
-		let delta = prev == 0 ? (i / DAMP)|0 : (i - prev) >> 1;
-		delta += (delta / len)|0;
-		let k = 0;
-		for (; delta > MAX_DELTA; k += BASE) {
-			delta = (delta / (BASE - T_MIN))|0;
-		}
-		bias = (k + (BASE - T_MIN + 1) * delta / (delta + SKEW))|0;
-		n += (i / len)|0;
+		bias = adapt(i - prev, len, prev == 0);
+		n += Math.floor(i / len);
 		i %= len;
 		ret.splice(i++, 0, n);
 	}	
@@ -741,9 +829,9 @@ function validate_context(cps) {
 
 var r = read_compressed_payload('AA4AEwAyAB0ADAAQAAoADgAJAAYADQCFABMABwDA/QQA8NwPGSY8GXQegwLODADknOjpQwsWCBMDFiERPwQEAoYD0AIBTwC8YMC0gQoCTQ0JGuv1SCYgWQoAZsQEAKdGCQMBBQwOCQILBiAVBScAlADGCwDFSgMIZSYTpRlnSv0/FAwABAIGBAATe0AD4gAhJQAAHgUVBQUFBQABF2VI/DQNSzsBJK4SAADy8QglE9EAy4E3qggOxQsACBIBATUMRjkMJgAAy61tFRDkFqVeAVkNAW4K5yIACAIM/xZUAM2Raa1oojhYAnlFaneDL37617VezdtM3exCFktwcMTz3IE3r3p/2kBtcmwR3QmZJMh+5eYi5vBHjtwwzBFZKxrXSEsDqtsYadOiXRNxIJsgaF/ALX3gyhu5n7f6YvfL0Y+HWk3R1Iw+x11c0XLnlWdDy7Emx7rOy6tLlfns4A==');
 
-const BUILT = '2022-05-02T09:44:51.349Z';
+const BUILT = '2022-05-08T07:17:49.345Z';
 const UNICODE = '14.0.0';
-const VERSION = '1.3.16';
+const VERSION = '1.3.17';
 const NAME = 'UTS51';
 const STOP = read_member_set(r);
 const VALID = read_member_set(r);
@@ -754,7 +842,7 @@ const EMOJI_PARSER = r() && emoji_parser_factory(r); // this is optional
 
 // collapse emoji or NFC(text) to code points
 function flatten_tokens(tokens) {
-	return tokens.flatMap(({e, v}) => e ?? nfc(v));
+	return tokens.flatMap(({e, v}) => e ?? v);
 }
 
 function label_error(cps, message) {
@@ -791,7 +879,7 @@ function ens_normalize(name) {
 	// [Processing] 2.) Normalize: Normalize the domain_name string to Unicode Normalization Form C.
 	// [Processing] 3.) Break: Break the string into labels at U+002E ( . ) FULL STOP.
 	const HYPHEN = 0x2D; // HYPHEN MINUS
-	let labels = tokenized_idna(nfc(explode_cp(name)), cp => {
+	let labels = parse_tokens(nfc(explode_cp(name)), cp => {
 		// ignored: Remove the code point from the string. This is equivalent to mapping the code point to an empty string.
 		if (STOP.has(cp)) return;
 		if (IGNORED.has(cp)) return [];
@@ -803,7 +891,7 @@ function ens_normalize(name) {
 		if (mapped) return mapped;
 		// disallowed: Leave the code point unchanged in the string, and record that there was an error.
 		throw new Error(`Disallowed character "${escape_unicode(String.fromCodePoint(cp))}"`);
-	}).map(tokens => {
+	}, EMOJI_PARSER).map(tokens => {
 		let cps = flatten_tokens(tokens);
 		// [Processing] 4.) Convert/Validate
 		if (cps.length >= 4 && cps[0] == 0x78 && cps[1] == 0x6E && cps[2] == HYPHEN && cps[3] == HYPHEN) { // "xn--"
@@ -815,7 +903,7 @@ function ens_normalize(name) {
 				// With either Transitional or Nontransitional Processing, sources already in Punycode are validated without mapping. 
 				// In particular, Punycode containing Deviation characters, such as href="xn--fu-hia.de" (for fuß.de) is not remapped. 
 				// This provides a mechanism allowing explicit use of Deviation characters even during a transition period. 
-				[tokens] = tokenized_idna(cps_decoded, cp => VALID.has(cp) ? [cp] : []);
+				tokens = parse_tokens(nfc(cps_decoded), cp => VALID.has(cp) ? [cp] : [])[0];
 				let expected = flatten_tokens(tokens);
 				if (cps_decoded.length != expected.length || !cps_decoded.every((x, i) => x == expected[i])) throw new Error('not normalized');
 				// Otherwise replace the original label in the string by the results of the conversion. 
@@ -888,55 +976,14 @@ function ens_normalize(name) {
 // this is much nicer than exposing the predicates
 // [{m:[0x72], u:[0x52]},{e:[0x1F4A9],u:[0x1F4A9]},{t:[61,66,66]},{},{t:[65,74,68]}]
 function ens_tokenize(name) {
-	return tokenized_idna(explode_cp(name), cp => {
+	return parse_tokens(explode_cp(name), cp => {
 		if (STOP.has(cp)) return {};
 		if (VALID.has(cp)) return [cp]; // this gets merged into v
 		if (IGNORED.has(cp)) return {i: cp};
 		let mapped = lookup_mapped(MAPPED, cp);
 		if (mapped) return {m: mapped, u: [cp]}; 
 		return {d: cp};
-	})[0];
-}
-
-// this returns [[]] if empty
-// {e:[],u:[]} => emoji
-// {v:[]} => chars
-function tokenized_idna(cps, tokenizer) {
-	let chars = [];
-	let tokens = [];
-	let labels = [tokens];
-	function drain() { 
-		if (chars.length > 0) {
-			tokens.push({v: chars}); 
-			chars = [];
-		}
-	}
-	for (let i = 0; i < cps.length; i++) {
-		if (EMOJI_PARSER) {
-			let [len, e] = EMOJI_PARSER(cps, i);
-			if (len > 0) {
-				drain();
-				tokens.push({e, u:cps.slice(i, i+len)}); // these are emoji tokens
-				i += len - 1;
-				continue;
-			}
-		} 
-		let cp = cps[i];
-		let token = tokenizer(cp);
-		if (Array.isArray(token)) { // this is more characters
-			chars.push(...token);
-		} else {
-			drain();
-			if (token) { // this is a token
-				tokens.push(token);
-			} else { // this is a label separator
-				tokens = []; // create a new label
-				labels.push(tokens);
-			}
-		}
-	}
-	drain();
-	return labels;
+	}, EMOJI_PARSER)[0];
 }
 
 export { BUILT, NAME, UNICODE, VERSION, ens_normalize, ens_tokenize };

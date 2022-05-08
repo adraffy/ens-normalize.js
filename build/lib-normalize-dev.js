@@ -1,5 +1,6 @@
 import {read_member_set, read_mapped_table, lookup_mapped} from './decoder.js';
 import {explode_cp, escape_unicode} from './utils.js';
+import {parse_tokens} from './tokens.js';
 import {puny_decode} from './puny.js';
 import emoji_parser_factory from './emoji.js';
 // the following is replaced by nf0.js when using "-xnfc"
@@ -19,7 +20,7 @@ const EMOJI_PARSER = r() && emoji_parser_factory(r); // this is optional
 
 // collapse emoji or NFC(text) to code points
 function flatten_tokens(tokens) {
-	return tokens.flatMap(({e, v}) => e ?? nfc(v));
+	return tokens.flatMap(({e, v}) => e ?? v);
 }
 
 function label_error(cps, message) {
@@ -56,7 +57,7 @@ export function ens_normalize(name) {
 	// [Processing] 2.) Normalize: Normalize the domain_name string to Unicode Normalization Form C.
 	// [Processing] 3.) Break: Break the string into labels at U+002E ( . ) FULL STOP.
 	const HYPHEN = 0x2D; // HYPHEN MINUS
-	let labels = tokenized_idna(nfc(explode_cp(name)), cp => {
+	let labels = parse_tokens(nfc(explode_cp(name)), cp => {
 		// ignored: Remove the code point from the string. This is equivalent to mapping the code point to an empty string.
 		if (STOP.has(cp)) return;
 		if (IGNORED.has(cp)) return [];
@@ -68,7 +69,7 @@ export function ens_normalize(name) {
 		if (mapped) return mapped;
 		// disallowed: Leave the code point unchanged in the string, and record that there was an error.
 		throw new Error(`Disallowed character "${escape_unicode(String.fromCodePoint(cp))}"`);
-	}).map(tokens => {
+	}, EMOJI_PARSER).map(tokens => {
 		let cps = flatten_tokens(tokens);
 		// [Processing] 4.) Convert/Validate
 		if (cps.length >= 4 && cps[0] == 0x78 && cps[1] == 0x6E && cps[2] == HYPHEN && cps[3] == HYPHEN) { // "xn--"
@@ -80,7 +81,7 @@ export function ens_normalize(name) {
 				// With either Transitional or Nontransitional Processing, sources already in Punycode are validated without mapping. 
 				// In particular, Punycode containing Deviation characters, such as href="xn--fu-hia.de" (for fuß.de) is not remapped. 
 				// This provides a mechanism allowing explicit use of Deviation characters even during a transition period. 
-				[tokens] = tokenized_idna(cps_decoded, cp => VALID.has(cp) ? [cp] : []);
+				tokens = parse_tokens(nfc(cps_decoded), cp => VALID.has(cp) ? [cp] : [])[0];
 				let expected = flatten_tokens(tokens);
 				if (cps_decoded.length != expected.length || !cps_decoded.every((x, i) => x == expected[i])) throw new Error('not normalized');
 				// Otherwise replace the original label in the string by the results of the conversion. 
@@ -153,53 +154,12 @@ export function ens_normalize(name) {
 // this is much nicer than exposing the predicates
 // [{m:[0x72], u:[0x52]},{e:[0x1F4A9],u:[0x1F4A9]},{t:[61,66,66]},{},{t:[65,74,68]}]
 export function ens_tokenize(name) {
-	return tokenized_idna(explode_cp(name), cp => {
+	return parse_tokens(explode_cp(name), cp => {
 		if (STOP.has(cp)) return {};
 		if (VALID.has(cp)) return [cp]; // this gets merged into v
 		if (IGNORED.has(cp)) return {i: cp};
 		let mapped = lookup_mapped(MAPPED, cp);
 		if (mapped) return {m: mapped, u: [cp]}; 
 		return {d: cp};
-	})[0];
-}
-
-// this returns [[]] if empty
-// {e:[],u:[]} => emoji
-// {v:[]} => chars
-function tokenized_idna(cps, tokenizer) {
-	let chars = [];
-	let tokens = [];
-	let labels = [tokens];
-	function drain() { 
-		if (chars.length > 0) {
-			tokens.push({v: chars}); 
-			chars = [];
-		}
-	}
-	for (let i = 0; i < cps.length; i++) {
-		if (EMOJI_PARSER) {
-			let [len, e] = EMOJI_PARSER(cps, i);
-			if (len > 0) {
-				drain();
-				tokens.push({e, u:cps.slice(i, i+len)}); // these are emoji tokens
-				i += len - 1;
-				continue;
-			}
-		} 
-		let cp = cps[i];
-		let token = tokenizer(cp);
-		if (Array.isArray(token)) { // this is more characters
-			chars.push(...token);
-		} else {
-			drain();
-			if (token) { // this is a token
-				tokens.push(token);
-			} else { // this is a label separator
-				tokens = []; // create a new label
-				labels.push(tokens);
-			}
-		}
-	}
-	drain();
-	return labels;
+	}, EMOJI_PARSER)[0];
 }

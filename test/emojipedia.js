@@ -1,6 +1,6 @@
 import {writeFileSync} from 'fs';
 import fetch from 'node-fetch';
-import {explode_cp, hex_cp, quote_cp} from '../build/utils.js';
+import {explode_cp, hex_cp, quote_cp, date_str} from '../build/utils.js';
 
 // use current version
 import {ens_normalize} from '../index.js';
@@ -30,4 +30,4 @@ for (let match of html.slice(pos0, pos1).matchAll(/<li>.*?href="(.+?)".*?class="
 	json.push({emoji, slug, desc, src: cps.map(hex_cp).join(' ')});
 }
 
-writeFileSync(new URL(`./data/emojipedia-missing-zwj-${new Date().toJSON().slice(0, 10).replaceAll('-', '')}.json`, import.meta.url).pathname, JSON.stringify(json));
+writeFileSync(new URL(`./data/emojipedia-missing-zwj-${date_str()}.json`, import.meta.url).pathname, JSON.stringify(json));

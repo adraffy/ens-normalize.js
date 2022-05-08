@@ -63,7 +63,7 @@ export function encode_arithmetic(symbols, linear) {
 	if (symbols.length == 0) throw new Error(`no symbols`);
 	if (linear < 0) throw new Error(`should be non-negative`);
 	let payload = [];
-	let w0 = bit_width(linear);
+	//let w0 = bit_width(linear);
 	symbols = symbols.map(x => {
 		if (x >= linear) {
 			x -= linear;			

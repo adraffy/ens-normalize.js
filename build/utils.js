@@ -10,6 +10,20 @@ export function random_choice(v) {
 	return v[Math.random() * v.length|0];
 }
 
+export function random_sample(v, n) {
+	if (v.length > n) {
+		v = v.slice(); // make copy
+		for (let i = 0; i < n; i++) { // shuffle prefix n
+			let swap = Math.floor(i + Math.random() * (v.length - i));
+			let temp = v[i]; 
+			v[i] = v[swap];
+			v[swap] = temp;
+		}
+		v = v.slice(0, n); // truncate
+	}
+	return v;
+}
+
 export function set_intersect(...sets) {
 	let n = sets.length;
 	if (n == 0) throw new TypeError('no sets');
@@ -67,6 +81,10 @@ export function quote_cp(cp) {
 	return `{${hex_cp(cp)}}`;
 }
 
+export function html_escape_cp(cp) {
+	return `&#${cp};`;
+}
+
 export function is_printable_ascii(s) {	
 	// printable w/o:
 	// 0x20 (space)
@@ -76,19 +94,21 @@ export function is_printable_ascii(s) {
 
 export function escape_unicode(s) {
 	// printable w/o:
+	// 0x20 (space)
 	// 0x22 (double-quote)
 	// 0x7B/0x7D (curly-brace, used for escaping)
 	// 0x7F (delete)
-	return s.replace(/[^\x20-\x21\x23-\x7A\x7C\x7E]/gu, x => quote_cp(x.codePointAt(0)));
+	return s.replace(/[^\x21\x23-\x7A\x7C\x7E]/gu, x => quote_cp(x.codePointAt(0)));
 }
 
-export function escape_name_for_html(s, quoter) {
+export function escape_name_for_html(s, quoter, escaper) {
 	// printable w/o:
 	// html: 0x26 &, 0x3C <, 0x3E >
 	// quote: 0x00-0x20 control, 0x7F DEL, whitespace, joiners, tagspec
 	if (!quoter) quoter = quote_cp;
+	if (!escaper) escaper = html_escape_cp;
 	return s.replace(/(?:([\x00-\x20\x7F\xA0\s\u200C\u200D\u{E0020}-\u{E007F}])|([^\x21-\x25\x27-\x3B\x3D\x3F-\x7E]))/gu, 
-		(_, a, b) => a ? quoter(a.codePointAt(0)) : `&#${b.codePointAt(0)};`);
+		(_, a, b) => a ? quoter(a.codePointAt(0)) : escaper(b.codePointAt(0)));
 }
 
 export function take_from(v, fn) {
@@ -132,6 +152,7 @@ export function split_linear(mapped, dx, dy) {
 	return {linear, nonlinear: mapped.filter(v => v[0] >= 0)}; // remove marked
 }
 
+// str to cps
 export function explode_cp(s) {
 	if (typeof s != 'string') throw new TypeError(`expected string`);	
 	return [...s].map(c => c.codePointAt(0));
@@ -195,6 +216,8 @@ export function group_by(v, fn, ret = {}) {
 	return ret;
 }
 
+// tally multiplicity 
+// [1, 1, 1, 4] => {1: 3, 4: 1}
 export function tally(v, ret = {}) {
 	for (let x of v) {
 		ret[x] = (ret[x] ?? 0) + 1;
@@ -232,4 +255,8 @@ export function split_on(v, x) {
 	}
 	ret.push(v.slice(pos));
 	return ret;
+}
+
+export function date_str() {
+	return new Date().toJSON().slice(0, 10).replaceAll('-', '')
 }

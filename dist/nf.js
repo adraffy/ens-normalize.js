@@ -1,3 +1,4 @@
+// str to cps
 function explode_cp(s) {
 	if (typeof s != 'string') throw new TypeError(`expected string`);	
 	return [...s].map(c => c.codePointAt(0));

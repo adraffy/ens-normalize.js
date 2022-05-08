@@ -2,6 +2,8 @@ import {inspect} from 'util';
 import {ens_normalize, ens_tokenize} from './lib-normalize-release.js';
 import {escape_name_for_html, parse_cp_sequence} from './utils.js';
 
+console.log(ens_normalize('نیم‌فاصله'));
+
 console.log(inspect(ens_tokenize('🚴‍♂️.eth'), false, null, true));
 
 console.log(ens_normalize('a.eth'));

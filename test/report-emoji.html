@@ -105,7 +105,7 @@ td.emoji.only {
 	border-collapse: collapse;
 }
 .legend td {
-	padding: 2px;
+	padding: 3px;
 }
 </style>
 </head>
@@ -115,7 +115,7 @@ td.emoji.only {
 <div class="legend">
 Pictograph and Single Character Emoji have no preferred appearance: 
 <table><tr>
-<td class="valid">Valid</td>
+<td class="valid">Valid (but not as provided)</td>
 <td class="verbatim">Verbatim</td>
 <td class="different">Different</td>
 <td class="disallowed">Disallowed</td>
@@ -235,13 +235,13 @@ async function main() {
 	//await add_characters('Test', parse_cp_sequence('270A'), true);
 
 	// these are nonstandard
-	await add_sequences('Custom Sequences', custom_seqs, true);
-	await add_sequences('Custom Characters', custom_chrs, true);
+	await add_sequences('Custom Sequences', custom_seqs);
+	await add_sequences('Custom Characters', custom_chrs);
 	await add_sequences('Missing ZWJ from Emojipedia', emojipedia)
 
 	// these are standard
 	await add_characters('Single Character Emoji', basic);
-	await add_characters('Unknown Emoji', emoji);
+	await add_characters('Uncategorized Emoji', emoji);
 	for (let [name, v] of Object.entries(seqs)) {
 		await add_sequences(name, v);
 	}
@@ -253,7 +253,7 @@ function str_from_tokens(tokens) {
 	return String.fromCodePoint(...tokens.flatMap(({v,m,e}) => v ?? m ?? e ?? []));
 }
 
-async function add_sequences(name, seqs, show_errors = false) {
+async function add_sequences(name, seqs) {
 	if (seqs.length == 0) return;
 	await update_state(`${name} (${seqs.length})`);
 
@@ -275,12 +275,8 @@ async function add_sequences(name, seqs, show_errors = false) {
 				td0.append(dom_from_tokens(tokens));
 			}
 		} catch (err) {
-			if (error) {
-				type = 'valid';
-			} else {
-				type = 'error';
-			}
-			td0.innerHTML = err.message;
+			type = 'error';
+			td0.innerHTML = `${error ? '✔️ ' : ''}${err.message}`;
 		}
 		td0.classList.add(type);
 
@@ -310,13 +306,13 @@ async function add_sequences(name, seqs, show_errors = false) {
 			return td;
 		}));
 
-		return {type, tr};
+		return {type, tr, error};
 	});
 
 	// sort by type
 	rows.sort((a, b) => types.indexOf(a.type) - types.indexOf(b.type));
 
-	let errors = rows.filter(x => x.type == 'error').length;
+	let errors = rows.filter(x => x.type == 'error' && !x.error).length;
 	let suffix = ` (${seqs.length})`;
 	if (errors > 0) {
 		suffix += ` &rarr; <span class="error-count">${errors} errors</span>`;
@@ -362,12 +358,13 @@ async function add_characters(name, chars, show_errors = false, width = 3) {
 			norm0 = ens_normalize(styled);
 			if (norm0 === solo) {
 				type = 'valid';
+				//td0.append(dom_from_tokens(ens_tokenize(norm0)));
 			} else {
 				if (norm0 === styled) {
 					type = 'verbatim';
 				} else {
 					type = 'different';
-					td0.append(dom_from_tokens(ens_tokenize(solo)));
+					td0.append(dom_from_tokens(ens_tokenize(norm0)));
 				}
 			}
 		} catch (err) {

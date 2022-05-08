@@ -64,6 +64,7 @@ function generate_dev_lib({rules, nfc = true, bidi = true, context = true}) {
 	return tmp_file;
 }
 
+
 // build release
 await build(generate_release_lib({name: 'adraffy'}), 'ens-normalize');
 await build(generate_release_lib({name: 'adraffy', versions: true}), 'ens-normalize-debug');
@@ -91,6 +92,7 @@ await build(generate_dev_lib({rules: 'ENS0', context: false, bidi: false, nfc: f
 await build(join(base_dir, 'lib-nf.js'), 'nf');
 await build(join(base_dir, 'lib-bidi.js'), 'bidi');
 await build(join(base_dir, 'lib-parts.js'), 'parts');
+await build(join(base_dir, 'lib-dns.js'), 'dns');
 
 // compute compression overhead
 // as of 20220115: ~2KB
