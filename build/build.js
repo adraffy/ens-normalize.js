@@ -129,6 +129,27 @@ async function build(lib_file, dist_name) {
 			}
 		})]
 	});
+	/*
+	// why the fuck is this stuff so dumb?
+	await bundle.write({
+		file: join(dist_dir, `${dist_name}.umd.min.js`),
+		format: 'umd',
+		name: 'adraffy',
+		plugins: [terser({
+			compress: {
+				toplevel: true,
+				passes: 1, 
+				dead_code: true
+			},
+			mangle: { 
+				toplevel: true,
+				properties: {
+					regex: /^read/
+				}
+			}
+		})]
+	});
+	*/
 	await bundle.close();
 	console.log(`Built: ${dist_name}`);
 }

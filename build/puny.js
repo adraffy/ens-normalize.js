@@ -1,7 +1,8 @@
 // https://datatracker.ietf.org/doc/html/rfc3492
 
-// "xn--{encoded}"
-// "xn--{lower-ascii}-{encoded}"
+// formats:
+// "{encoded}"
+// "{lower-ascii}-{encoded}"
 
 // overflow calculation:
 // https://datatracker.ietf.org/doc/html/rfc3492#section-6.4
@@ -31,6 +32,7 @@ const HYPHEN = 0x2D;
 // 30..39 (0-9) = 26 to 35, respectively
 
 // An encoder SHOULD output only uppercase forms or only lowercase forms
+// => lowercase
 function cp_from_basic(x) {
 	return x < 26 ? 97 + x : 22 + x;
 }
@@ -68,12 +70,14 @@ function adapt(delta, n, first) {
 
 // https://datatracker.ietf.org/doc/html/rfc3492#section-6.3
 // cps -> cps
+// does not restrict ascii part
+// does not append "xn--""
 // returns unchanged if not required
-export function puny_encode(cps, prefixed) {
+export function puny_encode(cps) {
 	let ret = cps.filter(cp => cp < N);
 	let basic = ret.length;
 	if (basic == cps.length) return cps; // puny not needed
-	if (prefixed) ret.unshift(120, 110, HYPHEN, HYPHEN); // insert "xn--"
+	//if (prefixed) ret.unshift(120, 110, HYPHEN, HYPHEN); // insert "xn--"
 	if (basic) ret.push(HYPHEN);
 	let cp0 = N;
 	let bias = BIAS;
@@ -111,13 +115,12 @@ export function puny_encode(cps, prefixed) {
 // https://datatracker.ietf.org/doc/html/rfc3492#section-6.2
 // cps -> cps
 // assumes "xn--" prefix is already removed
-// assumes cps is normalized: [0-9a-z\-]+
+// does not restrict ascii part
 export function puny_decode(cps) {
 	let ret = [];
 	let pos = cps.lastIndexOf(HYPHEN);
 	for (let i = 0; i < pos; i++) {
 		let cp = cps[i];
-		//if (cp != HYPHEN) cp = cp_from_basic(basic_from_cp(cp));
 		if (cp >= N) throw new Error('Expected ASCII');
 		ret.push(cp);
 	}

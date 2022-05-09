@@ -56,18 +56,38 @@ footer {
 <h1><a href="https://datatracker.ietf.org/doc/html/rfc3492">Punycode</a> Coder</h1>
 <a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a>
 </header>
-<p>No ASCII character restrictions.  Use <code>{HEX}</code> to escape.</p>
+<div id="examples">
+<button>💩</button>
+<button>👩🏽‍⚕</button>
+<button>👩🏽⚕</button>
+<button>🚴‍♂️</button>
+<button>🚴♂</button>
+<button>😵‍💫😵‍💫😵‍💫</button>
+<button>😵💫😵💫😵💫</button>
+</div>
+<p>No ASCII character restrictions.  No Unicode transformations.  Use <code>{HEX}</code> to escape.</p>
 <input id="unicode" autocomplete="off">
-<pre></pre>
+<pre id="codepoints"></pre>
 <input id="punycode" autocomplete="off">
+<p id="dns"></p>
 <footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
 <script type="module">
-import {explode_cp, hex_cp} from '../build/utils.js';
+import {explode_cp} from '../build/utils.js';
 import {puny_decode, puny_encode} from '../build/puny.js';
+
+const PREFIX = 'xn--';
 
 const unicode_field = document.querySelector('#unicode');
 const punycode_field = document.querySelector('#punycode');
-const codepoints = document.querySelector('pre');
+const codepoints_pre = document.querySelector('#codepoints');
+const dns_status = document.querySelector('#dns');
+
+for (let btn of document.querySelectorAll('#examples button')) {
+	btn.addEventListener('click', () => {
+		unicode_field.value = btn.innerHTML;
+		update_punycode();
+	});
+}
 
 unicode_field.addEventListener('input', update_punycode);
 punycode_field.addEventListener('input', update_unicode);
@@ -75,7 +95,7 @@ punycode_field.addEventListener('input', update_unicode);
 punycode_field.addEventListener('keydown', e => {
 	if (e.key == 'Tab') {
 		e.preventDefault();
-		unicode_field.select();
+		unicode_field.select(); // muhaha
 	}
 });
 
@@ -84,12 +104,13 @@ show_placeholder(true);
 function show_placeholder(b) {
 	unicode_field.placeholder = b ? '💩' : '';
 	punycode_field.placeholder = b ? 'xn--ls8h' : '';
-	codepoints.classList.toggle('hide', b);
+	codepoints_pre.classList.toggle('hide', b);
 	if (b) {
 		unicode_field.value = '';
 		punycode_field.value = '';
 		unicode_field.classList.remove('error');
 		punycode_field.classList.remove('error');
+		dns_status.classList.add('hide');
 	}
 }
 
@@ -111,20 +132,16 @@ function update_punycode() {
 				throw new Error(`Invalid Unicode: ${x}`);	
 			}
 		}));
-		update_codepoints(cps);
-		let encoded = puny_encode(cps, true);
-		punycode_field.value = String.fromCodePoint(...encoded);
-		/*
+		let encoded = puny_encode(cps);
 		if (encoded === cps) {
-			punycode_field.value = `xn--${String.fromCodePoint(...cps)}-`;
+			punycode_field.value = String.fromCodePoint(...cps);
 		} else {
-			punycode_field.value = String.fromCodePoint(...encoded);
+			punycode_field.value = PREFIX + String.fromCodePoint(...encoded);
 		}
-		*/
+		update_codepoints(cps);		
 	} catch (err) {
 		punycode_field.value = '';
-		codepoints.classList.add('error');
-		codepoints.innerHTML = err.message;
+		show_error(err.message);
 	}
 }
 
@@ -136,23 +153,39 @@ function update_unicode() {
 	}	
 	show_placeholder(false);
 	try {
-		if (!s.startsWith('xn--')) {
-			throw new Error('Expected "xn--" prefix');
+		let decoded;
+		if (s.startsWith(PREFIX)) {
+			decoded = puny_decode(explode_cp(s.slice(4)));
+			unicode_field.value = String.fromCodePoint(...decoded);
+		} else {
+			decoded = explode_cp(s);
+			unicode_field.value = s;
 		}
-		let cps = explode_cp(s.slice(4));
-		let decoded = puny_decode(cps);
-		unicode_field.value = String.fromCodePoint(...decoded);
 		update_codepoints(decoded);
 	} catch (err) {
 		unicode_field.value = '';
-		codepoints.classList.add('error');
-		codepoints.innerHTML = err.message;
+		show_error(err.message);
 	}
 }
 
+function show_error(error) {
+	codepoints_pre.classList.add('error');
+	codepoints_pre.innerHTML = error;
+	dns_status.classList.add('hide');
+}
+
 function update_codepoints(cps) {
-	codepoints.innerHTML = cps.length ? cps.map(hex_cp).join(' ') : '<i>empty string</i>';
-	codepoints.classList.remove('error');
+	codepoints_pre.innerHTML = cps.length ? cps.map(cp => `{${cp.toString(16).toUpperCase()}}`).join('') : '<i>empty string</i>';
+	codepoints_pre.classList.remove('error');
+
+	let puny = punycode_field.value;
+	if (/^[a-z0-9\-]+$/i.test(puny) && !puny.startsWith('-') && !puny.endsWith('-')) {
+		dns_status.innerHTML = '✔️ Valid DNS';
+	} else {
+		dns_status.innerHTML = '❌ Invalid DNS';
+	}
+	dns_status.classList.remove('hide');
+
 }
 </script>
 </body>

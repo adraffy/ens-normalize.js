@@ -67,11 +67,12 @@
 	{"name": "💩💩︎💩️", "norm": "💩💩💩", "comment": "All Legacy Styles"},
 	{"name": "💩\u200D💩", "error": true, "comment": "Poop Joiner"},
 
-	{"name": "#️⃣*️⃣", "comment": "New Keycaps"},
-	{"name": "‼️", "comment": "New Emoji: double exclaimation mark"},
-	{"name": "⁉️", "comment": "New Emoji: exclamation question mark"},
+	{"name": "#️⃣*️⃣", "comment": "Styled Keycaps"},
+	{"name": "‼️", "comment": "Styled Emoji: double exclaimation mark"},
+	{"name": "⁉️", "comment": "Styled Emoji: exclamation question mark"},
 
-	{"name": "‼︎", "error": true, "comment": "New Emoji: Text-styled"},
+	{"name": "‼", "error": true, "comment": "Styled Emoji: Unstyled"},
+	{"name": "‼\uFE0E", "error": true, "comment": "Styled Emoji: Text-styled"},
 	{"name": "👩️🏽‍⚕️", "error": true, "comment": "Text-styled Modifier Sequence in ZWJ Sequence"},
 	{"name": "🏳\uFE0E\u200D🌈", "error": true, "comment": "Text-styled Emoji in ZWJ Sequence"},
 

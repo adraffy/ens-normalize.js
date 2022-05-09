@@ -9,32 +9,30 @@ import VALID_STR from './output/dns.js';
 // lower-ascii characters valid in IDNA 2003/2008
 const VALID = new Set(explode_cp(VALID_STR));
 
-const STOP = '.';
-const HYPHEN = 0x2D;
-
-const MAX_NAME = 253; // u16(len) + 253
+// [len, 63][len, 63][len, 63][len, 61][len, 0] = 255 
+// 63+1+63+1+63+1+61 = 253
+const MAX_NAME = 253; 
 const MAX_LABEL = 63;
 
-function label_error(cps, message) {
-	return new Error(`Invalid label "${escape_unicode(String.fromCodePoint(...cps))}": ${message}`);
+function label_error(s, message) {
+	return new Error(`Invalid label "${escape_unicode(s)}": ${message}`);
 }
 
+// assume: name is from ens_normalize()
 export function dns_from_normalized_ens(name) {	
 	let acc = 0;
-	return name.split(STOP).map((label, i) => {
+	return name.split('.').map((label, i) => {
 		if (i > 0) acc++; // separator
 		if (!label) return ''; // empty label
+		if (/^xn--/i.test(label)) throw label_error(`literal punycode`);
+		if (label.startsWith('-')) throw label_error(label, 'leading hyphen');
+		if (label.endsWith('-')) throw label_error(label, 'trailing hyphen');
 		let cps = explode_cp(label);
-		let len = cps.length;
-		if (cps[0] == HYPHEN) throw label_error(cps, `leading hyphen`);
-		if (len >= 2 && cps[len - 1] == HYPHEN) throw label_error(cps, `trailing hyphen`);
-		if (len >= 4 && cps[2] == HYPHEN && cps[3] == HYPHEN) throw label_error(cps, `invalid label extension`);		
-		//if (len > MAX_LABEL) throw label_error(cps, `too long`);
-		let encoded = puny_encode(cps, true);
-		if (encoded.length > MAX_LABEL) throw label_error(cps, `too long`);
-		if (encoded.some(cp => !VALID.has(cp))) throw label_error(cps, 'invalid ASCII');
+		let encoded = puny_encode(cps);
+		if (encoded.length > MAX_LABEL) throw label_error(label, `too long`);
+		if (encoded.some(cp => !VALID.has(cp))) throw label_error(label, 'invalid ASCII');
 		acc += encoded.length;
-		if (acc > MAX_NAME) throw new Error(`Name too long`);		
-		return String.fromCodePoint(...encoded);
-	}).join(STOP);
+		if (acc > MAX_NAME) throw new Error(`Name too long`);
+		return encoded === cps ? label : 'xn--' + String.fromCodePoint(...encoded);
+	}).join('.');
 }
