@@ -55,4 +55,11 @@ export default  [
 	{ty: 'valid', src: '20AC'}, // €
 	{ty: 'valid', src: '20BF'}, // ₿
 
+	// path-like combining marks
+	// Combining Long Solidus Overlay	
+	//{ty: 'disallow', src: '338'}, // looks like /
+	// Combining Short Stroke Overlay 
+	//{ty: 'disallow', src: '335'}, // looks like -
+
+
 ];

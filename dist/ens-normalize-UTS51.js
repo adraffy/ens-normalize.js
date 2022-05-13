@@ -234,10 +234,11 @@ function quote_cp(cp) {
 
 function escape_unicode(s) {
 	// printable w/o:
+	// 0x20 (space)
 	// 0x22 (double-quote)
 	// 0x7B/0x7D (curly-brace, used for escaping)
 	// 0x7F (delete)
-	return s.replace(/[^\x20-\x21\x23-\x7A\x7C\x7E]/gu, x => quote_cp(x.codePointAt(0)));
+	return s.replace(/[^\x21\x23-\x7A\x7C\x7E]/gu, x => quote_cp(x.codePointAt(0)));
 }
 
 // str to cps
@@ -298,8 +299,9 @@ function parse_tokens(cps, tokenizer, emoji_parser) {
 
 // https://datatracker.ietf.org/doc/html/rfc3492
 
-// "xn--{encoded}"
-// "xn--{lower-ascii}-{encoded}"
+// formats:
+// "{encoded}"
+// "{lower-ascii}-{encoded}"
 
 // overflow calculation:
 // https://datatracker.ietf.org/doc/html/rfc3492#section-6.4
@@ -358,13 +360,12 @@ function adapt(delta, n, first) {
 // https://datatracker.ietf.org/doc/html/rfc3492#section-6.2
 // cps -> cps
 // assumes "xn--" prefix is already removed
-// assumes cps is normalized: [0-9a-z\-]+
+// does not restrict ascii part
 function puny_decode(cps) {
 	let ret = [];
 	let pos = cps.lastIndexOf(HYPHEN);
 	for (let i = 0; i < pos; i++) {
 		let cp = cps[i];
-		//if (cp != HYPHEN) cp = cp_from_basic(basic_from_cp(cp));
 		if (cp >= N) throw new Error('Expected ASCII');
 		ret.push(cp);
 	}
@@ -829,7 +830,7 @@ function validate_context(cps) {
 
 var r = read_compressed_payload('AA4AEwAyAB0ADAAQAAoADgAJAAYADQCFABMABwDA/QQA8NwPGSY8GXQegwLODADknOjpQwsWCBMDFiERPwQEAoYD0AIBTwC8YMC0gQoCTQ0JGuv1SCYgWQoAZsQEAKdGCQMBBQwOCQILBiAVBScAlADGCwDFSgMIZSYTpRlnSv0/FAwABAIGBAATe0AD4gAhJQAAHgUVBQUFBQABF2VI/DQNSzsBJK4SAADy8QglE9EAy4E3qggOxQsACBIBATUMRjkMJgAAy61tFRDkFqVeAVkNAW4K5yIACAIM/xZUAM2Raa1oojhYAnlFaneDL37617VezdtM3exCFktwcMTz3IE3r3p/2kBtcmwR3QmZJMh+5eYi5vBHjtwwzBFZKxrXSEsDqtsYadOiXRNxIJsgaF/ALX3gyhu5n7f6YvfL0Y+HWk3R1Iw+x11c0XLnlWdDy7Emx7rOy6tLlfns4A==');
 
-const BUILT = '2022-05-08T07:17:49.345Z';
+const BUILT = '2022-05-11T04:26:58.675Z';
 const UNICODE = '14.0.0';
 const VERSION = '1.3.17';
 const NAME = 'UTS51';

@@ -2,7 +2,6 @@ import {mkdirSync, readFileSync, writeFileSync} from 'fs';
 import {join} from 'path';
 import {escape_unicode, escape_name_for_html, parse_cp, quote_cp, html_escape_cp} from '../build/utils.js';
 import REGISTERED from './data/eth-labels.js';
-import {is_hangul, nfc} from '../build/nf.js';
 
 
 //import lib from 'eth-ens-namehash';
@@ -24,7 +23,8 @@ mkdirSync(output_dir, {recursive: true});
 
 const ENS_VERSION = JSON.parse(readFileSync(join(base_dir, 'node_modules/@ensdomains/eth-ens-namehash/package.json'))).version;
 
-generate_report(output_dir, await import('../dist/ens-normalize-debug.js'));
+//generate_report(output_dir, await import('../dist/ens-normalize-debug.js'));
+generate_report(output_dir, await import('../dist/ens-normalize-v2-debug.js'));
 //generate_report(output_dir, await import('../dist/ens-normalize-compat.js'));
 
 function generate_report(dir, module) {
@@ -43,6 +43,9 @@ function generate_report(dir, module) {
 			adraffy = ens_normalize(label);
 		} catch (err) {
 			adraffy_err = err.message;
+			if (adraffy_err.startsWith('Disallowed label')) {
+				adraffy_err = adraffy_err.slice(adraffy_err.lastIndexOf(': ') + 2);
+			}
 		}
 		let type;
 		let ret;
@@ -98,25 +101,31 @@ function generate_report(dir, module) {
 	}
 	html += '</tbody></table>';
 
+
 	for (let [type, bucket] of Object.entries(buckets)) {
 		let temp = `<a name="${type}"><h2>${type} (${bucket.length})</h2></a><table id="${type}"><thead><tr>
 		<th colspan="2">Unicode</th><th>ens</th><th>adraffy</th>
 		</tr></thead><tbody>`;
 		let ens_fmtr = escape_unicode_for_html;
-		let adraffy_fmtr = escape_unicode_for_html;
+		let adraffy_fmtr = escape_unicode_for_html;	
+		let sort_fn = (a, b) => a.adraffy.localeCompare(b.adraffy);
 		switch (type) {
-			case 'ens-error': 
+			case 'ens-error': {
+				sort_fn = (a, b) => a.ens.localeCompare(b.ens);
 				ens_fmtr = ens_error;
 				break;
-			case 'adraffy-error':
+			}
+			case 'adraffy-error': {
 				adraffy_fmtr = adraffy_error;
 				break;
-			case 'both-error':
+			}
+			case 'both-error': {
 				adraffy_fmtr = adraffy_error;
 				ens_fmtr = ens_error;
 				break;
+			}
 		}
-		temp += bucket.map(({label, ens, adraffy}) => `<tr>
+		temp += bucket.sort(sort_fn).map(({label, ens, adraffy}) => `<tr>
 			<td><div>${escape_name_for_html(label)}</div></td>
 			<td><div>${escape_unicode_for_html(label)}</div></td>
 			<td><div>${ens_fmtr(ens)}</div></td>

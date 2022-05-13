@@ -24,7 +24,7 @@ export function dns_from_normalized_ens(name) {
 	return name.split('.').map((label, i) => {
 		if (i > 0) acc++; // separator
 		if (!label) return ''; // empty label
-		if (/^xn--/i.test(label)) throw label_error(`literal punycode`);
+		if (/^xn--/i.test(label)) throw label_error(label, `literal punycode`);
 		if (label.startsWith('-')) throw label_error(label, 'leading hyphen');
 		if (label.endsWith('-')) throw label_error(label, 'trailing hyphen');
 		let cps = explode_cp(label);

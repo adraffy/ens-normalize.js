@@ -1,6 +1,6 @@
 {
   "name": "@adraffy/ens-normalize",
-  "version": "1.3.17",
+  "version": "1.4.1",
   "description": "Compact ES6 Ethereum Name Service (ENS) Name Normalizer",
   "keywords": [
     "ENS",
@@ -26,11 +26,9 @@
     "url": "http://raffy.antistupid.com"
   },
   "scripts": {
-    "unicode-download": "node build/unicode.js download",
-    "unicode-parse": "node build/unicode.js parse",
-    "build-tables": "node build/build-tables.js all",
-    "build": "node build/build.js",
-    "test-source": "node test/test-lib.js build/lib-normalize.js",
-    "test-build": "node test/test-lib.js dist/ens-normalize.js"
+    "unicode": "node build/update-unicode.js",
+    "build-tables": "node build/build-tables.js",
+    "build": "node build/build-dists.js",
+    "test": "node test/test-validation-tests.js"
   }
 }

@@ -24,6 +24,23 @@ export function random_sample(v, n) {
 	return v;
 }
 
+export function binary_search(v, x) {
+	let m = 0;
+	let n = v.length - 1;
+	while (m <= n) {
+		let k = (n + m) >> 1;
+		let cmp = x - v[k];
+		if (cmp > 0) {
+			m = k + 1;
+		} else if(cmp < 0) {
+			n = k - 1;
+		} else {
+			return k;
+		}
+	}
+	return ~m;
+}
+
 export function set_intersect(...sets) {
 	let n = sets.length;
 	if (n == 0) throw new TypeError('no sets');

@@ -133,17 +133,17 @@ export function read_member_table(next) {
 	].sort((a, b) => a[0] - b[0]);
 }
 
-export function read_member_set(next) {
-	let set = new Set(read_ascending(next(), next));
+export function read_member_set(next, lookup) {
+	let v = read_ascending(next(), next);
 	let n = next();
 	let vX = read_ascending(n, next);
 	let vN = read_counts(n, next);
 	for (let i = 0; i < n; i++) {
 		for (let j = 0; j < vN[i]; j++) {
-			set.add(vX[i] + j);
+			v.push(vX[i] + j);
 		}
 	}
-	return set;
+	return new Set(lookup ? v.map(x => lookup[x]) : v);
 }
 
 // returns array of 

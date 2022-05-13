@@ -286,7 +286,7 @@ footer {
 <button>Öbb.at</button>
 <button>◌̈bb.at</button>
 
-<a style="text-decoration: line-through" href="./puny.html">Punycode:</a>
+<b><a style="text-decoration: line-through" href="./puny.html">Punycode:</a></b>
 <button>xn--ls8h</button>
 <button>💷pound.eth</button>
 
@@ -311,7 +311,7 @@ footer {
 
 <b>Disallowed:</b>
 <button>te[st</button>
-<button data-name="a{0332}" data-replace="1"></button>
+<button data-name="a{0332}" data-replace></button>
 
 <b>Whitespace:</b>
 <button data-name="te st">Inner</button>
@@ -329,7 +329,7 @@ footer {
 <button>te--st</button>
 
 <b>Goofy:</b>
-<button data-name="[ba967c160905ade030f84952644a963994eeaed3881a6b8a4e9c8cbe452ad7a2].eth" data-skip="1">"💩.eth"</button>
+<button data-name="[ba967c160905ade030f84952644a963994eeaed3881a6b8a4e9c8cbe452ad7a2].eth" data-skip>"💩.eth"</button>
 
 <a href="./report-emoji.html#ZWJ%20Sequences"><b>Emoji:</b></a>
 <button>🚀🚀🚀</button>
@@ -356,9 +356,9 @@ footer {
 <button>🇺🇸</button>
 
 <a href="./report-emoji.html#RGI_Emoji_Tag_Sequence"><b>Tag:</b></a>
-<button data-name="{1F3F4}{E0067}{E0062}{E0065}{E006E}{E0067}{E007F}" data-replace="1"></button>
-<button data-name="{1F3F4}{E0067}{E0062}{E0073}{E0063}{E0074}{E007F}" data-replace="1"></button>
-<button data-name="{1F3F4}{E0067}{E0062}{E0077}{E006C}{E0073}{E007F}" data-replace="1"></button>
+<button data-name="{1F3F4}{E0067}{E0062}{E0065}{E006E}{E0067}{E007F}" data-replace></button>
+<button data-name="{1F3F4}{E0067}{E0062}{E0073}{E0063}{E0074}{E007F}" data-replace></button>
+<button data-name="{1F3F4}{E0067}{E0062}{E0077}{E006C}{E0073}{E007F}" data-replace></button>
 <button data-name="{1F3F4}{E0077}{E0074}{E0066}{E007F}">❌</button>
 <button data-name="{1F3F4}">"🏴"</button>
 
@@ -385,23 +385,20 @@ ZWJ:
 <a href="https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.3"><b>ContextO:</b></a>
 Middle Dot: 
 <button data-name="{6C}{B7}{6C}">✅</button>
-<button data-name="a{B7}b">❌</button>
 • 
 Greek Keraia: 
-<button data-name="ab{375}{0377}">✅</button>
-<button data-name="ab{375}">❌</button>
+<button data-name="{375}{0377}">✅</button>
 • 
 Hebrew Geresh 
-<button data-name="{05D1}{0591}{5F3}">✅</button>
-<button data-name="ab{5F3}">❌</button>
+<button data-name="{05D1}{5F3}">✅</button>
 • 
 Katakana:
-<button data-name="{3041}{30A1}{30FB}">✅</button>
+<button data-name="{30A1}{30FB}">✅</button>
 <button data-name="ab{30FB}">❌</button>
 • 
 Arabic-Indic:
-<button data-name="{5D0}{660}{661}{662}">✅</button>
-<button data-name="{5D0}{6F0}{6F1}{6F2}">✅</button>
+<button data-name="{660}{661}{662}">✅</button>
+<button data-name="{6F0}{6F1}{6F2}">✅</button>
 <button data-name="{660}{6F0}.eth">❌</button>
 <a href="https://www.rfc-editor.org/rfc/rfc5893.html#section-2"><b>CheckBidi:</b></a>
 <button>פעילותהבינאום</button>
@@ -411,15 +408,25 @@ Arabic-Indic:
 <button data-name="{633}{644}{645}{627}{646}{1F1F8}{1F1E6}">RTL+Emoji</button>
 <button data-name="bahrain.مصر">Separate LTR and RTL Labels</button>
 <button data-name="bahrainمصر">❌ Mixed LTR+RTL in Label</button>
-<button data-name="{202e}elgoog{202d}.eth" data-replace="1"></button>
-<button data-name="{202e}hte.elgoog" data-replace="1"></button>
+<button data-name="{202e}elgoog{202d}.eth" data-replace></button>
+<button data-name="{202e}hte.elgoog" data-replace></button>
+
 <b>Revived:</b>
 <button>‼️</button>
 <button>⁉️</button>
 <button>*️⃣</button>
 <button>#️⃣</button>
+
 <b>Currency:</b>
 <button>$£¥€₿</button>
+
+<b><a href="./report-scripts.html">Single-Script:</a></b>
+<button data-name="1a〆">Digit+Latin+Han</button>
+<button data-name="aрe">❌aрe</button>
+
+<b><a href="./report-confusables.html">Confusable:</a></b>
+<button>aɑ</button>
+<button>Aɑ</button>
 </div>
 <div id="options">
 <label><input type="checkbox" id="auto_resolve_check" checked>Resolve on Input</label>
@@ -440,7 +447,7 @@ Arabic-Indic:
 <div id="output">
 <ul class="row">
 <li>Click an <button data-name="bRANtly.eth">Example</button> to see how it works.</li>
-<li>Use <code>{FF}</code> or <code>[255]</code> to manually include codepoints, eg. <button data-escape="1" data-name="a{200D}b.eth">ZWJ</button></li>
+<li>Use <code>{FF}</code> or <code>[255]</code> to manually include codepoints, eg. <button data-escape data-name="a{200D}b.eth">ZWJ</button></li>
 <li><b>Copy Link</b> to get a URL that resolves on page-load.</li>
 </ul>
 </div>
@@ -452,7 +459,7 @@ import {
 	is_checksum_address, namehash, labelhash, ENS
 } from '../../eth-tools.js/dist/eth-tools.min.js';
 import {escape_name_for_html, is_printable_ascii, explode_cp, hex_cp} from '../build/utils.js';
-import {ens_normalize, ens_tokenize, VERSION, BUILT, NAME, UNICODE} from '../dist/ens-normalize-debug.min.js';
+import {ens_normalize, ens_tokenize, VERSION, BUILT, NAME, UNICODE} from '../dist/ens-normalize-v2-debug.min.js';
 import {dns_from_normalized_ens} from '../dist/dns.min.js';
 import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
 use_default_style();
@@ -485,9 +492,9 @@ determine_window_provider().then(p => {
 
 for (let btn of document.querySelectorAll('.examples button, button[data-name]')) {
 	let name = replace_escapes(btn.dataset.name ?? btn.innerHTML);
-	if (btn.dataset.replace) btn.innerHTML = name;
+	if (typeof btn.dataset.replace === 'string') btn.innerHTML = name;
 	if (!name.includes('.') && !is_checksum_address(name)) name += '.eth';
-	if (btn.dataset.escape) name = apply_escapes(name, false);
+	if (typeof btn.dataset.escape === 'string') name = apply_escapes(name, false);
 	if (!btn.title) btn.title = `${name}\n${explode_cp(name).map(hex_cp).join(' ')}`;
 	btn.addEventListener('click', () => {
 		input_field.value = name;
@@ -884,7 +891,10 @@ function resolve(skip_norm) {
 		parse();
 		return;
 	}
-	window.location = '#' + encodeURIComponent(input);
+	let hash = '#' + encodeURIComponent(input);
+	if (window.location.hash != hash) {
+		window.history.pushState(null, null, hash);
+	}
 	document.title = `${title}: ${input}`;
 	if (!skip_norm && !parse()) {
 		primary_arrows.classList.add('hide');

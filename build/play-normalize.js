@@ -1,7 +1,32 @@
 import {inspect} from 'util';
-import {ens_normalize, ens_tokenize} from './lib-normalize-release.js';
+import {ens_normalize, ens_tokenize} from './lib-normalize-v2.js';
 import {escape_name_for_html, parse_cp_sequence} from './utils.js';
 
+
+/*
+const UNICODE = [];
+for (let cp = 0; cp <= 0x10FFFF; cp++) {
+	try {
+		String.fromCodePoint(cp);
+		UNICODE.push(cp);
+	} catch (err) {	
+	}
+}
+for (let cp of UNICODE) {
+	try {
+		ens_normalize(String.fromCodePoint(cp, 0x30FB));
+	} catch (err) {
+		if (err.message.includes('katakana')) {
+			console.log(cp);
+			throw 1;
+		}
+	}
+}
+*/
+
+console.log(ens_normalize('うずまきナルト'));
+
+/*
 console.log(ens_normalize('نیم‌فاصله'));
 
 console.log(inspect(ens_tokenize('🚴‍♂️.eth'), false, null, true));
@@ -40,3 +65,4 @@ console.log(ens_tokenize(String.fromCodePoint(...parse_cp_sequence('1F3F4 E0067 
 console.log(ens_tokenize(String.fromCodePoint(...parse_cp_sequence('1F3F4 E0077 E007F'))));
 
 console.log(ens_normalize(String.fromCodePoint(...parse_cp_sequence('1F468 200D 2764 FE0F 200D 1F468'))));
+*/

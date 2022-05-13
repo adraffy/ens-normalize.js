@@ -8,6 +8,10 @@ function quote_cp(cp) {
 	return `{${hex_cp(cp)}}`;
 }
 
+function html_escape_cp(cp) {
+	return `&#${cp};`;
+}
+
 function is_printable_ascii(s) {	
 	// printable w/o:
 	// 0x20 (space)
@@ -15,13 +19,14 @@ function is_printable_ascii(s) {
 	return /^[\x21-\x7E]+$/gu.test(s);
 }
 
-function escape_name_for_html(s, quoter) {
+function escape_name_for_html(s, quoter, escaper) {
 	// printable w/o:
 	// html: 0x26 &, 0x3C <, 0x3E >
 	// quote: 0x00-0x20 control, 0x7F DEL, whitespace, joiners, tagspec
 	if (!quoter) quoter = quote_cp;
+	if (!escaper) escaper = html_escape_cp;
 	return s.replace(/(?:([\x00-\x20\x7F\xA0\s\u200C\u200D\u{E0020}-\u{E007F}])|([^\x21-\x25\x27-\x3B\x3D\x3F-\x7E]))/gu, 
-		(_, a, b) => a ? quoter(a.codePointAt(0)) : `&#${b.codePointAt(0)};`);
+		(_, a, b) => a ? quoter(a.codePointAt(0)) : escaper(b.codePointAt(0)));
 }
 
 function str(...v) {

@@ -1,7 +1,7 @@
 import {join} from 'path';
 import {readFileSync, writeFileSync} from 'fs';
 import {read_parsed} from '../nodejs-utils.js';
-import {parse_cp_range, parse_cp_sequence, compare_arrays, explode_cp} from '../utils.js';
+import {parse_cp_range, parse_cp_sequence, compare_arrays, explode_cp, date_str} from '../utils.js';
 import {nfc} from '../nf.js';
 
 
@@ -16,6 +16,44 @@ const SCRIPT_EXTS = Object.entries(read_parsed('ScriptExtensions')).map(([k, v])
 		return script;
 	})
 ]);
+
+//https://www.unicode.org/reports/tr39/#Mixed_Script_Detection
+/*
+
+    If Script_Extensions contains Hani (Han), add Hanb, Jpan, and Kore.
+    If Script_Extensions contains Hira (Hiragana), add Jpan.
+    If Script_Extensions contains Kana (Katakana), add Jpan.
+    If Script_Extensions contains Hang (Hangul), add Kore.
+    If Script_Extensions contains Bopo (Bopomofo), add Hanb.
+*/
+
+const SCRIPT_EXTRA = {
+	'Hani': ['Hanb', 'Jpan', 'Kore'],
+	'Hira': ['Jpan'],
+	'Kana': ['Jpan'],
+	'Hang': ['Kore'],
+	'Bopo': ['Hanb']
+};
+
+const SCRIPT_MAP = {};
+for (let [script, ranges] of Object.entries(read_parsed('Scripts'))) {
+	for (let cp of ranges.flatMap(parse_cp_range)) {
+		SCRIPT_MAP[cp] = new Set([script]);
+	}
+}
+for (let [range, abbrs] of Object.entries(read_parsed('ScriptExtensions'))) {
+	for (let cp of parse_cp_range(range)) {
+		for (let abbr of abbrs) {
+
+
+
+		}
+	}
+}
+
+
+
+
 
 function script_from_cp(cp) {
 	for (let [k, v] of SCRIPTS) {
@@ -50,7 +88,7 @@ let db = {};
 for (let [target, matches] of Object.entries(read_parsed('confusables'))) { // hex -> [hex hex]
 	let map = {};
 	let unique_forms = new Set();
-	for (let hex of [target, ...matches]) {
+	for (let hex of matches) {
 		let cps = nfc(parse_cp_sequence(hex)); // convert to nfc
 		let form = String.fromCodePoint(...cps);
 		//if (is_unconfusable(form)) continue; 
@@ -72,10 +110,15 @@ for (let [target, matches] of Object.entries(read_parsed('confusables'))) { // h
 			}
 			return a.map(v => [...v, script]);
 		}, [[]]);
-		for (let [script] of universe.map(v => [...new Set(v)]).filter(x => x.length == 1)) {
+
+		let single = new Set(universe.map(v => [...new Set(v)]).filter(x => x.length == 1).map(x => x[0]));
+
+
+
+		for (let script of single) {
 			let list = map[script];
 			if (!list) map[script] = list = [];
-			list.push(form);	
+			list.push([form, single.size]);
 		}
 	}
 	let confuse = String.fromCodePoint(...parse_cp_sequence(target));
@@ -87,5 +130,7 @@ for (let [target, matches] of Object.entries(read_parsed('confusables'))) { // h
 	}
 }
 
-
 writeFileSync(join(base_dir, 'conflicts.json'), JSON.stringify(db));
+
+// dump latin
+writeFileSync(join(base_dir, `conflicts-latin-${date_str()}.json`), JSON.stringify(db.Latin).replace(/\]\],/ug, ']],\n'));
