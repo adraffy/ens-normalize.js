@@ -311,7 +311,7 @@ footer {
 
 <b>Disallowed:</b>
 <button>te[st</button>
-<button data-name="a{0332}" data-replace></button>
+<button data-name="a{0332}"></button>
 
 <b>Whitespace:</b>
 <button data-name="te st">Inner</button>
@@ -395,11 +395,8 @@ Hebrew Geresh
 Katakana:
 <button data-name="{30A1}{30FB}">✅</button>
 <button data-name="ab{30FB}">❌</button>
-• 
-Arabic-Indic:
-<button data-name="{660}{661}{662}">✅</button>
-<button data-name="{6F0}{6F1}{6F2}">✅</button>
-<button data-name="{660}{6F0}.eth">❌</button>
+
+
 <a href="https://www.rfc-editor.org/rfc/rfc5893.html#section-2"><b>CheckBidi:</b></a>
 <button>פעילותהבינאום</button>
 <button data-name="{0786}{07AE}{0782}{07B0}{0795}{07A9}{0793}{07A6}{0783}{07AA}">Dhivehi</button>
@@ -422,11 +419,22 @@ Arabic-Indic:
 
 <b><a href="./report-scripts.html">Single-Script:</a></b>
 <button data-name="1a〆">Digit+Latin+Han</button>
-<button data-name="aрe">❌aрe</button>
+<button data-name="aрe">aрe</button>
+<button data-name="{450}{E8}"></button>
+
+<b>Whole-Script:</b>
+<button>аррӏе</button>
 
 <b><a href="./report-confusables.html">Confusable:</a></b>
 <button>aɑ</button>
-<button>Aɑ</button>
+
+
+<b>Arabic-Indic:</b>
+<button data-name="{661}{662}{663}"></button>
+<button data-name="{6F1}{6F2}{6F3}"></button>
+<button data-name="{661}{662}{664}"></button>
+<button data-name="{6F1}{6F2}{664}"></button>
+
 </div>
 <div id="options">
 <label><input type="checkbox" id="auto_resolve_check" checked>Resolve on Input</label>
@@ -492,7 +500,7 @@ determine_window_provider().then(p => {
 
 for (let btn of document.querySelectorAll('.examples button, button[data-name]')) {
 	let name = replace_escapes(btn.dataset.name ?? btn.innerHTML);
-	if (typeof btn.dataset.replace === 'string') btn.innerHTML = name;
+	if (typeof btn.dataset.replace === 'string' || !btn.innerHTML) btn.innerHTML = name;
 	if (!name.includes('.') && !is_checksum_address(name)) name += '.eth';
 	if (typeof btn.dataset.escape === 'string') name = apply_escapes(name, false);
 	if (!btn.title) btn.title = `${name}\n${explode_cp(name).map(hex_cp).join(' ')}`;
