@@ -6,10 +6,10 @@
 </head>
 <body>
 <script type="module">
-import {ens_tokenize} from '../dist/ens-normalize.min.js';
+import {ens_tokenize} from '../dist/ens-normalize-v3-debug.min.js';
 import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
 use_default_style();
-let name = '👨‍❤️‍👨Raffy. eth?\uFE0F';
+let name = '👨‍❤️‍👨Raffy. eth?\uFE0F.\u{C1}\u{FE0F}\u{325}';
 document.body.append(dom_from_tokens(ens_tokenize(name), false));
 document.body.append(dom_from_tokens(ens_tokenize(name), true));
 </script>

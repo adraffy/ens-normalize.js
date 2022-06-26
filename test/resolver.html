@@ -309,6 +309,9 @@ footer {
 <button>ß</button>
 <button>ς</button>
 
+<b>NFC:</b>
+<button data-name="{C1}{FE0E}{325}{326}" data-replace></button>
+
 <b>Disallowed:</b>
 <button>te[st</button>
 <button data-name="a{0332}"></button>
@@ -467,7 +470,7 @@ import {
 	is_checksum_address, namehash, labelhash, ENS
 } from '../../eth-tools.js/dist/eth-tools.min.js';
 import {escape_name_for_html, is_printable_ascii, explode_cp, hex_cp} from '../build/utils.js';
-import {ens_normalize, ens_tokenize, VERSION, BUILT, NAME, UNICODE} from '../dist/ens-normalize-v2-debug.min.js';
+import {ens_normalize, ens_tokenize, VERSION, BUILT, NAME, UNICODE} from '../dist/ens-normalize-v3-debug.min.js';
 import {dns_from_normalized_ens} from '../dist/dns.min.js';
 import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
 use_default_style();
