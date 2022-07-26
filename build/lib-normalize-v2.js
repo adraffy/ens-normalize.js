@@ -1,7 +1,7 @@
 import {read_member_set, read_mapped_table, lookup_mapped, read_tree, read_zero_terminated_array} from './decoder.js';
-import {explode_cp, escape_unicode} from './utils.js';
+import {explode_cp, escape_unicode, quote_cp} from './utils.js';
 import {parse_tokens} from './tokens.js';
-import r from './output/v2.js';
+import next from './output/v2.js';
 
 const FCP = String.fromCodePoint.bind(String);
 
@@ -10,21 +10,22 @@ const ZWJ = 0x200D;
 const STOP = 0x2E;
 const KEYCAP_END = 0x20E3;
 
-const VALID = read_member_set(r);
+const VALID = read_member_set(next);
 const SORTED_VALID = [...VALID].sort((a, b) => a - b);
 
-const IGNORED = read_member_set(r);
-const MAPPED = read_mapped_table(r);
-const COMBINING_MARKS = read_member_set(r, SORTED_VALID);
+const IGNORED = read_member_set(next);
+const MAPPED = read_mapped_table(next);
 
-const KEYCAP_LEGACY = read_member_set(r);
-const KEYCAP_REQ = read_member_set(r);
-const STYLE_LEGACY = read_member_set(r);
-const STYLE_REQ = read_member_set(r);
+const COMBINING_MARKS = read_member_set(next, SORTED_VALID);
+
+const KEYCAP_LEGACY = read_member_set(next);
+const KEYCAP_REQ = read_member_set(next);
+const STYLE_LEGACY = read_member_set(next);
+const STYLE_REQ = read_member_set(next);
 const SORTED_EMOJI = [...STYLE_LEGACY, ...STYLE_REQ].sort((a, b) => a - b);
 
-const MODIFIER = read_member_set(r, SORTED_EMOJI);
-const MODIFIER_BASE = read_member_set(r, SORTED_EMOJI);
+const MODIFIER = read_member_set(next, SORTED_EMOJI);
+const MODIFIER_BASE = read_member_set(next, SORTED_EMOJI);
 
 // whitelisted SEQ and ZWJ sequences are stored as trees
 // they can be traversed character by character 
@@ -32,66 +33,41 @@ const MODIFIER_BASE = read_member_set(r, SORTED_EMOJI);
 // implies a failure match
 
 // SEQ are 1-character chains
-const SEQ_ROOT = read_tree(r, x => Array(x()).fill(1)); 
+const SEQ_ROOT = read_tree(next, x => Array(x()).fill(1)); 
 
 // ZWJ are variable-character chains 
 // index into emoji for extra compression (bound asserted during build)
-const ZWJ_ROOT = read_tree(r, read_zero_terminated_array, SORTED_EMOJI);
+const ZWJ_ROOT = read_tree(next, read_zero_terminated_array, x => SORTED_EMOJI[x]);
 
-const COMBINING_RANK = Array(r()).fill().map(() => read_member_set(r));
-const DECOMP = read_mapped_table(r);
-const COMP_EXCLUSIONS = read_member_set(r);
+const COMBINING_RANK = Array(next()).fill().map(() => read_member_set(next));
+const DECOMP = read_mapped_table(next);
+const COMP_EXCLUSIONS = read_member_set(next);
 
-const VIRAMA = COMBINING_RANK[r()]; // index into virama class
-const JOIN_T = read_member_set(r, SORTED_VALID);
-const JOIN_LD = read_member_set(r, SORTED_VALID); // L
-const JOIN_RD = read_member_set(r, SORTED_VALID); // R
-for (let cp of read_member_set(r, SORTED_VALID)) { // D
-	JOIN_LD.add(cp); // LD
-	JOIN_RD.add(cp); // RD
-}
+const VIRAMA = COMBINING_RANK[next()]; // index into virama class
+const JOIN_T = read_member_set(next, SORTED_VALID);
+const JOIN_LD = read_member_set(next, SORTED_VALID);
+const JOIN_RD = read_member_set(next, SORTED_VALID); 
 
-//const SCRIPT_GREK = read_member_set(r, SORTED_VALID);
-//const SCRIPT_HEBR = read_member_set(r, SORTED_VALID);
-const SCRIPT_JPAN = read_member_set(r, SORTED_VALID);
-const SCRIPT_LATN = read_member_set(r, SORTED_VALID);
-const SCRIPT_HANB = read_member_set(r, SORTED_VALID);
-const SCRIPT_KORE = read_member_set(r, SORTED_VALID);
-const SCRIPT_ALL  = read_member_set(r, SORTED_VALID);
-
-
-const SCRIPTS = [
-	//SCRIPT_GREK,
-	//SCRIPT_HEBR,
-	SCRIPT_JPAN,
-	SCRIPT_LATN,
-	SCRIPT_HANB,
-	SCRIPT_KORE,
-	/*
-	https://www.unicode.org/reports/tr39/#highly_restrictive
-	The string is covered by any of the following sets of scripts, according to the definition in Section 5.1: 
-	Latin + Han + Hiragana + Katakana; or equivalently: Latn + Jpan
-	Latin + Han + Bopomofo; or equivalently: Latn + Hanb
-	Latin + Han + Hangul; or equivalently: Latn + Kore
-	*/
-	new Set([...SCRIPT_LATN, ...SCRIPT_JPAN]),
-	new Set([...SCRIPT_LATN, ...SCRIPT_HANB]),
-	new Set([...SCRIPT_LATN, ...SCRIPT_KORE])
-];
-
+const SCRIPTS = Array(next()).fill().map(() => read_member_set(next, SORTED_VALID));
 while (true) {
-	let set = read_member_set(r, SORTED_VALID);
-	if (set.size == 0) break;
-	SCRIPTS.push(set);
+	let i = next();
+	if (!i) break;
+	for (let j of read_member_set(next)) {
+		SCRIPTS[j] = new Set([...SCRIPTS[i-1], ...SCRIPTS[j]]);
+	} 
 }
+const [SCRIPT_ALL, SCRIPT_JPAN/*, SCRIPT_GREK, SCRIPT_HEBR*/] = SCRIPTS;
 
-const R_AL = read_member_set(r, SORTED_VALID);
-const L = read_member_set(r, SORTED_VALID);
-const AN = read_member_set(r, SORTED_VALID);
-const EN = read_member_set(r, SORTED_VALID);
-const ECTOB = read_member_set(r, SORTED_VALID); 
-const NSM = read_member_set(r, SORTED_VALID);
-const NSM0 = NSM.values().next().value;
+const WHOLE_ROOT = read_tree(next, x => Array(x()).fill(1), x => SORTED_VALID[x]);
+const CONFUSE_GLOBAL_ROOT = read_tree(next, x => Array(x()).fill(1), x => SORTED_VALID[x]);
+const CONFUSE_SCRIPT_ROOTS = SCRIPTS.map(() => read_tree(next, x => Array(x()).fill(1), x => SORTED_VALID[x]));
+
+const R_AL = read_member_set(next, SORTED_VALID);
+const L = read_member_set(next, SORTED_VALID);
+const AN = read_member_set(next, SORTED_VALID);
+const EN = read_member_set(next, SORTED_VALID);
+const ECTOB = read_member_set(next, SORTED_VALID); 
+const NSM = read_member_set(next, SORTED_VALID);
 
 // ************************************************************
 
@@ -160,11 +136,36 @@ function find_emoji_chr_mod_pre(cps, pos) {
 }
 */
 
+function find_seq_match(root, cps, pos0) {
+	let seq_key = FCP(cps[pos0]);
+	if (has_own(root, seq_key)) { // potential match
+		let node = root[seq_key];
+		let pos = pos0 + 1; // check remaining chars
+		while (true) {
+			let cp = cps[pos];
+			if (!cp) break; // end of string
+			let key = FCP(cp);
+			if (!has_own(node, key)) break; // no more possibilities
+			node = node[key];
+			pos++;
+		}
+		if (has_own(node)) { // this was a terminator
+			return pos; 
+		}
+	}
+}
+
 // read a complex emoji
 // always returns [consumed_length, parsed_codepoints?]
 function parse_emoji(cps, pos0) {
-	let cp0 = cps[pos0];
+	
+	let pos = find_seq_match(SEQ_ROOT, cps, pos0);
+	if (pos) {
+		return [pos - pos0, cps.slice(pos0, pos)];
+	}
 
+
+	/*
 	// check for SEQ match
 	let seq_key = FCP(cp0);
 	if (has_own(SEQ_ROOT, seq_key)) { // potential match
@@ -182,7 +183,9 @@ function parse_emoji(cps, pos0) {
 			return [pos - pos0, cps.slice(pos0, pos)];
 		}
 	}
+	*/
 
+	let cp0 = cps[pos0];
 	let cp1 = cps[pos0+1];
 	
 	// emoji flag sequence
@@ -459,6 +462,8 @@ function validate_contextO(cps) {
 		// we only fall-through if no context was matched
 		throw new Error(`no context for "${escape_unicode(FCP(cps[i]))}"`);
 	}
+	/*
+	// [mapped to arabic]
 	// ARABIC-INDIC DIGITS
 	// https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.8
 	// Can not be mixed with Extended Arabic-Indic Digits.
@@ -470,17 +475,18 @@ function validate_contextO(cps) {
 	if (cps.some(cp => cp >= 0x660 && cp <= 0x669) && cps.some(cp => cp >= 0x6F0 && cp <= 0x6F9)) {
 		throw new Error(`arabic-indic digit mixture`);
 	}
-	/*
-	// [not possible with single-script]
+	*/
+	// [almost not possible with single script, counter example: aa{30FB}]	
 	// KATAKANA MIDDLE DOT
 	// https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.7
 	// The effect of this rule is to require at least one character in the label to be in one of those scripts.
 	// For All Characters: If Script(cp) .in. {Hiragana, Katakana, Han} Then True; End For;
-	if (cps.includes(0x30FB) && !cps.some(cp => SCRIPT_JPAN.has(cp))) {
+	const KATAKANA_MIDDLE_DOT = 0x30FB;
+	if (cps.includes(KATAKANA_MIDDLE_DOT) && !cps.some(cp => cp != KATAKANA_MIDDLE_DOT && SCRIPT_JPAN.has(cp))) {
 		throw new Error(`katakana`);
 	}
-	*/
 }
+
 
 // ************************************************************
 // from bidi.js
@@ -532,7 +538,7 @@ export function ens_normalize(name) {
 	if (/^[0-9a-z\.\-]+$/iu.test(name)) { // fast path
 		return name.toLowerCase();
 	}
-	let labels = parse_tokens(nfc(explode_cp(name)), cp => {
+	let labels = parse_tokens(explode_cp(name), cp => {
 		if (STOP == cp) return; // create a new label
 		if (IGNORED.has(cp)) return []; // 0 char
 		if (VALID.has(cp)) return [cp]; // 1 char
@@ -542,15 +548,21 @@ export function ens_normalize(name) {
 	}, parse_emoji).map(tokens => {
 		let cps = []; // output code points
 		let text = []; // textual code points
+		let whole = true;
 		let scripts; // script universe
 		for (let {e, v} of tokens) {
 			if (v) {
 				try {
-					v = filter_contextJ(v); // ContextJ
+					v = filter_contextJ(nfc(v)); 
 				} catch (err) {
 					throw label_error(cps, err.message);
 				}
+				if (!v.length) continue;
+				if (COMBINING_MARKS.has(cps[0])) {
+					throw label_error(cps, `leading combining mark`);
+				}
 				cps.push(...v);
+				if (text.length) text.push(0x20); // space
 				text.push(...v);
 				// https://www.unicode.org/reports/tr39/#Mixed_Script_Detection
 				for (let cp of v) {
@@ -561,46 +573,60 @@ export function ens_normalize(name) {
 							throw label_error(cps, `not single script`);
 						}
 					} else {
-						scripts = [];
-						for (let i = 0; i < SCRIPTS.length; i++) {
-							if (SCRIPTS[i].has(cp)) {
-								scripts.push(i);
-							}
-						}
+						scripts = SCRIPTS.reduce((acc, set, i) => {
+							if (set.has(cp)) acc.push(i);
+							return acc;
+						}, []);
 					}
-					//console.log(cp, scripts);
+				}
+				if (whole) {
+					let off = 0;
+					while (off < v.length) {
+						let pos = find_seq_match(WHOLE_ROOT, v, off);
+						if (!pos) {
+							whole = false;
+							break;
+						}
+						off = pos;
+					}
 				}
 			} else {
-				if (text.length > 0) { 
-					// emoji at the start of the label are ignored until text is produced
-					// afterwards, emoji are replaced by an NSM placeholder
-					// (acts like a separator)
-					text.push(NSM0); 
-				}
 				cps.push(...e);
+			}
+		}
+		if (text.length) {
+			try {
+				validate_contextO(text); 
+			} catch (err) {
+				throw label_error(cps, err.message);
+			}
+			if (whole) {
+				throw label_error(cps, `whole script confusing`);
+			}
+			if (scripts) {
+				for (let j of scripts) {
+					for (let i = 0; i < text.length; i++) {
+						if (find_seq_match(CONFUSE_SCRIPT_ROOTS[j], text, i)) {
+							throw label_error(cps, `confusing "${escape_unicode(FCP(text[i]))}"`);
+						}
+					}
+				}
 			}
 		}
 		return {text, cps};
 	});
 	// https://unicode.org/reports/tr46/#Notation
 	// A Bidi domain name is a domain name containing at least one character with BIDI_Class R, AL, or AN
-	let check_bidi = labels.some(x => is_bidi_label(x.text));
-	return labels.map(({cps, text}) => {
-		if (cps.length > 0) {
-			if (COMBINING_MARKS.has(cps[0])) {
-				throw label_error(cps, `leading combining mark`);
-			}
+	if (labels.some(x => is_bidi_label(x.text))) {
+		for (let {cps, text} of labels) {
 			try {
-				validate_contextO(text); // ContextO
-				if (check_bidi) {
-					validate_bidi_label(text); // CheckBidi
-				}
+				validate_bidi_label(text); // CheckBidi
 			} catch (err) {
 				throw label_error(cps, err.message);
 			}
 		}
-		return FCP(...cps);
-	}).join(FCP(STOP));
+	}
+	return labels.map(x => FCP(...x.cps)).join(FCP(STOP));
 }
 
 // Secondary API
@@ -609,6 +635,17 @@ export function ens_normalize(name) {
 // this is much nicer than exposing the predicates
 // [{m:[0x72], u:[0x52]},{e:[0x1F4A9],u:[0x1F4A9]},{t:[61,66,66]},{},{t:[65,74,68]}]
 export function ens_tokenize(name) {
+	/*
+	let tokens = [];
+	for (let cp of explode_cp(name)) {
+		if (STOP === cp) {
+			tokens.push({});
+		} else if (VALID.has(cp)) {
+			tokens.push({v: cp});
+		}
+
+	}
+	*/
 	return parse_tokens(nfc(explode_cp(name)), cp => {
 		if (STOP == cp) return {}; // stop 
 		if (VALID.has(cp)) return [cp]; // this gets merged into v

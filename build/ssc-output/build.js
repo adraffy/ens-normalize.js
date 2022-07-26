@@ -8,23 +8,17 @@ let base_dir = new URL('.', import.meta.url).pathname;
 let conflicts = JSON.parse(readFileSync(join(base_dir, 'conflicts.json')));
 
 let resolved = {...conflicts};
-resolved.Latin = JSON.parse(readFileSync(join(base_dir, 'latin-20220511.json')));
+resolved.Latn = JSON.parse(readFileSync(join(base_dir, 'conflicts-Latn-20220515.json')));
 
-// idiot check
-for (let [k, v] of Object.entries(resolved.Latin)) {
-	for (let s of v) {
-		if (s.length === 1 && s.codePointAt(0) < 0x80) {
-			throw new Error(`Assumption wrong: disabled ASCII`)
-		}
-	}
-}
 
 let confused = {};
 
 for (let [script, map] of Object.entries(conflicts)) {
 	for (let [confuse, matches] of Object.entries(map)) {
-		for (let s of matches) {
+		for (let [s, n] of matches) {
 			let states = confused[s];
+
+
 			if (!states) confused[s] = states = [];
 			let state = resolved[script]?.[confuse]?.includes(s);
 			states.push([script, state]);

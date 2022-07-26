@@ -5,7 +5,7 @@ import {map_values, parse_cp_range, set_intersect, split_between} from '../build
 
 import {read_parsed} from '../build/nodejs-utils.js';
 import {ens_tokenize} from '../index.js';
-import LABELS from './registered-labels.js';
+import LABELS from './data/eth-labels.js';
 
 let base_dir = new URL('.', import.meta.url).pathname;
 let output_dir = join(base_dir, 'output');
@@ -30,7 +30,8 @@ function script_from_cp(cp) {
 			return k;
 		}
 	}
-	throw new Error(`unknown script: ${cp}`);
+	return '?';
+	//throw new Error(`unknown script: ${cp}`);
 }
 
 let tally_unsorted = {};

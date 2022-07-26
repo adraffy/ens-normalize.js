@@ -77,7 +77,9 @@ await build(generate_lib({rules: 'adraffy-exp'}), `${prefix}-adraffy-exp`);
 await build(generate_lib({rules: 'adraffy-compat'}), `${prefix}-adraffy-compat`);
 */
 
-await build(generate_release_lib({name: 'adraffy+ss', file: 'lib-normalize-v2.js', versions: true}), 'ens-normalize-v2-debug');
+//await build(generate_release_lib({name: 'adraffy+ss', file: 'lib-normalize-v2.js', versions: true}), 'ens-normalize-v2-debug');
+
+await build(generate_release_lib({name: 'adraffy3', file: 'lib-normalize-v3.js', versions: true}), 'ens-normalize-v3-debug');
 
 /*
 // build release
@@ -97,6 +99,7 @@ await build(join(base_dir, 'lib-bidi.js'), 'bidi');
 await build(join(base_dir, 'lib-parts.js'), 'parts');
 await build(join(base_dir, 'lib-dns.js'), 'dns');
 */
+await build(join(base_dir, 'lib-parts.js'), 'parts');
 
 // compute compression overhead
 // as of 20220115: ~2KB

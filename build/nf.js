@@ -20,7 +20,7 @@ const L1 = L0 + L_COUNT;
 const V1 = V0 + V_COUNT;
 const T1 = T0 + T_COUNT;
 
-export function is_hangul(cp) {
+function is_hangul(cp) {
 	return cp >= S0 && cp < S1;
 }
 function decompose(cp, next) {

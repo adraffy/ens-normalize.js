@@ -24,7 +24,8 @@ mkdirSync(output_dir, {recursive: true});
 const ENS_VERSION = JSON.parse(readFileSync(join(base_dir, 'node_modules/@ensdomains/eth-ens-namehash/package.json'))).version;
 
 //generate_report(output_dir, await import('../dist/ens-normalize-debug.js'));
-generate_report(output_dir, await import('../dist/ens-normalize-v2-debug.js'));
+//generate_report(output_dir, await import('../dist/ens-normalize-v2-debug.js'));
+generate_report(output_dir, await import('../dist/ens-normalize-v3-debug.js'));
 //generate_report(output_dir, await import('../dist/ens-normalize-compat.js'));
 
 function generate_report(dir, module) {

@@ -151,7 +151,12 @@ function dns_from_normalized_ens(name) {
 		let cps = explode_cp(label);
 		let encoded = puny_encode(cps);
 		if (encoded.length > MAX_LABEL) throw label_error(label, `too long`);
-		if (encoded.some(cp => !VALID.has(cp))) throw label_error(label, 'invalid ASCII');
+		for (let cp of encoded) {
+			if (!VALID.has(cp)) {
+				throw label_error(label, `invalid ASCII: "${escape_unicode(String.fromCodePoint(cp))}"`);
+			}
+		}
+		if (encoded.some(cp => !VALID.has(cp))) 
 		acc += encoded.length;
 		if (acc > MAX_NAME) throw new Error(`Name too long`);
 		return encoded === cps ? label : 'xn--' + String.fromCodePoint(...encoded);

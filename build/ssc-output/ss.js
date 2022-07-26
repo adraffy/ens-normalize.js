@@ -1,16 +1,31 @@
 
-import {read_parsed} from '../nodejs-utils.js';
-import {parse_cp_range, parse_cp, parse_cp_sequence, compare_arrays, explode_cp, date_str} from '../utils.js';
-import {Encoder} from '../encoder.js';
+import {readFileSync} from 'fs';
+import {local, read_parsed} from '../nodejs-utils.js';
+import {parse_cp_range, map_values, parse_cp, parse_cp_sequence, compare_arrays, explode_cp, date_str} from '../utils.js';
+import {read_script_sets} from '../unicode-logic.js';
 
-//https://www.unicode.org/reports/tr39/#Mixed_Script_Detection
+
+let derived = JSON.parse(readFileSync(local('build/output/v2-hr.json')));
+
+let {ALL, ...scripts} = map_values(read_script_sets(3), cps => new Set(cps)); 
+
+function compute_script_universe(cps) {
+	let ret = Object.keys(scripts);
+	for (let cp of cps) {
+		if (ALL.has(cp)) continue;
+		ret = ret.filter(k => scripts[k].has(cp));
+		if (ret.length == 0) break;		
+	}
+	return ret;
+}
+
+console.log(compute_script_universe(explode_cp('A1〆')));
+
+
+
 /*
-If Script_Extensions contains Hani (Han), add Hanb, Jpan, and Kore.
-If Script_Extensions contains Hira (Hiragana), add Jpan.
-If Script_Extensions contains Kana (Katakana), add Jpan.
-If Script_Extensions contains Hang (Hangul), add Kore.
-If Script_Extensions contains Bopo (Bopomofo), add Hanb.
-*/
+//https://www.unicode.org/reports/tr39/#Mixed_Script_Detection
+
 const SCRIPT_EXT_TR39 = {
 	'Hani': ['Hanb', 'Jpan', 'Kore'],
 	'Hira': ['Jpan'],
@@ -74,7 +89,7 @@ for (let [cp, v] of Object.entries(cp_to_abbr)) {
 }
 
 
-/*
+
 let base = abbr_to_cps.Jpan;
 for (let a of 'Bopo Hang Hani Hira Kana Yiii'.split(' ')) {
 	let cps = abbr_to_cps[a].filter(cp => !base.includes(cp));

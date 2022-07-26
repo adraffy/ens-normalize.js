@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Output Confusables</title>
+<style>
+#version {
+	position: absolute;
+	right: 1rem;
+	top: 1rem;
+	text-align: right;
+}
+table {
+	border-collapse: collapse;
+}
+table td {
+	border: 1px solid #ccc;
+	text-align: center;
+}
+td.name {
+	font-weight: bold;
+	background-color: #eee;
+}
+td.global {
+	background-color: #fff;
+}
+td.same {
+	background-color: #cfc;
+}
+td.diff {
+	background-color: #fcc;
+}
+</style>
+</head>
+<body>
+<h1>Output Confusables</h1>
+<div id="version"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a></div>
+
+<select id="script_select"></select>
+<select id="mode_select">
+<option value="all">All</option>
+<option value="same">Same Script</option>
+<option value="whole">Whole Script</option>
+</select>
+<table></table>
+
+<script type="module">
+//import {nfc_adraffy as nfc} from '../dist/nf.min.js';
+import {nfc} from '../build/nf.js';
+import {map_values, parse_cp_sequence, explode_cp, escape_name_for_html, quote_cp} from '../build/utils.js';
+
+const script_select = document.querySelector('#script_select');
+const mode_select = document.querySelector('#mode_select');
+
+let NAMES;
+let confused = [];
+let scripts_ALL;
+let scripts_map;
+
+script_select.addEventListener('input', update);
+mode_select.addEventListener('input', update);
+
+try {
+	let [scripts, confusables, aliases, names] = await Promise.all([
+		'../build/output/ss-3.json',
+		'../build/unicode-json/confusables.json',
+		'../build/unicode-json/PropertyValueAliases.json',
+		'../build/unicode-json/Names.json'
+	].map(fetch_json));
+
+	NAMES = names;
+
+	({ALL: scripts_ALL, ...scripts_map} = map_values(scripts, v => new Set(v.flatMap(x => {
+		if (Array.isArray(x)) {
+			let [min, max] = x;
+			return Array(1 + max - min).fill().map((_, i) => min + i);
+		} else {
+			return x;
+		}
+	}))));
+
+	for (let [confuse, matches] of Object.entries(confusables)) {
+		let name = String.fromCodePoint(...parse_cp_sequence(confuse));
+		let unique = [...new Set([confuse, ...matches].map(x => String.fromCodePoint(...nfc(parse_cp_sequence(x)))))].map(explode_cp);
+		if (unique.length == 0) continue;	
+		confused.push([name, unique]);
+	}
+
+	script_select.innerHTML = Object.entries(scripts_map).map(([abbr, set]) => {
+		let name = `${abbr} (${set.size})`;
+		let alias = aliases.sc[abbr];
+		if (alias) {
+			name = `${name} ${alias}`;
+		}
+		return `<option value="${abbr}">${name}</option>`;
+	});
+
+	update();
+
+} catch (err) {
+	console.error(err);
+}
+
+function update() {
+	let abbr = script_select.selectedOptions[0].value;
+	let mode = mode_select.selectedOptions[0].value;
+	let set = scripts_map[abbr];
+
+	let table = document.querySelector('table');
+	table.innerHTML = '';
+	for (let [confuse, matches] of confused) {
+		let types = matches.map(cps => {
+			if (cps.every(cp => scripts_ALL.has(cp))) {
+				return 1;
+			} else if (cps.every(cp => set.has(cp) || scripts_ALL.has(cp))) {
+				return 2;
+			} else {
+				return 3;
+			}
+		});
+		switch (mode) {
+			case 'same': {
+				if (types.filter(x => x <= 2).length < 2) continue;
+				break;
+			}
+			case 'whole': {
+				if (!types.some(x => x ))
+				break;
+			}
+			default: break;
+		}
+
+		let tr = document.createElement('tr');
+		tr.innerHTML = `<td class="name">${escape_name_for_html(confuse)}<br>${hex_form(confuse)}</td>`;
+		tr.append(...matches.filter((_, i) => types[i] == 1).map(x => create_cell('global', x)));
+		tr.append(...matches.filter((_, i) => types[i] == 2).map(x => create_cell('same', x)));
+		tr.append(...matches.filter((_, i) => types[i] == 3).map(x => create_cell('diff', x)));
+
+		table.append(tr);
+	}
+}
+
+function create_cell(type, cps) {
+	let td = document.createElement('td');
+	td.classList.add(type);
+	td.innerHTML = `${escape_name_for_html(String.fromCodePoint(...cps))}<br>${hex_form(cps)}`;
+	return td;
+}
+
+function hex_form(cps) {
+	if (typeof cps === 'string') cps = explode_cp(cps);
+	return cps.map(cp => `<code title="${NAMES[cp]}">${quote_cp(cp)}</code>`).join('');
+}
+
+async function fetch_json(url) {
+	let res = await fetch(url);
+	if (res.status !== 200) throw new Error(`Download failed: HTTP Code ${res.status}`);
+	return res.json();
+}
+</script>
+</body>
+</html>

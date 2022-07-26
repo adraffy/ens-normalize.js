@@ -41,25 +41,30 @@ export function binary_search(v, x) {
 	return ~m;
 }
 
+export function is_subset(set, sub) {
+	for (let x of sub) {
+		if (!set.has(x)) {
+			return false;
+		}
+	}
+	return true;
+}
+
 export function set_intersect(...sets) {
 	let n = sets.length;
 	if (n == 0) throw new TypeError('no sets');
-	let inter = new Set(sets[0]);
+	let inter = [...new Set(sets[0])];
 	for (let i = 1; i < n; i++) {
-		let set = sets[i];
-		for (let x of inter) {
-			if (!set.has(x)) {
-				inter.delete(x);
-			}
-		}
+		let set = new Set(sets[i]);
+		inter = inter.filter(x => set.has(x));
 	}
-	return inter;
+	return new Set(inter);
 }
 
 export function set_complement(set0, ...sets) {
 	let comp = new Set(set0);
-	for (let set of sets) {
-		for (let x of set) {
+	for (let v of sets) {
+		for (let x of v) {
 			comp.delete(x);
 		}
 	}
@@ -67,6 +72,7 @@ export function set_complement(set0, ...sets) {
 }
 
 export function set_union(...sets) {
+	/*
 	let union = new Set();
 	for (let set of sets) {
 		for (let x of set) {
@@ -74,6 +80,8 @@ export function set_union(...sets) {
 		}
 	}
 	return union;
+	*/
+	return new Set([...sets].flat());
 }
 
 export function compare_arrays(a, b) {
@@ -81,6 +89,22 @@ export function compare_arrays(a, b) {
 	let c = n - b.length;
 	for (let i = 0; c == 0 && i < n; i++) c = a[i] - b[i];
 	return c;
+}
+
+// generate subsets of length n
+// eg. subsets([1,2,3], 2) => [[1,2],[1,3],[2,3]]
+export function* subsets(v, n) {
+	if (!Number.isInteger(n) || n < 1) throw new TypeError(`expected n >= 1`);
+	v = Array.from(v);
+	if (v.length < n) return; // too few
+	let u = Array(n).fill().map((_, i) => i); // index cursor
+	while (true) {
+		yield u.map(i => v[i]);
+		let i = n - 1;
+		while (u[i] == v.length - (n - i)) if (i-- == 0) return; // done
+		let x = u[i];
+		while (i < n) u[i++] = ++x; // next permutation
+	}
 }
 
 // map over an objects values
@@ -135,9 +159,11 @@ export function take_from(v, fn) {
 	return take;
 }
 
+/*
 export function split_ascending(cps) {
 	return split_between(cps, (a, b) => b - a > 1).map(v => [v[0], v.length]);
 }
+*/
 
 // from a list of [[x,ys]...]
 // find spans of [[x,ys],[x+dx,ys+dy],[x+2dx,ys+2dy],...]

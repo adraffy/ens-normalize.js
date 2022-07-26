@@ -1,6 +1,5 @@
 import {readFileSync, createReadStream} from 'fs';
-import {createInterface} from 'readline/promises';
-
+import {createInterface} from 'readline'; ///promises';
 
 export function read_parsed(name) {
 	return JSON.parse(readFileSync(new URL(`./unicode-json/${name}.json`, import.meta.url).pathname));

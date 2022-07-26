@@ -177,7 +177,7 @@ export function read_zero_terminated_array(next) {
 function read_transposed(n, w, next, lookup) {
 	let m = Array(n).fill().map(() => []);
 	for (let i = 0; i < w; i++) {
-		read_deltas(n, next).forEach((x, j) => m[j].push(lookup ? lookup[x] : x));
+		read_deltas(n, next).forEach((x, j) => m[j].push(lookup ? lookup(x) : x));
 	}
 	return m;
 }

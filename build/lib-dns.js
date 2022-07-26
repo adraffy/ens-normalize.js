@@ -1,7 +1,7 @@
 // https://en.wikipedia.org/wiki/Domain_Name_System
 // https://chromium.googlesource.com/chromium/src/+/main/docs/idn.md
 
-import {explode_cp, escape_unicode} from './utils.js';
+import {explode_cp, escape_unicode, hex_cp, quote_cp} from './utils.js';
 import {puny_encode} from './puny.js';
 
 import VALID_STR from './output/dns.js';
@@ -30,7 +30,12 @@ export function dns_from_normalized_ens(name) {
 		let cps = explode_cp(label);
 		let encoded = puny_encode(cps);
 		if (encoded.length > MAX_LABEL) throw label_error(label, `too long`);
-		if (encoded.some(cp => !VALID.has(cp))) throw label_error(label, 'invalid ASCII');
+		for (let cp of encoded) {
+			if (!VALID.has(cp)) {
+				throw label_error(label, `invalid ASCII: "${escape_unicode(String.fromCodePoint(cp))}"`);
+			}
+		}
+		if (encoded.some(cp => !VALID.has(cp))) 
 		acc += encoded.length;
 		if (acc > MAX_NAME) throw new Error(`Name too long`);
 		return encoded === cps ? label : 'xn--' + String.fromCodePoint(...encoded);

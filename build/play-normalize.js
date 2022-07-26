@@ -1,7 +1,11 @@
 import {inspect} from 'util';
-import {ens_normalize, ens_tokenize} from './lib-normalize-v2.js';
+import {ens_normalize, ens_tokenize} from './lib-normalize-v3.js';
 import {escape_name_for_html, parse_cp_sequence} from './utils.js';
 
+
+console.log(ens_tokenize('ррр.eth'));
+
+console.log(ens_tokenize('raffy\u{E1}\u{325}.eth'));
 
 /*
 const UNICODE = [];
@@ -24,10 +28,11 @@ for (let cp of UNICODE) {
 }
 */
 
-console.log(ens_normalize('うずまきナルト'));
-
 /*
-console.log(ens_normalize('نیم‌فاصله'));
+//console.log(ens_normalize('うずまきナルト'));
+
+
+//console.log(ens_normalize('نیم‌فاصله'));
 
 console.log(inspect(ens_tokenize('🚴‍♂️.eth'), false, null, true));
 
@@ -65,4 +70,5 @@ console.log(ens_tokenize(String.fromCodePoint(...parse_cp_sequence('1F3F4 E0067 
 console.log(ens_tokenize(String.fromCodePoint(...parse_cp_sequence('1F3F4 E0077 E007F'))));
 
 console.log(ens_normalize(String.fromCodePoint(...parse_cp_sequence('1F468 200D 2764 FE0F 200D 1F468'))));
+
 */

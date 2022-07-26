@@ -19,7 +19,7 @@ function tooltip(cps) {
 export function dom_from_tokens(tokens, show_mapped = true) {
 	let div = document.createElement('div');
 	div.classList.add('tokens');
-	div.append(...tokens.flatMap(({v, m, i, d, e, u}) => {
+	div.append(...tokens.flatMap(({n, v, m, i, d, e, u}) => {
 		let el;
 		if (e) {
 			let cps = show_mapped ? e : u;
@@ -62,6 +62,15 @@ export function dom_from_tokens(tokens, show_mapped = true) {
 				}
 				el.append(span);
 			}
+		} else if (n) {
+			el = document.createElement('div');
+			el.classList.add('nf');
+			el.append(dom_from_tokens(u, show_mapped));
+			/*
+			let span = document.createElement('span');
+			span.innerHTML = '&rarr;';
+			el.append(span);
+			el.append(dom_from_tokens([{v: n}], true));*/
 		} else {
 			el = document.createElement('div');
 			if (v) {
@@ -164,6 +173,12 @@ export function use_default_style() {
 	.tokens .mod.dropped {
 		background: #aaa;
 		min-width: 5px;
+	}
+	.tokens .nf {
+		display: flex;
+		border: 2px solid #800;
+		background: #fcc;
+		border-radius: 5px;
 	}
 	.tokens code {
 		font-size: 90%;
