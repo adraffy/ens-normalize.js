@@ -1,7 +1,7 @@
 # ens-normalize.js
 0-dependancy Compact ES6 Ethereum Name Service (ENS) Name Normalizer.
 
-* Passes **100%** [ENSIP Norm Validation Tests](https://adraffy.github.io/ensip-norm/)
+* Passes **100%** [ENSIP Norm Validation Tests](https://adraffy.github.io/ensip-norm/) [(Latest)](https://adraffy.github.io/ens-norm-tests/test-validation/output/ens_normalize_1.5.0.html)
 * Filesize: 20KB
 * [Demo](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 
