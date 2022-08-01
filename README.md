@@ -1,8 +1,9 @@
 # ens-normalize.js
-1-file, 1-function, 1-argument, 0-dependancy Compact ES6 Ethereum Name Service (ENS) Name Normalizer.
+0-dependancy Compact ES6 Ethereum Name Service (ENS) Name Normalizer.
 
 * Passes **100%** [ENSIP Norm Validation Tests](https://adraffy.github.io/ensip-norm/)
-* [Demo: Resolver](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
+* Filesize: 20KB
+* [Demo](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 
 ```Javascript
 import {ens_normalize} from '@adraffy/ens-normalize';
@@ -22,18 +23,18 @@ let tokens = ens_tokenize('R💩\uFE0Fa\xAD./'); // never throws
 // [
 //     { 
 //         type: 'mapped', 
-//         cp: 82,                      // input
-//         cps: [ 114 ]                 // output
+//         cp: 82,         // input
+//         cps: [ 114 ]    // output
 //     }, 
 //     { 
 //         type: 'emoji',
-//         input: [ 128169, 65039 ],    // input 
-//         emoji: [ 128169, 65039 ],    // ideal form
-//         cps: [ 128169 ]              // output
+//         input: [ 128169, 65039 ],  // input 
+//         emoji: [ 128169, 65039 ],  // ideal form
+//         cps: [ 128169 ]            // output
 //     },
 //     { type: 'valid', cps: [ 97 ] },
 //     { type: 'ignored', cp: 173 },
-//     { type: 'stop' },                // label-break: '.'
+//     { type: 'stop' },
 //     { type: 'disallowed', cp: 47 }
 // ]
 ```

@@ -28,16 +28,14 @@
   "scripts": {
     "make": "node src/make.js",
     "build": "rollup -c",
-	"build-dev": "rollup -c rollup-dev.config.js",
+    "build-dev": "rollup -c rollup-dev.config.js",
     "test": "node test/validate.js"
   },
   "devDependencies": {
     "@adraffy/ensip-norm": "^0.0.4",
     "@adraffy/punycode": "^0.0.2",
+    "@rollup/plugin-node-resolve": "^13.3.0",
     "rollup": "^2.77.1",
     "rollup-plugin-terser": "^7.0.2"
-  },
-  "dependencies": {
-    "@rollup/plugin-node-resolve": "^13.3.0"
   }
 }
