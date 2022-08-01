@@ -11,11 +11,11 @@ import {ens_normalize} from '@adraffy/ens-normalize';
 // browser: https://unpkg.com/@adraffy/ens-normalize@latest/dist/index.min.js
 
 // Primary API: string -> string
-let normalized = ens_normalize('🚴‍♂️.eth'); // throws 
+let normalized = ens_normalize('🚴‍♂️.eth'); // throws on invalid names
 // ready for namehash
 // note: does not enforce .eth TLD 3-character minimum
 ```
-Instead of exposing an IDNA-like API (`is_valid()`, `get_mapped()`, etc.), this library converts names to tokens for use in providing a better UX for end-users. 
+Instead of exposing an IDNA-like API (`is_valid()`, `get_mapped()`, etc.), this library exposes a single function which converts names to tokens:
 ```JavaScript
 // Secondary API: string -> Token[]
 // turn a name into a list of tokens
