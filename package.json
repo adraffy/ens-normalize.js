@@ -1,6 +1,6 @@
 {
   "name": "@adraffy/ens-normalize",
-  "version": "1.5",
+  "version": "1.5.0",
   "description": "Compact ES6 Ethereum Name Service (ENS) Name Normalizer",
   "keywords": [
     "ENS",
