@@ -239,6 +239,9 @@ ul.row {
 	background: #fcc;
 	border: 3px dashed #f00;
 }
+.transform {
+	background: #fffaf0;
+}
 .dns {
 	background: #fff0ff;
 }
@@ -274,7 +277,8 @@ footer {
 <body>
 <header>
 <h1><a href="https://ens.domains/">ENS Resolver</a><span id="provider"></span></h1>
-<span id="version"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a></span>
+<span id="version"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a><br>
+<a href="https://github.com/adraffy/ensip-norm">@adraffy/ensip-norm</a></span>
 </header>
 <div class="examples">
 <button>vitalik.eth</button>
@@ -286,7 +290,7 @@ footer {
 <button>Öbb.at</button>
 <button>◌̈bb.at</button>
 
-<b><a style="text-decoration: line-through" href="./puny.html">Punycode:</a></b>
+<a href="https://adraffy.github.io/punycode.js/test/demo.html" style="text-decoration: line-through"><b>Punycode:</b></a>
 <button>xn--ls8h</button>
 <button>💷pound.eth</button>
 
@@ -309,8 +313,8 @@ footer {
 <button>ß</button>
 <button>ς</button>
 
-<b>NFC:</b>
-<button data-name="{C1}{FE0E}{325}{326}" data-replace></button>
+<b>Complex:</b>
+<button data-name="Mab{C1}{FE0E}{325}{326}{1F21A}{FE0F}a.eth" data-replace></button>
 
 <b>Disallowed:</b>
 <button>te[st</button>
@@ -376,27 +380,27 @@ footer {
 
 <a href="https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.1"><b>ContextJ:</b></a>
 ZWNJ:
-<button data-name="ന്{200C}മ">✅ #1</button>
-<button data-name="نیم‌فاصله">✅ #2</button>
-<button data-name="a{200C}b">❌</button>
+<button data-name="ന്{200C}മ"></button>
+<button data-name="نیم‌فاصله"></button>
+<button data-name="a{200C}b"></button>
 
 ZWJ:
-<button data-name="ണ്‍">✅</button>
-<button data-name="a{200D}b">❌</button>
+<button data-name="ണ്‍"></button>
+<button data-name="a{200D}b"></button>
 
 <a href="https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.3"><b>ContextO:</b></a>
 Middle Dot: 
-<button data-name="{6C}{B7}{6C}">✅</button>
+<button data-name="{6C}{B7}{6C}"></button>
 • 
 Greek Keraia: 
-<button data-name="{375}{0377}">✅</button>
+<button data-name="{375}{0377}"></button>
 • 
 Hebrew Geresh 
-<button data-name="{05D1}{5F3}">✅</button>
+<button data-name="{05D1}{5F3}"></button>
 • 
 Katakana:
-<button data-name="{30A1}{30FB}">✅</button>
-<button data-name="ab{30FB}">❌</button>
+<button data-name="{30A1}{30FB}"></button>
+<button data-name="ab{30FB}"></button>
 
 
 <a href="https://www.rfc-editor.org/rfc/rfc5893.html#section-2"><b>CheckBidi:</b></a>
@@ -406,13 +410,15 @@ Katakana:
 <button data-name="{1F1F8}{1F1E6}{633}{644}{645}{627}{646}">Emoji+RTL</button>
 <button data-name="{633}{644}{645}{627}{646}{1F1F8}{1F1E6}">RTL+Emoji</button>
 <button data-name="bahrain.مصر">Separate LTR and RTL Labels</button>
-<button data-name="bahrainمصر">❌ Mixed LTR+RTL in Label</button>
+<button data-name="bahrainمصر">Mixed LTR+RTL in Label</button>
 <button data-name="{202e}elgoog{202d}.eth" data-replace></button>
 <button data-name="{202e}hte.elgoog" data-replace></button>
 
-<b>Revived:</b>
+<b>Unusable Emoji:</b>
 <button>‼️</button>
 <button>⁉️</button>
+
+<b>Revived Keycaps:</b>
 <button>*️⃣</button>
 <button>#️⃣</button>
 
@@ -468,13 +474,13 @@ import {
 	determine_window_provider,
 	is_checksum_address, namehash, labelhash, ENS
 } from '../../eth-tools.js/dist/eth-tools.min.js';
-import {escape_name_for_html, is_printable_ascii, explode_cp, hex_cp} from '../build/utils.js';
-import {ens_normalize, ens_tokenize, VERSION, BUILT, NAME, UNICODE} from '../dist/ens-normalize-v3-debug.min.js';
-import {dns_from_normalized_ens} from '../dist/dns.min.js';
-import {dom_from_tokens, use_default_style} from '../dist/parts.min.js';
+import {
+	ens_normalize, ens_tokenize,
+	dns_from_normalized_ens,
+	escape_for_html, is_printable_ascii, hex_cp, explode_cp,
+	dom_from_tokens, use_default_style
+} from '../dist/all.min.js';
 use_default_style();
-
-document.querySelector('#version').innerHTML += ` (v${VERSION}+${NAME}+U${UNICODE})<br><code>${BUILT}</code>`;
 
 const providers = new Providers()
 	.add_static(1, new WebSocketProvider({url: 'wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe', source: 'Infura'}));
@@ -606,6 +612,7 @@ function parse() {
 	apply_input_grade(grade, name);
 	add_row_tag(row, grade);
 	output_div.append(row, create_hashes_row(name));
+	add_transformed_row(name);
 	if (skip_norm_check.checked) return true;
 	try {
 		let norm = ens_normalize(name);
@@ -633,6 +640,16 @@ function parse() {
 			});
 			add_row_tag(row, btn);
 		}		
+	}
+}
+
+function add_transformed_row(input) {
+	if (ens_tokenize(input).some(x => x.type === 'nfc' || x.type === 'mapped')) {
+		let row = create_row('Mapped');
+		row.classList.add('transform');
+		make_exploded(row, input, true);
+		row.querySelector('.tags').remove();
+		output_div.append(row);
 	}
 }
 
@@ -734,7 +751,7 @@ function create_opensea_link(name) {
 }
 
 function make_exploded(row, name, is_norm, downgrade_disallowed) {	
-	let tokens_div = dom_from_tokens(Array.isArray(name) ? name : ens_tokenize(name), is_norm);
+	let tokens_div = dom_from_tokens(ens_tokenize(name), !is_norm);
 	if (downgrade_disallowed) {
 		for (let x of tokens_div.querySelectorAll('.disallowed')) {
 			x.classList.add('ignored');
@@ -1030,7 +1047,7 @@ async function resolve0(input0, skip_norm) {
 		}	
 
 	} else {
-
+		
 		// the input is a name
 		input_row = create_row('Name');
 		make_exploded(input_row, input, false);
@@ -1039,7 +1056,7 @@ async function resolve0(input0, skip_norm) {
 		add_row_tag(input_row, create_ens_link(input));
 		output_div.append(input_row);
 		output_div.append(create_hashes_row(input));
-		
+
 		// lets check if it's normalized
 		
 		if (skip_norm) {
@@ -1051,6 +1068,9 @@ async function resolve0(input0, skip_norm) {
 			add_row_tag(input_row, create_opensea_link(input));
 			name_norm = input; // yolo
 		} else {
+
+			add_transformed_row(input);
+	
 			try {
 				name_norm = ens_normalize(input);
 			} catch (err) {
@@ -1188,6 +1208,7 @@ async function resolve0(input0, skip_norm) {
 	add_row_tag(resolver_row, create_copy_btn(name.resolver.address));
 	add_row_tag(resolver_row, create_elapsed());
 	
+	/*
 	// check the display name
 	let display_name;
 	let display_row = create_row('Display', true);
@@ -1240,7 +1261,8 @@ async function resolve0(input0, skip_norm) {
 			}
 		}
 	}
-	
+	*/
+
 	// get the owner
 	let owner;
 	let owner_row = create_row('Owner', true);
