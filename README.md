@@ -19,7 +19,7 @@ Instead of exposing an IDNA-like API (`is_valid()`, `get_mapped()`, etc.), this 
 ```JavaScript
 // Secondary API: string -> Token[]
 // turn a name into a list of tokens
-let tokens = ens_tokenize('R💩\u{FE0F}a\u{304}\u{AD}./'); // never throws
+let tokens = ens_tokenize('R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./'); // never throws
 // [
 //     { 
 //         type: 'mapped', 
@@ -34,10 +34,12 @@ let tokens = ens_tokenize('R💩\u{FE0F}a\u{304}\u{AD}./'); // never throws
 //     },
 //     {
 //         type: 'nfc',
-//         input: [ 97, 772 ],  // input (before nfc)
+//         input: [ 97, 772 ],  // input (before nfc, only valid or mapped)
 //         cps: [ 257 ],        // output (after nfc)
 //         tokens: [            // tokens (before nfc)
-//             { type: 'valid', cps: [ 97, 772 ] }
+//             { type: 'valid', cps: [ 97 ] },
+//             { type: 'ignored', cp: 65039 },
+//             { type: 'valid', cps: [ 772 ] }
 //         ]
 //     },
 //     { type: 'ignored', cp: 173 },
