@@ -19,7 +19,7 @@ function tooltip(cps) {
 function create_arrow_span() {
 	let span = document.createElement('span');
 	span.classList.add('arrow');
-	span.innerHTML = '&rarr;';
+	span.innerHTML = '🡆'; //'&rarr;';
 	return span;
 }
 
@@ -201,7 +201,7 @@ export function use_default_style() {
 		min-width: 5px;
 	}
 	.tokens .arrow {
-		color: #666;
+		color: rgba(0, 0, 0, 0.35);
 	}
 	.tokens .nfc {
 		display: flex;

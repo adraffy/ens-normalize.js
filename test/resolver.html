@@ -210,6 +210,14 @@ ul.row {
 	background: #fcc;
 	color: #600;
 }
+.tags .pretty {
+	background: #fff0fc;
+	border-color: #f9e;
+	color: #c900a2;
+}
+.row.pretty {
+	background: #fff0fc;
+}
 .row.hashes {
 	display: grid;
 	background: none;
@@ -243,7 +251,7 @@ ul.row {
 	background: #fffaf0;
 }
 .dns {
-	background: #fff0ff;
+	background:#f5faff; 
 }
 .dns.invalid {
 	background: #fcc;
@@ -362,7 +370,7 @@ footer {
 <button>🇦🇦</button>
 <button>🇺🇸</button>
 
-<a href="./report-emoji.html#RGI_Emoji_Tag_Sequence"><b>Tag:</b></a>
+<b>Tag:</b>
 <button data-name="{1F3F4}{E0067}{E0062}{E0065}{E006E}{E0067}{E007F}" data-replace></button>
 <button data-name="{1F3F4}{E0067}{E0062}{E0073}{E0063}{E0074}{E007F}" data-replace></button>
 <button data-name="{1F3F4}{E0067}{E0062}{E0077}{E006C}{E0073}{E007F}" data-replace></button>
@@ -370,7 +378,7 @@ footer {
 <button data-name="{1F3F4}">"🏴"</button>
 
 
-<a href="./report-emoji.html"><b>Picto:</b></a>
+<b>Picto:</b>
 <button>mmm</button>
 <button>ⓂⓂⓂ</button>
 <button>Ⓜ️Ⓜ️Ⓜ️</button>
@@ -426,7 +434,7 @@ Katakana:
 <b>Currency:</b>
 <button>$£¥€₿</button>
 
-<b><a href="./report-scripts.html">Single-Script:</a></b>
+<b><a href="https://unicode-org.github.io/cldr-staging/charts/latest/by_type/core_data.alphabetic_information.main.html">Single-Script:</a></b>
 <button data-name="1a〆">Digit+Latin+Han</button>
 <button data-name="aрe">aрe</button>
 <button data-name="{450}{E8}"></button>
@@ -434,9 +442,8 @@ Katakana:
 <b>Whole-Script:</b>
 <button>аррӏе</button>
 
-<b><a href="./report-confusables.html">Confusable:</a></b>
+<b><a href="https://util.unicode.org/UnicodeJsps/confusables.jsp">Confusable:</a></b>
 <button>aɑ</button>
-
 
 <b>Arabic-Indic:</b>
 <button data-name="{661}{662}{663}"></button>
@@ -659,6 +666,11 @@ function create_dns_row(ens_norm) {
 	row.classList.add('dns');
 	try {
 		let name = dns_from_normalized_ens(ens_norm);
+		let idna;
+		try {
+			idna = new URL(`https://${ens_norm}`).host;
+		} catch (ignored) {
+		}
 
 		let link = create_link(`https://${name}.limo`, name);
 		link.style.overflowWrap = 'anywhere';
@@ -667,9 +679,12 @@ function create_dns_row(ens_norm) {
 		let same = name === ens_norm;
 		let span = document.createElement('span');	
 		if (same) {
-			apply_grade(span, 'good', 'Verbatim')
+			apply_grade(span, 'good', 'Verbatim');
+		} else if (!idna || idna !== name) {
+			span.classList.add('fail');
+			span.innerHTML = '⛔ Punycode Required';
 		} else {
-			apply_grade(span, 'warn', 'Punycode Required');
+			apply_grade(span, 'warn', 'Transforms to Punycode');
 		}
 		add_row_tag(row, span);
 
@@ -678,6 +693,7 @@ function create_dns_row(ens_norm) {
 		}
 		//row.append(create_link(`https://whois.uniregistry.net/rdap/domain/${name}.link`, 'WHOIS'));
 	} catch (err) {
+		row.classList.add('invalid');
 		let span = document.createElement('span');
 		apply_grade(span, 'warn', err.message);
 		span.classList.add('long');
@@ -741,6 +757,13 @@ function create_ens_link(s) {
 function get_dot_eth_label(name) {
 	let v = name.split('.');
 	return v.length == 2 && v[1].toLowerCase() == 'eth' ? v[0] : undefined;
+}
+
+function create_pretty_tag() {
+	let span = document.createElement('span');
+	span.classList.add('pretty');
+	span.innerHTML = '🎀 Pretty'; 
+	return span;
 }
 
 function create_opensea_link(name) {
@@ -807,9 +830,9 @@ function apply_input_grade(span, name) {
 	span.classList.add('okay');
 	if (is_printable_ascii(name)) {
 		if (/^[a-z0-9\.]*$/u.test(name)) {
-			span.innerHTML = 'Base36';
+			span.innerHTML = 'Basic';
 		} else if (/^[a-z0-9\.]*$/iu.test(name)) {
-			span.innerHTML = 'Mixed-case Base36';
+			span.innerHTML = 'Mixed-case Basic';
 		} else if (name.toLowerCase() === name) {
 			span.innerHTML = 'ASCII';
 		} else {
@@ -962,6 +985,7 @@ async function resolve0(input0, skip_norm) {
 	let input_is_address = is_checksum_address(input);
 	let input_grade = document.createElement('span');
 	let input_row;
+	let normed_row;
 	let name_norm;
 	skip_norm |= skip_norm_check.checked;
 
@@ -975,7 +999,7 @@ async function resolve0(input0, skip_norm) {
 		
 		// lookup the address
 		let primary;
-		let reverse_row = create_row('Reverse', true);
+		let reverse_row = normed_row = create_row('Reverse', true);
 		output_div.append(reverse_row);
 		try {
 			primary = await ens.primary_from_address(input);
@@ -1038,7 +1062,7 @@ async function resolve0(input0, skip_norm) {
 			apply_grade(span, 'fail', 'Normalized');
 			add_row_tag(reverse_row, span);
 			// create norm now
-			let row = create_row('Normalized Reverse');
+			let row = normed_row = create_row('Normalized Reverse');
 			row.classList.add('normalized');
 			make_exploded(row, name_norm, true);
 			add_row_tag(row, create_copy_btn(name_norm));
@@ -1050,7 +1074,7 @@ async function resolve0(input0, skip_norm) {
 	} else {
 		
 		// the input is a name
-		input_row = create_row('Name');
+		input_row = normed_row = create_row('Name');
 		make_exploded(input_row, input, false);
 		apply_input_grade(input_grade, input);
 		add_row_tag(input_row, input_grade);
@@ -1081,6 +1105,8 @@ async function resolve0(input0, skip_norm) {
 				return;
 			}	
 		
+			let pretty = name_norm && ens_normalize(name_norm, true);
+
 			// name was normalized
 			if (name_norm === input) {
 				input_row.classList.add('normalized');
@@ -1093,10 +1119,11 @@ async function resolve0(input0, skip_norm) {
 				add_row_tag(input_row, span);
 				input_row.querySelector('.ens').remove(); // pointless
 				// create norm row
-				let row = create_row('Normalized');
+				let row = normed_row = create_row('Normalized');
 				row.classList.add('normalized');
 				make_exploded(row, name_norm, true);
 				add_row_tag(row, create_copy_btn(name_norm));
+				add_row_tag(row, create_resolve_btn(name_norm));
 				add_row_tag(row, create_ens_link(name_norm));
 				add_row_tag(row, create_opensea_link(name_norm));
 				output_div.append(row);
@@ -1107,10 +1134,14 @@ async function resolve0(input0, skip_norm) {
 
 	if (name_norm) {
 		let pretty = ens_normalize(name_norm, true);
-		if (name_norm !== pretty) {
+		if (name_norm === pretty) {			
+			add_row_tag(normed_row, create_pretty_tag());
+		} else {
 			let row = create_row('Pretty');
 			row.append(pretty);
-			row.append(create_copy_btn(pretty));
+			add_row_tag(row, create_copy_btn(pretty));
+			add_row_tag(row, create_resolve_btn(pretty));
+			add_row_tag(row, create_pretty_tag());
 			output_div.append(row);
 		}
 
