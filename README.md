@@ -2,7 +2,7 @@
 0-dependancy Compact ES6 Ethereum Name Service (ENS) Name Normalizer.
 
 * Passes **100%** [ENSIP Norm Validation Tests](https://adraffy.github.io/ensip-norm/) [(Latest)](https://adraffy.github.io/ens-norm-tests/test-validation/output/ens_normalize_1.5.0.html)
-* Filesize: 20KB
+* File Size: `20KB`
 * [Demo](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 
 ```Javascript
@@ -19,7 +19,7 @@ Instead of exposing an IDNA-like API (`is_valid()`, `get_mapped()`, etc.), this 
 ```JavaScript
 // Secondary API: string -> Token[]
 // turn a name into a list of tokens
-let tokens = ens_tokenize('R💩\uFE0Fa\xAD./'); // never throws
+let tokens = ens_tokenize('R💩\u{FE0F}a\u{304}\u{AD}./'); // never throws
 // [
 //     { 
 //         type: 'mapped', 
@@ -29,10 +29,17 @@ let tokens = ens_tokenize('R💩\uFE0Fa\xAD./'); // never throws
 //     { 
 //         type: 'emoji',
 //         input: [ 128169, 65039 ],  // input 
-//         emoji: [ 128169, 65039 ],  // ideal form
+//         emoji: [ 128169, 65039 ],  // fully-qualified
 //         cps: [ 128169 ]            // output
 //     },
-//     { type: 'valid', cps: [ 97 ] },
+//     {
+//         type: 'nfc',
+//         input: [ 97, 772 ],  // input (before nfc)
+//         cps: [ 257 ],        // output (after nfc)
+//         tokens: [            // tokens (before nfc)
+//             { type: 'valid', cps: [ 97, 772 ] }
+//         ]
+//     },
 //     { type: 'ignored', cp: 173 },
 //     { type: 'stop' },
 //     { type: 'disallowed', cp: 47 }
@@ -44,4 +51,5 @@ let tokens = ens_tokenize('R💩\uFE0Fa\xAD./'); // never throws
 * `npm run make` compress data from [@adraffy/ensip-norm](https://adraffy.github.io/ensip-norm/)
 * `npm run test` run validation tests
 * `npm run build` create `/dist/`
-* `npm run build-dev` compile `parts.js`, `dns.js`, and `all.js`
+* `npm run build-dev` same as `run build` plus `parts.js`, `dns.js`, and `all.js`
+	* Note: requires `devDependencies`

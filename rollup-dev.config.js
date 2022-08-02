@@ -1,42 +1,35 @@
-import {terser} from 'rollup-plugin-terser';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
+import BUILDS, {TERSER} from './rollup.config.js';
 
-const plugins = [nodeResolve()];
-
-const T = terser({
-	compress: {
-		toplevel: true,
-		passes: 2, 
-		dead_code: true
-	}
-});
+const NODE = nodeResolve();
 
 export default [
+	...BUILDS, 
 	{
 		input: './src/dns.js',
-		plugins,
+		plugins: [NODE],
 		output: {
 			file: './dist/dns.min.js',
 			format: 'es',
-			plugins: [T]
+			plugins: [TERSER]
 		}
 	},
 	{
 		input: './src/parts.js',
-		plugins,
+		plugins: [NODE],
 		output: {
 			file: './dist/parts.min.js',
 			format: 'es',
-			plugins: [T]
+			plugins: [TERSER]
 		}
 	},
 	{
 		input: './src/all.js',
-		plugins,
+		plugins: [NODE],
 		output: {
 			file: './dist/all.min.js',
 			format: 'es',
-			plugins: [T]
+			plugins: [TERSER]
 		}
 	}
 ];

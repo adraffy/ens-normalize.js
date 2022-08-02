@@ -49,6 +49,8 @@ export function ens_normalize(name, beautify = false) {
 const TY_VALID = 'valid';
 const TY_MAPPED = 'mapped';
 const TY_IGNORED = 'ignored';
+const TY_DISALLOWED = 'disallowed';
+const TY_EMOJI = 'emoji';
 
 export function ens_tokenize(name) {
 	let input = explode_cp(name).reverse();
@@ -56,7 +58,7 @@ export function ens_tokenize(name) {
 	while (input.length) {		
 		let emoji = consume_emoji_reversed(input, EMOJI_ROOT);
 		if (emoji) {
-			tokens.push({type: 'emoji', ...emoji, cps: filter_fe0f(emoji.input)});
+			tokens.push({type: TY_EMOJI, ...emoji, cps: filter_fe0f(emoji.input)});
 		} else {
 			let cp = input.pop();
 			if (cp === 0x2E) {
@@ -70,42 +72,51 @@ export function ens_tokenize(name) {
 				if (cps) {
 					tokens.push({type: TY_MAPPED, cp, cps});
 				} else {
-					tokens.push({type: 'disallowed', cp});
+					tokens.push({type: TY_DISALLOWED, cp});
 				}
 			}
 		}
 	}
-	for (let i = 0, last = 0; i < tokens.length; i++) {
-		if (nfc_check_token(tokens[i])) {
-			let end = i + 1;
-			while (end < tokens.length && nfc_check_token(tokens[end], true)) end++;
-			let slice = tokens.slice(last, end);
-			let cps = slice.flatMap(x => x.cps ?? []);
-			let str0 = String.fromCodePoint(...cps);
-			let str = nfc(str0);
-			if (str0 === str) {
-				last = end;
-				i = end - 1; // skip
+	for (let i = 0, start = -1; i < tokens.length; i++) {
+		let token = tokens[i];
+		if (is_valid_or_mapped(token.type)) {
+			if (requires_check(token.cps)) { // normalization might be needed
+				let end = i + 1;
+				for (let pos = end; pos < tokens.length; pos++) { // find adjacent text
+					let {type, cps} = tokens[pos];
+					if (is_valid_or_mapped(type)) {
+						if (!requires_check(cps)) break;
+						end = pos + 1;
+					} else if (type !== TY_IGNORED || type !== TY_DISALLOWED) { 
+						break;
+					}
+				}
+				if (start < 0) start = i;
+				let slice = tokens.slice(start, end);
+				let cps = slice.flatMap(x => is_valid_or_mapped(x.type) ? x.cps : []); // strip junk tokens
+				let str0 = String.fromCodePoint(...cps);
+				let str = nfc(str0);
+				if (str0 === str) {
+					i = end - 1; // skip to end of slice
+				} else {
+					tokens.splice(start, end - start, {type: 'nfc', input: cps, cps: explode_cp(str), tokens: collapse_valid_tokens(slice)});
+					i = start;
+				}
+				start = -1; // reset
 			} else {
-				tokens.splice(last, end - last, {type: 'nfc', input: cps, cps: explode_cp(str), tokens: collapse_valid_tokens(slice)});
-				i = last++;
+				start = i; // remember last
 			}
-		} else {
-			switch (tokens[i].type) {
-				case TY_VALID: 
-				case TY_MAPPED: last = i; break;
-			}
+		} else if (token.type === TY_EMOJI) {
+			start = -1; // reset
 		}
 	}
 	return collapse_valid_tokens(tokens);
 }
-
-function nfc_check_token(token, ignored) {
-	switch (token.type) {
-		case TY_VALID:
-		case TY_MAPPED: return token.cps.some(cp => NFC_CHECK.has(cp));
-		case TY_IGNORED: return ignored;
-	}
+function is_valid_or_mapped(type) {
+	return type === TY_VALID || type === TY_MAPPED;
+}
+function requires_check(cps) {
+	return cps.some(cp => NFC_CHECK.has(cp));
 }
 
 // collapse adjacent valid tokens

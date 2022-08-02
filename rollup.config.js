@@ -1,6 +1,6 @@
 import {terser} from 'rollup-plugin-terser';
 
-const T = terser({
+export const TERSER = terser({
 	compress: {
 		toplevel: true,
 		passes: 2, 
@@ -19,7 +19,7 @@ export default [
 			{
 				file: './dist/index.min.js',
 				format: 'es',
-				plugins: [T]
+				plugins: [TERSER]
 			}
 		]
 	},
@@ -28,7 +28,7 @@ export default [
 		output: {
 			file: './dist/ens-normalize.min.js',
 			format: 'es',
-			plugins: [T]
+			plugins: [TERSER]
 		}
 	}
 ];

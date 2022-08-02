@@ -1,13 +1,17 @@
-export function ens_normalize(name: string): string;
+export function ens_normalize(name: string, pretty?: boolean): string;
 
-interface BaseToken {
-	type: string;
+interface StopToken {
+	type: 'stop';
 }
-interface DisallowedToken extends BaseToken {
-	type: 'invalid' | 'disallowed';
+interface DisallowedToken {
+	type: 'disallowed';
 	cp: number;
 }
-interface AllowedToken extends BaseToken {
+interface IgnoredToken {
+	type: 'ignored';
+	cp: number;
+}
+interface AllowedToken {
 	type: string;
 	cps: number[];
 }
@@ -25,7 +29,8 @@ interface EmojiToken extends AllowedToken {
 interface NFCToken extends AllowedToken {
 	type: 'nfc';
 	input: number[];
-	tokens: Token[];
+	tokens: TextToken[]; 
 }
-type Token = DisallowedToken | ValidToken | MappedToken | EmojiToken | NFCToken;
+type TextToken = DisallowedToken | IgnoredToken | ValidToken | MappedToken;
+type Token = TextToken | EmojiToken | NFCToken | StopToken;
 export function ens_tokenize(name: string): Token[];

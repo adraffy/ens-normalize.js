@@ -7,6 +7,15 @@ function debug(s) {
 
 //debug('RAFFY.eth');
 
-debug('MabÁ︎̥̦🈚️a.eth');
+//debug('MabÁ︎̥̦🈚️a.eth');
 
-debug('R💩\uFE0Fa\xAD./');
+// readme example
+//debug('R💩\u{FE0F}a\u{304}\u{AD}./');
+
+
+//debug('🥋️꦳̝🌗️㍁𝔔');
+
+let name = '🥋️꦳̝🌗️㍁𝔔';
+console.log([...name].map(x => x.codePointAt(0)));
+
+debug(name);
