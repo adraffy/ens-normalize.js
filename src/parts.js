@@ -19,7 +19,7 @@ function tooltip(cps) {
 function create_arrow_span() {
 	let span = document.createElement('span');
 	span.classList.add('arrow');
-	span.innerHTML = '🡆'; //'&rarr;';
+	span.innerHTML = '➔'; //'&rarr;';
 	return span;
 }
 
