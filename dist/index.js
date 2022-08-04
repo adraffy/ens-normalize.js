@@ -251,11 +251,11 @@ function ens_normalize(name, beautify = false) {
 	return nfc(String.fromCodePoint(...output));
 }
 
-function consume_emoji_reversed(cps, node, input) {
+function consume_emoji_reversed(cps, node, eaten) {
 	let emoji;
 	let stack = [];
 	let pos = cps.length;
-	if (input) input.length = 0; // clear input buffer (if needed)
+	if (eaten) eaten.length = 0; // clear input buffer (if needed)
 	while (pos) {
 		let cp = cps[--pos];
 		node = node.branches.find(x => x.set.has(cp))?.node;
@@ -267,7 +267,7 @@ function consume_emoji_reversed(cps, node, input) {
 		}
 		if (node.valid) { // this is a valid emoji (so far)
 			emoji = stack.slice(); // copy stack
-			input?.push(...cps.slice(pos).reverse()); // copy input (if needed)
+			if (eaten) eaten.push(...cps.slice(pos).reverse()); // copy input (if needed)
 			cps.length = pos; // truncate
 		}
 	}
@@ -290,7 +290,7 @@ function ens_tokenize(name) {
 	while (input.length) {		
 		let emoji = consume_emoji_reversed(input, EMOJI_ROOT, eaten);
 		if (emoji) {
-			tokens.push({type: TY_EMOJI, emoji, input: eaten, cps: filter_fe0f(emoji)});
+			tokens.push({type: TY_EMOJI, emoji, input: eaten.slice(), cps: filter_fe0f(emoji)});
 		} else {
 			let cp = input.pop();
 			if (cp === 0x2E) {
