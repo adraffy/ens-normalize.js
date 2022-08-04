@@ -26,7 +26,7 @@ export default [
 	{
 		input: './src/only-norm.js',
 		output: {
-			file: './dist/ens-normalize.min.js',
+			file: './dist/only-norm.min.js',
 			format: 'es',
 			plugins: [TERSER]
 		}

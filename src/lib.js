@@ -25,7 +25,7 @@ export function ens_normalize(name, beautify = false) {
 	while (input.length) {		
 		let emoji = consume_emoji_reversed(input, EMOJI_ROOT);
 		if (emoji) {
-			output.push(...(beautify ? emoji.emoji : filter_fe0f(emoji.input)));
+			output.push(...(beautify ? emoji : filter_fe0f(emoji)));
 			continue;
 		}
 		let cp = input.pop();
@@ -46,6 +46,32 @@ export function ens_normalize(name, beautify = false) {
 	return nfc(String.fromCodePoint(...output));
 }
 
+function consume_emoji_reversed(cps, node, input) {
+	let emoji;
+	let stack = [];
+	let pos = cps.length;
+	if (input) input.length = 0; // clear input buffer (if needed)
+	while (pos) {
+		let cp = cps[--pos];
+		node = node.branches.find(x => x.set.has(cp))?.node;
+		if (!node) break;
+		stack.push(cp);
+		if (node.fe0f) {
+			stack.push(0xFE0F);
+			if (pos > 0 && cps[pos - 1] == 0xFE0F) pos--;
+		}
+		if (node.valid) { // this is a valid emoji (so far)
+			emoji = stack.slice(); // copy stack
+			input?.push(...cps.slice(pos).reverse()); // copy input (if needed)
+			cps.length = pos; // truncate
+		}
+	}
+	return emoji;
+}
+
+// ************************************************************
+// tokenizer (use "only-norm.js" if just above is needed)
+
 const TY_VALID = 'valid';
 const TY_MAPPED = 'mapped';
 const TY_IGNORED = 'ignored';
@@ -54,11 +80,12 @@ const TY_EMOJI = 'emoji';
 
 export function ens_tokenize(name) {
 	let input = explode_cp(name).reverse();
+	let eaten = [];
 	let tokens = [];
 	while (input.length) {		
-		let emoji = consume_emoji_reversed(input, EMOJI_ROOT);
+		let emoji = consume_emoji_reversed(input, EMOJI_ROOT, eaten);
 		if (emoji) {
-			tokens.push({type: TY_EMOJI, ...emoji, cps: filter_fe0f(emoji.input)});
+			tokens.push({type: TY_EMOJI, emoji, input: eaten, cps: filter_fe0f(emoji)});
 		} else {
 			let cp = input.pop();
 			if (cp === 0x2E) {
@@ -112,9 +139,11 @@ export function ens_tokenize(name) {
 	}
 	return collapse_valid_tokens(tokens);
 }
+
 function is_valid_or_mapped(type) {
 	return type === TY_VALID || type === TY_MAPPED;
 }
+
 function requires_check(cps) {
 	return cps.some(cp => NFC_CHECK.has(cp));
 }
@@ -129,35 +158,4 @@ function collapse_valid_tokens(tokens) {
 		}
 	}
 	return tokens;
-}
-
-function consume_emoji_reversed(cps, node) {
-	let emoji;
-	let fe0f;
-	let stack = [];
-	let input = [];
-	let pos = cps.length;
-	while (pos) {
-		let cp = cps[--pos];
-		if (cp === 0xFE0F) {
-			if (!fe0f) break; // we didn't expect FE0F
-			fe0f = false; // clear flag
-			continue;
-		}
-		node = node.branches.find(x => x.set.has(cp))?.node;
-		if (!node) break;
-		stack.push(cp);
-		fe0f = node.fe0f;
-		if (fe0f) stack.push(0xFE0F);
-		if (node.valid) { // this is a valid emoji (so far)
-			if (fe0f && pos > 0 && cps[pos - 1] == 0xFE0F) { // eat FE0F too
-				fe0f = false;
-				pos--;
-			}
-			emoji = stack.slice(); // copy stack
-			input.push(...cps.slice(pos).reverse()); // copy input
-			cps.length = pos; // truncate
-		}
-	}
-	if (emoji) return {input, emoji};
 }
