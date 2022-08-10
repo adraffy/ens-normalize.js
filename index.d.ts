@@ -1,8 +1,3 @@
-export function ens_normalize(name: string, pretty?: boolean): string;
-
-interface StopToken {
-	type: 'stop';
-}
 interface DisallowedToken {
 	type: 'disallowed';
 	cp: number;
@@ -11,26 +6,33 @@ interface IgnoredToken {
 	type: 'ignored';
 	cp: number;
 }
-interface AllowedToken {
-	type: string;
+interface ValidToken {
+	type: 'valid';
 	cps: number[];
 }
-interface ValidToken extends AllowedToken {
-	type: 'valid';
-}
-interface MappedToken extends AllowedToken {
-	type: 'mapped';
+interface MappedToken {
+	type: 'mapped';	
 	cp: number;
-}
-interface EmojiToken extends AllowedToken {
-	type: 'emoji';
-	emoji: number[];
-}
-interface NFCToken extends AllowedToken {
-	type: 'nfc';
-	input: number[];
-	tokens: TextToken[]; 
+	cps: number[];
 }
 type TextToken = DisallowedToken | IgnoredToken | ValidToken | MappedToken;
+interface EmojiToken {
+	type: 'emoji';
+	input: number[];
+	emoji: number[];
+	cps: number[];
+}
+interface NFCToken {
+	type: 'nfc';
+	input: number[];
+	cps: number[];
+	tokens: TextToken[]; 
+}
+interface StopToken {
+	type: 'stop';
+}
 type Token = TextToken | EmojiToken | NFCToken | StopToken;
+
+export function ens_normalize(name: string): string;
+export function ens_beautify(name: string): string;
 export function ens_tokenize(name: string): Token[];

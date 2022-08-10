@@ -40,11 +40,11 @@ export function dns_from_normalized_ens(name) {
 				acc += 4;
 				label = 'xn--' + String.fromCodePoint(...encoded); 
 			}
-			if (label.length > MAX_LABEL) throw new Error(`too long`);
+			if (label.length > MAX_LABEL) throw new Error(`too long: ${label.length} > ${MAX_LABEL}`);
 		} catch (err) {
 			throw new Error(`Invalid label "${escape_unicode(label)}": ${err.message}`);
 		}
-		if (acc > MAX_NAME) throw new Error(`Name too long`);
+		if (acc > MAX_NAME) throw new Error(`Name too long: ${acc} > ${MAX_NAME}`);
 		return label;
 	}).join('.');
 }

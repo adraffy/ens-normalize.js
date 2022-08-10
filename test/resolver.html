@@ -354,6 +354,7 @@ footer {
 <button>👁️‍🗨️</button>
 <button>🌈rainbow</button>
 <button>6️⃣9️⃣</button>
+<button>1⃣2️⃣.eth</button>
 <button>🏳️‍🌈</button>
 <button>🧟‍♂</button>
 <button>🧟♂</button>
@@ -365,6 +366,7 @@ footer {
 <button>🤼🏻‍♀️</button>
 
 <button data-name="💩{200D}💩">❌💩+💩</button>
+<button data-name="{1F469}{1F3FE}{200D}{1F91D}{200D}{1F469}{1F3FE}">❌ Mod+Mod</button>
 
 <b>Regional:</b>
 <button>🇦</button>
@@ -484,7 +486,7 @@ import {
 	is_checksum_address, namehash, labelhash, ENS
 } from '../../eth-tools.js/dist/eth-tools.min.js';
 import {
-	ens_normalize, ens_tokenize,
+	ens_normalize, ens_beautify, ens_tokenize,
 	dns_from_normalized_ens,
 	escape_for_html, is_printable_ascii, hex_cp, explode_cp,
 	dom_from_tokens, use_default_style
@@ -1106,8 +1108,6 @@ async function resolve0(input0, skip_norm) {
 				return;
 			}	
 		
-			let pretty = name_norm && ens_normalize(name_norm, true);
-
 			// name was normalized
 			if (name_norm === input) {
 				input_row.classList.add('normalized');
@@ -1134,7 +1134,7 @@ async function resolve0(input0, skip_norm) {
 	}
 
 	if (!skip_norm && name_norm) {
-		let pretty = ens_normalize(name_norm, true);
+		let pretty = ens_beautify(name_norm);
 		if (name_norm === pretty) {			
 			add_row_tag(normed_row, create_pretty_tag());
 		} else {

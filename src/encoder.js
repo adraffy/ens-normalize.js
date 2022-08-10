@@ -175,6 +175,7 @@ export class Encoder {
 				console.log(`linear spec not used: empty: ${w} ${dx} ${dy}`);
 				continue;
 			}
+			//console.log({w, dx, dy, n: linear.length})
 			mapped[w] = nonlinear; // remove them
 			this.unsigned(w);
 			this.positive(dx);

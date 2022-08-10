@@ -56,30 +56,34 @@ for (let cps of EMOJI) {
 }
 
 // there are sequences of the form:
-// a__ MOD b__ MOD2 c__ 
+// a__ MOD b__ MOD2 c__
 // where MOD != MOD2 (5x4 = 20 combinations)
 // if we remember the first mod, 
 // we can pretend the second mod is non-exclusionary (5x5)
-// which allows further compression
-let modifier_set = new Set([0x1F3FB, 0x1F3FC, 0x1F3FD, 0x1F3FE, 0x1F3FF]); // 1F3FB..1F3FF
+// which allows further compression 
+// (12193 to 11079 bytes -> saves 1KB)
+let modifier_set = new Set([0x1F3FB, 0x1F3FC, 0x1F3FD, 0x1F3FE, 0x1F3FF].map(x => String(x))); // 1F3FB..1F3FF
 root.scan((node, path) => {
 	// find nodes that are missing 1 modifier
 	let v = Object.keys(node.branches);
 	if (v.length != modifier_set.size - 1) return; 
 	if (!v.every(k => modifier_set.has(k))) return;
 	// where another modifier already exists in the path
-	let parent = path.find(kv => modifier_set.has(kv[0]));
-	if (parent == node) throw new Error('wtf');
-	// mark the first modifier
-	parent.save_mod = true;
-	// check on the second modifier
-	node.check_mod = true;	
-	// complete the map so we collapse
+	let m = path.filter(kv => modifier_set.has(kv[0]));
+	if (m.length == 0) return;
+	let parent = m[m.length - 1][1];
+	// complete the map so we can collapse
 	for (let cp of modifier_set) {
 		if (!node.branches[cp]) {
-			node.add(cp).valid = true;
+			node.branches[cp] = node.branches[v[0]]; // fake branch
 			break;
 		}
+	}
+	// set save on the first modifier
+	parent.save_mod = true;
+	// set check on the second modifiers
+	for (let b of Object.values(node.branches)) {
+		b.check_mod = true;
 	}
 });
 
@@ -123,11 +127,14 @@ let enc = new Encoder();
 enc.write_member(CHARS.valid);
 enc.write_member(CHARS.ignored);
 enc.write_mapped([
+	[1, 1, 0], // adjacent that map to a constant
+	[2, 1, 0], // eg. AAAA..BBBB => CCCC
 	[1, 1, 1], // alphabets: ABC
 	[1, 2, 2], // paired-alphabets: AaBbCc
-	[1, 1, 0], // \ 
-	[2, 1, 0], //  adjacent that map to a constant
-	[3, 1, 0]  // /   eg. AAAA..BBBB => CCCC
+//	[1, 2, 1],
+//	[1, 3, 3],
+//	[3, 1, 0],
+//	[4, 1, 0],
 ], CHARS.mapped);
 enc.write_member(sorted_emoji);
 encode_emoji(enc, root, sorted_emoji_map);

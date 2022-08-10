@@ -6,6 +6,7 @@ const IGNORED = new Set(read_member_array(r));
 const MAPPED = read_mapped_map(r);
 const EMOJI_ROOT = read_emoji_trie(r);
 const NFC_CHECK = new Set(read_member_array(r, [...VALID].sort((a, b) => a - b)));
+const FE0F = 0xFE0F;
 
 function nfc(s) {
 	return s.normalize('NFC');
@@ -16,16 +17,23 @@ function explode_cp(s) {
 }
 
 function filter_fe0f(cps) {
-	return cps.filter(cp => cp != 0xFE0F);
+	return cps.filter(cp => cp != FE0F);
 }
 
-export function ens_normalize(name, beautify = false) {
-	let input = [...name].map(x => x.codePointAt(0)).reverse(); // flip for pop
+export function ens_beautify(name) {
+	return normalize(name, x => x);
+}
+export function ens_normalize(name) {
+	return normalize(name, filter_fe0f);
+}
+
+function normalize(name, emoji_filter) {
+	let input = explode_cp(name).reverse(); // flip for pop
 	let output = [];
 	while (input.length) {		
 		let emoji = consume_emoji_reversed(input, EMOJI_ROOT);
 		if (emoji) {
-			output.push(...(beautify ? emoji : filter_fe0f(emoji)));
+			output.push(...emoji_filter(emoji));
 			continue;
 		}
 		let cp = input.pop();
@@ -48,6 +56,7 @@ export function ens_normalize(name, beautify = false) {
 
 function consume_emoji_reversed(cps, node, eaten) {
 	let emoji;
+	let saved;
 	let stack = [];
 	let pos = cps.length;
 	if (eaten) eaten.length = 0; // clear input buffer (if needed)
@@ -55,10 +64,15 @@ function consume_emoji_reversed(cps, node, eaten) {
 		let cp = cps[--pos];
 		node = node.branches.find(x => x.set.has(cp))?.node;
 		if (!node) break;
+		if (node.save) { // remember
+			saved = cp;
+		} else if (node.check) { // check exclusion
+			if (cp === saved) break;
+		}
 		stack.push(cp);
 		if (node.fe0f) {
-			stack.push(0xFE0F);
-			if (pos > 0 && cps[pos - 1] == 0xFE0F) pos--;
+			stack.push(FE0F);
+			if (pos > 0 && cps[pos - 1] == FE0F) pos--;
 		}
 		if (node.valid) { // this is a valid emoji (so far)
 			emoji = stack.slice(); // copy stack
