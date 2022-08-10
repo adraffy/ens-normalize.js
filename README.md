@@ -67,4 +67,3 @@ let tokens = ens_tokenize('R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./'); // never thr
 * `npm run make` compress data from [@adraffy/ensip-norm](https://adraffy.github.io/ensip-norm/)
 * `npm run test` run validation tests
 * `npm run build` create `/dist/`
-* `npm run build-dev` same as `run build` plus `parts.js`, `dns.js`, and `all.js`

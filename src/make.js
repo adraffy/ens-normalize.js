@@ -7,6 +7,9 @@ class Node {
 	constructor() {
 		this.branches = {};
 	}
+	get nodes() {
+		return Object.values(this.branches).reduce((a, x) => a + 1 + x.nodes, 0);
+	}
 	add(cp) {
 		if (cp == 0xFE0F) {
 			this.fe0f = true;
@@ -62,7 +65,7 @@ for (let cps of EMOJI) {
 // we can pretend the second mod is non-exclusionary (5x5)
 // which allows further compression 
 // (12193 to 11079 bytes -> saves 1KB)
-let modifier_set = new Set([0x1F3FB, 0x1F3FC, 0x1F3FD, 0x1F3FE, 0x1F3FF].map(x => String(x))); // 1F3FB..1F3FF
+let modifier_set = new Set(['127995', '127996', '127997', '127998', '127999']); // 1F3FB..1F3FF
 root.scan((node, path) => {
 	// find nodes that are missing 1 modifier
 	let v = Object.keys(node.branches);
@@ -93,12 +96,14 @@ root.scan((node) => {
 });
 
 // compress
+console.log(`Before: ${root.nodes}`);
 root.collapse_nodes();
 root.collapse_keys();
+console.log(`After: ${root.nodes}`);
 
 function encode_emoji(enc, node, map) {
 	for (let [keys, x] of Object.entries(node.branches)) {
-		enc.write_member(keys.split(',').map(x => sorted_emoji_map[x]));
+		enc.write_member(keys.split(',').map(x => map[x]));
 		encode_emoji(enc, x, map);
 	}
 	enc.write_member([]);
@@ -143,7 +148,8 @@ let buf = Buffer.from(enc.compressed());
 
 console.log(`${buf.length} bytes`);
 
-writeFileSync(new URL('./include.js', import.meta.url), `
-	import {read_compressed_payload} from './decoder.js';
-	export default read_compressed_payload(Uint8Array.from(atob('${buf.toString('base64')}'), c => c.charCodeAt(0)));
-`);
+writeFileSync(new URL('./include.js', import.meta.url), [
+	`// created ${new Date().toJSON()}`,
+	`import {read_compressed_payload} from './decoder.js';`,
+	`export default read_compressed_payload(Uint8Array.from(atob('${buf.toString('base64')}'), c => c.charCodeAt(0)));`,
+].join('\n'));

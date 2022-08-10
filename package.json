@@ -29,7 +29,6 @@
   "scripts": {
     "make": "node src/make.js",
     "build": "rollup -c",
-    "build-dev": "rollup -c rollup-dev.config.js",
     "test": "node test/validate.js"
   },
   "devDependencies": {
