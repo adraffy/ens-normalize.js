@@ -2,7 +2,7 @@
 0-dependancy Compact ES6 Ethereum Name Service (ENS) Name Normalizer.
 
 * Passes **100%** [ENSIP Norm Validation Tests](https://adraffy.github.io/ensip-norm/) [(Latest)](https://adraffy.github.io/ens-norm-tests/test-validation/output/ens_normalize_1.5.0.html)
-* File Size: `20KB`
+* File Size: [`18KB`](./dist/only-norm.min.js)
 * [Demo](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 
 ```Javascript
@@ -10,15 +10,25 @@ import {ens_normalize} from '@adraffy/ens-normalize';
 // npm i @adraffy/ens-normalize
 // browser: https://unpkg.com/@adraffy/ens-normalize@latest/dist/index.min.js
 
-// Primary API: string -> string
+// string -> string
 let normalized = ens_normalize('🚴‍♂️.eth'); // throws on invalid names
 // ready for namehash
 // note: does not enforce .eth TLD 3-character minimum
 ```
+Format names with fully-qualified emoji:
+```JavaScript
+// string -> string
+let pretty = ens_beautify('1⃣2⃣.eth'); // works like ens_normalize
+// ready for display
+// "1️⃣2️⃣.eth"
+
+// note: normalization is unchanged:
+// ens_normalize(ens_beautify(x)) == ens_normalize(x)
+```
+
 Instead of exposing an IDNA-like API (`is_valid()`, `get_mapped()`, etc.), this library exposes a single function which converts names to tokens:
 ```JavaScript
-// Secondary API: string -> Token[]
-// turn a name into a list of tokens
+// string -> Token[]
 let tokens = ens_tokenize('R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./'); // never throws
 // [
 //     { 
