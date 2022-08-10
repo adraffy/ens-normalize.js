@@ -1,7 +1,7 @@
 # ens-normalize.js
 0-dependancy Compact ES6 Ethereum Name Service (ENS) Name Normalizer.
 
-* Passes **100%** [ENSIP Norm Validation Tests](https://adraffy.github.io/ensip-norm/) [(Latest)](https://adraffy.github.io/ens-norm-tests/test-validation/output/ens_normalize_1.5.0.html)
+* Passes **100%** [ENSIP Norm](https://adraffy.github.io/ensip-norm/) Validation Tests [(Latest)](https://adraffy.github.io/ens-norm-tests/test-validation/output/ens_normalize_1.5.0.html)
 * File Size: [`18KB`](./dist/only-norm.min.js)
 * [Demo](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 
@@ -11,15 +11,19 @@ import {ens_normalize} from '@adraffy/ens-normalize';
 // browser: https://unpkg.com/@adraffy/ens-normalize@latest/dist/index.min.js
 
 // string -> string
-let normalized = ens_normalize('🚴‍♂️.eth'); // throws on invalid names
-// ready for namehash
+// throws on invalid names
+// output ready for namehash
+let normalized = ens_normalize('RaFFY🚴‍♂️.eTh');
+// "raffy🚴‍♂.eth"
+
 // note: does not enforce .eth TLD 3-character minimum
 ```
 Format names with fully-qualified emoji:
 ```JavaScript
 // string -> string
-let pretty = ens_beautify('1⃣2⃣.eth'); // works like ens_normalize
-// ready for display
+// works like ens_normalize
+// output ready for display
+let pretty = ens_beautify('1⃣2⃣.eth'); 
 // "1️⃣2️⃣.eth"
 
 // note: normalization is unchanged:
@@ -64,4 +68,3 @@ let tokens = ens_tokenize('R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./'); // never thr
 * `npm run test` run validation tests
 * `npm run build` create `/dist/`
 * `npm run build-dev` same as `run build` plus `parts.js`, `dns.js`, and `all.js`
-	* Note: requires `devDependencies`
