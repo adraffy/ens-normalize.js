@@ -154,10 +154,10 @@ export function read_zero_terminated_array(next) {
 	return v;
 }
 
-function read_transposed(n, w, next, lookup) {
+function read_transposed(n, w, next) {
 	let m = Array(n).fill().map(() => []);
 	for (let i = 0; i < w; i++) {
-		read_deltas(n, next).forEach((x, j) => m[j].push(lookup ? lookup(x) : x));
+		read_deltas(n, next).forEach((x, j) => m[j].push(x));
 	}
 	return m;
 }
@@ -192,14 +192,14 @@ export function read_emoji_trie(next) {
 			if (keys.length == 0) break;
 			branches.push({set: new Set(keys.map(i => sorted[i])), node: read()});
 		}
-		branches.sort((a, b) => b.set.size - a.set.size);
-		let flag = next();
-		return {
-			branches,
-			valid: (flag & 1) != 0, 
-			fe0f: (flag & 2) != 0, 
-			save: (flag & 4) != 0, 
-			check: (flag & 8) != 0,
-		};
+		branches.sort((a, b) => b.set.size - a.set.size); // sort by likelihood
+		let temp = next();
+		let valid = temp % 3;
+		temp = (temp / 3)|0;
+		let fe0f = !!(temp & 1);
+		temp >>= 1;
+		let save = temp == 1;
+		let check = temp == 2;
+		return {branches, valid, fe0f, save, check};
 	}
 }

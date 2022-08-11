@@ -1,23 +1,15 @@
 import r from './include.js';
 import {read_member_array, read_mapped_map, read_emoji_trie} from './decoder.js';
+import {explode_cp, filter_fe0f} from './utils.js';
 
 const VALID = new Set(read_member_array(r));
 const IGNORED = new Set(read_member_array(r));
 const MAPPED = read_mapped_map(r);
 const EMOJI_ROOT = read_emoji_trie(r);
 const NFC_CHECK = new Set(read_member_array(r, [...VALID].sort((a, b) => a - b)));
-const FE0F = 0xFE0F;
 
 function nfc(s) {
 	return s.normalize('NFC');
-}
-
-function explode_cp(s) {
-	return [...s].map(x => x.codePointAt(0));
-}
-
-function filter_fe0f(cps) {
-	return cps.filter(cp => cp != FE0F);
 }
 
 export function ens_beautify(name) {
@@ -31,7 +23,7 @@ function normalize(name, emoji_filter) {
 	let input = explode_cp(name).reverse(); // flip for pop
 	let output = [];
 	while (input.length) {		
-		let emoji = consume_emoji_reversed(input, EMOJI_ROOT);
+		let emoji = consume_emoji_reversed(input);
 		if (emoji) {
 			output.push(...emoji_filter(emoji));
 			continue;
@@ -54,7 +46,8 @@ function normalize(name, emoji_filter) {
 	return nfc(String.fromCodePoint(...output));
 }
 
-function consume_emoji_reversed(cps, node, eaten) {
+function consume_emoji_reversed(cps, eaten) {
+	let node = EMOJI_ROOT;
 	let emoji;
 	let saved;
 	let stack = [];
@@ -71,11 +64,12 @@ function consume_emoji_reversed(cps, node, eaten) {
 		}
 		stack.push(cp);
 		if (node.fe0f) {
-			stack.push(FE0F);
-			if (pos > 0 && cps[pos - 1] == FE0F) pos--;
+			stack.push(0xFE0F);
+			if (pos > 0 && cps[pos - 1] == 0xFE0F) pos--; // consume optional FE0F
 		}
 		if (node.valid) { // this is a valid emoji (so far)
 			emoji = stack.slice(); // copy stack
+			if (node.valid == 2) emoji.splice(1, 1); // delete FE0F at position 1 (RGI ZWJ don't follow spec!)
 			if (eaten) eaten.push(...cps.slice(pos).reverse()); // copy input (if needed)
 			cps.length = pos; // truncate
 		}
@@ -97,7 +91,7 @@ export function ens_tokenize(name) {
 	let eaten = [];
 	let tokens = [];
 	while (input.length) {		
-		let emoji = consume_emoji_reversed(input, EMOJI_ROOT, eaten);
+		let emoji = consume_emoji_reversed(input, eaten);
 		if (emoji) {
 			tokens.push({type: TY_EMOJI, emoji, input: eaten.slice(), cps: filter_fe0f(emoji)});
 		} else {

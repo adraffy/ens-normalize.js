@@ -931,8 +931,8 @@ function resolve(skip_norm) {
 	clearTimeout(resolve_timer);
 	resolve_timer = undefined;
 	let input = input_field.value;
-	if (/^[0-9a-f]{2,}( [0-9a-f]{2,})+$/i.test(input)) {
-		input_field.value = input = input.split(' ').map(x => `{${x}}`).join('');	
+	if (/^\s*[0-9a-f]{2,}(\s+[0-9a-f]{2,})+\s*$/i.test(input)) {
+		input_field.value = input = input.trim().split(/\s+/).map(x => `{${x}}`).join('');	
 	}
 	const title = 'ENS Resolver';
 	if (!input) {

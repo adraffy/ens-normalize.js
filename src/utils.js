@@ -11,6 +11,10 @@ export function explode_cp(s) {
 	return [...s].map(c => c.codePointAt(0));
 }
 
+export function filter_fe0f(cps) {
+	return cps.filter(cp => cp != 0xFE0F);
+}
+
 export function escape_for_html(s, quoter = quote_cp) {
 	// printable w/o:
 	// html: 0x26 &, 0x3C <, 0x3E >
@@ -33,66 +37,6 @@ export function is_printable_ascii(s) {
 	// 0x20 (space)
 	// 0x7F (delete)
 	return /^[\x21-\x7E]+$/gu.test(s);
-}
-
-
-// group list into collection
-// [1, 2, 2, 3] + odd => [odd:[1,3], even:[2,2]]
-export function group_by(v, fn, ret = {}) {
-	for (let x of v) {
-		let key = fn(x);
-		let g = ret[key];
-		if (!g) g = ret[key] = [];
-		g.push(x);
-	}
-	return ret;
-}
-
-// split list into runs where 
-// [..., a, b, ...] => [[..., a], [b, ...]] if fn(a, b)
-export function split_between(v, fn) {
-	let start = 0;
-	let ret = [];
-	for (let i = 1; i < v.length; i++) {
-		if (fn(v[i - 1], v[i])) {
-			ret.push(v.slice(start, i));
-			start = i;
-		}
-	}
-	if (start < v.length) {
-		ret.push(v.slice(start));
-	}
-	return ret;
-}
-
-// from a list of [[x,ys]...]
-// find spans of [[x,ys],[x+dx,ys+dy],[x+2dx,ys+2dy],...]
-export function split_linear(mapped, dx, dy) {
-	let linear = [];
-	mapped = mapped.map(v => v.slice());
-	for (let i = 0; i < mapped.length; i++) {
-		let row0 = mapped[i];
-		let [x0, ys0] = row0;
-		if (x0 == -1) continue; // marked
-		let group = [row0];
-		next: for (let j = i + 1; j < mapped.length; j++) {
-			let row =  mapped[j];
-			let [x, ys] = row;
-			if (x == -1) continue; // marked
-			let x1 = x0 + group.length * dx;
-			if (x < x1) continue;
-			if (x > x1) break;
-			for (let k = 0; k < ys0.length; k++) {
-				if (ys0[k] + group.length * dy != ys[k]) continue next;
-			}
-			group.push(row);
-		}
-		if (group.length > 1) {
-			group.forEach(v => v[0] = -1); // mark used
-			linear.push([x0, group.length, ys0]);
-		}
-	}
-	return {linear, nonlinear: mapped.filter(v => v[0] >= 0)}; // remove marked
 }
 
 export function compare_arrays(a, b) {

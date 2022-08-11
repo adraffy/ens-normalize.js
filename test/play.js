@@ -1,3 +1,5 @@
+// scratch file
+
 import {ens_beautify, ens_normalize, ens_tokenize} from '../index.js';
 import {inspect} from 'node:util';
 
@@ -10,6 +12,7 @@ console.log(ens_normalize('RAFFY.ETH'));
 console.log(ens_beautify('1⃣2️⃣.eth'));
 
 //debug('MabÁ︎̥̦🈚️a.eth');
+//debug(String.fromCodePoint(0x31,0x309,0x307,0x31,0x307,0x309));
 
 // readme example
 debug('R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./');

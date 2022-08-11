@@ -1,5 +1,66 @@
-import {group_by, split_between, split_linear, compare_arrays} from './utils.js'; 
+import {compare_arrays} from './utils.js'; 
 
+// group list into collection
+// [1, 2, 2, 3] + odd => [odd:[1,3], even:[2,2]]
+export function group_by(v, fn, ret = {}) {
+	for (let x of v) {
+		let key = fn(x);
+		let g = ret[key];
+		if (!g) g = ret[key] = [];
+		g.push(x);
+	}
+	return ret;
+}
+
+// split list into runs where 
+// [..., a, b, ...] => [[..., a], [b, ...]] if fn(a, b)
+export function split_between(v, fn) {
+	let start = 0;
+	let ret = [];
+	for (let i = 1; i < v.length; i++) {
+		if (fn(v[i - 1], v[i])) {
+			ret.push(v.slice(start, i));
+			start = i;
+		}
+	}
+	if (start < v.length) {
+		ret.push(v.slice(start));
+	}
+	return ret;
+}
+
+// from a list of [[x,ys]...]
+// find spans of [[x,ys],[x+dx,ys+dy],[x+2dx,ys+2dy],...]
+export function split_linear(mapped, dx, dy) {
+	let linear = [];
+	mapped = mapped.map(v => v.slice());
+	for (let i = 0; i < mapped.length; i++) {
+		let row0 = mapped[i];
+		let [x0, ys0] = row0;
+		if (x0 == -1) continue; // marked
+		let group = [row0];
+		next: for (let j = i + 1; j < mapped.length; j++) {
+			let row =  mapped[j];
+			let [x, ys] = row;
+			if (x == -1) continue; // marked
+			let x1 = x0 + group.length * dx;
+			if (x < x1) continue;
+			if (x > x1) break;
+			for (let k = 0; k < ys0.length; k++) {
+				if (ys0[k] + group.length * dy != ys[k]) continue next;
+			}
+			group.push(row);
+		}
+		if (group.length > 1) {
+			group.forEach(v => v[0] = -1); // mark used
+			linear.push([x0, group.length, ys0]);
+		}
+	}
+	return {linear, nonlinear: mapped.filter(v => v[0] >= 0)}; // remove marked
+}
+
+// group 8 bits into 1 byte
+// [0, 1, 1, 0, ...] => [0b0110..., ...]
 export function bytes_from_bits(v) {
 	if (v.length & 7) throw new TypeError('not divisible by 8');
 	let ret = [];
@@ -13,6 +74,7 @@ export function bytes_from_bits(v) {
 	return ret;
 }
 
+// vary symbol count to find best encoding 
 export function best_arithmetic(symbols, max = 64) {
 	let best;
 	for (let n = 0; n <= max; n++) {
@@ -53,10 +115,9 @@ export function encode_arithmetic(symbols, linear) {
 			return x + 1;
 		}
 	});
-	symbols.push(0);
+	symbols.push(0); // END
 	// create frequency table
-	let freq = Array(linear + 4).fill(0);
-	//let freq = Array(linear + 3).fill(0);
+	let freq = Array(linear + 4).fill(0); // END + 1,2,3-byte symbols
 	for (let x of symbols) freq[x]++;
 	freq = freq.map(x => Math.max(1, x)); // prevent sparse
 	// create accumulated table

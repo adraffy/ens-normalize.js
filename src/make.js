@@ -64,17 +64,17 @@ for (let cps of EMOJI) {
 // if we remember the first mod, 
 // we can pretend the second mod is non-exclusionary (5x5)
 // which allows further compression 
-// (12193 to 11079 bytes -> saves 1KB)
+// (12193 to 11079 bytes -> saves 1KB, ~10%)
 let modifier_set = new Set(['127995', '127996', '127997', '127998', '127999']); // 1F3FB..1F3FF
 root.scan((node, path) => {
 	// find nodes that are missing 1 modifier
 	let v = Object.keys(node.branches);
-	if (v.length != modifier_set.size - 1) return; 
-	if (!v.every(k => modifier_set.has(k))) return;
+	if (v.length != modifier_set.size - 1) return; // missing 1
+	if (!v.every(k => modifier_set.has(k))) return; // all mods
 	// where another modifier already exists in the path
 	let m = path.filter(kv => modifier_set.has(kv[0]));
 	if (m.length == 0) return;
-	let parent = m[m.length - 1][1];
+	let parent = m[m.length - 1][1]; // find closest
 	// complete the map so we can collapse
 	for (let cp of modifier_set) {
 		if (!node.branches[cp]) {
@@ -90,10 +90,25 @@ root.scan((node, path) => {
 	}
 });
 
-// assert invariants
-root.scan((node) => {
-	if (node.save_mod && node.check_mod) throw new Error('invariant wrong');
-});
+for (let cps0 of EMOJI) {
+	let node = root;
+	let bits = 0;
+	let index = 0;
+	for (let i = 0; i < cps0.length; ) {
+		let cp = cps0[i++];
+		node = node.branches[cp];
+		if (node.fe0f) {
+			if (i < cps0.length && cps0[i] == 0xFE0F) {
+				i++;
+			} else {
+				bits |= 1 << index;
+			}
+			index++;
+		}
+	}
+	if (bits >= 2) throw new Error('expected fe0f correction only at position 1');
+	node.bits = bits; // 0 or 1 
+}
 
 // compress
 console.log(`Before: ${root.nodes}`);
@@ -103,16 +118,17 @@ console.log(`After: ${root.nodes}`);
 
 function encode_emoji(enc, node, map) {
 	for (let [keys, x] of Object.entries(node.branches)) {
-		enc.write_member(keys.split(',').map(x => map[x]));
+		enc.write_member(keys.split(',').map(k => map[k]));
 		encode_emoji(enc, x, map);
 	}
 	enc.write_member([]);
-	let flag = 0;
-	if (node.valid)     flag |= 1;
-	if (node.fe0f)      flag |= 2;
-	if (node.save_mod)  flag |= 4;
-	if (node.check_mod) flag |= 8;
-	enc.unsigned(flag);
+	let valid = node.valid ? 1 + node.bits : 0;
+	let mod = node.check_mod ? 2 : node.save_mod ? 1 : 0;
+	let fe0f = node.fe0f ? 1 : 0;
+	//enc.unsigned(6*valid + 2*mod + fe0f); // 11888
+	//enc.unsigned(6*mod + 2*valid + fe0f); // 11866
+	//enc.unsigned(9*fe0f + 3*mod + valid); // 11844
+	enc.unsigned(6*mod + 3*fe0f + valid); // 11833
 }
 
 function unique_sorted(v) {
@@ -143,13 +159,17 @@ enc.write_mapped([
 ], CHARS.mapped);
 enc.write_member(sorted_emoji);
 encode_emoji(enc, root, sorted_emoji_map);
+//write('include-only'); // only saves 300 bytes
 enc.write_member(NFC_CHECK.flatMap(cp => sorted_valid_map[cp] ?? []));
-let buf = Buffer.from(enc.compressed());
+write('include');
 
-console.log(`${buf.length} bytes`);
+function write(name) {
+	let buf = Buffer.from(enc.compressed());
+	console.log(`${name} = ${buf.length} bytes`);
+	writeFileSync(new URL(`./${name}.js`, import.meta.url), [
+		`// created ${new Date().toJSON()}`,
+		`import {read_compressed_payload} from './decoder.js';`,
+		`export default read_compressed_payload(Uint8Array.from(atob('${buf.toString('base64')}'), c => c.charCodeAt(0)));`,
+	].join('\n'));
+}
 
-writeFileSync(new URL('./include.js', import.meta.url), [
-	`// created ${new Date().toJSON()}`,
-	`import {read_compressed_payload} from './decoder.js';`,
-	`export default read_compressed_payload(Uint8Array.from(atob('${buf.toString('base64')}'), c => c.charCodeAt(0)));`,
-].join('\n'));
