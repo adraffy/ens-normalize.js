@@ -80,7 +80,6 @@ export function decode_arithmetic(bytes) {
 	});
 }	
 
-
 // returns an iterator which returns the next symbol
 export function read_payload(v) {
 	let pos = 0;
@@ -113,6 +112,7 @@ function read_deltas(n, next) {
 	return v;
 }
 
+// return unsorted? unique array 
 export function read_member_array(next, lookup) {
 	let v = read_ascending(next(), next);
 	let n = next();
@@ -126,9 +126,7 @@ export function read_member_array(next, lookup) {
 	return lookup ? v.map(x => lookup[x]) : v;
 }
 
-// returns array of 
-// [x, ys] => single replacement rule
-// [x, ys, n, dx, dx] => linear map
+// returns map of x => ys
 export function read_mapped_map(next) {
 	let ret = [];
 	while (true) {
@@ -154,6 +152,8 @@ export function read_zero_terminated_array(next) {
 	return v;
 }
 
+// read w columns of length n
+// return as n rows of length w
 function read_transposed(n, w, next) {
 	let m = Array(n).fill().map(() => []);
 	for (let i = 0; i < w; i++) {
@@ -162,6 +162,8 @@ function read_transposed(n, w, next) {
 	return m;
 }
  
+// returns [[x, ys], [x+dx, ys+dy], [x+2*dx, ys+2*dy], ...]
+// where dx/dy = steps, n = run size, w = length of y
 function read_linear_table(w, next) {
 	let dx = 1 + next();
 	let dy = next();
@@ -176,6 +178,8 @@ function read_linear_table(w, next) {
 	});
 }
 
+// return [[x, ys...], ...]
+// where w = length of y
 function read_replacement_table(w, next) { 
 	let n = 1 + next();
 	let m = read_transposed(n, 1+w, next);
@@ -188,9 +192,9 @@ export function read_emoji_trie(next) {
 	function read() {
 		let branches = [];
 		while (true) {
-			let keys = read_member_array(next);
+			let keys = read_member_array(next, sorted);
 			if (keys.length == 0) break;
-			branches.push({set: new Set(keys.map(i => sorted[i])), node: read()});
+			branches.push({set: new Set(keys), node: read()});
 		}
 		branches.sort((a, b) => b.set.size - a.set.size); // sort by likelihood
 		let temp = next();

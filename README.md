@@ -1,7 +1,7 @@
 # ens-normalize.js
 0-dependancy Compact ES6 Ethereum Name Service (ENS) Name Normalizer.
 
-* Passes **100%** [ENSIP Norm](https://adraffy.github.io/ensip-norm/) Validation Tests [(Latest)](https://adraffy.github.io/ens-norm-tests/test-validation/output/ens_normalize_1.5.0.html)
+* Passes **100%** [ENSIP Norm](https://github.com/adraffy/ensip-norm/) Validation Tests [(Latest)](https://adraffy.github.io/ens-norm-tests/test-validation/output/ens_normalize_1.5.0.html)
 * File Size: [`18KB`](./dist/only-norm.min.js)
 * [Demo](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 
@@ -64,6 +64,6 @@ let tokens = ens_tokenize('R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./'); // never thr
 
 ## Build
 
-* `npm run make` compress data from [@adraffy/ensip-norm](https://adraffy.github.io/ensip-norm/)
+* `npm run make` compress data from [@adraffy/ensip-norm](https://github.com/adraffy/ensip-norm/)
 * `npm run test` run validation tests
 * `npm run build` create `/dist/`

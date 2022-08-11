@@ -1,4 +1,4 @@
-// beautify(emoji - FEOF) == emoji
+// beautify(emoji - FE0F) == emoji
 
 import {EMOJI} from '@adraffy/ensip-norm';
 import {ens_beautify} from '../index.js';
