@@ -122,7 +122,7 @@ export function ens_tokenize(name) {
 					if (is_valid_or_mapped(type)) {
 						if (!requires_check(cps)) break;
 						end = pos + 1;
-					} else if (type !== TY_IGNORED || type !== TY_DISALLOWED) { 
+					} else if (type !== TY_IGNORED) { // || type !== TY_DISALLOWED) { 
 						break;
 					}
 				}

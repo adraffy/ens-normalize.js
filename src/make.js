@@ -101,13 +101,14 @@ for (let cps0 of EMOJI) {
 			if (i < cps0.length && cps0[i] == 0xFE0F) {
 				i++;
 			} else {
+				if (index != 0) throw new Error('expected first FE0F');
+				if (i != 1) throw new Error('expected second character');
 				bits |= 1 << index;
 			}
 			index++;
 		}
 	}
-	if (bits >= 2) throw new Error('expected fe0f correction only at position 1');
-	node.bits = bits; // 0 or 1 
+	node.bits = bits; // 0 or 1
 }
 
 // compress
@@ -122,7 +123,7 @@ function encode_emoji(enc, node, map) {
 		encode_emoji(enc, x, map);
 	}
 	enc.write_member([]);
-	let valid = node.valid ? 1 + node.bits : 0;
+	let valid = node.bits ? 2 : node.valid ? 1 : 0;
 	let mod = node.check_mod ? 2 : node.save_mod ? 1 : 0;
 	let fe0f = node.fe0f ? 1 : 0;
 	//enc.unsigned(6*valid + 2*mod + fe0f); // 11888
@@ -172,4 +173,3 @@ function write(name) {
 		`export default read_compressed_payload(Uint8Array.from(atob('${buf.toString('base64')}'), c => c.charCodeAt(0)));`,
 	].join('\n'));
 }
-

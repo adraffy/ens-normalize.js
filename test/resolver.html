@@ -292,7 +292,7 @@ footer {
 <button>vitalik.eth</button>
 <button>bRAnTlY.eTh</button>
 <button>brantly.cash</button>
-<button>brantlymillegan.com</button>
+<button>antistupid.com</button>
 <button>.eth</button>
 <button>öbb.at</button>
 <button>Öbb.at</button>
@@ -305,9 +305,12 @@ footer {
 
 <b>Subdomain:</b>
 <button data-name="nowzad.loopring.eth">loopring</button>
+<button data-name="239.chonksociety.eth">Chonk #239</button>
 
+<!--
 <a href="./display.html"><b>Display:</b></a>
 <button>ADRaffy</button>
+-->
 
 <b>Address:</b>
 <button data-name="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045">d8dA..6045</button>
@@ -641,12 +644,22 @@ function parse() {
 		row.classList.add('error');
 		grade.classList.add('long');
 		apply_grade(grade, 'warn', err.message);		
-		let tokens = ens_tokenize(name);
-		if (tokens.some(x => 'd' in x)) {
+		let tokens = ens_tokenize(name).flatMap(token => token.type === 'nfc' ? token.tokens : token);
+		if (tokens.some(x => x.type === 'disallowed')) {
 			let btn = document.createElement('button');
 			btn.innerHTML = 'Remove Disallowed';
 			btn.addEventListener('click', () => {			
-				input_field.value = String.fromCodePoint(...tokens.flatMap(({v,i,m,e,u,d}) => v ?? i ?? (m?u:null) ?? (e?u:null) ?? (d===undefined ? 0x2E : [])));
+				input_field.value = String.fromCodePoint(...tokens.flatMap(token => {
+					switch (token.type) {
+						case 'disallowed': return [];
+						case 'stop': return 0x2E;
+						case 'valid': return token.cps;
+						case 'emoji': return token.input;
+						//case 'mapped':
+						//case 'ignored':
+						default: return token.cp;
+					}
+				}));
 				resolve();
 			});
 			add_row_tag(row, btn);
@@ -687,7 +700,7 @@ function create_dns_row(ens_norm) {
 			span.classList.add('fail');
 			span.innerHTML = '⛔ Punycode Required';
 		} else {
-			apply_grade(span, 'warn', 'Transforms to Punycode');
+			apply_grade(span, 'warn', 'Punycode Compatible');
 		}
 		add_row_tag(row, span);
 
@@ -727,8 +740,8 @@ function create_link(url, s) {
 	return a;
 }
 
-function create_etherscan_address_link(s) {
-	let a = create_link(`https://etherscan.io/address/${s}`, s);
+function create_etherscan_address_link(s, title) {
+	let a = create_link(`https://etherscan.io/address/${s}`, title ?? s);
 	a.classList.add('hash');
 	return a;	
 }
@@ -1137,6 +1150,8 @@ async function resolve0(input0, skip_norm) {
 		let pretty = ens_beautify(name_norm);
 		if (name_norm === pretty) {			
 			add_row_tag(normed_row, create_pretty_tag());
+		} else if (input === pretty) {
+			add_row_tag(input_row, create_pretty_tag());
 		} else {
 			let row = create_row('Pretty');
 			row.append(pretty);
@@ -1245,7 +1260,11 @@ async function resolve0(input0, skip_norm) {
 	}
 
 	// resolver exists
-	resolver_row.append(create_etherscan_address_link(name.resolver.address));
+	let resolver_name = name.resolver.address;
+	if (resolver_name === '0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41') {
+		resolver_name = 'Public Resolver';
+	}
+	resolver_row.append(create_etherscan_address_link(name.resolver.address, resolver_name));
 	add_row_tag(resolver_row, create_copy_btn(name.resolver.address));
 	add_row_tag(resolver_row, create_elapsed());
 	

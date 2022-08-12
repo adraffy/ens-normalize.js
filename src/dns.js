@@ -10,7 +10,7 @@ const VALID = new Set(explode_cp('-.0123456789abcdefghijklmnopqrstuvwxyz'));
 const MAX_LABEL = 63;
 // prefix-length form: [len:byte, label:[0, 63] bytes]+
 // root label is implicit 0 length
-// longest: [1,<61>] [1,<63>][1,<63>][1,<63>][1,<0>]
+// longest: [1,<61>][1,<63>][1,<63>][1,<63>][1,<0>]
 // (1+61)+(1+63)+(1+63)+(1+63)+(1+0) = 255
 // string form: "a.b.c"
 // 63+1+63+1+63+1+61 = 253
@@ -18,33 +18,31 @@ const MAX_NAME = 253;
 
 // assume: name is from ens_normalize()
 export function dns_from_normalized_ens(name) {	
-	let acc = 0;
-	return name.split('.').map((label, i) => {
-		if (i > 0) acc++; // separator
-		if (!label) return ''; // empty label
-		let cps = explode_cp(label);
-		let encoded = puny_encode(cps);
+	name = name.split('.').map(label0 => {
+		if (!label0) return ''; // empty label
+		let label = label0;
 		try {
+			let cps = explode_cp(label);
+			let encoded = puny_encode(cps);
 			for (let cp of encoded) {
 				if (!VALID.has(cp)) {
 					throw new Error(`invalid ASCII: "${escape_unicode(String.fromCodePoint(cp))}"`);
 				}
 			}
-			acc += encoded.length;
 			if (encoded === cps) {
 				if (label.startsWith('xn--')) throw new Error('punycode literal');
-				if (label.slice(2, 4) === '--') throw Error('invalid label extension');
-				if (label.startsWith('-')) throw Error('leading hyphen');
-				if (label.endsWith('-')) throw Error('trailing hyphen');
+				if (label.slice(2, 4) === '--') throw new Error('invalid label extension');
+				if (label.startsWith('-')) throw new Error('leading hyphen');
+				if (label.endsWith('-')) throw new Error('trailing hyphen');
 			} else {
-				acc += 4;
 				label = 'xn--' + String.fromCodePoint(...encoded); 
 			}
 			if (label.length > MAX_LABEL) throw new Error(`too long: ${label.length} > ${MAX_LABEL}`);
 		} catch (err) {
-			throw new Error(`Invalid label "${escape_unicode(label)}": ${err.message}`);
+			throw new Error(`Invalid label "${escape_unicode(label0)}": ${err.message}`);
 		}
-		if (acc > MAX_NAME) throw new Error(`Name too long: ${acc} > ${MAX_NAME}`);
 		return label;
 	}).join('.');
+	if (name.length > MAX_NAME) throw new Error(`Name too long: ${name.length} > ${MAX_NAME}`);
+	return name;
 }
