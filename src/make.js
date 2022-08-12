@@ -49,6 +49,7 @@ class Node {
 	}
 }
 
+// insert every emoji sequence
 let root = new Node();
 for (let cps of EMOJI) {
 	let node = root;
@@ -90,6 +91,7 @@ root.scan((node, path) => {
 	}
 });
 
+// check every emoji sequence for non-standard FE0F handling
 for (let cps0 of EMOJI) {
 	let node = root;
 	let bits = 0;
@@ -157,7 +159,7 @@ enc.write_mapped([
 //	[1, 3, 3],
 //	[3, 1, 0],
 //	[4, 1, 0],
-], CHARS.mapped);
+], CHARS.mapped); //.map(kv => [kv[0], kv[1].map(x => sorted_valid_map[x])]));
 enc.write_member(sorted_emoji);
 encode_emoji(enc, root, sorted_emoji_map);
 //write('include-only'); // only saves 300 bytes

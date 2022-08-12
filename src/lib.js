@@ -8,15 +8,11 @@ const MAPPED = read_mapped_map(r);
 const EMOJI_ROOT = read_emoji_trie(r);
 const NFC_CHECK = new Set(read_member_array(r, [...VALID].sort((a, b) => a - b)));
 
-function nfc(s) {
-	return s.normalize('NFC');
-}
-
-export function ens_beautify(name) {
-	return normalize(name, x => x);
-}
 export function ens_normalize(name) {
 	return normalize(name, filter_fe0f);
+}
+export function ens_beautify(name) {
+	return normalize(name, x => x);
 }
 
 function normalize(name, emoji_filter) {
@@ -44,6 +40,10 @@ function normalize(name, emoji_filter) {
 		throw new Error(`Disallowed codepoint: 0x${cp.toString(16).toUpperCase()}`);
 	}
 	return nfc(String.fromCodePoint(...output));
+}
+
+function nfc(s) {
+	return s.normalize('NFC'); // this might be incorrect on old browsers
 }
 
 function consume_emoji_reversed(cps, eaten) {
@@ -156,7 +156,6 @@ function requires_check(cps) {
 	return cps.some(cp => NFC_CHECK.has(cp));
 }
 
-// collapse adjacent valid tokens
 function collapse_valid_tokens(tokens) {
 	for (let i = 0; i < tokens.length; i++) {
 		if (tokens[i].type === TY_VALID) {
