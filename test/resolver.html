@@ -623,9 +623,7 @@ function parse() {
 	}
 	let row = create_row('Name');
 	make_exploded(row, name, false);
-	let grade = document.createElement('span');	
-	apply_input_grade(grade, name);
-	add_row_tag(row, grade);
+	add_row_tag(row, create_input_kind(name));
 	output_div.append(row, create_hashes_row(name));
 	add_transformed_row(name);
 	if (skip_norm_check.checked) return true;
@@ -637,14 +635,16 @@ function parse() {
 			let norm_row = create_row('Normalized');
 			norm_row.classList.add('normalized');
 			make_exploded(norm_row, norm, true);
+			add_row_tag(norm_row, create_input_kind(norm));
 			output_div.append(norm_row, create_hashes_row(norm));
 		}
 		output_div.append(create_dns_row(norm));
 		return true;
 	} catch (err) {
 		row.classList.add('error');
-		grade.classList.add('long');
-		apply_grade(grade, 'warn', err.message);		
+		let span = document.createElement('span');
+		span.classList.add('long');
+		apply_grade(span, 'warn', err.message);		
 		let tokens = ens_tokenize(name).flatMap(token => token.type === 'nfc' ? token.tokens : token);
 		if (tokens.some(x => x.type === 'disallowed')) {
 			let btn = document.createElement('button');
@@ -843,21 +843,38 @@ function apply_grade(span, type, s) {
 	}
 }
 
-function apply_input_grade(span, name) {
-	span.classList.add('okay');
-	if (is_printable_ascii(name)) {
-		if (/^[a-z0-9\.]*$/u.test(name)) {
-			span.innerHTML = 'Basic';
-		} else if (/^[a-z0-9\.]*$/iu.test(name)) {
-			span.innerHTML = 'Mixed-case Basic';
-		} else if (name.toLowerCase() === name) {
-			span.innerHTML = 'ASCII';
-		} else {
-			span.innerHTML = 'Mixed-case ASCII';
+function create_input_kind(name) {
+	let span = document.createElement('span');
+	let tokens = ens_tokenize(name);
+	let cps = tokens.flatMap(token => {
+		return token.type === 'nfc' ? token.tokens : token;
+	}).flatMap(token => {
+		switch (token.type) {
+			case 'disallowed':
+			case 'mapped': 
+			case 'ignored':  return token.cp;
+			case 'valid': return token.cps;
+			default: return [];
 		}
-	} else {
-		span.innerHTML = 'Unicode';
+	});
+	let tags = [];
+	if (cps.length) {
+		if (cps.every(cp => cp < 0x80)) {
+			if (/^[a-z0-9.]+$/u.test(String.fromCodePoint(...cps))) {
+				tags.push('Basic');
+			} else {
+				tags.push('ASCII');
+			}
+		} else {
+			tags.push('Unicode');
+		}
 	}
+	if (tokens.some(token => token.type === 'emoji')) {
+		tags.push('Emoji');
+	}
+	span.classList.add('okay');
+	span.innerHTML = tags.join('+');
+	return span;
 }
 
 function create_hashes_row(name) {
@@ -873,7 +890,7 @@ function create_hashes_row(name) {
 		text.innerHTML = label;
 		let points = document.createElement('span');
 		points.classList.add('cp');		
-		points.innerHTML = label.length == 0 ? 'null' : [...label].map(x => x.codePointAt(0).toString(16).toUpperCase().padStart(2, '0')).join(' ');		
+		points.innerHTML = label.length == 0 ? '«null»' : [...label].map(x => x.codePointAt(0).toString(16).toUpperCase().padStart(2, '0')).join(' ');		
 		let hash = document.createElement('span');
 		hash.classList.add('hash');
 		hash.innerHTML = labelhash(label).hex;
@@ -1051,6 +1068,7 @@ async function resolve0(input0, skip_norm) {
 
 		// primary exists!
 		make_exploded(reverse_row, primary, false);
+		add_row_tag(reverse_row, create_input_kind(primary));
 		output_div.append(create_hashes_row(primary));
 			
 		// lets check if it's normalized
@@ -1067,9 +1085,9 @@ async function resolve0(input0, skip_norm) {
 		// primary was normalized
 		if (name_norm === primary) {
 			reverse_row.classList.add('normalized');
-			let span = document.createElement('span');
-			apply_grade(span, 'good', 'Normalized');
-			add_row_tag(reverse_row, span);
+			//let span = document.createElement('span');
+			//apply_grade(span, 'good', 'Normalized');
+			//add_row_tag(reverse_row, span);
 			add_row_tag(reverse_row, create_resolve_btn(primary));
 
 		// primary was valid but wasn't normalized 
@@ -1093,8 +1111,8 @@ async function resolve0(input0, skip_norm) {
 		// the input is a name
 		input_row = normed_row = create_row('Name');
 		make_exploded(input_row, input, false);
-		apply_input_grade(input_grade, input);
-		add_row_tag(input_row, input_grade);
+		add_row_tag(input_row, create_input_kind(input));
+		//add_row_tag(input_row, input_grade);
 		add_row_tag(input_row, create_ens_link(input));
 		output_div.append(input_row);
 		output_div.append(create_hashes_row(input));
@@ -1118,14 +1136,16 @@ async function resolve0(input0, skip_norm) {
 			} catch (err) {
 				input_row.classList.add('error');
 				apply_grade(input_grade, 'warn', err.message);
-				input_grade.parentNode.prepend(input_grade); // move to front
+				add_row_tag(input_row, input_grade);
+				//input_grade.parentNode.prepend(input_grade); // move to front
 				return;
 			}	
 		
 			// name was normalized
 			if (name_norm === input) {
 				input_row.classList.add('normalized');
-				apply_grade(input_grade, 'good', 'Normalized');
+				//apply_grade(input_grade, 'good', 'Normalized');
+				//add_row_tag(input_row, input_grade);
 				add_row_tag(input_row, create_opensea_link(input));
 			} else if (name_norm) {
 				// mark the name as bad
@@ -1137,6 +1157,7 @@ async function resolve0(input0, skip_norm) {
 				let row = normed_row = create_row('Normalized');
 				row.classList.add('normalized');
 				make_exploded(row, name_norm, true);
+				add_row_tag(row, create_input_kind(name_norm));
 				add_row_tag(row, create_copy_btn(name_norm));
 				add_row_tag(row, create_resolve_btn(name_norm));
 				add_row_tag(row, create_ens_link(name_norm));
@@ -1350,7 +1371,7 @@ async function resolve0(input0, skip_norm) {
 	// if the input was an address, we can validate
 	if (input_is_address) {
 		if (owner.address === input) {
-			apply_grade(input_grade, 'best', 'Matches Owner');
+			apply_grade(input_grade, 'best', 'Owner');
 			add_row_tag(input_row, input_grade);
 			let span = document.createElement('span');
 			span.innerHTML = 'Same as Input';
@@ -1367,7 +1388,7 @@ async function resolve0(input0, skip_norm) {
 
 	// add address
 	let address;
-	let address_row = create_row('Address', true);
+	let address_row = create_row('ETH Address', true);
 	output_div.append(address_row);	
 	try {
 		address = await name.get_address();		
@@ -1445,6 +1466,7 @@ async function resolve0(input0, skip_norm) {
 
 	// primary exists
 	make_exploded(primary_row, primary, false);
+	add_row_tag(primary_row, create_input_kind(primary));
 	output_div.append(create_hashes_row(primary));
 
 	// lets check if it's normalized
@@ -1461,9 +1483,9 @@ async function resolve0(input0, skip_norm) {
 	// primary was normalized
 	if (primary === primary_norm) {
 		primary_row.classList.add('normalized');
-		let span = document.createElement('span');
-		apply_grade(span, 'good', 'Normalized');
-		add_row_tag(primary_row, span);
+		//let span = document.createElement('span');
+		//apply_grade(span, 'good', 'Normalized');
+		//add_row_tag(primary_row, span);
 		if (name_norm !== primary_norm) {
 			add_row_tag(primary_row, create_copy_btn(primary_norm));
 			add_row_tag(primary_row, create_resolve_btn(primary_norm));
@@ -1479,7 +1501,7 @@ async function resolve0(input0, skip_norm) {
 		let row = create_row('Normalized Primary');
 		row.classList.add('normalized');
 		make_exploded(row, primary_norm, true);
-		
+		add_row_tag(row, create_input_kind(primary_norm));
 		add_row_tag(row, create_copy_btn(primary_norm));
 		add_row_tag(row, create_ens_link(primary_norm));
 		add_row_tag(row, create_opensea_link(primary_norm));
@@ -1492,7 +1514,8 @@ async function resolve0(input0, skip_norm) {
 	}	
 
 	if (primary_norm && name_norm === primary_norm && !input_grade.classList.contains('best')) {
-		apply_grade(input_grade, 'best', 'Matches Primary');
+		apply_grade(input_grade, 'best', 'Primary');
+		add_row_tag(input_row, input_grade);
 	}
 }
 
