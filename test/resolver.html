@@ -57,7 +57,7 @@ h1 a {
 	from { transform:rotate(0deg); }
 	to { transform:rotate(360deg); }
 }
-.examples {
+#examples {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -272,7 +272,7 @@ footer {
 	header {
 		margin: 1rem 1rem 0 1rem;
 	}
-	#input, #controls, #options, .examples {
+	#input, #controls, #options, #examples {
 		margin: 0 1rem;
 	}
 	.error {
@@ -288,7 +288,7 @@ footer {
 <span id="version"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a><br>
 <a href="https://github.com/adraffy/ensip-norm">@adraffy/ensip-norm</a></span>
 </header>
-<div class="examples">
+<div id="examples">
 <button>vitalik.eth</button>
 <button>bRAnTlY.eTh</button>
 <button>brantly.cash</button>
@@ -510,6 +510,8 @@ const skip_norm_check = document.querySelector('#skip_norm_check');
 const show_hashes_check = document.querySelector('#show_hashes_check');
 const output_div = document.querySelector('#output');
 const readme_rows = [...output_div.childNodes]; // save initial ux
+const examples_div = document.querySelector('#examples');
+const examples_btn = document.createElement('button');
 
 let resolve_timer;
 let resolve_args;
@@ -521,7 +523,14 @@ determine_window_provider().then(p => {
 	providers.add_dynamic(p);
 }).catch(() => {});
 
-for (let btn of document.querySelectorAll('.examples button, button[data-name]')) {
+try {
+	examples_div.classList.toggle('hide', !!window.localStorage.getItem('hide_examples'));
+	show_hashes_check.selected = !!window.localStorage.getItem('show_hashes');
+	auto_resolve_check.selected = !!window.localStorage.getItem('auto_resolve');
+} catch (ignored) {
+}
+
+for (let btn of document.querySelectorAll('#examples button, button[data-name]')) {
 	let name = replace_escapes(btn.dataset.name ?? btn.innerHTML);
 	if (typeof btn.dataset.replace === 'string' || !btn.innerHTML) btn.innerHTML = name;
 	if (!name.includes('.') && !is_checksum_address(name)) name += '.eth';
@@ -558,19 +567,30 @@ document.querySelector('#link_btn').addEventListener('click', () => {
 	navigator.clipboard.writeText(window.location.href.split('#')[0] + '#' + encodeURIComponent(input_field.value));
 });
 
-for (let el of [auto_resolve_check, skip_norm_check]) {
-	el.addEventListener('input', () => {
-		if (auto_resolve_check.checked && input_field.value) {
-			if (parse()) resolve();
-		}
-	});
-}
+auto_resolve_check.addEventListener('input', () => {
+	window.localStorage.setItem('auto_resolve', auto_resolve_check.checked ? '1' : '');	
+	if (auto_resolve_check.checked && input_field.value) {
+		if (parse()) resolve();
+	}
+});
 show_hashes_check.addEventListener('input', () => {	
+	window.localStorage.setItem('show_hashes', show_hashes_check.checked ? '1' : '');
 	for (let el of document.querySelectorAll('.hashes')) {
 		el.classList.toggle('hide', !show_hashes_check.checked);
 	}
 });
+skip_norm_check.addEventListener('input', () => {
+	if (auto_resolve_check.checked && input_field.value) {
+		if (parse()) resolve();
+	}
+});
+examples_btn.addEventListener('click', () => {
+	examples_div.classList.toggle('hide');
+	window.localStorage.setItem('hide_examples', examples_div.classList.contains('hide') ? '1' : '');
+	update_examples();
+});
 
+update_examples();
 input_field.focus();
 input_field.value = decode_location_hash();
 schedule_resolve(100);
@@ -579,6 +599,15 @@ window.addEventListener('hashchange', () => {
 	resolve();
 });
 
+function update_examples() {
+	if (examples_div.classList.contains('hide')) {
+		examples_btn.innerHTML = '👀 Show Examples';
+		document.querySelector('#options').prepend(examples_btn);
+	} else {
+		examples_btn.innerHTML = '🙈 <b>Hide Examples</b>';
+		examples_div.prepend(examples_btn);
+	}
+}
 
 function decode_location_hash() {
 	return decodeURIComponent(window.location.hash.slice(1));
@@ -623,7 +652,7 @@ function parse() {
 	}
 	let row = create_row('Name');
 	make_exploded(row, name, false);
-	add_row_tag(row, create_input_kind(name));
+	add_row_tag(row, create_class_tag(name));
 	output_div.append(row, create_hashes_row(name));
 	add_transformed_row(name);
 	if (skip_norm_check.checked) return true;
@@ -635,7 +664,7 @@ function parse() {
 			let norm_row = create_row('Normalized');
 			norm_row.classList.add('normalized');
 			make_exploded(norm_row, norm, true);
-			add_row_tag(norm_row, create_input_kind(norm));
+			add_row_tag(norm_row, create_class_tag(norm));
 			output_div.append(norm_row, create_hashes_row(norm));
 		}
 		output_div.append(create_dns_row(norm));
@@ -843,7 +872,7 @@ function apply_grade(span, type, s) {
 	}
 }
 
-function create_input_kind(name) {
+function create_class_tag(name) {
 	let span = document.createElement('span');
 	let tokens = ens_tokenize(name);
 	let cps = tokens.flatMap(token => {
@@ -953,6 +982,9 @@ function is_working() {
 }
 
 function resolve(skip_norm) {
+	if (skip_norm === undefined) {
+		skip_norm = skip_norm_check.checked;
+	}
 	if (is_working()) {
 		if (resolve_timer === true) return;
 		resolve_timer = true;
@@ -1021,7 +1053,6 @@ async function resolve0(input0, skip_norm) {
 	let input_row;
 	let normed_row;
 	let name_norm;
-	skip_norm |= skip_norm_check.checked;
 
 	if (input_is_address) {
 
@@ -1068,7 +1099,7 @@ async function resolve0(input0, skip_norm) {
 
 		// primary exists!
 		make_exploded(reverse_row, primary, false);
-		add_row_tag(reverse_row, create_input_kind(primary));
+		add_row_tag(reverse_row, create_class_tag(primary));
 		output_div.append(create_hashes_row(primary));
 			
 		// lets check if it's normalized
@@ -1111,7 +1142,7 @@ async function resolve0(input0, skip_norm) {
 		// the input is a name
 		input_row = normed_row = create_row('Name');
 		make_exploded(input_row, input, false);
-		add_row_tag(input_row, create_input_kind(input));
+		add_row_tag(input_row, create_class_tag(input));
 		//add_row_tag(input_row, input_grade);
 		add_row_tag(input_row, create_ens_link(input));
 		output_div.append(input_row);
@@ -1157,7 +1188,7 @@ async function resolve0(input0, skip_norm) {
 				let row = normed_row = create_row('Normalized');
 				row.classList.add('normalized');
 				make_exploded(row, name_norm, true);
-				add_row_tag(row, create_input_kind(name_norm));
+				add_row_tag(row, create_class_tag(name_norm));
 				add_row_tag(row, create_copy_btn(name_norm));
 				add_row_tag(row, create_resolve_btn(name_norm));
 				add_row_tag(row, create_ens_link(name_norm));
@@ -1404,30 +1435,36 @@ async function resolve0(input0, skip_norm) {
 	if (resolve_timer) return;
 		
 	if (typeof address === 'string') {
-		address_row.append(create_etherscan_address_link(address));
-		if (input_is_address) {
-			if (address === input) {
-				let span = document.createElement('span');
-				span.innerHTML = 'Same as Input';
-				add_row_tag(address_row, span);
-			} else if (address) {
-				add_row_tag(address_row, create_copy_btn(address));
-				add_row_tag(address_row, create_resolve_btn(address));
-				let span = document.createElement('span');
-				apply_grade(span, 'warn', 'Different from Owner');
-				add_row_tag(address_row, span);	
-			}
+		if (/^0x0{40}/.test(address)) {
+			let span = document.createElement('span');
+			apply_grade(span, 'warn', 'Not Set');
+			add_row_tag(address_row, span);
 		} else {
-			if (owner.address === address) {
-				let span = document.createElement('span');
-				apply_grade(span, 'good', 'Same as Owner');
-				add_row_tag(address_row, span);		
+			address_row.append(create_etherscan_address_link(address));
+			if (input_is_address) {
+				if (address === input) {
+					let span = document.createElement('span');
+					span.innerHTML = 'Same as Input';
+					add_row_tag(address_row, span);
+				} else if (address) {
+					add_row_tag(address_row, create_copy_btn(address));
+					add_row_tag(address_row, create_resolve_btn(address));
+					let span = document.createElement('span');
+					apply_grade(span, 'warn', 'Different from Owner');
+					add_row_tag(address_row, span);	
+				}
 			} else {
-				add_row_tag(address_row, create_copy_btn(address));
-				add_row_tag(address_row, create_resolve_btn(address));
-				let span = document.createElement('span');
-				apply_grade(span, 'warn', 'Not Owner');
-				add_row_tag(address_row, span);	
+				if (owner.address === address) {
+					let span = document.createElement('span');
+					apply_grade(span, 'good', 'Same as Owner');
+					add_row_tag(address_row, span);	
+				} else {
+					add_row_tag(address_row, create_copy_btn(address));
+					add_row_tag(address_row, create_resolve_btn(address));
+					let span = document.createElement('span');
+					apply_grade(span, 'warn', 'Not Owner');
+					add_row_tag(address_row, span);	
+				}
 			}
 		}
 	}
@@ -1466,7 +1503,7 @@ async function resolve0(input0, skip_norm) {
 
 	// primary exists
 	make_exploded(primary_row, primary, false);
-	add_row_tag(primary_row, create_input_kind(primary));
+	add_row_tag(primary_row, create_class_tag(primary));
 	output_div.append(create_hashes_row(primary));
 
 	// lets check if it's normalized
@@ -1501,7 +1538,7 @@ async function resolve0(input0, skip_norm) {
 		let row = create_row('Normalized Primary');
 		row.classList.add('normalized');
 		make_exploded(row, primary_norm, true);
-		add_row_tag(row, create_input_kind(primary_norm));
+		add_row_tag(row, create_class_tag(primary_norm));
 		add_row_tag(row, create_copy_btn(primary_norm));
 		add_row_tag(row, create_ens_link(primary_norm));
 		add_row_tag(row, create_opensea_link(primary_norm));
