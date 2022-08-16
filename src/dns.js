@@ -32,6 +32,7 @@ export function dns_from_normalized_ens(name) {
 			if (encoded === cps) {
 				if (label.startsWith('xn--')) throw new Error('punycode literal');
 				if (label.slice(2, 4) === '--') throw new Error('invalid label extension');
+				// above criteria are satisfied by ens_normalize_post_check()
 				if (label.startsWith('-')) throw new Error('leading hyphen');
 				if (label.endsWith('-')) throw new Error('trailing hyphen');
 			} else {

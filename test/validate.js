@@ -1,15 +1,15 @@
 import {run_tests} from '@adraffy/ensip-norm';
-import {ens_normalize, ens_tokenize} from '../index.js';
+import {ens_normalize, ens_tokenize, ens_normalize_post_check} from '../index.js';
 
 function ens_normalize_via_tokenize(name) {
-	return ens_tokenize(name).flatMap(token => {
+	return ens_normalize_post_check(ens_tokenize(name).flatMap(token => {
 		switch (token.type) {
 			case 'disallowed': throw new Error('disallowed'); 
 			case 'ignored': return '';
 			case 'stop': return '.';
 			default: return String.fromCodePoint(...token.cps);
 		}
-	}).join('');
+	}).join(''));
 }
 
 test(ens_normalize);

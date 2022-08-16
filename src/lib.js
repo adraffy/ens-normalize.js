@@ -8,8 +8,31 @@ const MAPPED = read_mapped_map(r);
 const EMOJI_ROOT = read_emoji_trie(r);
 const NFC_CHECK = new Set(read_member_array(r, [...VALID].sort((a, b) => a - b)));
 
+const STOP = 0x2E;
+const HYPHEN = 0x2D;
+const UNDERSCORE = 0x5F;
+
+export function ens_normalize_post_check(name) {
+	for (let label of name.split('.')) {
+		let cps = explode_cp(label);
+		try {
+			for (let i = cps.lastIndexOf(UNDERSCORE) - 1; i >= 0; i--) {
+				if (cps[i] !== UNDERSCORE) {
+					throw new Error(`underscore only allowed at start`);
+				}
+			}
+			if (cps.length >= 4 && cps.every(cp => cp < 0x80) && cps[2] === HYPHEN && cps[3] === HYPHEN) {
+				throw new Error(`invalid label extension`);
+			}
+		} catch (err) {
+			throw new Error(`Invalid label "${label}": ${err.message}`);
+		}
+	}
+	return name;
+}
+
 export function ens_normalize(name) {
-	return normalize(name, filter_fe0f);
+	return ens_normalize_post_check(normalize(name, filter_fe0f));
 }
 export function ens_beautify(name) {
 	return normalize(name, x => x);
@@ -39,7 +62,7 @@ function normalize(name, emoji_filter) {
 		}
 		throw new Error(`Disallowed codepoint: 0x${cp.toString(16).toUpperCase()}`);
 	}
-	return nfc(String.fromCodePoint(...output));
+	return ens_normalize_post_check(nfc(String.fromCodePoint(...output)));
 }
 
 function nfc(s) {
@@ -96,7 +119,7 @@ export function ens_tokenize(name) {
 			tokens.push({type: TY_EMOJI, emoji, input: eaten.slice(), cps: filter_fe0f(emoji)});
 		} else {
 			let cp = input.pop();
-			if (cp === 0x2E) {
+			if (cp === STOP) {
 				tokens.push({type: 'stop'});
 			} else if (VALID.has(cp)) {
 				tokens.push({type: TY_VALID, cps: [cp]});
@@ -105,7 +128,7 @@ export function ens_tokenize(name) {
 			} else {
 				let cps = MAPPED[cp];
 				if (cps) {
-					tokens.push({type: TY_MAPPED, cp, cps});
+					tokens.push({type: TY_MAPPED, cp, cps: cps.slice()});
 				} else {
 					tokens.push({type: TY_DISALLOWED, cp});
 				}

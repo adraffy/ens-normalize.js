@@ -1,6 +1,6 @@
 {
   "name": "@adraffy/ens-normalize",
-  "version": "1.5.5",
+  "version": "1.5.6",
   "description": "Compact ES6 Ethereum Name Service (ENS) Name Normalizer",
   "keywords": [
     "ENS",
@@ -32,7 +32,7 @@
     "test": "node test/validate.js"
   },
   "devDependencies": {
-    "@adraffy/ensip-norm": "^0.0.5",
+    "@adraffy/ensip-norm": "^0.0.6",
     "@adraffy/punycode": "^0.0.2",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "rollup": "^2.77.1",
