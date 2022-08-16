@@ -677,7 +677,8 @@ function parse() {
 		row.classList.add('error');
 		let span = document.createElement('span');
 		span.classList.add('long');
-		apply_grade(span, 'warn', err.message);		
+		apply_grade(span, 'warn', err.message);
+		add_row_tag(row, span);
 		let tokens = ens_tokenize(name).flatMap(token => token.type === 'nfc' ? token.tokens : token);
 		if (tokens.some(x => x.type === 'disallowed')) {
 			let btn = document.createElement('button');
