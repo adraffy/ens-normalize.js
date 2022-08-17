@@ -182,10 +182,6 @@ ul.row {
 	order: -10;
 	background: #fff;
 }
-.tags .length:hover {
-	cursor: pointer;
-	background: #eee;
-}
 .tags .bytes {
 	order: -10;
 	background: #eee;
@@ -317,7 +313,7 @@ footer {
 
 <b>Mapped:</b> 
 <button>Ⅷ</button>
-<button data-name="{2010}{2011}{2012}{2013}{2014}{2015}{207B}{208B}{FE31}{FE32}{FE58}">Hyphens</button>
+<button data-name="hyphens{2010}{2011}{2012}{2013}{2014}{2015}{207B}{208B}{FE31}{FE32}{FE58}">Hyphens</button>
 
 <b>Ignored:</b> 
 <button data-name="{FE0E}{FE0F}">Emoji Style</button>
@@ -439,7 +435,7 @@ Katakana:
 <button>#️⃣</button>
 
 <b>Currency:</b>
-<button>$£¥€₿</button>
+<button>$¢£¤¥€₿</button>
 
 <b><a href="https://unicode-org.github.io/cldr-staging/charts/latest/by_type/core_data.alphabetic_information.main.html">Single-Script:</a></b>
 <button data-name="1a〆">Digit+Latin+Han</button>
@@ -659,12 +655,12 @@ function parse() {
 	add_row_tag(row, create_class_tag(name));
 	output_div.append(row, create_hashes_row(name));
 	if (skip_norm_check.checked) return true;
-	add_transformed_row(name);
 	try {
 		let norm = ens_normalize(name);
 		if (norm === name) {
 			row.classList.add('normalized');
 		} else {
+			add_transformed_row(name);
 			let norm_row = create_row('Normalized');
 			norm_row.classList.add('normalized');
 			make_exploded(norm_row, norm, true);
@@ -837,9 +833,11 @@ function make_exploded(row, name, is_norm, downgrade_disallowed) {
 	let n_u8 = unescape(encodeURIComponent(name)).length;
 	let count = document.createElement('span');
 	count.classList.add('length');		
+	/*
 	count.addEventListener('click', () => {
 		input_field.value = apply_escapes(name);
 	});
+	*/
 	add_row_tag(row, count);
 	if (n_cp != n_u8) {
 		count.innerHTML = `${n_cp}<sub>ch</sub>`;	
@@ -1165,8 +1163,6 @@ async function resolve0(input0, skip_norm) {
 			name_norm = input; // yolo
 		} else {
 
-			add_transformed_row(input);
-	
 			try {
 				name_norm = ens_normalize(input);
 			} catch (err) {
@@ -1177,6 +1173,8 @@ async function resolve0(input0, skip_norm) {
 				return;
 			}	
 		
+			add_transformed_row(input);
+	
 			// name was normalized
 			if (name_norm === input) {
 				input_row.classList.add('normalized');
