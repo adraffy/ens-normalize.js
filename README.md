@@ -1,7 +1,7 @@
 # ens-normalize.js
 0-dependancy Compact ES6 Ethereum Name Service (ENS) Name Normalizer that works in the browser.
 
-* Passes **100%** [ENSIP Norm](https://github.com/adraffy/ensip-norm/) Validation Tests [(Latest)](https://adraffy.github.io/ens-norm-tests/test-validation/output/ens_normalize_1.5.5.html)
+* Passes **100%** [ENSIP Norm](https://github.com/adraffy/ensip-norm/) Validation Tests [(Latest)](https://adraffy.github.io/ens-norm-tests/test-validation/output/ens_normalize_1.6.0.html)
 * File Size: [`19KB`](./dist/only-norm.min.js)
 * [Demo](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 
@@ -31,7 +31,7 @@ let pretty = ens_beautify('1⃣2⃣.eth');
 
 Normalize name fragments:
 ```Javascript
-// fragments can fails ens_normalize due to post_check rules
+// fragments fail ens_normalize() due to ens_normalize_post_check() rules
 let frag1 = ens_normalize_fragment('AB--');
 let frag2 = ens_normalize_fragment('\u{303}');
 ```

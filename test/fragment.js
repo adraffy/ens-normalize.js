@@ -9,8 +9,8 @@ function name_contains_fragment(name, frag) {
 }
 
 // examples
-test('1234--a', '34--A');
-test('e\u{303}', '\u{303}');
+test('1234--a', '34--A');    // error: invalid label extension
+test('e\u{303}', '\u{303}'); // error: leading combining mark
 
 function test(name, frag) {
 	try {
