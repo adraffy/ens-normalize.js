@@ -11,10 +11,9 @@ export function explode_cp(s) {
 }
 
 export function escape_for_html(s, quoter = quote_cp) {
-	// printable w/o:
-	// html: 0x26 &, 0x3C <, 0x3E >
-	// quote: 0x00-0x20 control, 0x7F DEL, whitespace, joiners, tagspec
-	return s.replace(/(?:([\x00-\x20\x7F\xA0\s\u200C\u200D\u{E0020}-\u{E007F}])|([^\x21-\x25\x27-\x3B\x3D\x3F-\x7E]))/gu, 
+	// invis: 0x00-0x20 control, 0x7F DEL, whitespace, joiners, tagspec
+	//  html: 0x26 &, 0x3C <, 0x3E >
+	return s.replace(/(?:([\x00-\x20\x7F\xA0\s\u200C\u200D\u2800\u{E0020}-\u{E007F}])|([\x26\x3C\x3E]))/gu, 
 		(_, a, b) => a ? quoter(a.codePointAt(0)) : `&#${b.codePointAt(0)};`);
 }
 
