@@ -1,6 +1,6 @@
 import r from './include.js';
 import {read_member_array, read_mapped_map, read_emoji_trie} from './decoder.js';
-import {explode_cp, filter_fe0f} from './utils.js';
+import {explode_cp} from './utils.js';
 
 const SORTED_VALID = read_member_array(r).sort((a, b) => a - b);
 const VALID = new Set(SORTED_VALID);
@@ -48,7 +48,7 @@ export function ens_normalize_post_check(norm) {
 }
 
 export function ens_normalize_fragment(frag) {
-	return nfc(process(frag, emoji => emoji.filter(cp => cp != FE0F)));
+	return nfc(process(frag, filter_fe0f));
 }
 
 export function ens_normalize(name) {
@@ -69,6 +69,10 @@ function nfc(s) {
 }
 function nfd(s) {
 	return s.normalize('NFD');
+}
+
+function filter_fe0f(cps) {
+	return cps.filter(cp => cp != FE0F);
 }
 
 function process(name, emoji_filter) {

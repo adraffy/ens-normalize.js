@@ -1,6 +1,6 @@
 {
   "name": "@adraffy/ens-normalize",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Compact ES6 Ethereum Name Service (ENS) Name Normalizer",
   "keywords": [
     "ENS",
@@ -10,7 +10,7 @@
     "IDNA"
   ],
   "main": "index.js",
-  "browser": "dist/only-norm.min.js",
+  "browser": "dist/index.min.js",
   "type": "module",
   "repository": {
     "type": "git",

@@ -1,4 +1,3 @@
-
 export function hex_cp(cp) {
 	return cp.toString(16).toUpperCase();
 }
@@ -9,10 +8,6 @@ export function quote_cp(cp) {
 
 export function explode_cp(s) {
 	return [...s].map(c => c.codePointAt(0));
-}
-
-export function filter_fe0f(cps) {
-	return cps.filter(cp => cp != 0xFE0F);
 }
 
 export function escape_for_html(s, quoter = quote_cp) {
