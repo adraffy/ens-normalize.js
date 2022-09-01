@@ -160,6 +160,7 @@ enc.write_mapped([
 //	[3, 1, 0],
 //	[4, 1, 0],
 ], CHARS.mapped); //.map(kv => [kv[0], kv[1].map(x => sorted_valid_map[x])]));
+enc.write_member(CHARS.cm.map(cp => sorted_valid_map[cp]));
 enc.write_member(sorted_emoji);
 encode_emoji(enc, root, sorted_emoji_map);
 //write('include-only'); // only saves 300 bytes

@@ -318,16 +318,20 @@ footer {
 <b>Ignored:</b> 
 <button data-name="{FE0E}{FE0F}">Emoji Style</button>
 
+<b>Disallowed:</b>
+<button>te[st</button>
+
 <b>Deviation:</b> 
 <button>ß</button>
 <button>ς</button>
 
 <b>Complex:</b>
-<button data-name="Mab{C1}{FE0E}{325}{326}{AD}{1F21A}{FE0F}a"></button>
-<button data-name="x{305}{330}"></button>
+<button data-name="E{FE0E}{303}{AD}{1F21A}{FE0F}a"></button>
 
-<b>Disallowed:</b>
-<button>te[st</button>
+<b>Combining Marks:</b>
+<button data-name="{330}">Leading</button>
+<button data-name="x{305}{330}">Adjacent</button>
+<button data-name="💩{330}">Emoji</button>
 
 <b>Whitespace:</b>
 <button data-name="te st">Inner</button>
@@ -342,11 +346,11 @@ footer {
 <a href="https://unicode.org/reports/tr46/#Validity_Criteria"><b>CheckHyphen:</b></a>
 <button>-test</button>
 <button>test-</button>
-<button>te--st</button>
+<button>❌te--st</button>
 
 <b>Underscore:</b>
 <button>__a</button>
-<button>a_b</button>
+<button>❌a_b</button>
 
 <b>Goofy:</b>
 <button data-name="[ba967c160905ade030f84952644a963994eeaed3881a6b8a4e9c8cbe452ad7a2].eth" data-skip="1">"💩.eth"</button>
@@ -354,7 +358,7 @@ footer {
 <a href="./report-emoji.html#ZWJ%20Sequences"><b>Emoji:</b></a>
 <button>🚀🚀🚀</button>
 <button>💩💩💩</button>
-<button>🚴‍♂️</button>
+<button>🚴‍♀️🚴‍♂️🚴🏻🚴🏼🚴🏽🚴🏾🚴🏿</button>
 <button>👁️‍🗨️</button>
 <button>🌈rainbow</button>
 <button>6️⃣9️⃣</button>
@@ -376,6 +380,7 @@ footer {
 <button>🇦</button>
 <button>🇦🇦</button>
 <button>🇺🇸</button>
+<button data-name="{1F1FA}{FE0F}{1F1F8}"></button>
 
 <b>Tag:</b>
 <button data-name="{1F3F4}{E0067}{E0062}{E0065}{E006E}{E0067}{E007F}" data-replace></button>
@@ -383,7 +388,6 @@ footer {
 <button data-name="{1F3F4}{E0067}{E0062}{E0077}{E006C}{E0073}{E007F}" data-replace></button>
 <button data-name="{1F3F4}{E0077}{E0074}{E0066}{E007F}">❌</button>
 <button data-name="{1F3F4}">"🏴"</button>
-
 
 <b>Picto:</b>
 <button>mmm</button>
@@ -427,8 +431,8 @@ Katakana:
 <button data-name="{633}{644}{645}{627}{646}{1F1F8}{1F1E6}">RTL+Emoji</button>
 <button data-name="bahrain.مصر">Separate LTR and RTL Labels</button>
 <button data-name="bahrainمصر">Mixed LTR+RTL in Label</button>
-<button data-name="{202e}elgoog{202d}.eth" data-replace></button>
-<button data-name="{202e}hte.elgoog" data-replace></button>
+<button data-name="{202e}elgoog{202d}.eth">❌.ethgoogle</button>
+<button data-name="{202e}hte.elgoog">❌google.eth</button>
 
 <b>Unusable Emoji:</b>
 <button>‼️</button>
@@ -461,6 +465,10 @@ Katakana:
 <a href="https://www.unicode.org/Public/emoji/15.0/"><b>Unicode 15:</b></a>
 <button data-name="{1F6DC}{1FA75}{1FA76}{1FA77}{1FA87}{1FA88}{1FAAD}{1FAAE}{1FAAF}{1FABB}{1FABC}{1FABD}{1FABF}{1FACE}{1FACF}{1FADA}{1FADB}{1FAE8}{1FAF7}{1FAF8}">Single Emoji</button>
 <button data-name="{1F426}{FE0F}{200D}{2B1B}{FE0F}">ZWJ</button>
+
+<b>Questionable:</b>
+<button>½</button>
+<button>000⁄000</button>
 
 </div>
 <div id="options">
@@ -676,8 +684,8 @@ function parse() {
 	} catch (err) {
 		row.classList.add('error');
 		let span = document.createElement('span');
-		span.classList.add('long');
 		apply_grade(span, 'warn', err.message);
+		span.classList.add('long');
 		add_row_tag(row, span);
 		let tokens = ens_tokenize(name).flatMap(token => token.type === 'nfc' ? token.tokens : token);
 		if (tokens.some(x => x.type === 'disallowed')) {

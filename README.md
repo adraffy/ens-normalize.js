@@ -2,7 +2,7 @@
 0-dependancy Compact ES6 Ethereum Name Service (ENS) Name Normalizer that works in the browser.
 
 * Passes **100%** [ENSIP Norm](https://github.com/adraffy/ensip-norm/) Validation Tests [(Latest)](https://adraffy.github.io/ens-norm-tests/test-validation/output/ens_normalize_1.5.5.html)
-* File Size: [`18KB`](./dist/only-norm.min.js)
+* File Size: [`19KB`](./dist/only-norm.min.js)
 * [Demo](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 
 ```Javascript

@@ -180,7 +180,7 @@ export function use_default_style() {
 	}
 	.tokens .glyph {
 		border: 2px solid #0aa;
-		border-radius: 0.5rem;
+		border-radius: 5px;
 		background: #cff;
 	}
 	.tokens .mod {
