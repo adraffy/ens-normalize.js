@@ -20,7 +20,6 @@ let normalized = ens_normalize('RaFFY🚴‍♂️.eTh');
 ```
 Format names with fully-qualified emoji:
 ```JavaScript
-// string -> string
 // works like ens_normalize
 // output ready for display
 let pretty = ens_beautify('1⃣2⃣.eth'); 
@@ -28,6 +27,13 @@ let pretty = ens_beautify('1⃣2⃣.eth');
 
 // note: normalization is unchanged:
 // ens_normalize(ens_beautify(x)) == ens_normalize(x)
+```
+
+Normalize name fragments:
+```Javascript
+// fragments can fails ens_normalize due to post_check rules
+let frag1 = ens_normalize_fragment('AB--');
+let frag2 = ens_normalize_fragment('\u{303}');
 ```
 
 Instead of exposing an IDNA-like API (`is_valid()`, `get_mapped()`, etc.), this library exposes a single function which converts names to tokens:
