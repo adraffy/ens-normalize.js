@@ -2,7 +2,13 @@
 0-dependancy Compact ES6 Ethereum Name Service (ENS) Name Normalizer that works in the browser.
 
 * Passes [**100%**](https://adraffy.github.io/ens-norm-tests/test-validation/output/ens_normalize_1.6.0.html) ENSIP Norm [Validation Tests](https://github.com/adraffy/ensip-norm/)
-* File Size: [`19KB`](./dist/only-norm.min.js) (only `ens_normalize`) / [`21KB`](./dist/index.min.js) (`ens_*`)
+* [Optional] Custom `NFC` [Implementation](https://unicode.org/reports/tr15/)
+	* Passes [**100%**](https://adraffy.github.io/ens-normalize.js/test/report-nf.html) Unicode `14.0.0` [NormalizationTests](https://www.unicode.org/Public/14.0.0/ucd/NormalizationTest.txt)
+* File Size: 
+	* [`21KB`](./dist/index-xnf.min.js) — `ens_*` using native `NFC` via `String.normalize()`
+	* [`30KB`](./dist/index.min.js) — `ens_*` using custom `NFC`
+	* [`35KB`](./dist/all.min.js) — everything (`ens_*`, custom `NFC`, `dns.js`, `parts.js`, `utils.js`)
+	* [`11KB`](./dist/nf.min.js) — only custom `NFC`
 * [**Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 
 ```Javascript
@@ -73,3 +79,4 @@ let tokens = ens_tokenize('R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./'); // never thr
 * `npm run make` compress data from [@adraffy/ensip-norm](https://github.com/adraffy/ensip-norm/)
 * `npm run test` run validation tests
 * `npm run build` create `/dist/`
+* `npm run test-builds` run validation tests on `/dist/`

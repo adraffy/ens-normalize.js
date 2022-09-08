@@ -1,6 +1,8 @@
-import r from './include.js';
+import r from './include-ens.js';
 import {read_member_array, read_mapped_map, read_emoji_trie} from './decoder.js';
-import {explode_cp} from './utils.js';
+import {explode_cp, str_from_cps} from './utils.js';
+import {nfc, nfd} from './nf.js';
+//import {nfc, nfd} from './nf-native.js';
 
 const SORTED_VALID = read_member_array(r).sort((a, b) => a - b);
 const VALID = new Set(SORTED_VALID);
@@ -27,13 +29,13 @@ export function ens_normalize_post_check(norm) {
 			if (cps_nfc.length >= 4 && cps_nfc[2] === HYPHEN && cps_nfc[3] === HYPHEN && cps_nfc.every(cp => cp < 0x80)) {
 				throw new Error(`invalid label extension`);
 			}
-			let cps_nfd = explode_cp(nfd(process(label, () => [FE0F]))); // replace emoji with single character
+			let cps_nfd = nfd(process(label, () => [FE0F])); // replace emoji with single character
 			for (let i = 0, j = -1; i < cps_nfd.length; i++) {
 				if (CM.has(cps_nfd[i])) {
 					if (i == 0) {
 						throw new Error(`leading combining mark`);
 					} else if (i == j) {
-						throw new Error(`adjacent combining marks "${String.fromCodePoint(...cps_nfd.slice(i - 2, i + 1))}"`);
+						throw new Error(`adjacent combining marks "${str_from_cps(cps_nfd.slice(i - 2, i + 1))}"`);
 					} else if (cps_nfd[i - 1] == FE0F) {
 						throw new Error(`emoji + combining mark`);
 					}	
@@ -48,7 +50,7 @@ export function ens_normalize_post_check(norm) {
 }
 
 export function ens_normalize_fragment(frag) {
-	return nfc(process(frag, filter_fe0f));
+	return str_from_cps(nfc(process(frag, filter_fe0f)));
 }
 
 export function ens_normalize(name) {
@@ -57,18 +59,7 @@ export function ens_normalize(name) {
 
 // note: does not post_check
 export function ens_beautify(name) {
-	return nfc(process(name, emoji => emoji));
-}
-
-// warning: Unicode support
-// 14.0.0 expected
-// 13.0.0 (node) appears to pass all tests
-// 11.0.0 (node) fails 1 test
-function nfc(s) {
-	return s.normalize('NFC'); 
-}
-function nfd(s) {
-	return s.normalize('NFD');
+	return str_from_cps(nfc(process(name, emoji => emoji)));
 }
 
 function filter_fe0f(cps) {
@@ -92,14 +83,14 @@ function process(name, emoji_filter) {
 		if (IGNORED.has(cp)) {
 			continue;
 		}
-		let cps = MAPPED[cp];
+		let cps = MAPPED.get(cp);
 		if (cps) {
 			output.push(...cps);
 			continue;
 		}
 		throw new Error(`Disallowed codepoint: 0x${cp.toString(16).toUpperCase()}`);
 	}
-	return String.fromCodePoint(...output);
+	return output;
 }
 
 function consume_emoji_reversed(cps, eaten) {
@@ -124,13 +115,37 @@ function consume_emoji_reversed(cps, eaten) {
 			if (pos > 0 && cps[pos - 1] == FE0F) pos--; // consume optional FE0F
 		}
 		if (node.valid) { // this is a valid emoji (so far)
-			emoji = stack.slice(); // copy stack
-			if (node.valid == 2) emoji.splice(1, 1); // delete FE0F at position 1 (RGI ZWJ don't follow spec!, see: make.js)
+			//emoji = stack.slice(); // copy stack
+			//if (node.valid == 2) emoji.splice(1, 1); // delete FE0F at position 1 (RGI ZWJ don't follow spec!, see: make.js)
+			emoji = conform_emoji_copy(stack, node);
 			if (eaten) eaten.push(...cps.slice(pos).reverse()); // copy input (if needed)
 			cps.length = pos; // truncate
 		}
 	}
 	return emoji;
+}
+
+function conform_emoji_copy(cps, node) {
+	let copy = cps.slice(); // copy stack
+	if (node.valid == 2) copy.splice(1, 1); // delete FE0F at position 1 (RGI ZWJ don't follow spec!, see: make.js)
+	return copy;
+}
+
+export function ens_emoji() {
+	let ret = [];
+	build(EMOJI_ROOT, []);
+	return ret;
+	function build(node, cps, saved) {
+		if (node.check && saved === cps[cps.length-1]) return;
+		if (node.save) saved = cps[cps.length-1];
+		if (node.fe0f) cps.push(FE0F);
+		if (node.valid) ret.push(conform_emoji_copy(cps, node));
+		for (let br of node.branches) {
+			for (let cp of br.set) {
+				build(br.node, [...cps, cp], saved);
+			}
+		}
+	}
 }
 
 // ************************************************************
@@ -161,7 +176,7 @@ export function ens_tokenize(name) {
 			} else if (IGNORED.has(cp)) {
 				tokens.push({type: TY_IGNORED, cp})
 			} else {
-				let cps = MAPPED[cp];
+				let cps = MAPPED.get(cp);
 				if (cps) {
 					tokens.push({type: TY_MAPPED, cp, cps: cps.slice()});
 				} else {
@@ -186,13 +201,14 @@ export function ens_tokenize(name) {
 				}
 				if (start < 0) start = i;
 				let slice = tokens.slice(start, end);
-				let cps = slice.flatMap(x => is_valid_or_mapped(x.type) ? x.cps : []); // strip junk tokens
-				let str0 = String.fromCodePoint(...cps);
-				let str = nfc(str0);
+				let cps0 = slice.flatMap(x => is_valid_or_mapped(x.type) ? x.cps : []); // strip junk tokens
+				let str0 = str_from_cps(cps0);
+				let cps = nfc(cps0);
+				let str = str_from_cps(cps);
 				if (str0 === str) {
 					i = end - 1; // skip to end of slice
 				} else {
-					tokens.splice(start, end - start, {type: TY_NFC, input: cps, cps: explode_cp(str), tokens: collapse_valid_tokens(slice)});
+					tokens.splice(start, end - start, {type: TY_NFC, input: cps0, cps, tokens: collapse_valid_tokens(slice)});
 					i = start;
 				}
 				start = -1; // reset

@@ -85,8 +85,24 @@ export function read_payload(v) {
 	let pos = 0;
 	return () => v[pos++];
 }
-export function read_compressed_payload(bytes) {
-	return read_payload(decode_arithmetic(bytes));
+export function read_compressed_payload(s) {	
+	return read_payload(decode_arithmetic(unsafe_atob(s)));
+}
+
+// unsafe in the sense this expects the input to be well-formed Base64
+export function unsafe_atob(s) {
+	let lookup = Object.fromEntries([...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'].map((c, i) => [c, i]));	
+	let n = s.length;
+	while (s[n-1] === '=') n--;
+	let v = new Uint8Array((6 * n) >> 3);
+	for (let i = 0, width = 0, carry = 0, pos = 0; i < n; i++) {
+		carry = (carry << 6) | lookup[s[i]];
+		width += 6;
+		if (width >= 8) {
+			v[pos++] = (carry >> (width -= 8));
+		}
+	}
+	return v;
 }
 
 // eg. [0,1,2,3...] => [0,-1,1,-2,...]
@@ -139,15 +155,17 @@ export function read_mapped_map(next) {
 		if (w < 0) break;
 		ret.push(read_replacement_table(w, next));
 	}
-	return Object.fromEntries(ret.flat());
+	return new Map(ret.flat());
 }
 
-export function read_zero_terminated_array(next) {
+// read until next is falsy
+// return array of read values
+export function read_array_while(next) {
 	let v = [];
 	while (true) {
-		let i = next();
-		if (i == 0) break;
-		v.push(i);
+		let x = next();
+		if (!x) break;
+		v.push(x);
 	}
 	return v;
 }
@@ -167,7 +185,7 @@ function read_transposed(n, w, next) {
 function read_linear_table(w, next) {
 	let dx = 1 + next();
 	let dy = next();
-	let vN = read_zero_terminated_array(next);
+	let vN = read_array_while(next);
 	let m = read_transposed(vN.length, 1+w, next);
 	return m.flatMap((v, i) => {
 		let [x, ...ys] = v;

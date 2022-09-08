@@ -1,7 +1,9 @@
 import {CHARS, EMOJI} from '@adraffy/ensip-norm';
 import {Encoder} from './encoder.js';
-import {writeFileSync} from 'node:fs';
+import {readFileSync, writeFileSync} from 'node:fs';
 import NFC_CHECK from './nfc-check.js';
+
+let {combining_rank, decomp, comp_exclusions} = JSON.parse(readFileSync(new URL('./nf.json', import.meta.url)));
 
 class Node {
 	constructor() {
@@ -165,7 +167,19 @@ enc.write_member(sorted_emoji);
 encode_emoji(enc, root, sorted_emoji_map);
 //write('include-only'); // only saves 300 bytes
 enc.write_member(NFC_CHECK.flatMap(cp => sorted_valid_map[cp] ?? []));
-write('include');
+write('include-ens');
+
+// just nf 
+// (only ~30 bytes saved using joined file)
+enc = new Encoder();
+for (let v of combining_rank) enc.write_member(v);
+enc.write_member([]);
+enc.write_mapped([
+	[1, 1, 0],
+	[1, 1, 1],	
+], decomp);
+enc.write_member(comp_exclusions);
+write('include-nf');
 
 function write(name) {
 	let buf = Buffer.from(enc.compressed());
@@ -173,6 +187,6 @@ function write(name) {
 	writeFileSync(new URL(`./${name}.js`, import.meta.url), [
 		`// created ${new Date().toJSON()}`,
 		`import {read_compressed_payload} from './decoder.js';`,
-		`export default read_compressed_payload(Uint8Array.from(atob('${buf.toString('base64')}'), c => c.charCodeAt(0)));`,
+		`export default read_compressed_payload('${buf.toString('base64')}');`,
 	].join('\n'));
 }

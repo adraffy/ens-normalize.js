@@ -9,6 +9,9 @@ export function quote_cp(cp) {
 export function explode_cp(s) {
 	return [...s].map(c => c.codePointAt(0));
 }
+export function str_from_cps(cps) {
+	return String.fromCodePoint(...cps);
+}
 
 export function escape_for_html(s, quoter = quote_cp) {
 	// invis: 0x00-0x20 control, 0x7F DEL, whitespace, joiners, tagspec

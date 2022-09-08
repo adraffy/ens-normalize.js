@@ -1,5 +1,5 @@
 import {encode_arithmetic} from '../src/encoder.js';
-import {decode_arithmetic} from '../src/decoder.js';
+import {decode_arithmetic, unsafe_atob} from '../src/decoder.js';
 import {compare_arrays} from '../src/utils.js';
 
 for (let i = 0; i < 1000; i++) {
@@ -15,10 +15,23 @@ for (let i = 0; i < 1000; i++) {
 	}
 	let v1 = encode_arithmetic(v0, u);
 	let v2 = decode_arithmetic(v1);
-	if (compare_arrays(v0, v2) != 0) {
+	if (compare_arrays(v0, v2)) {
 		console.log({v0, v1, v2});
 		process.exit(1);
 	}
 }
+console.log(`PASS arthimetic`);
+
+for (let i = 0; i < 100000; i++) {
+	let v0 = Buffer.from(Array(Math.random() * 1000|0).fill().map(() => Math.random() * 255|0));
+	let s = v0.toString('base64');
+	let v1 = Uint8Array.from(atob(s), c => c.codePointAt(0));
+	let v2 = unsafe_atob(s);
+	if (compare_arrays(v1, v2)) {
+		console.log({s, v0, v1, v2});
+		process.exit(2);
+	}
+}
+console.log(`PASS atob`);
 
 console.log('OK');

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NormalizationTest</title>
+<style>
+#version {
+	position: absolute;
+	right: 1rem;
+	top: 1rem;
+	text-align: right;
+}
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+th {
+	background: #ddd;
+}
+th.big {
+	font-size: 20pt;
+}
+td, th {
+	border: 1px solid #ccc;
+}
+tbody tr:nth-child(odd) {
+	background: #eee;
+}
+.same {
+	background: #cfc;
+}
+.diff {
+	background: #fcc;
+}
+#summary tbody td {
+	text-align: right;
+}
+#loading {
+	display: inline-block;
+	margin-top: 1rem;
+	background: #ffc;
+	border-radius: 1rem;
+	padding: 1rem 2rem;
+	font-size: 24pt;
+	border: 1px solid #ccc;
+}
+</style>
+</head>
+<body>
+<h1><a href="https://www.unicode.org/Public/14.0.0/ucd/NormalizationTest.txt">NormalizationTest</a></h1>
+<div id="version"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a></div>
+<table id="summary"><thead>
+<tr><th rowspan="2">Test</th><th rowspan="2">Cases</th><th colspan="2">adraffy</th><th colspan="2">Browser</th></tr>
+<tr><th>NFD</th><th>NFC</th><th>NFD</th><th>NFC</th></tr>
+</thead><tbody></tbody></table>
+<div id="loading">Computing...</div>
+<script type="module">
+import {nfc as nfc_adraffy, nfd as nfd_adraffy} from '../dist/nf.min.js';
+import {nfc as nfc_native, nfd as nfd_native} from '../src/nf-native.js';
+import {escape_for_html, escape_unicode, explode_cp, quote_cp} from '../src/utils.js';
+
+try {
+	main();
+} catch (err) {
+	let div = document.createElement('div');
+	div.innerHTML = err.message;
+	document.body.append(div);
+	console.error(err);
+}
+
+function raw_str(s) {
+	//return explode_cp(nfc0).map(quote_cp).join('');
+	return escape_for_html(escape_unicode(s));
+}
+
+async function fetch_json(url) {
+	let res = await fetch(url);
+	if (res.status !== 200) throw new Error(`Download failed: HTTP Code ${res.status}`);
+	return res.json();
+}
+
+async function main() {	
+	let tests = await fetch_json('./NormalizationTest.json');
+	//let tests = await fetch_json('../build/unicode-json/NormalizationTestOld.json');
+	tests = Object.entries(tests).sort((a, b) => b[1].length - a[1].length);
+	next();
+	function next() {
+		if (tests.length == 0) {
+			document.querySelector('#loading').remove();
+			return;
+		}
+		let [name, cases] = tests.pop();
+		let html = `<a name="${name}"></a><h2>${name}(${cases.length})</h2><table><thead>
+		<tr><th rowspan="2">Input</th><th class="big" colspan="4">NFD</th><th class="big" colspan="4">NFC</th></tr>
+		<tr><th colspan="2">Expected</th><th>adraffy</th><th>Browser</th><th colspan="2">Expected</th><th>adraffy</th><th>Browser</th></tr>
+		</tr></thead><tbody>`;
+		let errors = {};
+		function compare_cell(expect, cps, key) {
+			let result = String.fromCodePoint(...cps);
+			if (result === expect) {
+				return '<td class="same"></td>';
+			} else {
+				errors[key] = (errors[key] ?? 0) + 1;
+				return `<td class="diff raw">${raw_str(result)}</td>`;
+			}
+		}
+		for (let args of cases) {
+			let [src, nfc0, nfd0] = args;
+			let cps = explode_cp(src);
+			html += '<tr>' + [
+				`<td class="input">${escape_for_html(src)}</td>`,
+				`<td class="expect">${escape_for_html(nfd0)}</td>`,
+				`<td class="expect raw">${raw_str(nfd0)}</td>`,
+				compare_cell(nfd0, nfd_adraffy(cps), 'nfc_adraffy'),
+				compare_cell(nfd0, nfd_native(cps), 'nfd_default'),
+				`<td class="expect">${escape_for_html(nfc0)}</td>`,
+				`<td class="expect raw">${raw_str(nfc0)}</td>`,
+				compare_cell(nfc0, nfc_adraffy(cps), 'nfd_adraffy'),
+				compare_cell(nfc0, nfc_native(cps), 'nfc_default')
+			].join('') + '</tr>';
+		}
+		html += '</body></table>';
+
+		let section = document.createElement('section');
+		section.innerHTML = html;
+		document.body.append(section);
+
+		function total_cell(key) {
+			let total = errors[key];
+			if (total > 0) {
+				return `<td class="diff">${total}</td>`;
+			} else {
+				return `<td class="same">0</td>`;
+			}
+		}
+
+		let tr = document.createElement('tr');
+		tr.innerHTML = [
+			`<td class="name"><a href="#${name}">${name}</a></td>`,
+			`<td class="count">${cases.length}</td>`,
+			total_cell('nfd_adraffy'),
+			total_cell('nfc_adraffy'),
+			total_cell('nfd_default'),
+			total_cell('nfc_default')
+		].join('');
+
+		document.querySelector('#summary tbody').append(tr);
+		setTimeout(next, 0);
+	}
+}
+</script>
+</body>
+</html>

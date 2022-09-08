@@ -1,6 +1,7 @@
 import {run_tests} from '@adraffy/ensip-norm';
 import {ens_normalize, ens_tokenize, ens_normalize_post_check} from '../index.js';
 
+// proof of concept
 function ens_normalize_via_tokenize(name) {
 	return ens_normalize_post_check(ens_tokenize(name).flatMap(token => {
 		switch (token.type) {

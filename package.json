@@ -1,13 +1,16 @@
 {
   "name": "@adraffy/ens-normalize",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Compact ES6 Ethereum Name Service (ENS) Name Normalizer",
   "keywords": [
     "ENS",
     "Ethereum",
     "UTS-46",
     "UTS-51",
-    "IDNA"
+    "IDNA",
+	"Normalize",
+	"NFC",
+	"NFD"
   ],
   "main": "index.js",
   "browser": "dist/index.min.js",
@@ -28,8 +31,9 @@
   },
   "scripts": {
     "make": "node src/make.js",
+    "test": "node test/validate.js",
     "build": "rollup -c",
-    "test": "node test/validate.js"
+	"test-builds": "node test/validate-builds.js"
   },
   "devDependencies": {
     "@adraffy/ensip-norm": "^0.0.7",
