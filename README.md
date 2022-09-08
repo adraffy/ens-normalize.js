@@ -2,7 +2,7 @@
 0-dependancy Compact ES6 Ethereum Name Service (ENS) Name Normalizer that works in the browser.
 
 * Passes [**100%**](https://adraffy.github.io/ens-norm-tests/test-validation/output/ens_normalize_1.6.0.html) ENSIP Norm [Validation Tests](https://github.com/adraffy/ensip-norm/)
-* [Optional] Custom `NFC` [Implementation](https://unicode.org/reports/tr15/)
+* Custom `NFC` [Implementation](https://unicode.org/reports/tr15/) (or use native)
 	* Passes [**100%**](https://adraffy.github.io/ens-normalize.js/test/report-nf.html) Unicode `14.0.0` [NormalizationTests](https://www.unicode.org/Public/14.0.0/ucd/NormalizationTest.txt)
 * File Size: 
 	* [`21KB`](./dist/index-xnf.min.js) — `ens_*` using native `NFC` via `String.normalize()`
