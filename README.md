@@ -37,9 +37,13 @@ let pretty = ens_beautify('1⃣2⃣.eth');
 
 Normalize name fragments:
 ```Javascript
-// fragments fail ens_normalize() due to ens_normalize_post_check() rules
+// these fragments fail ens_normalize() due to ens_normalize_post_check() rules
+// but will normalize fine as fragments
 let frag1 = ens_normalize_fragment('AB--');
 let frag2 = ens_normalize_fragment('\u{303}');
+
+// structural logic is delayed until Post-check:
+let norm_gTLD = ens_normalize_post_check('eth');
 ```
 
 Instead of exposing an IDNA-like API (`is_valid()`, `get_mapped()`, etc.), this library exposes a single function which converts names to tokens:
@@ -71,6 +75,18 @@ let tokens = ens_tokenize('R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./'); // never thr
 //     { type: 'ignored', cp: 173 },
 //     { type: 'stop' },
 //     { type: 'disallowed', cp: 47 }
+// ]
+```
+
+Generates an array of supported emoji codepoints:
+```Javascript
+// () -> number[][]
+console.log(ens_emoji());
+// [
+//     [ 2764 ],
+//     [ 128169, 65039 ],
+//     [ 128105, 127997, 8205, 9877, 65039 ],
+//     ...
 // ]
 ```
 
