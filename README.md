@@ -7,7 +7,7 @@
 * Minified File Sizes: 
 	* [`21KB`](./dist/index-xnf.min.js) — using native `NFC` via `String.normalize()`
 	* [`30KB` **Default** ](./dist/index.min.js) — using custom `NFC`
-	* [`36KB`](./dist/all.min.js) — *everything* (custom `NFC` + sub-libraries: [nf.js](./src/nf.js), [dns.js](./src/dns.js), [parts.js](./src/parts.js), [utils.js](./src/utils.js), requires `git`)
+	* [`36KB`](./dist/all.min.js) — *everything* (custom `NFC` + sub-libraries: [nf.js](./src/nf.js), [dns.js](./src/dns.js), [parts.js](./src/parts.js), [utils.js](./src/utils.js))
 * [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 
 ```Javascript
