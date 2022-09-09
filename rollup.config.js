@@ -11,28 +11,11 @@ const TERSER = terser({
 
 const NODE = nodeResolve();
 
-function replace(map) {
-	map = Object.fromEntries(Object.entries(map).map(([src, dst]) => [
-		new URL(src, import.meta.url).pathname,
-		new URL(dst, import.meta.url).pathname
-	]));
-	return {
-		resolveId(importee, importer) {
-			try {
-				let dst = map[new URL(importee, 'file://' + importer).pathname];
-				if (dst) return dst;
-			} catch (err) {
-			}
-			return null;
-		}
-	};
-}
-
 const NATIVE_NF = replace({'./src/nf.js': './src/nf-native.js'});
 
 export default [
 	{
-		input: './index.js',
+		input: './src/lib.js',
 		output: [
 			{
 				file: './dist/index.js',
@@ -46,7 +29,7 @@ export default [
 		],
 	},
 	{
-		input: './index.js',
+		input: './src/lib.js',
 		plugins: [NATIVE_NF],
 		output: [
 			{
@@ -60,24 +43,6 @@ export default [
 			},
 		],
 	},
-	/*{
-		input: './src/only-norm.js',
-		output: {
-			file: './dist/only-norm.min.js',
-			format: 'es',
-			plugins: [TERSER],
-		},
-	},
-	{
-		input: './src/only-norm.js',
-		plugins: [NATIVE_NF],
-		output: {
-			file: './dist/only-norm-xnf.min.js',
-			format: 'es',
-			plugins: [TERSER],
-		},
-	},
-	*/
 	{
 		input: './src/dns.js',
 		plugins: [NODE],
@@ -114,3 +79,20 @@ export default [
 		},
 	},
 ];
+
+function replace(map) {
+	map = Object.fromEntries(Object.entries(map).map(([src, dst]) => [
+		new URL(src, import.meta.url).pathname,
+		new URL(dst, import.meta.url).pathname
+	]));
+	return {
+		resolveId(importee, importer) {
+			try {
+				let dst = map[new URL(importee, 'file://' + importer).pathname];
+				if (dst) return dst;
+			} catch (err) {
+			}
+			return null;
+		}
+	};
+}

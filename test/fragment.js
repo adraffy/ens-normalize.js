@@ -1,4 +1,4 @@
-import {ens_normalize, ens_normalize_fragment} from '../index.js';
+import {ens_normalize, ens_normalize_fragment} from '../src/lib.js';
 
 // naive implementation
 function name_contains_fragment(name, frag) {

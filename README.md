@@ -1,15 +1,14 @@
 # ens-normalize.js
-0-dependancy Compact ES6 Ethereum Name Service (ENS) Name Normalizer that works in the browser.
+0-dependancy Compact ES6 [Ethereum Name Service](https://ens.domains/) (ENS) Name Normalizer that works in the browser.
 
 * Passes [**100%**](https://adraffy.github.io/ens-norm-tests/test-validation/output/ens_normalize_1.6.0.html) ENSIP Norm [Validation Tests](https://github.com/adraffy/ensip-norm/)
 * Custom `NFC` [Implementation](https://unicode.org/reports/tr15/) (or use native)
-	* Passes [**100%**](https://adraffy.github.io/ens-normalize.js/test/report-nf.html) Unicode `14.0.0` [NormalizationTests](https://www.unicode.org/Public/14.0.0/ucd/NormalizationTest.txt)
-* File Size: 
-	* [`21KB`](./dist/index-xnf.min.js) — `ens_*` using native `NFC` via `String.normalize()`
-	* [`30KB` **Default** ](./dist/index.min.js) — `ens_*` using custom `NFC`
-	* [`35KB`](./dist/all.min.js) — *everything* (`ens_*`, custom `NFC`, [dns.js](./src/dns.js), [parts.js](./src/parts.js]), [utils.js](./src/utils.js]))
-	* [`11KB`](./dist/nf.min.js) — independent custom `NFC`
-* [**Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
+	* Passes [**100%**](https://adraffy.github.io/ens-normalize.js/test/report-nf.html) Unicode `14.0.0` [Normalization Tests](https://www.unicode.org/Public/14.0.0/ucd/NormalizationTest.txt)
+* Minified File Sizes: 
+	* [`21KB`](./dist/index-xnf.min.js) — using native `NFC` via `String.normalize()`
+	* [`30KB` **Default** ](./dist/index.min.js) — using custom `NFC`
+	* [`35KB`](./dist/all.min.js) — *everything* (custom `NFC` + sub-libraries: [nf.js](./src/nf.js), [dns.js](./src/dns.js), [parts.js](./src/parts.js]), [utils.js](./src/utils.js), requires `git`)
+* [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 
 ```Javascript
 import {ens_normalize} from '@adraffy/ens-normalize';
@@ -95,4 +94,3 @@ console.log(ens_emoji());
 * `npm run make` compress data from [@adraffy/ensip-norm](https://github.com/adraffy/ensip-norm/)
 * `npm run test` run validation tests
 * `npm run build` create `/dist/`
-* `npm run test-builds` run validation tests on `/dist/`

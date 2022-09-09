@@ -315,7 +315,7 @@ footer {
 <button>™️</button>
 <button>🈂️</button>
 <button>Ⅷ</button>
-<button data-name="hyphens{2010}{2011}{2012}{2013}{2014}{2015}{207B}{208B}{FE31}{FE32}{FE58}">Hyphens</button>
+<button data-name="hyphens{2D}{2010}{2011}{2012}{2013}{2014}{2015}{207B}{208B}{2212}{23AF}{23BA}{23BB}{23BC}{23BD}{23E4}{FE31}{FE32}{FE58}">Hyphens</button>
 
 <b>Ignored:</b> 
 <button data-name="{FE0E}{FE0F}">Emoji Style</button>
@@ -385,7 +385,7 @@ footer {
 <button>🇦</button>
 <button>🇦🇦</button>
 <button>🇺🇸</button>
-<button data-name="{1F1FA}{FE0F}{1F1F8}"></button>
+<button data-name="{1F1FA}{200B}{1F1F8}"></button>
 
 <b>Tag:</b>
 <button data-name="{1F3F4}{E0067}{E0062}{E0065}{E006E}{E0067}{E007F}" data-replace></button>
@@ -1223,8 +1223,8 @@ async function resolve0(input0, skip_norm) {
 		let pretty = ens_beautify(name_norm);
 		if (name_norm === pretty) {			
 			add_row_tag(normed_row, create_pretty_tag());
-		} else if (input === pretty) {
-			add_row_tag(input_row, create_pretty_tag());
+		//} else if (input === pretty) {
+		//	add_row_tag(input_row, create_pretty_tag());
 		} else {
 			let row = create_row('Pretty');
 			row.append(pretty);

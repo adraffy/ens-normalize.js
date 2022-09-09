@@ -1,7 +1,7 @@
 // beautify(emoji - FE0F) == emoji
 
 import {EMOJI} from '@adraffy/ensip-norm';
-import {ens_beautify} from '../index.js';
+import {ens_beautify} from '../src/lib.js';
 import {explode_cp, compare_arrays} from '../src/utils.js';
 
 for (let cps0 of EMOJI) {

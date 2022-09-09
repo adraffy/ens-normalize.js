@@ -1,8 +1,16 @@
 // confirm that the trie can be expanded correctly
 
 import {EMOJI} from '@adraffy/ensip-norm';
-import {ens_emoji} from '../index.js';
+import {ens_emoji} from '../src/lib.js';
 import {str_from_cps} from '../src/utils.js';
+
+console.log(`Emoji: ${EMOJI.length}`);
+
+let tally = {};
+for (let v of EMOJI) {
+	tally[v.length] = (tally[v.length]|0) + 1;
+}
+console.log(tally);
 
 let map = Object.fromEntries(ens_emoji().map(v => [str_from_cps(v), v]));
 

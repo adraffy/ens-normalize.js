@@ -166,6 +166,9 @@ export function encode_arithmetic(symbols, linear) {
 	return header.concat(payload, bytes_from_bits(bits));
 }
 
+export function unsafe_btoa(buf) {
+	return buf.toString('base64').replace(/=+$/, '');
+}
 
 export class Encoder {
 	constructor() { 

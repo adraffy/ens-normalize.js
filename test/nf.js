@@ -1,5 +1,5 @@
-import {compare_arrays, explode_cp} from '../src/utils.js';
 import {readFileSync} from 'node:fs';
+import {compare_arrays, explode_cp} from '../src/utils.js';
 import {nfc, nfd} from '../src/nf.js';
 //import {nfc, nfd} from '../src/nf-native.js';
 

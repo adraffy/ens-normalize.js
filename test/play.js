@@ -1,7 +1,7 @@
 // scratch file
 
-import {ens_beautify, ens_normalize, ens_tokenize} from '../index.js';
 import {inspect} from 'node:util';
+import {ens_beautify, ens_normalize, ens_tokenize} from '../src/lib.js';
 
 function debug(s) {
 	console.log(inspect(ens_tokenize(s), {depth: null, colors: true}));

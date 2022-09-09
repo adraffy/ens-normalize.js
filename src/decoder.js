@@ -93,7 +93,7 @@ export function read_compressed_payload(s) {
 export function unsafe_atob(s) {
 	let lookup = Object.fromEntries([...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'].map((c, i) => [c, i]));	
 	let n = s.length;
-	while (s[n-1] === '=') n--;
+	//while (s[n-1] === '=') n--;
 	let v = new Uint8Array((6 * n) >> 3);
 	for (let i = 0, width = 0, carry = 0, pos = 0; i < n; i++) {
 		carry = (carry << 6) | lookup[s[i]];

@@ -1,5 +1,6 @@
 import {run_tests} from '@adraffy/ensip-norm';
-import {ens_normalize, ens_tokenize, ens_normalize_post_check} from '../index.js';
+import {ens_normalize, ens_tokenize, ens_normalize_post_check} from '../src/lib.js';
+import {str_from_cps} from '../src/utils.js';
 
 // proof of concept
 function ens_normalize_via_tokenize(name) {
@@ -8,7 +9,7 @@ function ens_normalize_via_tokenize(name) {
 			case 'disallowed': throw new Error('disallowed'); 
 			case 'ignored': return '';
 			case 'stop': return '.';
-			default: return String.fromCodePoint(...token.cps);
+			default: return str_from_cps(token.cps);
 		}
 	}).join(''));
 }

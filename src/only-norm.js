@@ -1,1 +1,0 @@
-export {ens_normalize} from './lib.js';

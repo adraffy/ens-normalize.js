@@ -1,9 +1,18 @@
 import {CHARS, EMOJI} from '@adraffy/ensip-norm';
-import {Encoder} from './encoder.js';
+import {Encoder, unsafe_btoa} from './encoder.js';
 import {readFileSync, writeFileSync} from 'node:fs';
-import NFC_CHECK from './nfc-check.js';
 
+// combining_rank  => https://www.unicode.org/Public/14.0.0/ucd/extracted/DerivedCombiningClass.txt 
+// decomp          => https://www.unicode.org/Public/14.0.0/ucd/DerivedNormalizationProps.txt
+// comp_exclusions => https://www.unicode.org/Public/14.0.0/ucd/CompositionExclusions.txt
 let {combining_rank, decomp, comp_exclusions} = JSON.parse(readFileSync(new URL('./nf.json', import.meta.url)));
+
+// https://www.unicode.org/Public/14.0.0/ucd/DerivedNormalizationProps.txt
+// NFC_QC where NFC_Quick_Check = No/Maybe
+let nfc_qc = JSON.parse(readFileSync(new URL('./nfc-qc.json', import.meta.url)));
+
+// union of non-zero combining class + nfc_qc
+let nfc_check = [...new Set([combining_rank, nfc_qc].flat(Infinity))];
 
 class Node {
 	constructor() {
@@ -166,7 +175,7 @@ enc.write_member(CHARS.cm.map(cp => sorted_valid_map[cp]));
 enc.write_member(sorted_emoji);
 encode_emoji(enc, root, sorted_emoji_map);
 //write('include-only'); // only saves 300 bytes
-enc.write_member(NFC_CHECK.flatMap(cp => sorted_valid_map[cp] ?? []));
+enc.write_member(nfc_check.flatMap(cp => sorted_valid_map[cp] ?? []));
 write('include-ens');
 
 // just nf 
@@ -184,9 +193,10 @@ write('include-nf');
 function write(name) {
 	let buf = Buffer.from(enc.compressed());
 	console.log(`${name} = ${buf.length} bytes`);
+	let encoded = unsafe_btoa(buf);
 	writeFileSync(new URL(`./${name}.js`, import.meta.url), [
 		`// created ${new Date().toJSON()}`,
 		`import {read_compressed_payload} from './decoder.js';`,
-		`export default read_compressed_payload('${buf.toString('base64')}');`,
+		`export default read_compressed_payload('${encoded}');`,
 	].join('\n'));
 }

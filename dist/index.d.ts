@@ -35,7 +35,12 @@ type Token = TextToken | EmojiToken | NFCToken | StopToken;
 
 export function ens_normalize(name: string): string;
 export function ens_beautify(name: string): string;
+
 export function ens_tokenize(name: string): Token[];
+
 export function ens_normalize_fragment(frag: string): string;
 export function ens_normalize_post_check(norm: string): string;
 export function ens_emoji(): number[][];
+
+export function nfd(cps: number[]): number[];
+export function nfc(cps: number[]): number[];

@@ -1,4 +1,4 @@
-import {encode_arithmetic} from '../src/encoder.js';
+import {encode_arithmetic, unsafe_btoa} from '../src/encoder.js';
 import {decode_arithmetic, unsafe_atob} from '../src/decoder.js';
 import {compare_arrays} from '../src/utils.js';
 
@@ -24,7 +24,7 @@ console.log(`PASS arthimetic`);
 
 for (let i = 0; i < 100000; i++) {
 	let v0 = Buffer.from(Array(Math.random() * 1000|0).fill().map(() => Math.random() * 255|0));
-	let s = v0.toString('base64');
+	let s = unsafe_btoa(v0);
 	let v1 = Uint8Array.from(atob(s), c => c.codePointAt(0));
 	let v2 = unsafe_atob(s);
 	if (compare_arrays(v1, v2)) {

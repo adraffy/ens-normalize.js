@@ -2,7 +2,9 @@ import r from './include-ens.js';
 import {read_member_array, read_mapped_map, read_emoji_trie} from './decoder.js';
 import {explode_cp, str_from_cps} from './utils.js';
 import {nfc, nfd} from './nf.js';
-//import {nfc, nfd} from './nf-native.js';
+//import {nfc, nfd} from './nf-native.js'; // replaced by rollup
+
+export {nfc, nfd}; 
 
 const SORTED_VALID = read_member_array(r).sort((a, b) => a - b);
 const VALID = new Set(SORTED_VALID);
@@ -58,9 +60,16 @@ export function ens_normalize(name) {
 }
 
 // note: does not post_check
+// insert 200B between regional indicators so they do not collapse into flags
 export function ens_beautify(name) {
-	return str_from_cps(nfc(process(name, emoji => emoji)));
+	return str_from_cps(nfc(process(name, emoji => emoji))).replace(/[\u{1F1E6}-\u{1F1FF}]{2,}/gu, s => [...s].join('\u200B'));
 }
+
+/*
+function is_regional_indicator(cp) {
+	return 0x1F1E6 >= cp && 0x1F1FF <= cp;
+}
+*/
 
 function filter_fe0f(cps) {
 	return cps.filter(cp => cp != FE0F);
@@ -72,7 +81,7 @@ function process(name, emoji_filter) {
 	while (input.length) {		
 		let emoji = consume_emoji_reversed(input);
 		if (emoji) {
-			output.push(...emoji_filter(emoji));
+			output.push(...emoji_filter(emoji)); // idea: emoji_filter(emoji, output.length); // provide position to callback
 			continue;
 		}
 		let cp = input.pop();
@@ -102,8 +111,9 @@ function consume_emoji_reversed(cps, eaten) {
 	if (eaten) eaten.length = 0; // clear input buffer (if needed)
 	while (pos) {
 		let cp = cps[--pos];
-		node = node.branches.find(x => x.set.has(cp))?.node;
-		if (!node) break;
+		let br = node.branches.find(x => x.set.has(cp));
+		if (!br) break;
+		({node} = br);
 		if (node.save) { // remember
 			saved = cp;
 		} else if (node.check) { // check exclusion
@@ -115,8 +125,6 @@ function consume_emoji_reversed(cps, eaten) {
 			if (pos > 0 && cps[pos - 1] == FE0F) pos--; // consume optional FE0F
 		}
 		if (node.valid) { // this is a valid emoji (so far)
-			//emoji = stack.slice(); // copy stack
-			//if (node.valid == 2) emoji.splice(1, 1); // delete FE0F at position 1 (RGI ZWJ don't follow spec!, see: make.js)
 			emoji = conform_emoji_copy(stack, node);
 			if (eaten) eaten.push(...cps.slice(pos).reverse()); // copy input (if needed)
 			cps.length = pos; // truncate
@@ -125,19 +133,24 @@ function consume_emoji_reversed(cps, eaten) {
 	return emoji;
 }
 
+// create a copy and fix any unicode quirks
 function conform_emoji_copy(cps, node) {
 	let copy = cps.slice(); // copy stack
 	if (node.valid == 2) copy.splice(1, 1); // delete FE0F at position 1 (RGI ZWJ don't follow spec!, see: make.js)
 	return copy;
 }
 
+// return all supported emoji
 export function ens_emoji() {
 	let ret = [];
 	build(EMOJI_ROOT, []);
 	return ret;
 	function build(node, cps, saved) {
-		if (node.check && saved === cps[cps.length-1]) return;
-		if (node.save) saved = cps[cps.length-1];
+		if (node.save) { // remember
+			saved = cps[cps.length-1];
+		} else if (node.check) { // check exclusion
+			if (saved === cps[cps.length-1]) return;
+		}
 		if (node.fe0f) cps.push(FE0F);
 		if (node.valid) ret.push(conform_emoji_copy(cps, node));
 		for (let br of node.branches) {
@@ -149,7 +162,7 @@ export function ens_emoji() {
 }
 
 // ************************************************************
-// tokenizer (use "only-norm.js" if just above is needed)
+// tokenizer 
 
 const TY_VALID = 'valid';
 const TY_MAPPED = 'mapped';
@@ -203,7 +216,7 @@ export function ens_tokenize(name) {
 				let slice = tokens.slice(start, end);
 				let cps0 = slice.flatMap(x => is_valid_or_mapped(x.type) ? x.cps : []); // strip junk tokens
 				let str0 = str_from_cps(cps0);
-				let cps = nfc(cps0);
+				let cps = nfc(cps0); // this does extra work for nf-native but oh well
 				let str = str_from_cps(cps);
 				if (str0 === str) {
 					i = end - 1; // skip to end of slice
