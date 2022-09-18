@@ -9,12 +9,26 @@ const spec = new UnicodeSpec(new URL('./data/15.0.0/', import.meta.url));
 
 let args = process.argv.slice(2);
 let cps;
+let format;
+switch (args[0]) {
+	case 'js':
+	case 'md':
+		format = args.shift();
+}
 if (args[0] == '--') {
 	cps = explode_cp(args.slice(1).join(' '));
 } else {
-	cps = [...new Set(process.argv.slice(2).flatMap(parse_cp_range))].sort((a, b) => a - b);
+	cps = [...new Set(args.flatMap(parse_cp_range))].sort((a, b) => a - b);
 }
-
 for (let cp of cps) {
-	console.log(spec.format(cp));
+	switch (format) {
+		case 'md': console.log(`* \`${spec.format(cp)}\``); continue;
+		case 'js': {
+			let s = spec.format(cp);
+			let i = s.indexOf('(');
+			console.log(`0x${s.slice(0, i-1)}, // ${s.slice(i)}`); 
+			continue;
+		}
+		default: console.log(spec.format(cp));
+	}
 }

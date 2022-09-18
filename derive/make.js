@@ -18,7 +18,11 @@ nf.run_random_tests();
 
 const RegionalIndicators = new Set(parse_cp_range('1F1E6..1F1FF'));
 
-const idna = spec.idna_rules({version: 2003, use_STD3: true, valid_deviations: true});
+const idna = spec.idna_rules({
+	version: 2003, // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-137.md
+	use_STD3: true, 
+	valid_deviations: true // because 200C and 200D were allowed
+});
 
 let ignored = new Set(idna.ignored);
 let valid = new Set(idna.valid);

@@ -5,7 +5,7 @@
 ## Data Files
 
 1. `node download.js 15` — download Unicode 15.0.0 files
-	* Using `Node 18` for `fetch()`
+	* Uses `Node 18` for `fetch()`
 1. `node build.js` — creates `/output/` with data files
 
 ## Rule Files

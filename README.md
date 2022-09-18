@@ -1,13 +1,14 @@
 # ens-normalize.js
 0-dependancy Compact ES6 [Ethereum Name Service](https://ens.domains/) (ENS) Name Normalizer that works in the browser.
 
-* Passes [**100%**](https://adraffy.github.io/ens-norm-tests/test-validation/output/ens_normalize_1.6.3.html) ENSIP Norm [Validation Tests](https://github.com/adraffy/ensip-norm/)
+* Follows [ENS Name Normalization Standard](https://github.com/adraffy/ensip-norm/blob/main/draft.md)
+* Passes [**100%**](https://adraffy.github.io/ens-norm-tests/test-validation/output/ens_normalize_1.6.3.html) Validation Tests
 * Custom [`NFC`](https://unicode.org/reports/tr15/) Implementation (or use native)
 	* Passes [**100%**](https://adraffy.github.io/ens-normalize.js/test/report-nf.html) Unicode `15.0.0` [Normalization Tests](https://www.unicode.org/Public/15.0.0/ucd/NormalizationTest.txt)
 * Minified File Sizes: 
-	* [`22KB`](./dist/index-xnf.min.js) — using native `NFC` via `String.normalize()`
-	* [`30KB` **Default** ](./dist/index.min.js) — using custom `NFC`
-	* [`37KB`](./dist/all.min.js) *Everything!* — custom `NFC` + sub-libraries: [nf.js](./src/nf.js), [dns.js](./src/dns.js), [parts.js](./src/parts.js), [utils.js](./src/utils.js)
+	* [`22KB`](./dist/index-xnf.min.js) — native `NFC` via [nf-native.js](./src/nf-native.js) using `String.normalize()`
+	* [`30KB` **Default** ](./dist/index.min.js) — custom `NFC` via [nf.js](./src/nf.js)
+	* [`37KB`](./dist/all.min.js) *Everything!* — custom `NFC` + [@adraffy/punycode.js](https://github.com/adraffy/punycode.js) + sub-libraries: [dns.js](./src/dns.js), [parts.js](./src/parts.js), [utils.js](./src/utils.js)
 * [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 
 ```Javascript
@@ -93,9 +94,16 @@ console.log(ens_emoji());
 
 * `git clone` this repo then `npm install` 
 * Follow instructions in [/derive/](./derive/) to generate data files from scratch 
-	* `npm run derive`
+	* `npm run derive` 
+		* [chars.json](./derive/output/chars.json)
+		* [emoji.json](./derive/output/emoji.json)
+		* [nf.json](./derive/output/nf.json)
+		* [nf-tests.json](./derive/output/nf-tests.json)
 * `npm run make` to compress data files from `/derive/output/`
-* Follow instructions in [/validate](./validate/) to generate validation tests
-	* `npm run validate`
+	* [include-ens.js](./src/include-ens.js)
+	* [include-nf.js](./src/include-nf.js)
+* Follow instructions in [/validate/](./validate/) to generate validation tests
+	* `npm run validate` &rarr; creates `tests.json`
+		* [tests.json](./validate/tests.json)
 * `npm run test` to perform validation tests
 * `npm run build` create `/dist/`

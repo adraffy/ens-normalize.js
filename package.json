@@ -39,7 +39,7 @@
     "build": "rollup -c"
   },
   "devDependencies": {
-    "@adraffy/punycode": "^0.0.2",
+    "@adraffy/punycode": "^0.0.3",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "rollup": "^2.77.1",
     "rollup-plugin-terser": "^7.0.2"

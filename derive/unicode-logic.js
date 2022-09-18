@@ -92,6 +92,7 @@ export class UnicodeSpec {
 		this.version = JSON.parse(readFileSync(new URL('./version.json', dir)));
 		this.chars = parse_ucd(dir);
 		this.char_map = new Map(this.chars.map(x => [x.cp, x]));
+		this.cm = new Set(this.general_category('M').map(x => x.cp));
 	}
 	get_name(cp) {
 		let info = this.char_map.get(cp);
@@ -106,7 +107,11 @@ export class UnicodeSpec {
 	format(x, ...a) {
 		let ret;
 		if (typeof x === 'number') {
-			ret = `${hex_cp(x)} (${String.fromCodePoint(x)}) ${this.get_name(x)}`;
+			let form = String.fromCodePoint(x);
+			if (this.cm.has(x)) {
+				form = 'x' + form;
+			}
+			ret = `${hex_cp(x)} (${form}) ${this.get_name(x)}`;
 		} else if (Array.isArray(x)) {
 			if (x.length == 1) {
 				ret = this.format(x[0]);

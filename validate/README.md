@@ -6,7 +6,7 @@
 ## Instructions
 
 1. `node download-labels.js` — download a set of known labels: `labels.json`
-	* Using `Node 18` for `fetch()`
+	* Uses `Node 18` for `fetch()`
 1. `node random-names.js` — create a cache of names: `random-names.json`
 1. `node generate.js` — creates `tests.json` 
 	* Check output for any warnings
