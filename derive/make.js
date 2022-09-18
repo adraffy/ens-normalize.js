@@ -1,4 +1,7 @@
 import {mkdirSync, writeFileSync} from 'node:fs';
+import {compare_arrays, parse_cp_range, parse_cp_sequence} from './utils.js';
+import {UnicodeSpec} from './unicode-logic.js';
+import {create_nf} from './nf.js';
 
 import CHARS_VALID from './rules/chars-valid.js';
 import CHARS_DISALLOWED from './rules/chars-disallow.js';
@@ -7,22 +10,19 @@ import EMOJI_DEMOTED from './rules/emoji-demoted.js';
 import EMOJI_WHITELIST from './rules/emoji-seq-whitelist.js';
 import EMOJI_BLACKLIST from './rules/emoji-seq-blacklist.js';
 
-import {UnicodeSpec} from './unicode-logic.js';
-import {compare_arrays, parse_cp_range, parse_cp_sequence} from './utils.js';
-import {create_nf} from './nf.js';
-
 const spec = new UnicodeSpec(new URL('./data/15.0.0/', import.meta.url));
 
 const nf = create_nf(spec);
 if (nf.run_tests().length) throw new Error('nf implementation wrong');
+nf.run_random_tests();
 
 const RegionalIndicators = new Set(parse_cp_range('1F1E6..1F1FF'));
 
-const IDNA = spec.idna_rules({version: 2003, use_STD3: true, valid_deviations: true});
+const idna = spec.idna_rules({version: 2003, use_STD3: true, valid_deviations: true});
 
-let ignored = new Set(IDNA.ignored);
-let valid = new Set(IDNA.valid);
-let mapped = new Map(IDNA.mapped);
+let ignored = new Set(idna.ignored);
+let valid = new Set(idna.valid);
+let mapped = new Map(idna.mapped);
 let emoji = new Map();
 
 function disallow_char(cp, quiet) {	
@@ -130,8 +130,7 @@ function has_adjacent_cm(cps) {
 for (let cp of valid) {
 	let decomposed = nf.nfd([cp]);
 	if (has_adjacent_cm(decomposed)) {
-		//throw new Error(`Adjacent CM in Valid : ${spec.format(cp, decomposed)}`);
-		
+		throw new Error(`Adjacent CM in Valid : ${spec.format(cp, decomposed)}`);
 	}
 }
 for (let cp of ignored) {

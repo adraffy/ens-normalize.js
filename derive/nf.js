@@ -192,6 +192,20 @@ export function create_nf(spec) {
 				}
 			}
 			return errors;
+		},
+		run_random_tests(n = 10000, len = 256) {
+			let v = [];
+			for (; n > 0; n--) {
+				for (let i = 0; i < len; i++) {
+					v[i] = Math.random() * 0x110000|0;
+				}
+				if (compare_arrays(this.nfc(v), this.nfc(this.nfd(v)))) {
+					throw new Error('random nfc');
+				}
+				if (compare_arrays(this.nfd(v), this.nfd(this.nfc(v)))) {
+					throw new Error('random nfd');
+				}
+			}
 		}
 	};
 };
