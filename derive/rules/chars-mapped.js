@@ -41,8 +41,9 @@ export default [
 	[0x2043, [0x2D]], // 2043 (⁃) HYPHEN BULLET 
 	[0x2027, [0x2D]], // 2027 (‧) HYPHENATION POINT
 
-	// 27 (') APOSTROPHE => 2019 (’) RIGHT SINGLE QUOTATION MARK
+	
+	// apostrophe convenience 
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/403
-	[0x27, [0x2019]],
+	[0x27, [0x2019]], // 27 (') APOSTROPHE => 2019 (’) RIGHT SINGLE QUOTATION MARK
 	
 ];

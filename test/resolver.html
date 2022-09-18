@@ -377,8 +377,6 @@ footer {
 <button>🚴‍♀️🚴‍♂️🚴🚴🏻🚴🏼🚴🏽🚴🏾🚴🏿</button>
 <button>👁️‍🗨️</button>
 <button>🌈rainbow</button>
-<button>6️⃣9️⃣</button>
-<button>1⃣2️⃣.eth</button>
 <button>🏳️‍🌈</button>
 <button>🧟‍♂</button>
 <button>🧟♂</button>
@@ -438,7 +436,6 @@ Katakana:
 <button data-name="{30A1}{30FB}"></button>
 <button data-name="ab{30FB}"></button>
 
-
 <a href="https://www.rfc-editor.org/rfc/rfc5893.html#section-2"><b>CheckBidi:</b></a>
 <button>פעילותהבינאום</button>
 <button data-name="{0786}{07AE}{0782}{07B0}{0795}{07A9}{0793}{07A6}{0783}{07AA}">Dhivehi</button>
@@ -454,7 +451,9 @@ Katakana:
 <button>‼️</button>
 <button>⁉️</button>
 
-<b>Revived Keycaps:</b>
+<b>Keycaps:</b>
+<button>6️⃣9️⃣</button>
+<button>1⃣2️⃣🔟.eth</button>
 <button>*️⃣</button>
 <button>#️⃣</button>
 
@@ -559,12 +558,9 @@ determine_window_provider().then(p => {
 	providers.add_dynamic(p);
 }).catch(() => {});
 
-try {
-	examples_div.classList.toggle('hide', !!window.localStorage.getItem('hide_examples'));
-	show_hashes_check.selected = !!window.localStorage.getItem('show_hashes');
-	auto_resolve_check.selected = !!window.localStorage.getItem('auto_resolve');
-} catch (ignored) {
-}
+examples_div.classList.toggle('hide', !!window.localStorage.getItem('hide_examples'));
+show_hashes_check.selected = !!window.localStorage.getItem('show_hashes');
+auto_resolve_check.selected = !!window.localStorage.getItem('auto_resolve');
 
 for (let btn of document.querySelectorAll('#examples button, button[data-name]')) {
 	let name = replace_escapes(btn.dataset.name ?? btn.innerHTML);

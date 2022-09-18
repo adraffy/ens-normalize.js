@@ -11,11 +11,11 @@ let args = process.argv.slice(2);
 let cps;
 let format;
 switch (args[0]) {
-	case 'js':
-	case 'md':
+	case 'md': // markdown (eg. draft.md)
+	case 'js': // javascript (eg. rules/*.js)
 		format = args.shift();
 }
-if (args[0] == '--') {
+if (args[0] == '--') { // everything after is literal
 	cps = explode_cp(args.slice(1).join(' '));
 } else {
 	cps = [...new Set(args.flatMap(parse_cp_range))].sort((a, b) => a - b);
