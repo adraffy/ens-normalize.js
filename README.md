@@ -5,9 +5,9 @@
 * Custom [`NFC`](https://unicode.org/reports/tr15/) Implementation (or use native)
 	* Passes [**100%**](https://adraffy.github.io/ens-normalize.js/test/report-nf.html) Unicode `15.0.0` [Normalization Tests](https://www.unicode.org/Public/15.0.0/ucd/NormalizationTest.txt)
 * Minified File Sizes: 
-	* [`21KB`](./dist/index-xnf.min.js) — using native `NFC` via `String.normalize()`
+	* [`22KB`](./dist/index-xnf.min.js) — using native `NFC` via `String.normalize()`
 	* [`30KB` **Default** ](./dist/index.min.js) — using custom `NFC`
-	* [`36KB`](./dist/all.min.js) *Everything!* — custom `NFC` + sub-libraries: [nf.js](./src/nf.js), [dns.js](./src/dns.js), [parts.js](./src/parts.js), [utils.js](./src/utils.js)
+	* [`37KB`](./dist/all.min.js) *Everything!* — custom `NFC` + sub-libraries: [nf.js](./src/nf.js), [dns.js](./src/dns.js), [parts.js](./src/parts.js), [utils.js](./src/utils.js)
 * [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 
 ```Javascript
@@ -93,7 +93,9 @@ console.log(ens_emoji());
 
 * `git clone` this repo then `npm install` 
 * Follow instructions in [/derive/](./derive/) to generate data files from scratch 
+	* `npm run derive`
 * `npm run make` to compress data files from `/derive/output/`
 * Follow instructions in [/validate](./validate/) to generate validation tests
+	* `npm run validate`
 * `npm run test` to perform validation tests
 * `npm run build` create `/dist/`
