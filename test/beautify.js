@@ -1,15 +1,18 @@
-// beautify(emoji - FE0F) == emoji
+// norm(beautify(emoji w/o FE0F)) = norm(emoji)
 
-import {EMOJI} from '@adraffy/ensip-norm';
-import {ens_beautify} from '../src/lib.js';
-import {explode_cp, compare_arrays} from '../src/utils.js';
+import {ens_beautify, ens_emoji, ens_normalize} from '../src/lib.js';
 
-for (let cps0 of EMOJI) {
-	let cps = explode_cp(ens_beautify(String.fromCodePoint(...cps0.filter(cp => cp != 0xFE0F))));
-	if (compare_arrays(cps0, cps)) {
-		console.log({form: String.fromCodePoint(...cps0), cps0, cps});
-		process.exit(1);
+let count = 0;
+for (let cps of ens_emoji()) {
+	let norm = ens_normalize(String.fromCodePoint(...cps));
+	let beaut = ens_beautify(String.fromCodePoint(...cps.filter(cp => cp != 0xFE0F)));
+	let beaut_norm = ens_normalize(beaut);
+	if (norm !== beaut) count++;
+	if (norm !== beaut_norm) {
+		console.log({cps, norm0: norm, beaut, beaut_norm});
+		throw new Error('wrong');
 	}
 }
 
+console.log({count});
 console.log('OK');

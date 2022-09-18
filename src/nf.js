@@ -1,19 +1,37 @@
+// for reference implementation
+// see: /derive/nf.js
+
 import r from './include-nf.js';
-import {read_member_array, read_mapped_map, read_array_while} from './decoder.js';
+import {read_member_array, read_mapped, read_array_while} from './decoder.js';
 
-const COMBINING_RANK = read_array_while(() => {
+function unpack_cc(packed) {
+	return (packed >> 24) & 0xFF;
+}
+function unpack_cp(packed) {
+	return packed & 0xFFFFFF;
+}
+
+const SHIFTED_RANK = new Map(read_array_while(() => {
 	let v = read_member_array(r);
-	if (v.length) return new Set(v);
-});
-const DECOMP = read_mapped_map(r);
-const COMP_EXCLUSIONS = new Set(read_member_array(r));
+	if (v.length) return v;
+}).flatMap((v, i) => v.map(x => [x, (i+1) << 24]))); // pre-shifted
 
-const RECOMP = new Map([...DECOMP.entries()]
-	.filter(([cp, cps]) => !COMP_EXCLUSIONS.has(cp) && cps.length == 2)
-	.map(([cp, cps]) => [String.fromCodePoint(...cps), cp]));
+const EXCLUSIONS = new Set(read_member_array(r));
+const DECOMP = new Map();
+const RECOMP = new Map();
+for (let [cp, cps] of read_mapped(r)) {
+	if (!EXCLUSIONS.has(cp) && cps.length == 2) {
+		let [a, b] = cps;
+		let bucket = RECOMP.get(a);
+		if (!bucket) {
+			bucket = new Map();
+			RECOMP.set(a, bucket);
+		}
+		bucket.set(b, cp);
+	}
+	DECOMP.set(cp, cps.reverse());
+}
 
-// algorithmic hangul
-// https://www.unicode.org/versions/Unicode14.0.0/ch03.pdf
 const S0 = 0xAC00;
 const L0 = 0x1100;
 const V0 = 0x1161;
@@ -32,29 +50,6 @@ function is_hangul(cp) {
 	return cp >= S0 && cp < S1;
 }
 
-function decompose(cp, next) {
-	if (cp < 0x80) {
-		next(cp);
-	} else if (is_hangul(cp)) {
-		let s_index = cp - S0;
-		let l_index = s_index / N_COUNT | 0;
-		let v_index = (s_index % N_COUNT) / T_COUNT | 0;
-		let t_index = s_index % T_COUNT;
-		next(L0 + l_index);
-		next(V0 + v_index);
-		if (t_index > 0) next(T0 + t_index);
-	} else {
-		let mapped = DECOMP.get(cp);
-		if (mapped) {
-			for (let cp of mapped) {
-				decompose(cp, next);
-			}
-		} else {
-			next(cp);
-		}
-	}
-}
-
 function compose_pair(a, b) {
 	if (a >= L0 && a < L1 && b >= V0 && b < V1) { // LV
 		let l_index = a - L0;
@@ -64,73 +59,122 @@ function compose_pair(a, b) {
 	} else if (is_hangul(a) && b > T0 && b < T1 && (a - S0) % T_COUNT == 0) {
 		return a + (b - T0);
 	} else {
-		let combined = RECOMP.get(String.fromCodePoint(a, b));
-		if (combined) return combined;
+		let recomp = RECOMP.get(a);
+		if (recomp) {
+			recomp = recomp.get(b);
+			if (recomp) {
+				return recomp;
+			}
+		}
+		return -1;
 	}
-	return -1;
 }
 
-function decomposer(cps, callback) {
-	let stack = [];
-	cps.forEach(cp => decompose(cp, next));
-	drain();
-	function drain() {
-		stack.sort((a, b) => a[0] - b[0]).forEach(([rank, cp]) => callback(rank, cp));
-		stack.length = 0;
+function decomposed(cps) {
+	let ret = [];
+	let buf = [];
+	let check_order = false;
+	function add(cp) {
+		let cc = SHIFTED_RANK.get(cp);
+		if (cc) {
+			check_order = true;
+			cp |= cc;
+		}
+		ret.push(cp);
 	}
-	function next(cp) {
-		let rank = 1 + COMBINING_RANK.findIndex(set => set.has(cp));
-		if (rank == 0) {
-			drain();
-			callback(rank, cp);
-		} else {
-			stack.push([rank, cp]);
+	for (let cp0 of cps) {
+		buf[0] = cp0;
+		do {
+			let cp = buf.pop();
+			if (cp < 0x80) {
+				ret.push(cp);
+			} else if (is_hangul(cp)) {
+				let s_index = cp - S0;
+				let l_index = s_index / N_COUNT | 0;
+				let v_index = (s_index % N_COUNT) / T_COUNT | 0;
+				let t_index = s_index % T_COUNT;
+				add(L0 + l_index);
+				add(V0 + v_index);
+				if (t_index > 0) add(T0 + t_index);
+			} else {
+				let mapped = DECOMP.get(cp);
+				if (mapped) {
+					buf.push(...mapped);
+				} else {
+					add(cp);
+				}
+			}
+		} while (buf.length);
+	}
+	if (check_order && ret.length > 1) {
+		let prev_cc = unpack_cc(ret[0]);
+		for (let i = 1; i < ret.length; i++) {
+			let cc = unpack_cc(ret[i]);
+			if (cc == 0 || prev_cc <= cc) {
+				prev_cc = cc;
+				continue;
+			}
+			let j = i-1;
+			while (true) {
+				let tmp = ret[j+1];
+				ret[j+1] = ret[j];
+				ret[j] = tmp;
+				if (!j) break;
+				prev_cc = unpack_cc(ret[--j]);
+				if (prev_cc <= cc) break;
+			}
+			prev_cc = unpack_cc(ret[i]);
 		}
 	}
-}
-
-export function nfd(cps) {
-	let ret = [];
-	decomposer(cps, (_, cp) => ret.push(cp));
 	return ret;
 }
 
-export function nfc(cps) {
+function composed_from_decomposed(v) {
 	let ret = [];
 	let stack = [];
 	let prev_cp = -1;
-	let prev_rank = 0;
-	decomposer(cps, next);
-	if (prev_cp >= 0) ret.push(prev_cp);
-	ret.push(...stack);	
-	return ret;
-	function next(rank, cp) {
-		if (prev_cp === -1) {
-			if (rank == 0) {
+	let prev_cc = 0;
+	for (let packed of v) {
+		let cc = unpack_cc(packed);
+		let cp = unpack_cp(packed);
+		if (prev_cp == -1) {
+			if (cc == 0) {
 				prev_cp = cp;
 			} else {
 				ret.push(cp);
 			}
-		} else if (prev_rank > 0 && prev_rank >= rank) {
-			if (rank == 0) {
+		} else if (prev_cc > 0 && prev_cc >= cc) {
+			if (cc == 0) {
 				ret.push(prev_cp, ...stack);
 				stack.length = 0;
 				prev_cp = cp;
 			} else {
 				stack.push(cp);
 			}
-			prev_rank = rank;
+			prev_cc = cc;
 		} else {
 			let composed = compose_pair(prev_cp, cp);
 			if (composed >= 0) {
 				prev_cp = composed;
-			} else if (prev_rank == 0 && rank == 0) {
+			} else if (prev_cc == 0 && cc == 0) {
 				ret.push(prev_cp);
 				prev_cp = cp;
 			} else {
 				stack.push(cp);
-				prev_rank = rank;
+				prev_cc = cc;
 			}
 		}
 	}
+	if (prev_cp >= 0) {
+		ret.push(prev_cp, ...stack);	
+	}
+	return ret;
+}
+
+export function nfd(cps) {
+	return decomposed(cps).map(unpack_cp);
+}
+
+export function nfc(cps) {
+	return composed_from_decomposed(decomposed(cps));
 }

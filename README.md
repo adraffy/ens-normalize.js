@@ -2,12 +2,12 @@
 0-dependancy Compact ES6 [Ethereum Name Service](https://ens.domains/) (ENS) Name Normalizer that works in the browser.
 
 * Passes [**100%**](https://adraffy.github.io/ens-norm-tests/test-validation/output/ens_normalize_1.6.3.html) ENSIP Norm [Validation Tests](https://github.com/adraffy/ensip-norm/)
-* Custom `NFC` [Implementation](https://unicode.org/reports/tr15/) (or use native)
-	* Passes [**100%**](https://adraffy.github.io/ens-normalize.js/test/report-nf.html) Unicode `14.0.0` [Normalization Tests](https://www.unicode.org/Public/14.0.0/ucd/NormalizationTest.txt)
+* Custom [`NFC`](https://unicode.org/reports/tr15/) Implementation (or use native)
+	* Passes [**100%**](https://adraffy.github.io/ens-normalize.js/test/report-nf.html) Unicode `15.0.0` [Normalization Tests](https://www.unicode.org/Public/15.0.0/ucd/NormalizationTest.txt)
 * Minified File Sizes: 
 	* [`21KB`](./dist/index-xnf.min.js) — using native `NFC` via `String.normalize()`
 	* [`30KB` **Default** ](./dist/index.min.js) — using custom `NFC`
-	* [`36KB`](./dist/all.min.js) — *everything* (custom `NFC` + sub-libraries: [nf.js](./src/nf.js), [dns.js](./src/dns.js), [parts.js](./src/parts.js), [utils.js](./src/utils.js))
+	* [`36KB`](./dist/all.min.js) *Everything!* — custom `NFC` + sub-libraries: [nf.js](./src/nf.js), [dns.js](./src/dns.js), [parts.js](./src/parts.js), [utils.js](./src/utils.js)
 * [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 
 ```Javascript
@@ -91,6 +91,9 @@ console.log(ens_emoji());
 
 ## Build
 
-* `npm run make` compress data from [@adraffy/ensip-norm](https://github.com/adraffy/ensip-norm/)
-* `npm run test` run validation tests
+* `git clone` this repo then `npm install` 
+* Follow instructions in [/derive/](./derive/) to generate data files from scratch 
+* `npm run make` to compress data files from `/derive/output/`
+* Follow instructions in [/validate](./validate/) to generate validation tests
+* `npm run test` to perform validation tests
 * `npm run build` create `/dist/`

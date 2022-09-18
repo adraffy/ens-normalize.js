@@ -47,17 +47,17 @@ tbody tr:nth-child(odd) {
 </style>
 </head>
 <body>
-<h1><a href="https://www.unicode.org/Public/14.0.0/ucd/NormalizationTest.txt">NormalizationTest</a></h1>
+<h1><a href="https://www.unicode.org/Public/15.0.0/ucd/NormalizationTest.txt">NormalizationTest</a> (15.0.0)</h1>
 <div id="version"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a></div>
 <table id="summary"><thead>
-<tr><th rowspan="2">Test</th><th rowspan="2">Cases</th><th colspan="2">adraffy</th><th colspan="2">Browser</th></tr>
+<tr><th rowspan="2">Test</th><th rowspan="2">Cases</th><th colspan="2">Custom</th><th colspan="2">Browser</th></tr>
 <tr><th>NFD</th><th>NFC</th><th>NFD</th><th>NFC</th></tr>
 </thead><tbody></tbody></table>
 <div id="loading">Computing...</div>
 <script type="module">
-import {nfc as nfc_adraffy, nfd as nfd_adraffy} from '../dist/nf.min.js';
+import {nfc as nfc_custom, nfd as nfd_custom} from '../dist/nf.min.js';
 import {nfc as nfc_native, nfd as nfd_native} from '../src/nf-native.js';
-import {escape_for_html, escape_unicode, explode_cp, quote_cp} from '../src/utils.js';
+import {escape_for_html, escape_unicode, explode_cp} from '../src/utils.js';
 
 try {
 	main();
@@ -69,7 +69,6 @@ try {
 }
 
 function raw_str(s) {
-	//return explode_cp(nfc0).map(quote_cp).join('');
 	return escape_for_html(escape_unicode(s));
 }
 
@@ -80,7 +79,7 @@ async function fetch_json(url) {
 }
 
 async function main() {	
-	let tests = await fetch_json('./NormalizationTest.json');
+	let tests = await fetch_json('../derive/output/nf-tests.json');
 	//let tests = await fetch_json('../build/unicode-json/NormalizationTestOld.json');
 	tests = Object.entries(tests).sort((a, b) => b[1].length - a[1].length);
 	next();
@@ -92,7 +91,7 @@ async function main() {
 		let [name, cases] = tests.pop();
 		let html = `<a name="${name}"></a><h2>${name}(${cases.length})</h2><table><thead>
 		<tr><th rowspan="2">Input</th><th class="big" colspan="4">NFD</th><th class="big" colspan="4">NFC</th></tr>
-		<tr><th colspan="2">Expected</th><th>adraffy</th><th>Browser</th><th colspan="2">Expected</th><th>adraffy</th><th>Browser</th></tr>
+		<tr><th colspan="2">Expected</th><th>Custom</th><th>Browser</th><th colspan="2">Expected</th><th>Custom</th><th>Browser</th></tr>
 		</tr></thead><tbody>`;
 		let errors = {};
 		function compare_cell(expect, cps, key) {
@@ -105,17 +104,17 @@ async function main() {
 			}
 		}
 		for (let args of cases) {
-			let [src, nfc0, nfd0] = args;
+			let [src, nfd0, nfc0] = args;
 			let cps = explode_cp(src);
 			html += '<tr>' + [
 				`<td class="input">${escape_for_html(src)}</td>`,
 				`<td class="expect">${escape_for_html(nfd0)}</td>`,
 				`<td class="expect raw">${raw_str(nfd0)}</td>`,
-				compare_cell(nfd0, nfd_adraffy(cps), 'nfc_adraffy'),
+				compare_cell(nfd0, nfd_custom(cps), 'nfc_custom'),
 				compare_cell(nfd0, nfd_native(cps), 'nfd_default'),
 				`<td class="expect">${escape_for_html(nfc0)}</td>`,
 				`<td class="expect raw">${raw_str(nfc0)}</td>`,
-				compare_cell(nfc0, nfc_adraffy(cps), 'nfd_adraffy'),
+				compare_cell(nfc0, nfc_custom(cps), 'nfd_custom'),
 				compare_cell(nfc0, nfc_native(cps), 'nfc_default')
 			].join('') + '</tr>';
 		}
@@ -138,8 +137,8 @@ async function main() {
 		tr.innerHTML = [
 			`<td class="name"><a href="#${name}">${name}</a></td>`,
 			`<td class="count">${cases.length}</td>`,
-			total_cell('nfd_adraffy'),
-			total_cell('nfc_adraffy'),
+			total_cell('nfd_custom'),
+			total_cell('nfc_custom'),
 			total_cell('nfd_default'),
 			total_cell('nfc_default')
 		].join('');

@@ -1,33 +1,30 @@
 // confirm that the trie can be expanded correctly
 
-import {EMOJI} from '@adraffy/ensip-norm';
+import {readFileSync} from 'fs';
 import {ens_emoji} from '../src/lib.js';
 import {str_from_cps} from '../src/utils.js';
 
-console.log(`Emoji: ${EMOJI.length}`);
+let emoji = JSON.parse(readFileSync(new URL('../derive/output/emoji.json', import.meta.url)));
+
+console.log(`Emoji: ${emoji.length}`);
 
 let tally = {};
-for (let v of EMOJI) {
-	tally[v.length] = (tally[v.length]|0) + 1;
+for (let cps of emoji) {
+	tally[cps.length] = (tally[cps.length]|0) + 1;
 }
 console.log(tally);
 
-let map = Object.fromEntries(ens_emoji().map(v => [str_from_cps(v), v]));
-
-for (let emoji of EMOJI) {
-	let key = str_from_cps(emoji);
-	if (!map[key]) {
-		console.log({key, emoji});
-		console.log('Missing emoji');
-		process.exit(1);
+let map = new Map(ens_emoji().map(v => [str_from_cps(v), v]));
+for (let cps of emoji) {
+	let form = str_from_cps(cps);
+	if (!map.delete(form)) {
+		console.log({form, cps});
+		throw new Error('missing emoji');
 	}
-	delete map[key];
 }
-let m = Object.entries(map);
-if (m.length) {
-	console.log(m);
-	console.log('Extra emoji');
-	process.exit(2);
+if (map.size) {
+	console.log(map);
+	throw new Error('extra emoji');
 }
 
 console.log('OK');

@@ -89,20 +89,21 @@ export function read_compressed_payload(s) {
 	return read_payload(decode_arithmetic(unsafe_atob(s)));
 }
 
-// unsafe in the sense this expects the input to be well-formed Base64
+// unsafe in the sense:
+// expected well-formed Base64 w/o padding 
 export function unsafe_atob(s) {
-	let lookup = Object.fromEntries([...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'].map((c, i) => [c, i]));	
+	let lookup = [];
+	[...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'].forEach((c, i) => lookup[c.charCodeAt(0)] = i);
 	let n = s.length;
-	//while (s[n-1] === '=') n--;
-	let v = new Uint8Array((6 * n) >> 3);
-	for (let i = 0, width = 0, carry = 0, pos = 0; i < n; i++) {
-		carry = (carry << 6) | lookup[s[i]];
+	let ret = new Uint8Array((6 * n) >> 3);
+	for (let i = 0, pos = 0, width = 0, carry = 0; i < n; i++) {
+		carry = (carry << 6) | lookup[s.charCodeAt(i)];
 		width += 6;
 		if (width >= 8) {
-			v[pos++] = (carry >> (width -= 8));
+			ret[pos++] = (carry >> (width -= 8));
 		}
 	}
-	return v;
+	return ret;
 }
 
 // eg. [0,1,2,3...] => [0,-1,1,-2,...]
@@ -143,7 +144,7 @@ export function read_member_array(next, lookup) {
 }
 
 // returns map of x => ys
-export function read_mapped_map(next) {
+export function read_mapped(next) {
 	let ret = [];
 	while (true) {
 		let w = next();
@@ -155,7 +156,7 @@ export function read_mapped_map(next) {
 		if (w < 0) break;
 		ret.push(read_replacement_table(w, next));
 	}
-	return new Map(ret.flat());
+	return ret.flat();
 }
 
 // read until next is falsy

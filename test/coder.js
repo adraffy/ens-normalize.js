@@ -17,19 +17,19 @@ for (let i = 0; i < 1000; i++) {
 	let v2 = decode_arithmetic(v1);
 	if (compare_arrays(v0, v2)) {
 		console.log({v0, v1, v2});
-		process.exit(1);
+		throw new Error('arthimetic');
 	}
 }
 console.log(`PASS arthimetic`);
 
-for (let i = 0; i < 100000; i++) {
+for (let i = 0; i < 10000; i++) {
 	let v0 = Buffer.from(Array(Math.random() * 1000|0).fill().map(() => Math.random() * 255|0));
 	let s = unsafe_btoa(v0);
 	let v1 = Uint8Array.from(atob(s), c => c.codePointAt(0));
 	let v2 = unsafe_atob(s);
 	if (compare_arrays(v1, v2)) {
 		console.log({s, v0, v1, v2});
-		process.exit(2);
+		throw new Error('bota');
 	}
 }
 console.log(`PASS atob`);

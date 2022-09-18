@@ -167,16 +167,19 @@ ul.row {
 .tags .long {
 	white-space: normal;
 }
-.tags .ens {
-	order: 9;
-}
 .tags .opensea {
 	order: 8;
+}
+.tags .metadata {
+	order: 9;
+}
+.tags .ens {
+	order: 10;
 }
 .tags .elapsed {
 	background: #cff;
 	font-size: 80%;
-	order: 10;
+	order: 20;
 }
 .tags .length {
 	order: -10;
@@ -184,7 +187,7 @@ ul.row {
 }
 .tags .bytes {
 	order: -10;
-	background: #eee;
+	background: #f8eedd;
 }
 .tags .okay {
 	background: #ffc;
@@ -214,20 +217,27 @@ ul.row {
 .row.pretty {
 	background: #fff0fc;
 }
+#pretty {
+	font-size: 16pt;
+}
 .row.hashes {
 	display: grid;
 	background: none;
 	padding: 0 0.5rem;
-	grid-template-columns: 20% 30% auto;
+	grid-template-columns: 20% min-content 30% auto;
 	align-items: start;
 	gap: 0.5rem;
 	font-size: 12pt;
 	box-sizing: border-box;
 	width: 100%;
 }
+.hashes .length {
+	text-align: center;
+	color: #777;
+}
 .hashes .text {
 	line-break: anywhere;
-	text-align: center;
+	text-align: right;
 }
 .hashes .cp {
 	white-space: break-spaces;
@@ -288,13 +298,13 @@ footer {
 <button>vitalik.eth</button>
 <button>bRAnTlY.eTh</button>
 <button>brantly.cash</button>
-<button>antistupid.com</button>
+<button>raffy.antistupid.com</button>
 <button>.eth</button>
 <button>öbb.at</button>
 <button>Öbb.at</button>
 <button>◌̈bb.at</button>
 
-<a href="https://adraffy.github.io/punycode.js/test/demo.html" style="text-decoration: line-through"><b>Punycode:</b></a>
+<a href="https://adraffy.github.io/punycode.js/test/demo.html"><b>Punycode:</b></a>
 <button>xn--ls8h</button>
 <button>xn--💩</button>
 <button>💷pound.eth</button>
@@ -315,7 +325,7 @@ footer {
 <button>™️</button>
 <button>🈂️</button>
 <button>Ⅷ</button>
-<button data-name="hyphens{2D}{2010}{2011}{2012}{2013}{2014}{2015}{207B}{208B}{2212}{23AF}{23BA}{23BB}{23BC}{23BD}{23E4}{FE31}{FE32}{FE58}">Hyphens</button>
+<button data-name="hyphens{2D}{2010}{2011}{2012}{2013}{2014}{2015}{2027}{2043}{207B}{208B}{2212}{23AF}{23BA}{23BB}{23BC}{23BD}{23E4}{FE31}{FE32}{FE58}">Hyphens</button>
 
 <b>Ignored:</b> 
 <button data-name="{FE0E}{FE0F}">Emoji Style</button>
@@ -334,6 +344,7 @@ footer {
 <button data-name="{330}">Leading</button>
 <button data-name="x{305}{330}">Adjacent</button>
 <button data-name="💩{330}">Emoji</button>
+<button>ǖ</button>
 
 <b>Whitespace:</b>
 <button data-name="te st">Inner</button>
@@ -362,7 +373,7 @@ footer {
 <button>🛥</button>
 <button>🚀🚀🚀</button>
 <button>💩💩💩</button>
-<button>🍎🍊🍋🍏🫐🍇</button>
+<button>👁💜🐮☕💎</button>
 <button>🚴‍♀️🚴‍♂️🚴🚴🏻🚴🏼🚴🏽🚴🏾🚴🏿</button>
 <button>👁️‍🗨️</button>
 <button>🌈rainbow</button>
@@ -468,17 +479,25 @@ Katakana:
 <button data-name="{6F1}{6F2}{664}"></button>
 
 <a href="https://www.unicode.org/Public/emoji/15.0/"><b>Unicode 15:</b></a>
-<button data-name="{1F6DC}{1FA75}{1FA76}{1FA77}{1FA87}{1FA88}{1FAAD}{1FAAE}{1FAAF}{1FABB}{1FABC}{1FABD}{1FABF}{1FACE}{1FACF}{1FADA}{1FADB}{1FAE8}{1FAF7}{1FAF8}">Single Emoji</button>
-<button data-name="{1F426}{FE0F}{200D}{2B1B}{FE0F}">ZWJ</button>
+<button data-name="{1F6DC}{1FA75}{1FA76}{1FA77}{1FA87}{1FA88}{1FAAD}{1FAAE}{1FAAF}{1FABB}{1FABC}{1FABD}{1FABF}{1FACE}{1FACF}{1FADA}{1FADB}{1FAE8}{1FAF7}{1FAF8}">Single Emoji (20)</button>
+<button data-name="{1FAF7}{1F3FB}{1FAF7}{1F3FC}{1FAF7}{1F3FD}{1FAF7}{1F3FE}{1FAF7}{1F3FF}{1FAF8}{1F3FB}{1FAF8}{1F3FC}{1FAF8}{1F3FD}{1FAF8}{1F3FE}{1FAF8}{1F3FF}">Sequences (10)</button>
+<button data-name="{1F426}{200D}{2B1B}">Black Bird</button>
+
+<b>Apostrophe:</b>
+<button>a'</button>
+<button>’z</button>
+<button>a'’b</button>
+<button>O'Brian</button>
 
 <b>Questionable:</b>
 <button>½</button>
 <button>000⁄000</button>
+<button>•</button>
 
 </div>
 <div id="options">
 <label><input type="checkbox" id="auto_resolve_check" checked>Resolve on Input</label>
-<label><input type="checkbox" id="show_hashes_check" checked>Show Hashes</label>
+<label><input type="checkbox" id="show_hashes_check" checked>Show Details</label>
 <span><input type="checkbox" id="skip_norm_check"><label class="nonstd" for="skip_norm_check">Skip Normalization</label></span>
 </div>
 <div id="input">
@@ -823,19 +842,54 @@ function get_dot_eth_label(name) {
 	return v.length == 2 && v[1].toLowerCase() == 'eth' ? v[0] : undefined;
 }
 
-function create_pretty_tag() {
+function create_pretty_tag(title = 'Pretty') {
 	let span = document.createElement('span');
 	span.classList.add('pretty');
-	span.innerHTML = '🎀 Pretty'; 
+	span.innerHTML = `🎀 ${title}`;
 	return span;
 }
 
-function create_opensea_link(name) {
+function add_dot_eth_links(row, name) {
 	let label = get_dot_eth_label(name);
 	if (!label) return ''; // only if 2LD .eth	
+	let hash = labelhash(label);
+	let contract = '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85';
+	
+	let os = create_link(`https://opensea.io/assets/${contract}/${hash.dec}`, 'Opensea');
+	os.classList.add('opensea');
+	add_row_tag(row, os);
+
+	let meta = create_link(`https://metadata.ens.domains/mainnet/${contract}/${hash.hex}`, 'Metadata');
+	meta.classList.add('metadata');
+	add_row_tag(row, meta);
+}
+
+/*
+function create_opensea_link(name) {
+	let label = get_dot_eth_label(name);
+	if (!label) return; // only if 2LD .eth	
 	let a = create_link(`https://opensea.io/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/${labelhash(label).dec}`, 'Opensea');
 	a.classList.add('opensea');
 	return a;
+}
+*/
+
+function utf8_length(s) {
+	let bytes = 0;
+	for (let pos = 0, len = s.length; pos < len; ) {
+		let cp = s.codePointAt(pos++);
+		if (cp < 0x800) {
+			bytes += cp < 0x80 ? 1 : 2;
+		} else {
+			if (cp < 0x10000) {
+				bytes += 3;
+			} else {
+				bytes += 4;
+				pos++;
+			}
+		}
+	}
+	return bytes;
 }
 
 function make_exploded(row, name, is_norm, downgrade_disallowed) {	
@@ -846,15 +900,14 @@ function make_exploded(row, name, is_norm, downgrade_disallowed) {
 			x.classList.remove('disallowed');
 		}
 	}
+	/*
 	let n_cp = [...name].length;
-	let n_u8 = unescape(encodeURIComponent(name)).length;
+	let n_u8 = unescape(encodeURIComponent(name)).length; // this kinda sucks
 	let count = document.createElement('span');
 	count.classList.add('length');		
-	/*
-	count.addEventListener('click', () => {
-		input_field.value = apply_escapes(name);
-	});
-	*/
+	//count.addEventListener('click', () => {
+	//	input_field.value = apply_escapes(name);
+	//});
 	add_row_tag(row, count);
 	if (n_cp != n_u8) {
 		count.innerHTML = `${n_cp}<sub>ch</sub>`;	
@@ -866,7 +919,12 @@ function make_exploded(row, name, is_norm, downgrade_disallowed) {
 		count.innerHTML = `${n_cp}<sub>chytes</sub>`;
 		count.title = '1-byte Characters';
 	}	
-
+	*/
+	let bytes = document.createElement('span');
+	bytes.classList.add('bytes');
+	bytes.innerHTML = `${utf8_length(name)}<sub>bytes</sub>`;
+	add_row_tag(row, bytes); 
+	
 	let exploded = document.createElement('div');
 	exploded.classList.add('exploded');
 	exploded.append(tokens_div, row.querySelector('.tags'));
@@ -907,16 +965,14 @@ function create_class_tag(name) {
 		}
 	});
 	let tags = [];
-	if (cps.length) {
-		if (cps.every(cp => cp < 0x80)) {
-			if (/^[a-z0-9.]+$/u.test(String.fromCodePoint(...cps))) {
-				tags.push('Basic');
-			} else {
-				tags.push('ASCII');
-			}
+	if (cps.every(cp => cp < 0x80)) {
+		if (/^[a-z0-9.]*$/u.test(String.fromCodePoint(...cps))) {
+			tags.push('Basic');
 		} else {
-			tags.push('Unicode');
+			tags.push('ASCII');
 		}
+	} else {
+		tags.push('Unicode');
 	}
 	if (tokens.some(token => token.type === 'emoji')) {
 		tags.push('Emoji');
@@ -931,19 +987,21 @@ function create_hashes_row(name) {
 	row.classList.add('hashes');
 	row.classList.toggle('hide', !show_hashes_check.checked);
 	// build table of label hashes
-	let labels = name.split('.');
-	for (let i = 0; i < labels.length; i++) {
-		let label = labels[i];
+	for (let label of name.split('.')) {
+		let cps = explode_cp(label);
 		let text = document.createElement('span');
 		text.classList.add('text');
 		text.innerHTML = label;
-		let points = document.createElement('span');
-		points.classList.add('cp');		
-		points.innerHTML = label.length == 0 ? '«null»' : [...label].map(x => x.codePointAt(0).toString(16).toUpperCase().padStart(2, '0')).join(' ');		
+		let len = document.createElement('span');
+		len.classList.add('length');
+		len.innerHTML = `${cps.length}<sub>ch</sub>`;
+		let hex = document.createElement('span');
+		hex.classList.add('cp');
+		hex.innerHTML = cps.length == 0 ? '«null»' : [...cps].map(hex_cp).join(' ');
 		let hash = document.createElement('span');
 		hash.classList.add('hash');
 		hash.innerHTML = labelhash(label).hex;
-		row.append(text, points, hash);
+		row.append(text, len, hex, hash);
 	}
 	// add namehash
 	let hash = document.createElement('span');
@@ -1176,7 +1234,8 @@ async function resolve0(input0, skip_norm) {
 			apply_grade(span, 'fail', 'Skipped');
 			add_row_tag(row, span);
 			output_div.append(row);
-			add_row_tag(input_row, create_opensea_link(input));
+			add_dot_eth_links(input_row, input);
+			//add_row_tag(input_row, create_opensea_link(input));
 			name_norm = input; // yolo
 		} else {
 
@@ -1197,7 +1256,8 @@ async function resolve0(input0, skip_norm) {
 				input_row.classList.add('normalized');
 				//apply_grade(input_grade, 'good', 'Normalized');
 				//add_row_tag(input_row, input_grade);
-				add_row_tag(input_row, create_opensea_link(input));
+				//add_row_tag(input_row, create_opensea_link(input));
+				add_dot_eth_links(input_row, input);
 			} else if (name_norm) {
 				// mark the name as bad
 				let span = document.createElement('span');
@@ -1212,7 +1272,8 @@ async function resolve0(input0, skip_norm) {
 				add_row_tag(row, create_copy_btn(name_norm));
 				add_row_tag(row, create_resolve_btn(name_norm));
 				add_row_tag(row, create_ens_link(name_norm));
-				add_row_tag(row, create_opensea_link(name_norm));
+				//add_row_tag(row, create_opensea_link(name_norm));
+				add_dot_eth_links(row, name_norm);
 				output_div.append(row);
 				output_div.append(create_hashes_row(name_norm));
 			}
@@ -1223,11 +1284,16 @@ async function resolve0(input0, skip_norm) {
 		let pretty = ens_beautify(name_norm);
 		if (name_norm === pretty) {			
 			add_row_tag(normed_row, create_pretty_tag());
-		//} else if (input === pretty) {
-		//	add_row_tag(input_row, create_pretty_tag());
 		} else {
+			if (input === pretty) { 
+				add_row_tag(input_row, create_pretty_tag());
+			} 
 			let row = create_row('Pretty');
-			row.append(pretty);
+			let span = document.createElement('span');
+			span.id = 'pretty';
+			span.innerHTML = pretty;
+			row.append(span);
+			//row.append(pretty);
 			add_row_tag(row, create_copy_btn(pretty));
 			add_row_tag(row, create_resolve_btn(pretty));
 			add_row_tag(row, create_pretty_tag());
@@ -1546,6 +1612,8 @@ async function resolve0(input0, skip_norm) {
 		if (name_norm !== primary_norm) {
 			add_row_tag(primary_row, create_copy_btn(primary_norm));
 			add_row_tag(primary_row, create_resolve_btn(primary_norm));
+			add_row_tag(primary_row, create_ens_link(primary_norm));
+			add_dot_eth_links(primary_row, primary_norm);
 		}
 
 	// primary was valid but not normalized
@@ -1561,7 +1629,8 @@ async function resolve0(input0, skip_norm) {
 		add_row_tag(row, create_class_tag(primary_norm));
 		add_row_tag(row, create_copy_btn(primary_norm));
 		add_row_tag(row, create_ens_link(primary_norm));
-		add_row_tag(row, create_opensea_link(primary_norm));
+		add_dot_eth_links(row, primary_norm);
+		//add_row_tag(row, create_opensea_link(primary_norm));
 		if (name_norm !== primary_norm) {
 			add_row_tag(row, create_resolve_btn(primary_norm));
 		}

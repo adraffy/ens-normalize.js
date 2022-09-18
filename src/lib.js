@@ -1,6 +1,6 @@
 import r from './include-ens.js';
-import {read_member_array, read_mapped_map, read_emoji_trie} from './decoder.js';
-import {explode_cp, str_from_cps} from './utils.js';
+import {read_member_array, read_mapped, read_emoji_trie} from './decoder.js';
+import {explode_cp, str_from_cps, hex_cp} from './utils.js';
 import {nfc, nfd} from './nf.js';
 //import {nfc, nfd} from './nf-native.js'; // replaced by rollup
 
@@ -9,7 +9,7 @@ export {nfc, nfd};
 const SORTED_VALID = read_member_array(r).sort((a, b) => a - b);
 const VALID = new Set(SORTED_VALID);
 const IGNORED = new Set(read_member_array(r));
-const MAPPED = read_mapped_map(r);
+const MAPPED = new Map(read_mapped(r));
 const CM = new Set(read_member_array(r, SORTED_VALID));
 const EMOJI_ROOT = read_emoji_trie(r);
 const NFC_CHECK = new Set(read_member_array(r, SORTED_VALID));
@@ -19,31 +19,63 @@ const HYPHEN = 0x2D;
 const UNDERSCORE = 0x5F;
 const FE0F = 0xFE0F;
 
+function check_leading_underscore(cps) {
+	let i = cps.lastIndexOf(UNDERSCORE);
+	while (i > 0) {
+		if (cps[--i] !== UNDERSCORE) {
+			throw new Error(`underscore only allowed at start`);
+		}
+	}
+}
+
+function check_label_extension(cps) {
+	if (cps.length >= 4 && cps[2] === HYPHEN && cps[3] === HYPHEN && cps.every(cp => cp < 0x80)) {
+		throw new Error(`invalid label extension`);
+	}
+}
+
+function check_isolated(cps, cp, name, no_leading, no_trailing) {
+	let last = -1;
+	if (cps[0] === cp) {
+		if (no_leading) throw new Error(`leading ${name}`);
+		last = 0;
+	}
+	while (true) {
+		let i = cps.indexOf(cp, last+1);
+		if (i == -1) break;
+		if (last == i-1) throw new Error(`adjacent ${name}`);
+		last = i;
+	}
+	if (no_trailing && last == cps.length-1) throw new Error(`trailing ${name}`);
+	
+}
+
+// requires decomposed codepoints
+function check_cm(cps) {
+	for (let i = 0, j = -1; i < cps.length; i++) {
+		if (CM.has(cps[i])) {
+			if (i == 0) {
+				throw new Error(`leading combining mark`);
+			} else if (i == j) {
+				throw new Error(`adjacent combining marks "${str_from_cps(cps.slice(i - 2, i + 1))}"`);
+			} else if (cps[i - 1] == FE0F) {
+				throw new Error(`emoji + combining mark`);
+			}	
+			j = i + 1;
+		}
+	}
+}
+
 export function ens_normalize_post_check(norm) {
 	for (let label of norm.split('.')) {
+		if (!label) throw new Error('Empty label');
 		try {
 			let cps_nfc = explode_cp(label);
-			for (let i = cps_nfc.lastIndexOf(UNDERSCORE) - 1; i >= 0; i--) {
-				if (cps_nfc[i] !== UNDERSCORE) {
-					throw new Error(`underscore only allowed at start`);
-				}
-			}
-			if (cps_nfc.length >= 4 && cps_nfc[2] === HYPHEN && cps_nfc[3] === HYPHEN && cps_nfc.every(cp => cp < 0x80)) {
-				throw new Error(`invalid label extension`);
-			}
+			check_leading_underscore(cps_nfc);
+			check_label_extension(cps_nfc);
+			check_isolated(cps_nfc, 0x2019, 'apostrophe', true, true);
 			let cps_nfd = nfd(process(label, () => [FE0F])); // replace emoji with single character
-			for (let i = 0, j = -1; i < cps_nfd.length; i++) {
-				if (CM.has(cps_nfd[i])) {
-					if (i == 0) {
-						throw new Error(`leading combining mark`);
-					} else if (i == j) {
-						throw new Error(`adjacent combining marks "${str_from_cps(cps_nfd.slice(i - 2, i + 1))}"`);
-					} else if (cps_nfd[i - 1] == FE0F) {
-						throw new Error(`emoji + combining mark`);
-					}	
-					j = i + 1;
-				}
-			}
+			check_cm(cps_nfd);
 		} catch (err) {
 			throw new Error(`Invalid label "${label}": ${err.message}`);
 		}
@@ -97,7 +129,7 @@ function process(name, emoji_filter) {
 			output.push(...cps);
 			continue;
 		}
-		throw new Error(`Disallowed codepoint: 0x${cp.toString(16).toUpperCase()}`);
+		throw new Error(`Disallowed codepoint: 0x${hex_cp(cp)}`);
 	}
 	return output;
 }
@@ -141,6 +173,7 @@ function conform_emoji_copy(cps, node) {
 }
 
 // return all supported emoji
+// not sorted
 export function ens_emoji() {
 	let ret = [];
 	build(EMOJI_ROOT, []);

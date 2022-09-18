@@ -1,5 +1,5 @@
 export function hex_cp(cp) {
-	return cp.toString(16).toUpperCase();
+	return cp.toString(16).toUpperCase().padStart(2, '0');
 }
 
 export function quote_cp(cp) {
@@ -41,4 +41,18 @@ export function compare_arrays(a, b) {
 	let c = n - b.length;
 	for (let i = 0; c == 0 && i < n; i++) c = a[i] - b[i];
 	return c;
+}
+
+export function random_sample(v, n) {
+	v = v.slice(); // make copy
+	if (v.length > n) {
+		for (let i = 0; i < n; i++) { // shuffle prefix n
+			let temp = v[i]; 
+			let j = Math.floor(i + Math.random() * (v.length - i));
+			v[i] = v[j];
+			v[j] = temp;
+		}
+		v = v.slice(0, n); // truncate
+	}
+	return v;
 }

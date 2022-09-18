@@ -20,7 +20,7 @@ function test(name, frag) {
 	}
 	ok: {
 		try {
-			ens_normalize(frag);			
+			ens_normalize(frag);
 		} catch (err) {		
 			break ok;
 		}
