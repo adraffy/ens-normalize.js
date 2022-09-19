@@ -1,8 +1,8 @@
-# Normalize Spec Generator
+# Derive Data Files
 
 * Independent of parent repo
 
-## Data Files
+## Instructions
 
 1. `node download.js 15` — download Unicode 15.0.0 files
 	* Uses `Node 18` for `fetch()`

@@ -1,3 +1,4 @@
+// https://unicode.org/reports/tr15/
 // for reference implementation
 // see: /derive/nf.js
 
@@ -29,9 +30,11 @@ for (let [cp, cps] of read_mapped(r)) {
 		}
 		bucket.set(b, cp);
 	}
-	DECOMP.set(cp, cps.reverse());
+	DECOMP.set(cp, cps.reverse()); // stored reversed
 }
 
+// algorithmic hangul
+// https://www.unicode.org/versions/Unicode15.0.0/ch03.pdf (page 144) <same>
 const S0 = 0xAC00;
 const L0 = 0x1100;
 const V0 = 0x1161;
@@ -51,11 +54,8 @@ function is_hangul(cp) {
 }
 
 function compose_pair(a, b) {
-	if (a >= L0 && a < L1 && b >= V0 && b < V1) { // LV
-		let l_index = a - L0;
-		let v_index = b - V0;
-		let lv_index = l_index * N_COUNT + v_index * T_COUNT;
-		return S0 + lv_index;
+	if (a >= L0 && a < L1 && b >= V0 && b < V1) {
+		return S0 + (a - L0) * N_COUNT + (b - V0) * T_COUNT;
 	} else if (is_hangul(a) && b > T0 && b < T1 && (a - S0) % T_COUNT == 0) {
 		return a + (b - T0);
 	} else {

@@ -43,6 +43,9 @@
 	{"name": "a'’a", "error": true, "comment": "Apostrophe: adjacent"},
 	{"name": "a'a’a", "norm": "a’a’a", "comment": "Apostrophe"},
 
+	{"name": "l·l", "comment": "ContextO: middle dot"},
+	{"name": "a·b", "error": true, "comment": "ContextO: middle dot"},
+
 	{"name": "\uFE0E\uFE0Fa", "norm": "a", "comment": "Ignored: emoji-styling"},
 
 	{"name": "🚴‍♂️", "norm": "🚴‍♂", "comment": "Emoji: bicycle + ZWJ + male"},

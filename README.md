@@ -93,7 +93,7 @@ console.log(ens_emoji());
 ## Build
 
 * `git clone` this repo then `npm install` 
-* Follow instructions in [/derive/](./derive/) to generate data files from scratch 
+* Follow instructions in [/derive/](./derive/) to generate data files
 	* `npm run derive` 
 		* [chars.json](./derive/output/chars.json)
 		* [emoji.json](./derive/output/emoji.json)

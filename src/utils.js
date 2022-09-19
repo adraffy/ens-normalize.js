@@ -43,6 +43,10 @@ export function compare_arrays(a, b) {
 	return c;
 }
 
+export function random_choice(v) {
+	return v[Math.random() * v.length|0];
+}
+
 export function random_sample(v, n) {
 	v = v.slice(); // make copy
 	if (v.length > n) {
@@ -55,4 +59,25 @@ export function random_sample(v, n) {
 		v = v.slice(0, n); // truncate
 	}
 	return v;
+}
+
+export function run_tests(fn, tests) {
+	let errors = [];
+	for (let test of tests) {
+		let {name, norm, error} = test;
+		if (typeof norm !== 'string') norm = name;
+		try {
+			let result = fn(name);
+			if (error) {	
+				errors.push({type: 'expected error', result, ...test});
+			} else if (result != norm) {
+				errors.push({type: 'wrong norm', result, ...test});
+			}
+		} catch (err) {
+			if (!error) {
+				errors.push({type: 'unexpected error', result: err.message, ...test});
+			}
+		}
+	}
+	return errors;
 }

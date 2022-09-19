@@ -1,7 +1,7 @@
 import {readFileSync, writeFileSync} from 'node:fs';
 import {ens_normalize, ens_emoji} from '../src/lib.js';
 import {parse_cp_sequence} from '../derive/utils.js';
-import {random_sample} from './utils.js';
+import {random_sample} from '../src/utils.js';
 
 // make tests for registered names
 let LABELS;

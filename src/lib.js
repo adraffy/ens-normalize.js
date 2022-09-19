@@ -47,7 +47,19 @@ function check_isolated(cps, cp, name, no_leading, no_trailing) {
 		last = i;
 	}
 	if (no_trailing && last == cps.length-1) throw new Error(`trailing ${name}`);
-	
+}
+
+// ContextO: MIDDLE DOT
+// https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.3
+// Between 'l' (U+006C) characters only, used to permit the Catalan character ela geminada to be expressed.
+function check_middle_dot(cps) {
+	let i = 0;
+	while (true) {
+		i = cps.indexOf(0xB7, i);
+		if (i == -1) break;
+		if (cps[i-1] !== 0x6C || cps[i+1] !== 0x6C) throw new Error('ContextO: middle dot');
+		i += 2;
+	}
 }
 
 // requires decomposed codepoints
@@ -74,6 +86,7 @@ export function ens_normalize_post_check(norm) {
 			check_leading_underscore(cps_nfc);
 			check_label_extension(cps_nfc);
 			check_isolated(cps_nfc, 0x2019, 'apostrophe', true, true);
+			check_middle_dot(cps_nfc);
 			let cps_nfd = nfd(process(label, () => [FE0F])); // replace emoji with single character
 			check_cm(cps_nfd);
 		} catch (err) {
@@ -145,7 +158,7 @@ function consume_emoji_reversed(cps, eaten) {
 		let cp = cps[--pos];
 		let br = node.branches.find(x => x.set.has(cp));
 		if (!br) break;
-		({node} = br);
+		node = br.node;
 		if (node.save) { // remember
 			saved = cp;
 		} else if (node.check) { // check exclusion
@@ -248,12 +261,11 @@ export function ens_tokenize(name) {
 				if (start < 0) start = i;
 				let slice = tokens.slice(start, end);
 				let cps0 = slice.flatMap(x => is_valid_or_mapped(x.type) ? x.cps : []); // strip junk tokens
-				let str0 = str_from_cps(cps0);
 				let cps = nfc(cps0); // this does extra work for nf-native but oh well
-				let str = str_from_cps(cps);
-				if (str0 === str) {
+				//if (cps0.length === cps.length && cps0.every((cp, i) => cp === cps[i])) { 
+				if (str_from_cps(cps0) === str_from_cps(cps)) {
 					i = end - 1; // skip to end of slice
-				} else {
+				} else { // bundle into an nfc token
 					tokens.splice(start, end - start, {type: TY_NFC, input: cps0, cps, tokens: collapse_valid_tokens(slice)});
 					i = start;
 				}

@@ -3,7 +3,7 @@
 
 import {readFileSync, writeFileSync} from 'node:fs';
 import {ens_normalize} from '../src/lib.js';
-import {random_choice} from './utils.js';
+import {random_choice} from '../src/utils.js';
 
 let chars = JSON.parse(readFileSync(new URL('../derive/output/chars.json', import.meta.url)));
 let emoji = JSON.parse(readFileSync(new URL('../derive/output/emoji.json', import.meta.url)));

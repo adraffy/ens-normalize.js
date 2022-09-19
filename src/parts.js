@@ -69,10 +69,6 @@ export function dom_from_tokens(tokens, before) {
 						}
 						span.classList.add('mod', 'tag');
 					}
-				/*} else if (!before && !e.includes(cp)) { 
-					span = document.createElement('code');
-					span.classList.add('mod', 'dropped'); 
-					span.innerHTML = hex_cp(cp);*/
 				} else {
 					span.classList.add('emoji');
 					span.innerHTML = String.fromCodePoint(cp);
