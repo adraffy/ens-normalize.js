@@ -114,7 +114,7 @@ for (let n = 0; n < buckets.length; n++) {
 	`;
 	//<th class="form">Norm</th>
 	//<th class="form">Beautify</th>
-	section.querySelector('tbody').append(...bucket.map(({cps, name, norm pretty}, i) => {
+	section.querySelector('tbody').append(...bucket.map(({cps, name, norm, pretty}, i) => {
 		let tr = document.createElement('tr');
 		tr.innerHTML = `
 			<td class="index">${i+1}</td>
