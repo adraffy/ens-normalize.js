@@ -94,6 +94,9 @@ export class UnicodeSpec {
 		this.char_map = new Map(this.chars.map(x => [x.cp, x]));
 		this.cm = new Set(this.general_category('M').map(x => x.cp));
 	}
+	get version_str() {
+		return `${this.version.major}.${this.version.minor}.${this.version.patch}`;
+	}
 	get_name(cp) {
 		let info = this.char_map.get(cp);
 		if (info) {

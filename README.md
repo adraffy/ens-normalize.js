@@ -95,8 +95,7 @@ console.log(ens_emoji());
 * `git clone` this repo then `npm install` 
 * Follow instructions in [/derive/](./derive/) to generate data files
 	* `npm run derive` 
-		* [chars.json](./derive/output/chars.json)
-		* [emoji.json](./derive/output/emoji.json)
+		* [spec.json](./derive/output/spec.json)
 		* [nf.json](./derive/output/nf.json)
 		* [nf-tests.json](./derive/output/nf-tests.json)
 * `npm run make` to compress data files from `/derive/output/`

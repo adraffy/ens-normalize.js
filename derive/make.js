@@ -1,4 +1,4 @@
-import {mkdirSync, writeFileSync} from 'node:fs';
+import {mkdirSync, writeFileSync, createWriteStream} from 'node:fs';
 import {compare_arrays, parse_cp_range, parse_cp_sequence} from './utils.js';
 import {UnicodeSpec} from './unicode-logic.js';
 import {create_nf} from './nf.js';
@@ -7,14 +7,51 @@ import CHARS_VALID from './rules/chars-valid.js';
 import CHARS_DISALLOWED from './rules/chars-disallow.js';
 import CHARS_MAPPED from './rules/chars-mapped.js';
 import EMOJI_DEMOTED from './rules/emoji-demoted.js';
+import PICTO_PROMOTED from './rules/picto-promoted.js';
 import EMOJI_WHITELIST from './rules/emoji-seq-whitelist.js';
 import EMOJI_BLACKLIST from './rules/emoji-seq-blacklist.js';
+
+// quick hack to capture log
+((stream) => {
+	let out = createWriteStream(new URL('./make.txt', import.meta.url).pathname);
+	let old = stream.write.bind(stream);
+	stream.write = function(...a) {
+		old(...a);
+		out.write(...a);
+	};
+})(process.stdout);
+
+function assert_distinct(things) {
+	let m = Object.entries(things).map(([k, v]) => [k, new Set(v)]);
+	for (let i = 0; i < m.length; i++) {
+		let set_i = m[i][1];
+		for (let j = i + 1; j < m.length; j++) {
+			let set_j = m[j][1];
+			for (let x of set_i) {
+				if (set_j.has(x)) {
+					console.log(m[i][0], m[j][0], x);
+					throw new Error("distinct");
+				}
+			}
+		}
+	}
+}
+assert_distinct({
+	CHARS_VALID, 
+	CHARS_DISALLOWED, 
+	MAPPED: CHARS_MAPPED.map(x => x[0]),
+	EMOJI_DEMOTED,
+	PICTO_PROMOTED
+});
 
 const spec = new UnicodeSpec(new URL('./data/15.0.0/', import.meta.url));
 
 const nf = create_nf(spec);
 if (nf.run_tests().length) throw new Error('nf implementation wrong');
 nf.run_random_tests();
+
+console.log(`Build Date: ${new Date().toJSON()}`);
+console.log(`Unicode Version: ${spec.version_str}`);
 
 const RegionalIndicators = new Set(parse_cp_range('1F1E6..1F1FF'));
 
@@ -76,24 +113,28 @@ for (let {cp} of emoji_map.values()) {
 		disallow_char(cp, true);
 	}
 }
-for (let x of emoji_chrs.Emoji_Presentation) {
-	if (emoji_map.get(x.cp) && !RegionalIndicators.has(x.cp)) {
-		emoji_map.delete(x.cp);
-		register_emoji({cps: [x.cp, 0xFE0F], ...x});
+for (let cp of PICTO_PROMOTED) {
+	disallow_char(cp);
+	register_emoji({cps: [cp], type: 'Promoted', picto: true});
+}
+for (let info of emoji_chrs.Emoji_Presentation) {
+	if (emoji_map.get(info.cp) && !RegionalIndicators.has(info.cp)) {
+		emoji_map.delete(info.cp);
+		register_emoji({cps: [info.cp, 0xFE0F], ...info});
 	}
 }
-for (let x of emoji_chrs.Extended_Pictographic) {
-	if (emoji_map.get(x.cp)) {
-		emoji_map.delete(x.cp);
-		register_emoji({cps: [x.cp], ...x});
+for (let info of emoji_chrs.Extended_Pictographic) {
+	if (emoji_map.get(info.cp)) {
+		emoji_map.delete(info.cp);
+		register_emoji({cps: [info.cp], ...info, picto: true});
 	}
 }
-for (let x of emoji_map.values()) {
-	register_emoji({cps: [x.cp], ...x});
+for (let info of emoji_map.values()) {
+	register_emoji({cps: [info.cp], ...info});
 }
 
 for (let seq of EMOJI_WHITELIST) {
-	register_emoji({cps: parse_cp_sequence(seq)}); // we could name these?
+	register_emoji({cps: parse_cp_sequence(seq), type: 'Whitelist'});
 }
 for (let seq of EMOJI_BLACKLIST) {
 	let cps = parse_cp_sequence(seq);
@@ -162,20 +203,25 @@ for (let [x, ys] of mapped.entries()) {
 	}
 }
 
+function sorted(v) {
+	return [...v].sort((a, b) => a - b);
+}
+
 let out_dir = new URL('./output/', import.meta.url);
 mkdirSync(out_dir, {recursive: true});
-writeFileSync(new URL('./emoji.json', out_dir), JSON.stringify([...emoji.values()].map(x => x.cps).sort(compare_arrays)));
-writeFileSync(new URL('./chars.json', out_dir), JSON.stringify({
-	valid: [...valid],
-	ignored: [...ignored],
-	mapped: [...mapped.entries()],
-	cm: [...cm],
+writeFileSync(new URL('./spec.json', out_dir), JSON.stringify({
+	valid: sorted(valid),
+	ignored: sorted(ignored),
+	mapped: [...mapped.entries()].sort((a, b) => a[0] - b[0]),
+	cm: sorted(cm),
+	emoji: [...emoji.values()].filter(x => !x.picto).map(x => x.cps).sort(compare_arrays),
+	picto: sorted([...emoji.values()].filter(x => x.picto).map(x => x.cps[0]))
 }));
 
 writeFileSync(new URL('./nf.json', out_dir), JSON.stringify({
 	ranks: spec.combining_ranks(),
 	exclusions: spec.composition_exclusions(),
 	decomp: spec.decompositions(),
-	qc: spec.nf_props().NFC_QC.map(x => x[0])
+	qc: spec.nf_props().NFC_QC.map(x => x[0]).sort((a, b) => a - b)
 }));
 writeFileSync(new URL('./nf-tests.json', out_dir), JSON.stringify(spec.nf_tests()));

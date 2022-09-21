@@ -181,7 +181,7 @@ export class Encoder {
 		if (!Number.isSafeInteger(x) || x < 0) throw new TypeError(`expected unsigned: ${x}`);
 		this.values.push(x); 
 	}
-	signed(i) { this.unsigned(i < 0 ? -1 - 2 * i : 2 * i); }
+	signed(i) { this.unsigned(i < 0 ? ~(i << 1) : (i << 1)); }
 	positive(i) { this.unsigned(i - 1); }
 	positive_counts(v) { for (let x of v) this.positive(x); }
 	ascending(v) {

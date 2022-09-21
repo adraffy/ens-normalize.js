@@ -34,7 +34,7 @@ for (let [cp, cps] of read_mapped(r)) {
 }
 
 // algorithmic hangul
-// https://www.unicode.org/versions/Unicode15.0.0/ch03.pdf (page 144) <same>
+// https://www.unicode.org/versions/Unicode15.0.0/ch03.pdf (page 144)
 const S0 = 0xAC00;
 const L0 = 0x1100;
 const V0 = 0x1161;
@@ -82,10 +82,8 @@ function decomposed(cps) {
 		}
 		ret.push(cp);
 	}
-	for (let cp0 of cps) {
-		buf[0] = cp0;
-		do {
-			let cp = buf.pop();
+	for (let cp of cps) {
+		while (true) {
 			if (cp < 0x80) {
 				ret.push(cp);
 			} else if (is_hangul(cp)) {
@@ -104,7 +102,9 @@ function decomposed(cps) {
 					add(cp);
 				}
 			}
-		} while (buf.length);
+			if (!buf.length) break;
+			cp = buf.pop();
+		}
 	}
 	if (check_order && ret.length > 1) {
 		let prev_cc = unpack_cc(ret[0]);

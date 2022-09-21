@@ -27,7 +27,7 @@ table {
 tbody {
 	font-size: 150%; 
 }
-tr:nth-child(even) {
+tbody tr:nth-child(odd) {
 	background: #fff;
 }
 td {
@@ -118,7 +118,7 @@ for (let n = 0; n < buckets.length; n++) {
 		let tr = document.createElement('tr');
 		tr.innerHTML = `
 			<td class="index">${i+1}</td>
-			<td class="form"><a href="resolver.html#${encodeURIComponent(name)}.eth" target="_blank">${name}</a></td>
+			<td class="form"><a href="./resolver.html#${encodeURIComponent(name)}.eth" target="_blank">${name}</a></td>
 			<td class="exploded"></td>
 			<td class="hex">${cps.map(hex_cp).join(' ')}</td>
 		`;

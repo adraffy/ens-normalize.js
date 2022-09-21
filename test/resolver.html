@@ -125,8 +125,27 @@ input[type=checkbox]:checked + label.nonstd {
 .row.normalized {
 	background: #efe;
 }
+.row.skipped {
+	background: #efe;
+}
 .row.owner {
 	background: #ffd;
+}
+.row.dns {
+	background:#f5faff; 
+}
+.row.dns.invalid2 {
+	background: #fcc;
+}
+.row.dns.invalid {
+	background: #fff0f0;	
+	border: 3px dashed #fcc;
+}
+.row.pretty {
+	background: #fff0fc;
+}
+#pretty {
+	font-size: 16pt;
 }
 ul.row {
 	flex-direction: column;
@@ -210,15 +229,9 @@ ul.row {
 	color: #600;
 }
 .tags .pretty {
-	background: #fff0fc;
+	background: #f8e8f0;
 	border-color: #f9e;
 	color: #c900a2;
-}
-.row.pretty {
-	background: #fff0fc;
-}
-#pretty {
-	font-size: 16pt;
 }
 .row.hashes {
 	display: grid;
@@ -255,12 +268,6 @@ ul.row {
 }
 .transform {
 	background: #fffaf0;
-}
-.dns {
-	background:#f5faff; 
-}
-.dns.invalid {
-	background: #fcc;
 }
 footer {
 	text-align: center;
@@ -300,9 +307,9 @@ footer {
 <button>brantly.cash</button>
 <button>raffy.antistupid.com</button>
 <button data-name=".eth">❌.eth</button>
-<button>öbb.at</button>
-<button>Öbb.at</button>
-<button>◌̈bb.at</button>
+<button>öbb</button>
+<button>Öbb</button>
+<button data-name="◌̈bb">❌◌̈bb</button>
 
 <a href="https://adraffy.github.io/punycode.js/test/demo.html"><b>Punycode:</b></a>
 <button>xn--ls8h</button>
@@ -368,7 +375,7 @@ footer {
 <b>Goofy:</b>
 <button data-name="[ba967c160905ade030f84952644a963994eeaed3881a6b8a4e9c8cbe452ad7a2].eth" data-skip="1">"💩.eth"</button>
 
-<b>Emoji:</b>
+<a href="./emoji.html"><b>Emoji:</b></a>
 <button>©</button>
 <button>🛥</button>
 <button>🚀🚀🚀</button>
@@ -404,7 +411,7 @@ footer {
 <button data-name="{1F3F4}{E0077}{E0074}{E0066}{E007F}">❌wtf</button>
 <button data-name="{1F3F4}">"🏴"</button>
 
-<b>Picto:</b>
+<b>Circled/Squared:</b>
 <button>mmm</button>
 <button>ⓂⓂⓂ</button>
 <button>Ⓜ️Ⓜ️Ⓜ️</button>
@@ -426,6 +433,7 @@ ZWJ:
 <a href="https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.3"><b>ContextO:</b></a>
 Middle Dot: 
 <button data-name="{6C}{B7}{6C}"></button>
+<button data-name="a{B7}b">❌</button>
 • 
 Greek Keraia: 
 <button data-name="{375}{0377}"></button>
@@ -478,7 +486,7 @@ Katakana:
 <button data-name="{661}{662}{664}"></button>
 <button data-name="{6F1}{6F2}{664}"></button>
 
-<a href="https://www.unicode.org/Public/emoji/15.0/"><b>Unicode 15:</b></a>
+<a href="https://unicode.org/emoji/charts/emoji-released.html"><b>Unicode 15:</b></a>
 <button data-name="{1F6DC}{1FA75}{1FA76}{1FA77}{1FA87}{1FA88}{1FAAD}{1FAAE}{1FAAF}{1FABB}{1FABC}{1FABD}{1FABF}{1FACE}{1FACF}{1FADA}{1FADB}{1FAE8}{1FAF7}{1FAF8}">Single Emoji (20)</button>
 <button data-name="{1FAF7}{1F3FB}{1FAF7}{1F3FC}{1FAF7}{1F3FD}{1FAF7}{1F3FE}{1FAF7}{1F3FF}{1FAF8}{1F3FB}{1FAF8}{1F3FC}{1FAF8}{1F3FD}{1FAF8}{1F3FE}{1FAF8}{1F3FF}">Sequences (10)</button>
 <button data-name="{1F426}{200D}{2B1B}">Black Bird</button>
@@ -515,6 +523,7 @@ Katakana:
 <ul class="row">
 <li>Click an <button data-name="bRANtly.eth">Example</button> to see how it works.</li>
 <li>Use <code>{FF}</code> or <code>[255]</code> to manually include codepoints, eg. <button data-escape data-name="a{200D}b.eth">ZWJ</button></li>
+<li>Input <code>"0123 4567 89AB CDEF"</code> to interpret as hex codepoints</li>
 <li><b>Copy Link</b> to get a URL that resolves on page-load.</li>
 </ul>
 </div>
@@ -544,13 +553,20 @@ const primary_arrows = document.querySelector('#arrows');
 const auto_resolve_check = document.querySelector('#auto_resolve_check');
 const skip_norm_check = document.querySelector('#skip_norm_check');
 const show_hashes_check = document.querySelector('#show_hashes_check');
+const controls_div = document.querySelector('#controls');
 const output_div = document.querySelector('#output');
 const readme_rows = [...output_div.childNodes]; // save initial ux
 const examples_div = document.querySelector('#examples');
 const examples_btn = document.createElement('button');
 
-let resolve_timer;
-let resolve_args;
+const RESOLVE_MODE_IDLE = 'idle';
+const RESOLVE_MODE_REPEAT = 'repeat';
+const RESOLVE_MODE_EMPTY = 'empty';
+
+const SKIP_SUFFIX = '_!';
+
+let resolve_timer = RESOLVE_MODE_IDLE;
+let resolve_options;
 let resolve_date0;
 
 let window_provider;
@@ -571,7 +587,8 @@ for (let btn of document.querySelectorAll('#examples button, button[data-name]')
 	if (!btn.title) btn.title = `${name}\n${explode_cp(name).map(hex_cp).join(' ')}`;
 	btn.addEventListener('click', () => {
 		input_field.value = name;
-		resolve(btn.dataset.skip);
+		skip_norm_check.checked = btn.dataset.skip;
+		resolve();
 	});
 }
 
@@ -597,7 +614,9 @@ document.querySelector('#escape_btn').addEventListener('click', () => {
 });
 
 document.querySelector('#link_btn').addEventListener('click', () => {
-	navigator.clipboard.writeText(window.location.href.split('#')[0] + '#' + encodeURIComponent(input_field.value));
+	let hash = '#' + encodeURIComponent(input_field.value);
+	if (skip_norm_check.checked) hash += SKIP_SUFFIX;
+	navigator.clipboard.writeText(window.location.href.split('#')[0] + hash);
 });
 
 auto_resolve_check.addEventListener('input', () => {
@@ -614,7 +633,7 @@ show_hashes_check.addEventListener('input', () => {
 });
 skip_norm_check.addEventListener('input', () => {
 	if (auto_resolve_check.checked && input_field.value) {
-		if (parse()) resolve();
+		resolve();
 	}
 });
 examples_btn.addEventListener('click', () => {
@@ -625,12 +644,8 @@ examples_btn.addEventListener('click', () => {
 
 update_examples();
 input_field.focus();
-input_field.value = decode_location_hash();
-schedule_resolve(100);
-window.addEventListener('hashchange', () => {
-	input_field.value = decode_location_hash();
-	resolve();
-});
+apply_location_hash();
+window.addEventListener('hashchange', apply_location_hash);
 
 function update_examples() {
 	if (examples_div.classList.contains('hide')) {
@@ -642,40 +657,45 @@ function update_examples() {
 	}
 }
 
-function decode_location_hash() {
-	return decodeURIComponent(window.location.hash.slice(1));
+function apply_location_hash() {
+	let name = decodeURIComponent(window.location.hash.slice(1));
+	let skip = name.endsWith(SKIP_SUFFIX);
+	if (skip) name = name.slice(0, -SKIP_SUFFIX.length);
+	skip_norm_check.checked = skip;
+	input_field.value = name;
+	resolve();
+}
+
+function should_stop_resolving() {
+	return resolve_timer !== RESOLVE_MODE_IDLE;
 }
 
 function schedule_resolve(delay) {
 	if (!auto_resolve_check.checked) return;
-	resolve_args = undefined;
+	resolve_options = {
+		automatic: true,
+		skip_norm: skip_norm_check.checked
+	};
 	if (is_working()) {
-		resolve_timer = true;
-	} else if (!resolve_timer || resolve_timer === 'null') {
+		resolve_timer = RESOLVE_MODE_REPEAT;
+	} else if (!should_stop_resolving()) {
 		primary_arrows.classList.remove('hide');
-		resolve_timer = setTimeout(queued_resolve, delay);
+		resolve_timer = setTimeout(() => resolve(resolve_options), delay);
 	}
 } 
-function queued_resolve() {
-	if (resolve_args) {
-		resolve(...resolve_args);
-	} else {
-		resolve();
-	}
-}
-
 function parse() {
 	output_div.innerHTML = '';
 	let name = replace_escapes(input_field.value);
+	controls_div.classList.toggle('hide', !name);
 	if (!name) {
 		clearTimeout(resolve_timer);
-		resolve_timer = 'null';
+		resolve_timer = RESOLVE_MODE_EMPTY;
 		primary_arrows.classList.add('hide');
 		output_div.append(...readme_rows);
 		return;
 	}
-	if (resolve_timer === 'null') {
-		resolve_timer = undefined;
+	if (resolve_timer === RESOLVE_MODE_EMPTY) {
+		resolve_timer = RESOLVE_MODE_IDLE;
 	}
 	if (is_checksum_address(name)) {
 		let row = create_row('Address');
@@ -788,7 +808,7 @@ function apply_escapes(s, forced) {
 
 function replace_escapes(s) {
 	// match: {HEX}, [0xHEX], [DEC]
-	return s.replace(/(?:(?:\{([0-9a-f]+)\})|(?:\[((?:0x[0-9a-f]+)|[0-9]+)\]))/uig, (_, a, b) => {
+	return s.replace(/(?:(?:\{([0-9a-f]+)\})|(?:\[((?:0x[0-9a-f]+)|[0-9]+)\]))/uig, (_, a, b, c) => {
 		try {
 			return String.fromCodePoint(a ? parseInt(a, 16) : parseInt(b)); 
 		} catch (err) {
@@ -839,10 +859,11 @@ function get_dot_eth_label(name) {
 	return v.length == 2 && v[1].toLowerCase() == 'eth' ? v[0] : undefined;
 }
 
-function create_pretty_tag(title = 'Pretty') {
+function create_pretty_tag() {
 	let span = document.createElement('span');
 	span.classList.add('pretty');
-	span.innerHTML = `🎀 ${title}`;
+	span.innerHTML = `🌷`;
+	span.title = 'Name is in Beautified form';
 	return span;
 }
 
@@ -1056,23 +1077,24 @@ function is_working() {
 	return resolve_btn.disabled;
 }
 
-function resolve(skip_norm) {
-	if (skip_norm === undefined) {
-		skip_norm = skip_norm_check.checked;
+function resolve(options) {
+	if (!options) {
+		options =  {
+			skip_norm: skip_norm_check.checked
+		};
 	}
 	if (is_working()) {
-		if (resolve_timer === true) return;
-		resolve_timer = true;
-		resolve_args = [skip_norm];
+		resolve_timer = RESOLVE_MODE_REPEAT; 
+		resolve_options = options;
 		return;
 	}
 	clearTimeout(resolve_timer);
-	resolve_timer = undefined;
+	resolve_timer = RESOLVE_MODE_IDLE;
 	let input = input_field.value;
-	if (/^\s*[0-9a-f]{2,}(\s+[0-9a-f]{2,})+\s*$/i.test(input)) {
+	if (!options.automatic && /^\s*[0-9a-f]{2,}(\s+[0-9a-f]{2,})+\s*$/i.test(input)) {
 		input_field.value = input = input.trim().split(/\s+/).map(x => `{${x}}`).join('');	
 	}
-	const title = 'ENS Resolver';
+	let title = 'ENS Resolver';
 	if (!input) {
 		if (window.location.hash) {
 			window.history.pushState(null, null, ' ');
@@ -1083,23 +1105,27 @@ function resolve(skip_norm) {
 		parse();
 		return;
 	}
+	title += `: ${input}`;
 	let hash = '#' + encodeURIComponent(input);
+	if (options.skip_norm) {
+		hash += SKIP_SUFFIX;
+		title += ' (!)';
+	}
+	document.title = title;
 	if (window.location.hash != hash) {
 		window.history.pushState(null, null, hash);
 	}
-	document.title = `${title}: ${input}`;
-	if (!skip_norm && !parse()) {
+	if (!options.skip_norm && !parse()) {
 		primary_arrows.classList.add('hide');
 		return;
 	}
 	resolve_btn.disabled = true;
 	primary_arrows.classList.remove('hide');
 	resolve_date0 = new Date();
-	resolve0(input, skip_norm).then(() => {
+	resolve0(input, options.skip_norm).then(() => {
 		resolve_btn.disabled = false;
-		if (resolve_timer === true) { 
-			resolve_timer = false;
-			setTimeout(queued_resolve, 0);
+		if (resolve_timer === RESOLVE_MODE_REPEAT) { 
+			setTimeout(resolve, 0, resolve_options);
 		} else {
 			primary_arrows.classList.add('hide');
 		}
@@ -1153,7 +1179,7 @@ async function resolve0(input0, skip_norm) {
 		} finally {
 			remove_temporary(reverse_row);
 		}
-		if (resolve_timer) return;
+		if (should_stop_resolving()) return;
 		add_row_tag(reverse_row, create_elapsed());
 
 		// the address doesn't correspond to an owner
@@ -1227,6 +1253,7 @@ async function resolve0(input0, skip_norm) {
 		
 		if (skip_norm) {
 			let row = create_row('Normalization');
+			row.classList.add('skipped');
 			let span = document.createElement('span');
 			apply_grade(span, 'fail', 'Skipped');
 			add_row_tag(row, span);
@@ -1277,7 +1304,7 @@ async function resolve0(input0, skip_norm) {
 		}
 	}
 
-	if (!skip_norm && name_norm) {
+	if (!skip_norm) {
 		let pretty = ens_beautify(name_norm);
 		if (name_norm === pretty) {			
 			add_row_tag(normed_row, create_pretty_tag());
@@ -1285,7 +1312,7 @@ async function resolve0(input0, skip_norm) {
 			if (input === pretty) { 
 				add_row_tag(input_row, create_pretty_tag());
 			} 
-			let row = create_row('Pretty');
+			let row = create_row('Beautified');
 			let span = document.createElement('span');
 			span.id = 'pretty';
 			span.innerHTML = pretty;
@@ -1296,9 +1323,9 @@ async function resolve0(input0, skip_norm) {
 			add_row_tag(row, create_pretty_tag());
 			output_div.append(row);
 		}
-
-		output_div.append(create_dns_row(name_norm));
 	}
+
+	output_div.append(create_dns_row(name_norm));
 
 	// at this point, we have a name
 	// lookup the name
@@ -1317,7 +1344,7 @@ async function resolve0(input0, skip_norm) {
 	} finally {
 		remove_temporary(resolver_row);
 	}
-	if (resolve_timer) return;
+	if (should_stop_resolving()) return;
 	
 	// name doesn't exist
 	if (!name.resolver) { 
@@ -1364,7 +1391,7 @@ async function resolve0(input0, skip_norm) {
 				remove_temporary(avail_row);
 			}
 			add_row_tag(avail_row, create_elapsed());
-			if (resolve_timer) return;
+			if (should_stop_resolving()) return;
 
 			if (!available) {
 				let nft_row = create_row('NFT Owner', true);
@@ -1474,7 +1501,7 @@ async function resolve0(input0, skip_norm) {
 	} finally {
 		remove_temporary(owner_row);
 	}
-	if (resolve_timer) return;
+	if (should_stop_resolving()) return;
 
 	// we got the owner
 	owner_row.classList.add('owner');
@@ -1515,7 +1542,7 @@ async function resolve0(input0, skip_norm) {
 	} finally {
 		remove_temporary(address_row);
 	}
-	if (resolve_timer) return;
+	if (should_stop_resolving()) return;
 		
 	if (typeof address === 'string') {
 		if (/^0x0{40}/.test(address)) {
@@ -1573,7 +1600,7 @@ async function resolve0(input0, skip_norm) {
 	} finally {
 		remove_temporary(primary_row);
 	}
-	if (resolve_timer) return;
+	if (should_stop_resolving()) return;
 	add_row_tag(primary_row, create_elapsed());
 
 	// primary not set

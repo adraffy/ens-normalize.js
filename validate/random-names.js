@@ -5,33 +5,35 @@ import {readFileSync, writeFileSync} from 'node:fs';
 import {ens_normalize} from '../src/lib.js';
 import {random_choice} from '../src/utils.js';
 
-let chars = JSON.parse(readFileSync(new URL('../derive/output/chars.json', import.meta.url)));
-let emoji = JSON.parse(readFileSync(new URL('../derive/output/emoji.json', import.meta.url)));
+let {valid, mapped, ignored, cm, emoji, picto} = JSON.parse(readFileSync(new URL('../derive/output/spec.json', import.meta.url)));
 
-let sets = [
-	[2, chars.valid.map(x => [x])],
-	[3, chars.mapped.map(x => [x[0]])],
-	[1, chars.ignored.map(x => [x])],
-	[2, chars.cm.map(x => [x])],
+let distrib = [
+	[2, valid],
+	[3, mapped],
+	[1, ignored],
+	[2, cm],
 	[4, emoji],
+	[1, picto],
 ];
 
-let weight_sum = sets.reduce((a, x) => a + x[0], 0);
-sets.forEach(x => x[0] /= weight_sum);
+// norm and sort by prob
+// coerce samples to sequences
+let weight_sum = distrib.reduce((a, x) => a + x[0], 0);
+distrib = distrib.map(([w, v]) => [w / weight_sum, v.map(x => [x].flat(Infinity))]).sort((a, b) => b[0] - a[0]); 
 
+// choose from weighted distribution
 function random_seq() {
 	let r0 = Math.random();
 	let r = r0;
-	for (let i = 0; i < sets.length; i++) {
-		r -= sets[i][0];
-		if (r < 0) {
-			return random_choice(sets[i][1]); 
-		}
+	let i = 0;
+	for (let e = distrib.length-1; i < e; i++) {
+		r -= distrib[i][0];
+		if (r < 0) break;
 	}
-	throw new Error('impossibru');
+	return random_choice(distrib[i][1]); 
 }
 
-for (let i =0; i < 100; i++) {
+for (let i = 0; i < 100; i++) {
 	let v = random_seq();
 	if (!Array.isArray(v)) {
 		console.log(v, i);

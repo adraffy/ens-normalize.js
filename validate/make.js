@@ -1,7 +1,16 @@
 import {readFileSync, writeFileSync} from 'node:fs';
 import {ens_normalize, ens_emoji} from '../src/lib.js';
 import {parse_cp_sequence} from '../derive/utils.js';
-import {random_sample} from '../src/utils.js';
+import {random_sample, run_tests} from '../src/utils.js';
+
+// get custom tests
+const CUSTOM_TESTS = JSON.parse(readFileSync(new URL('./custom-tests.json', import.meta.url)));
+let custom_errors = run_tests(ens_normalize, CUSTOM_TESTS);
+if (custom_errors.length) {
+	console.log(custom_errors);
+	console.log(`Errors: ${custom_errors.length}`);
+	throw new Error('custom');
+}
 
 // make tests for registered names
 let LABELS;
@@ -37,23 +46,22 @@ for (let s of (await import('../derive/rules/emoji-seq-whitelist.js')).default) 
 	EXPECT_PASS.add(String.fromCodePoint(...parse_cp_sequence(s)));
 }
 
-// get custom tests
-const CUSTOM_TESTS = JSON.parse(readFileSync(new URL('./custom-tests.json', import.meta.url)));
-
 // get random tests (random-tests.js)
 const RANDOM_NAMES = JSON.parse(readFileSync(new URL('./random-names.json', import.meta.url)));
 
-function disjoint(...a) {
+function make_disjoint(...a) {
 	for (let i = 0; i < a.length; i++) {
+		let set_i = a[i];
 		for (let j = i + 1; j <a.length; j++) {
-			let set = a[j];
-			for (let x of a[i]) {
-				set.delete(x);
+			let set_j = a[j];
+			for (let x of set_i) {
+				set_j.delete(x);
 			}
 		}
 	}
 }
-disjoint(CUSTOM_TESTS, EXPECT_PASS, EXPECT_FAIL, LABELS);
+
+make_disjoint(/*CUSTOM_TESTS.map(x => x.name),*/ EXPECT_PASS, EXPECT_FAIL, LABELS);
 
 // remove trivial
 for (let name of LABELS) {

@@ -19,17 +19,21 @@
 	
 	{"name": "öbb.at", "comment": "IDNATestV2"},
 	{"name": "Öbb.at", "norm": "öbb.at", "comment": "IDNATestV2"}, 
-	{"name": "◌̈bb.at", "comment": "IDNATestV2"},
+	{"name": "◌̈bb.at", "error": true, "comment": "IDNATestV2"},
 
 	{"name": "ß", "comment": "IDNA deviation"},
 	{"name": "ς", "comment": "IDNA deviation"},
 	
 	{"name": "Ⅷ", "norm": "viii", "comment": "Mapping: roman numeral"},
 
-	{"name": "Ⓜ", "norm": "m", "comment": "Mapping: circled M"},
+	{"name": "Ⓜ", "norm": "m", "comment": "Mapping: circled"},
 	{"name": "Ⓜ️", "norm": "m", "comment": "Mapping: demoji"},
-	{"name": "🅜"},
-	{"name": "🅼"},
+	{"name": "⓫⓬⓭⓮⓯⓰⓱⓲⓳⓴⓿", "norm": "111213141516171819200", "comment": "negative circled"},
+	{"name": "⓵⓶⓷⓸⓹⓺⓻⓼⓽⓾", "norm": "12345678910", "comment": "double circled"},
+	{"name": "➊➋➌➍➎➏➐➑➒➓", "norm": "12345678910", "comment": "negative circled san-serif"},
+	{"name": "❶❷❸❹❺❻❼❽❾❿", "norm": "12345678910", "comment": "negative circled"},
+	{"name": "🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩", "norm": "abcdefghijklmnopqrstuvwxyz", "comment": "negative circled san-serif"},
+	{"name": "🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉", "comment": "negative squared"},
 
 	{"name": " ", "error": true, "comment": "Whitespace"},
 	{"name": "te st", "error": true, "comment": "Whitespace: inner"},
@@ -48,11 +52,7 @@
 
 	{"name": "\uFE0E\uFE0Fa", "norm": "a", "comment": "Ignored: emoji-styling"},
 
-	{"name": "🚴‍♂️", "norm": "🚴‍♂", "comment": "Emoji: bicycle + ZWJ + male"},
-	{"name": "🏳️‍🌈", "norm": "🏳‍🌈", "comment": "Emoji: flag + ZWJ + rainbow"},
-	{"name": "👩🏽‍⚕️", "norm": "👩🏽‍⚕", "comment": "Emoji: women + ZWJ + doctor"},
-	{"name": "👁️‍🗨️", "norm": "👁‍🗨", "comment": "Emoji: eye + ZWJ + bubble"},
-	{"name": "6️⃣9️⃣", "norm": "6⃣9⃣", "comment": "Emoji: Keycaps"},
+	{"name": "0️⃣1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣", "norm": "0⃣1⃣2⃣3⃣4⃣5⃣6⃣7⃣8⃣9⃣", "comment": "Emoji: Keycaps"},
 	{"name": "#️⃣*️⃣", "norm": "#⃣*⃣", "comment": "Emoji: Revived Keycaps"},
 
 	{"name": "_a", "comment": "Leading Underscore"},
@@ -66,13 +66,6 @@
 	{"name": "a\u0303\u0303", "error": true, "comment": "CM + CM"},
 	{"name": "💩\u0303", "error": true, "comment": "Emoji + CM"},
 	{"name": "aǖa", "error": true, "comment": "2xCM in Decompose"},
-	{"name": "\u0320", "error": true, "comment": "Disallowed CM: 320"},
-	{"name": "\u0332", "error": true, "comment": "Disallowed CM: 332"},
-	{"name": "\u0333", "error": true, "comment": "Disallowed CM: 333"},
-	{"name": "\u0347", "error": true, "comment": "Disallowed CM: 347"},
-	{"name": "\uFE2B", "error": true, "comment": "Disallowed CM: FE2B"},
-	{"name": "\uFE2C", "error": true, "comment": "Disallowed CM: FE2C"},
-	{"name": "\uFE2D", "error": true, "comment": "Disallowed CM: FE2D"},
 
 	{"name": "🇦", "comment": "Single regional indicator"},
 	{"name": "🇦🇦", "comment": "Double regional indicator: invalid flag sequence"},
@@ -90,25 +83,12 @@
 	{"name": "💩💩︎💩️", "norm": "💩💩💩", "comment": "Emoji: All Styles"},
 	{"name": "💩\u200D💩", "error": true, "comment": "Poop Joiner"},
 
-	{"name": "‼️", "error": true, "comment": "double exclaimation mark"},
-	{"name": "⁉️", "error": true, "comment": "exclamation question mark"},
-
 	{"name": "👩︎🏽‍⚕️", "error": true, "comment": "Text-styled Modifier Sequence in ZWJ Sequence"},
 	{"name": "🏳\uFE0E\u200D🌈", "error": true, "comment": "Text-styled Emoji in ZWJ Sequence"},
 
 	{"name": "🌈rainbow", "comment": "Emoji + Text"},
 	{"name": "rainbow🌈", "comment": "Text + Emoji"},
 
-	{"name": "🧟\u200D♂", "comment": "Zombie + ZWJ + Male"},
-	{"name": "🧟♂", "comment": "Zombie + Male"},
-
-	{"name": "😵\u200D💫", "comment": "Crossed-out + ZWJ + Dizzy"},
-	{"name": "😵💫", "comment": "Crossed-out + Dizzy"},
-	
-	{"name": "🏴", "comment": "Flag emoji"},
-	{"name": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "comment": "Emoji Tag Sequence: GBENG"},
-	{"name": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "comment": "Emoji Tag Sequence: GBSCT"},
-	{"name": "🏴󠁧󠁢󠁷󠁬󠁳󠁿", "comment": "Emoji Tag Sequence: GBWLS"},
 	{"name": "🏴󠁷󠁴󠁦󠁿", "error": true, "comment": "Invalid Emoji Tag Sequence"},
 
 	{"name": "\u06F0\u06F1\u06F2\u06F3\u06F8\u06F9", "norm": "\u0660\u0661\u0662\u0663\u0668\u0669", "comment": "Arabic Mapping"}

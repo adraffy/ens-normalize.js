@@ -14,6 +14,7 @@
 * [chars-valid.js](./rules/chars-valid.js)
 * [chars-mapped.js](./rules/chars-mapped.js)
 * [chars-disallow.js](./rules/chars-disallow.js) 
+* [picto-promoted.js](./rules/picto-promoted.js) — non-emoji characters handled by extended pictographic processing (= emoji)
 * [emoji-demoted.js](./rules/emoji-demoted.js) — emoji characters handled by text processing
 * [emoji-seq-whitelist.js](./rules/emoji-seq-whitelist.js)
 * [emoji-seq-blacklist.js](./rules/emoji-seq-blacklist.js)

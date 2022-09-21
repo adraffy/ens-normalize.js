@@ -2,9 +2,10 @@ import {Encoder, unsafe_btoa} from './encoder.js';
 import {readFileSync, writeFileSync} from 'node:fs';
 
 let data_dir = new URL('../derive/output/', import.meta.url);
-let {valid, mapped, ignored, cm} = JSON.parse(readFileSync(new URL('./chars.json', data_dir)));
-let emoji_seqs = JSON.parse(readFileSync(new URL('./emoji.json', data_dir)));
+let {valid, mapped, ignored, cm, picto, emoji} = JSON.parse(readFileSync(new URL('./spec.json', data_dir)));
 let {ranks, decomp, exclusions, qc} = JSON.parse(readFileSync(new URL('./nf.json', data_dir)));
+
+let emoji_seqs = [picto.map(x => [x]), emoji].flat();
 
 // union of non-zero combining class + nfc_qc
 let nfc_check = [...new Set([ranks, qc].flat(Infinity))];
@@ -101,7 +102,7 @@ root.scan((node, path) => {
 for (let cps of emoji_seqs) {
 	let node = root;
 	let bits = 0;
-	let index = 0;
+	let n = 0;
 	for (let i = 0; i < cps.length; ) {
 		let cp = cps[i++];
 		node = node.branches[cp];
@@ -109,11 +110,13 @@ for (let cps of emoji_seqs) {
 			if (i < cps.length && cps[i] == 0xFE0F) {
 				i++;
 			} else {
-				if (index != 0) throw new Error('expected first FE0F');
+				// emoji in zwj dont obey emoji presentation rules
+				// this should only happen with the first emoji
+				if (n != 0) throw new Error('expected first FE0F');
 				if (i != 1) throw new Error('expected second character');
-				bits |= 1 << index;
+				bits |= 1 << n;
 			}
-			index++;
+			n++;
 		}
 	}
 	node.bits = bits; // 0 or 1

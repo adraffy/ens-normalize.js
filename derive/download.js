@@ -40,7 +40,7 @@ function url_from_source(source, {major, minor = 0, patch = 0}) {
 	}));
 }
 
-let versions = process.argv.slice(2).flatMap(parse_version);
+let versions = process.argv.slice(2).map(parse_version);
 console.log(versions);
 
 for (let version of versions) {
@@ -74,5 +74,5 @@ async function download({major, minor, patch}, files) {
 			throw new Error(`Download failed`);
 		}
 	}
-	await writeFile(new URL('version.json', dir), JSON.stringify({major, minor, patch, date: new Date()}));	
+	await writeFile(new URL('./version.json', dir), JSON.stringify({major, minor, patch, date: new Date()}));	
 }
