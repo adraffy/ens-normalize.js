@@ -345,7 +345,7 @@ footer {
 <button>ς</button>
 
 <b>Complex:</b>
-<button data-name="E{FE0E}{303}{AD}{1F21A}{FE0F}a"></button>
+<button data-name="_E{FE0E}{303}{AD}{1F21A}{FE0F}a"></button>
 
 <b>Combining Marks:</b>
 <button data-name="{330}">Leading</button>
@@ -369,7 +369,7 @@ footer {
 <button data-name="te--st">❌te--st</button>
 
 <b>Underscore:</b>
-<button>__a</button>
+<button>__z</button>
 <button data-name="a_b">❌a_b</button>
 
 <b>Goofy:</b>
@@ -600,7 +600,11 @@ input_field.addEventListener('keydown', e => {
 	}
 });
 input_field.addEventListener('input', () => {
-	if (parse()) schedule_resolve(1000);
+	if (parse()) {
+		schedule_resolve(1000);
+	} else {
+		stop_resolving();
+	}
 });
 
 document.querySelector('#escape_btn').addEventListener('click', () => {
@@ -683,14 +687,19 @@ function schedule_resolve(delay) {
 		resolve_timer = setTimeout(() => resolve(resolve_options), delay);
 	}
 } 
+
+function stop_resolving() {
+	clearTimeout(resolve_timer);
+	resolve_timer = RESOLVE_MODE_EMPTY;
+	primary_arrows.classList.add('hide');
+}
+
 function parse() {
 	output_div.innerHTML = '';
 	let name = replace_escapes(input_field.value);
 	controls_div.classList.toggle('hide', !name);
 	if (!name) {
-		clearTimeout(resolve_timer);
-		resolve_timer = RESOLVE_MODE_EMPTY;
-		primary_arrows.classList.add('hide');
+		stop_resolving();
 		output_div.append(...readme_rows);
 		return;
 	}
@@ -863,7 +872,7 @@ function create_pretty_tag() {
 	let span = document.createElement('span');
 	span.classList.add('pretty');
 	span.innerHTML = `🌷`;
-	span.title = 'Name is in Beautified form';
+	span.title = 'Beautified Form';
 	return span;
 }
 
@@ -1306,12 +1315,12 @@ async function resolve0(input0, skip_norm) {
 
 	if (!skip_norm) {
 		let pretty = ens_beautify(name_norm);
-		if (name_norm === pretty) {			
+		if (input === pretty) { 
+			add_row_tag(input_row, create_pretty_tag());
+		} else if (name_norm === pretty) {			
 			add_row_tag(normed_row, create_pretty_tag());
-		} else {
-			if (input === pretty) { 
-				add_row_tag(input_row, create_pretty_tag());
-			} 
+		} 
+		if (input0 !== pretty) {	
 			let row = create_row('Beautified');
 			let span = document.createElement('span');
 			span.id = 'pretty';

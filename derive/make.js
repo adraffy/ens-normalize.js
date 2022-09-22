@@ -1,19 +1,20 @@
 import {mkdirSync, writeFileSync, createWriteStream} from 'node:fs';
-import {compare_arrays, parse_cp_range, parse_cp_sequence} from './utils.js';
-import {UnicodeSpec} from './unicode-logic.js';
-import {create_nf} from './nf.js';
+import {compare_arrays, parse_cp_sequence} from './utils.js';
+import {SPEC, NF, IDNA} from './unicode-version.js';
 
 import CHARS_VALID from './rules/chars-valid.js';
 import CHARS_DISALLOWED from './rules/chars-disallow.js';
 import CHARS_MAPPED from './rules/chars-mapped.js';
+import CHARS_ISOLATED from './rules/chars-isolated.js';
 import EMOJI_DEMOTED from './rules/emoji-demoted.js';
-import PICTO_PROMOTED from './rules/picto-promoted.js';
 import EMOJI_WHITELIST from './rules/emoji-seq-whitelist.js';
 import EMOJI_BLACKLIST from './rules/emoji-seq-blacklist.js';
 
+let out_dir = new URL('./output/', import.meta.url);
+
 // quick hack to capture log
 ((stream) => {
-	let out = createWriteStream(new URL('./make.txt', import.meta.url).pathname);
+	let out = createWriteStream(new URL('./log.txt', out_dir).pathname);
 	let old = stream.write.bind(stream);
 	stream.write = function(...a) {
 		old(...a);
@@ -40,117 +41,117 @@ assert_distinct({
 	CHARS_VALID, 
 	CHARS_DISALLOWED, 
 	MAPPED: CHARS_MAPPED.map(x => x[0]),
-	EMOJI_DEMOTED,
-	PICTO_PROMOTED
+	EMOJI_DEMOTED
 });
 
-const spec = new UnicodeSpec(new URL('./data/15.0.0/', import.meta.url));
-
-const nf = create_nf(spec);
-if (nf.run_tests().length) throw new Error('nf implementation wrong');
-nf.run_random_tests();
+const Regional_Indicator = new Set(SPEC.props().Regional_Indicator);
 
 console.log(`Build Date: ${new Date().toJSON()}`);
-console.log(`Unicode Version: ${spec.version_str}`);
+console.log(`Unicode Version: ${SPEC.version_str}`);
 
-const RegionalIndicators = new Set(parse_cp_range('1F1E6..1F1FF'));
-
-const idna = spec.idna_rules({
-	version: 2003, // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-137.md
-	use_STD3: true, 
-	valid_deviations: true // because 200C and 200D were allowed
-});
-
-let ignored = new Set(idna.ignored);
-let valid = new Set(idna.valid);
-let mapped = new Map(idna.mapped);
+let ignored = new Set(IDNA.ignored);
+let valid = new Set(IDNA.valid);
+let mapped = new Map(IDNA.mapped);
+let isolated = new Set();
 let emoji = new Map();
 
 function disallow_char(cp, quiet) {	
 	let replacement = mapped.get(cp);
 	if (replacement) {
 		mapped.delete(cp);
-		console.log(`Removed Mapped: ${spec.format(cp, replacement)}`);
+		console.log(`Removed Mapped: ${SPEC.format(cp, replacement)}`);
 	} else if (ignored.delete(cp)) {
-		console.log(`Removed Ignored: ${spec.format(cp)}`);
+		console.log(`Removed Ignored: ${SPEC.format(cp)}`);
 	} else if (valid.delete(cp)) {
-		if (!quiet) console.log(`Removed Valid: ${spec.format(cp)}`);
+		if (!quiet) console.log(`Removed Valid: ${SPEC.format(cp)}`);
 		for (let [x, ys] of mapped) {
 			if (ys.includes(cp)) {
 				mapped.delete(x);
-				console.log(`--Mapping: ${spec.format(x, ys)}`);
+				console.log(`--Mapping: ${SPEC.format(x, ys)}`);
 			}
 		}
 	}
 }
 
 function register_emoji(info) {
-	let key = String.fromCodePoint(...info.cps);
-	let old = emoji.get(key);
-	if (old) {
-		console.log(old);
+	try {
+		let {cps} = info;
+		if (!Array.isArray(cps) || !cps.length) throw new Error('expected cps');
+		if (!info.type) throw new Error('expected type');
+		let key = String.fromCodePoint(...cps);
+		let old = emoji.get(key);
+		if (old) {
+			console.log(old);
+			throw new Error(`duplicate`);
+		}
+		if (!info.name) throw new Error('expected name');
+		console.log(`Register Emoji: ${SPEC.format(info)}`);		
+		emoji.set(key, info);
+	} catch (err) {
 		console.log(info);
-		throw new Error(`Duplicate emoji: ${key}`);
+		throw new Error(`Register Emoji: ${err.message}`);
 	}
-	emoji.set(key, info);
 }
 
-let emoji_zwjs = spec.emoji_zwjs();
+function set_isolated(cp) {
+	if (!valid.has(cp)) {
+		throw new Error(`Isolated not Valid: ${SPEC.format(cp)}`);
+	}
+	isolated.add(cp);
+	console.log(`Isolated: ${SPEC.format(cp)}`);
+}
+
+let emoji_zwjs = SPEC.emoji_zwjs();
 emoji_zwjs.RGI_Emoji_ZWJ_Sequence.forEach(register_emoji);
 
-let emoji_seqs = spec.emoji_seqs();
+let emoji_seqs = SPEC.emoji_seqs();
 emoji_seqs.Emoji_Keycap_Sequence.forEach(register_emoji);
 emoji_seqs.RGI_Emoji_Tag_Sequence.forEach(register_emoji);
 emoji_seqs.RGI_Emoji_Modifier_Sequence.forEach(register_emoji);
 
-let emoji_chrs = spec.emoji_data();
+let emoji_chrs = SPEC.emoji_data();
 let emoji_map = new Map(emoji_chrs.Emoji.map(x => [x.cp, x]));
-for (let {cp} of emoji_map.values()) {
-	if (EMOJI_DEMOTED.includes(cp)) {
-		emoji_map.delete(cp);
-		console.log(`Demoted Emoji: ${spec.format(cp)}`);
+for (let rec of emoji_map.values()) {
+	if (EMOJI_DEMOTED.includes(rec.cp)) {
+		rec.used = true;
+		console.log(`Demoted Emoji: ${SPEC.format(rec)}`);
 	} else {
-		disallow_char(cp, true);
+		disallow_char(rec.cp, true);
 	}
 }
-for (let cp of PICTO_PROMOTED) {
-	disallow_char(cp);
-	register_emoji({cps: [cp], type: 'Promoted', picto: true});
-}
+// register default emoji-presentation
 for (let info of emoji_chrs.Emoji_Presentation) {
-	if (emoji_map.get(info.cp) && !RegionalIndicators.has(info.cp)) {
-		emoji_map.delete(info.cp);
-		register_emoji({cps: [info.cp, 0xFE0F], ...info});
-	}
+	if (Regional_Indicator.has(info.cp)) continue; // skipped
+	let rec = emoji_map.get(info.cp);
+	if (!rec) throw new Error(`Expected emoji: ${SPEC.format(info)}`);
+	if (rec.used) continue;
+	rec.used = true;
+	register_emoji({cps: [info.cp, 0xFE0F], ...info});
 }
-for (let info of emoji_chrs.Extended_Pictographic) {
-	if (emoji_map.get(info.cp)) {
-		emoji_map.delete(info.cp);
-		register_emoji({cps: [info.cp], ...info, picto: true});
-	}
-}
+// register default text-presentation (leftovers)
 for (let info of emoji_map.values()) {
-	register_emoji({cps: [info.cp], ...info});
+	if (!info.used) {	
+		register_emoji({cps: [info.cp], ...info});
+	}
 }
-
-for (let seq of EMOJI_WHITELIST) {
-	register_emoji({cps: parse_cp_sequence(seq), type: 'Whitelist'});
+for (let info of EMOJI_WHITELIST) {
+	register_emoji({cps: parse_cp_sequence(info.hex), type: 'Whitelisted', name: info.name});
 }
 for (let seq of EMOJI_BLACKLIST) {
 	let cps = parse_cp_sequence(seq);
 	let key = String.fromCodePoint(...cps);
 	let info = emoji.get(key);
 	if (!info) {
-		console.log(`*** Blacklist Emoji: No match for ${spec.format(cps)}`);
+		console.log(`*** Blacklist Emoji: No match for ${SPEC.format(cps)}`); // should this be fatal?
 		continue;
 	}
-	console.log(`Blacklist Emoji by Sequence: ${spec.format(info)}`);
+	console.log(`Blacklist Emoji by Sequence: ${SPEC.format(info)}`);
 	emoji.delete(key);
 }
 for (let [x, ys] of CHARS_MAPPED) {
 	disallow_char(x);
 	mapped.set(x, ys);
-	console.log(`Added Mapped: ${spec.format(x, ys)}`);
+	console.log(`Added Mapped: ${SPEC.format(x, ys)}`);
 }
 for (let cp of CHARS_DISALLOWED) {
 	disallow_char(cp);
@@ -158,11 +159,19 @@ for (let cp of CHARS_DISALLOWED) {
 for (let cp of CHARS_VALID) {
 	disallow_char(cp);
 	valid.add(cp);
-	console.log(`Added Valid: ${spec.format(cp)}`);
+	console.log(`Added Valid: ${SPEC.format(cp)}`);
+}
+for (let cp of CHARS_ISOLATED) {
+	set_isolated(cp);
+}
+for (let info of emoji_chrs.Extended_Pictographic) { 
+	if (!emoji_map.has(info.cp) && valid.has(info.cp)) {
+		set_isolated(info.cp);
+	}
 }
 
 // filter combining marks
-let cm = new Set(spec.general_category('M').filter(x => valid.has(x.cp)).map(x => x.cp));
+let cm = new Set(SPEC.general_category('M').filter(x => valid.has(x.cp)).map(x => x.cp));
 
 // check that everything makes sense
 function has_adjacent_cm(cps) {
@@ -173,33 +182,46 @@ function has_adjacent_cm(cps) {
 	}
 }
 for (let cp of valid) {
-	let decomposed = nf.nfd([cp]);
+	let decomposed = NF.nfd([cp]);
 	if (has_adjacent_cm(decomposed)) {
-		throw new Error(`Adjacent CM in Valid : ${spec.format(cp, decomposed)}`);
+		throw new Error(`Adjacent CM in Valid : ${SPEC.format(cp, decomposed)}`);
 	}
 }
 for (let cp of ignored) {
 	if (valid.has(cp)) {
-		throw new Error(`Ignored is valid: ${spec.format(cp)}`);
+		throw new Error(`Ignored is valid: ${SPEC.format(cp)}`);
 	} else if (mapped.has(cp)) {
-		throw new Error(`Ignored is mapped: ${spec.format(cp)}`);
+		throw new Error(`Ignored is mapped: ${SPEC.format(cp)}`);
 	}
 }
 for (let [x, ys] of mapped.entries()) {
 	if (valid.has(x)) {
-		throw new Error(`Mapped is valid: ${spec.format(x)}`);
+		throw new Error(`Mapped is valid: ${SPEC.format(x)}`);
 	}
 	for (let cp of ys) {
 		if (!valid.has(cp)) {
-			throw new Error(`Mapping isn't invalid: ${spec.format(x, ys)} @ ${spec.format(cp)}`);
+			throw new Error(`Mapping isn't invalid: ${SPEC.format(x, ys)} @ ${SPEC.format(cp)}`);
 		}
 	}
-	let decomposed = nf.nfd(ys);
+	let decomposed = NF.nfd(ys);
 	if (has_adjacent_cm(decomposed)) {
-		throw new Error(`Adjacent CM in Mapping: ${spec.format(x, ys, decomposed)}`);
+		throw new Error(`Adjacent CM in Mapping: ${SPEC.format(x, ys, decomposed)}`);
 	}
 	if (ys.includes(0x2E)) {
-		throw new Error(`Mapping includes stop: ${spec.format(x, ys)}`);
+		throw new Error(`Mapping includes stop: ${SPEC.format(x, ys)}`);
+	}
+}
+let cc = new Set(SPEC.chars.filter(x => x.cc > 0).map(x => x.cp)); 
+for (let info of emoji.values()) {
+	let {cps} = info;
+	if (cc.has(cps[0]) || cc.has(cps[cps.length-1])) {
+		console.log(info);
+		throw new Error(`Emoji with non-zero combining class boundary: ${SPEC.format(info)}`);
+	}
+}
+for (let cp of isolated) {
+	if (cc.has(cp)) {
+		throw new Error(`Isolated with non-zero combining class: ${SPEC.format(cp)}`);
 	}
 }
 
@@ -207,21 +229,20 @@ function sorted(v) {
 	return [...v].sort((a, b) => a - b);
 }
 
-let out_dir = new URL('./output/', import.meta.url);
 mkdirSync(out_dir, {recursive: true});
 writeFileSync(new URL('./spec.json', out_dir), JSON.stringify({
 	valid: sorted(valid),
 	ignored: sorted(ignored),
 	mapped: [...mapped.entries()].sort((a, b) => a[0] - b[0]),
 	cm: sorted(cm),
-	emoji: [...emoji.values()].filter(x => !x.picto).map(x => x.cps).sort(compare_arrays),
-	picto: sorted([...emoji.values()].filter(x => x.picto).map(x => x.cps[0]))
+	emoji: [...emoji.values()].map(x => x.cps).sort(compare_arrays),
+	isolated: sorted(isolated)
 }));
 
 writeFileSync(new URL('./nf.json', out_dir), JSON.stringify({
-	ranks: spec.combining_ranks(),
-	exclusions: spec.composition_exclusions(),
-	decomp: spec.decompositions(),
-	qc: spec.nf_props().NFC_QC.map(x => x[0]).sort((a, b) => a - b)
+	ranks: SPEC.combining_ranks(),
+	exclusions: SPEC.composition_exclusions(),
+	decomp: SPEC.decompositions(),
+	qc: SPEC.nf_props().NFC_QC.map(x => x[0]).sort((a, b) => a - b)
 }));
-writeFileSync(new URL('./nf-tests.json', out_dir), JSON.stringify(spec.nf_tests()));
+writeFileSync(new URL('./nf-tests.json', out_dir), JSON.stringify(SPEC.nf_tests()));

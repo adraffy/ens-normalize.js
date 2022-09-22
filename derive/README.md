@@ -4,10 +4,10 @@
 
 ## Instructions
 
-1. `node download.js 15` — download Unicode 15.0.0 files
+1. (optional) `node download.js 15` — download Unicode 15.0.0 files
 	* Uses `Node 18` for `fetch()`
 1. `node make.js` — creates `/output/` with data files
-	* Defaults to Unicode `15.0.0`
+	* Current version specification: [unicode-version.js](./unicode-version.js)
 
 ## Rule Files
 

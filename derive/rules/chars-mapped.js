@@ -29,18 +29,34 @@ export default [
 
 	// more hyphen-likes
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/393
-	[0x23BA, [0x2D]], // 23BA (⎺) HORIZONTAL SCAN LINE-1
-	[0x23BB, [0x2D]], // 23BB (⎻) HORIZONTAL SCAN LINE-3
-	[0x23BC, [0x2D]], // 23BC (⎼) HORIZONTAL SCAN LINE-7
-	[0x23BD, [0x2D]], // 23BD (⎽) HORIZONTAL SCAN LINE-9
-	[0x23E4, [0x2D]], // 23E4 (⏤) STRAIGHTNESS
-	[0x23AF, [0x2D]], // 23AF (⎯) HORIZONTAL LINE EXTENSION
+	[0x23BA, [0x2D]], // (⎺) HORIZONTAL SCAN LINE-1
+	[0x23BB, [0x2D]], // (⎻) HORIZONTAL SCAN LINE-3
+	[0x23BC, [0x2D]], // (⎼) HORIZONTAL SCAN LINE-7
+	[0x23BD, [0x2D]], // (⎽) HORIZONTAL SCAN LINE-9
+	[0x23E4, [0x2D]], // (⏤) STRAIGHTNESS
+	[0x23AF, [0x2D]], // (⎯) HORIZONTAL LINE EXTENSION
 
 	// more hyphen-likes
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/396
-	[0x2043, [0x2D]], // 2043 (⁃) HYPHEN BULLET 
-	[0x2027, [0x2D]], // 2027 (‧) HYPHENATION POINT
-	
+	[0x2043, [0x2D]], // (⁃) HYPHEN BULLET 
+	[0x2027, [0x2D]], // (‧) HYPHENATION POINT
+
+	// more hyphens!
+	[0x58A, [0x2D]], // (֊) ARMENIAN HYPHEN
+	[0x5BE, [0x2D]], // (־) HEBREW PUNCTUATION MAQAF
+	[0x2E1A, [0x2D]], // (⸚) HYPHEN WITH DIAERESIS
+	[0x2E3A, [0x2D]], // (⸺) TWO-EM DASH
+	[0x2E3B, [0x2D]], // (⸻) THREE-EM DASH
+	[0x2E5D, [0x2D]], // (⹝) OBLIQUE HYPHEN
+	[0x301C, [0x2D]], // (〜) WAVE DASH
+	// 10EAD (𐺭) YEZIDI HYPHENATION MARK // i'm not sure what this is
+
+	// double hyphens
+	[0x1400, [0x2D]], // (᐀) CANADIAN SYLLABICS HYPHEN
+	[0x2E17, [0x2D]], // (⸗) DOUBLE OBLIQUE HYPHEN]
+	[0x2E40, [0x2D]], // (⹀) DOUBLE HYPHEN
+	[0x30A0, [0x2D]], // (゠) KATAKANA-HIRAGANA DOUBLE HYPHEN
+
 	// apostrophe convenience 
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/403
 	[0x27, [0x2019]], // 27 (') APOSTROPHE => 2019 (’) RIGHT SINGLE QUOTATION MARK
@@ -135,5 +151,6 @@ export default [
 	// 0x1F17E, // (🅾) NEGATIVE SQUARED LATIN CAPITAL LETTER O
 	// 0x1F17F, // (🅿) NEGATIVE SQUARED LATIN CAPITAL LETTER P
 	// these contain some emoji
+	// promote remainder to picto instead
 
 ];

@@ -5,7 +5,7 @@ import {readFileSync, writeFileSync} from 'node:fs';
 import {ens_normalize} from '../src/lib.js';
 import {random_choice} from '../src/utils.js';
 
-let {valid, mapped, ignored, cm, emoji, picto} = JSON.parse(readFileSync(new URL('../derive/output/spec.json', import.meta.url)));
+let {valid, mapped, ignored, cm, emoji} = JSON.parse(readFileSync(new URL('../derive/output/spec.json', import.meta.url)));
 
 let distrib = [
 	[2, valid],
@@ -13,7 +13,6 @@ let distrib = [
 	[1, ignored],
 	[2, cm],
 	[4, emoji],
-	[1, picto],
 ];
 
 // norm and sort by prob

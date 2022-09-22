@@ -4,6 +4,7 @@ import {parse_version} from './utils.js';
 const FILES = [
 	// UCD
 	['{SPEC}/ucd/UnicodeData.txt'],
+	['{SPEC}/ucd/PropList.txt'],
 	// IDNA
 	['{IDNA}/IdnaMappingTable.txt'],
 	['{IDNA}/IdnaTestV2.txt', /*old*/'{IDNA}/IdnaTest.txt'],

@@ -1,10 +1,9 @@
 // find emoji that are new
 
-import {UnicodeSpec} from './unicode-logic.js';
+import {SPEC} from './unicode-version.js';
 import {version_ordinal} from './utils.js';
 
-const spec = new UnicodeSpec(new URL(`./data/15.0.0/`, import.meta.url));
-const version0 = version_ordinal(spec.version);
+const version0 = version_ordinal(SPEC.version);
 
 let found = new Map();
 function add(cps, info) {
@@ -19,16 +18,16 @@ function add(cps, info) {
 	rec.types.push(info.type);
 }
 
-for (let info of Object.values(spec.emoji_data()).flat()) {
+for (let info of Object.values(SPEC.emoji_data()).flat()) {
 	add([info.cp], info);
 }
-for (let info of Object.values(spec.emoji_seqs()).flat()) {
+for (let info of Object.values(SPEC.emoji_seqs()).flat()) {
 	add(info.cps, info);
 }
-for (let info of Object.values(spec.emoji_zwjs()).flat()) {
+for (let info of Object.values(SPEC.emoji_zwjs()).flat()) {
 	add(info.cps, info);
 }
 
 for (let info of found.values()) {
-	console.log(`${spec.format(info)} <${info.types}>`);
+	console.log(`${SPEC.format(info)} <${info.types}>`);
 }

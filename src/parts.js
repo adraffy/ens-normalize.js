@@ -1,25 +1,49 @@
 import {escape_for_html, is_printable_ascii, hex_cp} from './utils.js';
 
-function format_cps(v) {
-	return escape_for_html(String.fromCodePoint(...v), cp => {
-		if (cp == 0x200C) {
-			return '<span class="mod zwj">ZWNJ</span>';
-		} else if (cp == 0x200D) {
-			return '<span class="mod zwj">ZWJ</span>';
-		} else {
-			return `<code>${hex_cp(cp)}</code>`;
-		}
-	});
-}
-
-function tooltip(cps) {
-	return `Hex: 0x${cps.map(hex_cp).join(' ')}\nDec: ${cps.join(' ')}`;
+function hex_seq(cps) {
+	return cps.map(hex_cp).join(' ');
 }
 
 function create_arrow_span() {
 	let span = document.createElement('span');
 	span.classList.add('arrow');
 	span.innerHTML = '➔'; //'&rarr;';
+	return span;
+}
+
+function span_from_cp(cp, fmtr) {
+	let span = document.createElement('span');
+	if (cp == 0x200D) {
+		span.classList.add('mod', 'zwj');
+		span.innerHTML = 'ZWJ';
+	} else if (cp == 0x200C) {
+		span.classList.add('mod', 'zwj');
+		span.innerHTML = 'ZWNJ';
+	} else if (cp == 0xFE0F) {
+		span.classList.add('mod', 'dropped', 'style');
+		span.innerHTML = 'FE0F';
+	} else if (cp == 0x20E3) {
+		span.classList.add('mod', 'keycap');
+		span.innerHTML = 'Keycap';
+	} else if (cp >= 0xE0020 && cp <= 0xE007F) {
+		cp -= 0xE0000;
+		let ch = String.fromCodePoint(cp);
+		if (cp === 0x7F) {
+			span.classList.add('mod');
+			span.innerHTML = 'TagEnd';
+		} else {
+			if (is_printable_ascii(ch)) {
+				span.innerHTML = ch;
+			} else {
+				span = document.createElement('code');
+				span.innerHTML = hex_cp(cp);
+			}
+			span.classList.add('mod', 'tag');
+		}
+	} else {
+		span.classList.add('raw');
+		span.innerHTML = fmtr(cp);
+	}
 	return span;
 }
 
@@ -42,39 +66,9 @@ export function dom_from_tokens(tokens, before) {
 			let cps = before ? token.input : token.cps;
 			el = document.createElement('a');
 			el.href = `https://emojipedia.org/${String.fromCodePoint(...token.emoji)}`;
+			el.title = `Emoji\n${hex_seq(cps)}`;
 			el.classList.add('glyph');
-			el.append(...cps.map((cp, i) => {
-				let span = document.createElement('span');
-				if (cp == 0x200D) {
-					span.classList.add('mod', 'zwj');
-					span.innerHTML = 'ZWJ';
-				} else if (cp == 0xFE0F) {
-					span.classList.add('mod', 'dropped', 'style');
-					span.innerHTML = 'FE0F';
-				} else if (cp == 0x20E3) {
-					span.classList.add('mod', 'keycap');
-					span.innerHTML = 'Keycap';
-				} else if (cp >= 0xE0020 && cp <= 0xE007F) {
-					cp -= 0xE0000;
-					let ch = String.fromCodePoint(cp);
-					if (cp === 0x7F) {
-						span.classList.add('mod');
-						span.innerHTML = 'TagEnd';
-					} else {
-						if (is_printable_ascii(ch)) {
-							span.innerHTML = ch;
-						} else {
-							span = document.createElement('code');
-							span.innerHTML = hex_cp(cp);
-						}
-						span.classList.add('mod', 'tag');
-					}
-				} else {
-					span.classList.add('emoji');
-					span.innerHTML = String.fromCodePoint(cp);
-				}
-				return span;
-			}));
+			el.append(...cps.map(cp => span_from_cp(cp, String.fromCodePoint)));
 		} else if (token.type === 'nfc') {
 			el = document.createElement('div');
 			el.classList.add('nfc');
@@ -82,42 +76,45 @@ export function dom_from_tokens(tokens, before) {
 			lhs.classList.add('before');
 			let rhs = document.createElement('div');
 			rhs.classList.add('valid');
-			rhs.innerHTML = format_cps(token.cps);
-			rhs.title = tooltip(token.cps);
+			rhs.innerHTML = String.fromCodePoint(...token.cps);
+			rhs.title = `NFC\n${hex_seq(token.cps)}`;
 			el.append(lhs, create_arrow_span(), rhs);
 		} else {
 			el = document.createElement('div');
 			if (token.type === 'valid') {
 				el.classList.add('valid');
-				el.innerHTML = format_cps(token.cps);
-				el.title = tooltip(token.cps);
+				el.innerHTML = String.fromCodePoint(...token.cps);
+				el.title = `Valid\n${hex_seq(token.cps)}`;
 			} else if (token.type === 'mapped') {
 				el.classList.add('mapped');
 				let span = document.createElement('span');
 				span.classList.add('before');
-				span.innerHTML = format_cps([token.cp]);	
-				span.title = tooltip([token.cp]);
+				span.innerHTML = String.fromCodePoint(token.cp);	
+				span.title = `Mapped\n${hex_cp(token.cp)}`;
 				el.append(span);
 				if (!before) {
 					el.append(create_arrow_span(), ...token.cps.map(cp => {
 						let span = document.createElement('span');
-						span.innerHTML = format_cps([cp]);	
-						span.title = tooltip([cp])
+						span.innerHTML = String.fromCodePoint(cp);	
+						span.title = hex_cp(cp);
 						return span;
 					}));
 				}
 			} else if (token.type === 'ignored') {
-				el = document.createElement('code');
 				el.innerHTML = hex_cp(token.cp); 
-				el.title = tooltip([token.cp]);
+				el.title = `Ignored\n${hex_cp(token.cp)}`;
 				el.classList.add('ignored');
 			} else if (token.type === 'disallowed') {
+				el = span_from_cp(token.cp, hex_cp);
 				el.classList.add('disallowed');
-				el.innerHTML = format_cps([token.cp]);
-				el.title = tooltip([token.cp]);
+				el.title = `Disallowed\n${hex_cp(token.cp)}`;
 			} else if (token.type === 'stop') {
 				el.classList.add('stop');
 				el.innerHTML = '.';
+			} else if (token.type === 'isolated') {
+				el.classList.add('isolated');
+				el.innerHTML = String.fromCodePoint(token.cp);
+				el.title = `Valid (Isolated)\n${hex_cp(token.cp)}`;
 			} else {
 				throw new TypeError(`unknown token type: ${token.type}`);
 			}
@@ -157,9 +154,23 @@ export function use_default_style() {
 		color: #fff;
 		background: #aaa;
 		min-width: 5px;
+		font-size: 65%;
+		font-family: monospace;
+		border-radius: 5px;
 	}
 	.tokens .disallowed {
-		background: #f66;	
+		background: #c00;	
+		border-radius: 5px;
+		color: #fff;
+	}
+	.tokens .disallowed.raw {
+		font-size: 65%;		
+		font-family: monospace;
+		background: #800;
+	}
+	.tokens .disallowed.mod {
+		border: 2px solid #800;
+		font-size: 80%;
 	}
 	.tokens .mapped {
 		display: flex;
@@ -174,6 +185,11 @@ export function use_default_style() {
 	.tokens .stop {
 		font-weight: bold;
 	}
+	.tokens .isolated {
+		border: 2px solid #87e;
+		border-radius: 5px;
+		background: #ecf;
+	}
 	.tokens .glyph {
 		border: 2px solid #0aa;
 		border-radius: 5px;
@@ -182,19 +198,20 @@ export function use_default_style() {
 	.tokens .mod {
 		font-size: 70%;
 		padding: 2px;
-		background: #333;
 		color: #fff;
 		border-radius: 5px;
 	}
-	.tokens .mod.zwj {
+	.tokens .glyph .mod {
+		background: #333;		
+	}
+	.tokens .glyph .mod.zwj {
 		background: #0aa;
 	}
-	.tokens .mod.tag {
+	.tokens .glyph .mod.tag {
 		background: #33f;
 	}
-	.tokens .mod.dropped {
-		background: #aaa;
-		min-width: 5px;
+	.tokens .glyph .mod.dropped {
+		background: #aaa;		
 	}
 	.tokens .arrow {
 		color: rgba(0, 0, 0, 0.35);
@@ -204,14 +221,6 @@ export function use_default_style() {
 		border: 2px solid #fa0;
 		background: #fd8;
 		border-radius: 5px;
-	}
-	.tokens code {
-		font-size: 90%;
-		padding: 2px;
-		border-radius: 5px;
-		color: #fff;
-		background: rgba(0, 0, 0, .3);
-		align-self: center;
 	}`;
 	document.body.append(style);
 }

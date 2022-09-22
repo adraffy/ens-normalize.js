@@ -32,6 +32,7 @@ function ens_normalize_via_tokenize(name) {
 			case 'disallowed': throw new Error('disallowed'); 
 			case 'ignored': return '';
 			case 'stop': return '.';
+			case 'isolated': return String.fromCodePoint(token.cp);
 			default: return str_from_cps(token.cps);
 		}
 	}).join(''));

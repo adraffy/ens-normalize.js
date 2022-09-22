@@ -1,4 +1,4 @@
-import {parse_cp, parse_cp_range, parse_cp_sequence, hex_cp} from './utils.js';
+import {parse_cp, parse_cp_range, parse_cp_sequence, hex_cp, hex_seq} from './utils.js';
 import {readFileSync} from 'node:fs';
 
 export function parse_semicolon_file(file, impl = {}) {
@@ -116,17 +116,11 @@ export class UnicodeSpec {
 			}
 			ret = `${hex_cp(x)} (${form}) ${this.get_name(x)}`;
 		} else if (Array.isArray(x)) {
-			if (x.length == 1) {
-				ret = this.format(x[0]);
-			} else {
-				ret = '[' + x.map(hex_cp).join(' ') + ']';
-			}
+			ret = x.length === 1 ? this.format(x[0]) : hex_seq(x);
+		} else if (typeof x.cp === 'number') {
+			ret = `${hex_cp(x.cp)} (${String.fromCodePoint(x.cp)}) ${x.name}`;
 		} else {
-			if (typeof x.cp === 'number')  {
-				ret = this.format(x.cp);
-			} else {
-				ret = `${this.format(x.cps)} (${String.fromCodePoint(...x.cps)}) ${x.name}`;
-			}
+			ret = `${hex_seq(x.cps) } (${String.fromCodePoint(...x.cps)}) ${x.name}`;
 		}
 		if (a.length) {
 			ret = `${ret} => ${this.format(...a)}`;
@@ -136,6 +130,15 @@ export class UnicodeSpec {
 		// 202D   LTR OVERRIDE
 		// 202E   RTL OVERRIDE
 		return ret.replace(/[\x00-\x19\x7F\u202E\u202D]/gu, '?');
+	}
+	props() {
+		// 0009..000D    ; White_Space # Cc   [5] <control-0009>..<control-000D>
+		// 0020          ; White_Space # Zs       SPACE
+		return parse_semicolon_file(new URL('./PropList.txt', this.dir), {
+			row([src, type]) {
+				this.get_bucket(type).push(...parse_cp_range(src));
+			}
+		});
 	}
 	combining_ranks() {
 		// return list of codepoints in order by increasing combining class

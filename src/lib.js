@@ -11,6 +11,8 @@ const VALID = new Set(SORTED_VALID);
 const IGNORED = new Set(read_member_array(r));
 const MAPPED = new Map(read_mapped(r));
 const CM = new Set(read_member_array(r, SORTED_VALID));
+const ISOLATED = new Set(read_member_array(r, SORTED_VALID));
+const EMOJI_SOLO = new Set(read_member_array(r));
 const EMOJI_ROOT = read_emoji_trie(r);
 const NFC_CHECK = new Set(read_member_array(r, SORTED_VALID));
 
@@ -34,7 +36,9 @@ function check_label_extension(cps) {
 	}
 }
 
-function check_isolated(cps, cp, name, no_leading, no_trailing) {
+// check that cp is not touching another cp
+// optionally disallow leading/trailing
+function check_surrounding(cps, cp, name, no_leading, no_trailing) {
 	let last = -1;
 	if (cps[0] === cp) {
 		if (no_leading) throw new Error(`leading ${name}`);
@@ -70,8 +74,11 @@ function check_cm(cps) {
 				throw new Error(`leading combining mark`);
 			} else if (i == j) {
 				throw new Error(`adjacent combining marks "${str_from_cps(cps.slice(i - 2, i + 1))}"`);
-			} else if (cps[i - 1] == FE0F) {
-				throw new Error(`emoji + combining mark`);
+			} else {
+				let prev = cps[i - 1];
+				if (prev == FE0F || ISOLATED.has(prev)) {
+					throw new Error(`illegal combining mark`);
+				}
 			}	
 			j = i + 1;
 		}
@@ -85,9 +92,10 @@ export function ens_normalize_post_check(norm) {
 			let cps_nfc = explode_cp(label);
 			check_leading_underscore(cps_nfc);
 			check_label_extension(cps_nfc);
-			check_isolated(cps_nfc, 0x2019, 'apostrophe', true, true);
+			check_surrounding(cps_nfc, 0x2019, 'apostrophe', true, true);
 			check_middle_dot(cps_nfc);
-			let cps_nfd = nfd(process(label, () => [FE0F])); // replace emoji with single character
+			// replace emoji with single character
+			let cps_nfd = nfd(process(label, () => [FE0F])); 
 			check_cm(cps_nfd);
 		} catch (err) {
 			throw new Error(`Invalid label "${label}": ${err.message}`);
@@ -106,15 +114,10 @@ export function ens_normalize(name) {
 
 // note: does not post_check
 // insert 200B between regional indicators so they do not collapse into flags
+// alternative solution: only allow valid flags
 export function ens_beautify(name) {
-	return str_from_cps(nfc(process(name, emoji => emoji))).replace(/[\u{1F1E6}-\u{1F1FF}]{2,}/gu, s => [...s].join('\u200B'));
+	return str_from_cps(nfc(process(name, x => x))).replace(/[\u{1F1E6}-\u{1F1FF}]{2,}/gu, s => [...s].join('\u200B'));
 }
-
-/*
-function is_regional_indicator(cp) {
-	return 0x1F1E6 >= cp && 0x1F1FF <= cp;
-}
-*/
 
 function filter_fe0f(cps) {
 	return cps.filter(cp => cp != FE0F);
@@ -127,22 +130,19 @@ function process(name, emoji_filter) {
 		let emoji = consume_emoji_reversed(input);
 		if (emoji) {
 			output.push(...emoji_filter(emoji)); // idea: emoji_filter(emoji, output.length); // provide position to callback
-			continue;
+		} else {
+			let cp = input.pop();
+			if (VALID.has(cp)) {
+				output.push(cp);
+			} else if (!IGNORED.has(cp)) {
+				let cps = MAPPED.get(cp);
+				if (cps) {
+					output.push(...cps);
+				} else {
+					throw new Error(`Disallowed codepoint: 0x${hex_cp(cp)}`);
+				}
+			}
 		}
-		let cp = input.pop();
-		if (VALID.has(cp)) {
-			output.push(cp);
-			continue;
-		} 
-		if (IGNORED.has(cp)) {
-			continue;
-		}
-		let cps = MAPPED.get(cp);
-		if (cps) {
-			output.push(...cps);
-			continue;
-		}
-		throw new Error(`Disallowed codepoint: 0x${hex_cp(cp)}`);
 	}
 	return output;
 }
@@ -175,20 +175,27 @@ function consume_emoji_reversed(cps, eaten) {
 			cps.length = pos; // truncate
 		}
 	}
+	if (!emoji) {
+		let cp = cps[cps.length-1];
+		if (EMOJI_SOLO.has(cp)) {
+			if (eaten) eaten.push(cp);
+			emoji = [cp];
+			cps.pop();
+		}
+	}
 	return emoji;
 }
 
 // create a copy and fix any unicode quirks
 function conform_emoji_copy(cps, node) {
 	let copy = cps.slice(); // copy stack
-	if (node.valid == 2) copy.splice(1, 1); // delete FE0F at position 1 (RGI ZWJ don't follow spec!, see: make.js)
+	if (node.valid == 2) copy.splice(1, 1); // delete FE0F at position 1 (see: make.js)
 	return copy;
 }
 
-// return all supported emoji
-// not sorted
+// return all supported emoji (not sorted)
 export function ens_emoji() {
-	let ret = [];
+	let ret = [...EMOJI_SOLO].map(x => [x]);
 	build(EMOJI_ROOT, []);
 	return ret;
 	function build(node, cps, saved) {
@@ -215,6 +222,7 @@ const TY_MAPPED = 'mapped';
 const TY_IGNORED = 'ignored';
 const TY_DISALLOWED = 'disallowed';
 const TY_EMOJI = 'emoji';
+const TY_ISOLATED = 'isolated';
 const TY_NFC = 'nfc';
 const TY_STOP = 'stop';
 
@@ -231,9 +239,13 @@ export function ens_tokenize(name) {
 			if (cp === STOP) {
 				tokens.push({type: TY_STOP});
 			} else if (VALID.has(cp)) {
-				tokens.push({type: TY_VALID, cps: [cp]});
+				if (ISOLATED.has(cp)) {
+					tokens.push({type: TY_ISOLATED, cp});
+				} else {
+					tokens.push({type: TY_VALID, cps: [cp]});
+				}
 			} else if (IGNORED.has(cp)) {
-				tokens.push({type: TY_IGNORED, cp})
+				tokens.push({type: TY_IGNORED, cp});
 			} else {
 				let cps = MAPPED.get(cp);
 				if (cps) {

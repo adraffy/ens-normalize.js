@@ -17,4 +17,4 @@ console.log(ens_emoji().length);
 //debug(String.fromCodePoint(0x31,0x309,0x307,0x31,0x307,0x309));
 
 // readme example
-debug('R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./');
+debug('_R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./');

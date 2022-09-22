@@ -2,10 +2,11 @@ import {Encoder, unsafe_btoa} from './encoder.js';
 import {readFileSync, writeFileSync} from 'node:fs';
 
 let data_dir = new URL('../derive/output/', import.meta.url);
-let {valid, mapped, ignored, cm, picto, emoji} = JSON.parse(readFileSync(new URL('./spec.json', data_dir)));
+let {valid, mapped, ignored, cm, isolated, emoji} = JSON.parse(readFileSync(new URL('./spec.json', data_dir)));
 let {ranks, decomp, exclusions, qc} = JSON.parse(readFileSync(new URL('./nf.json', data_dir)));
 
-let emoji_seqs = [picto.map(x => [x]), emoji].flat();
+let emoji_solo = emoji.filter(v => v.length == 1);
+let emoji_seqs = emoji.filter(v => v.length >= 2);
 
 // union of non-zero combining class + nfc_qc
 let nfc_check = [...new Set([ranks, qc].flat(Infinity))];
@@ -99,27 +100,31 @@ root.scan((node, path) => {
 });
 
 // check every emoji sequence for non-standard FE0F handling
+// emoji in zwj dont obey emoji presentation rules
+// this should only happen with the second character of the first emoji
+// eg. "A FE0F" vs. "A ZWJ B"
 for (let cps of emoji_seqs) {
 	let node = root;
-	let bits = 0;
-	let n = 0;
-	for (let i = 0; i < cps.length; ) {
+	let i = 0;
+	let n = 0; // number of fe0f
+	let quirk;
+	while (i < cps.length) {
 		let cp = cps[i++];
-		node = node.branches[cp];
-		if (node.fe0f) {
-			if (i < cps.length && cps[i] == 0xFE0F) {
+		node = node.branches[cp]; // must exist
+		if (i < cps.length && node.fe0f) {
+			if (cps[i] == 0xFE0F) {
 				i++;
 			} else {
-				// emoji in zwj dont obey emoji presentation rules
-				// this should only happen with the first emoji
 				if (n != 0) throw new Error('expected first FE0F');
 				if (i != 1) throw new Error('expected second character');
-				bits |= 1 << n;
+				//console.log('quirk', cps, i, n);
+				//bits |= 1 << n;
+				quirk = true;
 			}
 			n++;
 		}
 	}
-	node.bits = bits; // 0 or 1
+	node.quirk = quirk;
 }
 
 // compress
@@ -134,7 +139,7 @@ function encode_emoji(enc, node, map) {
 		encode_emoji(enc, x, map);
 	}
 	enc.write_member([]);
-	let flag = node.bits ? 2 : node.valid ? 1 : 0;
+	let flag = node.quirk ? 2 : node.valid ? 1 : 0;
 	let mod = node.check_mod ? 2 : node.save_mod ? 1 : 0;
 	let fe0f = node.fe0f ? 1 : 0;
 	//enc.unsigned(6*valid + 2*mod + fe0f); // 11888
@@ -170,6 +175,8 @@ enc.write_mapped([
 //	[4, 1, 0],
 ], mapped); //.map(kv => [kv[0], kv[1].map(x => sorted_valid_map[x])])); // not worth it
 enc.write_member(cm.map(cp => sorted_valid_map[cp]));
+enc.write_member(isolated.map(cp => sorted_valid_map[cp]));
+enc.write_member(emoji_solo.map(v => v[0]));
 enc.write_member(sorted_emoji);
 encode_emoji(enc, root, sorted_emoji_map);
 //write('include-only'); // only saves 300 bytes

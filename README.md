@@ -7,9 +7,10 @@
 	* Passes [**100%**](https://adraffy.github.io/ens-normalize.js/test/report-nf.html) Unicode `15.0.0` [Normalization Tests](https://www.unicode.org/Public/15.0.0/ucd/NormalizationTest.txt)
 * Minified File Sizes: 
 	* [`22KB`](./dist/index-xnf.min.js) — native `NFC` via [nf-native.js](./src/nf-native.js) using `String.normalize()`
-	* [`30KB` **Default** ](./dist/index.min.js) — custom `NFC` via [nf.js](./src/nf.js)
-	* [`37KB`](./dist/all.min.js) *Everything!* — custom `NFC` + [@adraffy/punycode.js](https://github.com/adraffy/punycode.js) + sub-libraries: [dns.js](./src/dns.js), [parts.js](./src/parts.js), [utils.js](./src/utils.js)
+	* [`31KB` **Default** ](./dist/index.min.js) — custom `NFC` via [nf.js](./src/nf.js)
+	* [`38KB`](./dist/all.min.js) *Everything!* — custom `NFC` + [@adraffy/punycode.js](https://github.com/adraffy/punycode.js) + sub-libraries: [dns.js](./src/dns.js), [parts.js](./src/parts.js), [utils.js](./src/utils.js)
 * [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
+* [List of Supported Emoji](https://adraffy.github.io/ens-normalize.js/test/emoji.html)
 
 ```Javascript
 import {ens_normalize} from '@adraffy/ens-normalize';
@@ -49,9 +50,10 @@ let norm_gTLD = ens_normalize_post_check('eth');
 Instead of exposing an IDNA-like API (`is_valid()`, `get_mapped()`, etc.), this library exposes a single function which converts names to tokens:
 ```JavaScript
 // string -> Token[]
-let tokens = ens_tokenize('R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./'); // never throws
+let tokens = ens_tokenize('_R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./'); // never throws
 // [
-//     { 
+//     { type: 'isolated', cp: 95 }, // valid w/restrictions
+//     {                             // (eg. no combining marks)
 //         type: 'mapped', 
 //         cp: 82,         // input
 //         cps: [ 114 ]    // output
@@ -92,17 +94,17 @@ console.log(ens_emoji());
 
 ## Build
 
-* `git clone` this repo then `npm install` 
+* `git clone` this repo, then `npm install` 
 * Follow instructions in [/derive/](./derive/) to generate data files
 	* `npm run derive` 
 		* [spec.json](./derive/output/spec.json)
 		* [nf.json](./derive/output/nf.json)
 		* [nf-tests.json](./derive/output/nf-tests.json)
-* `npm run make` to compress data files from `/derive/output/`
+* `npm run make` — compress data files from `/derive/output/`
 	* [include-ens.js](./src/include-ens.js)
 	* [include-nf.js](./src/include-nf.js)
 * Follow instructions in [/validate/](./validate/) to generate validation tests
-	* `npm run validate` &rarr; creates `tests.json`
+	* `npm run validate`
 		* [tests.json](./validate/tests.json)
-* `npm run test` to perform validation tests
-* `npm run build` create `/dist/`
+* `npm run test` — perform validation tests
+* `npm run build` — create `/dist/`
