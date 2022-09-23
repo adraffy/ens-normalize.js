@@ -1,6 +1,5 @@
-import { readFileSync } from 'node:fs';
+import {readFileSync} from 'node:fs';
 import {ens_normalize, ens_tokenize, ens_normalize_post_check} from '../src/lib.js';
-import {str_from_cps} from '../src/utils.js';
 
 const TESTS = JSON.parse(readFileSync(new URL('../validate/tests.json', import.meta.url)));
 
@@ -33,7 +32,7 @@ function ens_normalize_via_tokenize(name) {
 			case 'ignored': return '';
 			case 'stop': return '.';
 			case 'isolated': return String.fromCodePoint(token.cp);
-			default: return str_from_cps(token.cps);
+			default: return String.fromCodePoint(...token.cps);
 		}
 	}).join(''));
 }

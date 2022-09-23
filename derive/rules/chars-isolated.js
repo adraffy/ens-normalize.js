@@ -5,6 +5,8 @@ export default [
 	0x005F, // (_) LOW LINE
 	0x2019, // (’) RIGHT SINGLE QUOTATION MARK
 	0x2044, // (⁄) FRACTION SLASH
+	0x00AC, // (¬) NOT SIGN
+	0x2310, // (⌐) REVERSED NOT SIGN
 
 	// bullets
 	0x2022, // (•) BULLET

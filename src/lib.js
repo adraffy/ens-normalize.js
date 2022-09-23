@@ -82,14 +82,14 @@ function check_scripts_latin_like(cps) {
 			for (let j = i + 1; j < SCRIPTS.length; j++) {
 				let [name_j, set_j] = SCRIPTS[j];
 				if (cps.some(cp => set_j.has(cp))) {
-					throw new Error(`Mixed-script confusable: ${name} + ${name_j}`);
+					throw new Error(`mixed-script confusable: ${name} + ${name_j}`);
 				}
 			}
 			if (whole_set) { // aka non-latin
 				// https://www.unicode.org/reports/tr39/#def_whole_script_confusables
 				// if every char matches the script is confusable
 				if (cps.every(cp => !script_set.has(cp) || whole_set.has(cp))) {
-					throw new Error(`Whole-script confusable: ${name}`);
+					throw new Error(`whole-script confusable: ${name}`);
 				}
 			}
 		}

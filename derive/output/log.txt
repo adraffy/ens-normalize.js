@@ -1,4 +1,4 @@
-Build Date: 2022-09-23T08:57:33.467Z
+Build Date: 2022-09-23T10:53:55.507Z
 Unicode Version: 15.0.0
 Register Emoji: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -3718,8 +3718,6 @@ Removed Valid: A6 (¦) BROKEN BAR
 --Mapping: FFE4 (￤) FULLWIDTH BROKEN BAR => A6 (¦) BROKEN BAR
 Removed Valid: A7 (§) SECTION SIGN
 Removed Valid: AB («) LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
-Removed Valid: AC (¬) NOT SIGN
---Mapping: FFE2 (￢) FULLWIDTH NOT SIGN => AC (¬) NOT SIGN
 Removed Valid: BB (») RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
 Removed Valid: D7 (×) MULTIPLICATION SIGN
 Removed Valid: F7 (÷) DIVISION SIGN
@@ -4685,6 +4683,8 @@ Isolated: 2D (-) HYPHEN-MINUS
 Isolated: 5F (_) LOW LINE
 Isolated: 2019 (’) RIGHT SINGLE QUOTATION MARK
 Isolated: 2044 (⁄) FRACTION SLASH
+Isolated: AC (¬) NOT SIGN
+Isolated: 2310 (⌐) REVERSED NOT SIGN
 Isolated: 2022 (•) BULLET
 Isolated: 25C9 (◉) FISHEYE
 Isolated: 25CA (◊) LOZENGE

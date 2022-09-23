@@ -10,12 +10,16 @@ interface ValidToken {
 	type: 'valid';
 	cps: number[];
 }
+interface IsolatedToken {
+	type: 'isolated';
+	cp: number;
+}
 interface MappedToken {
 	type: 'mapped';	
 	cp: number;
 	cps: number[];
 }
-type TextToken = DisallowedToken | IgnoredToken | ValidToken | MappedToken;
+type TextToken = DisallowedToken | IgnoredToken | ValidToken | IsolatedToken | MappedToken;
 interface EmojiToken {
 	type: 'emoji';
 	input: number[];
