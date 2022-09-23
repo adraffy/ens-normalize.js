@@ -1,4 +1,4 @@
-import {parse_cp, parse_cp_range, parse_cp_sequence, hex_cp, hex_seq} from './utils.js';
+import {parse_cp, parse_cp_range, parse_cp_sequence, hex_cp, hex_seq, explode_cp} from './utils.js';
 import {readFileSync} from 'node:fs';
 
 export function parse_semicolon_file(file, impl = {}) {
@@ -139,6 +139,49 @@ export class UnicodeSpec {
 				this.get_bucket(type).push(...parse_cp_range(src));
 			}
 		});
+	}
+	prop_values() {
+		// AHex; N ; No ; F ; False
+		//sc ; Latn ; Latin
+		return parse_semicolon_file(new URL('./PropertyValueAliases.txt', this.dir), {
+			row([key, ...a]) {
+				this.get_bucket(key).push(a);
+			}
+		});
+	}
+	scripts({abbr = false} = {}) {
+		// 0000..001F    ; Common # Cc  [32] <control-0000>..<control-001F>
+		// 0020          ; Common # Zs       SPACE
+		let m = Object.entries(parse_semicolon_file(new URL('./Scripts.txt', this.dir), {
+			row([src, type]) {
+				this.get_bucket(type).push(...parse_cp_range(src));
+			}
+		}));
+		if (abbr) {
+			let map = Object.fromEntries(this.prop_values().sc.map(v => [v[1], v[0]])); // Latn => Latin
+			for (let i = 0; i < m.length; i++) {
+				let abbr = map[m[i][0]];
+				if (abbr) {
+					m[i][0] = abbr;
+				}
+			}
+		}
+		return m;
+	}
+	confusables() {
+		// thes are SINGLE CHARCTERS that confuse with a SEQUENCE
+		// Each line in the data file has the following format: 
+		// - Field 1 is the source, 
+		// - Field 2 is the target,
+		// - Field 3 is obsolete, always containing the letters “MA” for backwards compatibility. 
+		// 06E8 ;	0306 0307 ;	MA	# ( ۨ → ̆̇ ) ARABIC SMALL HIGH NOON → COMBINING BREVE, COMBINING DOT ABOVE
+		// 0310 ;	0306 0307 ;	MA	# ( ̐ → ̆̇ ) COMBINING CANDRABINDU → COMBINING BREVE, COMBINING DOT ABOVE
+		return Object.entries(parse_semicolon_file(new URL('./confusables.txt', this.dir), {
+			row([src, target]) {
+				let key = String.fromCodePoint(...parse_cp_sequence(target));
+				this.get_bucket(key).push(parse_cp(src));
+			}
+		})).map(([key, cps]) => [explode_cp(key), cps]);
 	}
 	combining_ranks() {
 		// return list of codepoints in order by increasing combining class

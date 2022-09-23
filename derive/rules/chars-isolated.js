@@ -1,9 +1,12 @@
 export default [
 	
+	// supported punctuation
 	0x002D, // (-) HYPHEN-MINUS
 	0x005F, // (_) LOW LINE
+	0x2019, // (’) RIGHT SINGLE QUOTATION MARK
 	0x2044, // (⁄) FRACTION SLASH
 
+	// bullets
 	0x2022, // (•) BULLET
 	0x25C9, // (◉) FISHEYE
 	0x25CA, // (◊) LOZENGE

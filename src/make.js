@@ -2,7 +2,7 @@ import {Encoder, unsafe_btoa} from './encoder.js';
 import {readFileSync, writeFileSync} from 'node:fs';
 
 let data_dir = new URL('../derive/output/', import.meta.url);
-let {valid, mapped, ignored, cm, isolated, emoji} = JSON.parse(readFileSync(new URL('./spec.json', data_dir)));
+let {valid, mapped, ignored, cm, isolated, emoji, scripts, wholes} = JSON.parse(readFileSync(new URL('./spec.json', data_dir)));
 let {ranks, decomp, exclusions, qc} = JSON.parse(readFileSync(new URL('./nf.json', data_dir)));
 
 let emoji_solo = emoji.filter(v => v.length == 1);
@@ -176,6 +176,11 @@ enc.write_mapped([
 ], mapped); //.map(kv => [kv[0], kv[1].map(x => sorted_valid_map[x])])); // not worth it
 enc.write_member(cm.map(cp => sorted_valid_map[cp]));
 enc.write_member(isolated.map(cp => sorted_valid_map[cp]));
+enc.write_member(scripts.Latn.map(cp => sorted_valid_map[cp]));
+enc.write_member(scripts.Grek.map(cp => sorted_valid_map[cp]));
+ enc.write_member(wholes.Grek.map(cp => sorted_valid_map[cp]));
+enc.write_member(scripts.Cyrl.map(cp => sorted_valid_map[cp]));
+ enc.write_member(wholes.Cyrl.map(cp => sorted_valid_map[cp]));
 enc.write_member(emoji_solo.map(v => v[0]));
 enc.write_member(sorted_emoji);
 encode_emoji(enc, root, sorted_emoji_map);

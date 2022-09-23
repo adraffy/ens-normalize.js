@@ -2,20 +2,29 @@
 
 * Independent of parent repo
 
+## Data Files
+
+* `node download.js` — download latest Unicode data files
+	* Uses `Node 18` for `fetch()`
+	* Download older version: `node download.js 12.1.0` 
+	* Already included: [Unicode 11-15](./data/)
+* `node parse-cldr.js` — download latest CLDR files
+	* These aren't versioned with Unicode!
+		* [regions.json](./data/regions.json)
+
 ## Instructions
 
-1. (optional) `node download.js 15` — download Unicode 15.0.0 files
-	* Uses `Node 18` for `fetch()`
+1. edit [Unicode Version](./unicode-version.js)
+1. edit [Rules Files](#rule-files)
 1. `node make.js` — creates `/output/` with data files
-	* Current version specification: [unicode-version.js](./unicode-version.js)
 
 ## Rule Files
 
 * [chars-valid.js](./rules/chars-valid.js)
 * [chars-mapped.js](./rules/chars-mapped.js)
 * [chars-disallow.js](./rules/chars-disallow.js) 
-* [picto-promoted.js](./rules/picto-promoted.js) — non-emoji characters handled by extended pictographic processing (= emoji)
-* [emoji-demoted.js](./rules/emoji-demoted.js) — emoji characters handled by text processing
+* [chars-isolated.js](./rules/chars-isolated.js) — valid w/extra restrictions
+* [emoji-demoted.js](./rules/emoji-demoted.js) — emoji procssed as text
 * [emoji-seq-whitelist.js](./rules/emoji-seq-whitelist.js)
 * [emoji-seq-blacklist.js](./rules/emoji-seq-blacklist.js)
 

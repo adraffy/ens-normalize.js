@@ -127,6 +127,7 @@ input[type=checkbox]:checked + label.nonstd {
 }
 .row.skipped {
 	background: #efe;
+	border: 3px dashed #fcc;
 }
 .row.owner {
 	background: #ffd;
@@ -351,6 +352,7 @@ footer {
 <button data-name="{330}">Leading</button>
 <button data-name="x{305}{330}">Adjacent</button>
 <button data-name="💩{330}">Emoji</button>
+<button data-name="-{330}">Isolated</button>
 <button data-name="ǖ">Decomposed</button>
 
 <b>Whitespace:</b>
@@ -362,29 +364,28 @@ footer {
 <button>。</button>
 <button>．</button>
 <button>｡</button>
+<button>۔</button>
 
 <a href="https://unicode.org/reports/tr46/#Validity_Criteria"><b>CheckHyphen:</b></a>
 <button>-test</button>
 <button>test-</button>
-<button data-name="te--st">❌te--st</button>
+<button>❌te--st</button>
 
 <b>Underscore:</b>
 <button>__z</button>
-<button data-name="a_b">❌a_b</button>
+<button>❌a_b</button>
 
 <b>Goofy:</b>
 <button data-name="[ba967c160905ade030f84952644a963994eeaed3881a6b8a4e9c8cbe452ad7a2].eth" data-skip="1">"💩.eth"</button>
 
 <a href="./emoji.html"><b>Emoji:</b></a>
+<button id="random_emoji_btn">Random</button>
 <button>©</button>
 <button>🛥</button>
 <button>🚀🚀🚀</button>
 <button>💩💩💩</button>
-<button>👁💜🐮☕💎</button>
 <button>🚴‍♀️🚴‍♂️🚴🚴🏻🚴🏼🚴🏽🚴🏾🚴🏿</button>
 <button>👁️‍🗨️</button>
-<button>🌈rainbow</button>
-<button>🏳️‍🌈</button>
 <button>🧟‍♂</button>
 <button>🧟♂</button>
 <button>😵‍💫😵‍💫😵‍💫</button>
@@ -403,13 +404,16 @@ footer {
 <button>🇺🇸🇺🇲</button>
 <button data-name="{1F1FA}{200B}{1F1F8}{200B}{1F1FA}{200B}{1F1F2}"></button>
 
+<b>Flag:</b>
+<button>🏴</button>
+<button>🏁️</button>
+<button>🏳️‍🌈</button>
+
 <b>Tag:</b>
 <button data-name="{1F3F4}{E0067}{E0062}{E0065}{E006E}{E0067}{E007F}" data-replace></button>
 <button data-name="{1F3F4}{E0067}{E0062}{E0073}{E0063}{E0074}{E007F}" data-replace></button>
 <button data-name="{1F3F4}{E0067}{E0062}{E0077}{E006C}{E0073}{E007F}" data-replace></button>
 <button data-name="{1F3F4}{E0075}{E0073}{E0063}{E0061}{E007F}">❌usca</button>
-<button data-name="{1F3F4}{E0077}{E0074}{E0066}{E007F}">❌wtf</button>
-<button data-name="{1F3F4}">"🏴"</button>
 
 <b>Circled/Squared:</b>
 <button>mmm</button>
@@ -469,16 +473,22 @@ Katakana:
 <b>Currency:</b>
 <button>$¢£¤¥€₿</button>
 
-<b><a href="https://unicode-org.github.io/cldr-staging/charts/latest/by_type/core_data.alphabetic_information.main.html">Single-Script:</a></b>
+
+<a href="https://util.unicode.org/UnicodeJsps/confusables.jsp">Confusables</a>/
+<a href="https://unicode-org.github.io/cldr-staging/charts/latest/by_type/core_data.alphabetic_information.main.html">Exemplars</a>
+<b>Single Script:</b>
+<button>aɑ</button>
+
+<b>Mixed-Script:</b>
 <button data-name="1a〆">Digit+Latin+Han</button>
-<button data-name="aрe">aрe</button>
-<button data-name="{450}{E8}"></button>
+<button>дре</button>
+<button>❌aрe</button>
+<button>❌ѐè</button>
 
 <b>Whole-Script:</b>
-<button>аррӏе</button>
-
-<b><a href="https://util.unicode.org/UnicodeJsps/confusables.jsp">Confusable:</a></b>
-<button>aɑ</button>
+<button>дррӏе</button>
+<button>❌аррӏе</button>
+<button>❌ρον</button>
 
 <b>Arabic-Indic:</b>
 <button data-name="{661}{662}{663}"></button>
@@ -515,6 +525,7 @@ Katakana:
 <div id="controls">
 <div id="arrows" class="hide"><div class="arrows"></div></div>
 <div class="balloon"></div>
+<button id="nf_btn">NFD↔NFC</button>
 <button id="escape_btn">Escape</button>
 <button id="link_btn">Copy Link</button>
 <button id="resolve_btn">Resolve</button>
@@ -523,7 +534,7 @@ Katakana:
 <ul class="row">
 <li>Click an <button data-name="bRANtly.eth">Example</button> to see how it works.</li>
 <li>Use <code>{FF}</code> or <code>[255]</code> to manually include codepoints, eg. <button data-escape data-name="a{200D}b.eth">ZWJ</button></li>
-<li>Input <code>"0123 4567 89AB CDEF"</code> to interpret as hex codepoints</li>
+<li>Input <code>"0123 4567 89AB CDEF"</code> to interpret as hex codepoints.</li>
 <li><b>Copy Link</b> to get a URL that resolves on page-load.</li>
 </ul>
 </div>
@@ -535,8 +546,7 @@ import {
 	is_checksum_address, namehash, labelhash, ENS
 } from '../../eth-tools.js/dist/eth-tools.min.js';
 import {
-	ens_normalize, ens_beautify, ens_tokenize,
-	dns_from_normalized_ens,
+	ens_normalize, ens_beautify, ens_tokenize, ens_emoji, nfc, nfd, dns_from_normalized_ens,
 	escape_for_html, is_printable_ascii, hex_cp, explode_cp,
 	dom_from_tokens, use_default_style
 } from '../dist/all.min.js';
@@ -546,6 +556,8 @@ const providers = new Providers()
 	.add_static(1, new WebSocketProvider({url: 'wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe', source: 'Infura'}));
 
 const ens = new ENS({provider: providers.view(1)});
+
+const EMOJI = ens_emoji();
 
 const input_field = document.querySelector('#input_field');
 const resolve_btn = document.querySelector('#resolve_btn');
@@ -579,8 +591,14 @@ examples_div.classList.toggle('hide', !!window.localStorage.getItem('hide_exampl
 show_hashes_check.selected = !!window.localStorage.getItem('show_hashes');
 auto_resolve_check.selected = !!window.localStorage.getItem('auto_resolve');
 
-for (let btn of document.querySelectorAll('#examples button, button[data-name]')) {
-	let name = replace_escapes(btn.dataset.name ?? btn.innerHTML);
+for (let btn of document.querySelectorAll('#examples button:not([id]), button[data-name]')) {
+	let name = btn.innerHTML;
+	if (btn.dataset.name) {
+		name = btn.dataset.name;
+	} else if (name.startsWith('❌')) {
+		name = [...name].slice(1).join('');
+	}
+	name = replace_escapes(name);
 	if (typeof btn.dataset.replace === 'string' || !btn.innerHTML) btn.innerHTML = name;
 	if (!name.includes('.') && !is_checksum_address(name)) name += '.eth';
 	if (typeof btn.dataset.escape === 'string') name = apply_escapes(name, false);
@@ -605,6 +623,20 @@ input_field.addEventListener('input', () => {
 	} else {
 		stop_resolving();
 	}
+});
+
+document.querySelector('#random_emoji_btn').addEventListener('click', () => {
+	input_field.value = String.fromCodePoint(...EMOJI[Math.random() * EMOJI.length|0]) + '.eth';
+	skip_norm_check.checked = false;
+	resolve();
+});
+
+document.querySelector('#nf_btn').addEventListener('click', () => {
+	let s0 = input_field.value;
+	let s1 = replace_escapes(s0);
+	let s3 = apply_escapes(String.fromCodePoint(...nfd(explode_cp(s1))));
+	let s4 = apply_escapes(String.fromCodePoint(...nfc(explode_cp(s1))));
+	input_field.value = s0 == s3 ? s4 : s3;
 });
 
 document.querySelector('#escape_btn').addEventListener('click', () => {
@@ -748,6 +780,7 @@ function parse() {
 						case 'stop': return 0x2E;
 						case 'valid': return token.cps;
 						case 'emoji': return token.input;
+						//case 'isolated':
 						//case 'mapped':
 						//case 'ignored':
 						default: return token.cp;
@@ -786,6 +819,11 @@ function create_dns_row(ens_norm) {
 		row.append(link);
 
 		let same = name === ens_norm;
+
+		if (!same) {
+			row.append(create_copy_btn(name));
+		}
+
 		let span = document.createElement('span');	
 		if (same) {
 			apply_grade(span, 'good', 'Verbatim');
@@ -797,9 +835,6 @@ function create_dns_row(ens_norm) {
 		}
 		add_row_tag(row, span);
 
-		if (!same) {
-			row.append(create_copy_btn(name));
-		}
 		//row.append(create_link(`https://whois.uniregistry.net/rdap/domain/${name}.link`, 'WHOIS'));
 	} catch (err) {
 		row.classList.add('invalid');
@@ -868,10 +903,10 @@ function get_dot_eth_label(name) {
 	return v.length == 2 && v[1].toLowerCase() == 'eth' ? v[0] : undefined;
 }
 
-function create_pretty_tag() {
+function create_pretty_tag(short) {
 	let span = document.createElement('span');
 	span.classList.add('pretty');
-	span.innerHTML = `🌷`;
+	span.innerHTML = '💖️';
 	span.title = 'Beautified Form';
 	return span;
 }
@@ -1315,23 +1350,34 @@ async function resolve0(input0, skip_norm) {
 
 	if (!skip_norm) {
 		let pretty = ens_beautify(name_norm);
+		
+		let row = create_row('Beautified');
+		let span = document.createElement('span');
+		span.id = 'pretty';
+		span.innerHTML = pretty;
+		row.append(span);
+		add_row_tag(row, create_copy_btn(pretty));
+		add_row_tag(row, create_resolve_btn(pretty));
+		add_row_tag(row, create_pretty_tag(true));
+		
 		if (input === pretty) { 
 			add_row_tag(input_row, create_pretty_tag());
+			let span = document.createElement('span');
+			apply_grade(span, 'good', 'Same as Input');
+			add_row_tag(row, span);
 		} else if (name_norm === pretty) {			
 			add_row_tag(normed_row, create_pretty_tag());
-		} 
-		if (input0 !== pretty) {	
-			let row = create_row('Beautified');
 			let span = document.createElement('span');
-			span.id = 'pretty';
-			span.innerHTML = pretty;
-			row.append(span);
-			//row.append(pretty);
-			add_row_tag(row, create_copy_btn(pretty));
-			add_row_tag(row, create_resolve_btn(pretty));
-			add_row_tag(row, create_pretty_tag());
-			output_div.append(row);
+			apply_grade(span, 'good', 'Same as Normalized');
+			add_row_tag(row, span);
+		} else {
+			let span = document.createElement('span');
+			apply_grade(span, 'warn', 'Additional Style');
+			add_row_tag(row, span);
 		}
+		
+
+		output_div.append(row);
 	}
 
 	output_div.append(create_dns_row(name_norm));

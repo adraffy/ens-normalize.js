@@ -1,5 +1,6 @@
-import {writeFile, mkdir} from 'node:fs/promises';
+import {writeFile, mkdir, access} from 'node:fs/promises';
 import {parse_version} from './utils.js';
+
 
 const FILES = [
 	// UCD
@@ -17,13 +18,11 @@ const FILES = [
 	['{EMOJI}/emoji-sequences.txt'],
 	['{EMOJI}/emoji-zwj-sequences.txt'],
 	['{EMOJI}/emoji-test.txt'],
-	/*
 	// Confusables
 	['{SPEC}/ucd/Scripts.txt'],
 	['{SPEC}/ucd/ScriptExtensions.txt'],
 	['{SPEC}/ucd/PropertyValueAliases.txt'],
-	['{SPEC}/confusables.txt'],
-	*/
+	['{SECURITY}/confusables.txt'],
 ];
 
 function url_from_source(source, {major, minor = 0, patch = 0}) {
@@ -42,6 +41,25 @@ function url_from_source(source, {major, minor = 0, patch = 0}) {
 }
 
 let versions = process.argv.slice(2).map(parse_version);
+
+if (!versions.length) {
+	// if no version is provided
+	// attempt to determine the latest version
+	// by finding a version string in the UCD readme
+	console.log(`Determining latest version...`);
+	try {
+		let res = await fetch('https://www.unicode.org/Public/UCD/latest/ReadMe.txt');
+		if (res.status != 200) throw new Error(`HTTP error ${res.status}`);
+		let text = await res.text();
+		let match = text.match(/Version (\d+\.\d+\.\d+)/);
+		if (!match) throw new Error(`no match`);
+		console.log(`Latest version: ${match[1]}`);
+		versions.push(parse_version(match[1]));
+	} catch (err) {
+		throw new Error(`Unable to determine latest Unicode version: ${err.message}`);
+	}
+}
+
 console.log(versions);
 
 for (let version of versions) {
@@ -60,8 +78,9 @@ async function download({major, minor, patch}, files) {
 				return [i, await res.arrayBuffer()];
 			}));
 			let name = urls[i].pathname.split('/').pop();
+			let file = new URL(name, dir);
 			await mkdir(dir, {recursive: true});
-			await writeFile(new URL(name, dir), Buffer.from(buf));
+			await writeFile(file, Buffer.from(buf));
 			console.log(`[${i+1}/${sources.length}] ${urls[i]}`);
 		} catch (err) {
 			if (err instanceof AggregateError) {

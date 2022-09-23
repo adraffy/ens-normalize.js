@@ -5,6 +5,7 @@ import {ens_tokenize} from '../src/lib.js';
 import {SPEC} from '../derive/unicode-version.js';
 import {readFileSync} from 'node:fs';
 import {parse_cp_range, explode_cp} from '../derive/utils.js';
+import {read_labels} from './data.js';
 
 // TODO FIX ME
 
@@ -36,9 +37,11 @@ for (let cp of cps) {
 	}
 }
 
-for (let label of JSON.parse(readFileSync(new URL('./labels.json', import.meta.url)))) {
+/*
+for (let label of read_labels()) {
 	let cps = explode_cp(label);
 	if (cps.includes(0x5BE)) {
 		console.log({label, cps});
 	}
 }
+*/

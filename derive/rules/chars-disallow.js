@@ -31,8 +31,13 @@ export default [
 	0xBB, // (») RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
 	0xD7, // (×) MULTIPLICATION SIGN
 	0xF7, // (÷) DIVISION SIGN
+	// old english
 	0xF0, // (ð) LATIN SMALL LETTER ETH
-	0xFE, // (þ) LATIN SMALL LETTER THORN
+	0xFE, // (þ) LATIN SMALL LETTER THORN	
+	// these just seem dangerous
+	0x131, // (ı) LATIN SMALL LETTER DOTLESS I
+	0x237, // (ȷ) LATIN SMALL LETTER DOTLESS J
+	0x1D4E, // (ᵎ) MODIFIER LETTER SMALL TURNED I
 
 	// combining marks that look like underline
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/391
@@ -201,8 +206,6 @@ export default [
 	0x25A0, // (■) BLACK SQUARE
 	0x25A1, // (□) WHITE SQUARE
 	0x25A2, // (▢) WHITE SQUARE WITH ROUNDED CORNERS
-	0x25AA, // (▪) BLACK SMALL SQUARE
-	0x25AB, // (▫) WHITE SMALL SQUARE
 	0x25AC, // (▬) BLACK RECTANGLE
 	0x25AD, // (▭) WHITE RECTANGLE
 	0x25AE, // (▮) BLACK VERTICAL RECTANGLE
@@ -237,6 +240,10 @@ export default [
 	0x23E1, // (⏡) BOTTOM TORTOISE SHELL BRACKET
 
 	// vertical bars
+	0x1C0, // (ǀ) LATIN LETTER DENTAL CLICK
+	0x1C1, // (ǁ) LATIN LETTER LATERAL CLICK
+	0x1C2, // (ǂ) LATIN LETTER ALVEOLAR CLICK
+	0x1C3, // (ǃ) LATIN LETTER RETROFLEX CLICK
 	0x2758, // (❘) LIGHT VERTICAL BAR
 	0x2759, // (❙) MEDIUM VERTICAL BAR
 	0x275A, // (❚) HEAVY VERTICAL BAR

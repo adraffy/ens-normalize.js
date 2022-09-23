@@ -10,8 +10,16 @@ const SORTED_VALID = read_member_array(r).sort((a, b) => a - b);
 const VALID = new Set(SORTED_VALID);
 const IGNORED = new Set(read_member_array(r));
 const MAPPED = new Map(read_mapped(r));
-const CM = new Set(read_member_array(r, SORTED_VALID));
-const ISOLATED = new Set(read_member_array(r, SORTED_VALID));
+function read_sorted_valid_set() {
+	return new Set(read_member_array(r, SORTED_VALID));
+}
+const CM = read_sorted_valid_set();
+const ISOLATED = read_sorted_valid_set();
+const SCRIPTS = [
+	['Latin', read_sorted_valid_set()], // latin gets priority because of ascii
+	['Greek', read_sorted_valid_set(), read_sorted_valid_set()],
+	['Cyrillic', read_sorted_valid_set(), read_sorted_valid_set()]
+];
 const EMOJI_SOLO = new Set(read_member_array(r));
 const EMOJI_ROOT = read_emoji_trie(r);
 const NFC_CHECK = new Set(read_member_array(r, SORTED_VALID));
@@ -66,6 +74,28 @@ function check_middle_dot(cps) {
 	}
 }
 
+function check_scripts_latin_like(cps) {
+	// https://www.unicode.org/reports/tr39/#mixed_script_confusables
+	for (let i = 0; i < SCRIPTS.length; i++) {
+		let [name, script_set, whole_set] = SCRIPTS[i];
+		if (cps.some(cp => script_set.has(cp))) {
+			for (let j = i + 1; j < SCRIPTS.length; j++) {
+				let [name_j, set_j] = SCRIPTS[j];
+				if (cps.some(cp => set_j.has(cp))) {
+					throw new Error(`Mixed-script confusable: ${name} + ${name_j}`);
+				}
+			}
+			if (whole_set) { // aka non-latin
+				// https://www.unicode.org/reports/tr39/#def_whole_script_confusables
+				// if every char matches the script is confusable
+				if (cps.every(cp => !script_set.has(cp) || whole_set.has(cp))) {
+					throw new Error(`Whole-script confusable: ${name}`);
+				}
+			}
+		}
+	}
+}
+
 // requires decomposed codepoints
 function check_cm(cps) {
 	for (let i = 0, j = -1; i < cps.length; i++) {
@@ -94,6 +124,7 @@ export function ens_normalize_post_check(norm) {
 			check_label_extension(cps_nfc);
 			check_surrounding(cps_nfc, 0x2019, 'apostrophe', true, true);
 			check_middle_dot(cps_nfc);
+			check_scripts_latin_like(cps_nfc);
 			// replace emoji with single character
 			let cps_nfd = nfd(process(label, () => [FE0F])); 
 			check_cm(cps_nfd);

@@ -1,5 +1,5 @@
-import {mkdirSync, writeFileSync, createWriteStream} from 'node:fs';
-import {compare_arrays, parse_cp_sequence} from './utils.js';
+import {mkdirSync, writeFileSync, createWriteStream, readFileSync} from 'node:fs';
+import {compare_arrays, explode_cp, parse_cp_sequence} from './utils.js';
 import {SPEC, NF, IDNA} from './unicode-version.js';
 
 import CHARS_VALID from './rules/chars-valid.js';
@@ -119,6 +119,28 @@ for (let rec of emoji_map.values()) {
 		disallow_char(rec.cp, true);
 	}
 }
+
+/*
+if (false) { // whitelist flags
+	let regions = JSON.parse(readFileSync(new URL('./data/regions.json', import.meta.url)));
+	let cps = [...Regional_Indicator];
+	if (cps.length != 26) throw new Error('expected 26');
+	for (let cp of cps) {
+		let rec = emoji_map.get(info.cp);
+		if (!rec) throw new Error(`Expected emoji: ${SPEC.format(cp)}`);
+		//rec.used = true; // disable single regionals	
+	}
+	let dx = cps[0] - 0x41; // 'A'
+	for (let region of regions) {
+		register_emoji({
+			cps: explode_cp(region).map(x => x + dx),
+			name: `Flag Sequence: ${region}`,
+			type: 'Flag'
+		});
+	}
+}
+*/
+
 // register default emoji-presentation
 for (let info of emoji_chrs.Emoji_Presentation) {
 	if (Regional_Indicator.has(info.cp)) continue; // skipped
@@ -225,10 +247,55 @@ for (let cp of isolated) {
 	}
 }
 
+let scripts = SPEC.scripts({abbr: true});
+let script_map = Object.fromEntries(scripts.map(([k, v]) => { 
+	return [k, sorted(v.filter(cp => valid.has(cp)))];
+}));
+let script_sets = scripts.map(([k, cps]) => [k, new Set(cps)]);
+function get_script_cover(cps) {
+	let cover = new Set();
+	for (let cp of cps) {
+		for (let [name, set] of script_sets) {
+			if (set.has(cp)) {
+				cover.add(name);
+			}
+		}
+	}
+	return cover;
+}
+
+let confusables = SPEC.confusables();
+let confuse_groups = confusables.map(([target, cps]) => {
+	return {target, cps, cover: get_script_cover([target, cps].flat())};
+});
+
+// find all characters of script0 that are linked 
+// by confusables to ANY of the provided scripts
+function whole_script_confusables(abbr0, ...abbrs) {
+	let whole = [];	
+	let script = new Set(script_map[abbr0]);
+	for (let {cps, cover} of confuse_groups) {
+		if (cover.has(abbr0) && abbrs.some(abbr => cover.has(abbr))) {
+			for (let cp of cps) {
+				if (script.delete(cp)) {
+					whole.push(cp);
+				}
+			}
+		}
+	}
+	return sorted(whole);
+}
+
+let {Latn, Grek, Cyrl} = script_map;
+
+//console.log(String.fromCodePoint(...whole_script_confusables('Grek', 'Latn', 'Cyrl')));
+//console.log(String.fromCodePoint(...whole_script_confusables('Cyrl', 'Latn', 'Grek')));
+
 function sorted(v) {
 	return [...v].sort((a, b) => a - b);
 }
 
+// sorting isn't important, just nice to have
 mkdirSync(out_dir, {recursive: true});
 writeFileSync(new URL('./spec.json', out_dir), JSON.stringify({
 	valid: sorted(valid),
@@ -236,7 +303,12 @@ writeFileSync(new URL('./spec.json', out_dir), JSON.stringify({
 	mapped: [...mapped.entries()].sort((a, b) => a[0] - b[0]),
 	cm: sorted(cm),
 	emoji: [...emoji.values()].map(x => x.cps).sort(compare_arrays),
-	isolated: sorted(isolated)
+	isolated: sorted(isolated),
+	scripts: {Latn, Grek, Cyrl}, // already sorted
+	wholes: {
+		Grek: whole_script_confusables('Grek', 'Latn', 'Cyrl'), // already
+		Cyrl: whole_script_confusables('Cyrl', 'Latn', 'Grek'), // sorted
+	}
 }));
 
 writeFileSync(new URL('./nf.json', out_dir), JSON.stringify({
