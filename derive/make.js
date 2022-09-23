@@ -63,9 +63,15 @@ function disallow_char(cp, quiet) {
 	} else if (ignored.delete(cp)) {
 		console.log(`Removed Ignored: ${SPEC.format(cp)}`);
 	} else if (valid.delete(cp)) {
-		if (!quiet) console.log(`Removed Valid: ${SPEC.format(cp)}`);
+		let print = () => {
+			console.log(`Removed Valid: ${SPEC.format(cp)}`);
+			print = false;
+		};
+		if (!quiet)print();
+		if (!quiet) 
 		for (let [x, ys] of mapped) {
 			if (ys.includes(cp)) {
+				if (print) print();
 				mapped.delete(x);
 				console.log(`--Mapping: ${SPEC.format(x, ys)}`);
 			}
@@ -77,6 +83,7 @@ function register_emoji(info) {
 	try {
 		let {cps} = info;
 		if (!Array.isArray(cps) || !cps.length) throw new Error('expected cps');
+		if (!info.name) throw new Error('expected name');
 		if (!info.type) throw new Error('expected type');
 		let key = String.fromCodePoint(...cps);
 		let old = emoji.get(key);
@@ -84,7 +91,6 @@ function register_emoji(info) {
 			console.log(old);
 			throw new Error(`duplicate`);
 		}
-		if (!info.name) throw new Error('expected name');
 		console.log(`Register Emoji: ${SPEC.format(info)}`);		
 		emoji.set(key, info);
 	} catch (err) {
@@ -96,6 +102,9 @@ function register_emoji(info) {
 function set_isolated(cp) {
 	if (!valid.has(cp)) {
 		throw new Error(`Isolated not Valid: ${SPEC.format(cp)}`);
+	}
+	if (isolated.has(cp)) {
+		throw new Error(`Already Isolated: ${SPEC.format(cp)}`);
 	}
 	isolated.add(cp);
 	console.log(`Isolated: ${SPEC.format(cp)}`);
@@ -121,7 +130,7 @@ for (let rec of emoji_map.values()) {
 }
 
 /*
-if (false) { // whitelist flags
+if (false) { // only flag sequences with valid regions
 	let regions = JSON.parse(readFileSync(new URL('./data/regions.json', import.meta.url)));
 	let cps = [...Regional_Indicator];
 	if (cps.length != 26) throw new Error('expected 26');
@@ -171,14 +180,22 @@ for (let seq of EMOJI_BLACKLIST) {
 	emoji.delete(key);
 }
 for (let [x, ys] of CHARS_MAPPED) {
+	let old = mapped.get(x);
+	if (old && compare_arrays(old, ys) == 0) {
+		throw new Error(`Already mapped: ${SPEC.format(x, ys)}`);
+	}
 	disallow_char(x);
 	mapped.set(x, ys);
 	console.log(`Added Mapped: ${SPEC.format(x, ys)}`);
 }
 for (let cp of CHARS_DISALLOWED) {
+	if (!mapped.has(cp) && !ignored.has(cp) && !valid.has(cp)) {
+
+	}
 	disallow_char(cp);
 }
 for (let cp of CHARS_VALID) {
+	if (valid.has(cp)) throw new Error(`Already valid: ${SPEC.format(cp)}`);
 	disallow_char(cp);
 	valid.add(cp);
 	console.log(`Added Valid: ${SPEC.format(cp)}`);
@@ -244,6 +261,9 @@ for (let info of emoji.values()) {
 for (let cp of isolated) {
 	if (cc.has(cp)) {
 		throw new Error(`Isolated with non-zero combining class: ${SPEC.format(cp)}`);
+	}
+	if (!valid.has(cp)) {
+		throw new Error(`Isolated not Valid: ${SPEC.format(cp)}`);
 	}
 }
 

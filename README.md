@@ -15,7 +15,7 @@
 ```Javascript
 import {ens_normalize} from '@adraffy/ens-normalize';
 // npm i @adraffy/ens-normalize
-// browser: https://unpkg.com/@adraffy/ens-normalize@latest/dist/index.min.js
+// browser: https://cdn.jsdelivr.net/npm/@adraffy/ens-normalize@latest/dist/index.min.js
 
 // string -> string
 // throws on invalid names

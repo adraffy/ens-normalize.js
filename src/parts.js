@@ -105,7 +105,14 @@ export function dom_from_tokens(tokens, before) {
 				el.title = `Ignored\n${hex_cp(token.cp)}`;
 				el.classList.add('ignored');
 			} else if (token.type === 'disallowed') {
-				el = span_from_cp(token.cp, hex_cp);
+				el = span_from_cp(token.cp, cp => {
+					let ch = String.fromCodePoint(cp);
+					if (is_printable_ascii(ch)) {
+						return ch;
+					} else {
+						return hex_cp(cp);
+					}
+				});
 				el.classList.add('disallowed');
 				el.title = `Disallowed\n${hex_cp(token.cp)}`;
 			} else if (token.type === 'stop') {
