@@ -100,10 +100,6 @@ td.info {
 	color: #999;
 	font-size: 90%;
 }
-.wide .cells {
-	align-items: start;
-	flex-direction: column;
-} 
 .cells code {
 	background: #ffa;
 	font-size: 120%;
@@ -176,7 +172,7 @@ const hover_div = document.querySelector('#hover');
 
 let last_hover;
 let search_timer;
-let emoji = ens_emoji();
+let emoji_seqs = ens_emoji();
 
 async function fetch_json(url) {
 	let res = await fetch(url);
@@ -196,7 +192,7 @@ try {
 		let form = String.fromCodePoint(...cps);
 		if (!info_map.has(form)) {
 			info_map.set(form, {name: `Flag Sequence: ${region}`, type: flag_type});
-			emoji.push(cps);
+			emoji_seqs.push(cps);
 		}
 	}	
 	
@@ -245,7 +241,7 @@ if (type_map.size || versions.size) {
 }
 
 let buckets = [];
-for (let cps of emoji) {
+for (let cps of emoji_seqs) {
 	let form = String.fromCodePoint(...cps);
 	let norm = ens_normalize(form);
 	let info = info_map.get(form);
@@ -390,7 +386,7 @@ function update_search() {
 	}
 	let n = results.length;
 	results_section.innerHTML = `
-		<h2>${n} result${n==1?'':'s'}</h2>
+		<h2>${n} result${n==1?'':'s'} (${(100*n/emoji_seqs.length).toFixed(1)}%)</h2>
 	`;
 	results_section.append(create_table(results, true));
 	hover_div.classList.add('hide');
@@ -432,10 +428,11 @@ function create_tr({cps, form, norm, info, n}, first) {
 	for (let i = 3 - cps.length; i > 0; i--) {
 		repeated += form;
 	}
+	// ${n >= 3 ? 'wide' : 'narrow'}
 	tr.innerHTML = `
 		<td class="index">${first}</td>
 		<td class="form"><a href="./resolver.html#${repeated}.eth" target="_blank">${form}</a></td>
-		<td class="info ${n >= 3 ? 'wide' : 'narrow'}"><div class="cells">${cells.join('')}</div></td>
+		<td class="info"><div class="cells">${cells.join('')}</div></td>
 	`;
 	let exploded = tr.querySelector('.exploded');
 	exploded.append(dom_from_tokens(ens_tokenize(form), true));

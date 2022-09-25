@@ -37,7 +37,7 @@ async function fetch_regions(version) {
 			}
 		}
 	}
-	return regions;
+	return regions.sort();
 }
 
 const VERSION = '41';
