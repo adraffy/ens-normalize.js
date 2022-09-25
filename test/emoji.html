@@ -36,7 +36,7 @@ h1 {
 }
 #search select {
 	margin-left: 0.5rem;
-	max-width: 32px;
+	
 }
 #hover {
 	position: absolute;
@@ -130,7 +130,8 @@ footer {
 		margin: 0 1rem;
 	}
 	h2 {
-		padding: 1rem 0;
+		padding: 8px 1rem 4px;
+		background: #ddd;
 	}
 }
 </style>
@@ -148,7 +149,7 @@ footer {
 </header>
 <div id="search">
 <input placeholder="Search: Name or {FF} or v15 or UnicodeProperty">
-<select class="hide"></select>
+<select class="hide" placeholder="A"></select>
 </div>
 <ul id="toc"></ul>
 <div id="hover" class="hide"></div>
@@ -351,6 +352,7 @@ function update_search() {
 	clearTimeout(search_timer);
 	search_timer = undefined;
 	search_select.selectedIndex = -1;
+	search_select.value = 'ABC';
 	let input = searchize(search_field.value);
 	toc_ul.classList.toggle('hide', input);
 	main.classList.toggle('hide', input);

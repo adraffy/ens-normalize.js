@@ -74,6 +74,8 @@ h1 a {
 }
 #controls {
 	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
 	align-items: center;
 	gap: 0.5rem;
 }
@@ -126,8 +128,7 @@ input[type=checkbox]:checked + label.nonstd {
 	background: #efe;
 }
 .row.skipped {
-	background: #efe;
-	border: 3px dashed #fcc;
+	background: linear-gradient(90deg, #efe, #fcc);
 }
 .row.owner {
 	background: #ffd;
@@ -292,6 +293,10 @@ footer {
 	.error {
 		border-left: 0;
 		border-right: 0;
+	}
+	#examples_btn {
+		display: block;
+		font-size: 150%;
 	}
 }
 </style>
@@ -570,6 +575,7 @@ const output_div = document.querySelector('#output');
 const readme_rows = [...output_div.childNodes]; // save initial ux
 const examples_div = document.querySelector('#examples');
 const examples_btn = document.createElement('button');
+examples_btn.id = 'examples_btn';
 
 const RESOLVE_MODE_IDLE = 'idle';
 const RESOLVE_MODE_REPEAT = 'repeat';
