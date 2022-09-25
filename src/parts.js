@@ -1,4 +1,4 @@
-import {escape_for_html, is_printable_ascii, hex_cp} from './utils.js';
+import {escape_for_html, hex_cp} from './utils.js';
 
 function hex_seq(cps) {
 	return cps.map(hex_cp).join(' ');
@@ -28,21 +28,21 @@ function span_from_cp(cp, fmtr) {
 	} else if (cp >= 0xE0020 && cp <= 0xE007F) {
 		cp -= 0xE0000;
 		let ch = String.fromCodePoint(cp);
+		let form;
+		span.classList.add('mod', 'tag');
 		if (cp === 0x7F) {
-			span.classList.add('mod');
-			span.innerHTML = 'TagEnd';
+			form = 'End';
 		} else {
-			if (is_printable_ascii(ch)) {
-				span.innerHTML = ch;
-			} else {
-				span = document.createElement('code');
-				span.innerHTML = hex_cp(cp);
-			}
-			span.classList.add('mod', 'tag');
+			form = escape_for_html(ch);
+			if (form !== ch) span.classList.add('code');
 		}
+		span.innerHTML = `<span class="tag">${form}<sub>🏷️</sub></span>`
 	} else {
+		let ch = String.fromCodePoint(cp);
+		let form = escape_for_html(ch, hex_cp);
+		if (form !== ch) span.classList.add('code');
 		span.classList.add('raw');
-		span.innerHTML = fmtr(cp);
+		span.innerHTML = form;
 	}
 	return span;
 }
@@ -68,7 +68,7 @@ export function dom_from_tokens(tokens, before) {
 			el.href = `https://emojipedia.org/${String.fromCodePoint(...token.emoji)}`;
 			el.title = `Emoji\n${hex_seq(cps)}`;
 			el.classList.add('glyph');
-			el.append(...cps.map(cp => span_from_cp(cp, String.fromCodePoint)));
+			el.append(...cps.map(cp => span_from_cp(cp)));
 		} else if (token.type === 'nfc') {
 			el = document.createElement('div');
 			el.classList.add('nfc');
@@ -105,14 +105,7 @@ export function dom_from_tokens(tokens, before) {
 				el.title = `Ignored\n${hex_cp(token.cp)}`;
 				el.classList.add('ignored');
 			} else if (token.type === 'disallowed') {
-				el = span_from_cp(token.cp, cp => {
-					let ch = String.fromCodePoint(cp);
-					if (is_printable_ascii(ch)) {
-						return ch;
-					} else {
-						return hex_cp(cp);
-					}
-				});
+				el = span_from_cp(token.cp);
 				el.classList.add('disallowed');
 				el.title = `Disallowed\n${hex_cp(token.cp)}`;
 			} else if (token.type === 'stop') {
@@ -161,7 +154,7 @@ export function use_default_style() {
 		color: #fff;
 		background: #aaa;
 		min-width: 5px;
-		font-size: 65%;
+		font-size: 50%;
 		font-family: monospace;
 		border-radius: 5px;
 	}
@@ -170,10 +163,13 @@ export function use_default_style() {
 		border-radius: 5px;
 		color: #fff;
 	}
-	.tokens .disallowed.raw {
-		font-size: 65%;		
-		font-family: monospace;
+	.tokens .disallowed.code {
+		font-size: 65%;
 		background: #800;
+	}
+	.tokens .tag sub {
+		font-size: 70%;
+		color: #ccc;
 	}
 	.tokens .disallowed.mod {
 		border: 2px solid #800;
@@ -215,13 +211,16 @@ export function use_default_style() {
 		background: #0aa;
 	}
 	.tokens .glyph .mod.tag {
-		background: #33f;
+		background: #333;
 	}
 	.tokens .glyph .mod.dropped {
 		background: #aaa;		
 	}
 	.tokens .arrow {
 		color: rgba(0, 0, 0, 0.35);
+	}
+	.tokens .code {
+		font-family: monospace;
 	}
 	.tokens .nfc {
 		display: flex;
