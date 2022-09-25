@@ -25,6 +25,7 @@ h1 {
 #search {
 	margin: 1rem 0;
 	text-align: center;
+	display: flex;
 }
 #search input {
 	display: block;
@@ -32,6 +33,10 @@ h1 {
 	font-size: 150%;
 	width: 100%;
 	box-sizing: border-box;
+}
+#search select {
+	margin-left: 0.5rem;
+	max-width: 32px;
 }
 #hover {
 	position: absolute;
@@ -47,6 +52,8 @@ h1 {
 h2 a.top {
 	float: right;
 	font-size: 70%;
+	font-weight: normal;
+	text-decoration: none;
 }
 table {
 	border-collapse: collapse;
@@ -108,6 +115,9 @@ td.info {
 	align-items: center;
 	gap: 5px;
 }
+#loading {
+	text-align: center;
+}
 footer {
 	text-align: center;
 	color: #666;
@@ -141,11 +151,12 @@ footer {
 </span>
 </header>
 <div id="search">
-<label><input placeholder="Search: Name or {FF} or v15"></label>
+<input placeholder="Search: Name or {FF} or v15">
+<select class="hide"></select>
 </div>
 <ul id="toc"></ul>
 <div id="hover" class="hide"></div>
-<main>Loading...</main>
+<main><div id="loading">Loading...</div></main>
 <section id="results" class="hide"></section>
 <footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
 <script type="module">
@@ -157,6 +168,7 @@ import {
 use_default_style();
 
 const search_field = document.querySelector('#search input');
+const search_select = document.querySelector('#search select');
 const toc_ul = document.querySelector('#toc');
 const main = document.querySelector('main');
 const results_section = document.querySelector('#results');
@@ -178,22 +190,35 @@ try {
 	for (let info of await fetch_json('../derive/output/emoji-info.json')) {
 		info_map.set(info.form, info);
 	}
+	let flag_type = 'ValidRegionalFlag';
 	for (let region of await fetch_json('../derive/data/regions.json')) {
 		let cps = explode_cp(region).map(cp => 0x1F1E6 - 0x41 + cp);
 		let form = String.fromCodePoint(...cps);
 		if (!info_map.has(form)) {
-			info_map.set(form, {name: `Flag Sequence: ${region}`});
+			info_map.set(form, {name: `Flag Sequence: ${region}`, type: flag_type});
 			emoji.push(cps);
 		}
-	}
+	}	
+	
 } catch (err) {
+	console.log(err);
 }
 
+let type_map = new Map();
+let versions = new Set();
 for (let x of info_map.values()) {
+	type_map.set(x.type.toLowerCase(), x.type);
+	versions.add(parseInt(x.version)|0);
 	x.lower = x.name.toLowerCase(); // cache this
 }
-
-emoji.sort(compare_arrays);
+if (type_map.size || versions.size) {
+	let keywords = [
+		[...type_map.values()].sort(), 
+		[...versions].sort((a, b) => a - b).map(x => `v${x}`)
+	].flat(Infinity);
+	search_select.innerHTML = keywords.map(x => `<option>${x}</option>`).join('');
+	search_select.classList.remove('hide');
+}
 
 let buckets = [];
 for (let cps of emoji) {
@@ -252,6 +277,11 @@ hover_div.addEventListener('mousemove', e => {
 	hover_div.classList.add('hide');
 });
 
+search_select.addEventListener('input', () => {
+	search_field.value = search_select.value;
+	update_search();
+});
+
 document.addEventListener('mousemove', e => {
 	let node = e.target;
 	while (node && !node.dataset.name) {
@@ -301,7 +331,8 @@ function search_soon() {
 function update_search() {
 	clearTimeout(search_timer);
 	search_timer = undefined;
-	let input = search_field.value.trim();
+	search_select.selectedIndex = -1;
+	let input = search_field.value.trim().toLowerCase();
 	toc_ul.classList.toggle('hide', input);
 	main.classList.toggle('hide', input);
 	results_section.classList.toggle('hide', !input);
@@ -321,15 +352,16 @@ function update_search() {
 	} else if (match = input.match(/^v\d*$/)) {
 		let version = parseInt(input.slice(1));
 		results = flat.filter(x => x.info && parseInt(x.info.version) == version);
+	} else if (match = type_map.get(input)) {
+		results = flat.filter(x => x.info && x.info.type === match);
 	} else {
-		let lower = input.toLowerCase();
 		let norm;
 		try {
 			norm = ens_normalize(input);
 		} catch (err) {
 		}
 		results = flat.filter(x => {
-			if (x.info && x.info.lower.includes(lower)) return true;
+			if (x.info && x.info.lower.includes(input)) return true;
 			if (x.norm.includes(norm)) return true;
 		});
 	}
@@ -347,9 +379,9 @@ function create_table(bucket, search) {
 		<table>
 		<thead>
 		<tr>
-		<th class="index">${search ? 'Length' : ''}</th>
+		<th class="index">${search ? 'n<sub>ch</sub>' : ''}</th>
 		<th class="form">Form</th>
-		<th class="info">Name, Version, Fully-Qualified Hex, Components</th>
+		<th class="info">Name, Version, Hex Codepoints (Fully-Qualified), Normalized Parts</th>
 		</tr>
 		</thead>
 		<tbody></tbody>
