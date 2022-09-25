@@ -626,7 +626,11 @@ input_field.addEventListener('input', () => {
 });
 
 document.querySelector('#random_emoji_btn').addEventListener('click', () => {
-	input_field.value = String.fromCodePoint(...EMOJI[Math.random() * EMOJI.length|0]) + '.eth';
+	let cps = [];
+	while (cps.length < 3) {
+		cps.push(...EMOJI[Math.random() * EMOJI.length|0]);
+	}
+	input_field.value = String.fromCodePoint(...cps) + '.eth';
 	skip_norm_check.checked = false;
 	resolve();
 });

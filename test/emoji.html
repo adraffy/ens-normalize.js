@@ -261,7 +261,6 @@ let flat = buckets.flat();
 
 document.querySelector('h1').innerHTML += ` (${flat.length})`;
 
-
 main.innerHTML = '';
 
 for (let n = 1; n < buckets.length; n++) {
@@ -429,9 +428,13 @@ function create_tr({cps, form, norm, info, n}, first) {
 
 	let tr = document.createElement('tr');
 	tr.dataset.name = form;
+	let repeated = form;
+	for (let i = 3 - cps.length; i > 0; i--) {
+		repeated += form;
+	}
 	tr.innerHTML = `
 		<td class="index">${first}</td>
-		<td class="form"><a href="./resolver.html#${form}.eth" target="_blank">${form}</a></td>
+		<td class="form"><a href="./resolver.html#${repeated}.eth" target="_blank">${form}</a></td>
 		<td class="info ${n >= 3 ? 'wide' : 'narrow'}"><div class="cells">${cells.join('')}</div></td>
 	`;
 	let exploded = tr.querySelector('.exploded');
