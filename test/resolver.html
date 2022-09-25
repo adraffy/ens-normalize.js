@@ -379,7 +379,7 @@ footer {
 <button data-name="[ba967c160905ade030f84952644a963994eeaed3881a6b8a4e9c8cbe452ad7a2].eth" data-skip="1">"💩.eth"</button>
 
 <a href="./emoji.html"><b>Emoji:</b></a>
-<button id="random_emoji_btn">Random</button>
+<button id="random_emoji_btn">🎲 Random</button>
 <button>©</button>
 <button>🛥</button>
 <button>🚀🚀🚀</button>
@@ -833,7 +833,7 @@ function create_dns_row(ens_norm) {
 			apply_grade(span, 'good', 'Verbatim');
 		} else if (!idna || idna !== name) {
 			span.classList.add('fail');
-			span.innerHTML = '⛔ Punycode Required';
+			span.innerHTML = '🛑 Pre-IDNA Punycode Required';
 		} else {
 			apply_grade(span, 'warn', 'Punycode Compatible');
 		}

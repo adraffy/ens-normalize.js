@@ -134,7 +134,7 @@ footer {
 		margin: 0 1rem;
 	}
 	h2 {
-		padding-left: 1rem;
+		padding: 1rem 0;
 	}
 }
 </style>
@@ -221,7 +221,7 @@ for (let x of info_map.values()) {
 let keywords = [
 	[...type_map.values()].sort(), 
 	[
-		'Man',
+		'Man ',
 		'Woman',
 		'Family',
 		'Person',
@@ -232,7 +232,7 @@ let keywords = [
 		'Dark Skin',
 		'Red Hair',
 		'Blond Hair',
-		'Curly Hair',		
+		'Curly Hair',
 		'White Hair',
 	],
 	[...versions].sort((a, b) => a - b).map(x => `v${x}`),
@@ -278,7 +278,7 @@ for (let n = 1; n < buckets.length; n++) {
 	// add jump
 	let a = document.createElement('a');
 	a.classList.add('top');
-	a.innerHTML = '⬆ Top';
+	a.innerHTML = 'Top ⬆';
 	a.href = '#';
 	a.addEventListener('click', e => {
 		e.preventDefault();
