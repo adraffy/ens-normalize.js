@@ -36,7 +36,7 @@ h1 {
 }
 #search select {
 	margin-left: 0.5rem;
-	
+	max-width: 50px;
 }
 #hover {
 	position: absolute;
@@ -236,7 +236,6 @@ let keywords = [
 ].flat(Infinity);
 
 if (type_map.size || versions.size) {
-	
 	search_select.innerHTML = keywords.map(x => `<option>${x}</option>`).join('');
 	search_select.classList.remove('hide');
 }
@@ -352,7 +351,6 @@ function update_search() {
 	clearTimeout(search_timer);
 	search_timer = undefined;
 	search_select.selectedIndex = -1;
-	search_select.value = 'ABC';
 	let input = searchize(search_field.value);
 	toc_ul.classList.toggle('hide', input);
 	main.classList.toggle('hide', input);
