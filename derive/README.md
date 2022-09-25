@@ -27,7 +27,7 @@
 ## Instructions
 
 1. edit [unicode-version.js](./unicode-version.js) — specify which version to use
-1. edit [Rules Files](#rule-files)
+1. edit [Rules Files](./rules/)
 1. `node make.js` — creates `/output/` with data files
 
 ## Rule Files
@@ -39,6 +39,8 @@
 * [emoji-demoted.js](./rules/emoji-demoted.js) — emoji procssed as text
 * [emoji-seq-whitelist.js](./rules/emoji-seq-whitelist.js)
 * [emoji-seq-blacklist.js](./rules/emoji-seq-blacklist.js)
+* [confusables-Grek.js](./rules/confusables-Grek.js) — Greek confusables
+* [confusables-Cyrl.js](./rules/confusables-Cyrl.js) — Cyrillic confusables
 
 ## Helpers
 

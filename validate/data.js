@@ -18,9 +18,11 @@ export function read_random() {
 	} 
 }
 
+export const SPEC_FILE = new URL('../derive/output/spec.json', import.meta.url);
+
 export function read_spec() {
 	try {
-		return JSON.parse(readFileSync(new URL('../derive/output/spec.json', import.meta.url)));
+		return JSON.parse(readFileSync(SPEC_FILE));
 	} catch (err) {
 		console.log('Missing "spec.json".  Try running `npm run derive`');
 		throw new Error('spec');

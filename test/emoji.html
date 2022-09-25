@@ -148,7 +148,7 @@ footer {
 </span>
 </header>
 <div id="search">
-<input placeholder="Search: Name or {FF} or v15 or UnicodeProperty">
+<input placeholder="Search: Name or {FFF} or v15 or UnicodeProperty">
 <select class="hide" placeholder="A"></select>
 </div>
 <ul id="toc"></ul>
@@ -386,7 +386,7 @@ function update_search() {
 	}
 	let n = results.length;
 	results_section.innerHTML = `
-		<h2>${n} result${n==1?'':'s'} (${(100*n/emoji_seqs.length).toFixed(1)}%)</h2>
+		<h2>${n} result${n==1?'':'s'} (${(100*n/emoji_seqs.length).toFixed(2)}%)</h2>
 	`;
 	results_section.append(create_table(results, true));
 	hover_div.classList.add('hide');
@@ -424,14 +424,13 @@ function create_tr({cps, form, norm, info, n}, first) {
 
 	let tr = document.createElement('tr');
 	tr.dataset.name = form;
-	let repeated = form;
-	for (let i = 3 - cps.length; i > 0; i--) {
-		repeated += form;
+	let repeated = norm;
+	for (let i = 3 - [...norm].length; i > 0; i--) {
+		repeated += norm;
 	}
-	// ${n >= 3 ? 'wide' : 'narrow'}
 	tr.innerHTML = `
 		<td class="index">${first}</td>
-		<td class="form"><a href="./resolver.html#${repeated}.eth" target="_blank">${form}</a></td>
+		<td class="form"><a href="./resolver.html#${repeated}.eth">${form}</a></td>
 		<td class="info"><div class="cells">${cells.join('')}</div></td>
 	`;
 	let exploded = tr.querySelector('.exploded');

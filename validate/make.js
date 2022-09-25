@@ -1,9 +1,10 @@
 import {readFileSync, writeFileSync} from 'node:fs';
-import {SPEC} from '../derive/unicode-version.js';
+import {UNICODE} from '../derive/unicode-version.js';
 import {parse_cp_sequence} from '../derive/utils.js';
 import {ens_normalize, ens_emoji, ens_beautify} from '../src/lib.js';
 import {random_sample, run_tests, } from '../src/utils.js';
-import {read_labels, read_random, read_spec} from './data.js';
+import {read_labels, read_random, read_spec, SPEC_FILE} from './data.js';
+import {createHash} from 'node:crypto';
 
 // get custom tests
 const CUSTOM_TESTS = JSON.parse(readFileSync(new URL('./custom-tests.json', import.meta.url)));
@@ -65,7 +66,7 @@ for (let {hex} of (await import('../derive/rules/emoji-seq-whitelist.js')).defau
 }
 
 // make tests from unicode spec
-for (let cp of SPEC.props().White_Space) {
+for (let cp of UNICODE.props().White_Space) {
 	EXPECT_FAIL.add(String.fromCodePoint(cp));
 }
 
@@ -148,8 +149,12 @@ for (let [k, v] of Object.entries(registered)) {
 	console.log(`  ${k}: ${v.length}`);
 }
 
+let spec_hash = createHash('sha256').update(readFileSync(SPEC_FILE)).digest('hex');
+console.log(`Hash: ${spec_hash}`);
+
 let sample = 2048; // arbitrary, target: ~2MB
 let tests = [
+	{name: 'version', created: new Date(), spec_hash},
 	CUSTOM_TESTS,
 	Object.values(require_pass), 
 	Object.values(require_fail), 

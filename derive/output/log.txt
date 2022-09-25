@@ -1,4 +1,4 @@
-Build Date: 2022-09-25T06:54:06.244Z
+Build Date: 2022-09-25T20:27:17.905Z
 Unicode Version: 15.0.0
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man

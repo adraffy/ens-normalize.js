@@ -36,21 +36,22 @@ let pretty = ens_beautify('1⃣2⃣.eth');
 // ens_normalize(ens_beautify(x)) == ens_normalize(x)
 ```
 
-Normalize name fragments:
+Normalize name fragments for [substring search](./test/fragment.js):
 ```Javascript
 // these fragments fail ens_normalize() due to ens_normalize_post_check() rules
 // but will normalize fine as fragments
 let frag1 = ens_normalize_fragment('AB--');
 let frag2 = ens_normalize_fragment('\u{303}');
 
-// structural logic is delayed until Post-check:
+// positional logic is delayed until Post-check:
 let norm_gTLD = ens_normalize_post_check('eth');
 ```
 
 Instead of exposing an IDNA-like API (`is_valid()`, `get_mapped()`, etc.), this library exposes a single function which converts names to tokens:
 ```JavaScript
 // string -> Token[]
-let tokens = ens_tokenize('_R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./'); // never throws
+// never throws
+let tokens = ens_tokenize('_R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./');
 // [
 //     { type: 'isolated', cp: 95 }, // valid w/restrictions
 //     {                             // (eg. no combining marks)
