@@ -108,3 +108,4 @@ console.log(ens_emoji());
 		* [tests.json](./validate/tests.json)
 * `npm run test` — perform validation tests
 * `npm run build` — create `/dist/`
+* `npm run rebuild` — run all the commands above

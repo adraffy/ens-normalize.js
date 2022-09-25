@@ -37,5 +37,9 @@ export default [
 	0x39, // (9) DIGIT NINE
 	0x23, // (#) NUMBER SIGN
 	0x2A, // (*) ASTERISK
+
+	// demoted for mapping
+	0x203C, // (‼️) double exclamation mark
+	0x2049, // (⁉️) exclamation question mark
 	
 ];

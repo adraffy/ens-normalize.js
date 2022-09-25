@@ -1,6 +1,6 @@
 {
   "name": "@adraffy/ens-normalize",
-  "version": "1.6.7",
+  "version": "1.6.8",
   "description": "Compact ES6 Ethereum Name Service (ENS) Name Normalizer",
   "keywords": [
     "ENS",
@@ -36,7 +36,8 @@
     "make": "node src/make.js",
     "validate": "node validate/make.js",
     "test": "node test/validate.js",
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "rebuild": "npm run derive && npm run make && npm run validate && npm run test && npm run build"
   },
   "devDependencies": {
     "@adraffy/punycode": "^0.0.3",

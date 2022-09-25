@@ -10,6 +10,10 @@ export default [
 	[0x6F8, [0x668]], // 6F8 (۸) EXTENDED ARABIC-INDIC DIGIT EIGHT => 668 (٨) ARABIC-INDIC DIGIT EIGHT
 	[0x6F9, [0x669]], // 6F9 (۹) EXTENDED ARABIC-INDIC DIGIT NINE  => 669 (٩) ARABIC-INDIC DIGIT NINE
 
+	// emoji convenience
+	[0x203C, [0x2757, 0x2757]], // (‼️) double exclamation mark   => ❗+❗
+	[0x2049, [0x2757, 0x2753]], // (⁉️) exclamation question mark => ❗+❓
+
 	// initial hyphen-likes
 	[0x2011, [0x2D]], // 2011 (‑) NON-BREAKING HYPHEN
 	[0x2013, [0x2D]], // 2013 (–) EN DASH
@@ -146,11 +150,11 @@ export default [
 	[0x1F168, [0x79]], // (🅨) NEGATIVE CIRCLED LATIN CAPITAL LETTER Y
 	[0x1F169, [0x7A]], // (🅩) NEGATIVE CIRCLED LATIN CAPITAL LETTER Z
 	// negative squared => a-z
+	// these contain some emoji
 	// 0x1F170, // (🅰) NEGATIVE SQUARED LATIN CAPITAL LETTER A
 	// 0x1F171, // (🅱) NEGATIVE SQUARED LATIN CAPITAL LETTER B
 	// 0x1F17E, // (🅾) NEGATIVE SQUARED LATIN CAPITAL LETTER O
 	// 0x1F17F, // (🅿) NEGATIVE SQUARED LATIN CAPITAL LETTER P
-	// these contain some emoji
-	// promote remainder to picto instead
+	// marked remainder as isolates
 
 ];

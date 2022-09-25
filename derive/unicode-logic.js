@@ -1,6 +1,10 @@
 import {parse_cp, parse_cp_range, parse_cp_sequence, hex_cp, hex_seq, explode_cp} from './utils.js';
 import {readFileSync} from 'node:fs';
 
+export function read_regions() {
+	return JSON.parse(readFileSync(new URL('./data/regions.json', import.meta.url)));
+}
+
 export function parse_semicolon_file(file, impl = {}) {
 	let scope = {
 		root: {},
@@ -149,24 +153,26 @@ export class UnicodeSpec {
 			}
 		});
 	}
-	scripts({abbr = false} = {}) {
+	scripts() {
 		// 0000..001F    ; Common # Cc  [32] <control-0000>..<control-001F>
 		// 0020          ; Common # Zs       SPACE
-		let m = Object.entries(parse_semicolon_file(new URL('./Scripts.txt', this.dir), {
+		return Object.entries(parse_semicolon_file(new URL('./Scripts.txt', this.dir), {
 			row([src, type]) {
 				this.get_bucket(type).push(...parse_cp_range(src));
 			}
 		}));
-		if (abbr) {
-			let map = Object.fromEntries(this.prop_values().sc.map(v => [v[1], v[0]])); // Latn => Latin
-			for (let i = 0; i < m.length; i++) {
-				let abbr = map[m[i][0]];
-				if (abbr) {
-					m[i][0] = abbr;
+	}
+	script_extensions() {
+		// 102E0         ; Arab Copt # Mn       COPTIC EPACT THOUSANDS MARK
+		// 102E1..102FB  ; Arab Copt # No  [27] COPTIC EPACT DIGIT ONE..COPTIC EPACT NUMBER NINE HUNDRED
+		return Object.entries(parse_semicolon_file(new URL('./ScriptExtensions.txt', this.dir), {
+			row([src, abbrs]) {
+				let cps = parse_cp_range(src);
+				for (let abbr of abbrs.trim().split(/\s+/)) {
+					this.get_bucket(abbr).push(...cps);
 				}
 			}
-		}
-		return m;
+		}));
 	}
 	confusables() {
 		// thes are SINGLE CHARCTERS that confuse with a SEQUENCE
@@ -369,3 +375,75 @@ function parse_version_from_comment(s) {
 	if (!match) throw new Error(`expected version: ${s}`);
 	return match[1];
 }
+
+export class UnicodeScripts {
+	constructor(spec) {
+		this.spec = spec;
+		let {sc} = spec.prop_values(); // sc = Script
+		// this.names = new Map(sc.map(v => [v[0], v[1]])); // abbr -> name
+		let name2abbr = new Map(sc.map(v => [v[1], v[0]])); // name -> abbr
+		// work in abbrs
+		this.entries = spec.scripts().map(([name, cps]) => {
+			let abbr = name2abbr.get(name);
+			if (!abbr) throw new TypeError(`unknown script abbr: ${name}`);
+			return {name, abbr, set: new Set(cps)};
+		});
+		this.by_abbr = Object.fromEntries(this.entries.map(x => [x.abbr, x])); // use Object so we can $.Latn
+	}
+	get_script_set(cps) {
+		let ret = new Set();
+		for (let cp of cps) {
+			for (let {abbr, set} of this.entries) {
+				if (set.has(cp)) {
+					ret.add(abbr);
+				}
+			}
+		}
+		return ret;
+	}
+	get_augmented_script_set(cps) {
+		// https://www.unicode.org/reports/tr39/#Mixed_Script_Detection
+		let ret = this.get_script_set(cps);
+		if (ret.has('Hani')) {
+			ret.add('Hanb');
+			ret.add('Jpan');
+			ret.add('Kore');
+		}
+		if (ret.has('Hira')) ret.add('Jpan');
+		if (ret.has('Kana')) ret.add('Jpan');
+		if (ret.has('Hang')) ret.add('Kore');
+		if (ret.has('Bopo')) ret.add('Hanb');
+		if (ret.delete('Zyyy') | ret.delete('Zinh')) {
+			ret.add('ALL'); // this needs special handling
+		}
+		return ret;
+	}
+
+	// https://www.unicode.org/reports/tr39/#Whole_Script_Confusables
+	// confusables = [target: number[], cps: number[]]
+	// for example:
+	//   237A ;	0061 ; ⍺ → a ) APL FUNCTIONAL SYMBOL ALPHA → LATIN SMALL LETTER A
+	//   FF41 ;	0061 ; ａ → a ) FULLWIDTH LATIN SMALL LETTER A → LATIN SMALL LETTER A
+	// confusables = [[0x61], [0x237A, 0xFF41]]
+	wholes_from_single(abbr0, confusables, ...abbrs) {
+		let wholes = [];	
+		let script0 = this.by_abbr[abbr0];
+		if (!script0) throw new TypeError(`unknown script: ${abbr0}`);
+		for (let abbr of abbrs) {
+			if (!this.by_abbr[abbr]) {
+				throw new TypeError(`unknown script: ${abbr}`);
+			}
+		}
+		for (let [target, cps] of confusables) {
+			let matches = cps.filter(cp => script0.set.has(cp));
+			if (!matches.length) continue;
+			let cover_set = this.get_script_set(target);
+			if (!cover_set.has(abbr0) || abbrs.some(abbr => cover_set.has(abbr))) {
+				wholes.push([target, matches]);
+			}
+		}
+		return wholes;
+	}
+
+}
+

@@ -1,9 +1,16 @@
-import {ens_normalize, ens_normalize_fragment} from '../src/lib.js';
+import {ens_normalize, ens_normalize_fragment, nfd} from '../src/lib.js';
 
 // naive implementation
 function name_contains_fragment(name, frag) {
+	// convert the name to NFD because:
+	//   è = E8 => 65 300
+	// note that:
+	//   name_contains_fragment("è", "e") => true
+	//   name_contains_fragment("è", String.fromCodePoint(300)) => true
+	// if instead, you want exact codepoint matching: 
+	//   use ens_normalize_fragment() without the nfd argument (which defaults to nfc)
 	try {
-		return ens_normalize(name).normalize('NFD').includes(ens_normalize_fragment(frag).normalize('NFD'));
+		return ens_normalize_fragment(name, nfd).includes(ens_normalize_fragment(frag, nfd));
 	} catch (ignored) {
 	}
 }

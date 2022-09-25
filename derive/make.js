@@ -1,14 +1,12 @@
-import {mkdirSync, writeFileSync, createWriteStream, readFileSync} from 'node:fs';
+import {mkdirSync, writeFileSync, createWriteStream} from 'node:fs';
 import {compare_arrays, explode_cp, parse_cp_sequence} from './utils.js';
-import {SPEC, NF, IDNA} from './unicode-version.js';
+import {SPEC, NF, IDNA, SCRIPTS} from './unicode-version.js';
+import {read_regions} from './unicode-logic.js';
 
 import CHARS_VALID from './rules/chars-valid.js';
 import CHARS_DISALLOWED from './rules/chars-disallow.js';
 import CHARS_MAPPED from './rules/chars-mapped.js';
 import CHARS_ISOLATED from './rules/chars-isolated.js';
-import EMOJI_DEMOTED from './rules/emoji-demoted.js';
-import EMOJI_WHITELIST from './rules/emoji-seq-whitelist.js';
-import EMOJI_BLACKLIST from './rules/emoji-seq-blacklist.js';
 
 let out_dir = new URL('./output/', import.meta.url);
 
@@ -22,6 +20,7 @@ let out_dir = new URL('./output/', import.meta.url);
 	};
 })(process.stdout);
 
+// quick idiot check
 function assert_distinct(things) {
 	let m = Object.entries(things).map(([k, v]) => [k, new Set(v)]);
 	for (let i = 0; i < m.length; i++) {
@@ -40,15 +39,16 @@ function assert_distinct(things) {
 assert_distinct({
 	CHARS_VALID, 
 	CHARS_DISALLOWED, 
-	MAPPED: CHARS_MAPPED.map(x => x[0]),
-	EMOJI_DEMOTED
+	MAPPED: CHARS_MAPPED.map(x => x[0])
 });
 
+// missing data
 const Regional_Indicator = new Set(SPEC.props().Regional_Indicator);
 
 console.log(`Build Date: ${new Date().toJSON()}`);
 console.log(`Unicode Version: ${SPEC.version_str}`);
 
+// these are our primary output structures
 let ignored = new Set(IDNA.ignored);
 let valid = new Set(IDNA.valid);
 let mapped = new Map(IDNA.mapped);
@@ -85,13 +85,14 @@ function register_emoji(info) {
 		if (!Array.isArray(cps) || !cps.length) throw new Error('expected cps');
 		if (!info.name) throw new Error('expected name');
 		if (!info.type) throw new Error('expected type');
+		info.name = info.name.replace(/\\x{([0-9a-f]{2})}/g, (_, x) => String.fromCharCode(parseInt(x, 16)));
 		let key = String.fromCodePoint(...cps);
 		let old = emoji.get(key);
 		if (old) {
 			console.log(old);
 			throw new Error(`duplicate`);
 		}
-		console.log(`Register Emoji: ${SPEC.format(info)}`);		
+		console.log(`Register Emoji [${info.type}]: ${SPEC.format(info)}`);		
 		emoji.set(key, info);
 	} catch (err) {
 		console.log(info);
@@ -120,8 +121,9 @@ emoji_seqs.RGI_Emoji_Modifier_Sequence.forEach(register_emoji);
 
 let emoji_chrs = SPEC.emoji_data();
 let emoji_map = new Map(emoji_chrs.Emoji.map(x => [x.cp, x]));
+let emoji_demoted = new Set((await import('./rules/emoji-demoted.js')).default);
 for (let rec of emoji_map.values()) {
-	if (EMOJI_DEMOTED.includes(rec.cp)) {
+	if (emoji_demoted.has(rec.cp)) {
 		rec.used = true;
 		console.log(`Demoted Emoji: ${SPEC.format(rec)}`);
 	} else {
@@ -131,7 +133,7 @@ for (let rec of emoji_map.values()) {
 
 /*
 if (false) { // only flag sequences with valid regions
-	let regions = JSON.parse(readFileSync(new URL('./data/regions.json', import.meta.url)));
+	let regions = read_regions();
 	let cps = [...Regional_Indicator];
 	if (cps.length != 26) throw new Error('expected 26');
 	for (let cp of cps) {
@@ -165,10 +167,11 @@ for (let info of emoji_map.values()) {
 		register_emoji({cps: [info.cp], ...info});
 	}
 }
-for (let info of EMOJI_WHITELIST) {
+
+for (let info of (await import('./rules/emoji-seq-whitelist.js')).default) {
 	register_emoji({cps: parse_cp_sequence(info.hex), type: 'Whitelisted', name: info.name});
 }
-for (let seq of EMOJI_BLACKLIST) {
+for (let seq of (await import('./rules/emoji-seq-blacklist.js')).default) {
 	let cps = parse_cp_sequence(seq);
 	let key = String.fromCodePoint(...cps);
 	let info = emoji.get(key);
@@ -237,9 +240,9 @@ for (let [x, ys] of mapped.entries()) {
 	if (valid.has(x)) {
 		throw new Error(`Mapped is valid: ${SPEC.format(x)}`);
 	}
-	for (let cp of ys) {
-		if (!valid.has(cp)) {
-			throw new Error(`Mapping isn't invalid: ${SPEC.format(x, ys)} @ ${SPEC.format(cp)}`);
+	if (!ys.every(cp => valid.has(cp))) { // not valid chars
+		if (!ys.every(cp => emoji_map.has(cp))) { // not multiple single emoji
+			throw new Error(`Mapping isn't valid or emoji: ${SPEC.format(x, ys)}`);
 		}
 	}
 	let decomposed = NF.nfd(ys);
@@ -267,55 +270,19 @@ for (let cp of isolated) {
 	}
 }
 
-let scripts = SPEC.scripts({abbr: true});
-let script_map = Object.fromEntries(scripts.map(([k, v]) => { 
-	return [k, sorted(v.filter(cp => valid.has(cp)))];
-}));
-let script_sets = scripts.map(([k, cps]) => [k, new Set(cps)]);
-function get_script_cover(cps) {
-	let cover = new Set();
-	for (let cp of cps) {
-		for (let [name, set] of script_sets) {
-			if (set.has(cp)) {
-				cover.add(name);
-			}
-		}
-	}
-	return cover;
-}
-
-let confusables = SPEC.confusables();
-let confuse_groups = confusables.map(([target, cps]) => {
-	return {target, cps, cover: get_script_cover([target, cps].flat())};
-});
-
-// find all characters of script0 that are linked 
-// by confusables to ANY of the provided scripts
-function whole_script_confusables(abbr0, ...abbrs) {
-	let whole = [];	
-	let script = new Set(script_map[abbr0]);
-	for (let {cps, cover} of confuse_groups) {
-		if (cover.has(abbr0) && abbrs.some(abbr => cover.has(abbr))) {
-			for (let cp of cps) {
-				if (script.delete(cp)) {
-					whole.push(cp);
-				}
-			}
-		}
-	}
-	return sorted(whole);
-}
-
-let {Latn, Grek, Cyrl} = script_map;
-
-//console.log(String.fromCodePoint(...whole_script_confusables('Grek', 'Latn', 'Cyrl')));
-//console.log(String.fromCodePoint(...whole_script_confusables('Cyrl', 'Latn', 'Grek')));
-
 function sorted(v) {
 	return [...v].sort((a, b) => a - b);
 }
 
-// sorting isn't important, just nice to have
+let scripts = Object.fromEntries(SCRIPTS.entries.map(x => {
+	return [x.abbr, [...x.set].filter(cp => valid.has(cp))];
+}));
+
+let confuse_Grek = (await import('./rules/confusables-Grek.js')).default.filter(cp => valid.has(cp));
+let confuse_Cyrl = (await import('./rules/confusables-Cyrl.js')).default.filter(cp => valid.has(cp));
+
+// note: sorting isn't important, just nice to have
+
 mkdirSync(out_dir, {recursive: true});
 writeFileSync(new URL('./spec.json', out_dir), JSON.stringify({
 	valid: sorted(valid),
@@ -324,10 +291,14 @@ writeFileSync(new URL('./spec.json', out_dir), JSON.stringify({
 	cm: sorted(cm),
 	emoji: [...emoji.values()].map(x => x.cps).sort(compare_arrays),
 	isolated: sorted(isolated),
-	scripts: {Latn, Grek, Cyrl}, // already sorted
+	scripts: {
+		Latn: sorted(scripts.Latn),
+		Grek: sorted(scripts.Grek),
+		Cyrl: sorted(scripts.Cyrl),
+	}, 
 	wholes: {
-		Grek: whole_script_confusables('Grek', 'Latn', 'Cyrl'), // already
-		Cyrl: whole_script_confusables('Cyrl', 'Latn', 'Grek'), // sorted
+		Grek: sorted(confuse_Grek),
+		Cyrl: sorted(confuse_Cyrl),
 	}
 }));
 
@@ -335,6 +306,11 @@ writeFileSync(new URL('./nf.json', out_dir), JSON.stringify({
 	ranks: SPEC.combining_ranks(),
 	exclusions: SPEC.composition_exclusions(),
 	decomp: SPEC.decompositions(),
-	qc: SPEC.nf_props().NFC_QC.map(x => x[0]).sort((a, b) => a - b)
+	qc: sorted(SPEC.nf_props().NFC_QC.map(x => x[0]))
 }));
 writeFileSync(new URL('./nf-tests.json', out_dir), JSON.stringify(SPEC.nf_tests()));
+
+writeFileSync(new URL('./emoji-info.json', out_dir), JSON.stringify([...emoji.values()].map(info => {
+	let {cps, name, version, type} = info;
+	return {form: String.fromCodePoint(...cps), name, version, type};
+})));

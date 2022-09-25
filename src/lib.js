@@ -10,19 +10,20 @@ const SORTED_VALID = read_member_array(r).sort((a, b) => a - b);
 const VALID = new Set(SORTED_VALID);
 const IGNORED = new Set(read_member_array(r));
 const MAPPED = new Map(read_mapped(r));
-function read_sorted_valid_set() {
+function read_valid_subset() {
 	return new Set(read_member_array(r, SORTED_VALID));
 }
-const CM = read_sorted_valid_set();
-const ISOLATED = read_sorted_valid_set();
-const SCRIPTS = [
-	['Latin', read_sorted_valid_set()], // latin gets priority because of ascii
-	['Greek', read_sorted_valid_set(), read_sorted_valid_set()],
-	['Cyrillic', read_sorted_valid_set(), read_sorted_valid_set()]
-];
+const CM = read_valid_subset();
+const ISOLATED = read_valid_subset();
+const SCRIPTS = ['Latin', 'Greek', 'Cyrillic'].map((k, i) => {
+	// this defines the priority
+	// order must match make.js
+	// (script name, script-set, whole-set)
+	return [k, read_valid_subset(), i ? read_valid_subset() : 0];
+});
 const EMOJI_SOLO = new Set(read_member_array(r));
 const EMOJI_ROOT = read_emoji_trie(r);
-const NFC_CHECK = new Set(read_member_array(r, SORTED_VALID));
+const NFC_CHECK = read_valid_subset();
 
 const STOP = 0x2E;
 const HYPHEN = 0x2D;
@@ -79,7 +80,7 @@ function check_scripts_latin_like(cps) {
 	for (let i = 0; i < SCRIPTS.length; i++) {
 		let [name, script_set, whole_set] = SCRIPTS[i];
 		if (cps.some(cp => script_set.has(cp))) {
-			for (let j = i + 1; j < SCRIPTS.length; j++) {
+			for (let j = i + 1; j < SCRIPTS.length; j++) { // scripts before already had no match
 				let [name_j, set_j] = SCRIPTS[j];
 				if (cps.some(cp => set_j.has(cp))) {
 					throw new Error(`mixed-script confusable: ${name} + ${name_j}`);
@@ -87,17 +88,18 @@ function check_scripts_latin_like(cps) {
 			}
 			if (whole_set) { // aka non-latin
 				// https://www.unicode.org/reports/tr39/#def_whole_script_confusables
-				// if every char matches the script is confusable
+				// if every char matching the script is confusable
 				if (cps.every(cp => !script_set.has(cp) || whole_set.has(cp))) {
 					throw new Error(`whole-script confusable: ${name}`);
 				}
 			}
+			break;
 		}
 	}
 }
 
 // requires decomposed codepoints
-function check_cm(cps) {
+function check_combinining_marks(cps) {
 	for (let i = 0, j = -1; i < cps.length; i++) {
 		if (CM.has(cps[i])) {
 			if (i == 0) {
@@ -107,7 +109,7 @@ function check_cm(cps) {
 			} else {
 				let prev = cps[i - 1];
 				if (prev == FE0F || ISOLATED.has(prev)) {
-					throw new Error(`illegal combining mark`);
+					throw new Error(`isolate combining mark`);
 				}
 			}	
 			j = i + 1;
@@ -115,6 +117,8 @@ function check_cm(cps) {
 	}
 }
 
+// this function only makes sense if the input 
+// was an output of ens_normalize_fragment 
 export function ens_normalize_post_check(norm) {
 	for (let label of norm.split('.')) {
 		if (!label) throw new Error('Empty label');
@@ -127,7 +131,7 @@ export function ens_normalize_post_check(norm) {
 			check_scripts_latin_like(cps_nfc);
 			// replace emoji with single character
 			let cps_nfd = nfd(process(label, () => [FE0F])); 
-			check_cm(cps_nfd);
+			check_combinining_marks(cps_nfd);
 		} catch (err) {
 			throw new Error(`Invalid label "${label}": ${err.message}`);
 		}
@@ -135,8 +139,8 @@ export function ens_normalize_post_check(norm) {
 	return norm;
 }
 
-export function ens_normalize_fragment(frag) {
-	return str_from_cps(nfc(process(frag, filter_fe0f)));
+export function ens_normalize_fragment(frag, nf = nfc) {
+	return str_from_cps(nf(process(frag, filter_fe0f)));
 }
 
 export function ens_normalize(name) {
@@ -157,7 +161,7 @@ function filter_fe0f(cps) {
 function process(name, emoji_filter) {
 	let input = explode_cp(name).reverse(); // flip so we can pop
 	let output = [];
-	while (input.length) {		
+	while (input.length) {
 		let emoji = consume_emoji_reversed(input);
 		if (emoji) {
 			output.push(...emoji_filter(emoji)); // idea: emoji_filter(emoji, output.length); // provide position to callback

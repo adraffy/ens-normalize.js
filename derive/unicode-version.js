@@ -1,4 +1,4 @@
-import {UnicodeSpec} from './unicode-logic.js';
+import {UnicodeScripts, UnicodeSpec} from './unicode-logic.js';
 import {create_nf} from './nf.js';
 
 export const SPEC = new UnicodeSpec(new URL('./data/15.0.0/', import.meta.url));
@@ -13,3 +13,4 @@ export const IDNA = SPEC.idna_rules({
 	valid_deviations: true // because 200C and 200D were allowed
 });
 
+export const SCRIPTS = new UnicodeScripts(SPEC);

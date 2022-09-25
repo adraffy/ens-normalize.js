@@ -3,8 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Supported Emoji</title>
+<title>Emoji</title>
 <style>
+.hide {
+	display: none !important;
+}
 body { 
 	margin: 3rem; 
 	background: #eee;
@@ -19,16 +22,42 @@ h1 {
 #version {
 	text-align: right;
 }
+#search {
+	margin: 1rem 0;
+	text-align: center;
+}
+#search input {
+	display: block;
+	padding: 5px;
+	font-size: 150%;
+	width: 100%;
+	box-sizing: border-box;
+}
+#hover {
+	position: absolute;
+	font-size: 200px;
+	background: rgba(255, 255, 255, .85);
+	padding: 20px;
+	border: 10px solid rgba(128, 128, 128, .2);
+	border-radius: 40px;
+	left: 50%;
+	min-width: 300px;
+	text-align: center;
+}
+h2 a.top {
+	float: right;
+	font-size: 70%;
+}
 table {
 	border-collapse: collapse;
 	width: 100%;
 	text-align: left;
 }
-tbody {
-	font-size: 150%; 
-}
 tbody tr:nth-child(odd) {
 	background: #fff;
+}
+tbody tr:hover {
+	background-color: #cff;
 }
 td {
 	border: 1px solid #ccc;
@@ -45,28 +74,80 @@ td.form {
 }
 .form a {
 	text-decoration: none;
-}
-.hex {
-	width: 100%;
+	color: #000;
 }
 td.index {
 	color: #999;
 }
-td.hex {
-	font: 11pt monospace;	
+td.info {
+	padding: 5px 10px;
+	width: 100%;
+}
+.cells {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 5px;
+}
+.cells .version {
+	color: #999;
+	font-size: 90%;
+}
+.wide .cells {
+	align-items: start;
+	flex-direction: column;
+} 
+.cells code {
+	background: #ffa;
+	font-size: 120%;
+	padding: 2px 4px;
+}
+.exploded {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 5px;
+}
+footer {
+	text-align: center;
+	color: #666;
+	margin: 1rem;
+}
+@media only screen and (max-width: 800px) { 
+	body {
+		margin: 0;
+	}
+	header {
+		margin: 1rem;
+	}
+	#search {
+		margin: 0 1rem;
+	}
+	h2 {
+		padding-left: 1rem;
+	}
 }
 </style>
 </head>
 <body>
 <header>
-<h1>Supported Emoji</h1>
+<div>
+◀ <a href="./resolver.html">Resolver</a>
+<h1>Emoji</h1>
+</div>
 <span id="version">
 <a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a><br>
 <a href="https://github.com/adraffy/ensip-norm">@adraffy/ensip-norm</a>
 </span>
 </header>
+<div id="search">
+<label><input placeholder="Search: Name or {FF} or v15"></label>
+</div>
 <ul id="toc"></ul>
-<div id="sections"></div>
+<div id="hover" class="hide"></div>
+<main>Loading...</main>
+<section id="results" class="hide"></section>
+<footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
 <script type="module">
 import {
 	ens_normalize, ens_beautify, ens_tokenize, ens_emoji,
@@ -75,61 +156,237 @@ import {
 } from '../dist/all.min.js';
 use_default_style();
 
+const search_field = document.querySelector('#search input');
+const toc_ul = document.querySelector('#toc');
+const main = document.querySelector('main');
+const results_section = document.querySelector('#results');
+const hover_div = document.querySelector('#hover');
+
+let last_hover;
+let search_timer;
+let emoji = ens_emoji();
+
+async function fetch_json(url) {
+	let res = await fetch(url);
+	if (res.status !== 200) throw new Error(`HTTP Error ${res.status}`);
+	return res.json();
+}
+
+// this is optional
+let info_map = new Map();
+try {
+	for (let info of await fetch_json('../derive/output/emoji-info.json')) {
+		info_map.set(info.form, info);
+	}
+	for (let region of await fetch_json('../derive/data/regions.json')) {
+		let cps = explode_cp(region).map(cp => 0x1F1E6 - 0x41 + cp);
+		let form = String.fromCodePoint(...cps);
+		if (!info_map.has(form)) {
+			info_map.set(form, {name: `Flag Sequence: ${region}`});
+			emoji.push(cps);
+		}
+	}
+} catch (err) {
+}
+
+for (let x of info_map.values()) {
+	x.lower = x.name.toLowerCase(); // cache this
+}
+
+emoji.sort(compare_arrays);
+
 let buckets = [];
-for (let cps of ens_emoji().sort(compare_arrays)) {
-	let name = String.fromCodePoint(...cps);
-	let norm = ens_normalize(name);
-	let pretty = ens_beautify(norm);
+for (let cps of emoji) {
+	let form = String.fromCodePoint(...cps);
+	let norm = ens_normalize(form);
+	let info = info_map.get(form);
 	let n = [...norm].length;
 	let bucket = buckets[n];
 	if (!bucket) buckets[n] = bucket = [];
-	bucket.push({name, norm, pretty, cps});
+	let rec = {form, norm, cps, info, n};
+	rec.tr = create_tr(rec, cps.length);
+	bucket.push(rec);
 }
 
-document.querySelector('h1').innerHTML += ` (${buckets.reduce((a, x) => a + (x?x.length:0), 0)})`;
+let flat = buckets.flat();
 
-for (let n = 0; n < buckets.length; n++) {
+document.querySelector('h1').innerHTML += ` (${flat.length})`;
+
+
+main.innerHTML = '';
+
+for (let n = 1; n < buckets.length; n++) {
 	let bucket = buckets[n];
 	if (!bucket) continue;
 	let title = `${n} character${n==1?'':'s'} (${bucket.length})`;
 
 	let li = document.createElement('li');
 	li.innerHTML = `<a href="#${n}">${title}</a>`;
-	document.querySelector('#toc').append(li);
+	toc_ul.append(li);
 
 	let section = document.createElement('section');
-	section.innerHTML = `
-		<h2><a name="${n}">${title}</a></h2>
+	section.innerHTML = `<h2><a name="${n}">${title}</a></h2>`;
+	
+	// add jump
+	let a = document.createElement('a');
+	a.classList.add('top');
+	a.innerHTML = '⬆ Top';
+	a.href = '#';
+	a.addEventListener('click', e => {
+		e.preventDefault();
+		window.history.replaceState(null, null, ' ');
+		window.scrollTo(0, 0);
+	});
+	section.querySelector('h2').append(a);
+
+	section.append(create_table(bucket));
+	main.append(section);
+}
+
+process_hash();
+window.addEventListener('hashchange', process_hash);
+
+search_field.addEventListener('input', search_soon);
+
+hover_div.addEventListener('mousemove', e => {
+	hover_div.classList.add('hide');
+});
+
+document.addEventListener('mousemove', e => {
+	let node = e.target;
+	while (node && !node.dataset.name) {
+		node = node.parentElement;
+	}
+	hover_div.classList.toggle('hide', !node);
+	if (!node) return;
+	let {name} = node.dataset;
+	if (name == last_hover) return;
+	last_hover = name;
+	let r = node.getBoundingClientRect();
+	let y = r.top + window.scrollY;
+	let gap = 0.5;
+	if (r.top < window.innerHeight * .6) {		
+		y += r.height * (1 + gap);
+		hover_div.style.transform = 'translate(-50%, 0)';
+	} else {
+		y -= r.height * gap;
+		hover_div.style.transform = 'translate(-50%, -100%)';
+	}
+	hover_div.style.top = `${y}px`;
+	hover_div.innerHTML = name;
+});
+
+function process_hash() {
+	let anchor;
+	let hash = window.location.hash.slice(1);
+	if (hash) {
+		let match;
+		if (match = hash.match(/^q\=(.*)$/)) {
+			search_field.value = match[1];
+			search_field.select();
+		} else if (/^\d+$/.test(hash)) {
+			search_field.value = '';
+			anchor = document.querySelector(`[name="${hash}"]`);
+		}
+	}
+	update_search();
+	if (anchor) anchor.scrollIntoView();
+}
+
+function search_soon() {
+	if (search_timer) return;
+	search_timer = setTimeout(update_search, 100);
+}
+
+function update_search() {
+	clearTimeout(search_timer);
+	search_timer = undefined;
+	let input = search_field.value.trim();
+	toc_ul.classList.toggle('hide', input);
+	main.classList.toggle('hide', input);
+	results_section.classList.toggle('hide', !input);
+	const prefix = '#q=';
+	if (!input) {
+		if (window.location.hash.startsWith(prefix)) {
+			window.history.replaceState(null, null, ' ');
+		}
+		return;
+	}
+	window.history.replaceState(null, null, prefix + input);
+	let results;
+	let match;
+	if (match = input.match(/^{([0-9a-f]+)}$/i)) {
+		let cp = parseInt(match[1], 16);
+		results = flat.filter(x => x.cps.includes(cp));
+	} else if (match = input.match(/^v\d*$/)) {
+		let version = parseInt(input.slice(1));
+		results = flat.filter(x => x.info && parseInt(x.info.version) == version);
+	} else {
+		let lower = input.toLowerCase();
+		let norm;
+		try {
+			norm = ens_normalize(input);
+		} catch (err) {
+		}
+		results = flat.filter(x => {
+			if (x.info && x.info.lower.includes(lower)) return true;
+			if (x.norm.includes(norm)) return true;
+		});
+	}
+	let n = results.length;
+	results_section.innerHTML = `
+		<h2>${n} result${n==1?'':'s'}</h2>
+	`;
+	results_section.append(create_table(results, true));
+	hover_div.classList.add('hide');
+}
+
+function create_table(bucket, search) {
+	let table = document.createElement('table');
+	table.innerHTML = `
 		<table>
 		<thead>
 		<tr>
-		<th class="index"></th>
+		<th class="index">${search ? 'Length' : ''}</th>
 		<th class="form">Form</th>
-		<th class="exploded">Parts</th>
-		<th class="hex">Fully Qualified</th>
+		<th class="info">Name, Version, Fully-Qualified Hex, Components</th>
 		</tr>
 		</thead>
 		<tbody></tbody>
 		</table>
 	`;
-	//<th class="form">Norm</th>
-	//<th class="form">Beautify</th>
-	section.querySelector('tbody').append(...bucket.map(({cps, name, norm, pretty}, i) => {
-		let tr = document.createElement('tr');
-		tr.innerHTML = `
-			<td class="index">${i+1}</td>
-			<td class="form"><a href="./resolver.html#${encodeURIComponent(name)}.eth" target="_blank">${name}</a></td>
-			<td class="exploded"></td>
-			<td class="hex">${cps.map(hex_cp).join(' ')}</td>
-		`;
-		//<td class="form">${name!==norm?norm:''}</a></td>
-		//<td class="form">${norm!==pretty?pretty:''}</a></td>
-		tr.querySelector('.exploded').append(dom_from_tokens(ens_tokenize(name)));
-		return tr;
-	}));
-
-	document.body.append(section);
+	table.querySelector('tbody').append(...bucket.map((x, i) => search ? x.tr : create_tr(x, 1+i)));
+	return table;
 }
+
+function create_tr({cps, form, norm, info, n}, first) {
+	let cells = [];
+
+	if (info) {
+		let {name, version} = info;
+		let title = `<a href="https://emojipedia.org/${form}">${name}</a>`;
+		if (version) title += ` <span class="version">v${version}</span>`;
+		cells.push(`<div>${title}</div>`);
+	}
+	cells.push(`<code>${cps.map(hex_cp).join(' ')}</code>`);
+	cells.push(`<div class="exploded"></div>`);
+
+	let tr = document.createElement('tr');
+	tr.dataset.name = form;
+	tr.innerHTML = `
+		<td class="index">${first}</td>
+		<td class="form"><a href="./resolver.html#${form}.eth" target="_blank">${form}</a></td>
+		<td class="info ${n >= 3 ? 'wide' : 'narrow'}"><div class="cells">${cells.join('')}</div></td>
+	`;
+	let exploded = tr.querySelector('.exploded');
+	exploded.append(dom_from_tokens(ens_tokenize(form), true));
+	if (form !== norm) {
+		exploded.append('➔');
+		exploded.append(dom_from_tokens(ens_tokenize(norm)));
+	}
+	return tr;
+}
+
 </script>
 </body>
 </html>
