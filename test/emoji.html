@@ -151,7 +151,7 @@ footer {
 </span>
 </header>
 <div id="search">
-<input placeholder="Search: Name or {FF} or v15">
+<input placeholder="Search: Name or {FF} or v15 or UnicodeProperty">
 <select class="hide"></select>
 </div>
 <ul id="toc"></ul>
@@ -204,18 +204,42 @@ try {
 	console.log(err);
 }
 
+function searchize(s) {
+	return s.toLowerCase()
+		.replace(/^\s+/, '') // leading whitespace
+		.replace(/\s+/, ' '); // repeated whitespace
+		//.replace(/[^a-z0-9 ]/, '');
+}
+
 let type_map = new Map();
 let versions = new Set();
 for (let x of info_map.values()) {
 	type_map.set(x.type.toLowerCase(), x.type);
 	versions.add(parseInt(x.version)|0);
-	x.lower = x.name.toLowerCase(); // cache this
+	x.query = searchize(x.name);
 }
+let keywords = [
+	[...type_map.values()].sort(), 
+	[
+		'Man',
+		'Woman',
+		'Family',
+		'Person',
+		'Light Skin',
+		'Medium-light Skin',
+		'Medium Skin',
+		'Medium-dark Skin',
+		'Dark Skin',
+		'Red Hair',
+		'Blond Hair',
+		'Curly Hair',		
+		'White Hair',
+	],
+	[...versions].sort((a, b) => a - b).map(x => `v${x}`),
+].flat(Infinity);
+
 if (type_map.size || versions.size) {
-	let keywords = [
-		[...type_map.values()].sort(), 
-		[...versions].sort((a, b) => a - b).map(x => `v${x}`)
-	].flat(Infinity);
+	
 	search_select.innerHTML = keywords.map(x => `<option>${x}</option>`).join('');
 	search_select.classList.remove('hide');
 }
@@ -312,7 +336,7 @@ function process_hash() {
 	if (hash) {
 		let match;
 		if (match = hash.match(/^q\=(.*)$/)) {
-			search_field.value = match[1];
+			search_field.value = decodeURIComponent(match[1]);
 			search_field.select();
 		} else if (/^\d+$/.test(hash)) {
 			search_field.value = '';
@@ -332,7 +356,7 @@ function update_search() {
 	clearTimeout(search_timer);
 	search_timer = undefined;
 	search_select.selectedIndex = -1;
-	let input = search_field.value.trim().toLowerCase();
+	let input = searchize(search_field.value);
 	toc_ul.classList.toggle('hide', input);
 	main.classList.toggle('hide', input);
 	results_section.classList.toggle('hide', !input);
@@ -357,11 +381,11 @@ function update_search() {
 	} else {
 		let norm;
 		try {
-			norm = ens_normalize(input);
+			norm = ens_normalize(input.replace(/\s+/, ''));
 		} catch (err) {
 		}
 		results = flat.filter(x => {
-			if (x.info && x.info.lower.includes(input)) return true;
+			if (x.info && x.info.query.includes(input)) return true;
 			if (x.norm.includes(norm)) return true;
 		});
 	}
