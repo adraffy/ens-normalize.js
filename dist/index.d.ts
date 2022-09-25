@@ -43,7 +43,7 @@ export function ens_beautify(name: string): string;
 export function ens_tokenize(name: string): Token[];
 export function ens_emoji(): number[][];
 
-export function ens_normalize_fragment(frag: string, nf: (cps: number[]) => number[]): string;
+export function ens_normalize_fragment(frag: string, nf?: (cps: number[]) => number[]): string;
 export function ens_normalize_post_check(norm: string): string;
 
 export function nfd(cps: number[]): number[];
