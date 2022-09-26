@@ -1,5 +1,6 @@
 import {parse_cp, parse_cp_range, parse_cp_sequence, hex_cp, hex_seq, explode_cp} from './utils.js';
 import {readFileSync} from 'node:fs';
+import { type } from 'node:os';
 
 export function read_regions() {
 	return JSON.parse(readFileSync(new URL('./data/regions.json', import.meta.url)));
@@ -291,6 +292,21 @@ export class UnicodeSpec {
 			}
 		});
 	}
+	regional_indicators() {
+		return this.props().Regional_Indicator;
+	}
+	valid_emoji_flag_sequences() {
+		let regions = read_regions(); // note: not versioned
+		let cps = this.regional_indicators();
+		if (cps.length != 26) throw new Error('expected 26 regionals');
+		let dx = cps[0] - 0x41; // 'A'
+		return regions.map(region => {
+			let cps = explode_cp(region).map(x => x + dx);
+			let name = `Flag Sequence: ${region}`;
+			let type = 'ValidFlagSequence';
+			return {cps, name, type};
+		});
+	}
 	idna_rules({version, use_STD3, valid_deviations}) {
 		switch (version) {
 			case 2003:
@@ -413,8 +429,11 @@ export class UnicodeScripts {
 		if (ret.has('Kana')) ret.add('Jpan');
 		if (ret.has('Hang')) ret.add('Kore');
 		if (ret.has('Bopo')) ret.add('Hanb');
-		if (ret.delete('Zyyy') | ret.delete('Zinh')) {
-			ret.add('ALL'); // this needs special handling
+		if (ret.has('Zyyy') || has.has('Zinh')) {
+			ret.delete('Zyyy');
+			ret.delete('Zinh');
+			// TODO: this needs special handling
+			ret.add('ALL');
 		}
 		return ret;
 	}

@@ -1,7 +1,7 @@
-import {SPEC, NF, SCRIPTS} from '../unicode-version.js';
+import {UNICODE, NF, SCRIPTS} from '../unicode-version.js';
 import {compare_arrays} from '../utils.js';
 
-let confusables = SPEC.confusables();
+let confusables = UNICODE.confusables();
 
 function get_scripts(cps) {
 	let set = SCRIPTS.get_script_set(cps);

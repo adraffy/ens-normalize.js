@@ -154,12 +154,13 @@ export function use_default_style() {
 		color: #fff;
 		background: #aaa;
 		min-width: 5px;
-		font-size: 50%;
+		font-size: 70%;
 		font-family: monospace;
 		border-radius: 5px;
 	}
 	.tokens .disallowed {
 		background: #c00;	
+		min-width: 5px;
 		border-radius: 5px;
 		color: #fff;
 	}
@@ -168,7 +169,7 @@ export function use_default_style() {
 		background: #800;
 	}
 	.tokens .tag sub {
-		font-size: 70%;
+		font-size: 50%;
 		color: #ccc;
 	}
 	.tokens .disallowed.mod {
@@ -211,7 +212,7 @@ export function use_default_style() {
 		background: #0aa;
 	}
 	.tokens .glyph .mod.tag {
-		background: #333;
+		background: #666;
 	}
 	.tokens .glyph .mod.dropped {
 		background: #aaa;		

@@ -6,7 +6,7 @@
 ## Data Files
 
 * [Unicode Technical Standard #46: IDNA](https://www.unicode.org/reports/tr46/)
-	* [unicode-logic.js/`idna_rules`()](./unicode-logic.js) — [src](https://unicode.org/reports/tr46/#Implementation_Notes)
+	* [unicode-logic.js/`idna_rules()`](./unicode-logic.js) — [src](https://unicode.org/reports/tr46/#Implementation_Notes)
 * [Unicode Technical Standard #51: Emoji](https://www.unicode.org/reports/tr51/)
 * [Unicode Standard Annex #15: Normalization Forms](https://unicode.org/reports/tr15/)
 * [Unicode Standard Annex #31: Script Property](https://www.unicode.org/reports/tr31/)
@@ -14,7 +14,7 @@
 	* [scripts-recommended.json](./data/scripts-recommended.json) — [src](https://www.unicode.org/reports/tr31/#Table_Recommended_Scripts)
 	* [scripts-limited-use.json](./data/scripts-limited-use.json) — [src](https://www.unicode.org/reports/tr31/#Table_Limited_Use_Scripts)
 * [Unicode Technical Standard #39: Security Mechanisms](https://www.unicode.org/reports/tr39/)
-	* [unicode-logic.js/`get_augmented_script_set`()](./unicode-logic.js) — [src](https://www.unicode.org/reports/tr39/#Mixed_Script_Detection)
+	* [unicode-logic.js/`get_augmented_script_set()`](./unicode-logic.js) — [src](https://www.unicode.org/reports/tr39/#Mixed_Script_Detection)
 * [Unicode data files](https://www.unicode.org/Public/)
 	* Download Latest: `node download.js` 
 	* To download older versions: `node download.js 12.1.0` 

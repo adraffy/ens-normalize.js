@@ -2,7 +2,7 @@
 // this requires a functioning library (derive => make)
 
 import {ens_tokenize} from '../src/lib.js';
-import {SPEC} from '../derive/unicode-version.js';
+import {UNICODE} from '../derive/unicode-version.js';
 import {readFileSync} from 'node:fs';
 import {parse_cp_range, explode_cp} from '../derive/utils.js';
 import {read_labels} from './data.js';
@@ -26,14 +26,14 @@ if (args[0] == '--') { // everything after is literal
 */
 
 //let cps = parse_cp_range('00..FF');
-let cps = SPEC.props().Terminal_Punctuation;
+let cps = UNICODE.props().Terminal_Punctuation;
 
 for (let cp of cps) {
 	let token = ens_tokenize(String.fromCodePoint(cp))[0];
 	if (token.type == 'valid') {
-		console.log('V', SPEC.format(cp));
+		console.log('V', UNICODE.format(cp));
 	} else if (token.type === 'mapped') {
-		console.log('M', SPEC.format(token.cp, token.cps));
+		console.log('M', UNICODE.format(token.cp, token.cps));
 	}
 }
 

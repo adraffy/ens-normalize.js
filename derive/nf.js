@@ -48,14 +48,14 @@ function unpack_cp(packed) {
 	return packed & 0xFFFFFF;
 }
 
-export function create_nf(spec) {
+export function create_nf(unicode) {
 
-	const SHIFTED_RANK = new Map(spec.combining_ranks().flatMap((v, i) => v.map(cp => [cp, (i+1) << 24])));
-	const COMP_EXCLUSIONS = new Set(spec.composition_exclusions());
+	const SHIFTED_RANK = new Map(unicode.combining_ranks().flatMap((v, i) => v.map(cp => [cp, (i+1) << 24])));
+	const COMP_EXCLUSIONS = new Set(unicode.composition_exclusions());
 	const DECOMP = new Map();
 	const RECOMP = new Map();
 
-	for (let [cp, cps] of spec.decompositions()) {
+	for (let [cp, cps] of unicode.decompositions()) {
 		DECOMP.set(cp, [...cps].reverse());
 		if (!COMP_EXCLUSIONS.has(cp) && cps.length == 2) {
 			let [a, b] = cps;
@@ -178,7 +178,7 @@ export function create_nf(spec) {
 		},
 		run_tests() {
 			let errors = [];
-			for (let [name, cases] of Object.entries(spec.nf_tests())) {
+			for (let [name, cases] of Object.entries(unicode.nf_tests())) {
 				for (let strs of cases) {
 					let [input, nfd0, nfc0] = strs.map(explode_cp);
 					let nfd1 = this.nfd(input);

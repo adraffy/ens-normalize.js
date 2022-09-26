@@ -3,10 +3,21 @@ export default [
 	// supported punctuation
 	0x002D, // (-) HYPHEN-MINUS
 	0x005F, // (_) LOW LINE
+	0x00B0, // (°) DEGREE SIGN
+	0x00B1, // (±) PLUS-MINUS SIGN
 	0x2019, // (’) RIGHT SINGLE QUOTATION MARK
 	0x2044, // (⁄) FRACTION SLASH
 	0x00AC, // (¬) NOT SIGN
 	0x2310, // (⌐) REVERSED NOT SIGN
+
+	// currency
+	0x0024, // ($) DOLLAR SIGN	
+	0x00A2, // (¢) CENT SIGN
+	0x00A3, // (£) POUND SIGN
+	0x00A4, // (¤) CURRENCY SIGN
+	0x00A5, // (¥) YEN SIGN
+	0x20AC, // (€) EURO SIGN
+	0x20BF, // (₿) BITCOIN SIGN
 
 	// bullets
 	0x2022, // (•) BULLET
@@ -15,6 +26,17 @@ export default [
 	0x25CD, // (◍) CIRCLE WITH VERTICAL FILL
 	0x25CE, // (◎) BULLSEYE
 
+	// blocks
+	0x2581, // (▁) LOWER ONE EIGHTH BLOCK
+	0x2582, // (▂) LOWER ONE QUARTER BLOCK
+	0x2583, // (▃) LOWER THREE EIGHTHS BLOCK
+	0x2584, // (▄) LOWER HALF BLOCK
+	0x2585, // (▅) LOWER FIVE EIGHTHS BLOCK
+	0x2586, // (▆) LOWER THREE QUARTERS BLOCK
+	0x2587, // (▇) LOWER SEVEN EIGHTHS BLOCK
+	0x2588, // (█) FULL BLOCK
+
+	// shapes
 	0x25B0, // (▰) BLACK PARALLELOGRAM
 	0x25B1, // (▱) WHITE PARALLELOGRAM
 	0x25B2, // (▲) BLACK UP-POINTING TRIANGLE

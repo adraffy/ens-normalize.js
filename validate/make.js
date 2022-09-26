@@ -2,7 +2,7 @@ import {readFileSync, writeFileSync} from 'node:fs';
 import {UNICODE} from '../derive/unicode-version.js';
 import {parse_cp_sequence} from '../derive/utils.js';
 import {ens_normalize, ens_emoji, ens_beautify} from '../src/lib.js';
-import {random_sample, run_tests, } from '../src/utils.js';
+import {random_sample, run_tests} from '../src/utils.js';
 import {read_labels, read_random, read_spec, SPEC_FILE} from './data.js';
 import {createHash} from 'node:crypto';
 

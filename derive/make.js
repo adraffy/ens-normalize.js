@@ -1,7 +1,6 @@
 import {mkdirSync, writeFileSync, createWriteStream} from 'node:fs';
-import {compare_arrays, explode_cp, parse_cp_sequence} from './utils.js';
+import {compare_arrays, parse_cp_sequence} from './utils.js';
 import {UNICODE, NF, IDNA, SCRIPTS} from './unicode-version.js';
-import {read_regions} from './unicode-logic.js';
 
 import CHARS_VALID from './rules/chars-valid.js';
 import CHARS_DISALLOWED from './rules/chars-disallow.js';
@@ -29,7 +28,7 @@ function assert_distinct(things) {
 			for (let x of set_i) {
 				if (set_j.has(x)) {
 					console.log(m[i][0], m[j][0], x);
-					throw new Error("distinct");
+					throw new Error('distinct');
 				}
 			}
 		}
@@ -42,7 +41,7 @@ assert_distinct({
 });
 
 // missing data
-const Regional_Indicator = new Set(UNICODE.props().Regional_Indicator);
+const Regional_Indicator = new Set(UNICODE.regional_indicators());
 
 console.log(`Build Date: ${new Date().toJSON()}`);
 console.log(`Unicode Version: ${UNICODE.version_str}`);
@@ -118,6 +117,9 @@ emoji_seqs.Emoji_Keycap_Sequence.forEach(register_emoji);
 emoji_seqs.RGI_Emoji_Tag_Sequence.forEach(register_emoji);
 emoji_seqs.RGI_Emoji_Modifier_Sequence.forEach(register_emoji);
 
+// flag sequences with valid regions
+//UNICODE.valid_emoji_flag_sequences().forEach(register_emoji);
+
 let emoji_chrs = UNICODE.emoji_data();
 let emoji_map = new Map(emoji_chrs.Emoji.map(x => [x.cp, x]));
 let emoji_demoted = new Set((await import('./rules/emoji-demoted.js')).default);
@@ -129,27 +131,6 @@ for (let rec of emoji_map.values()) {
 		disallow_char(rec.cp, true);
 	}
 }
-
-/*
-if (false) { // only flag sequences with valid regions
-	let regions = read_regions();
-	let cps = [...Regional_Indicator];
-	if (cps.length != 26) throw new Error('expected 26');
-	for (let cp of cps) {
-		let rec = emoji_map.get(info.cp);
-		if (!rec) throw new Error(`Expected emoji: ${SPEC.format(cp)}`);
-		//rec.used = true; // disable single regionals	
-	}
-	let dx = cps[0] - 0x41; // 'A'
-	for (let region of regions) {
-		register_emoji({
-			cps: explode_cp(region).map(x => x + dx),
-			name: `Flag Sequence: ${region}`,
-			type: 'Flag'
-		});
-	}
-}
-*/
 
 // register default emoji-presentation
 for (let info of emoji_chrs.Emoji_Presentation) {

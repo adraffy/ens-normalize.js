@@ -50,4 +50,3 @@ function test(fn) {
 	}
 	console.log(`PASS ${fn.name}`);
 }
-
