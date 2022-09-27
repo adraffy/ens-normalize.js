@@ -6,9 +6,9 @@
 * Custom [`NFC`](https://unicode.org/reports/tr15/) Implementation (or use native)
 	* Passes [**100%**](https://adraffy.github.io/ens-normalize.js/test/report-nf.html) Unicode `15.0.0` [Normalization Tests](https://www.unicode.org/Public/15.0.0/ucd/NormalizationTest.txt)
 * Minified File Sizes: 
-	* [`22KB`](./dist/index-xnf.min.js) — native `NFC` via [nf-native.js](./src/nf-native.js) using `String.normalize()`
-	* [`31KB` **Default** ](./dist/index.min.js) — custom `NFC` via [nf.js](./src/nf.js)
-	* [`38KB`](./dist/all.min.js) *Everything!* — custom `NFC` + [@adraffy/punycode.js](https://github.com/adraffy/punycode.js) + sub-libraries: [dns.js](./src/dns.js), [parts.js](./src/parts.js), [utils.js](./src/utils.js)
+	* [`23KB`](./dist/index-xnf.min.js) — native `NFC` via [nf-native.js](./src/nf-native.js) using `String.normalize()`
+	* [`32KB` **Default** ](./dist/index.min.js) — custom `NFC` via [nf.js](./src/nf.js)
+	* [`39KB`](./dist/all.min.js) *Everything!* — custom `NFC` + [@adraffy/punycode.js](https://github.com/adraffy/punycode.js) + sub-libraries: [dns.js](./src/dns.js), [parts.js](./src/parts.js), [utils.js](./src/utils.js)
 * [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 * [List of Supported Emoji](https://adraffy.github.io/ens-normalize.js/test/emoji.html)
 

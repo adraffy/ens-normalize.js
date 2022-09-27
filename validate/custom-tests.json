@@ -67,8 +67,8 @@
 	{"name": "💩\u0303", "error": true, "comment": "Emoji + CM"},
 	{"name": "aǖa", "error": true, "comment": "2xCM in Decompose"},
 
-	{"name": "🇦", "comment": "Single regional indicator"},
-	{"name": "🇦🇦", "comment": "Double regional indicator: invalid flag sequence"},
+	{"name": "🇦", "error": "true", "comment": "Single regional indicator"},
+	{"name": "🇦🇦", "error": "true", "comment": "Double regional indicator: invalid flag sequence"},
 	{"name": "🇺🇸", "comment": "Double regional indicator: valid flag sequence"},
 
 	{"name": "xn--ls8h", "error": true, "comment": "Punycode Literal"},

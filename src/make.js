@@ -2,7 +2,7 @@ import {Encoder, unsafe_btoa} from './encoder.js';
 import {readFileSync, writeFileSync} from 'node:fs';
 
 let data_dir = new URL('../derive/output/', import.meta.url);
-let {valid, mapped, ignored, cm, isolated, emoji, scripts, wholes} = JSON.parse(readFileSync(new URL('./spec.json', data_dir)));
+let {valid, mapped, ignored, cm, isolated, emoji, scripts, wholes, excluded} = JSON.parse(readFileSync(new URL('./spec.json', data_dir)));
 let {ranks, decomp, exclusions, qc} = JSON.parse(readFileSync(new URL('./nf.json', data_dir)));
 
 let emoji_solo = emoji.filter(v => v.length == 1);
@@ -184,6 +184,10 @@ write_valid_sorted(scripts.Grek);
 write_valid_sorted(wholes.Grek);
 write_valid_sorted(scripts.Cyrl);
 write_valid_sorted(wholes.Cyrl);
+for (let cps of Object.values(excluded)) {
+	write_valid_sorted(cps);
+}
+enc.write_member([]);
 enc.write_member(emoji_solo.map(v => v[0]));
 enc.write_member(sorted_emoji);
 encode_emoji(enc, root, sorted_emoji_map);

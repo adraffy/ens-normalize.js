@@ -304,6 +304,8 @@ export default [
 	0x237F, // (⍿) VERTICAL LINE WITH MIDDLE DOT
 	
 	// no mac
+	// https://discuss.ens.domains/t/ens-name-normalization-2/14564/3
+	/*
 	0x269D, // (⚝) OUTLINED WHITE STAR
 	0x269E, // (⚞) THREE LINES CONVERGING RIGHT
 	0x269F, // (⚟) THREE LINES CONVERGING LEFT	
@@ -350,6 +352,7 @@ export default [
 	0x26E8, // (⛨) BLACK CROSS ON SHIELD
 	0x26EB, // (⛫) CASTLE
 	0x26EC, // (⛬) HISTORIC SITE
+	*/
 
 	// already have scissor emoji
 	0x2700, // (✀) BLACK SAFETY SCISSORS

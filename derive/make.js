@@ -117,9 +117,6 @@ emoji_seqs.Emoji_Keycap_Sequence.forEach(register_emoji);
 emoji_seqs.RGI_Emoji_Tag_Sequence.forEach(register_emoji);
 emoji_seqs.RGI_Emoji_Modifier_Sequence.forEach(register_emoji);
 
-// flag sequences with valid regions
-//UNICODE.valid_emoji_flag_sequences().forEach(register_emoji);
-
 let emoji_chrs = UNICODE.emoji_data();
 let emoji_map = new Map(emoji_chrs.Emoji.map(x => [x.cp, x]));
 let emoji_demoted = new Set((await import('./rules/emoji-demoted.js')).default);
@@ -130,6 +127,13 @@ for (let rec of emoji_map.values()) {
 	} else {
 		disallow_char(rec.cp, true);
 	}
+}
+
+// flag sequences with valid regions
+UNICODE.valid_emoji_flag_sequences().forEach(register_emoji);
+// disable single regionals
+for (let cp of Regional_Indicator) {
+	emoji_map.get(cp).used = true;
 }
 
 // register default emoji-presentation
@@ -195,6 +199,23 @@ for (let info of emoji_chrs.Extended_Pictographic) {
 // filter combining marks
 let cm = new Set(UNICODE.general_category('M').filter(x => valid.has(x.cp)).map(x => x.cp));
 
+// load scripts
+let scripts = Object.fromEntries(SCRIPTS.entries.map(x => {
+	return [x.abbr, new Set([...x.set].filter(cp => valid.has(cp)))];
+}));
+
+// apply changes
+for (let cp of (await import('./rules/scripts.js')).default) {
+	for (let [abbr0, set] of Object.entries(scripts)) {
+		if (set.delete(cp)) {
+			const abbr1 = 'Zyyy'; // TODO: generalize this
+			scripts[abbr1].add(cp);
+			console.log(`Changed Script [${abbr0} => ${abbr1}]: ${UNICODE.format(cp)}`);
+			break;
+		}
+	}
+}
+
 // check that everything makes sense
 function has_adjacent_cm(cps) {
 	for (let i = 1; i < cps.length; i++) {
@@ -254,12 +275,26 @@ function sorted(v) {
 	return [...v].sort((a, b) => a - b);
 }
 
-let scripts = Object.fromEntries(SCRIPTS.entries.map(x => {
-	return [x.abbr, [...x.set].filter(cp => valid.has(cp))];
-}));
 
-let confuse_Grek = (await import('./rules/confusables-Grek.js')).default.filter(cp => valid.has(cp));
-let confuse_Cyrl = (await import('./rules/confusables-Cyrl.js')).default.filter(cp => valid.has(cp));
+// load excluded scripts
+let excluded = {};
+for (let abbr of SCRIPTS.excluded()) {	
+	let set  = scripts[abbr];
+	if (!set) throw new TypeError(`Expected script: ${abbr}`);
+	if (set.size == 0) continue;	
+	let decomposed = new Set(NF.nfd([...set]));
+	for (let cp of decomposed) {
+		if (!set.has(cp)) {
+			throw new Error(`Excluded script "${a}" decomposition: ${SPEC.format(cp)}`);
+		}
+	}
+	excluded[abbr] = sorted(decomposed);
+	console.log(`Excluded Script: ${abbr} (${decomposed.size})`);
+}
+
+// wholes
+let wholes_Grek = (await import('./rules/confusables-Grek.js')).default.filter(cp => valid.has(cp));
+let wholes_Cyrl = (await import('./rules/confusables-Cyrl.js')).default.filter(cp => valid.has(cp));
 
 // note: sorting isn't important, just nice to have
 const created = new Date();
@@ -278,9 +313,10 @@ writeFileSync(new URL('./spec.json', out_dir), JSON.stringify({
 		Grek: sorted(scripts.Grek),
 		Cyrl: sorted(scripts.Cyrl),
 	}, 
+	excluded,
 	wholes: {
-		Grek: sorted(confuse_Grek),
-		Cyrl: sorted(confuse_Cyrl),
+		Grek: sorted(wholes_Grek),
+		Cyrl: sorted(wholes_Cyrl),
 	}
 }));
 

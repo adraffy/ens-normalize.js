@@ -155,23 +155,12 @@ export class UnicodeSpec {
 		});
 	}
 	scripts() {
+		// WARNING: this returns full names
 		// 0000..001F    ; Common # Cc  [32] <control-0000>..<control-001F>
 		// 0020          ; Common # Zs       SPACE
 		return Object.entries(parse_semicolon_file(new URL('./Scripts.txt', this.dir), {
 			row([src, type]) {
 				this.get_bucket(type).push(...parse_cp_range(src));
-			}
-		}));
-	}
-	script_extensions() {
-		// 102E0         ; Arab Copt # Mn       COPTIC EPACT THOUSANDS MARK
-		// 102E1..102FB  ; Arab Copt # No  [27] COPTIC EPACT DIGIT ONE..COPTIC EPACT NUMBER NINE HUNDRED
-		return Object.entries(parse_semicolon_file(new URL('./ScriptExtensions.txt', this.dir), {
-			row([src, abbrs]) {
-				let cps = parse_cp_range(src);
-				for (let abbr of abbrs.trim().split(/\s+/)) {
-					this.get_bucket(abbr).push(...cps);
-				}
 			}
 		}));
 	}
@@ -296,7 +285,7 @@ export class UnicodeSpec {
 		return this.props().Regional_Indicator;
 	}
 	valid_emoji_flag_sequences() {
-		let regions = read_regions(); // note: not versioned
+		let regions = read_regions(); // WARNING: not versioned by spec
 		let cps = this.regional_indicators();
 		if (cps.length != 26) throw new Error('expected 26 regionals');
 		let dx = cps[0] - 0x41; // 'A'
@@ -405,6 +394,22 @@ export class UnicodeScripts {
 			return {name, abbr, set: new Set(cps)};
 		});
 		this.by_abbr = Object.fromEntries(this.entries.map(x => [x.abbr, x])); // use Object so we can $.Latn
+	}
+	excluded() { // abbrs
+		// WARNING: not versioned by spec
+ 		return JSON.parse(readFileSync(new URL('../scripts-excluded.json', this.spec.dir)));
+	}
+	extensions() { // abbrs
+		// 102E0         ; Arab Copt # Mn       COPTIC EPACT THOUSANDS MARK
+		// 102E1..102FB  ; Arab Copt # No  [27] COPTIC EPACT DIGIT ONE..COPTIC EPACT NUMBER NINE HUNDRED
+		return Object.entries(parse_semicolon_file(new URL('./ScriptExtensions.txt', this.dir), {
+			row([src, abbrs]) {
+				let cps = parse_cp_range(src);
+				for (let abbr of abbrs.trim().split(/\s+/)) {
+					this.get_bucket(abbr).push(...cps);
+				}
+			}
+		}));
 	}
 	get_script_set(cps) {
 		let ret = new Set();

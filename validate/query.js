@@ -7,6 +7,8 @@ import {readFileSync} from 'node:fs';
 import {parse_cp_range, explode_cp} from '../derive/utils.js';
 import {read_labels} from './data.js';
 
+//console.log(read_labels().length);
+
 // TODO FIX ME
 
 /*

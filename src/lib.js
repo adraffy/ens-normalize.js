@@ -1,5 +1,5 @@
 import r from './include-ens.js';
-import {read_member_array, read_mapped, read_emoji_trie} from './decoder.js';
+import {read_member_array, read_mapped, read_emoji_trie, read_array_while} from './decoder.js';
 import {explode_cp, str_from_cps, hex_cp} from './utils.js';
 import {nfc, nfd} from './nf.js';
 //import {nfc, nfd} from './nf-native.js'; // replaced by rollup
@@ -20,6 +20,10 @@ const SCRIPTS = ['Latin', 'Greek', 'Cyrillic'].map((k, i) => {
 	// order must match make.js
 	// (script name, script-set, whole-set?)
 	return [k, read_valid_subset(), i ? read_valid_subset() : 0];
+});
+const EXCLUDED = read_array_while(() => {
+	let v = read_valid_subset(r);
+	if (v.size) return v;
 });
 const EMOJI_SOLO = new Set(read_member_array(r));
 const EMOJI_ROOT = read_emoji_trie(r);
@@ -99,6 +103,16 @@ function check_scripts_latin_like(cps) {
 }
 
 // requires decomposed codepoints
+function check_excluded_scripts(cps) {
+	// https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers
+	for (let set of EXCLUDED) {
+		if (cps.some(cp => set.has(cp)) && !cps.every(cp => set.has(cp) || cp == FE0F)) {
+			throw new Error(`excluded script cannot mix`);
+		}
+	}
+}
+
+// requires decomposed codepoints
 function check_combinining_marks(cps) {
 	for (let i = 0, j = -1; i < cps.length; i++) {
 		if (CM.has(cps[i])) {
@@ -132,6 +146,7 @@ export function ens_normalize_post_check(norm) {
 			// replace emoji with single character
 			let cps_nfd = nfd(process(label, () => [FE0F])); 
 			check_combinining_marks(cps_nfd);
+			check_excluded_scripts(cps_nfd);
 		} catch (err) {
 			throw new Error(`Invalid label "${label}": ${err.message}`);
 		}
@@ -148,10 +163,8 @@ export function ens_normalize(name) {
 }
 
 // note: does not post_check
-// insert 200B between regional indicators so they do not collapse into flags
-// alternative solution: only allow valid flags
 export function ens_beautify(name) {
-	return str_from_cps(nfc(process(name, x => x))).replace(/[\u{1F1E6}-\u{1F1FF}]{2,}/gu, s => [...s].join('\u200B'));
+	return str_from_cps(nfc(process(name, x => x)));
 }
 
 function filter_fe0f(cps) {
@@ -169,11 +182,11 @@ function process(name, emoji_filter) {
 			let cp = input.pop();
 			if (VALID.has(cp)) {
 				output.push(cp);
-			} else if (!IGNORED.has(cp)) {
+			} else {
 				let cps = MAPPED.get(cp);
 				if (cps) {
 					output.push(...cps);
-				} else {
+				} else if (!IGNORED.has(cp)) {
 					throw new Error(`Disallowed codepoint: 0x${hex_cp(cp)}`);
 				}
 			}

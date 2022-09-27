@@ -1,4 +1,4 @@
-Build Date: 2022-09-26T06:49:18.769Z
+Build Date: 2022-09-27T07:59:15.196Z
 Unicode Version: 15.0.0
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -2054,6 +2054,266 @@ Demoted Emoji: 1F239 (🈹) SQUARED CJK UNIFIED IDEOGRAPH-5272
 Demoted Emoji: 1F23A (🈺) SQUARED CJK UNIFIED IDEOGRAPH-55B6
 Demoted Emoji: 1F250 (🉐) CIRCLED IDEOGRAPH ADVANTAGE
 Demoted Emoji: 1F251 (🉑) CIRCLED IDEOGRAPH ACCEPT
+Register Emoji [ValidFlagSequence]: [1F1E6 1F1E8] (🇦🇨) Flag Sequence: AC
+Register Emoji [ValidFlagSequence]: [1F1E6 1F1E9] (🇦🇩) Flag Sequence: AD
+Register Emoji [ValidFlagSequence]: [1F1E6 1F1EA] (🇦🇪) Flag Sequence: AE
+Register Emoji [ValidFlagSequence]: [1F1E6 1F1EB] (🇦🇫) Flag Sequence: AF
+Register Emoji [ValidFlagSequence]: [1F1E6 1F1EC] (🇦🇬) Flag Sequence: AG
+Register Emoji [ValidFlagSequence]: [1F1E6 1F1EE] (🇦🇮) Flag Sequence: AI
+Register Emoji [ValidFlagSequence]: [1F1E6 1F1F1] (🇦🇱) Flag Sequence: AL
+Register Emoji [ValidFlagSequence]: [1F1E6 1F1F2] (🇦🇲) Flag Sequence: AM
+Register Emoji [ValidFlagSequence]: [1F1E6 1F1F4] (🇦🇴) Flag Sequence: AO
+Register Emoji [ValidFlagSequence]: [1F1E6 1F1F6] (🇦🇶) Flag Sequence: AQ
+Register Emoji [ValidFlagSequence]: [1F1E6 1F1F7] (🇦🇷) Flag Sequence: AR
+Register Emoji [ValidFlagSequence]: [1F1E6 1F1F8] (🇦🇸) Flag Sequence: AS
+Register Emoji [ValidFlagSequence]: [1F1E6 1F1F9] (🇦🇹) Flag Sequence: AT
+Register Emoji [ValidFlagSequence]: [1F1E6 1F1FA] (🇦🇺) Flag Sequence: AU
+Register Emoji [ValidFlagSequence]: [1F1E6 1F1FC] (🇦🇼) Flag Sequence: AW
+Register Emoji [ValidFlagSequence]: [1F1E6 1F1FD] (🇦🇽) Flag Sequence: AX
+Register Emoji [ValidFlagSequence]: [1F1E6 1F1FF] (🇦🇿) Flag Sequence: AZ
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1E6] (🇧🇦) Flag Sequence: BA
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1E7] (🇧🇧) Flag Sequence: BB
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1E9] (🇧🇩) Flag Sequence: BD
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1EA] (🇧🇪) Flag Sequence: BE
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1EB] (🇧🇫) Flag Sequence: BF
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1EC] (🇧🇬) Flag Sequence: BG
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1ED] (🇧🇭) Flag Sequence: BH
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1EE] (🇧🇮) Flag Sequence: BI
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1EF] (🇧🇯) Flag Sequence: BJ
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1F1] (🇧🇱) Flag Sequence: BL
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1F2] (🇧🇲) Flag Sequence: BM
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1F3] (🇧🇳) Flag Sequence: BN
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1F4] (🇧🇴) Flag Sequence: BO
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1F6] (🇧🇶) Flag Sequence: BQ
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1F7] (🇧🇷) Flag Sequence: BR
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1F8] (🇧🇸) Flag Sequence: BS
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1F9] (🇧🇹) Flag Sequence: BT
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1FB] (🇧🇻) Flag Sequence: BV
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1FC] (🇧🇼) Flag Sequence: BW
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1FE] (🇧🇾) Flag Sequence: BY
+Register Emoji [ValidFlagSequence]: [1F1E7 1F1FF] (🇧🇿) Flag Sequence: BZ
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1E6] (🇨🇦) Flag Sequence: CA
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1E8] (🇨🇨) Flag Sequence: CC
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1E9] (🇨🇩) Flag Sequence: CD
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1EB] (🇨🇫) Flag Sequence: CF
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1EC] (🇨🇬) Flag Sequence: CG
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1ED] (🇨🇭) Flag Sequence: CH
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1EE] (🇨🇮) Flag Sequence: CI
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1F0] (🇨🇰) Flag Sequence: CK
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1F1] (🇨🇱) Flag Sequence: CL
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1F2] (🇨🇲) Flag Sequence: CM
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1F3] (🇨🇳) Flag Sequence: CN
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1F4] (🇨🇴) Flag Sequence: CO
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1F5] (🇨🇵) Flag Sequence: CP
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1F7] (🇨🇷) Flag Sequence: CR
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1FA] (🇨🇺) Flag Sequence: CU
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1FB] (🇨🇻) Flag Sequence: CV
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1FC] (🇨🇼) Flag Sequence: CW
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1FD] (🇨🇽) Flag Sequence: CX
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1FE] (🇨🇾) Flag Sequence: CY
+Register Emoji [ValidFlagSequence]: [1F1E8 1F1FF] (🇨🇿) Flag Sequence: CZ
+Register Emoji [ValidFlagSequence]: [1F1E9 1F1EA] (🇩🇪) Flag Sequence: DE
+Register Emoji [ValidFlagSequence]: [1F1E9 1F1EC] (🇩🇬) Flag Sequence: DG
+Register Emoji [ValidFlagSequence]: [1F1E9 1F1EF] (🇩🇯) Flag Sequence: DJ
+Register Emoji [ValidFlagSequence]: [1F1E9 1F1F0] (🇩🇰) Flag Sequence: DK
+Register Emoji [ValidFlagSequence]: [1F1E9 1F1F2] (🇩🇲) Flag Sequence: DM
+Register Emoji [ValidFlagSequence]: [1F1E9 1F1F4] (🇩🇴) Flag Sequence: DO
+Register Emoji [ValidFlagSequence]: [1F1E9 1F1FF] (🇩🇿) Flag Sequence: DZ
+Register Emoji [ValidFlagSequence]: [1F1EA 1F1E6] (🇪🇦) Flag Sequence: EA
+Register Emoji [ValidFlagSequence]: [1F1EA 1F1E8] (🇪🇨) Flag Sequence: EC
+Register Emoji [ValidFlagSequence]: [1F1EA 1F1EA] (🇪🇪) Flag Sequence: EE
+Register Emoji [ValidFlagSequence]: [1F1EA 1F1EC] (🇪🇬) Flag Sequence: EG
+Register Emoji [ValidFlagSequence]: [1F1EA 1F1ED] (🇪🇭) Flag Sequence: EH
+Register Emoji [ValidFlagSequence]: [1F1EA 1F1F7] (🇪🇷) Flag Sequence: ER
+Register Emoji [ValidFlagSequence]: [1F1EA 1F1F8] (🇪🇸) Flag Sequence: ES
+Register Emoji [ValidFlagSequence]: [1F1EA 1F1F9] (🇪🇹) Flag Sequence: ET
+Register Emoji [ValidFlagSequence]: [1F1EB 1F1EE] (🇫🇮) Flag Sequence: FI
+Register Emoji [ValidFlagSequence]: [1F1EB 1F1EF] (🇫🇯) Flag Sequence: FJ
+Register Emoji [ValidFlagSequence]: [1F1EB 1F1F0] (🇫🇰) Flag Sequence: FK
+Register Emoji [ValidFlagSequence]: [1F1EB 1F1F2] (🇫🇲) Flag Sequence: FM
+Register Emoji [ValidFlagSequence]: [1F1EB 1F1F4] (🇫🇴) Flag Sequence: FO
+Register Emoji [ValidFlagSequence]: [1F1EB 1F1F7] (🇫🇷) Flag Sequence: FR
+Register Emoji [ValidFlagSequence]: [1F1EC 1F1E6] (🇬🇦) Flag Sequence: GA
+Register Emoji [ValidFlagSequence]: [1F1EC 1F1E7] (🇬🇧) Flag Sequence: GB
+Register Emoji [ValidFlagSequence]: [1F1EC 1F1E9] (🇬🇩) Flag Sequence: GD
+Register Emoji [ValidFlagSequence]: [1F1EC 1F1EA] (🇬🇪) Flag Sequence: GE
+Register Emoji [ValidFlagSequence]: [1F1EC 1F1EB] (🇬🇫) Flag Sequence: GF
+Register Emoji [ValidFlagSequence]: [1F1EC 1F1EC] (🇬🇬) Flag Sequence: GG
+Register Emoji [ValidFlagSequence]: [1F1EC 1F1ED] (🇬🇭) Flag Sequence: GH
+Register Emoji [ValidFlagSequence]: [1F1EC 1F1EE] (🇬🇮) Flag Sequence: GI
+Register Emoji [ValidFlagSequence]: [1F1EC 1F1F1] (🇬🇱) Flag Sequence: GL
+Register Emoji [ValidFlagSequence]: [1F1EC 1F1F2] (🇬🇲) Flag Sequence: GM
+Register Emoji [ValidFlagSequence]: [1F1EC 1F1F3] (🇬🇳) Flag Sequence: GN
+Register Emoji [ValidFlagSequence]: [1F1EC 1F1F5] (🇬🇵) Flag Sequence: GP
+Register Emoji [ValidFlagSequence]: [1F1EC 1F1F6] (🇬🇶) Flag Sequence: GQ
+Register Emoji [ValidFlagSequence]: [1F1EC 1F1F7] (🇬🇷) Flag Sequence: GR
+Register Emoji [ValidFlagSequence]: [1F1EC 1F1F8] (🇬🇸) Flag Sequence: GS
+Register Emoji [ValidFlagSequence]: [1F1EC 1F1F9] (🇬🇹) Flag Sequence: GT
+Register Emoji [ValidFlagSequence]: [1F1EC 1F1FA] (🇬🇺) Flag Sequence: GU
+Register Emoji [ValidFlagSequence]: [1F1EC 1F1FC] (🇬🇼) Flag Sequence: GW
+Register Emoji [ValidFlagSequence]: [1F1EC 1F1FE] (🇬🇾) Flag Sequence: GY
+Register Emoji [ValidFlagSequence]: [1F1ED 1F1F0] (🇭🇰) Flag Sequence: HK
+Register Emoji [ValidFlagSequence]: [1F1ED 1F1F2] (🇭🇲) Flag Sequence: HM
+Register Emoji [ValidFlagSequence]: [1F1ED 1F1F3] (🇭🇳) Flag Sequence: HN
+Register Emoji [ValidFlagSequence]: [1F1ED 1F1F7] (🇭🇷) Flag Sequence: HR
+Register Emoji [ValidFlagSequence]: [1F1ED 1F1F9] (🇭🇹) Flag Sequence: HT
+Register Emoji [ValidFlagSequence]: [1F1ED 1F1FA] (🇭🇺) Flag Sequence: HU
+Register Emoji [ValidFlagSequence]: [1F1EE 1F1E8] (🇮🇨) Flag Sequence: IC
+Register Emoji [ValidFlagSequence]: [1F1EE 1F1E9] (🇮🇩) Flag Sequence: ID
+Register Emoji [ValidFlagSequence]: [1F1EE 1F1EA] (🇮🇪) Flag Sequence: IE
+Register Emoji [ValidFlagSequence]: [1F1EE 1F1F1] (🇮🇱) Flag Sequence: IL
+Register Emoji [ValidFlagSequence]: [1F1EE 1F1F2] (🇮🇲) Flag Sequence: IM
+Register Emoji [ValidFlagSequence]: [1F1EE 1F1F3] (🇮🇳) Flag Sequence: IN
+Register Emoji [ValidFlagSequence]: [1F1EE 1F1F4] (🇮🇴) Flag Sequence: IO
+Register Emoji [ValidFlagSequence]: [1F1EE 1F1F6] (🇮🇶) Flag Sequence: IQ
+Register Emoji [ValidFlagSequence]: [1F1EE 1F1F7] (🇮🇷) Flag Sequence: IR
+Register Emoji [ValidFlagSequence]: [1F1EE 1F1F8] (🇮🇸) Flag Sequence: IS
+Register Emoji [ValidFlagSequence]: [1F1EE 1F1F9] (🇮🇹) Flag Sequence: IT
+Register Emoji [ValidFlagSequence]: [1F1EF 1F1EA] (🇯🇪) Flag Sequence: JE
+Register Emoji [ValidFlagSequence]: [1F1EF 1F1F2] (🇯🇲) Flag Sequence: JM
+Register Emoji [ValidFlagSequence]: [1F1EF 1F1F4] (🇯🇴) Flag Sequence: JO
+Register Emoji [ValidFlagSequence]: [1F1EF 1F1F5] (🇯🇵) Flag Sequence: JP
+Register Emoji [ValidFlagSequence]: [1F1F0 1F1EA] (🇰🇪) Flag Sequence: KE
+Register Emoji [ValidFlagSequence]: [1F1F0 1F1EC] (🇰🇬) Flag Sequence: KG
+Register Emoji [ValidFlagSequence]: [1F1F0 1F1ED] (🇰🇭) Flag Sequence: KH
+Register Emoji [ValidFlagSequence]: [1F1F0 1F1EE] (🇰🇮) Flag Sequence: KI
+Register Emoji [ValidFlagSequence]: [1F1F0 1F1F2] (🇰🇲) Flag Sequence: KM
+Register Emoji [ValidFlagSequence]: [1F1F0 1F1F3] (🇰🇳) Flag Sequence: KN
+Register Emoji [ValidFlagSequence]: [1F1F0 1F1F5] (🇰🇵) Flag Sequence: KP
+Register Emoji [ValidFlagSequence]: [1F1F0 1F1F7] (🇰🇷) Flag Sequence: KR
+Register Emoji [ValidFlagSequence]: [1F1F0 1F1FC] (🇰🇼) Flag Sequence: KW
+Register Emoji [ValidFlagSequence]: [1F1F0 1F1FE] (🇰🇾) Flag Sequence: KY
+Register Emoji [ValidFlagSequence]: [1F1F0 1F1FF] (🇰🇿) Flag Sequence: KZ
+Register Emoji [ValidFlagSequence]: [1F1F1 1F1E6] (🇱🇦) Flag Sequence: LA
+Register Emoji [ValidFlagSequence]: [1F1F1 1F1E7] (🇱🇧) Flag Sequence: LB
+Register Emoji [ValidFlagSequence]: [1F1F1 1F1E8] (🇱🇨) Flag Sequence: LC
+Register Emoji [ValidFlagSequence]: [1F1F1 1F1EE] (🇱🇮) Flag Sequence: LI
+Register Emoji [ValidFlagSequence]: [1F1F1 1F1F0] (🇱🇰) Flag Sequence: LK
+Register Emoji [ValidFlagSequence]: [1F1F1 1F1F7] (🇱🇷) Flag Sequence: LR
+Register Emoji [ValidFlagSequence]: [1F1F1 1F1F8] (🇱🇸) Flag Sequence: LS
+Register Emoji [ValidFlagSequence]: [1F1F1 1F1F9] (🇱🇹) Flag Sequence: LT
+Register Emoji [ValidFlagSequence]: [1F1F1 1F1FA] (🇱🇺) Flag Sequence: LU
+Register Emoji [ValidFlagSequence]: [1F1F1 1F1FB] (🇱🇻) Flag Sequence: LV
+Register Emoji [ValidFlagSequence]: [1F1F1 1F1FE] (🇱🇾) Flag Sequence: LY
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1E6] (🇲🇦) Flag Sequence: MA
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1E8] (🇲🇨) Flag Sequence: MC
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1E9] (🇲🇩) Flag Sequence: MD
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1EA] (🇲🇪) Flag Sequence: ME
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1EB] (🇲🇫) Flag Sequence: MF
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1EC] (🇲🇬) Flag Sequence: MG
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1ED] (🇲🇭) Flag Sequence: MH
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1F0] (🇲🇰) Flag Sequence: MK
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1F1] (🇲🇱) Flag Sequence: ML
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1F2] (🇲🇲) Flag Sequence: MM
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1F3] (🇲🇳) Flag Sequence: MN
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1F4] (🇲🇴) Flag Sequence: MO
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1F5] (🇲🇵) Flag Sequence: MP
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1F6] (🇲🇶) Flag Sequence: MQ
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1F7] (🇲🇷) Flag Sequence: MR
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1F8] (🇲🇸) Flag Sequence: MS
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1F9] (🇲🇹) Flag Sequence: MT
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1FA] (🇲🇺) Flag Sequence: MU
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1FB] (🇲🇻) Flag Sequence: MV
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1FC] (🇲🇼) Flag Sequence: MW
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1FD] (🇲🇽) Flag Sequence: MX
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1FE] (🇲🇾) Flag Sequence: MY
+Register Emoji [ValidFlagSequence]: [1F1F2 1F1FF] (🇲🇿) Flag Sequence: MZ
+Register Emoji [ValidFlagSequence]: [1F1F3 1F1E6] (🇳🇦) Flag Sequence: NA
+Register Emoji [ValidFlagSequence]: [1F1F3 1F1E8] (🇳🇨) Flag Sequence: NC
+Register Emoji [ValidFlagSequence]: [1F1F3 1F1EA] (🇳🇪) Flag Sequence: NE
+Register Emoji [ValidFlagSequence]: [1F1F3 1F1EB] (🇳🇫) Flag Sequence: NF
+Register Emoji [ValidFlagSequence]: [1F1F3 1F1EC] (🇳🇬) Flag Sequence: NG
+Register Emoji [ValidFlagSequence]: [1F1F3 1F1EE] (🇳🇮) Flag Sequence: NI
+Register Emoji [ValidFlagSequence]: [1F1F3 1F1F1] (🇳🇱) Flag Sequence: NL
+Register Emoji [ValidFlagSequence]: [1F1F3 1F1F4] (🇳🇴) Flag Sequence: NO
+Register Emoji [ValidFlagSequence]: [1F1F3 1F1F5] (🇳🇵) Flag Sequence: NP
+Register Emoji [ValidFlagSequence]: [1F1F3 1F1F7] (🇳🇷) Flag Sequence: NR
+Register Emoji [ValidFlagSequence]: [1F1F3 1F1FA] (🇳🇺) Flag Sequence: NU
+Register Emoji [ValidFlagSequence]: [1F1F3 1F1FF] (🇳🇿) Flag Sequence: NZ
+Register Emoji [ValidFlagSequence]: [1F1F4 1F1F2] (🇴🇲) Flag Sequence: OM
+Register Emoji [ValidFlagSequence]: [1F1F5 1F1E6] (🇵🇦) Flag Sequence: PA
+Register Emoji [ValidFlagSequence]: [1F1F5 1F1EA] (🇵🇪) Flag Sequence: PE
+Register Emoji [ValidFlagSequence]: [1F1F5 1F1EB] (🇵🇫) Flag Sequence: PF
+Register Emoji [ValidFlagSequence]: [1F1F5 1F1EC] (🇵🇬) Flag Sequence: PG
+Register Emoji [ValidFlagSequence]: [1F1F5 1F1ED] (🇵🇭) Flag Sequence: PH
+Register Emoji [ValidFlagSequence]: [1F1F5 1F1F0] (🇵🇰) Flag Sequence: PK
+Register Emoji [ValidFlagSequence]: [1F1F5 1F1F1] (🇵🇱) Flag Sequence: PL
+Register Emoji [ValidFlagSequence]: [1F1F5 1F1F2] (🇵🇲) Flag Sequence: PM
+Register Emoji [ValidFlagSequence]: [1F1F5 1F1F3] (🇵🇳) Flag Sequence: PN
+Register Emoji [ValidFlagSequence]: [1F1F5 1F1F7] (🇵🇷) Flag Sequence: PR
+Register Emoji [ValidFlagSequence]: [1F1F5 1F1F8] (🇵🇸) Flag Sequence: PS
+Register Emoji [ValidFlagSequence]: [1F1F5 1F1F9] (🇵🇹) Flag Sequence: PT
+Register Emoji [ValidFlagSequence]: [1F1F5 1F1FC] (🇵🇼) Flag Sequence: PW
+Register Emoji [ValidFlagSequence]: [1F1F5 1F1FE] (🇵🇾) Flag Sequence: PY
+Register Emoji [ValidFlagSequence]: [1F1F6 1F1E6] (🇶🇦) Flag Sequence: QA
+Register Emoji [ValidFlagSequence]: [1F1F7 1F1EA] (🇷🇪) Flag Sequence: RE
+Register Emoji [ValidFlagSequence]: [1F1F7 1F1F4] (🇷🇴) Flag Sequence: RO
+Register Emoji [ValidFlagSequence]: [1F1F7 1F1F8] (🇷🇸) Flag Sequence: RS
+Register Emoji [ValidFlagSequence]: [1F1F7 1F1FA] (🇷🇺) Flag Sequence: RU
+Register Emoji [ValidFlagSequence]: [1F1F7 1F1FC] (🇷🇼) Flag Sequence: RW
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1E6] (🇸🇦) Flag Sequence: SA
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1E7] (🇸🇧) Flag Sequence: SB
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1E8] (🇸🇨) Flag Sequence: SC
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1E9] (🇸🇩) Flag Sequence: SD
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1EA] (🇸🇪) Flag Sequence: SE
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1EC] (🇸🇬) Flag Sequence: SG
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1ED] (🇸🇭) Flag Sequence: SH
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1EE] (🇸🇮) Flag Sequence: SI
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1EF] (🇸🇯) Flag Sequence: SJ
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1F0] (🇸🇰) Flag Sequence: SK
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1F1] (🇸🇱) Flag Sequence: SL
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1F2] (🇸🇲) Flag Sequence: SM
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1F3] (🇸🇳) Flag Sequence: SN
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1F4] (🇸🇴) Flag Sequence: SO
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1F7] (🇸🇷) Flag Sequence: SR
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1F8] (🇸🇸) Flag Sequence: SS
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1F9] (🇸🇹) Flag Sequence: ST
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1FB] (🇸🇻) Flag Sequence: SV
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1FD] (🇸🇽) Flag Sequence: SX
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1FE] (🇸🇾) Flag Sequence: SY
+Register Emoji [ValidFlagSequence]: [1F1F8 1F1FF] (🇸🇿) Flag Sequence: SZ
+Register Emoji [ValidFlagSequence]: [1F1F9 1F1E6] (🇹🇦) Flag Sequence: TA
+Register Emoji [ValidFlagSequence]: [1F1F9 1F1E8] (🇹🇨) Flag Sequence: TC
+Register Emoji [ValidFlagSequence]: [1F1F9 1F1E9] (🇹🇩) Flag Sequence: TD
+Register Emoji [ValidFlagSequence]: [1F1F9 1F1EB] (🇹🇫) Flag Sequence: TF
+Register Emoji [ValidFlagSequence]: [1F1F9 1F1EC] (🇹🇬) Flag Sequence: TG
+Register Emoji [ValidFlagSequence]: [1F1F9 1F1ED] (🇹🇭) Flag Sequence: TH
+Register Emoji [ValidFlagSequence]: [1F1F9 1F1EF] (🇹🇯) Flag Sequence: TJ
+Register Emoji [ValidFlagSequence]: [1F1F9 1F1F0] (🇹🇰) Flag Sequence: TK
+Register Emoji [ValidFlagSequence]: [1F1F9 1F1F1] (🇹🇱) Flag Sequence: TL
+Register Emoji [ValidFlagSequence]: [1F1F9 1F1F2] (🇹🇲) Flag Sequence: TM
+Register Emoji [ValidFlagSequence]: [1F1F9 1F1F3] (🇹🇳) Flag Sequence: TN
+Register Emoji [ValidFlagSequence]: [1F1F9 1F1F4] (🇹🇴) Flag Sequence: TO
+Register Emoji [ValidFlagSequence]: [1F1F9 1F1F7] (🇹🇷) Flag Sequence: TR
+Register Emoji [ValidFlagSequence]: [1F1F9 1F1F9] (🇹🇹) Flag Sequence: TT
+Register Emoji [ValidFlagSequence]: [1F1F9 1F1FB] (🇹🇻) Flag Sequence: TV
+Register Emoji [ValidFlagSequence]: [1F1F9 1F1FC] (🇹🇼) Flag Sequence: TW
+Register Emoji [ValidFlagSequence]: [1F1F9 1F1FF] (🇹🇿) Flag Sequence: TZ
+Register Emoji [ValidFlagSequence]: [1F1FA 1F1E6] (🇺🇦) Flag Sequence: UA
+Register Emoji [ValidFlagSequence]: [1F1FA 1F1EC] (🇺🇬) Flag Sequence: UG
+Register Emoji [ValidFlagSequence]: [1F1FA 1F1F2] (🇺🇲) Flag Sequence: UM
+Register Emoji [ValidFlagSequence]: [1F1FA 1F1F8] (🇺🇸) Flag Sequence: US
+Register Emoji [ValidFlagSequence]: [1F1FA 1F1FE] (🇺🇾) Flag Sequence: UY
+Register Emoji [ValidFlagSequence]: [1F1FA 1F1FF] (🇺🇿) Flag Sequence: UZ
+Register Emoji [ValidFlagSequence]: [1F1FB 1F1E6] (🇻🇦) Flag Sequence: VA
+Register Emoji [ValidFlagSequence]: [1F1FB 1F1E8] (🇻🇨) Flag Sequence: VC
+Register Emoji [ValidFlagSequence]: [1F1FB 1F1EA] (🇻🇪) Flag Sequence: VE
+Register Emoji [ValidFlagSequence]: [1F1FB 1F1EC] (🇻🇬) Flag Sequence: VG
+Register Emoji [ValidFlagSequence]: [1F1FB 1F1EE] (🇻🇮) Flag Sequence: VI
+Register Emoji [ValidFlagSequence]: [1F1FB 1F1F3] (🇻🇳) Flag Sequence: VN
+Register Emoji [ValidFlagSequence]: [1F1FB 1F1FA] (🇻🇺) Flag Sequence: VU
+Register Emoji [ValidFlagSequence]: [1F1FC 1F1EB] (🇼🇫) Flag Sequence: WF
+Register Emoji [ValidFlagSequence]: [1F1FC 1F1F8] (🇼🇸) Flag Sequence: WS
+Register Emoji [ValidFlagSequence]: [1F1FD 1F1F0] (🇽🇰) Flag Sequence: XK
+Register Emoji [ValidFlagSequence]: [1F1FE 1F1EA] (🇾🇪) Flag Sequence: YE
+Register Emoji [ValidFlagSequence]: [1F1FE 1F1F9] (🇾🇹) Flag Sequence: YT
+Register Emoji [ValidFlagSequence]: [1F1FF 1F1E6] (🇿🇦) Flag Sequence: ZA
+Register Emoji [ValidFlagSequence]: [1F1FF 1F1F2] (🇿🇲) Flag Sequence: ZM
+Register Emoji [ValidFlagSequence]: [1F1FF 1F1FC] (🇿🇼) Flag Sequence: ZW
+Register Emoji [ValidFlagSequence]: [1F1EA 1F1FA] (🇪🇺) Flag Sequence: EU
+Register Emoji [ValidFlagSequence]: [1F1EA 1F1FF] (🇪🇿) Flag Sequence: EZ
+Register Emoji [ValidFlagSequence]: [1F1F6 1F1F4] (🇶🇴) Flag Sequence: QO
+Register Emoji [ValidFlagSequence]: [1F1FA 1F1F3] (🇺🇳) Flag Sequence: UN
 Register Emoji [Emoji_Presentation]: 231A (⌚) WATCH
 Register Emoji [Emoji_Presentation]: 231B (⌛) HOURGLASS
 Register Emoji [Emoji_Presentation]: 23E9 (⏩) BLACK RIGHT-POINTING DOUBLE TRIANGLE
@@ -3327,32 +3587,6 @@ Register Emoji [Emoji]: 1F170 (🅰) NEGATIVE SQUARED LATIN CAPITAL LETTER A
 Register Emoji [Emoji]: 1F171 (🅱) NEGATIVE SQUARED LATIN CAPITAL LETTER B
 Register Emoji [Emoji]: 1F17E (🅾) NEGATIVE SQUARED LATIN CAPITAL LETTER O
 Register Emoji [Emoji]: 1F17F (🅿) NEGATIVE SQUARED LATIN CAPITAL LETTER P
-Register Emoji [Emoji]: 1F1E6 (🇦) REGIONAL INDICATOR SYMBOL LETTER A
-Register Emoji [Emoji]: 1F1E7 (🇧) REGIONAL INDICATOR SYMBOL LETTER B
-Register Emoji [Emoji]: 1F1E8 (🇨) REGIONAL INDICATOR SYMBOL LETTER C
-Register Emoji [Emoji]: 1F1E9 (🇩) REGIONAL INDICATOR SYMBOL LETTER D
-Register Emoji [Emoji]: 1F1EA (🇪) REGIONAL INDICATOR SYMBOL LETTER E
-Register Emoji [Emoji]: 1F1EB (🇫) REGIONAL INDICATOR SYMBOL LETTER F
-Register Emoji [Emoji]: 1F1EC (🇬) REGIONAL INDICATOR SYMBOL LETTER G
-Register Emoji [Emoji]: 1F1ED (🇭) REGIONAL INDICATOR SYMBOL LETTER H
-Register Emoji [Emoji]: 1F1EE (🇮) REGIONAL INDICATOR SYMBOL LETTER I
-Register Emoji [Emoji]: 1F1EF (🇯) REGIONAL INDICATOR SYMBOL LETTER J
-Register Emoji [Emoji]: 1F1F0 (🇰) REGIONAL INDICATOR SYMBOL LETTER K
-Register Emoji [Emoji]: 1F1F1 (🇱) REGIONAL INDICATOR SYMBOL LETTER L
-Register Emoji [Emoji]: 1F1F2 (🇲) REGIONAL INDICATOR SYMBOL LETTER M
-Register Emoji [Emoji]: 1F1F3 (🇳) REGIONAL INDICATOR SYMBOL LETTER N
-Register Emoji [Emoji]: 1F1F4 (🇴) REGIONAL INDICATOR SYMBOL LETTER O
-Register Emoji [Emoji]: 1F1F5 (🇵) REGIONAL INDICATOR SYMBOL LETTER P
-Register Emoji [Emoji]: 1F1F6 (🇶) REGIONAL INDICATOR SYMBOL LETTER Q
-Register Emoji [Emoji]: 1F1F7 (🇷) REGIONAL INDICATOR SYMBOL LETTER R
-Register Emoji [Emoji]: 1F1F8 (🇸) REGIONAL INDICATOR SYMBOL LETTER S
-Register Emoji [Emoji]: 1F1F9 (🇹) REGIONAL INDICATOR SYMBOL LETTER T
-Register Emoji [Emoji]: 1F1FA (🇺) REGIONAL INDICATOR SYMBOL LETTER U
-Register Emoji [Emoji]: 1F1FB (🇻) REGIONAL INDICATOR SYMBOL LETTER V
-Register Emoji [Emoji]: 1F1FC (🇼) REGIONAL INDICATOR SYMBOL LETTER W
-Register Emoji [Emoji]: 1F1FD (🇽) REGIONAL INDICATOR SYMBOL LETTER X
-Register Emoji [Emoji]: 1F1FE (🇾) REGIONAL INDICATOR SYMBOL LETTER Y
-Register Emoji [Emoji]: 1F1FF (🇿) REGIONAL INDICATOR SYMBOL LETTER Z
 Register Emoji [Emoji]: 1F321 (🌡) THERMOMETER
 Register Emoji [Emoji]: 1F324 (🌤) WHITE SUN WITH SMALL CLOUD
 Register Emoji [Emoji]: 1F325 (🌥) WHITE SUN BEHIND CLOUD
@@ -3971,51 +4205,6 @@ Removed Valid: 23AE (⎮) INTEGRAL EXTENSION
 Removed Valid: 23B8 (⎸) LEFT VERTICAL BOX LINE
 Removed Valid: 23B9 (⎹) RIGHT VERTICAL BOX LINE
 Removed Valid: 237F (⍿) VERTICAL LINE WITH MIDDLE DOT
-Removed Valid: 269D (⚝) OUTLINED WHITE STAR
-Removed Valid: 269E (⚞) THREE LINES CONVERGING RIGHT
-Removed Valid: 269F (⚟) THREE LINES CONVERGING LEFT
-Removed Valid: 26EF (⛯) MAP SYMBOL FOR LIGHTHOUSE
-Removed Valid: 26C0 (⛀) WHITE DRAUGHTS MAN
-Removed Valid: 26C1 (⛁) WHITE DRAUGHTS KING
-Removed Valid: 26C2 (⛂) BLACK DRAUGHTS MAN
-Removed Valid: 26C3 (⛃) BLACK DRAUGHTS KING
-Removed Valid: 26DA (⛚) DRIVE SLOW SIGN
-Removed Valid: 26DB (⛛) HEAVY WHITE DOWN-POINTING TRIANGLE
-Removed Valid: 26DC (⛜) LEFT CLOSED ENTRY
-Removed Valid: 26DD (⛝) SQUARED SALTIRE
-Removed Valid: 26DE (⛞) FALLING DIAGONAL IN WHITE CIRCLE IN BLACK SQUARE
-Removed Valid: 26E0 (⛠) RESTRICTED LEFT ENTRY-1
-Removed Valid: 26E1 (⛡) RESTRICTED LEFT ENTRY-2
-Removed Valid: 26C9 (⛉) TURNED WHITE SHOGI PIECE
-Removed Valid: 26CA (⛊) TURNED BLACK SHOGI PIECE
-Removed Valid: 26E4 (⛤) PENTAGRAM
-Removed Valid: 26E5 (⛥) RIGHT-HANDED INTERLACED PENTAGRAM
-Removed Valid: 26E6 (⛦) LEFT-HANDED INTERLACED PENTAGRAM
-Removed Valid: 26E7 (⛧) INVERTED PENTAGRAM
-Removed Valid: 26B2 (⚲) NEUTER
-Removed Valid: 26B3 (⚳) CERES
-Removed Valid: 26B4 (⚴) PALLAS
-Removed Valid: 26B5 (⚵) JUNO
-Removed Valid: 26B6 (⚶) VESTA
-Removed Valid: 26B7 (⚷) CHIRON
-Removed Valid: 26B8 (⚸) BLACK MOON LILITH
-Removed Valid: 26BA (⚺) SEMISEXTILE
-Removed Valid: 26BB (⚻) QUINCUNX
-Removed Valid: 26BC (⚼) SESQUIQUADRATE
-Removed Valid: 26BF (⚿) SQUARED KEY
-Removed Valid: 26C6 (⛆) RAIN
-Removed Valid: 26C7 (⛇) BLACK SNOWMAN
-Removed Valid: 26CD (⛍) DISABLED CAR
-Removed Valid: 26D0 (⛐) CAR SLIDING
-Removed Valid: 26D5 (⛕) ALTERNATE ONE-WAY LEFT WAY TRAFFIC
-Removed Valid: 26D6 (⛖) BLACK TWO-WAY LEFT WAY TRAFFIC
-Removed Valid: 26D7 (⛗) WHITE TWO-WAY LEFT WAY TRAFFIC
-Removed Valid: 26D8 (⛘) BLACK LEFT LANE MERGE
-Removed Valid: 26D9 (⛙) WHITE LEFT LANE MERGE
-Removed Valid: 26DF (⛟) BLACK TRUCK
-Removed Valid: 26E8 (⛨) BLACK CROSS ON SHIELD
-Removed Valid: 26EB (⛫) CASTLE
-Removed Valid: 26EC (⛬) HISTORIC SITE
 Removed Valid: 2700 (✀) BLACK SAFETY SCISSORS
 Removed Valid: 2701 (✁) UPPER BLADE SCISSORS
 Removed Valid: 2704 (✄) WHITE SCISSORS
@@ -4906,6 +5095,9 @@ Isolated: 2690 (⚐) WHITE FLAG
 Isolated: 2691 (⚑) BLACK FLAG
 Isolated: 2698 (⚘) FLOWER
 Isolated: 269A (⚚) STAFF OF HERMES
+Isolated: 269D (⚝) OUTLINED WHITE STAR
+Isolated: 269E (⚞) THREE LINES CONVERGING RIGHT
+Isolated: 269F (⚟) THREE LINES CONVERGING LEFT
 Isolated: 26A2 (⚢) DOUBLED FEMALE SIGN
 Isolated: 26A3 (⚣) DOUBLED MALE SIGN
 Isolated: 26A4 (⚤) INTERLOCKED FEMALE AND MALE SIGN
@@ -4916,7 +5108,49 @@ Isolated: 26A9 (⚩) HORIZONTAL MALE WITH STROKE SIGN
 Isolated: 26AD (⚭) MARRIAGE SYMBOL
 Isolated: 26AE (⚮) DIVORCE SYMBOL
 Isolated: 26AF (⚯) UNMARRIED PARTNERSHIP SYMBOL
+Isolated: 26B2 (⚲) NEUTER
+Isolated: 26B3 (⚳) CERES
+Isolated: 26B4 (⚴) PALLAS
+Isolated: 26B5 (⚵) JUNO
+Isolated: 26B6 (⚶) VESTA
+Isolated: 26B7 (⚷) CHIRON
+Isolated: 26B8 (⚸) BLACK MOON LILITH
+Isolated: 26BA (⚺) SEMISEXTILE
+Isolated: 26BB (⚻) QUINCUNX
+Isolated: 26BC (⚼) SESQUIQUADRATE
+Isolated: 26BF (⚿) SQUARED KEY
+Isolated: 26C0 (⛀) WHITE DRAUGHTS MAN
+Isolated: 26C1 (⛁) WHITE DRAUGHTS KING
+Isolated: 26C2 (⛂) BLACK DRAUGHTS MAN
+Isolated: 26C3 (⛃) BLACK DRAUGHTS KING
+Isolated: 26C6 (⛆) RAIN
+Isolated: 26C7 (⛇) BLACK SNOWMAN
+Isolated: 26C9 (⛉) TURNED WHITE SHOGI PIECE
+Isolated: 26CA (⛊) TURNED BLACK SHOGI PIECE
+Isolated: 26CD (⛍) DISABLED CAR
+Isolated: 26D0 (⛐) CAR SLIDING
+Isolated: 26D5 (⛕) ALTERNATE ONE-WAY LEFT WAY TRAFFIC
+Isolated: 26D6 (⛖) BLACK TWO-WAY LEFT WAY TRAFFIC
+Isolated: 26D7 (⛗) WHITE TWO-WAY LEFT WAY TRAFFIC
+Isolated: 26D8 (⛘) BLACK LEFT LANE MERGE
+Isolated: 26D9 (⛙) WHITE LEFT LANE MERGE
+Isolated: 26DA (⛚) DRIVE SLOW SIGN
+Isolated: 26DB (⛛) HEAVY WHITE DOWN-POINTING TRIANGLE
+Isolated: 26DC (⛜) LEFT CLOSED ENTRY
+Isolated: 26DD (⛝) SQUARED SALTIRE
+Isolated: 26DE (⛞) FALLING DIAGONAL IN WHITE CIRCLE IN BLACK SQUARE
+Isolated: 26DF (⛟) BLACK TRUCK
+Isolated: 26E0 (⛠) RESTRICTED LEFT ENTRY-1
+Isolated: 26E1 (⛡) RESTRICTED LEFT ENTRY-2
 Isolated: 26E2 (⛢) ASTRONOMICAL SYMBOL FOR URANUS
+Isolated: 26E4 (⛤) PENTAGRAM
+Isolated: 26E5 (⛥) RIGHT-HANDED INTERLACED PENTAGRAM
+Isolated: 26E6 (⛦) LEFT-HANDED INTERLACED PENTAGRAM
+Isolated: 26E7 (⛧) INVERTED PENTAGRAM
+Isolated: 26E8 (⛨) BLACK CROSS ON SHIELD
+Isolated: 26EB (⛫) CASTLE
+Isolated: 26EC (⛬) HISTORIC SITE
+Isolated: 26EF (⛯) MAP SYMBOL FOR LIGHTHOUSE
 Isolated: 26FB (⛻) JAPANESE BANK SYMBOL
 Isolated: 26FC (⛼) HEADSTONE GRAVEYARD SYMBOL
 Isolated: 26FE (⛾) CUP ON BLACK SQUARE
@@ -5413,3 +5647,101 @@ Isolated: 1FA6A (🩪) XIANGQI BLACK HORSE
 Isolated: 1FA6B (🩫) XIANGQI BLACK CHARIOT
 Isolated: 1FA6C (🩬) XIANGQI BLACK CANNON
 Isolated: 1FA6D (🩭) XIANGQI BLACK SOLDIER
+Changed Script [Grek => Zyyy]: 3BE (ξ) GREEK SMALL LETTER XI
+Excluded Script: Aghb (53)
+Excluded Script: Ahom (65)
+Excluded Script: Armi (31)
+Excluded Script: Avst (61)
+Excluded Script: Bass (36)
+Excluded Script: Bhks (97)
+Excluded Script: Brah (115)
+Excluded Script: Bugi (30)
+Excluded Script: Buhd (20)
+Excluded Script: Cari (49)
+Excluded Script: Chrs (28)
+Excluded Script: Copt (77)
+Excluded Script: Cpmn (99)
+Excluded Script: Cprt (55)
+Excluded Script: Diak (71)
+Excluded Script: Dogr (60)
+Excluded Script: Dsrt (40)
+Excluded Script: Dupl (143)
+Excluded Script: Egyp (1094)
+Excluded Script: Elba (40)
+Excluded Script: Elym (23)
+Excluded Script: Glag (86)
+Excluded Script: Gong (63)
+Excluded Script: Gonm (75)
+Excluded Script: Goth (27)
+Excluded Script: Gran (83)
+Excluded Script: Hano (21)
+Excluded Script: Hatr (26)
+Excluded Script: Hluw (583)
+Excluded Script: Hmng (127)
+Excluded Script: Hung (57)
+Excluded Script: Ital (39)
+Excluded Script: Kawi (86)
+Excluded Script: Khar (68)
+Excluded Script: Khoj (65)
+Excluded Script: Kits (471)
+Excluded Script: Kthi (63)
+Excluded Script: Lina (341)
+Excluded Script: Linb (211)
+Excluded Script: Lyci (29)
+Excluded Script: Lydi (27)
+Excluded Script: Maka (25)
+Excluded Script: Mahj (39)
+Excluded Script: Mani (51)
+Excluded Script: Marc (68)
+Excluded Script: Medf (59)
+Excluded Script: Mend (213)
+Excluded Script: Merc (90)
+Excluded Script: Mero (32)
+Excluded Script: Modi (79)
+Excluded Script: Mong (162)
+Excluded Script: Mroo (43)
+Excluded Script: Mult (38)
+Excluded Script: Nagm (42)
+Excluded Script: Narb (32)
+Excluded Script: Nand (65)
+Excluded Script: Nbat (40)
+Excluded Script: Nshu (397)
+Excluded Script: Ogam (28)
+Excluded Script: Orkh (73)
+Excluded Script: Osma (40)
+Excluded Script: Ougr (26)
+Excluded Script: Palm (32)
+Excluded Script: Pauc (57)
+Excluded Script: Perm (43)
+Excluded Script: Phag (56)
+Excluded Script: Phli (27)
+Excluded Script: Phlp (29)
+Excluded Script: Phnx (29)
+Excluded Script: Prti (30)
+Excluded Script: Rjng (37)
+Excluded Script: Runr (86)
+Excluded Script: Samr (61)
+Excluded Script: Sarb (32)
+Excluded Script: Sgnw (672)
+Excluded Script: Shaw (48)
+Excluded Script: Shrd (96)
+Excluded Script: Sidd (90)
+Excluded Script: Sind (69)
+Excluded Script: Sora (35)
+Excluded Script: Sogd (42)
+Excluded Script: Sogo (40)
+Excluded Script: Soyo (83)
+Excluded Script: Tagb (18)
+Excluded Script: Takr (68)
+Excluded Script: Tang (6914)
+Excluded Script: Tglg (23)
+Excluded Script: Tirh (79)
+Excluded Script: Tnsa (89)
+Excluded Script: Toto (31)
+Excluded Script: Ugar (31)
+Excluded Script: Vith (35)
+Excluded Script: Wara (52)
+Excluded Script: Xpeo (50)
+Excluded Script: Xsux (1234)
+Excluded Script: Yezi (47)
+Excluded Script: Zanb (72)

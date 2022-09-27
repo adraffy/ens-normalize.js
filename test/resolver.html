@@ -412,10 +412,9 @@ footer {
 <button data-name="{1F469}{1F3FE}{200D}{1F91D}{200D}{1F469}{1F3FE}">❌Mod+Mod</button>
 
 <b>Regional:</b>
-<button>🇦</button>
-<button>🇦🇦</button>
+<button>❌🇦</button>
+<button>❌🇦🇦</button>
 <button>🇺🇸🇺🇲</button>
-<button data-name="{1F1FA}{200B}{1F1F8}{200B}{1F1FA}{200B}{1F1F2}"></button>
 
 <b>Flag:</b>
 <button>🏴</button>
@@ -527,6 +526,12 @@ Katakana:
 <b>Misc:</b>
 <button>•-•¬</button>
 <button>360°</button>
+
+<a href="https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers"><b>Excluded:</b></a>
+<button data-name="𓀀𓀁𓀂">Egyptian Hieroglyphs</button>
+<button>🐸️𓆏</button>
+<button data-name="𐌱𐌻𐍉𐌼𐌰">Gothic</button>
+<button data-name="a𓀂">❌Mixed</button>
 
 </div>
 <div id="options">
@@ -855,6 +860,9 @@ function create_dns_row(ens_norm) {
 		} else if (!idna || idna !== name) {
 			span.classList.add('fail');
 			span.innerHTML = '🛑 Pre-IDNA Punycode Required';
+			if (idna) {
+				add_row_tag(row, create_copy_btn(idna, 'Copy Mangled'));
+			}
 		} else {
 			apply_grade(span, 'warn', 'Punycode Compatible');
 		}
@@ -867,6 +875,7 @@ function create_dns_row(ens_norm) {
 		apply_grade(span, 'fail', err.message);
 		span.classList.add('long');
 		add_row_tag(row, span);
+		console.log(err);
 	}
 	return row;
 }
@@ -903,12 +912,14 @@ function create_copy_btn(s, title = 'Copy') {
 	let btn = document.createElement('button');
 	btn.addEventListener('click', () => navigator.clipboard.writeText(s));
 	btn.innerHTML = title;
+	btn.title = `${s}\n${explode_cp(s).map(hex_cp).join(' ')}`;
 	return btn;
 }
 
 function create_resolve_btn(s) {
 	let btn = document.createElement('button');
 	btn.innerHTML = 'Resolve';	
+	btn.title = s;
 	btn.addEventListener('click', () => {
 		input_field.value = s;
 		resolve();
