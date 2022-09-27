@@ -402,7 +402,7 @@ export class UnicodeScripts {
 	extensions() { // abbrs
 		// 102E0         ; Arab Copt # Mn       COPTIC EPACT THOUSANDS MARK
 		// 102E1..102FB  ; Arab Copt # No  [27] COPTIC EPACT DIGIT ONE..COPTIC EPACT NUMBER NINE HUNDRED
-		return Object.entries(parse_semicolon_file(new URL('./ScriptExtensions.txt', this.dir), {
+		return Object.entries(parse_semicolon_file(new URL('./ScriptExtensions.txt', this.spec.dir), {
 			row([src, abbrs]) {
 				let cps = parse_cp_range(src);
 				for (let abbr of abbrs.trim().split(/\s+/)) {

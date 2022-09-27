@@ -187,6 +187,7 @@ try {
 	for (let info of await fetch_json('../derive/output/emoji-info.json')) {
 		info_map.set(info.form, info);
 	}
+	/*
 	let flag_type = 'ValidRegionalFlag';
 	for (let region of await fetch_json('../derive/data/regions.json')) {
 		let cps = explode_cp(region).map(cp => 0x1F1E6 - 0x41 + cp);
@@ -196,7 +197,17 @@ try {
 			emoji_seqs.push(cps);
 		}
 	}	
-	
+	*/
+	/*
+	for (let x = 0; x < 26; x++) {
+		let form = String.fromCodePoint(0x1F1E6 + x);
+		if (!info_map.has(form)) {
+			let cps = explode_cp(form);
+			info_map.set(form, {cps, name: `regional indicator symbol letter ${String.fromCodePoint(0x41 + x)}`, type: 'Regional'});
+			emoji_seqs.push(cps);
+		}
+	}	
+	*/
 } catch (err) {
 	console.log(err);
 }

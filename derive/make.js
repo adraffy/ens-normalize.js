@@ -138,7 +138,7 @@ for (let cp of Regional_Indicator) {
 
 // register default emoji-presentation
 for (let info of emoji_chrs.Emoji_Presentation) {
-	if (Regional_Indicator.has(info.cp)) continue; // skipped
+	//if (Regional_Indicator.has(info.cp)) continue; // skipped (not necessary with above flag logic)
 	let rec = emoji_map.get(info.cp);
 	if (!rec) throw new Error(`Expected emoji: ${UNICODE.format(info)}`);
 	if (rec.used) continue;
