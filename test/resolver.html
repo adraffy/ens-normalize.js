@@ -26,23 +26,26 @@ header {
 h1 {
 	display: flex;
 	flex-wrap: wrap;
-	flex-basis: 50%;
 	align-items: baseline;
 	margin: 0;
-	gap: 0.5rem;
+	gap: 0.2rem;
 }
 h1 a {
 	font-size: 24pt;
 	white-space: pre;
 }
 #provider {
-	font-size: 12pt;
+	font-size: 11pt;
 	font-weight: normal;
 	color: #666;
 }
 #version {
 	text-align: right;
 	box-sizing: border-box;
+	width: min-content;
+}
+#version a {	
+	white-space: pre;
 }
 .arrows {
 	width: 2rem;
@@ -130,7 +133,7 @@ input[type=checkbox]:checked + label.nonstd {
 .row.skipped {
 	background: linear-gradient(90deg, #efe, #fcc);
 }
-.row.owner {
+.row.addr {
 	background: #ffd;
 }
 .row.dns {
@@ -195,6 +198,7 @@ ul.row {
 }
 .tags .long {
 	white-space: normal;
+	line-break: anywhere;
 }
 .tags .opensea {
 	order: 8;
@@ -237,6 +241,9 @@ ul.row {
 .tags .fail {
 	background: #fcc;
 	color: #600;
+}
+.tags .wildcard {
+	background: #ccf;	
 }
 .tags .pretty {
 	background: #f8e8f0;
@@ -319,7 +326,6 @@ footer {
 <button>vitalik.eth</button>
 <button>bRAnTlY.eTh</button>
 <button>brantly.cash</button>
-<button>raffy.antistupid.com</button>
 <button data-name=".eth">❌.eth</button>
 <button>öbb</button>
 <button>Öbb</button>
@@ -333,6 +339,8 @@ footer {
 <b>Subdomain:</b>
 <button data-name="nowzad.loopring.eth">loopring</button>
 <button data-name="239.chonksociety.eth">Chonk #239</button>
+<button>raffy.antistupid.com</button>
+<button>barmstrong.cb.id</button>
 
 <!--
 <a href="./display.html"><b>Display:</b></a>
@@ -341,6 +349,9 @@ footer {
 
 <b>Address:</b>
 <button data-name="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045">d8dA..6045</button>
+
+<b>Hyperlink:</b>
+<button data-name="https://opensea.io/assets/ethereum/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209">OpenSea</button>
 
 <b>Mapped:</b> 
 <button>™️</button>
@@ -529,7 +540,7 @@ Katakana:
 
 <a href="https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers"><b>Excluded:</b></a>
 <button data-name="𓀀𓀁𓀂">Egyptian Hieroglyphs</button>
-<button>🐸️𓆏</button>
+<button>𓆏➡🐸️</button>
 <button data-name="𐌱𐌻𐍉𐌼𐌰">Gothic</button>
 <button data-name="a𓀂">❌Mixed</button>
 
@@ -541,7 +552,7 @@ Katakana:
 </div>
 <div id="input">
 <label for="input_field">Name or Address:</label>
-<input id="input_field" size="20" placeholder="Name or Address (Checksummed)">
+<input id="input_field" size="20" placeholder="Name or Address (Checksummed) or OpenSea URL">
 </div>
 <div id="controls">
 <div id="arrows" class="hide"><div class="arrows"></div></div>
@@ -561,11 +572,7 @@ Katakana:
 </div>
 <footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
 <script type="module">
-import {
-	Providers, WebSocketProvider, 
-	determine_window_provider,
-	is_checksum_address, namehash, labelhash, ENS
-} from '../../eth-tools.js/dist/eth-tools.min.js';
+import { ethers } from "https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.1/ethers.esm.min.js";
 import {
 	ens_normalize, ens_beautify, ens_tokenize, ens_emoji, nfc, nfd, dns_from_normalized_ens,
 	escape_for_html, is_printable_ascii, hex_cp, explode_cp,
@@ -573,10 +580,37 @@ import {
 } from '../dist/all.min.js';
 use_default_style();
 
-const providers = new Providers()
-	.add_static(1, new WebSocketProvider({url: 'wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe', source: 'Infura'}));
+let infura_provider = new ethers.providers.WebSocketProvider('wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe');
+let active_provider = infura_provider;
+let window_provider;
+let registry_contract;
+let eth_nft_contract;
 
-const ens = new ENS({provider: providers.view(1)});
+if (window.ethereum) {
+	window_provider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+	window_provider.on('network', update_network);
+} else {
+	update_network();
+}
+function update_network(network) {
+	let registry;
+	let name;
+	if (network && network.ensAddress) {
+		active_provider = window_provider;
+		name = `window.ethereum (${network.name.replace('homestead', 'mainnet')})`;
+		registry = network.ensAddress;
+	} else {
+		active_provider = infura_provider;
+		name = `Infura (mainnet)`;
+		registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
+	}
+	document.querySelector('#provider').innerHTML = `using ${name}`;
+	registry_contract = new ethers.Contract(registry, [
+		`function resolver(bytes32 node) external view returns (address)`,
+		`function owner(bytes32 node) external view returns (address)`,
+	], active_provider);
+	eth_nft_contract = null;
+}
 
 const EMOJI = ens_emoji();
 
@@ -603,12 +637,6 @@ const SKIP_SUFFIX = '_!';
 let resolve_timer = RESOLVE_MODE_IDLE;
 let resolve_options;
 let resolve_date0;
-
-let window_provider;
-determine_window_provider().then(p => {
-	window_provider = p;
-	providers.add_dynamic(p);
-}).catch(() => {});
 
 examples_div.classList.toggle('hide', !!window.localStorage.getItem('hide_examples'));
 show_hashes_check.selected = !!window.localStorage.getItem('show_hashes');
@@ -666,7 +694,11 @@ document.querySelector('#nf_btn').addEventListener('click', () => {
 	let s1 = replace_escapes(s0);
 	let s3 = apply_escapes(String.fromCodePoint(...nfd(explode_cp(s1))));
 	let s4 = apply_escapes(String.fromCodePoint(...nfc(explode_cp(s1))));
-	input_field.value = s0 == s3 ? s4 : s3;
+	let s5 = s0 == s3 ? s4 : s3;
+	if (s0 != s5) {
+		input_field.value = s5;
+		resolve();
+	}
 });
 
 document.querySelector('#escape_btn').addEventListener('click', () => {
@@ -875,7 +907,6 @@ function create_dns_row(ens_norm) {
 		apply_grade(span, 'fail', err.message);
 		span.classList.add('long');
 		add_row_tag(row, span);
-		console.log(err);
 	}
 	return row;
 }
@@ -953,24 +984,14 @@ function add_dot_eth_links(row, name) {
 	let hash = labelhash(label);
 	let contract = '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85';
 	
-	let os = create_link(`https://opensea.io/assets/${contract}/${hash.dec}`, 'Opensea');
+	let os = create_link(`https://opensea.io/assets/${contract}/${ethers.BigNumber.from(hash)}`, 'OpenSea');
 	os.classList.add('opensea');
 	add_row_tag(row, os);
 
-	let meta = create_link(`https://metadata.ens.domains/mainnet/${contract}/${hash.hex}`, 'Metadata');
+	let meta = create_link(`https://metadata.ens.domains/mainnet/${contract}/${hash}`, 'Metadata');
 	meta.classList.add('metadata');
 	add_row_tag(row, meta);
 }
-
-/*
-function create_opensea_link(name) {
-	let label = get_dot_eth_label(name);
-	if (!label) return; // only if 2LD .eth	
-	let a = create_link(`https://opensea.io/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/${labelhash(label).dec}`, 'Opensea');
-	a.classList.add('opensea');
-	return a;
-}
-*/
 
 function utf8_length(s) {
 	let bytes = 0;
@@ -1098,13 +1119,13 @@ function create_hashes_row(name) {
 		hex.innerHTML = cps.length == 0 ? '«null»' : [...cps].map(hex_cp).join(' ');
 		let hash = document.createElement('span');
 		hash.classList.add('hash');
-		hash.innerHTML = labelhash(label).hex;
+		hash.innerHTML = labelhash(label);
 		row.append(text, len, hex, hash);
 	}
 	// add namehash
 	let hash = document.createElement('span');
 	hash.classList.add('name', 'hash');
-	hash.innerHTML = `<b>Namehash:</b> ${namehash(name).hex}`;
+	hash.innerHTML = `<b>Namehash:</b> ${namehash(name)}`;
 	row.append(hash);
 	return row;
 }
@@ -1171,6 +1192,28 @@ function resolve(options) {
 	clearTimeout(resolve_timer);
 	resolve_timer = RESOLVE_MODE_IDLE;
 	let input = input_field.value;
+	try {
+		let url = new URL(input);
+		if (url.hostname == 'opensea.io') {
+			// https://opensea.io/assets/ethereum/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
+			let v = url.pathname.toLowerCase().split('/').filter(x => x);
+			if (v[0] === 'assets' && v[1] === 'ethereum' && v[2] === '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85' && /^\d+$/.test(v[3])) {
+				resolve_btn.disabled = true;
+				primary_arrows.classList.remove('hide');
+				fetch(`https://metadata.ens.domains/mainnet/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/${v[3]}`).then(r => {
+					if (r.status !== 200) throw new Error(`HTTP Error ${r.status}`);
+					return r.json();
+				}).then(meta => {				
+					input_field.value = meta.name;
+					setTimeout(resolve, 0);
+				}).catch(() => {}).finally(() => {
+					resolve_btn.disabled = false;
+				});
+				return;
+			}
+		}
+	} catch (err) {		
+	}
 	if (!options.automatic && /^\s*[0-9a-f]{2,}(\s+[0-9a-f]{2,})+\s*$/i.test(input)) {
 		input_field.value = input = input.trim().split(/\s+/).map(x => `{${x}}`).join('');	
 	}
@@ -1225,8 +1268,6 @@ function create_elapsed() {
 async function resolve0(input0, skip_norm) {
 	output_div.innerHTML = '';
 
-	document.querySelector('#provider').innerHTML = `using ${await ens.get_provider().then(x => x.source)}`;
-
 	// replace escapes
 	let input = replace_escapes(input0);
 	let input_is_address = is_checksum_address(input);
@@ -1248,7 +1289,7 @@ async function resolve0(input0, skip_norm) {
 		let reverse_row = normed_row = create_row('Reverse', true);
 		output_div.append(reverse_row);
 		try {
-			primary = await ens.primary_from_address(input);
+			primary = await active_provider.lookupAddress(input);
 		} catch (err) {			
 			reverse_row.classList.add('error');
 			let span = document.createElement('span');
@@ -1261,14 +1302,6 @@ async function resolve0(input0, skip_norm) {
 		}
 		if (should_stop_resolving()) return;
 		add_row_tag(reverse_row, create_elapsed());
-
-		// the address doesn't correspond to an owner
-		if (primary === null) {
-			let span = document.createElement('span');
-			apply_grade(span, 'warn', 'No Owner');
-			add_row_tag(reverse_row, span);
-			return;
-		}
 
 		// primary not set
 		if (!primary) {
@@ -1339,6 +1372,7 @@ async function resolve0(input0, skip_norm) {
 			add_row_tag(row, span);
 			let unnorm = document.createElement('span');
 			unnorm.id = 'unnorm';
+			unnorm.classList.add('long');
 			unnorm.innerHTML = input;
 			add_row_tag(row, unnorm);
 			add_row_tag(row, create_copy_btn(input));
@@ -1421,25 +1455,25 @@ async function resolve0(input0, skip_norm) {
 
 	// at this point, we have a name
 	// lookup the name
-	let name;
+	let resolver;
 	let resolver_row = create_row('Resolver', true);
 	output_div.append(resolver_row);
 	try {
-		name = await ens.resolve(name_norm);
+		resolver = await active_provider.getResolver(name_norm);
 	} catch (err) {
+		remove_temporary(resolver_row);
 		resolver_row.classList.add('error');
 		let span = document.createElement('span');
 		apply_grade(span, 'warn', err.message);
 		span.classList.add('long');
 		add_row_tag(resolver_row, span);
 		return;	
-	} finally {
-		remove_temporary(resolver_row);
 	}
 	if (should_stop_resolving()) return;
 	
 	// name doesn't exist
-	if (!name.resolver) { 
+	if (!resolver) { 
+		remove_temporary(resolver_row);
 		let span = document.createElement('span');
 		apply_grade(span, 'warn', `Name Not Found`);
 		add_row_tag(resolver_row, span);
@@ -1447,32 +1481,40 @@ async function resolve0(input0, skip_norm) {
 
 		// check if *.eth
 		let label = get_dot_eth_label(name_norm);
-		let available;
+		let check_nft;
 		if (label) {
+			let hash = ethers.utils.id(label);
 			let avail_row = create_row('Availability', true);
 			output_div.append(avail_row);
 			try {
-				available = await ens.is_dot_eth_available(label);	
+				await ensure_eth_nft();
 				let span_avail = document.createElement('span');
 				let len = [...label].length;
-				if (available) {
-					if (len < 3) {
-						apply_grade(span_avail, 'warn', `Too Short`);
-					} else {
-						apply_grade(span_avail, 'good', 'Available');
-					}
+				if (len < 3) {
+					apply_grade(span_avail, 'fail', `Too Short`);
 				} else {
-					apply_grade(span_avail, 'fail', `Not Available`);
+					let available = await eth_nft_contract.callStatic.available(hash);
+					if (available) {
+						apply_grade(span_avail, 'good', 'Available');
+					} else {
+						apply_grade(span_avail, 'warn', `Not Available`);
+						let t_exp = (await eth_nft_contract.callStatic.nameExpires(hash)).toNumber();
+						let t_end = t_exp + eth_nft_contract.grace_period;
+						let t_now = Math.round(Date.now() / 1000);
+						if (t_now > t_end) {
+							check_nft = true;
+						} else {
+							apply_grade(span_avail, 'warn', `Grace Period: ${(100 * (t_end - t_now) / eth_nft_contract.grace_period).toFixed(2)}%`);
+						}
+					}
+					add_row_tag(avail_row, span_avail);
 				}
-				add_row_tag(avail_row, span_avail);
-
 				let span_len = document.createElement('span');
-				span_len.classList.add('length');
+				span_len.classList.add('bytes'); 
 				span_len.innerHTML = `${len}<sub>ch</sub>`;
 				add_row_tag(avail_row, span_len);
-
 				add_row_tag(avail_row, create_ens_link(name_norm));	
-
+				add_row_tag(avail_row, create_etherscan_address_link(eth_nft_contract.address, 'NFT'));	
 			} catch (err) {
 				avail_row.classList.add('error');
 				let span = document.createElement('span');
@@ -1485,21 +1527,16 @@ async function resolve0(input0, skip_norm) {
 			add_row_tag(avail_row, create_elapsed());
 			if (should_stop_resolving()) return;
 
-			if (!available) {
+			if (check_nft) {
 				let nft_row = create_row('NFT Owner', true);
 				output_div.append(nft_row);
 				try {
-					let nft_owner = await ens.get_dot_eth_owner(label);	
-					if (nft_owner) {
-						nft_row.append(create_etherscan_address_link(nft_owner.address));
-						add_row_tag(nft_row, create_copy_btn(nft_owner.address));
-						add_row_tag(nft_row, create_resolve_btn(nft_owner.address));
-					} else {
-						let span = document.createElement('span');
-						span.innerHTML = 'Expired (Grace Period)';
-						add_row_tag(nft_row, span);
-					}
+					let nft_owner = await eth_nft_contract.callStatic.ownerOf(hash);	
+					nft_row.append(create_etherscan_address_link(nft_owner));
+					add_row_tag(nft_row, create_copy_btn(nft_owner));
+					add_row_tag(nft_row, create_resolve_btn(nft_owner));
 				} catch (err) {
+					console.log(err);
 					nft_row.classList.add('error');
 					let span = document.createElement('span');
 					apply_grade(span, 'warn', err.message);
@@ -1514,15 +1551,39 @@ async function resolve0(input0, skip_norm) {
 		return;
 	}
 
-	// resolver exists
-	let resolver_name = name.resolver.address;
-	if (resolver_name === '0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41') {
+	let is_wildcard = await resolver.supportsWildcard();
+	let resolver_name = resolver.address;
+	if (is_wildcard) {
+		// ethers doesn't expose this information
+		let v = name_norm.split('.');
+		try {
+			while (true) {
+				let parent = v.join('.');
+				let address = await registry_contract.callStatic.resolver(namehash(parent));
+				if (address === resolver.address) {
+					resolver_name = parent;
+					break;
+				}	
+				v.shift();
+			}
+		} catch (ignored) {			
+		}
+	} else if (resolver_name === '0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41') {
 		resolver_name = 'Public Resolver';
 	}
-	resolver_row.append(create_etherscan_address_link(name.resolver.address, resolver_name));
-	add_row_tag(resolver_row, create_copy_btn(name.resolver.address));
-	add_row_tag(resolver_row, create_elapsed());
+	resolver_row.append(create_etherscan_address_link(resolver.address, resolver_name));
 	
+	if (is_wildcard) {
+		let span = document.createElement('span');
+		span.classList.add('wildcard');
+		span.innerHTML = 'Wildcard';
+		add_row_tag(resolver_row, span);
+	}
+	add_row_tag(resolver_row, create_copy_btn(resolver.address));
+	add_row_tag(resolver_row, create_elapsed());
+	remove_temporary(resolver_row);
+
+
 	/*
 	// check the display name
 	let display_name;
@@ -1580,51 +1641,77 @@ async function resolve0(input0, skip_norm) {
 
 	// get the owner
 	let owner;
-	let owner_row = create_row('Owner', true);
-	output_div.append(owner_row);
-	try {
-		owner = await name.get_owner();
-	} catch (err) {
-		owner_row.classList.add('error');
-		let span = document.createElement('span');
-		apply_grade(span, 'warn', err.message);
-		span.classList.add('long');
-		return; // required to continue
-	} finally {
-		remove_temporary(owner_row);
-	}
-	if (should_stop_resolving()) return;
-
-	// we got the owner
-	owner_row.classList.add('owner');
-	owner_row.append(create_etherscan_address_link(owner.address));
-	add_row_tag(owner_row, create_copy_btn(owner.address));
-	add_row_tag(owner_row, create_elapsed());
-
-	// if the input was an address, we can validate
-	if (input_is_address) {
-		if (owner.address === input) {
-			apply_grade(input_grade, 'best', 'Owner');
-			add_row_tag(input_row, input_grade);
+	if (!is_wildcard) {
+		//owner = await resolver._fetch('0x02571be3'); // owner(bytes32)
+		//owner = await resolver._fetch('0x38a699a4'); // exists(bytes32)
+		//owner = await resolver._fetch('0x7dd56411'); // ownerOf(bytes32)
+		let owner_row = create_row('Owner', true);
+		output_div.append(owner_row);
+		try {
+			owner = await registry_contract.callStatic.owner(namehash(name_norm));
+		} catch (err) {
+			owner_row.classList.add('error');
 			let span = document.createElement('span');
-			span.innerHTML = 'Same as Input';
-			add_row_tag(owner_row, span);
-		} else {
-			apply_grade(input_grade, 'fail', 'Different from Owner');
-			add_row_tag(input_row, input_grade);
+			apply_grade(span, 'warn', err.message);
+			span.classList.add('long');
+			return; // required to continue
+		} finally {
+			remove_temporary(owner_row);
+		}
+		if (should_stop_resolving()) return;
+
+		// we got the owner
+		owner_row.classList.add('owner');
+		owner_row.append(create_etherscan_address_link(owner));
+		add_row_tag(owner_row, create_copy_btn(owner));
+		add_row_tag(owner_row, create_elapsed());
+
+		// if the input was an address, we can validate
+		if (input_is_address) {
+			if (owner === input) {
+				apply_grade(input_grade, 'best', 'Owner');
+				add_row_tag(input_row, input_grade);
+				let span = document.createElement('span');
+				span.innerHTML = 'Same as Input';
+				add_row_tag(owner_row, span);
+			} else {
+				apply_grade(input_grade, 'fail', 'Different from Owner');
+				add_row_tag(input_row, input_grade);
+			}
+		}
+		if (owner !== input) {
+			add_row_tag(owner_row, create_resolve_btn(owner));
+		}
+
+		let label = get_dot_eth_label(name_norm);
+		if (label) {
+			let row = create_row('Controller', true);
+			output_div.append(row);
+			let controller;
+			try {
+				await ensure_eth_nft();
+				controller = await eth_nft_contract.callStatic.getApproved(labelhash(label));
+			} catch (err) {
+				
+			}
+			remove_temporary(row);
+			if (!controller || is_null_hex(controller)) {
+				row.remove();
+			} else {
+				row.append(create_etherscan_address_link(controller));
+				add_row_tag(row, create_elapsed());
+			}
 		}
 	}
-	if (owner.address !== input) {
-		add_row_tag(owner_row, create_resolve_btn(owner.address));
-	}
-
 
 	// add address
 	let address;
 	let address_row = create_row('ETH Address', true);
+	address_row.classList.add('addr');
 	output_div.append(address_row);	
 	try {
-		address = await name.get_address();		
+		address = await resolver.getAddress();
+		if (is_null_hex(address)) address = false;
 	} catch (err) {
 		address_row.classList.add('error');
 		let span = document.createElement('span');
@@ -1635,34 +1722,34 @@ async function resolve0(input0, skip_norm) {
 		remove_temporary(address_row);
 	}
 	if (should_stop_resolving()) return;
-		
-	if (typeof address === 'string') {
-		if (/^0x0{40}/.test(address)) {
-			let span = document.createElement('span');
-			apply_grade(span, 'warn', 'Not Set');
-			add_row_tag(address_row, span);
+	
+	if (!address) {
+		let span = document.createElement('span');
+		apply_grade(span, 'warn', 'Not Set');
+		add_row_tag(address_row, span);
+	} else {
+		address_row.append(create_etherscan_address_link(address));
+		if (input_is_address) {
+			if (address === input) {
+				let span = document.createElement('span');
+				span.innerHTML = 'Same as Input';
+				add_row_tag(address_row, span);
+			} else if (address) {
+				add_row_tag(address_row, create_copy_btn(address));
+				add_row_tag(address_row, create_resolve_btn(address));
+				let span = document.createElement('span');
+				apply_grade(span, 'warn', 'Different from Owner');
+				add_row_tag(address_row, span);	
+			}
 		} else {
-			address_row.append(create_etherscan_address_link(address));
-			if (input_is_address) {
-				if (address === input) {
-					let span = document.createElement('span');
-					span.innerHTML = 'Same as Input';
-					add_row_tag(address_row, span);
-				} else if (address) {
-					add_row_tag(address_row, create_copy_btn(address));
-					add_row_tag(address_row, create_resolve_btn(address));
-					let span = document.createElement('span');
-					apply_grade(span, 'warn', 'Different from Owner');
-					add_row_tag(address_row, span);	
-				}
+			if (owner === address) {
+				let span = document.createElement('span');
+				apply_grade(span, 'good', 'Same as Owner');
+				add_row_tag(address_row, span);	
 			} else {
-				if (owner.address === address) {
-					let span = document.createElement('span');
-					apply_grade(span, 'good', 'Same as Owner');
-					add_row_tag(address_row, span);	
-				} else {
-					add_row_tag(address_row, create_copy_btn(address));
-					add_row_tag(address_row, create_resolve_btn(address));
+				add_row_tag(address_row, create_copy_btn(address));
+				add_row_tag(address_row, create_resolve_btn(address));
+				if (owner) {
 					let span = document.createElement('span');
 					apply_grade(span, 'warn', 'Not Owner');
 					add_row_tag(address_row, span);	
@@ -1670,18 +1757,15 @@ async function resolve0(input0, skip_norm) {
 			}
 		}
 	}
-	add_row_tag(address_row, create_elapsed());
-	
-	if (input_is_address) return; // nothing more to do
+	add_row_tag(address_row, create_elapsed());	
+	if (input_is_address || !address) return; // nothing more to do
 
-	// lookup primary
+	// lookup primary from eth address 
 	let primary;
 	let primary_row = create_row('Primary', true);
 	output_div.append(primary_row);
 	try {
-		//throw new Error('wtf');
-		primary = await ens.primary_from_address(owner.address);
-		//primary = primary.toUpperCase();
+		primary = await active_provider.lookupAddress(address);
 	} catch (err) {
 		primary_row.classList.add('error');
 		let span = document.createElement('span');
@@ -1761,7 +1845,38 @@ async function resolve0(input0, skip_norm) {
 	}
 }
 
+async function ensure_eth_nft() {
+	if (eth_nft_contract) return;
+	// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar
+	let resolver = await active_provider.getResolver('eth');
+	if (!resolver) throw new Error(`No .eth resolver`);
+	eth_nft_contract = new ethers.Contract(await resolver.getAddress(), [
+		`function available(uint256 id) external view returns(bool)`,
+		`function nameExpires(uint256 id) external view returns(uint256)`,
+		`function ownerOf(uint256 id) external view returns (address)`,
+		`function getApproved(uint256 id) external view returns (address)`,
+		`function GRACE_PERIOD() external view returns (uint256)`,
+	], active_provider);
+	eth_nft_contract.grace_period = (await eth_nft_contract.callStatic.GRACE_PERIOD()).toNumber();
+}
 
+function is_checksum_address(s) {
+	try {
+		return s === ethers.utils.getAddress(s);
+	} catch (ignored) {		
+	}
+}
+function is_null_hex(s) {
+	return /^0x0*$/.test(s);
+}
+function labelhash(s) {
+	return ethers.utils.id(s);
+}
+function namehash(s) {
+	let hash = '0x0000000000000000000000000000000000000000000000000000000000000000';
+	if (s) hash = s.split('.').reduceRight((h, x) => ethers.utils.keccak256(h + ethers.utils.id(x).slice(2)), hash);
+	return hash.slice(0, 66);
+}
 </script>
 </body>
 </html>
