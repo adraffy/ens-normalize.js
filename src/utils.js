@@ -3,11 +3,22 @@ export function hex_cp(cp) {
 }
 
 export function quote_cp(cp) {
-	return `{${hex_cp(cp)}}`;
+	return `{${hex_cp(cp)}}`; // my convention: like "\u{X}" w/o the "\u"
 }
 
+/*
 export function explode_cp(s) {
 	return [...s].map(c => c.codePointAt(0));
+}
+*/
+export function explode_cp(s) { // this is about 2x faster
+	let cps = [];
+	for (let pos = 0, len = s.length; pos < len; ) {
+		let cp = s.codePointAt(pos);
+		pos += cp < 0x10000 ? 1 : 2;
+		cps.push(cp);
+	}
+	return cps;
 }
 
 export function str_from_cps(cps) {

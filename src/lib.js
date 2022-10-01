@@ -106,8 +106,11 @@ function check_scripts_latin_like(cps) {
 function check_excluded_scripts(cps) {
 	// https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers
 	for (let set of EXCLUDED) {
-		if (cps.some(cp => set.has(cp)) && !cps.every(cp => set.has(cp) || cp == FE0F)) {
-			throw new Error(`excluded script cannot mix`);
+		if (cps.some(cp => set.has(cp))) { // first with one match
+			if (!cps.every(cp => set.has(cp) || cp == FE0F)) { // must match all (or emoji)
+				throw new Error(`excluded script cannot mix`);
+			}
+			break; // pure
 		}
 	}
 }
@@ -140,13 +143,13 @@ export function ens_normalize_post_check(norm) {
 			let cps_nfc = explode_cp(label);
 			check_leading_underscore(cps_nfc);
 			check_label_extension(cps_nfc);
-			check_surrounding(cps_nfc, 0x2019, 'apostrophe', true, true);
-			check_middle_dot(cps_nfc);
+			check_surrounding(cps_nfc, 0x2019, 'apostrophe', true, true); // question: can this be generalized better?
+			check_middle_dot(cps_nfc); // this a lot of effort for 1 character
 			check_scripts_latin_like(cps_nfc);
 			// replace emoji with single character
 			let cps_nfd = nfd(process(label, () => [FE0F])); 
 			check_combinining_marks(cps_nfd);
-			check_excluded_scripts(cps_nfd);
+			check_excluded_scripts(cps_nfd); // idea: it's probably safe to early terminate if this is pure
 		} catch (err) {
 			throw new Error(`Invalid label "${label}": ${err.message}`);
 		}

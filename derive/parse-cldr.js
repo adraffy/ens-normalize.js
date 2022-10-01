@@ -3,11 +3,11 @@ import {writeFile, mkdir} from 'node:fs/promises';
 // for some reason CLDR version != Unicode version
 // also these files have garbage formatting
 
-async function fetch_regions(version) {
+async function fetch_regions(url) {
 	// A sequence of two Regional Indicator characters, where the corresponding ASCII characters 
 	//are valid region sequences as specified by Unicode region subtags in [CLDR],
 	// with idStatus = “regular”, “deprecated”, or “macroregion”.
-	let res = await fetch(`https://raw.githubusercontent.com/unicode-org/cldr/maint/maint-${version}/common/validity/region.xml`);
+	let res = await fetch(new URL('./common/validity/region.xml', url));
 	if (res.status != 200) throw new Error(`HTTP error ${res.status}`);
 	let text = await res.text();
 	text = text.replace(/<!--.*?-->/sg, ''); // remove comments
@@ -40,9 +40,16 @@ async function fetch_regions(version) {
 	return regions.sort();
 }
 
-const VERSION = '41';
+function url_for_version(version) {
+	if (version) {
+		return `https://raw.githubusercontent.com/unicode-org/cldr/maint/maint-${version}/`;
+	} else {
+		return `https://raw.githubusercontent.com/unicode-org/cldr/latest/`;
+	}
+}
 
-let regions = await fetch_regions(VERSION);
+//let regions = await fetch_regions(repo_for_version('41'));
+let regions = await fetch_regions(url_for_version());
 console.log(`Regions: ${regions.length}`);
 
 let out_dir = new URL(`./data/`, import.meta.url);	

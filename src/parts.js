@@ -11,7 +11,7 @@ function create_arrow_span() {
 	return span;
 }
 
-function span_from_cp(cp, fmtr) {
+function span_from_cp(cp) {
 	let span = document.createElement('span');
 	if (cp == 0x200D) {
 		span.classList.add('mod', 'zwj');
@@ -213,6 +213,9 @@ export function use_default_style() {
 	}
 	.tokens .glyph .mod.tag {
 		background: #666;
+	}
+	.tokens .glyph .mod.tag sub {
+		display: none;
 	}
 	.tokens .glyph .mod.dropped {
 		background: #aaa;		

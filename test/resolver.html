@@ -149,6 +149,9 @@ input[type=checkbox]:checked + label.nonstd {
 .row.pretty {
 	background: #fff0fc;
 }
+.row.ethmoji {
+	background: linear-gradient(90deg,#fff,#efe);
+}
 #pretty {
 	font-size: 16pt;
 }
@@ -243,7 +246,9 @@ ul.row {
 	color: #600;
 }
 .tags .wildcard {
-	background: #ccf;	
+	background: #f84;
+	border: none;
+	color: #fff;
 }
 .tags .pretty {
 	background: #f8e8f0;
@@ -332,7 +337,7 @@ footer {
 <button data-name="◌̈bb">❌◌̈bb</button>
 
 <a href="https://adraffy.github.io/punycode.js/test/demo.html"><b>Punycode:</b></a>
-<button>xn--ls8h</button>
+<button>❌xn--ls8h</button>
 <button>xn--💩</button>
 <button>💷pound.eth</button>
 
@@ -1432,6 +1437,55 @@ async function resolve0(input0, skip_norm) {
 		}
 	}
 
+	let eth_label = get_dot_eth_label(name_norm);
+	if (eth_label) {
+		let tokens = ens_tokenize(eth_label);
+		if (tokens.every(t => t.type === 'emoji')) {
+			let ethmoji_row = create_row('Ethmoji');
+			ethmoji_row.classList.add('ethmoji');
+			let unique = new Set();
+			let grouped = [];
+			let last;
+			for (let token of tokens) {
+				let form = String.fromCodePoint(...token.emoji);
+				unique.add(form);
+				if (!last || last.form !== form) {
+					grouped.push(token);
+					token.count = 1;
+					token.form = form;
+					last = token;
+				} else {
+					last.count++;
+				}
+			}
+			let formula = document.createElement('code');
+			formula.innerHTML = grouped.map(token => {
+				return `${token.form}<sup>${token.count}</sup>`;
+			}).join('');
+			ethmoji_row.append(formula);
+
+			let grade = document.createElement('span');
+			if ([...eth_label].length < 3) {
+				grade.innerHTML = 'Too Short';
+			} else if (unique.size == 1) {
+				let ncp = last.cps.length;
+				if ((ncp == 1 && last.count == 3) || (ncp == 2 && last.count == 2) || (ncp >= 3 && last.count == 1)) {
+					grade.classList.add('best');
+					grade.innerHTML = '🔥️ Shortest';
+				} else {
+					grade.classList.add('warn');
+					grade.innerHTML = '⭐️ Repeated';
+				}
+			} else {
+				grade.innerHTML = `Mixed: ${unique.size}`;
+			}
+			add_row_tag(ethmoji_row, grade);
+
+			output_div.append(ethmoji_row);
+		}
+	}
+
+
 	if (!skip_norm) {
 		let pretty = ens_beautify(name_norm);
 		
@@ -1489,16 +1543,16 @@ async function resolve0(input0, skip_norm) {
 		add_row_tag(resolver_row, create_elapsed());
 
 		// check if *.eth
-		let label = get_dot_eth_label(name_norm);
 		let check_nft;
-		if (label) {
-			let hash = ethers.utils.id(label);
+		if (eth_label) {
+			let hash = ethers.utils.id(eth_label);
 			let avail_row = create_row('Availability', true);
 			output_div.append(avail_row);
 			try {
 				await ensure_eth_nft();
 				let span_avail = document.createElement('span');
-				let len = [...label].length;
+				add_row_tag(avail_row, span_avail);
+				let len = [...eth_label].length;
 				if (len < 3) {
 					apply_grade(span_avail, 'fail', `Too Short`);
 				} else {
@@ -1506,21 +1560,24 @@ async function resolve0(input0, skip_norm) {
 					if (available) {
 						apply_grade(span_avail, 'good', 'Available');
 					} else {
-						apply_grade(span_avail, 'warn', `Not Available`);
+						apply_grade(span_avail, 'fail', `Not Available`);
 						let t_exp = (await eth_nft_contract.callStatic.nameExpires(hash)).toNumber();
 						let t_end = t_exp + eth_nft_contract.grace_period;
 						let t_now = Math.round(Date.now() / 1000);
 						if (t_now >= t_exp && t_now <= t_end) {
 							let days = (t_end - t_now) / 86400;
-							apply_grade(span_avail, 'warn', `Grace period (${format_dur(1000 * eth_nft_contract.grace_period)}) ends in ${format_dur(1000 * (t_end - t_now))}`);
+							let span = document.createElement('span');
+							span.innerHTML = `Grace period (${format_dur(1000 * eth_nft_contract.grace_period)}) ends in ${format_dur(1000 * (t_end - t_now))}`;
+							add_row_tag(avail_row, span);
 						} else {
 							if (t_exp - t_now < 86400 * 60) {
-								apply_grade(span_avail, 'warn', `Expires in ${format_dur(1000 * (t_exp - t_now))}`);
+								let span = document.createElement('span');
+								span.innerHTML = `Expires in ${format_dur(1000 * (t_exp - t_now))}`;
+								add_row_tag(avail_row, span);
 							}
 							check_nft = true;
 						}
 					}
-					add_row_tag(avail_row, span_avail);
 				}
 				let span_len = document.createElement('span');
 				span_len.classList.add('bytes'); 
@@ -1696,23 +1753,22 @@ async function resolve0(input0, skip_norm) {
 			add_row_tag(owner_row, create_resolve_btn(owner));
 		}
 
-		let label = get_dot_eth_label(name_norm);
-		if (label) {
+		if (eth_label) {
 			let row = create_row('Controller', true);
 			output_div.append(row);
 			let controller;
 			try {
 				await ensure_eth_nft();
-				controller = await eth_nft_contract.callStatic.getApproved(labelhash(label));
+				controller = await eth_nft_contract.callStatic.getApproved(labelhash(eth_label));
 			} catch (err) {
 				
 			}
-			remove_temporary(row);
 			if (!controller || is_null_hex(controller)) {
 				row.remove();
 			} else {
 				row.append(create_etherscan_address_link(controller));
 				add_row_tag(row, create_elapsed());
+				remove_temporary(row);
 			}
 		}
 	}

@@ -100,7 +100,8 @@ function register_emoji(info) {
 
 function set_isolated(cp) {
 	if (!valid.has(cp)) {
-		throw new Error(`Isolated not Valid: ${UNICODE.format(cp)}`);
+		// this shouldn't be fatal
+		console.log(`Warning: Isolated not Valid: ${UNICODE.format(cp)}`);
 	}
 	if (isolated.has(cp)) {
 		throw new Error(`Already Isolated: ${UNICODE.format(cp)}`);
@@ -262,12 +263,14 @@ for (let info of emoji.values()) {
 		throw new Error(`Emoji with non-zero combining class boundary: ${UNICODE.format(info)}`);
 	}
 }
-for (let cp of isolated) {
+for (let cp of isolated) {	
+	if (!valid.has(cp)) {
+		// shouldn't be fatal, see: set_isolated()
+		//throw new Error(`Isolated not Valid: ${UNICODE.format(cp)}`);
+		isolated.delete(cp);
+	}
 	if (cc.has(cp)) {
 		throw new Error(`Isolated with non-zero combining class: ${UNICODE.format(cp)}`);
-	}
-	if (!valid.has(cp)) {
-		throw new Error(`Isolated not Valid: ${UNICODE.format(cp)}`);
 	}
 }
 
@@ -275,14 +278,13 @@ function sorted(v) {
 	return [...v].sort((a, b) => a - b);
 }
 
-
 // load excluded scripts
 let excluded = {};
 for (let abbr of SCRIPTS.excluded()) {	
 	let set  = scripts[abbr];
 	if (!set) throw new TypeError(`Expected script: ${abbr}`);
 	if (set.size == 0) continue;	
-	let decomposed = new Set(NF.nfd([...set]));
+	let decomposed = new Set(NF.nfd([...set])); // this is a good idea IMO
 	for (let cp of decomposed) {
 		if (!set.has(cp)) {
 			throw new Error(`Excluded script "${a}" decomposition: ${SPEC.format(cp)}`);

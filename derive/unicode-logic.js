@@ -1,9 +1,12 @@
 import {parse_cp, parse_cp_range, parse_cp_sequence, hex_cp, hex_seq, explode_cp} from './utils.js';
 import {readFileSync} from 'node:fs';
-import { type } from 'node:os';
 
 export function read_regions() {
 	return JSON.parse(readFileSync(new URL('./data/regions.json', import.meta.url)));
+}
+
+export function read_excluded_scripts() {
+	 return JSON.parse(readFileSync(new URL('./data/scripts-excluded.json', import.meta.url)));
 }
 
 export function parse_semicolon_file(file, impl = {}) {
@@ -155,12 +158,24 @@ export class UnicodeSpec {
 		});
 	}
 	scripts() {
-		// WARNING: this returns full names
+		// WARNING: returns full names
 		// 0000..001F    ; Common # Cc  [32] <control-0000>..<control-001F>
 		// 0020          ; Common # Zs       SPACE
 		return Object.entries(parse_semicolon_file(new URL('./Scripts.txt', this.dir), {
 			row([src, type]) {
 				this.get_bucket(type).push(...parse_cp_range(src));
+			}
+		}));
+	}
+	script_extensions() { // abbrs
+		// 102E0         ; Arab Copt # Mn       COPTIC EPACT THOUSANDS MARK
+		// 102E1..102FB  ; Arab Copt # No  [27] COPTIC EPACT DIGIT ONE..COPTIC EPACT NUMBER NINE HUNDRED
+		return Object.entries(parse_semicolon_file(new URL('./ScriptExtensions.txt', this.dir), {
+			row([src, abbrs]) {
+				let cps = parse_cp_range(src);
+				for (let abbr of abbrs.trim().split(/\s+/)) {
+					this.get_bucket(abbr).push(...cps);
+				}
 			}
 		}));
 	}
@@ -395,22 +410,10 @@ export class UnicodeScripts {
 		});
 		this.by_abbr = Object.fromEntries(this.entries.map(x => [x.abbr, x])); // use Object so we can $.Latn
 	}
-	excluded() { // abbrs
-		// WARNING: not versioned by spec
- 		return JSON.parse(readFileSync(new URL('../scripts-excluded.json', this.spec.dir)));
+	excluded() { 
+		return read_excluded_scripts(); 
 	}
-	extensions() { // abbrs
-		// 102E0         ; Arab Copt # Mn       COPTIC EPACT THOUSANDS MARK
-		// 102E1..102FB  ; Arab Copt # No  [27] COPTIC EPACT DIGIT ONE..COPTIC EPACT NUMBER NINE HUNDRED
-		return Object.entries(parse_semicolon_file(new URL('./ScriptExtensions.txt', this.spec.dir), {
-			row([src, abbrs]) {
-				let cps = parse_cp_range(src);
-				for (let abbr of abbrs.trim().split(/\s+/)) {
-					this.get_bucket(abbr).push(...cps);
-				}
-			}
-		}));
-	}
+	//extensions() { return this.spec.script_extensions(); }
 	get_script_set(cps) {
 		let ret = new Set();
 		for (let cp of cps) {
@@ -442,7 +445,6 @@ export class UnicodeScripts {
 		}
 		return ret;
 	}
-
 	// https://www.unicode.org/reports/tr39/#Whole_Script_Confusables
 	// confusables = [target: number[], cps: number[]]
 	// for example:
@@ -470,4 +472,3 @@ export class UnicodeScripts {
 	}
 
 }
-
