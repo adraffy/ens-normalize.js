@@ -1,4 +1,4 @@
-Build Date: 2022-10-02T06:49:36.733Z
+Build Date: 2022-10-02T06:53:27.505Z
 Unicode Version: 15.0.0
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -2020,6 +2020,264 @@ Register Emoji [RGI_Emoji_Modifier_Sequence]: [1FAF8 1F3FC] (🫸🏼) rightward
 Register Emoji [RGI_Emoji_Modifier_Sequence]: [1FAF8 1F3FD] (🫸🏽) rightwards pushing hand: medium skin tone
 Register Emoji [RGI_Emoji_Modifier_Sequence]: [1FAF8 1F3FE] (🫸🏾) rightwards pushing hand: medium-dark skin tone
 Register Emoji [RGI_Emoji_Modifier_Sequence]: [1FAF8 1F3FF] (🫸🏿) rightwards pushing hand: dark skin tone
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E6 1F1E8] (🇦🇨) flag: Ascension Island
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E6 1F1E9] (🇦🇩) flag: Andorra
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E6 1F1EA] (🇦🇪) flag: United Arab Emirates
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E6 1F1EB] (🇦🇫) flag: Afghanistan
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E6 1F1EC] (🇦🇬) flag: Antigua & Barbuda
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E6 1F1EE] (🇦🇮) flag: Anguilla
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E6 1F1F1] (🇦🇱) flag: Albania
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E6 1F1F2] (🇦🇲) flag: Armenia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E6 1F1F4] (🇦🇴) flag: Angola
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E6 1F1F6] (🇦🇶) flag: Antarctica
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E6 1F1F7] (🇦🇷) flag: Argentina
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E6 1F1F8] (🇦🇸) flag: American Samoa
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E6 1F1F9] (🇦🇹) flag: Austria
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E6 1F1FA] (🇦🇺) flag: Australia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E6 1F1FC] (🇦🇼) flag: Aruba
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E6 1F1FD] (🇦🇽) flag: Åland Islands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E6 1F1FF] (🇦🇿) flag: Azerbaijan
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1E6] (🇧🇦) flag: Bosnia & Herzegovina
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1E7] (🇧🇧) flag: Barbados
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1E9] (🇧🇩) flag: Bangladesh
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1EA] (🇧🇪) flag: Belgium
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1EB] (🇧🇫) flag: Burkina Faso
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1EC] (🇧🇬) flag: Bulgaria
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1ED] (🇧🇭) flag: Bahrain
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1EE] (🇧🇮) flag: Burundi
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1EF] (🇧🇯) flag: Benin
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1F1] (🇧🇱) flag: St. Barthélemy
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1F2] (🇧🇲) flag: Bermuda
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1F3] (🇧🇳) flag: Brunei
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1F4] (🇧🇴) flag: Bolivia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1F6] (🇧🇶) flag: Caribbean Netherlands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1F7] (🇧🇷) flag: Brazil
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1F8] (🇧🇸) flag: Bahamas
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1F9] (🇧🇹) flag: Bhutan
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1FB] (🇧🇻) flag: Bouvet Island
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1FC] (🇧🇼) flag: Botswana
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1FE] (🇧🇾) flag: Belarus
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E7 1F1FF] (🇧🇿) flag: Belize
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1E6] (🇨🇦) flag: Canada
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1E8] (🇨🇨) flag: Cocos (Keeling) Islands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1E9] (🇨🇩) flag: Congo - Kinshasa
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1EB] (🇨🇫) flag: Central African Republic
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1EC] (🇨🇬) flag: Congo - Brazzaville
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1ED] (🇨🇭) flag: Switzerland
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1EE] (🇨🇮) flag: Côte d’Ivoire
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1F0] (🇨🇰) flag: Cook Islands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1F1] (🇨🇱) flag: Chile
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1F2] (🇨🇲) flag: Cameroon
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1F3] (🇨🇳) flag: China
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1F4] (🇨🇴) flag: Colombia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1F5] (🇨🇵) flag: Clipperton Island
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1F7] (🇨🇷) flag: Costa Rica
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1FA] (🇨🇺) flag: Cuba
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1FB] (🇨🇻) flag: Cape Verde
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1FC] (🇨🇼) flag: Curaçao
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1FD] (🇨🇽) flag: Christmas Island
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1FE] (🇨🇾) flag: Cyprus
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1FF] (🇨🇿) flag: Czechia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E9 1F1EA] (🇩🇪) flag: Germany
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E9 1F1EC] (🇩🇬) flag: Diego Garcia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E9 1F1EF] (🇩🇯) flag: Djibouti
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E9 1F1F0] (🇩🇰) flag: Denmark
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E9 1F1F2] (🇩🇲) flag: Dominica
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E9 1F1F4] (🇩🇴) flag: Dominican Republic
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E9 1F1FF] (🇩🇿) flag: Algeria
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EA 1F1E6] (🇪🇦) flag: Ceuta & Melilla
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EA 1F1E8] (🇪🇨) flag: Ecuador
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EA 1F1EA] (🇪🇪) flag: Estonia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EA 1F1EC] (🇪🇬) flag: Egypt
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EA 1F1ED] (🇪🇭) flag: Western Sahara
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EA 1F1F7] (🇪🇷) flag: Eritrea
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EA 1F1F8] (🇪🇸) flag: Spain
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EA 1F1F9] (🇪🇹) flag: Ethiopia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EA 1F1FA] (🇪🇺) flag: European Union
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EB 1F1EE] (🇫🇮) flag: Finland
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EB 1F1EF] (🇫🇯) flag: Fiji
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EB 1F1F0] (🇫🇰) flag: Falkland Islands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EB 1F1F2] (🇫🇲) flag: Micronesia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EB 1F1F4] (🇫🇴) flag: Faroe Islands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EB 1F1F7] (🇫🇷) flag: France
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1E6] (🇬🇦) flag: Gabon
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1E7] (🇬🇧) flag: United Kingdom
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1E9] (🇬🇩) flag: Grenada
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1EA] (🇬🇪) flag: Georgia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1EB] (🇬🇫) flag: French Guiana
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1EC] (🇬🇬) flag: Guernsey
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1ED] (🇬🇭) flag: Ghana
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1EE] (🇬🇮) flag: Gibraltar
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1F1] (🇬🇱) flag: Greenland
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1F2] (🇬🇲) flag: Gambia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1F3] (🇬🇳) flag: Guinea
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1F5] (🇬🇵) flag: Guadeloupe
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1F6] (🇬🇶) flag: Equatorial Guinea
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1F7] (🇬🇷) flag: Greece
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1F8] (🇬🇸) flag: South Georgia & South Sandwich Islands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1F9] (🇬🇹) flag: Guatemala
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1FA] (🇬🇺) flag: Guam
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1FC] (🇬🇼) flag: Guinea-Bissau
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1FE] (🇬🇾) flag: Guyana
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1ED 1F1F0] (🇭🇰) flag: Hong Kong SAR China
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1ED 1F1F2] (🇭🇲) flag: Heard & McDonald Islands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1ED 1F1F3] (🇭🇳) flag: Honduras
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1ED 1F1F7] (🇭🇷) flag: Croatia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1ED 1F1F9] (🇭🇹) flag: Haiti
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1ED 1F1FA] (🇭🇺) flag: Hungary
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EE 1F1E8] (🇮🇨) flag: Canary Islands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EE 1F1E9] (🇮🇩) flag: Indonesia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EE 1F1EA] (🇮🇪) flag: Ireland
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EE 1F1F1] (🇮🇱) flag: Israel
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EE 1F1F2] (🇮🇲) flag: Isle of Man
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EE 1F1F3] (🇮🇳) flag: India
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EE 1F1F4] (🇮🇴) flag: British Indian Ocean Territory
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EE 1F1F6] (🇮🇶) flag: Iraq
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EE 1F1F7] (🇮🇷) flag: Iran
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EE 1F1F8] (🇮🇸) flag: Iceland
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EE 1F1F9] (🇮🇹) flag: Italy
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EF 1F1EA] (🇯🇪) flag: Jersey
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EF 1F1F2] (🇯🇲) flag: Jamaica
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EF 1F1F4] (🇯🇴) flag: Jordan
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EF 1F1F5] (🇯🇵) flag: Japan
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F0 1F1EA] (🇰🇪) flag: Kenya
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F0 1F1EC] (🇰🇬) flag: Kyrgyzstan
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F0 1F1ED] (🇰🇭) flag: Cambodia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F0 1F1EE] (🇰🇮) flag: Kiribati
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F0 1F1F2] (🇰🇲) flag: Comoros
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F0 1F1F3] (🇰🇳) flag: St. Kitts & Nevis
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F0 1F1F5] (🇰🇵) flag: North Korea
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F0 1F1F7] (🇰🇷) flag: South Korea
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F0 1F1FC] (🇰🇼) flag: Kuwait
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F0 1F1FE] (🇰🇾) flag: Cayman Islands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F0 1F1FF] (🇰🇿) flag: Kazakhstan
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F1 1F1E6] (🇱🇦) flag: Laos
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F1 1F1E7] (🇱🇧) flag: Lebanon
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F1 1F1E8] (🇱🇨) flag: St. Lucia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F1 1F1EE] (🇱🇮) flag: Liechtenstein
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F1 1F1F0] (🇱🇰) flag: Sri Lanka
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F1 1F1F7] (🇱🇷) flag: Liberia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F1 1F1F8] (🇱🇸) flag: Lesotho
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F1 1F1F9] (🇱🇹) flag: Lithuania
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F1 1F1FA] (🇱🇺) flag: Luxembourg
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F1 1F1FB] (🇱🇻) flag: Latvia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F1 1F1FE] (🇱🇾) flag: Libya
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1E6] (🇲🇦) flag: Morocco
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1E8] (🇲🇨) flag: Monaco
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1E9] (🇲🇩) flag: Moldova
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1EA] (🇲🇪) flag: Montenegro
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1EB] (🇲🇫) flag: St. Martin
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1EC] (🇲🇬) flag: Madagascar
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1ED] (🇲🇭) flag: Marshall Islands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1F0] (🇲🇰) flag: North Macedonia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1F1] (🇲🇱) flag: Mali
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1F2] (🇲🇲) flag: Myanmar (Burma)
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1F3] (🇲🇳) flag: Mongolia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1F4] (🇲🇴) flag: Macao SAR China
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1F5] (🇲🇵) flag: Northern Mariana Islands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1F6] (🇲🇶) flag: Martinique
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1F7] (🇲🇷) flag: Mauritania
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1F8] (🇲🇸) flag: Montserrat
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1F9] (🇲🇹) flag: Malta
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1FA] (🇲🇺) flag: Mauritius
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1FB] (🇲🇻) flag: Maldives
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1FC] (🇲🇼) flag: Malawi
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1FD] (🇲🇽) flag: Mexico
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1FE] (🇲🇾) flag: Malaysia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F2 1F1FF] (🇲🇿) flag: Mozambique
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F3 1F1E6] (🇳🇦) flag: Namibia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F3 1F1E8] (🇳🇨) flag: New Caledonia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F3 1F1EA] (🇳🇪) flag: Niger
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F3 1F1EB] (🇳🇫) flag: Norfolk Island
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F3 1F1EC] (🇳🇬) flag: Nigeria
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F3 1F1EE] (🇳🇮) flag: Nicaragua
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F3 1F1F1] (🇳🇱) flag: Netherlands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F3 1F1F4] (🇳🇴) flag: Norway
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F3 1F1F5] (🇳🇵) flag: Nepal
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F3 1F1F7] (🇳🇷) flag: Nauru
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F3 1F1FA] (🇳🇺) flag: Niue
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F3 1F1FF] (🇳🇿) flag: New Zealand
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F4 1F1F2] (🇴🇲) flag: Oman
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F5 1F1E6] (🇵🇦) flag: Panama
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F5 1F1EA] (🇵🇪) flag: Peru
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F5 1F1EB] (🇵🇫) flag: French Polynesia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F5 1F1EC] (🇵🇬) flag: Papua New Guinea
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F5 1F1ED] (🇵🇭) flag: Philippines
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F5 1F1F0] (🇵🇰) flag: Pakistan
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F5 1F1F1] (🇵🇱) flag: Poland
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F5 1F1F2] (🇵🇲) flag: St. Pierre & Miquelon
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F5 1F1F3] (🇵🇳) flag: Pitcairn Islands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F5 1F1F7] (🇵🇷) flag: Puerto Rico
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F5 1F1F8] (🇵🇸) flag: Palestinian Territories
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F5 1F1F9] (🇵🇹) flag: Portugal
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F5 1F1FC] (🇵🇼) flag: Palau
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F5 1F1FE] (🇵🇾) flag: Paraguay
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F6 1F1E6] (🇶🇦) flag: Qatar
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F7 1F1EA] (🇷🇪) flag: Réunion
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F7 1F1F4] (🇷🇴) flag: Romania
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F7 1F1F8] (🇷🇸) flag: Serbia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F7 1F1FA] (🇷🇺) flag: Russia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F7 1F1FC] (🇷🇼) flag: Rwanda
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1E6] (🇸🇦) flag: Saudi Arabia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1E7] (🇸🇧) flag: Solomon Islands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1E8] (🇸🇨) flag: Seychelles
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1E9] (🇸🇩) flag: Sudan
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1EA] (🇸🇪) flag: Sweden
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1EC] (🇸🇬) flag: Singapore
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1ED] (🇸🇭) flag: St. Helena
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1EE] (🇸🇮) flag: Slovenia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1EF] (🇸🇯) flag: Svalbard & Jan Mayen
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1F0] (🇸🇰) flag: Slovakia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1F1] (🇸🇱) flag: Sierra Leone
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1F2] (🇸🇲) flag: San Marino
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1F3] (🇸🇳) flag: Senegal
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1F4] (🇸🇴) flag: Somalia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1F7] (🇸🇷) flag: Suriname
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1F8] (🇸🇸) flag: South Sudan
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1F9] (🇸🇹) flag: São Tomé & Príncipe
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1FB] (🇸🇻) flag: El Salvador
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1FD] (🇸🇽) flag: Sint Maarten
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1FE] (🇸🇾) flag: Syria
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1FF] (🇸🇿) flag: Eswatini
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1E6] (🇹🇦) flag: Tristan da Cunha
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1E8] (🇹🇨) flag: Turks & Caicos Islands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1E9] (🇹🇩) flag: Chad
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1EB] (🇹🇫) flag: French Southern Territories
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1EC] (🇹🇬) flag: Togo
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1ED] (🇹🇭) flag: Thailand
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1EF] (🇹🇯) flag: Tajikistan
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1F0] (🇹🇰) flag: Tokelau
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1F1] (🇹🇱) flag: Timor-Leste
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1F2] (🇹🇲) flag: Turkmenistan
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1F3] (🇹🇳) flag: Tunisia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1F4] (🇹🇴) flag: Tonga
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1F7] (🇹🇷) flag: Turkey
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1F9] (🇹🇹) flag: Trinidad & Tobago
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1FB] (🇹🇻) flag: Tuvalu
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1FC] (🇹🇼) flag: Taiwan
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1FF] (🇹🇿) flag: Tanzania
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FA 1F1E6] (🇺🇦) flag: Ukraine
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FA 1F1EC] (🇺🇬) flag: Uganda
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FA 1F1F2] (🇺🇲) flag: U.S. Outlying Islands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FA 1F1F3] (🇺🇳) flag: United Nations
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FA 1F1F8] (🇺🇸) flag: United States
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FA 1F1FE] (🇺🇾) flag: Uruguay
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FA 1F1FF] (🇺🇿) flag: Uzbekistan
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FB 1F1E6] (🇻🇦) flag: Vatican City
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FB 1F1E8] (🇻🇨) flag: St. Vincent & Grenadines
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FB 1F1EA] (🇻🇪) flag: Venezuela
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FB 1F1EC] (🇻🇬) flag: British Virgin Islands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FB 1F1EE] (🇻🇮) flag: U.S. Virgin Islands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FB 1F1F3] (🇻🇳) flag: Vietnam
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FB 1F1FA] (🇻🇺) flag: Vanuatu
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FC 1F1EB] (🇼🇫) flag: Wallis & Futuna
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FC 1F1F8] (🇼🇸) flag: Samoa
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FD 1F1F0] (🇽🇰) flag: Kosovo
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FE 1F1EA] (🇾🇪) flag: Yemen
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FE 1F1F9] (🇾🇹) flag: Mayotte
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FF 1F1E6] (🇿🇦) flag: South Africa
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FF 1F1F2] (🇿🇲) flag: Zambia
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FF 1F1FC] (🇿🇼) flag: Zimbabwe
 Demoted Emoji: 23 (#) NUMBER SIGN
 Demoted Emoji: 2A (*) ASTERISK
 Demoted Emoji: 30 (0) DIGIT ZERO
@@ -2054,266 +2312,6 @@ Demoted Emoji: 1F239 (🈹) SQUARED CJK UNIFIED IDEOGRAPH-5272
 Demoted Emoji: 1F23A (🈺) SQUARED CJK UNIFIED IDEOGRAPH-55B6
 Demoted Emoji: 1F250 (🉐) CIRCLED IDEOGRAPH ADVANTAGE
 Demoted Emoji: 1F251 (🉑) CIRCLED IDEOGRAPH ACCEPT
-Register Emoji [ValidFlagSequence]: [1F1E6 1F1E8] (🇦🇨) Flag Sequence: AC
-Register Emoji [ValidFlagSequence]: [1F1E6 1F1E9] (🇦🇩) Flag Sequence: AD
-Register Emoji [ValidFlagSequence]: [1F1E6 1F1EA] (🇦🇪) Flag Sequence: AE
-Register Emoji [ValidFlagSequence]: [1F1E6 1F1EB] (🇦🇫) Flag Sequence: AF
-Register Emoji [ValidFlagSequence]: [1F1E6 1F1EC] (🇦🇬) Flag Sequence: AG
-Register Emoji [ValidFlagSequence]: [1F1E6 1F1EE] (🇦🇮) Flag Sequence: AI
-Register Emoji [ValidFlagSequence]: [1F1E6 1F1F1] (🇦🇱) Flag Sequence: AL
-Register Emoji [ValidFlagSequence]: [1F1E6 1F1F2] (🇦🇲) Flag Sequence: AM
-Register Emoji [ValidFlagSequence]: [1F1E6 1F1F4] (🇦🇴) Flag Sequence: AO
-Register Emoji [ValidFlagSequence]: [1F1E6 1F1F6] (🇦🇶) Flag Sequence: AQ
-Register Emoji [ValidFlagSequence]: [1F1E6 1F1F7] (🇦🇷) Flag Sequence: AR
-Register Emoji [ValidFlagSequence]: [1F1E6 1F1F8] (🇦🇸) Flag Sequence: AS
-Register Emoji [ValidFlagSequence]: [1F1E6 1F1F9] (🇦🇹) Flag Sequence: AT
-Register Emoji [ValidFlagSequence]: [1F1E6 1F1FA] (🇦🇺) Flag Sequence: AU
-Register Emoji [ValidFlagSequence]: [1F1E6 1F1FC] (🇦🇼) Flag Sequence: AW
-Register Emoji [ValidFlagSequence]: [1F1E6 1F1FD] (🇦🇽) Flag Sequence: AX
-Register Emoji [ValidFlagSequence]: [1F1E6 1F1FF] (🇦🇿) Flag Sequence: AZ
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1E6] (🇧🇦) Flag Sequence: BA
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1E7] (🇧🇧) Flag Sequence: BB
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1E9] (🇧🇩) Flag Sequence: BD
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1EA] (🇧🇪) Flag Sequence: BE
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1EB] (🇧🇫) Flag Sequence: BF
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1EC] (🇧🇬) Flag Sequence: BG
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1ED] (🇧🇭) Flag Sequence: BH
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1EE] (🇧🇮) Flag Sequence: BI
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1EF] (🇧🇯) Flag Sequence: BJ
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1F1] (🇧🇱) Flag Sequence: BL
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1F2] (🇧🇲) Flag Sequence: BM
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1F3] (🇧🇳) Flag Sequence: BN
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1F4] (🇧🇴) Flag Sequence: BO
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1F6] (🇧🇶) Flag Sequence: BQ
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1F7] (🇧🇷) Flag Sequence: BR
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1F8] (🇧🇸) Flag Sequence: BS
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1F9] (🇧🇹) Flag Sequence: BT
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1FB] (🇧🇻) Flag Sequence: BV
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1FC] (🇧🇼) Flag Sequence: BW
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1FE] (🇧🇾) Flag Sequence: BY
-Register Emoji [ValidFlagSequence]: [1F1E7 1F1FF] (🇧🇿) Flag Sequence: BZ
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1E6] (🇨🇦) Flag Sequence: CA
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1E8] (🇨🇨) Flag Sequence: CC
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1E9] (🇨🇩) Flag Sequence: CD
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1EB] (🇨🇫) Flag Sequence: CF
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1EC] (🇨🇬) Flag Sequence: CG
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1ED] (🇨🇭) Flag Sequence: CH
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1EE] (🇨🇮) Flag Sequence: CI
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1F0] (🇨🇰) Flag Sequence: CK
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1F1] (🇨🇱) Flag Sequence: CL
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1F2] (🇨🇲) Flag Sequence: CM
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1F3] (🇨🇳) Flag Sequence: CN
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1F4] (🇨🇴) Flag Sequence: CO
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1F5] (🇨🇵) Flag Sequence: CP
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1F7] (🇨🇷) Flag Sequence: CR
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1FA] (🇨🇺) Flag Sequence: CU
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1FB] (🇨🇻) Flag Sequence: CV
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1FC] (🇨🇼) Flag Sequence: CW
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1FD] (🇨🇽) Flag Sequence: CX
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1FE] (🇨🇾) Flag Sequence: CY
-Register Emoji [ValidFlagSequence]: [1F1E8 1F1FF] (🇨🇿) Flag Sequence: CZ
-Register Emoji [ValidFlagSequence]: [1F1E9 1F1EA] (🇩🇪) Flag Sequence: DE
-Register Emoji [ValidFlagSequence]: [1F1E9 1F1EC] (🇩🇬) Flag Sequence: DG
-Register Emoji [ValidFlagSequence]: [1F1E9 1F1EF] (🇩🇯) Flag Sequence: DJ
-Register Emoji [ValidFlagSequence]: [1F1E9 1F1F0] (🇩🇰) Flag Sequence: DK
-Register Emoji [ValidFlagSequence]: [1F1E9 1F1F2] (🇩🇲) Flag Sequence: DM
-Register Emoji [ValidFlagSequence]: [1F1E9 1F1F4] (🇩🇴) Flag Sequence: DO
-Register Emoji [ValidFlagSequence]: [1F1E9 1F1FF] (🇩🇿) Flag Sequence: DZ
-Register Emoji [ValidFlagSequence]: [1F1EA 1F1E6] (🇪🇦) Flag Sequence: EA
-Register Emoji [ValidFlagSequence]: [1F1EA 1F1E8] (🇪🇨) Flag Sequence: EC
-Register Emoji [ValidFlagSequence]: [1F1EA 1F1EA] (🇪🇪) Flag Sequence: EE
-Register Emoji [ValidFlagSequence]: [1F1EA 1F1EC] (🇪🇬) Flag Sequence: EG
-Register Emoji [ValidFlagSequence]: [1F1EA 1F1ED] (🇪🇭) Flag Sequence: EH
-Register Emoji [ValidFlagSequence]: [1F1EA 1F1F7] (🇪🇷) Flag Sequence: ER
-Register Emoji [ValidFlagSequence]: [1F1EA 1F1F8] (🇪🇸) Flag Sequence: ES
-Register Emoji [ValidFlagSequence]: [1F1EA 1F1F9] (🇪🇹) Flag Sequence: ET
-Register Emoji [ValidFlagSequence]: [1F1EB 1F1EE] (🇫🇮) Flag Sequence: FI
-Register Emoji [ValidFlagSequence]: [1F1EB 1F1EF] (🇫🇯) Flag Sequence: FJ
-Register Emoji [ValidFlagSequence]: [1F1EB 1F1F0] (🇫🇰) Flag Sequence: FK
-Register Emoji [ValidFlagSequence]: [1F1EB 1F1F2] (🇫🇲) Flag Sequence: FM
-Register Emoji [ValidFlagSequence]: [1F1EB 1F1F4] (🇫🇴) Flag Sequence: FO
-Register Emoji [ValidFlagSequence]: [1F1EB 1F1F7] (🇫🇷) Flag Sequence: FR
-Register Emoji [ValidFlagSequence]: [1F1EC 1F1E6] (🇬🇦) Flag Sequence: GA
-Register Emoji [ValidFlagSequence]: [1F1EC 1F1E7] (🇬🇧) Flag Sequence: GB
-Register Emoji [ValidFlagSequence]: [1F1EC 1F1E9] (🇬🇩) Flag Sequence: GD
-Register Emoji [ValidFlagSequence]: [1F1EC 1F1EA] (🇬🇪) Flag Sequence: GE
-Register Emoji [ValidFlagSequence]: [1F1EC 1F1EB] (🇬🇫) Flag Sequence: GF
-Register Emoji [ValidFlagSequence]: [1F1EC 1F1EC] (🇬🇬) Flag Sequence: GG
-Register Emoji [ValidFlagSequence]: [1F1EC 1F1ED] (🇬🇭) Flag Sequence: GH
-Register Emoji [ValidFlagSequence]: [1F1EC 1F1EE] (🇬🇮) Flag Sequence: GI
-Register Emoji [ValidFlagSequence]: [1F1EC 1F1F1] (🇬🇱) Flag Sequence: GL
-Register Emoji [ValidFlagSequence]: [1F1EC 1F1F2] (🇬🇲) Flag Sequence: GM
-Register Emoji [ValidFlagSequence]: [1F1EC 1F1F3] (🇬🇳) Flag Sequence: GN
-Register Emoji [ValidFlagSequence]: [1F1EC 1F1F5] (🇬🇵) Flag Sequence: GP
-Register Emoji [ValidFlagSequence]: [1F1EC 1F1F6] (🇬🇶) Flag Sequence: GQ
-Register Emoji [ValidFlagSequence]: [1F1EC 1F1F7] (🇬🇷) Flag Sequence: GR
-Register Emoji [ValidFlagSequence]: [1F1EC 1F1F8] (🇬🇸) Flag Sequence: GS
-Register Emoji [ValidFlagSequence]: [1F1EC 1F1F9] (🇬🇹) Flag Sequence: GT
-Register Emoji [ValidFlagSequence]: [1F1EC 1F1FA] (🇬🇺) Flag Sequence: GU
-Register Emoji [ValidFlagSequence]: [1F1EC 1F1FC] (🇬🇼) Flag Sequence: GW
-Register Emoji [ValidFlagSequence]: [1F1EC 1F1FE] (🇬🇾) Flag Sequence: GY
-Register Emoji [ValidFlagSequence]: [1F1ED 1F1F0] (🇭🇰) Flag Sequence: HK
-Register Emoji [ValidFlagSequence]: [1F1ED 1F1F2] (🇭🇲) Flag Sequence: HM
-Register Emoji [ValidFlagSequence]: [1F1ED 1F1F3] (🇭🇳) Flag Sequence: HN
-Register Emoji [ValidFlagSequence]: [1F1ED 1F1F7] (🇭🇷) Flag Sequence: HR
-Register Emoji [ValidFlagSequence]: [1F1ED 1F1F9] (🇭🇹) Flag Sequence: HT
-Register Emoji [ValidFlagSequence]: [1F1ED 1F1FA] (🇭🇺) Flag Sequence: HU
-Register Emoji [ValidFlagSequence]: [1F1EE 1F1E8] (🇮🇨) Flag Sequence: IC
-Register Emoji [ValidFlagSequence]: [1F1EE 1F1E9] (🇮🇩) Flag Sequence: ID
-Register Emoji [ValidFlagSequence]: [1F1EE 1F1EA] (🇮🇪) Flag Sequence: IE
-Register Emoji [ValidFlagSequence]: [1F1EE 1F1F1] (🇮🇱) Flag Sequence: IL
-Register Emoji [ValidFlagSequence]: [1F1EE 1F1F2] (🇮🇲) Flag Sequence: IM
-Register Emoji [ValidFlagSequence]: [1F1EE 1F1F3] (🇮🇳) Flag Sequence: IN
-Register Emoji [ValidFlagSequence]: [1F1EE 1F1F4] (🇮🇴) Flag Sequence: IO
-Register Emoji [ValidFlagSequence]: [1F1EE 1F1F6] (🇮🇶) Flag Sequence: IQ
-Register Emoji [ValidFlagSequence]: [1F1EE 1F1F7] (🇮🇷) Flag Sequence: IR
-Register Emoji [ValidFlagSequence]: [1F1EE 1F1F8] (🇮🇸) Flag Sequence: IS
-Register Emoji [ValidFlagSequence]: [1F1EE 1F1F9] (🇮🇹) Flag Sequence: IT
-Register Emoji [ValidFlagSequence]: [1F1EF 1F1EA] (🇯🇪) Flag Sequence: JE
-Register Emoji [ValidFlagSequence]: [1F1EF 1F1F2] (🇯🇲) Flag Sequence: JM
-Register Emoji [ValidFlagSequence]: [1F1EF 1F1F4] (🇯🇴) Flag Sequence: JO
-Register Emoji [ValidFlagSequence]: [1F1EF 1F1F5] (🇯🇵) Flag Sequence: JP
-Register Emoji [ValidFlagSequence]: [1F1F0 1F1EA] (🇰🇪) Flag Sequence: KE
-Register Emoji [ValidFlagSequence]: [1F1F0 1F1EC] (🇰🇬) Flag Sequence: KG
-Register Emoji [ValidFlagSequence]: [1F1F0 1F1ED] (🇰🇭) Flag Sequence: KH
-Register Emoji [ValidFlagSequence]: [1F1F0 1F1EE] (🇰🇮) Flag Sequence: KI
-Register Emoji [ValidFlagSequence]: [1F1F0 1F1F2] (🇰🇲) Flag Sequence: KM
-Register Emoji [ValidFlagSequence]: [1F1F0 1F1F3] (🇰🇳) Flag Sequence: KN
-Register Emoji [ValidFlagSequence]: [1F1F0 1F1F5] (🇰🇵) Flag Sequence: KP
-Register Emoji [ValidFlagSequence]: [1F1F0 1F1F7] (🇰🇷) Flag Sequence: KR
-Register Emoji [ValidFlagSequence]: [1F1F0 1F1FC] (🇰🇼) Flag Sequence: KW
-Register Emoji [ValidFlagSequence]: [1F1F0 1F1FE] (🇰🇾) Flag Sequence: KY
-Register Emoji [ValidFlagSequence]: [1F1F0 1F1FF] (🇰🇿) Flag Sequence: KZ
-Register Emoji [ValidFlagSequence]: [1F1F1 1F1E6] (🇱🇦) Flag Sequence: LA
-Register Emoji [ValidFlagSequence]: [1F1F1 1F1E7] (🇱🇧) Flag Sequence: LB
-Register Emoji [ValidFlagSequence]: [1F1F1 1F1E8] (🇱🇨) Flag Sequence: LC
-Register Emoji [ValidFlagSequence]: [1F1F1 1F1EE] (🇱🇮) Flag Sequence: LI
-Register Emoji [ValidFlagSequence]: [1F1F1 1F1F0] (🇱🇰) Flag Sequence: LK
-Register Emoji [ValidFlagSequence]: [1F1F1 1F1F7] (🇱🇷) Flag Sequence: LR
-Register Emoji [ValidFlagSequence]: [1F1F1 1F1F8] (🇱🇸) Flag Sequence: LS
-Register Emoji [ValidFlagSequence]: [1F1F1 1F1F9] (🇱🇹) Flag Sequence: LT
-Register Emoji [ValidFlagSequence]: [1F1F1 1F1FA] (🇱🇺) Flag Sequence: LU
-Register Emoji [ValidFlagSequence]: [1F1F1 1F1FB] (🇱🇻) Flag Sequence: LV
-Register Emoji [ValidFlagSequence]: [1F1F1 1F1FE] (🇱🇾) Flag Sequence: LY
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1E6] (🇲🇦) Flag Sequence: MA
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1E8] (🇲🇨) Flag Sequence: MC
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1E9] (🇲🇩) Flag Sequence: MD
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1EA] (🇲🇪) Flag Sequence: ME
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1EB] (🇲🇫) Flag Sequence: MF
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1EC] (🇲🇬) Flag Sequence: MG
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1ED] (🇲🇭) Flag Sequence: MH
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1F0] (🇲🇰) Flag Sequence: MK
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1F1] (🇲🇱) Flag Sequence: ML
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1F2] (🇲🇲) Flag Sequence: MM
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1F3] (🇲🇳) Flag Sequence: MN
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1F4] (🇲🇴) Flag Sequence: MO
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1F5] (🇲🇵) Flag Sequence: MP
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1F6] (🇲🇶) Flag Sequence: MQ
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1F7] (🇲🇷) Flag Sequence: MR
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1F8] (🇲🇸) Flag Sequence: MS
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1F9] (🇲🇹) Flag Sequence: MT
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1FA] (🇲🇺) Flag Sequence: MU
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1FB] (🇲🇻) Flag Sequence: MV
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1FC] (🇲🇼) Flag Sequence: MW
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1FD] (🇲🇽) Flag Sequence: MX
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1FE] (🇲🇾) Flag Sequence: MY
-Register Emoji [ValidFlagSequence]: [1F1F2 1F1FF] (🇲🇿) Flag Sequence: MZ
-Register Emoji [ValidFlagSequence]: [1F1F3 1F1E6] (🇳🇦) Flag Sequence: NA
-Register Emoji [ValidFlagSequence]: [1F1F3 1F1E8] (🇳🇨) Flag Sequence: NC
-Register Emoji [ValidFlagSequence]: [1F1F3 1F1EA] (🇳🇪) Flag Sequence: NE
-Register Emoji [ValidFlagSequence]: [1F1F3 1F1EB] (🇳🇫) Flag Sequence: NF
-Register Emoji [ValidFlagSequence]: [1F1F3 1F1EC] (🇳🇬) Flag Sequence: NG
-Register Emoji [ValidFlagSequence]: [1F1F3 1F1EE] (🇳🇮) Flag Sequence: NI
-Register Emoji [ValidFlagSequence]: [1F1F3 1F1F1] (🇳🇱) Flag Sequence: NL
-Register Emoji [ValidFlagSequence]: [1F1F3 1F1F4] (🇳🇴) Flag Sequence: NO
-Register Emoji [ValidFlagSequence]: [1F1F3 1F1F5] (🇳🇵) Flag Sequence: NP
-Register Emoji [ValidFlagSequence]: [1F1F3 1F1F7] (🇳🇷) Flag Sequence: NR
-Register Emoji [ValidFlagSequence]: [1F1F3 1F1FA] (🇳🇺) Flag Sequence: NU
-Register Emoji [ValidFlagSequence]: [1F1F3 1F1FF] (🇳🇿) Flag Sequence: NZ
-Register Emoji [ValidFlagSequence]: [1F1F4 1F1F2] (🇴🇲) Flag Sequence: OM
-Register Emoji [ValidFlagSequence]: [1F1F5 1F1E6] (🇵🇦) Flag Sequence: PA
-Register Emoji [ValidFlagSequence]: [1F1F5 1F1EA] (🇵🇪) Flag Sequence: PE
-Register Emoji [ValidFlagSequence]: [1F1F5 1F1EB] (🇵🇫) Flag Sequence: PF
-Register Emoji [ValidFlagSequence]: [1F1F5 1F1EC] (🇵🇬) Flag Sequence: PG
-Register Emoji [ValidFlagSequence]: [1F1F5 1F1ED] (🇵🇭) Flag Sequence: PH
-Register Emoji [ValidFlagSequence]: [1F1F5 1F1F0] (🇵🇰) Flag Sequence: PK
-Register Emoji [ValidFlagSequence]: [1F1F5 1F1F1] (🇵🇱) Flag Sequence: PL
-Register Emoji [ValidFlagSequence]: [1F1F5 1F1F2] (🇵🇲) Flag Sequence: PM
-Register Emoji [ValidFlagSequence]: [1F1F5 1F1F3] (🇵🇳) Flag Sequence: PN
-Register Emoji [ValidFlagSequence]: [1F1F5 1F1F7] (🇵🇷) Flag Sequence: PR
-Register Emoji [ValidFlagSequence]: [1F1F5 1F1F8] (🇵🇸) Flag Sequence: PS
-Register Emoji [ValidFlagSequence]: [1F1F5 1F1F9] (🇵🇹) Flag Sequence: PT
-Register Emoji [ValidFlagSequence]: [1F1F5 1F1FC] (🇵🇼) Flag Sequence: PW
-Register Emoji [ValidFlagSequence]: [1F1F5 1F1FE] (🇵🇾) Flag Sequence: PY
-Register Emoji [ValidFlagSequence]: [1F1F6 1F1E6] (🇶🇦) Flag Sequence: QA
-Register Emoji [ValidFlagSequence]: [1F1F7 1F1EA] (🇷🇪) Flag Sequence: RE
-Register Emoji [ValidFlagSequence]: [1F1F7 1F1F4] (🇷🇴) Flag Sequence: RO
-Register Emoji [ValidFlagSequence]: [1F1F7 1F1F8] (🇷🇸) Flag Sequence: RS
-Register Emoji [ValidFlagSequence]: [1F1F7 1F1FA] (🇷🇺) Flag Sequence: RU
-Register Emoji [ValidFlagSequence]: [1F1F7 1F1FC] (🇷🇼) Flag Sequence: RW
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1E6] (🇸🇦) Flag Sequence: SA
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1E7] (🇸🇧) Flag Sequence: SB
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1E8] (🇸🇨) Flag Sequence: SC
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1E9] (🇸🇩) Flag Sequence: SD
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1EA] (🇸🇪) Flag Sequence: SE
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1EC] (🇸🇬) Flag Sequence: SG
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1ED] (🇸🇭) Flag Sequence: SH
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1EE] (🇸🇮) Flag Sequence: SI
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1EF] (🇸🇯) Flag Sequence: SJ
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1F0] (🇸🇰) Flag Sequence: SK
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1F1] (🇸🇱) Flag Sequence: SL
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1F2] (🇸🇲) Flag Sequence: SM
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1F3] (🇸🇳) Flag Sequence: SN
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1F4] (🇸🇴) Flag Sequence: SO
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1F7] (🇸🇷) Flag Sequence: SR
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1F8] (🇸🇸) Flag Sequence: SS
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1F9] (🇸🇹) Flag Sequence: ST
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1FB] (🇸🇻) Flag Sequence: SV
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1FD] (🇸🇽) Flag Sequence: SX
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1FE] (🇸🇾) Flag Sequence: SY
-Register Emoji [ValidFlagSequence]: [1F1F8 1F1FF] (🇸🇿) Flag Sequence: SZ
-Register Emoji [ValidFlagSequence]: [1F1F9 1F1E6] (🇹🇦) Flag Sequence: TA
-Register Emoji [ValidFlagSequence]: [1F1F9 1F1E8] (🇹🇨) Flag Sequence: TC
-Register Emoji [ValidFlagSequence]: [1F1F9 1F1E9] (🇹🇩) Flag Sequence: TD
-Register Emoji [ValidFlagSequence]: [1F1F9 1F1EB] (🇹🇫) Flag Sequence: TF
-Register Emoji [ValidFlagSequence]: [1F1F9 1F1EC] (🇹🇬) Flag Sequence: TG
-Register Emoji [ValidFlagSequence]: [1F1F9 1F1ED] (🇹🇭) Flag Sequence: TH
-Register Emoji [ValidFlagSequence]: [1F1F9 1F1EF] (🇹🇯) Flag Sequence: TJ
-Register Emoji [ValidFlagSequence]: [1F1F9 1F1F0] (🇹🇰) Flag Sequence: TK
-Register Emoji [ValidFlagSequence]: [1F1F9 1F1F1] (🇹🇱) Flag Sequence: TL
-Register Emoji [ValidFlagSequence]: [1F1F9 1F1F2] (🇹🇲) Flag Sequence: TM
-Register Emoji [ValidFlagSequence]: [1F1F9 1F1F3] (🇹🇳) Flag Sequence: TN
-Register Emoji [ValidFlagSequence]: [1F1F9 1F1F4] (🇹🇴) Flag Sequence: TO
-Register Emoji [ValidFlagSequence]: [1F1F9 1F1F7] (🇹🇷) Flag Sequence: TR
-Register Emoji [ValidFlagSequence]: [1F1F9 1F1F9] (🇹🇹) Flag Sequence: TT
-Register Emoji [ValidFlagSequence]: [1F1F9 1F1FB] (🇹🇻) Flag Sequence: TV
-Register Emoji [ValidFlagSequence]: [1F1F9 1F1FC] (🇹🇼) Flag Sequence: TW
-Register Emoji [ValidFlagSequence]: [1F1F9 1F1FF] (🇹🇿) Flag Sequence: TZ
-Register Emoji [ValidFlagSequence]: [1F1FA 1F1E6] (🇺🇦) Flag Sequence: UA
-Register Emoji [ValidFlagSequence]: [1F1FA 1F1EC] (🇺🇬) Flag Sequence: UG
-Register Emoji [ValidFlagSequence]: [1F1FA 1F1F2] (🇺🇲) Flag Sequence: UM
-Register Emoji [ValidFlagSequence]: [1F1FA 1F1F8] (🇺🇸) Flag Sequence: US
-Register Emoji [ValidFlagSequence]: [1F1FA 1F1FE] (🇺🇾) Flag Sequence: UY
-Register Emoji [ValidFlagSequence]: [1F1FA 1F1FF] (🇺🇿) Flag Sequence: UZ
-Register Emoji [ValidFlagSequence]: [1F1FB 1F1E6] (🇻🇦) Flag Sequence: VA
-Register Emoji [ValidFlagSequence]: [1F1FB 1F1E8] (🇻🇨) Flag Sequence: VC
-Register Emoji [ValidFlagSequence]: [1F1FB 1F1EA] (🇻🇪) Flag Sequence: VE
-Register Emoji [ValidFlagSequence]: [1F1FB 1F1EC] (🇻🇬) Flag Sequence: VG
-Register Emoji [ValidFlagSequence]: [1F1FB 1F1EE] (🇻🇮) Flag Sequence: VI
-Register Emoji [ValidFlagSequence]: [1F1FB 1F1F3] (🇻🇳) Flag Sequence: VN
-Register Emoji [ValidFlagSequence]: [1F1FB 1F1FA] (🇻🇺) Flag Sequence: VU
-Register Emoji [ValidFlagSequence]: [1F1FC 1F1EB] (🇼🇫) Flag Sequence: WF
-Register Emoji [ValidFlagSequence]: [1F1FC 1F1F8] (🇼🇸) Flag Sequence: WS
-Register Emoji [ValidFlagSequence]: [1F1FD 1F1F0] (🇽🇰) Flag Sequence: XK
-Register Emoji [ValidFlagSequence]: [1F1FE 1F1EA] (🇾🇪) Flag Sequence: YE
-Register Emoji [ValidFlagSequence]: [1F1FE 1F1F9] (🇾🇹) Flag Sequence: YT
-Register Emoji [ValidFlagSequence]: [1F1FF 1F1E6] (🇿🇦) Flag Sequence: ZA
-Register Emoji [ValidFlagSequence]: [1F1FF 1F1F2] (🇿🇲) Flag Sequence: ZM
-Register Emoji [ValidFlagSequence]: [1F1FF 1F1FC] (🇿🇼) Flag Sequence: ZW
-Register Emoji [ValidFlagSequence]: [1F1EA 1F1FA] (🇪🇺) Flag Sequence: EU
-Register Emoji [ValidFlagSequence]: [1F1EA 1F1FF] (🇪🇿) Flag Sequence: EZ
-Register Emoji [ValidFlagSequence]: [1F1F6 1F1F4] (🇶🇴) Flag Sequence: QO
-Register Emoji [ValidFlagSequence]: [1F1FA 1F1F3] (🇺🇳) Flag Sequence: UN
 Register Emoji [Basic_Emoji]: [A9 FE0F] (©️) copyright
 Register Emoji [Basic_Emoji]: [AE FE0F] (®️) registered
 Register Emoji [Basic_Emoji]: [2194 FE0F] (↔️) left-right arrow
