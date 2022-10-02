@@ -11,7 +11,7 @@ import {read_labels} from './data.js';
 
 // TODO FIX ME
 
-/*
+
 let args = process.argv.slice(2);
 let cps;
 let format;
@@ -25,10 +25,11 @@ if (args[0] == '--') { // everything after is literal
 } else {
 	cps = [...new Set(args.flatMap(parse_cp_range))].sort((a, b) => a - b);
 }
-*/
+
 
 //let cps = parse_cp_range('00..FF');
-let cps = UNICODE.props().Terminal_Punctuation;
+//let cps = UNICODE.props().Terminal_Punctuation;
+//let args = process.argv.slice(2);
 
 for (let cp of cps) {
 	let token = ens_tokenize(String.fromCodePoint(cp))[0];

@@ -1,5 +1,9 @@
 export default [
 
+	// latin cleanup
+	[0x238, [0x64, 0x62]], // (ȸ) LATIN SMALL LETTER DB DIGRAPH -> "db"
+	[0x239, [0x71, 0x70]], // (ȹ) LATIN SMALL LETTER QP DIGRAPH -> "qp"
+
 	// arabic numerals
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/172
 	[0x6F0, [0x660]], // 6F0 (۰) EXTENDED ARABIC-INDIC DIGIT ZERO  => 660 (٠) ARABIC-INDIC DIGIT ZERO

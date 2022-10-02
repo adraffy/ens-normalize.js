@@ -136,12 +136,21 @@ UNICODE.valid_emoji_flag_sequences().forEach(register_emoji);
 for (let cp of Regional_Indicator) {
 	emoji_map.get(cp).used = true;
 }
-
+// register forced FE0F
+for (let info of emoji_seqs.Basic_Emoji) {
+	if (info.cps.length == 2 && info.cps[1] == 0xFE0F) { // X + FE0F
+		let rec = emoji_map.get(info.cps[0]);
+		if (!rec) throw new Error(`Expected emoji: ${UNICODE.format(info)}`);	
+		if (rec.used) continue;
+		rec.used = true;
+		register_emoji(info);
+	}
+}
 // register default emoji-presentation
 for (let info of emoji_chrs.Emoji_Presentation) {
 	//if (Regional_Indicator.has(info.cp)) continue; // skipped (not necessary with above flag logic)
 	let rec = emoji_map.get(info.cp);
-	if (!rec) throw new Error(`Expected emoji: ${UNICODE.format(info)}`);
+	if (!rec) throw new Error(`Expected emoji: ${UNICODE.format(info)}`);	
 	if (rec.used) continue;
 	rec.used = true;
 	register_emoji({cps: [info.cp, 0xFE0F], ...info});

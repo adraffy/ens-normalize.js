@@ -7,4 +7,7 @@ export default [
 	// 0x39E (Ξ) GREEK CAPITAL LETTER XI
 	0x3BE,
 
+	// not sure if this should be greek
+	// B5 (µ) MICRO SIGN => 3BC
+
 ];

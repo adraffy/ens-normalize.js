@@ -1,4 +1,4 @@
-Build Date: 2022-10-01T22:13:36.421Z
+Build Date: 2022-10-02T06:49:36.733Z
 Unicode Version: 15.0.0
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -2314,6 +2314,204 @@ Register Emoji [ValidFlagSequence]: [1F1EA 1F1FA] (🇪🇺) Flag Sequence: EU
 Register Emoji [ValidFlagSequence]: [1F1EA 1F1FF] (🇪🇿) Flag Sequence: EZ
 Register Emoji [ValidFlagSequence]: [1F1F6 1F1F4] (🇶🇴) Flag Sequence: QO
 Register Emoji [ValidFlagSequence]: [1F1FA 1F1F3] (🇺🇳) Flag Sequence: UN
+Register Emoji [Basic_Emoji]: [A9 FE0F] (©️) copyright
+Register Emoji [Basic_Emoji]: [AE FE0F] (®️) registered
+Register Emoji [Basic_Emoji]: [2194 FE0F] (↔️) left-right arrow
+Register Emoji [Basic_Emoji]: [2195 FE0F] (↕️) up-down arrow
+Register Emoji [Basic_Emoji]: [2196 FE0F] (↖️) up-left arrow
+Register Emoji [Basic_Emoji]: [2197 FE0F] (↗️) up-right arrow
+Register Emoji [Basic_Emoji]: [2198 FE0F] (↘️) down-right arrow
+Register Emoji [Basic_Emoji]: [2199 FE0F] (↙️) down-left arrow
+Register Emoji [Basic_Emoji]: [21A9 FE0F] (↩️) right arrow curving left
+Register Emoji [Basic_Emoji]: [21AA FE0F] (↪️) left arrow curving right
+Register Emoji [Basic_Emoji]: [2328 FE0F] (⌨️) keyboard
+Register Emoji [Basic_Emoji]: [23CF FE0F] (⏏️) eject button
+Register Emoji [Basic_Emoji]: [23ED FE0F] (⏭️) next track button
+Register Emoji [Basic_Emoji]: [23EE FE0F] (⏮️) last track button
+Register Emoji [Basic_Emoji]: [23EF FE0F] (⏯️) play or pause button
+Register Emoji [Basic_Emoji]: [23F1 FE0F] (⏱️) stopwatch
+Register Emoji [Basic_Emoji]: [23F2 FE0F] (⏲️) timer clock
+Register Emoji [Basic_Emoji]: [23F8 FE0F] (⏸️) pause button
+Register Emoji [Basic_Emoji]: [23F9 FE0F] (⏹️) stop button
+Register Emoji [Basic_Emoji]: [23FA FE0F] (⏺️) record button
+Register Emoji [Basic_Emoji]: [25AA FE0F] (▪️) black small square
+Register Emoji [Basic_Emoji]: [25AB FE0F] (▫️) white small square
+Register Emoji [Basic_Emoji]: [25B6 FE0F] (▶️) play button
+Register Emoji [Basic_Emoji]: [25C0 FE0F] (◀️) reverse button
+Register Emoji [Basic_Emoji]: [25FB FE0F] (◻️) white medium square
+Register Emoji [Basic_Emoji]: [25FC FE0F] (◼️) black medium square
+Register Emoji [Basic_Emoji]: [2600 FE0F] (☀️) sun
+Register Emoji [Basic_Emoji]: [2601 FE0F] (☁️) cloud
+Register Emoji [Basic_Emoji]: [2602 FE0F] (☂️) umbrella
+Register Emoji [Basic_Emoji]: [2603 FE0F] (☃️) snowman
+Register Emoji [Basic_Emoji]: [2604 FE0F] (☄️) comet
+Register Emoji [Basic_Emoji]: [260E FE0F] (☎️) telephone
+Register Emoji [Basic_Emoji]: [2611 FE0F] (☑️) check box with check
+Register Emoji [Basic_Emoji]: [2618 FE0F] (☘️) shamrock
+Register Emoji [Basic_Emoji]: [261D FE0F] (☝️) index pointing up
+Register Emoji [Basic_Emoji]: [2620 FE0F] (☠️) skull and crossbones
+Register Emoji [Basic_Emoji]: [2622 FE0F] (☢️) radioactive
+Register Emoji [Basic_Emoji]: [2623 FE0F] (☣️) biohazard
+Register Emoji [Basic_Emoji]: [2626 FE0F] (☦️) orthodox cross
+Register Emoji [Basic_Emoji]: [262A FE0F] (☪️) star and crescent
+Register Emoji [Basic_Emoji]: [262E FE0F] (☮️) peace symbol
+Register Emoji [Basic_Emoji]: [262F FE0F] (☯️) yin yang
+Register Emoji [Basic_Emoji]: [2638 FE0F] (☸️) wheel of dharma
+Register Emoji [Basic_Emoji]: [2639 FE0F] (☹️) frowning face
+Register Emoji [Basic_Emoji]: [263A FE0F] (☺️) smiling face
+Register Emoji [Basic_Emoji]: [2640 FE0F] (♀️) female sign
+Register Emoji [Basic_Emoji]: [2642 FE0F] (♂️) male sign
+Register Emoji [Basic_Emoji]: [265F FE0F] (♟️) chess pawn
+Register Emoji [Basic_Emoji]: [2660 FE0F] (♠️) spade suit
+Register Emoji [Basic_Emoji]: [2663 FE0F] (♣️) club suit
+Register Emoji [Basic_Emoji]: [2665 FE0F] (♥️) heart suit
+Register Emoji [Basic_Emoji]: [2666 FE0F] (♦️) diamond suit
+Register Emoji [Basic_Emoji]: [2668 FE0F] (♨️) hot springs
+Register Emoji [Basic_Emoji]: [267B FE0F] (♻️) recycling symbol
+Register Emoji [Basic_Emoji]: [267E FE0F] (♾️) infinity
+Register Emoji [Basic_Emoji]: [2692 FE0F] (⚒️) hammer and pick
+Register Emoji [Basic_Emoji]: [2694 FE0F] (⚔️) crossed swords
+Register Emoji [Basic_Emoji]: [2695 FE0F] (⚕️) medical symbol
+Register Emoji [Basic_Emoji]: [2696 FE0F] (⚖️) balance scale
+Register Emoji [Basic_Emoji]: [2697 FE0F] (⚗️) alembic
+Register Emoji [Basic_Emoji]: [2699 FE0F] (⚙️) gear
+Register Emoji [Basic_Emoji]: [269B FE0F] (⚛️) atom symbol
+Register Emoji [Basic_Emoji]: [269C FE0F] (⚜️) fleur-de-lis
+Register Emoji [Basic_Emoji]: [26A0 FE0F] (⚠️) warning
+Register Emoji [Basic_Emoji]: [26A7 FE0F] (⚧️) transgender symbol
+Register Emoji [Basic_Emoji]: [26B0 FE0F] (⚰️) coffin
+Register Emoji [Basic_Emoji]: [26B1 FE0F] (⚱️) funeral urn
+Register Emoji [Basic_Emoji]: [26C8 FE0F] (⛈️) cloud with lightning and rain
+Register Emoji [Basic_Emoji]: [26CF FE0F] (⛏️) pick
+Register Emoji [Basic_Emoji]: [26D1 FE0F] (⛑️) rescue worker’s helmet
+Register Emoji [Basic_Emoji]: [26D3 FE0F] (⛓️) chains
+Register Emoji [Basic_Emoji]: [26E9 FE0F] (⛩️) shinto shrine
+Register Emoji [Basic_Emoji]: [26F0 FE0F] (⛰️) mountain
+Register Emoji [Basic_Emoji]: [26F1 FE0F] (⛱️) umbrella on ground
+Register Emoji [Basic_Emoji]: [26F4 FE0F] (⛴️) ferry
+Register Emoji [Basic_Emoji]: [26F7 FE0F] (⛷️) skier
+Register Emoji [Basic_Emoji]: [26F8 FE0F] (⛸️) ice skate
+Register Emoji [Basic_Emoji]: [26F9 FE0F] (⛹️) person bouncing ball
+Register Emoji [Basic_Emoji]: [2702 FE0F] (✂️) scissors
+Register Emoji [Basic_Emoji]: [2708 FE0F] (✈️) airplane
+Register Emoji [Basic_Emoji]: [2709 FE0F] (✉️) envelope
+Register Emoji [Basic_Emoji]: [270C FE0F] (✌️) victory hand
+Register Emoji [Basic_Emoji]: [270D FE0F] (✍️) writing hand
+Register Emoji [Basic_Emoji]: [270F FE0F] (✏️) pencil
+Register Emoji [Basic_Emoji]: [2712 FE0F] (✒️) black nib
+Register Emoji [Basic_Emoji]: [2714 FE0F] (✔️) check mark
+Register Emoji [Basic_Emoji]: [2716 FE0F] (✖️) multiply
+Register Emoji [Basic_Emoji]: [271D FE0F] (✝️) latin cross
+Register Emoji [Basic_Emoji]: [2721 FE0F] (✡️) star of David
+Register Emoji [Basic_Emoji]: [2733 FE0F] (✳️) eight-spoked asterisk
+Register Emoji [Basic_Emoji]: [2734 FE0F] (✴️) eight-pointed star
+Register Emoji [Basic_Emoji]: [2744 FE0F] (❄️) snowflake
+Register Emoji [Basic_Emoji]: [2747 FE0F] (❇️) sparkle
+Register Emoji [Basic_Emoji]: [2763 FE0F] (❣️) heart exclamation
+Register Emoji [Basic_Emoji]: [2764 FE0F] (❤️) red heart
+Register Emoji [Basic_Emoji]: [27A1 FE0F] (➡️) right arrow
+Register Emoji [Basic_Emoji]: [2934 FE0F] (⤴️) right arrow curving up
+Register Emoji [Basic_Emoji]: [2935 FE0F] (⤵️) right arrow curving down
+Register Emoji [Basic_Emoji]: [2B05 FE0F] (⬅️) left arrow
+Register Emoji [Basic_Emoji]: [2B06 FE0F] (⬆️) up arrow
+Register Emoji [Basic_Emoji]: [2B07 FE0F] (⬇️) down arrow
+Register Emoji [Basic_Emoji]: [3030 FE0F] (〰️) wavy dash
+Register Emoji [Basic_Emoji]: [303D FE0F] (〽️) part alternation mark
+Register Emoji [Basic_Emoji]: [1F170 FE0F] (🅰️) A button (blood type)
+Register Emoji [Basic_Emoji]: [1F171 FE0F] (🅱️) B button (blood type)
+Register Emoji [Basic_Emoji]: [1F17E FE0F] (🅾️) O button (blood type)
+Register Emoji [Basic_Emoji]: [1F17F FE0F] (🅿️) P button
+Register Emoji [Basic_Emoji]: [1F321 FE0F] (🌡️) thermometer
+Register Emoji [Basic_Emoji]: [1F324 FE0F] (🌤️) sun behind small cloud
+Register Emoji [Basic_Emoji]: [1F325 FE0F] (🌥️) sun behind large cloud
+Register Emoji [Basic_Emoji]: [1F326 FE0F] (🌦️) sun behind rain cloud
+Register Emoji [Basic_Emoji]: [1F327 FE0F] (🌧️) cloud with rain
+Register Emoji [Basic_Emoji]: [1F328 FE0F] (🌨️) cloud with snow
+Register Emoji [Basic_Emoji]: [1F329 FE0F] (🌩️) cloud with lightning
+Register Emoji [Basic_Emoji]: [1F32A FE0F] (🌪️) tornado
+Register Emoji [Basic_Emoji]: [1F32B FE0F] (🌫️) fog
+Register Emoji [Basic_Emoji]: [1F32C FE0F] (🌬️) wind face
+Register Emoji [Basic_Emoji]: [1F336 FE0F] (🌶️) hot pepper
+Register Emoji [Basic_Emoji]: [1F37D FE0F] (🍽️) fork and knife with plate
+Register Emoji [Basic_Emoji]: [1F396 FE0F] (🎖️) military medal
+Register Emoji [Basic_Emoji]: [1F397 FE0F] (🎗️) reminder ribbon
+Register Emoji [Basic_Emoji]: [1F399 FE0F] (🎙️) studio microphone
+Register Emoji [Basic_Emoji]: [1F39A FE0F] (🎚️) level slider
+Register Emoji [Basic_Emoji]: [1F39B FE0F] (🎛️) control knobs
+Register Emoji [Basic_Emoji]: [1F39E FE0F] (🎞️) film frames
+Register Emoji [Basic_Emoji]: [1F39F FE0F] (🎟️) admission tickets
+Register Emoji [Basic_Emoji]: [1F3CB FE0F] (🏋️) person lifting weights
+Register Emoji [Basic_Emoji]: [1F3CC FE0F] (🏌️) person golfing
+Register Emoji [Basic_Emoji]: [1F3CD FE0F] (🏍️) motorcycle
+Register Emoji [Basic_Emoji]: [1F3CE FE0F] (🏎️) racing car
+Register Emoji [Basic_Emoji]: [1F3D4 FE0F] (🏔️) snow-capped mountain
+Register Emoji [Basic_Emoji]: [1F3D5 FE0F] (🏕️) camping
+Register Emoji [Basic_Emoji]: [1F3D6 FE0F] (🏖️) beach with umbrella
+Register Emoji [Basic_Emoji]: [1F3D7 FE0F] (🏗️) building construction
+Register Emoji [Basic_Emoji]: [1F3D8 FE0F] (🏘️) houses
+Register Emoji [Basic_Emoji]: [1F3D9 FE0F] (🏙️) cityscape
+Register Emoji [Basic_Emoji]: [1F3DA FE0F] (🏚️) derelict house
+Register Emoji [Basic_Emoji]: [1F3DB FE0F] (🏛️) classical building
+Register Emoji [Basic_Emoji]: [1F3DC FE0F] (🏜️) desert
+Register Emoji [Basic_Emoji]: [1F3DD FE0F] (🏝️) desert island
+Register Emoji [Basic_Emoji]: [1F3DE FE0F] (🏞️) national park
+Register Emoji [Basic_Emoji]: [1F3DF FE0F] (🏟️) stadium
+Register Emoji [Basic_Emoji]: [1F3F3 FE0F] (🏳️) white flag
+Register Emoji [Basic_Emoji]: [1F3F5 FE0F] (🏵️) rosette
+Register Emoji [Basic_Emoji]: [1F3F7 FE0F] (🏷️) label
+Register Emoji [Basic_Emoji]: [1F43F FE0F] (🐿️) chipmunk
+Register Emoji [Basic_Emoji]: [1F441 FE0F] (👁️) eye
+Register Emoji [Basic_Emoji]: [1F4FD FE0F] (📽️) film projector
+Register Emoji [Basic_Emoji]: [1F549 FE0F] (🕉️) om
+Register Emoji [Basic_Emoji]: [1F54A FE0F] (🕊️) dove
+Register Emoji [Basic_Emoji]: [1F56F FE0F] (🕯️) candle
+Register Emoji [Basic_Emoji]: [1F570 FE0F] (🕰️) mantelpiece clock
+Register Emoji [Basic_Emoji]: [1F573 FE0F] (🕳️) hole
+Register Emoji [Basic_Emoji]: [1F574 FE0F] (🕴️) person in suit levitating
+Register Emoji [Basic_Emoji]: [1F575 FE0F] (🕵️) detective
+Register Emoji [Basic_Emoji]: [1F576 FE0F] (🕶️) sunglasses
+Register Emoji [Basic_Emoji]: [1F577 FE0F] (🕷️) spider
+Register Emoji [Basic_Emoji]: [1F578 FE0F] (🕸️) spider web
+Register Emoji [Basic_Emoji]: [1F579 FE0F] (🕹️) joystick
+Register Emoji [Basic_Emoji]: [1F587 FE0F] (🖇️) linked paperclips
+Register Emoji [Basic_Emoji]: [1F58A FE0F] (🖊️) pen
+Register Emoji [Basic_Emoji]: [1F58B FE0F] (🖋️) fountain pen
+Register Emoji [Basic_Emoji]: [1F58C FE0F] (🖌️) paintbrush
+Register Emoji [Basic_Emoji]: [1F58D FE0F] (🖍️) crayon
+Register Emoji [Basic_Emoji]: [1F590 FE0F] (🖐️) hand with fingers splayed
+Register Emoji [Basic_Emoji]: [1F5A5 FE0F] (🖥️) desktop computer
+Register Emoji [Basic_Emoji]: [1F5A8 FE0F] (🖨️) printer
+Register Emoji [Basic_Emoji]: [1F5B1 FE0F] (🖱️) computer mouse
+Register Emoji [Basic_Emoji]: [1F5B2 FE0F] (🖲️) trackball
+Register Emoji [Basic_Emoji]: [1F5BC FE0F] (🖼️) framed picture
+Register Emoji [Basic_Emoji]: [1F5C2 FE0F] (🗂️) card index dividers
+Register Emoji [Basic_Emoji]: [1F5C3 FE0F] (🗃️) card file box
+Register Emoji [Basic_Emoji]: [1F5C4 FE0F] (🗄️) file cabinet
+Register Emoji [Basic_Emoji]: [1F5D1 FE0F] (🗑️) wastebasket
+Register Emoji [Basic_Emoji]: [1F5D2 FE0F] (🗒️) spiral notepad
+Register Emoji [Basic_Emoji]: [1F5D3 FE0F] (🗓️) spiral calendar
+Register Emoji [Basic_Emoji]: [1F5DC FE0F] (🗜️) clamp
+Register Emoji [Basic_Emoji]: [1F5DD FE0F] (🗝️) old key
+Register Emoji [Basic_Emoji]: [1F5DE FE0F] (🗞️) rolled-up newspaper
+Register Emoji [Basic_Emoji]: [1F5E1 FE0F] (🗡️) dagger
+Register Emoji [Basic_Emoji]: [1F5E3 FE0F] (🗣️) speaking head
+Register Emoji [Basic_Emoji]: [1F5E8 FE0F] (🗨️) left speech bubble
+Register Emoji [Basic_Emoji]: [1F5EF FE0F] (🗯️) right anger bubble
+Register Emoji [Basic_Emoji]: [1F5F3 FE0F] (🗳️) ballot box with ballot
+Register Emoji [Basic_Emoji]: [1F5FA FE0F] (🗺️) world map
+Register Emoji [Basic_Emoji]: [1F6CB FE0F] (🛋️) couch and lamp
+Register Emoji [Basic_Emoji]: [1F6CD FE0F] (🛍️) shopping bags
+Register Emoji [Basic_Emoji]: [1F6CE FE0F] (🛎️) bellhop bell
+Register Emoji [Basic_Emoji]: [1F6CF FE0F] (🛏️) bed
+Register Emoji [Basic_Emoji]: [1F6E0 FE0F] (🛠️) hammer and wrench
+Register Emoji [Basic_Emoji]: [1F6E1 FE0F] (🛡️) shield
+Register Emoji [Basic_Emoji]: [1F6E2 FE0F] (🛢️) oil drum
+Register Emoji [Basic_Emoji]: [1F6E3 FE0F] (🛣️) motorway
+Register Emoji [Basic_Emoji]: [1F6E4 FE0F] (🛤️) railway track
+Register Emoji [Basic_Emoji]: [1F6E5 FE0F] (🛥️) motor boat
+Register Emoji [Basic_Emoji]: [1F6E9 FE0F] (🛩️) small airplane
+Register Emoji [Basic_Emoji]: [1F6F0 FE0F] (🛰️) satellite
+Register Emoji [Basic_Emoji]: [1F6F3 FE0F] (🛳️) passenger ship
 Register Emoji [Emoji_Presentation]: 231A (⌚) WATCH
 Register Emoji [Emoji_Presentation]: 231B (⌛) HOURGLASS
 Register Emoji [Emoji_Presentation]: 23E9 (⏩) BLACK RIGHT-POINTING DOUBLE TRIANGLE
@@ -3480,204 +3678,6 @@ Register Emoji [Emoji_Presentation]: 1FAF5 (🫵) INDEX POINTING AT THE VIEWER
 Register Emoji [Emoji_Presentation]: 1FAF6 (🫶) HEART HANDS
 Register Emoji [Emoji_Presentation]: 1FAF7 (🫷) LEFTWARDS PUSHING HAND
 Register Emoji [Emoji_Presentation]: 1FAF8 (🫸) RIGHTWARDS PUSHING HAND
-Register Emoji [Emoji]: A9 (©) COPYRIGHT SIGN
-Register Emoji [Emoji]: AE (®) REGISTERED SIGN
-Register Emoji [Emoji]: 2194 (↔) LEFT RIGHT ARROW
-Register Emoji [Emoji]: 2195 (↕) UP DOWN ARROW
-Register Emoji [Emoji]: 2196 (↖) NORTH WEST ARROW
-Register Emoji [Emoji]: 2197 (↗) NORTH EAST ARROW
-Register Emoji [Emoji]: 2198 (↘) SOUTH EAST ARROW
-Register Emoji [Emoji]: 2199 (↙) SOUTH WEST ARROW
-Register Emoji [Emoji]: 21A9 (↩) LEFTWARDS ARROW WITH HOOK
-Register Emoji [Emoji]: 21AA (↪) RIGHTWARDS ARROW WITH HOOK
-Register Emoji [Emoji]: 2328 (⌨) KEYBOARD
-Register Emoji [Emoji]: 23CF (⏏) EJECT SYMBOL
-Register Emoji [Emoji]: 23ED (⏭) BLACK RIGHT-POINTING DOUBLE TRIANGLE WITH VERTICAL BAR
-Register Emoji [Emoji]: 23EE (⏮) BLACK LEFT-POINTING DOUBLE TRIANGLE WITH VERTICAL BAR
-Register Emoji [Emoji]: 23EF (⏯) BLACK RIGHT-POINTING TRIANGLE WITH DOUBLE VERTICAL BAR
-Register Emoji [Emoji]: 23F1 (⏱) STOPWATCH
-Register Emoji [Emoji]: 23F2 (⏲) TIMER CLOCK
-Register Emoji [Emoji]: 23F8 (⏸) DOUBLE VERTICAL BAR
-Register Emoji [Emoji]: 23F9 (⏹) BLACK SQUARE FOR STOP
-Register Emoji [Emoji]: 23FA (⏺) BLACK CIRCLE FOR RECORD
-Register Emoji [Emoji]: 25AA (▪) BLACK SMALL SQUARE
-Register Emoji [Emoji]: 25AB (▫) WHITE SMALL SQUARE
-Register Emoji [Emoji]: 25B6 (▶) BLACK RIGHT-POINTING TRIANGLE
-Register Emoji [Emoji]: 25C0 (◀) BLACK LEFT-POINTING TRIANGLE
-Register Emoji [Emoji]: 25FB (◻) WHITE MEDIUM SQUARE
-Register Emoji [Emoji]: 25FC (◼) BLACK MEDIUM SQUARE
-Register Emoji [Emoji]: 2600 (☀) BLACK SUN WITH RAYS
-Register Emoji [Emoji]: 2601 (☁) CLOUD
-Register Emoji [Emoji]: 2602 (☂) UMBRELLA
-Register Emoji [Emoji]: 2603 (☃) SNOWMAN
-Register Emoji [Emoji]: 2604 (☄) COMET
-Register Emoji [Emoji]: 260E (☎) BLACK TELEPHONE
-Register Emoji [Emoji]: 2611 (☑) BALLOT BOX WITH CHECK
-Register Emoji [Emoji]: 2618 (☘) SHAMROCK
-Register Emoji [Emoji]: 261D (☝) WHITE UP POINTING INDEX
-Register Emoji [Emoji]: 2620 (☠) SKULL AND CROSSBONES
-Register Emoji [Emoji]: 2622 (☢) RADIOACTIVE SIGN
-Register Emoji [Emoji]: 2623 (☣) BIOHAZARD SIGN
-Register Emoji [Emoji]: 2626 (☦) ORTHODOX CROSS
-Register Emoji [Emoji]: 262A (☪) STAR AND CRESCENT
-Register Emoji [Emoji]: 262E (☮) PEACE SYMBOL
-Register Emoji [Emoji]: 262F (☯) YIN YANG
-Register Emoji [Emoji]: 2638 (☸) WHEEL OF DHARMA
-Register Emoji [Emoji]: 2639 (☹) WHITE FROWNING FACE
-Register Emoji [Emoji]: 263A (☺) WHITE SMILING FACE
-Register Emoji [Emoji]: 2640 (♀) FEMALE SIGN
-Register Emoji [Emoji]: 2642 (♂) MALE SIGN
-Register Emoji [Emoji]: 265F (♟) BLACK CHESS PAWN
-Register Emoji [Emoji]: 2660 (♠) BLACK SPADE SUIT
-Register Emoji [Emoji]: 2663 (♣) BLACK CLUB SUIT
-Register Emoji [Emoji]: 2665 (♥) BLACK HEART SUIT
-Register Emoji [Emoji]: 2666 (♦) BLACK DIAMOND SUIT
-Register Emoji [Emoji]: 2668 (♨) HOT SPRINGS
-Register Emoji [Emoji]: 267B (♻) BLACK UNIVERSAL RECYCLING SYMBOL
-Register Emoji [Emoji]: 267E (♾) PERMANENT PAPER SIGN
-Register Emoji [Emoji]: 2692 (⚒) HAMMER AND PICK
-Register Emoji [Emoji]: 2694 (⚔) CROSSED SWORDS
-Register Emoji [Emoji]: 2695 (⚕) STAFF OF AESCULAPIUS
-Register Emoji [Emoji]: 2696 (⚖) SCALES
-Register Emoji [Emoji]: 2697 (⚗) ALEMBIC
-Register Emoji [Emoji]: 2699 (⚙) GEAR
-Register Emoji [Emoji]: 269B (⚛) ATOM SYMBOL
-Register Emoji [Emoji]: 269C (⚜) FLEUR-DE-LIS
-Register Emoji [Emoji]: 26A0 (⚠) WARNING SIGN
-Register Emoji [Emoji]: 26A7 (⚧) MALE WITH STROKE AND MALE AND FEMALE SIGN
-Register Emoji [Emoji]: 26B0 (⚰) COFFIN
-Register Emoji [Emoji]: 26B1 (⚱) FUNERAL URN
-Register Emoji [Emoji]: 26C8 (⛈) THUNDER CLOUD AND RAIN
-Register Emoji [Emoji]: 26CF (⛏) PICK
-Register Emoji [Emoji]: 26D1 (⛑) HELMET WITH WHITE CROSS
-Register Emoji [Emoji]: 26D3 (⛓) CHAINS
-Register Emoji [Emoji]: 26E9 (⛩) SHINTO SHRINE
-Register Emoji [Emoji]: 26F0 (⛰) MOUNTAIN
-Register Emoji [Emoji]: 26F1 (⛱) UMBRELLA ON GROUND
-Register Emoji [Emoji]: 26F4 (⛴) FERRY
-Register Emoji [Emoji]: 26F7 (⛷) SKIER
-Register Emoji [Emoji]: 26F8 (⛸) ICE SKATE
-Register Emoji [Emoji]: 26F9 (⛹) PERSON WITH BALL
-Register Emoji [Emoji]: 2702 (✂) BLACK SCISSORS
-Register Emoji [Emoji]: 2708 (✈) AIRPLANE
-Register Emoji [Emoji]: 2709 (✉) ENVELOPE
-Register Emoji [Emoji]: 270C (✌) VICTORY HAND
-Register Emoji [Emoji]: 270D (✍) WRITING HAND
-Register Emoji [Emoji]: 270F (✏) PENCIL
-Register Emoji [Emoji]: 2712 (✒) BLACK NIB
-Register Emoji [Emoji]: 2714 (✔) HEAVY CHECK MARK
-Register Emoji [Emoji]: 2716 (✖) HEAVY MULTIPLICATION X
-Register Emoji [Emoji]: 271D (✝) LATIN CROSS
-Register Emoji [Emoji]: 2721 (✡) STAR OF DAVID
-Register Emoji [Emoji]: 2733 (✳) EIGHT SPOKED ASTERISK
-Register Emoji [Emoji]: 2734 (✴) EIGHT POINTED BLACK STAR
-Register Emoji [Emoji]: 2744 (❄) SNOWFLAKE
-Register Emoji [Emoji]: 2747 (❇) SPARKLE
-Register Emoji [Emoji]: 2763 (❣) HEAVY HEART EXCLAMATION MARK ORNAMENT
-Register Emoji [Emoji]: 2764 (❤) HEAVY BLACK HEART
-Register Emoji [Emoji]: 27A1 (➡) BLACK RIGHTWARDS ARROW
-Register Emoji [Emoji]: 2934 (⤴) ARROW POINTING RIGHTWARDS THEN CURVING UPWARDS
-Register Emoji [Emoji]: 2935 (⤵) ARROW POINTING RIGHTWARDS THEN CURVING DOWNWARDS
-Register Emoji [Emoji]: 2B05 (⬅) LEFTWARDS BLACK ARROW
-Register Emoji [Emoji]: 2B06 (⬆) UPWARDS BLACK ARROW
-Register Emoji [Emoji]: 2B07 (⬇) DOWNWARDS BLACK ARROW
-Register Emoji [Emoji]: 3030 (〰) WAVY DASH
-Register Emoji [Emoji]: 303D (〽) PART ALTERNATION MARK
-Register Emoji [Emoji]: 1F170 (🅰) NEGATIVE SQUARED LATIN CAPITAL LETTER A
-Register Emoji [Emoji]: 1F171 (🅱) NEGATIVE SQUARED LATIN CAPITAL LETTER B
-Register Emoji [Emoji]: 1F17E (🅾) NEGATIVE SQUARED LATIN CAPITAL LETTER O
-Register Emoji [Emoji]: 1F17F (🅿) NEGATIVE SQUARED LATIN CAPITAL LETTER P
-Register Emoji [Emoji]: 1F321 (🌡) THERMOMETER
-Register Emoji [Emoji]: 1F324 (🌤) WHITE SUN WITH SMALL CLOUD
-Register Emoji [Emoji]: 1F325 (🌥) WHITE SUN BEHIND CLOUD
-Register Emoji [Emoji]: 1F326 (🌦) WHITE SUN BEHIND CLOUD WITH RAIN
-Register Emoji [Emoji]: 1F327 (🌧) CLOUD WITH RAIN
-Register Emoji [Emoji]: 1F328 (🌨) CLOUD WITH SNOW
-Register Emoji [Emoji]: 1F329 (🌩) CLOUD WITH LIGHTNING
-Register Emoji [Emoji]: 1F32A (🌪) CLOUD WITH TORNADO
-Register Emoji [Emoji]: 1F32B (🌫) FOG
-Register Emoji [Emoji]: 1F32C (🌬) WIND BLOWING FACE
-Register Emoji [Emoji]: 1F336 (🌶) HOT PEPPER
-Register Emoji [Emoji]: 1F37D (🍽) FORK AND KNIFE WITH PLATE
-Register Emoji [Emoji]: 1F396 (🎖) MILITARY MEDAL
-Register Emoji [Emoji]: 1F397 (🎗) REMINDER RIBBON
-Register Emoji [Emoji]: 1F399 (🎙) STUDIO MICROPHONE
-Register Emoji [Emoji]: 1F39A (🎚) LEVEL SLIDER
-Register Emoji [Emoji]: 1F39B (🎛) CONTROL KNOBS
-Register Emoji [Emoji]: 1F39E (🎞) FILM FRAMES
-Register Emoji [Emoji]: 1F39F (🎟) ADMISSION TICKETS
-Register Emoji [Emoji]: 1F3CB (🏋) WEIGHT LIFTER
-Register Emoji [Emoji]: 1F3CC (🏌) GOLFER
-Register Emoji [Emoji]: 1F3CD (🏍) RACING MOTORCYCLE
-Register Emoji [Emoji]: 1F3CE (🏎) RACING CAR
-Register Emoji [Emoji]: 1F3D4 (🏔) SNOW CAPPED MOUNTAIN
-Register Emoji [Emoji]: 1F3D5 (🏕) CAMPING
-Register Emoji [Emoji]: 1F3D6 (🏖) BEACH WITH UMBRELLA
-Register Emoji [Emoji]: 1F3D7 (🏗) BUILDING CONSTRUCTION
-Register Emoji [Emoji]: 1F3D8 (🏘) HOUSE BUILDINGS
-Register Emoji [Emoji]: 1F3D9 (🏙) CITYSCAPE
-Register Emoji [Emoji]: 1F3DA (🏚) DERELICT HOUSE BUILDING
-Register Emoji [Emoji]: 1F3DB (🏛) CLASSICAL BUILDING
-Register Emoji [Emoji]: 1F3DC (🏜) DESERT
-Register Emoji [Emoji]: 1F3DD (🏝) DESERT ISLAND
-Register Emoji [Emoji]: 1F3DE (🏞) NATIONAL PARK
-Register Emoji [Emoji]: 1F3DF (🏟) STADIUM
-Register Emoji [Emoji]: 1F3F3 (🏳) WAVING WHITE FLAG
-Register Emoji [Emoji]: 1F3F5 (🏵) ROSETTE
-Register Emoji [Emoji]: 1F3F7 (🏷) LABEL
-Register Emoji [Emoji]: 1F43F (🐿) CHIPMUNK
-Register Emoji [Emoji]: 1F441 (👁) EYE
-Register Emoji [Emoji]: 1F4FD (📽) FILM PROJECTOR
-Register Emoji [Emoji]: 1F549 (🕉) OM SYMBOL
-Register Emoji [Emoji]: 1F54A (🕊) DOVE OF PEACE
-Register Emoji [Emoji]: 1F56F (🕯) CANDLE
-Register Emoji [Emoji]: 1F570 (🕰) MANTELPIECE CLOCK
-Register Emoji [Emoji]: 1F573 (🕳) HOLE
-Register Emoji [Emoji]: 1F574 (🕴) MAN IN BUSINESS SUIT LEVITATING
-Register Emoji [Emoji]: 1F575 (🕵) SLEUTH OR SPY
-Register Emoji [Emoji]: 1F576 (🕶) DARK SUNGLASSES
-Register Emoji [Emoji]: 1F577 (🕷) SPIDER
-Register Emoji [Emoji]: 1F578 (🕸) SPIDER WEB
-Register Emoji [Emoji]: 1F579 (🕹) JOYSTICK
-Register Emoji [Emoji]: 1F587 (🖇) LINKED PAPERCLIPS
-Register Emoji [Emoji]: 1F58A (🖊) LOWER LEFT BALLPOINT PEN
-Register Emoji [Emoji]: 1F58B (🖋) LOWER LEFT FOUNTAIN PEN
-Register Emoji [Emoji]: 1F58C (🖌) LOWER LEFT PAINTBRUSH
-Register Emoji [Emoji]: 1F58D (🖍) LOWER LEFT CRAYON
-Register Emoji [Emoji]: 1F590 (🖐) RAISED HAND WITH FINGERS SPLAYED
-Register Emoji [Emoji]: 1F5A5 (🖥) DESKTOP COMPUTER
-Register Emoji [Emoji]: 1F5A8 (🖨) PRINTER
-Register Emoji [Emoji]: 1F5B1 (🖱) THREE BUTTON MOUSE
-Register Emoji [Emoji]: 1F5B2 (🖲) TRACKBALL
-Register Emoji [Emoji]: 1F5BC (🖼) FRAME WITH PICTURE
-Register Emoji [Emoji]: 1F5C2 (🗂) CARD INDEX DIVIDERS
-Register Emoji [Emoji]: 1F5C3 (🗃) CARD FILE BOX
-Register Emoji [Emoji]: 1F5C4 (🗄) FILE CABINET
-Register Emoji [Emoji]: 1F5D1 (🗑) WASTEBASKET
-Register Emoji [Emoji]: 1F5D2 (🗒) SPIRAL NOTE PAD
-Register Emoji [Emoji]: 1F5D3 (🗓) SPIRAL CALENDAR PAD
-Register Emoji [Emoji]: 1F5DC (🗜) COMPRESSION
-Register Emoji [Emoji]: 1F5DD (🗝) OLD KEY
-Register Emoji [Emoji]: 1F5DE (🗞) ROLLED-UP NEWSPAPER
-Register Emoji [Emoji]: 1F5E1 (🗡) DAGGER KNIFE
-Register Emoji [Emoji]: 1F5E3 (🗣) SPEAKING HEAD IN SILHOUETTE
-Register Emoji [Emoji]: 1F5E8 (🗨) LEFT SPEECH BUBBLE
-Register Emoji [Emoji]: 1F5EF (🗯) RIGHT ANGER BUBBLE
-Register Emoji [Emoji]: 1F5F3 (🗳) BALLOT BOX WITH BALLOT
-Register Emoji [Emoji]: 1F5FA (🗺) WORLD MAP
-Register Emoji [Emoji]: 1F6CB (🛋) COUCH AND LAMP
-Register Emoji [Emoji]: 1F6CD (🛍) SHOPPING BAGS
-Register Emoji [Emoji]: 1F6CE (🛎) BELLHOP BELL
-Register Emoji [Emoji]: 1F6CF (🛏) BED
-Register Emoji [Emoji]: 1F6E0 (🛠) HAMMER AND WRENCH
-Register Emoji [Emoji]: 1F6E1 (🛡) SHIELD
-Register Emoji [Emoji]: 1F6E2 (🛢) OIL DRUM
-Register Emoji [Emoji]: 1F6E3 (🛣) MOTORWAY
-Register Emoji [Emoji]: 1F6E4 (🛤) RAILWAY TRACK
-Register Emoji [Emoji]: 1F6E5 (🛥) MOTOR BOAT
-Register Emoji [Emoji]: 1F6E9 (🛩) SMALL AIRPLANE
-Register Emoji [Emoji]: 1F6F0 (🛰) SATELLITE
-Register Emoji [Emoji]: 1F6F3 (🛳) PASSENGER SHIP
 Register Emoji [Whitelisted]: [1F93C 1F3FB 200D 2642 FE0F] (🤼🏻‍♂️) man wrestler: light skin tone
 Register Emoji [Whitelisted]: [1F93C 1F3FC 200D 2642 FE0F] (🤼🏼‍♂️) man wrestler: medium-light skin tone
 Register Emoji [Whitelisted]: [1F93C 1F3FD 200D 2642 FE0F] (🤼🏽‍♂️) man wrestler: medium skin tone
@@ -3703,6 +3703,10 @@ Register Emoji [Whitelisted]: [1F93C 1F3FC] (🤼🏼) people wrestling: medium-
 Register Emoji [Whitelisted]: [1F93C 1F3FD] (🤼🏽) people wrestling: medium skin tone
 Register Emoji [Whitelisted]: [1F93C 1F3FE] (🤼🏾) people wrestling: medium-dark skin tone
 Register Emoji [Whitelisted]: [1F93C 1F3FF] (🤼🏿) people wrestling: dark skin tone
+Removed Valid: 238 (ȸ) LATIN SMALL LETTER DB DIGRAPH
+Added Mapped: 238 (ȸ) LATIN SMALL LETTER DB DIGRAPH => [64 62]
+Removed Valid: 239 (ȹ) LATIN SMALL LETTER QP DIGRAPH
+Added Mapped: 239 (ȹ) LATIN SMALL LETTER QP DIGRAPH => [71 70]
 Removed Valid: 6F0 (۰) EXTENDED ARABIC-INDIC DIGIT ZERO
 Added Mapped: 6F0 (۰) EXTENDED ARABIC-INDIC DIGIT ZERO => 660 (٠) ARABIC-INDIC DIGIT ZERO
 Removed Valid: 6F1 (۱) EXTENDED ARABIC-INDIC DIGIT ONE
@@ -3960,11 +3964,28 @@ Removed Valid: F0 (ð) LATIN SMALL LETTER ETH
 --Mapping: 1D9E (ᶞ) MODIFIER LETTER SMALL ETH => F0 (ð) LATIN SMALL LETTER ETH
 Removed Valid: FE (þ) LATIN SMALL LETTER THORN
 --Mapping: DE (Þ) LATIN CAPITAL LETTER THORN => FE (þ) LATIN SMALL LETTER THORN
+Removed Valid: 1BF (ƿ) LATIN LETTER WYNN
+--Mapping: 1F7 (Ƿ) LATIN CAPITAL LETTER WYNN => 1BF (ƿ) LATIN LETTER WYNN
+Removed Valid: 195 (ƕ) LATIN SMALL LETTER HV
+--Mapping: 1F6 (Ƕ) LATIN CAPITAL LETTER HWAIR => 195 (ƕ) LATIN SMALL LETTER HV
 Removed Valid: 131 (ı) LATIN SMALL LETTER DOTLESS I
 --Mapping: 1D6A4 (𝚤) MATHEMATICAL ITALIC SMALL DOTLESS I => 131 (ı) LATIN SMALL LETTER DOTLESS I
 Removed Valid: 237 (ȷ) LATIN SMALL LETTER DOTLESS J
 --Mapping: 1D6A5 (𝚥) MATHEMATICAL ITALIC SMALL DOTLESS J => 237 (ȷ) LATIN SMALL LETTER DOTLESS J
+Removed Valid: 249 (ɉ) LATIN SMALL LETTER J WITH STROKE
+--Mapping: 248 (Ɉ) LATIN CAPITAL LETTER J WITH STROKE => 249 (ɉ) LATIN SMALL LETTER J WITH STROKE
 Removed Valid: 1D4E (ᵎ) MODIFIER LETTER SMALL TURNED I
+Removed Valid: 21D (ȝ) LATIN SMALL LETTER YOGH
+--Mapping: 21C (Ȝ) LATIN CAPITAL LETTER YOGH => 21D (ȝ) LATIN SMALL LETTER YOGH
+Removed Valid: 223 (ȣ) LATIN SMALL LETTER OU
+--Mapping: 222 (Ȣ) LATIN CAPITAL LETTER OU => 223 (ȣ) LATIN SMALL LETTER OU
+--Mapping: 1D3D (ᴽ) MODIFIER LETTER CAPITAL OU => 223 (ȣ) LATIN SMALL LETTER OU
+Removed Valid: 18D (ƍ) LATIN SMALL LETTER TURNED DELTA
+Removed Valid: 1AA (ƪ) LATIN LETTER REVERSED ESH LOOP
+Removed Valid: 1BE (ƾ) LATIN LETTER INVERTED GLOTTAL STOP WITH STROKE
+Removed Valid: 269 (ɩ) LATIN SMALL LETTER IOTA
+--Mapping: 196 (Ɩ) LATIN CAPITAL LETTER IOTA => 269 (ɩ) LATIN SMALL LETTER IOTA
+--Mapping: 1DA5 (ᶥ) MODIFIER LETTER SMALL IOTA => 269 (ɩ) LATIN SMALL LETTER IOTA
 Removed Valid: 320 (x̠) COMBINING MINUS SIGN BELOW
 Removed Valid: 330 (x̰) COMBINING TILDE BELOW
 Removed Valid: 331 (x̱) COMBINING MACRON BELOW
@@ -4113,7 +4134,6 @@ Removed Mapped: 2034 (‴) TRIPLE PRIME => [2032 2032 2032]
 Removed Mapped: 2036 (‶) REVERSED DOUBLE PRIME => [2035 2035]
 Removed Mapped: 2037 (‷) REVERSED TRIPLE PRIME => [2035 2035 2035]
 Removed Mapped: 2057 (⁗) QUADRUPLE PRIME => [2032 2032 2032 2032]
-Removed Valid: 2016 (‖) DOUBLE VERTICAL LINE
 Removed Valid: 2018 (‘) LEFT SINGLE QUOTATION MARK
 Removed Valid: 201A (‚) SINGLE LOW-9 QUOTATION MARK
 Removed Valid: 201B (‛) SINGLE HIGH-REVERSED-9 QUOTATION MARK
@@ -4184,6 +4204,12 @@ Removed Valid: 2772 (❲) LIGHT LEFT TORTOISE SHELL BRACKET ORNAMENT
 Removed Valid: 2773 (❳) LIGHT RIGHT TORTOISE SHELL BRACKET ORNAMENT
 Removed Valid: 2774 (❴) MEDIUM LEFT CURLY BRACKET ORNAMENT
 Removed Valid: 2775 (❵) MEDIUM RIGHT CURLY BRACKET ORNAMENT
+Removed Mapped: 2329 (〈) LEFT-POINTING ANGLE BRACKET => 3008 (〈) LEFT ANGLE BRACKET
+Removed Mapped: 232A (〉) RIGHT-POINTING ANGLE BRACKET => 3009 (〉) RIGHT ANGLE BRACKET
+Removed Valid: 3008 (〈) LEFT ANGLE BRACKET
+--Mapping: FE3F (︿) PRESENTATION FORM FOR VERTICAL LEFT ANGLE BRACKET => 3008 (〈) LEFT ANGLE BRACKET
+Removed Valid: 3009 (〉) RIGHT ANGLE BRACKET
+--Mapping: FE40 (﹀) PRESENTATION FORM FOR VERTICAL RIGHT ANGLE BRACKET => 3009 (〉) RIGHT ANGLE BRACKET
 Removed Valid: 300C (「) LEFT CORNER BRACKET
 --Mapping: FE41 (﹁) PRESENTATION FORM FOR VERTICAL LEFT CORNER BRACKET => 300C (「) LEFT CORNER BRACKET
 --Mapping: FF62 (｢) HALFWIDTH LEFT CORNER BRACKET => 300C (「) LEFT CORNER BRACKET
@@ -4196,8 +4222,33 @@ Removed Valid: 300F (』) RIGHT WHITE CORNER BRACKET
 --Mapping: FE44 (﹄) PRESENTATION FORM FOR VERTICAL RIGHT WHITE CORNER BRACKET => 300F (』) RIGHT WHITE CORNER BRACKET
 Removed Valid: 27C5 (⟅) LEFT S-SHAPED BAG DELIMITER
 Removed Valid: 27C6 (⟆) RIGHT S-SHAPED BAG DELIMITER
+Removed Valid: 2320 (⌠) TOP HALF INTEGRAL
+Removed Valid: 2321 (⌡) BOTTOM HALF INTEGRAL
+Removed Valid: 239B (⎛) LEFT PARENTHESIS UPPER HOOK
+Removed Valid: 239D (⎝) LEFT PARENTHESIS LOWER HOOK
+Removed Valid: 239E (⎞) RIGHT PARENTHESIS UPPER HOOK
+Removed Valid: 23A0 (⎠) RIGHT PARENTHESIS LOWER HOOK
+Removed Valid: 23A1 (⎡) LEFT SQUARE BRACKET UPPER CORNER
+Removed Valid: 23A3 (⎣) LEFT SQUARE BRACKET LOWER CORNER
+Removed Valid: 23A4 (⎤) RIGHT SQUARE BRACKET UPPER CORNER
+Removed Valid: 23A6 (⎦) RIGHT SQUARE BRACKET LOWER CORNER
+Removed Valid: 23A7 (⎧) LEFT CURLY BRACKET UPPER HOOK
+Removed Valid: 23A9 (⎩) LEFT CURLY BRACKET LOWER HOOK
+Removed Valid: 23AB (⎫) RIGHT CURLY BRACKET UPPER HOOK
+Removed Valid: 23AD (⎭) RIGHT CURLY BRACKET LOWER HOOK
+Removed Valid: 23B0 (⎰) UPPER LEFT OR LOWER RIGHT CURLY BRACKET SECTION
+Removed Valid: 23B1 (⎱) UPPER RIGHT OR LOWER LEFT CURLY BRACKET SECTION
 Removed Valid: 27CB (⟋) MATHEMATICAL RISING DIAGONAL
 Removed Valid: 27CD (⟍) MATHEMATICAL FALLING DIAGONAL
+Removed Valid: 2215 (∕) DIVISION SLASH
+--Mapping: 33A7 (㎧) SQUARE M OVER S => [6D 2215 73]
+--Mapping: 33A8 (㎨) SQUARE M OVER S SQUARED => [6D 2215 73 32]
+--Mapping: 33AE (㎮) SQUARE RAD OVER S => [72 61 64 2215 73]
+--Mapping: 33AF (㎯) SQUARE RAD OVER S SQUARED => [72 61 64 2215 73 32]
+--Mapping: 33C6 (㏆) SQUARE C OVER KG => [63 2215 6B 67]
+--Mapping: 33DE (㏞) SQUARE V OVER M => [76 2215 6D]
+--Mapping: 33DF (㏟) SQUARE A OVER M => [61 2215 6D]
+Removed Valid: 2216 (∖) SET MINUS
 Removed Valid: 2589 (▉) LEFT SEVEN EIGHTHS BLOCK
 Removed Valid: 258A (▊) LEFT THREE QUARTERS BLOCK
 Removed Valid: 258B (▋) LEFT FIVE EIGHTHS BLOCK
@@ -4221,12 +4272,9 @@ Removed Valid: 2688 (⚈) BLACK CIRCLE WITH WHITE DOT RIGHT
 Removed Valid: 2689 (⚉) BLACK CIRCLE WITH TWO WHITE DOTS
 Removed Valid: 274D (❍) SHADOWED WHITE CIRCLE
 Removed Valid: 26EE (⛮) GEAR WITH HANDLES
-Removed Valid: 26D2 (⛒) CIRCLED CROSSING LANES
 Removed Valid: 2613 (☓) SALTIRE
-Removed Valid: 26CC (⛌) CROSSING LANES
 Removed Valid: 2621 (☡) CAUTION SIGN
 Removed Valid: 26B9 (⚹) SEXTILE
-Removed Valid: 26CB (⛋) WHITE DIAMOND IN SQUARE
 Removed Valid: 268A (⚊) MONOGRAM FOR YANG
 Removed Valid: 268B (⚋) MONOGRAM FOR YIN
 Removed Valid: 268C (⚌) DIGRAM FOR GREATER YANG
@@ -4241,6 +4289,9 @@ Removed Valid: 25AC (▬) BLACK RECTANGLE
 Removed Valid: 25AD (▭) WHITE RECTANGLE
 Removed Valid: 25AE (▮) BLACK VERTICAL RECTANGLE
 Removed Valid: 25AF (▯) WHITE VERTICAL RECTANGLE
+Removed Valid: 2311 (⌑) SQUARE LOZENGE
+Removed Valid: 2337 (⌷) APL FUNCTIONAL SYMBOL SQUISH QUAD
+Removed Valid: 2395 (⎕) APL FUNCTIONAL SYMBOL QUAD
 Removed Valid: 25B4 (▴) BLACK UP-POINTING SMALL TRIANGLE
 Removed Valid: 25B5 (▵) WHITE UP-POINTING SMALL TRIANGLE
 Removed Valid: 25B8 (▸) BLACK RIGHT-POINTING SMALL TRIANGLE
@@ -4253,16 +4304,21 @@ Removed Valid: 25C2 (◂) BLACK LEFT-POINTING SMALL TRIANGLE
 Removed Valid: 25C3 (◃) WHITE LEFT-POINTING SMALL TRIANGLE
 Removed Valid: 25C4 (◄) BLACK LEFT-POINTING POINTER
 Removed Valid: 25C5 (◅) WHITE LEFT-POINTING POINTER
-Removed Valid: 25DC (◜) UPPER LEFT QUADRANT CIRCULAR ARC
-Removed Valid: 25DD (◝) UPPER RIGHT QUADRANT CIRCULAR ARC
-Removed Valid: 25DE (◞) LOWER RIGHT QUADRANT CIRCULAR ARC
-Removed Valid: 25DF (◟) LOWER LEFT QUADRANT CIRCULAR ARC
+Removed Valid: 2206 (∆) INCREMENT
+Removed Valid: 2207 (∇) NABLA
+--Mapping: 1D6C1 (𝛁) MATHEMATICAL BOLD NABLA => 2207 (∇) NABLA
+--Mapping: 1D6FB (𝛻) MATHEMATICAL ITALIC NABLA => 2207 (∇) NABLA
+--Mapping: 1D735 (𝜵) MATHEMATICAL BOLD ITALIC NABLA => 2207 (∇) NABLA
+--Mapping: 1D76F (𝝯) MATHEMATICAL SANS-SERIF BOLD NABLA => 2207 (∇) NABLA
+--Mapping: 1D7A9 (𝞩) MATHEMATICAL SANS-SERIF BOLD ITALIC NABLA => 2207 (∇) NABLA
 Removed Valid: 23DC (⏜) TOP PARENTHESIS
 Removed Valid: 23DD (⏝) BOTTOM PARENTHESIS
 Removed Valid: 23DE (⏞) TOP CURLY BRACKET
 Removed Valid: 23DF (⏟) BOTTOM CURLY BRACKET
 Removed Valid: 23E0 (⏠) TOP TORTOISE SHELL BRACKET
 Removed Valid: 23E1 (⏡) BOTTOM TORTOISE SHELL BRACKET
+Removed Valid: 2322 (⌢) FROWN
+Removed Valid: 2323 (⌣) SMILE
 Removed Valid: 1C0 (ǀ) LATIN LETTER DENTAL CLICK
 --Mapping: 107B6 (𐞶) MODIFIER LETTER DENTAL CLICK => 1C0 (ǀ) LATIN LETTER DENTAL CLICK
 Removed Valid: 1C1 (ǁ) LATIN LETTER LATERAL CLICK
@@ -4270,6 +4326,7 @@ Removed Valid: 1C1 (ǁ) LATIN LETTER LATERAL CLICK
 Removed Valid: 1C2 (ǂ) LATIN LETTER ALVEOLAR CLICK
 --Mapping: 107B8 (𐞸) MODIFIER LETTER ALVEOLAR CLICK => 1C2 (ǂ) LATIN LETTER ALVEOLAR CLICK
 Removed Valid: 1C3 (ǃ) LATIN LETTER RETROFLEX CLICK
+Removed Valid: 2016 (‖) DOUBLE VERTICAL LINE
 Removed Valid: 2758 (❘) LIGHT VERTICAL BAR
 Removed Valid: 2759 (❙) MEDIUM VERTICAL BAR
 Removed Valid: 275A (❚) HEAVY VERTICAL BAR
@@ -4285,15 +4342,364 @@ Removed Valid: 23AE (⎮) INTEGRAL EXTENSION
 Removed Valid: 23B8 (⎸) LEFT VERTICAL BOX LINE
 Removed Valid: 23B9 (⎹) RIGHT VERTICAL BOX LINE
 Removed Valid: 237F (⍿) VERTICAL LINE WITH MIDDLE DOT
-Removed Valid: 2700 (✀) BLACK SAFETY SCISSORS
-Removed Valid: 2701 (✁) UPPER BLADE SCISSORS
-Removed Valid: 2704 (✄) WHITE SCISSORS
-Removed Valid: 270E (✎) LOWER RIGHT PENCIL
-Removed Valid: 2710 (✐) UPPER RIGHT PENCIL
+Removed Valid: 23D0 (⏐) VERTICAL LINE EXTENSION
+Removed Valid: 2223 (∣) DIVIDES
+Removed Valid: 2224 (∤) DOES NOT DIVIDE
+Removed Valid: 2225 (∥) PARALLEL TO
+Removed Valid: 2226 (∦) NOT PARALLEL TO
+Removed Valid: 25DC (◜) UPPER LEFT QUADRANT CIRCULAR ARC
+Removed Valid: 25DD (◝) UPPER RIGHT QUADRANT CIRCULAR ARC
+Removed Valid: 25DE (◞) LOWER RIGHT QUADRANT CIRCULAR ARC
+Removed Valid: 25DF (◟) LOWER LEFT QUADRANT CIRCULAR ARC
+Removed Valid: 230C (⌌) BOTTOM RIGHT CROP
+Removed Valid: 230D (⌍) BOTTOM LEFT CROP
+Removed Valid: 230E (⌎) TOP RIGHT CROP
+Removed Valid: 230F (⌏) TOP LEFT CROP
+Removed Valid: 2308 (⌈) LEFT CEILING
+Removed Valid: 2309 (⌉) RIGHT CEILING
+Removed Valid: 230A (⌊) LEFT FLOOR
+Removed Valid: 230B (⌋) RIGHT FLOOR
+Removed Valid: 231C (⌜) TOP LEFT CORNER
+Removed Valid: 231D (⌝) TOP RIGHT CORNER
+Removed Valid: 231E (⌞) BOTTOM LEFT CORNER
+Removed Valid: 231F (⌟) BOTTOM RIGHT CORNER
+Removed Valid: 2319 (⌙) TURNED NOT SIGN
+Removed Valid: 221F (∟) RIGHT ANGLE
+Removed Valid: 2220 (∠) ANGLE
+Removed Valid: 2221 (∡) MEASURED ANGLE
+Removed Valid: 2222 (∢) SPHERICAL ANGLE
+Removed Valid: 2303 (⌃) UP ARROWHEAD
+Removed Valid: 2304 (⌄) DOWN ARROWHEAD
+Removed Valid: 2227 (∧) LOGICAL AND
+Removed Valid: 2228 (∨) LOGICAL OR
+Removed Valid: 2229 (∩) INTERSECTION
+Removed Valid: 222A (∪) UNION
+Removed Valid: 233A (⌺) APL FUNCTIONAL SYMBOL QUAD DIAMOND
+Removed Valid: 2358 (⍘) APL FUNCTIONAL SYMBOL QUOTE UNDERBAR
+Removed Valid: 2373 (⍳) APL FUNCTIONAL SYMBOL IOTA
+Removed Valid: 2374 (⍴) APL FUNCTIONAL SYMBOL RHO
+Removed Valid: 2375 (⍵) APL FUNCTIONAL SYMBOL OMEGA
+Removed Valid: 2376 (⍶) APL FUNCTIONAL SYMBOL ALPHA UNDERBAR
+Removed Valid: 2377 (⍷) APL FUNCTIONAL SYMBOL EPSILON UNDERBAR
+Removed Valid: 2378 (⍸) APL FUNCTIONAL SYMBOL IOTA UNDERBAR
+Removed Valid: 2379 (⍹) APL FUNCTIONAL SYMBOL OMEGA UNDERBAR
+Removed Valid: 237A (⍺) APL FUNCTIONAL SYMBOL ALPHA
+Removed Valid: 2361 (⍡) APL FUNCTIONAL SYMBOL UP TACK DIAERESIS
+Removed Valid: 2362 (⍢) APL FUNCTIONAL SYMBOL DEL DIAERESIS
+Removed Valid: 2363 (⍣) APL FUNCTIONAL SYMBOL STAR DIAERESIS
+Removed Valid: 2364 (⍤) APL FUNCTIONAL SYMBOL JOT DIAERESIS
+Removed Valid: 2365 (⍥) APL FUNCTIONAL SYMBOL CIRCLE DIAERESIS
+Removed Valid: 236E (⍮) APL FUNCTIONAL SYMBOL SEMICOLON UNDERBAR
+Removed Valid: 2368 (⍨) APL FUNCTIONAL SYMBOL TILDE DIAERESIS
+Removed Valid: 2369 (⍩) APL FUNCTIONAL SYMBOL GREATER-THAN DIAERESIS
+Removed Valid: 236A (⍪) APL FUNCTIONAL SYMBOL COMMA BAR
+Removed Valid: 236B (⍫) APL FUNCTIONAL SYMBOL DEL TILDE
+Removed Valid: 236C (⍬) APL FUNCTIONAL SYMBOL ZILDE
+Removed Valid: 236D (⍭) APL FUNCTIONAL SYMBOL STILE TILDE
+Removed Valid: 2371 (⍱) APL FUNCTIONAL SYMBOL DOWN CARET TILDE
+Removed Valid: 2372 (⍲) APL FUNCTIONAL SYMBOL UP CARET TILDE
+Removed Valid: 237B (⍻) NOT CHECK MARK
+Removed Valid: 237C (⍼) RIGHT ANGLE WITH DOWNWARDS ZIGZAG ARROW
+Removed Valid: 233F (⌿) APL FUNCTIONAL SYMBOL SLASH BAR
+Removed Valid: 2340 (⍀) APL FUNCTIONAL SYMBOL BACKSLASH BAR
+Removed Valid: 2359 (⍙) APL FUNCTIONAL SYMBOL DELTA UNDERBAR
+Removed Valid: 235A (⍚) APL FUNCTIONAL SYMBOL DIAMOND UNDERBAR
+Removed Valid: 235B (⍛) APL FUNCTIONAL SYMBOL JOT UNDERBAR
+Removed Valid: 235C (⍜) APL FUNCTIONAL SYMBOL CIRCLE UNDERBAR
+Removed Valid: 2380 (⎀) INSERTION SYMBOL
+Removed Valid: 2381 (⎁) CONTINUOUS UNDERLINE SYMBOL
+Removed Valid: 2382 (⎂) DISCONTINUOUS UNDERLINE SYMBOL
+Removed Valid: 2383 (⎃) EMPHASIS SYMBOL
+Removed Valid: 238F (⎏) OPEN-CIRCUIT-OUTPUT H-TYPE SYMBOL
+Removed Valid: 2390 (⎐) OPEN-CIRCUIT-OUTPUT L-TYPE SYMBOL
+Removed Valid: 2391 (⎑) PASSIVE-PULL-DOWN-OUTPUT SYMBOL
+Removed Valid: 2392 (⎒) PASSIVE-PULL-UP-OUTPUT SYMBOL
+Removed Valid: 2393 (⎓) DIRECT CURRENT SYMBOL FORM TWO
+Removed Valid: 23B2 (⎲) SUMMATION TOP
+Removed Valid: 23B3 (⎳) SUMMATION BOTTOM
+Removed Valid: 23E8 (⏨) DECIMAL EXPONENT SYMBOL
+Removed Valid: 23B4 (⎴) TOP SQUARE BRACKET
+Removed Valid: 23B5 (⎵) BOTTOM SQUARE BRACKET
+Removed Valid: 23B6 (⎶) BOTTOM SQUARE BRACKET OVER TOP SQUARE BRACKET
+Removed Valid: 23B7 (⎷) RADICAL SYMBOL BOTTOM
+Removed Valid: 2422 (␢) BLANK SYMBOL
+Removed Valid: 2423 (␣) OPEN BOX
+Removed Valid: 2201 (∁) COMPLEMENT
+Removed Valid: 2203 (∃) THERE EXISTS
+Removed Valid: 2204 (∄) THERE DOES NOT EXIST
+Removed Valid: 2205 (∅) EMPTY SET
+Removed Valid: 2208 (∈) ELEMENT OF
+Removed Valid: 2209 (∉) NOT AN ELEMENT OF
+Removed Valid: 220A (∊) SMALL ELEMENT OF
+Removed Valid: 220B (∋) CONTAINS AS MEMBER
+Removed Valid: 220C (∌) DOES NOT CONTAIN AS MEMBER
+Removed Valid: 220D (∍) SMALL CONTAINS AS MEMBER
+Removed Valid: 220E (∎) END OF PROOF
+Removed Valid: 2214 (∔) DOT PLUS
+Removed Valid: 2217 (∗) ASTERISK OPERATOR
+Removed Valid: 2218 (∘) RING OPERATOR
+Removed Valid: 2219 (∙) BULLET OPERATOR
+Removed Valid: 2234 (∴) THEREFORE
+Removed Valid: 2235 (∵) BECAUSE
+Removed Valid: 2236 (∶) RATIO
+Removed Valid: 2237 (∷) PROPORTION
+Removed Valid: 2238 (∸) DOT MINUS
+Removed Valid: 2239 (∹) EXCESS
+Removed Valid: 223A (∺) GEOMETRIC PROPORTION
+Removed Valid: 223B (∻) HOMOTHETIC
+Removed Valid: 223C (∼) TILDE OPERATOR
+Removed Valid: 223D (∽) REVERSED TILDE
+Removed Valid: 223E (∾) INVERTED LAZY S
+Removed Valid: 223F (∿) SINE WAVE
+Removed Valid: 2240 (≀) WREATH PRODUCT
+Removed Valid: 2241 (≁) NOT TILDE
+Removed Valid: 2242 (≂) MINUS TILDE
+Removed Valid: 2243 (≃) ASYMPTOTICALLY EQUAL TO
+Removed Valid: 2244 (≄) NOT ASYMPTOTICALLY EQUAL TO
+Removed Valid: 2245 (≅) APPROXIMATELY EQUAL TO
+Removed Valid: 2246 (≆) APPROXIMATELY BUT NOT ACTUALLY EQUAL TO
+Removed Valid: 2247 (≇) NEITHER APPROXIMATELY NOR ACTUALLY EQUAL TO
+Removed Valid: 2248 (≈) ALMOST EQUAL TO
+Removed Valid: 2249 (≉) NOT ALMOST EQUAL TO
+Removed Valid: 224A (≊) ALMOST EQUAL OR EQUAL TO
+Removed Valid: 224C (≌) ALL EQUAL TO
+Removed Valid: 224D (≍) EQUIVALENT TO
+Removed Valid: 224E (≎) GEOMETRICALLY EQUIVALENT TO
+Removed Valid: 224F (≏) DIFFERENCE BETWEEN
+Removed Valid: 2250 (≐) APPROACHES THE LIMIT
+Removed Valid: 2251 (≑) GEOMETRICALLY EQUAL TO
+Removed Valid: 2252 (≒) APPROXIMATELY EQUAL TO OR THE IMAGE OF
+Removed Valid: 2253 (≓) IMAGE OF OR APPROXIMATELY EQUAL TO
+Removed Valid: 2254 (≔) COLON EQUALS
+Removed Valid: 2255 (≕) EQUALS COLON
+Removed Valid: 2256 (≖) RING IN EQUAL TO
+Removed Valid: 2257 (≗) RING EQUAL TO
+Removed Valid: 2258 (≘) CORRESPONDS TO
+Removed Valid: 2259 (≙) ESTIMATES
+Removed Valid: 225A (≚) EQUIANGULAR TO
+Removed Valid: 225B (≛) STAR EQUALS
+Removed Valid: 225C (≜) DELTA EQUAL TO
+Removed Valid: 225D (≝) EQUAL TO BY DEFINITION
+Removed Valid: 225E (≞) MEASURED BY
+Removed Valid: 225F (≟) QUESTIONED EQUAL TO
+Removed Valid: 2261 (≡) IDENTICAL TO
+Removed Valid: 2262 (≢) NOT IDENTICAL TO
+Removed Valid: 2263 (≣) STRICTLY EQUIVALENT TO
+Removed Valid: 2264 (≤) LESS-THAN OR EQUAL TO
+Removed Valid: 2265 (≥) GREATER-THAN OR EQUAL TO
+Removed Valid: 2266 (≦) LESS-THAN OVER EQUAL TO
+Removed Valid: 2267 (≧) GREATER-THAN OVER EQUAL TO
+Removed Valid: 2268 (≨) LESS-THAN BUT NOT EQUAL TO
+Removed Valid: 2269 (≩) GREATER-THAN BUT NOT EQUAL TO
+Removed Valid: 226A (≪) MUCH LESS-THAN
+Removed Valid: 226B (≫) MUCH GREATER-THAN
+Removed Valid: 226C (≬) BETWEEN
+Removed Valid: 226D (≭) NOT EQUIVALENT TO
+Removed Valid: 2270 (≰) NEITHER LESS-THAN NOR EQUAL TO
+Removed Valid: 2271 (≱) NEITHER GREATER-THAN NOR EQUAL TO
+Removed Valid: 2272 (≲) LESS-THAN OR EQUIVALENT TO
+Removed Valid: 2273 (≳) GREATER-THAN OR EQUIVALENT TO
+Removed Valid: 2274 (≴) NEITHER LESS-THAN NOR EQUIVALENT TO
+Removed Valid: 2275 (≵) NEITHER GREATER-THAN NOR EQUIVALENT TO
+Removed Valid: 2276 (≶) LESS-THAN OR GREATER-THAN
+Removed Valid: 2277 (≷) GREATER-THAN OR LESS-THAN
+Removed Valid: 2278 (≸) NEITHER LESS-THAN NOR GREATER-THAN
+Removed Valid: 2279 (≹) NEITHER GREATER-THAN NOR LESS-THAN
+Removed Valid: 227A (≺) PRECEDES
+Removed Valid: 227B (≻) SUCCEEDS
+Removed Valid: 227C (≼) PRECEDES OR EQUAL TO
+Removed Valid: 227D (≽) SUCCEEDS OR EQUAL TO
+Removed Valid: 227E (≾) PRECEDES OR EQUIVALENT TO
+Removed Valid: 227F (≿) SUCCEEDS OR EQUIVALENT TO
+Removed Valid: 2280 (⊀) DOES NOT PRECEDE
+Removed Valid: 2281 (⊁) DOES NOT SUCCEED
+Removed Valid: 2282 (⊂) SUBSET OF
+Removed Valid: 2283 (⊃) SUPERSET OF
+Removed Valid: 2284 (⊄) NOT A SUBSET OF
+Removed Valid: 2285 (⊅) NOT A SUPERSET OF
+Removed Valid: 2286 (⊆) SUBSET OF OR EQUAL TO
+Removed Valid: 2287 (⊇) SUPERSET OF OR EQUAL TO
+Removed Valid: 2288 (⊈) NEITHER A SUBSET OF NOR EQUAL TO
+Removed Valid: 2289 (⊉) NEITHER A SUPERSET OF NOR EQUAL TO
+Removed Valid: 228A (⊊) SUBSET OF WITH NOT EQUAL TO
+Removed Valid: 228B (⊋) SUPERSET OF WITH NOT EQUAL TO
+Removed Valid: 228C (⊌) MULTISET
+Removed Valid: 228D (⊍) MULTISET MULTIPLICATION
+Removed Valid: 228E (⊎) MULTISET UNION
+Removed Valid: 228F (⊏) SQUARE IMAGE OF
+Removed Valid: 2290 (⊐) SQUARE ORIGINAL OF
+Removed Valid: 2291 (⊑) SQUARE IMAGE OF OR EQUAL TO
+Removed Valid: 2292 (⊒) SQUARE ORIGINAL OF OR EQUAL TO
+Removed Valid: 2293 (⊓) SQUARE CAP
+Removed Valid: 2294 (⊔) SQUARE CUP
+Removed Valid: 22A2 (⊢) RIGHT TACK
+Removed Valid: 22A3 (⊣) LEFT TACK
+Removed Valid: 22A4 (⊤) DOWN TACK
+Removed Valid: 22A5 (⊥) UP TACK
+Removed Valid: 22A6 (⊦) ASSERTION
+Removed Valid: 22A7 (⊧) MODELS
+Removed Valid: 22A8 (⊨) TRUE
+Removed Valid: 22A9 (⊩) FORCES
+Removed Valid: 22AA (⊪) TRIPLE VERTICAL BAR RIGHT TURNSTILE
+Removed Valid: 22AB (⊫) DOUBLE VERTICAL BAR DOUBLE RIGHT TURNSTILE
+Removed Valid: 22AC (⊬) DOES NOT PROVE
+Removed Valid: 22AD (⊭) NOT TRUE
+Removed Valid: 22AE (⊮) DOES NOT FORCE
+Removed Valid: 22AF (⊯) NEGATED DOUBLE VERTICAL BAR DOUBLE RIGHT TURNSTILE
+Removed Valid: 22B0 (⊰) PRECEDES UNDER RELATION
+Removed Valid: 22B1 (⊱) SUCCEEDS UNDER RELATION
+Removed Valid: 22B2 (⊲) NORMAL SUBGROUP OF
+Removed Valid: 22B3 (⊳) CONTAINS AS NORMAL SUBGROUP
+Removed Valid: 22B4 (⊴) NORMAL SUBGROUP OF OR EQUAL TO
+Removed Valid: 22B5 (⊵) CONTAINS AS NORMAL SUBGROUP OR EQUAL TO
+Removed Valid: 22B8 (⊸) MULTIMAP
+Removed Valid: 22B9 (⊹) HERMITIAN CONJUGATE MATRIX
+Removed Valid: 22BA (⊺) INTERCALATE
+Removed Valid: 22BB (⊻) XOR
+Removed Valid: 22BC (⊼) NAND
+Removed Valid: 22BD (⊽) NOR
+Removed Valid: 22BE (⊾) RIGHT ANGLE WITH ARC
+Removed Valid: 22BF (⊿) RIGHT TRIANGLE
+Removed Valid: 22C0 (⋀) N-ARY LOGICAL AND
+Removed Valid: 22C1 (⋁) N-ARY LOGICAL OR
+Removed Valid: 22C2 (⋂) N-ARY INTERSECTION
+Removed Valid: 22C3 (⋃) N-ARY UNION
+Removed Valid: 22C4 (⋄) DIAMOND OPERATOR
+Removed Valid: 22C5 (⋅) DOT OPERATOR
+Removed Valid: 22C6 (⋆) STAR OPERATOR
+Removed Valid: 22C7 (⋇) DIVISION TIMES
+Removed Valid: 22C9 (⋉) LEFT NORMAL FACTOR SEMIDIRECT PRODUCT
+Removed Valid: 22CA (⋊) RIGHT NORMAL FACTOR SEMIDIRECT PRODUCT
+Removed Valid: 22CB (⋋) LEFT SEMIDIRECT PRODUCT
+Removed Valid: 22CC (⋌) RIGHT SEMIDIRECT PRODUCT
+Removed Valid: 22CD (⋍) REVERSED TILDE EQUALS
+Removed Valid: 22CE (⋎) CURLY LOGICAL OR
+Removed Valid: 22CF (⋏) CURLY LOGICAL AND
+Removed Valid: 22D0 (⋐) DOUBLE SUBSET
+Removed Valid: 22D1 (⋑) DOUBLE SUPERSET
+Removed Valid: 22D2 (⋒) DOUBLE INTERSECTION
+Removed Valid: 22D3 (⋓) DOUBLE UNION
+Removed Valid: 22D4 (⋔) PITCHFORK
+Removed Valid: 22D5 (⋕) EQUAL AND PARALLEL TO
+Removed Valid: 22D6 (⋖) LESS-THAN WITH DOT
+Removed Valid: 22D7 (⋗) GREATER-THAN WITH DOT
+Removed Valid: 22D8 (⋘) VERY MUCH LESS-THAN
+Removed Valid: 22D9 (⋙) VERY MUCH GREATER-THAN
+Removed Valid: 22DA (⋚) LESS-THAN EQUAL TO OR GREATER-THAN
+Removed Valid: 22DB (⋛) GREATER-THAN EQUAL TO OR LESS-THAN
+Removed Valid: 22DC (⋜) EQUAL TO OR LESS-THAN
+Removed Valid: 22DD (⋝) EQUAL TO OR GREATER-THAN
+Removed Valid: 22DE (⋞) EQUAL TO OR PRECEDES
+Removed Valid: 22DF (⋟) EQUAL TO OR SUCCEEDS
+Removed Valid: 22E0 (⋠) DOES NOT PRECEDE OR EQUAL
+Removed Valid: 22E1 (⋡) DOES NOT SUCCEED OR EQUAL
+Removed Valid: 22E2 (⋢) NOT SQUARE IMAGE OF OR EQUAL TO
+Removed Valid: 22E3 (⋣) NOT SQUARE ORIGINAL OF OR EQUAL TO
+Removed Valid: 22E4 (⋤) SQUARE IMAGE OF OR NOT EQUAL TO
+Removed Valid: 22E5 (⋥) SQUARE ORIGINAL OF OR NOT EQUAL TO
+Removed Valid: 22E6 (⋦) LESS-THAN BUT NOT EQUIVALENT TO
+Removed Valid: 22E7 (⋧) GREATER-THAN BUT NOT EQUIVALENT TO
+Removed Valid: 22E8 (⋨) PRECEDES BUT NOT EQUIVALENT TO
+Removed Valid: 22E9 (⋩) SUCCEEDS BUT NOT EQUIVALENT TO
+Removed Valid: 22EA (⋪) NOT NORMAL SUBGROUP OF
+Removed Valid: 22EB (⋫) DOES NOT CONTAIN AS NORMAL SUBGROUP
+Removed Valid: 22EC (⋬) NOT NORMAL SUBGROUP OF OR EQUAL TO
+Removed Valid: 22ED (⋭) DOES NOT CONTAIN AS NORMAL SUBGROUP OR EQUAL
+Removed Valid: 22EE (⋮) VERTICAL ELLIPSIS
+Removed Valid: 22EF (⋯) MIDLINE HORIZONTAL ELLIPSIS
+Removed Valid: 22F0 (⋰) UP RIGHT DIAGONAL ELLIPSIS
+Removed Valid: 22F1 (⋱) DOWN RIGHT DIAGONAL ELLIPSIS
+Removed Valid: 22F2 (⋲) ELEMENT OF WITH LONG HORIZONTAL STROKE
+Removed Valid: 22F3 (⋳) ELEMENT OF WITH VERTICAL BAR AT END OF HORIZONTAL STROKE
+Removed Valid: 22F4 (⋴) SMALL ELEMENT OF WITH VERTICAL BAR AT END OF HORIZONTAL STROKE
+Removed Valid: 22F5 (⋵) ELEMENT OF WITH DOT ABOVE
+Removed Valid: 22F6 (⋶) ELEMENT OF WITH OVERBAR
+Removed Valid: 22F7 (⋷) SMALL ELEMENT OF WITH OVERBAR
+Removed Valid: 22F8 (⋸) ELEMENT OF WITH UNDERBAR
+Removed Valid: 22F9 (⋹) ELEMENT OF WITH TWO HORIZONTAL STROKES
+Removed Valid: 22FA (⋺) CONTAINS WITH LONG HORIZONTAL STROKE
+Removed Valid: 22FB (⋻) CONTAINS WITH VERTICAL BAR AT END OF HORIZONTAL STROKE
+Removed Valid: 22FC (⋼) SMALL CONTAINS WITH VERTICAL BAR AT END OF HORIZONTAL STROKE
+Removed Valid: 22FD (⋽) CONTAINS WITH OVERBAR
+Removed Valid: 22FE (⋾) SMALL CONTAINS WITH OVERBAR
+Removed Valid: 22FF (⋿) Z NOTATION BAG MEMBERSHIP
+Removed Valid: 23BE (⎾) DENTISTRY SYMBOL LIGHT VERTICAL AND TOP RIGHT
+Removed Valid: 23BF (⎿) DENTISTRY SYMBOL LIGHT VERTICAL AND BOTTOM RIGHT
+Removed Valid: 23C0 (⏀) DENTISTRY SYMBOL LIGHT VERTICAL WITH CIRCLE
+Removed Valid: 23C1 (⏁) DENTISTRY SYMBOL LIGHT DOWN AND HORIZONTAL WITH CIRCLE
+Removed Valid: 23C2 (⏂) DENTISTRY SYMBOL LIGHT UP AND HORIZONTAL WITH CIRCLE
+Removed Valid: 23C3 (⏃) DENTISTRY SYMBOL LIGHT VERTICAL WITH TRIANGLE
+Removed Valid: 23C4 (⏄) DENTISTRY SYMBOL LIGHT DOWN AND HORIZONTAL WITH TRIANGLE
+Removed Valid: 23C5 (⏅) DENTISTRY SYMBOL LIGHT UP AND HORIZONTAL WITH TRIANGLE
+Removed Valid: 23C6 (⏆) DENTISTRY SYMBOL LIGHT VERTICAL AND WAVE
+Removed Valid: 23C7 (⏇) DENTISTRY SYMBOL LIGHT DOWN AND HORIZONTAL WITH WAVE
+Removed Valid: 23C8 (⏈) DENTISTRY SYMBOL LIGHT UP AND HORIZONTAL WITH WAVE
+Removed Valid: 23C9 (⏉) DENTISTRY SYMBOL LIGHT DOWN AND HORIZONTAL
+Removed Valid: 23CA (⏊) DENTISTRY SYMBOL LIGHT UP AND HORIZONTAL
+Removed Valid: 23CB (⏋) DENTISTRY SYMBOL LIGHT VERTICAL AND TOP LEFT
+Removed Valid: 23CC (⏌) DENTISTRY SYMBOL LIGHT VERTICAL AND BOTTOM LEFT
+Removed Valid: 23D1 (⏑) METRICAL BREVE
+Removed Valid: 23D2 (⏒) METRICAL LONG OVER SHORT
+Removed Valid: 23D3 (⏓) METRICAL SHORT OVER LONG
+Removed Valid: 23D4 (⏔) METRICAL LONG OVER TWO SHORTS
+Removed Valid: 23D5 (⏕) METRICAL TWO SHORTS OVER LONG
+Removed Valid: 23D6 (⏖) METRICAL TWO SHORTS JOINED
+Removed Valid: 23D7 (⏗) METRICAL TRISEME
+Removed Valid: 23D8 (⏘) METRICAL TETRASEME
+Removed Valid: 23D9 (⏙) METRICAL PENTASEME
+Removed Valid: 2400 (␀) SYMBOL FOR NULL
+Removed Valid: 2401 (␁) SYMBOL FOR START OF HEADING
+Removed Valid: 2402 (␂) SYMBOL FOR START OF TEXT
+Removed Valid: 2403 (␃) SYMBOL FOR END OF TEXT
+Removed Valid: 2404 (␄) SYMBOL FOR END OF TRANSMISSION
+Removed Valid: 2405 (␅) SYMBOL FOR ENQUIRY
+Removed Valid: 2406 (␆) SYMBOL FOR ACKNOWLEDGE
+Removed Valid: 2407 (␇) SYMBOL FOR BELL
+Removed Valid: 2408 (␈) SYMBOL FOR BACKSPACE
+Removed Valid: 2409 (␉) SYMBOL FOR HORIZONTAL TABULATION
+Removed Valid: 240A (␊) SYMBOL FOR LINE FEED
+Removed Valid: 240B (␋) SYMBOL FOR VERTICAL TABULATION
+Removed Valid: 240C (␌) SYMBOL FOR FORM FEED
+Removed Valid: 240D (␍) SYMBOL FOR CARRIAGE RETURN
+Removed Valid: 240E (␎) SYMBOL FOR SHIFT OUT
+Removed Valid: 240F (␏) SYMBOL FOR SHIFT IN
+Removed Valid: 2410 (␐) SYMBOL FOR DATA LINK ESCAPE
+Removed Valid: 2411 (␑) SYMBOL FOR DEVICE CONTROL ONE
+Removed Valid: 2412 (␒) SYMBOL FOR DEVICE CONTROL TWO
+Removed Valid: 2413 (␓) SYMBOL FOR DEVICE CONTROL THREE
+Removed Valid: 2414 (␔) SYMBOL FOR DEVICE CONTROL FOUR
+Removed Valid: 2415 (␕) SYMBOL FOR NEGATIVE ACKNOWLEDGE
+Removed Valid: 2416 (␖) SYMBOL FOR SYNCHRONOUS IDLE
+Removed Valid: 2417 (␗) SYMBOL FOR END OF TRANSMISSION BLOCK
+Removed Valid: 2418 (␘) SYMBOL FOR CANCEL
+Removed Valid: 2419 (␙) SYMBOL FOR END OF MEDIUM
+Removed Valid: 241A (␚) SYMBOL FOR SUBSTITUTE
+Removed Valid: 241B (␛) SYMBOL FOR ESCAPE
+Removed Valid: 241C (␜) SYMBOL FOR FILE SEPARATOR
+Removed Valid: 241D (␝) SYMBOL FOR GROUP SEPARATOR
+Removed Valid: 241E (␞) SYMBOL FOR RECORD SEPARATOR
+Removed Valid: 241F (␟) SYMBOL FOR UNIT SEPARATOR
+Removed Valid: 2420 (␠) SYMBOL FOR SPACE
+Removed Valid: 2421 (␡) SYMBOL FOR DELETE
+Removed Valid: 2424 (␤) SYMBOL FOR NEWLINE
+Removed Valid: 2425 (␥) SYMBOL FOR DELETE FORM TWO
+Removed Valid: 2426 (␦) SYMBOL FOR SUBSTITUTE FORM TWO
+Removed Valid: 2440 (⑀) OCR HOOK
+Removed Valid: 2441 (⑁) OCR CHAIR
+Removed Valid: 2442 (⑂) OCR FORK
+Removed Valid: 2443 (⑃) OCR INVERTED FORK
+Removed Valid: 2444 (⑄) OCR BELT BUCKLE
+Removed Valid: 2445 (⑅) OCR BOW TIE
+Removed Valid: 2446 (⑆) OCR BRANCH BANK IDENTIFICATION
+Removed Valid: 2447 (⑇) OCR AMOUNT OF CHECK
+Removed Valid: 2448 (⑈) OCR DASH
+Removed Valid: 2449 (⑉) OCR CUSTOMER ACCOUNT NUMBER
+Removed Valid: 244A (⑊) OCR DOUBLE BACKSLASH
 Removed Valid: 2713 (✓) CHECK MARK
-Removed Valid: 2715 (✕) MULTIPLICATION X
 Removed Valid: 2717 (✗) BALLOT X
-Removed Valid: 2672 (♲) UNIVERSAL RECYCLING SYMBOL
+Removed Valid: 2715 (✕) MULTIPLICATION X
+Removed Valid: 26CC (⛌) CROSSING LANES
+Removed Valid: 26D2 (⛒) CIRCLED CROSSING LANES
 Removed Valid: 2673 (♳) RECYCLING SYMBOL FOR TYPE-1 PLASTICS
 Removed Valid: 2674 (♴) RECYCLING SYMBOL FOR TYPE-2 PLASTICS
 Removed Valid: 2675 (♵) RECYCLING SYMBOL FOR TYPE-3 PLASTICS
@@ -4301,9 +4707,6 @@ Removed Valid: 2676 (♶) RECYCLING SYMBOL FOR TYPE-4 PLASTICS
 Removed Valid: 2677 (♷) RECYCLING SYMBOL FOR TYPE-5 PLASTICS
 Removed Valid: 2678 (♸) RECYCLING SYMBOL FOR TYPE-6 PLASTICS
 Removed Valid: 2679 (♹) RECYCLING SYMBOL FOR TYPE-7 PLASTICS
-Removed Valid: 267A (♺) RECYCLING SYMBOL FOR GENERIC MATERIALS
-Removed Valid: 267C (♼) RECYCLED PAPER SYMBOL
-Removed Valid: 267D (♽) PARTIALLY-RECYCLED PAPER SYMBOL
 Removed Valid: 266D (♭) MUSIC FLAT SIGN
 Removed Valid: 266E (♮) MUSIC NATURAL SIGN
 Removed Valid: 266F (♯) MUSIC SHARP SIGN
@@ -5004,11 +5407,12 @@ Added Valid: 5F (_) LOW LINE
 Isolated: 2D (-) HYPHEN-MINUS
 Isolated: 5F (_) LOW LINE
 Isolated: B0 (°) DEGREE SIGN
-Isolated: B1 (±) PLUS-MINUS SIGN
 Isolated: 2019 (’) RIGHT SINGLE QUOTATION MARK
 Isolated: 2044 (⁄) FRACTION SLASH
 Isolated: AC (¬) NOT SIGN
 Isolated: 2310 (⌐) REVERSED NOT SIGN
+Warning: Isolated not Valid: 2319 (⌙) TURNED NOT SIGN
+Isolated: 2319 (⌙) TURNED NOT SIGN
 Isolated: 24 ($) DOLLAR SIGN
 Isolated: A2 (¢) CENT SIGN
 Isolated: A3 (£) POUND SIGN
@@ -5016,11 +5420,140 @@ Isolated: A4 (¤) CURRENCY SIGN
 Isolated: A5 (¥) YEN SIGN
 Isolated: 20AC (€) EURO SIGN
 Isolated: 20BF (₿) BITCOIN SIGN
+Isolated: 2300 (⌀) DIAMETER SIGN
+Isolated: 2301 (⌁) ELECTRIC ARROW
+Isolated: 2302 (⌂) HOUSE
+Warning: Isolated not Valid: 2303 (⌃) UP ARROWHEAD
+Isolated: 2303 (⌃) UP ARROWHEAD
+Warning: Isolated not Valid: 2304 (⌄) DOWN ARROWHEAD
+Isolated: 2304 (⌄) DOWN ARROWHEAD
+Isolated: 2305 (⌅) PROJECTIVE
+Isolated: 2306 (⌆) PERSPECTIVE
+Isolated: 2307 (⌇) WAVY LINE
+Isolated: 2312 (⌒) ARC
+Isolated: 2313 (⌓) SEGMENT
+Isolated: 2314 (⌔) SECTOR
+Isolated: 2315 (⌕) TELEPHONE RECORDER
+Isolated: 2316 (⌖) POSITION INDICATOR
+Isolated: 2317 (⌗) VIEWDATA SQUARE
+Isolated: 2318 (⌘) PLACE OF INTEREST SIGN
+Isolated: 2324 (⌤) UP ARROWHEAD BETWEEN TWO HORIZONTAL BARS
+Isolated: 2325 (⌥) OPTION KEY
+Isolated: 2326 (⌦) ERASE TO THE RIGHT
+Isolated: 2327 (⌧) X IN A RECTANGLE BOX
+Isolated: 232B (⌫) ERASE TO THE LEFT
+Isolated: 232C (⌬) BENZENE RING
+Isolated: 232D (⌭) CYLINDRICITY
+Isolated: 232E (⌮) ALL AROUND-PROFILE
+Isolated: 232F (⌯) SYMMETRY
+Isolated: 2330 (⌰) TOTAL RUNOUT
+Isolated: 2331 (⌱) DIMENSION ORIGIN
+Isolated: 2332 (⌲) CONICAL TAPER
+Isolated: 2333 (⌳) SLOPE
+Isolated: 2334 (⌴) COUNTERBORE
+Isolated: 2335 (⌵) COUNTERSINK
+Isolated: 23CD (⏍) SQUARE FOOT
+Isolated: 23CE (⏎) RETURN SYMBOL
+Isolated: 23DA (⏚) EARTH GROUND
+Isolated: 23DB (⏛) FUSE
+Isolated: 23E2 (⏢) WHITE TRAPEZIUM
+Isolated: 23E3 (⏣) BENZENE RING WITH CIRCLE
+Isolated: 23E5 (⏥) FLATNESS
+Isolated: 23E6 (⏦) AC CURRENT
+Isolated: 23E7 (⏧) ELECTRICAL INTERSECTION
+Isolated: 23F4 (⏴) BLACK MEDIUM LEFT-POINTING TRIANGLE
+Isolated: 23F5 (⏵) BLACK MEDIUM RIGHT-POINTING TRIANGLE
+Isolated: 23F6 (⏶) BLACK MEDIUM UP-POINTING TRIANGLE
+Isolated: 23F7 (⏷) BLACK MEDIUM DOWN-POINTING TRIANGLE
+Warning: Isolated not Valid: 23F8 (⏸) DOUBLE VERTICAL BAR
+Isolated: 23F8 (⏸) DOUBLE VERTICAL BAR
+Warning: Isolated not Valid: 23F9 (⏹) BLACK SQUARE FOR STOP
+Isolated: 23F9 (⏹) BLACK SQUARE FOR STOP
+Warning: Isolated not Valid: 23FA (⏺) BLACK CIRCLE FOR RECORD
+Isolated: 23FA (⏺) BLACK CIRCLE FOR RECORD
+Isolated: 23FB (⏻) POWER SYMBOL
+Isolated: 23FC (⏼) POWER ON-OFF SYMBOL
+Isolated: 23FD (⏽) POWER ON SYMBOL
+Isolated: 23FE (⏾) POWER SLEEP SYMBOL
+Isolated: 23FF (⏿) OBSERVER EYE SYMBOL
+Isolated: 2336 (⌶) APL FUNCTIONAL SYMBOL I-BEAM
+Isolated: 2338 (⌸) APL FUNCTIONAL SYMBOL QUAD EQUAL
+Isolated: 2339 (⌹) APL FUNCTIONAL SYMBOL QUAD DIVIDE
+Isolated: 233B (⌻) APL FUNCTIONAL SYMBOL QUAD JOT
+Isolated: 233C (⌼) APL FUNCTIONAL SYMBOL QUAD CIRCLE
+Isolated: 233D (⌽) APL FUNCTIONAL SYMBOL CIRCLE STILE
+Isolated: 233E (⌾) APL FUNCTIONAL SYMBOL CIRCLE JOT
+Isolated: 2341 (⍁) APL FUNCTIONAL SYMBOL QUAD SLASH
+Isolated: 2342 (⍂) APL FUNCTIONAL SYMBOL QUAD BACKSLASH
+Isolated: 2343 (⍃) APL FUNCTIONAL SYMBOL QUAD LESS-THAN
+Isolated: 2344 (⍄) APL FUNCTIONAL SYMBOL QUAD GREATER-THAN
+Isolated: 2345 (⍅) APL FUNCTIONAL SYMBOL LEFTWARDS VANE
+Isolated: 2346 (⍆) APL FUNCTIONAL SYMBOL RIGHTWARDS VANE
+Isolated: 2347 (⍇) APL FUNCTIONAL SYMBOL QUAD LEFTWARDS ARROW
+Isolated: 2348 (⍈) APL FUNCTIONAL SYMBOL QUAD RIGHTWARDS ARROW
+Isolated: 2349 (⍉) APL FUNCTIONAL SYMBOL CIRCLE BACKSLASH
+Isolated: 234A (⍊) APL FUNCTIONAL SYMBOL DOWN TACK UNDERBAR
+Isolated: 234B (⍋) APL FUNCTIONAL SYMBOL DELTA STILE
+Isolated: 234C (⍌) APL FUNCTIONAL SYMBOL QUAD DOWN CARET
+Isolated: 234D (⍍) APL FUNCTIONAL SYMBOL QUAD DELTA
+Isolated: 234E (⍎) APL FUNCTIONAL SYMBOL DOWN TACK JOT
+Isolated: 234F (⍏) APL FUNCTIONAL SYMBOL UPWARDS VANE
+Isolated: 2350 (⍐) APL FUNCTIONAL SYMBOL QUAD UPWARDS ARROW
+Isolated: 2351 (⍑) APL FUNCTIONAL SYMBOL UP TACK OVERBAR
+Isolated: 2352 (⍒) APL FUNCTIONAL SYMBOL DEL STILE
+Isolated: 2353 (⍓) APL FUNCTIONAL SYMBOL QUAD UP CARET
+Isolated: 2354 (⍔) APL FUNCTIONAL SYMBOL QUAD DEL
+Isolated: 2355 (⍕) APL FUNCTIONAL SYMBOL UP TACK JOT
+Isolated: 2356 (⍖) APL FUNCTIONAL SYMBOL DOWNWARDS VANE
+Isolated: 2357 (⍗) APL FUNCTIONAL SYMBOL QUAD DOWNWARDS ARROW
+Isolated: 235D (⍝) APL FUNCTIONAL SYMBOL UP SHOE JOT
+Isolated: 235E (⍞) APL FUNCTIONAL SYMBOL QUOTE QUAD
+Isolated: 2360 (⍠) APL FUNCTIONAL SYMBOL QUAD COLON
+Isolated: 2366 (⍦) APL FUNCTIONAL SYMBOL DOWN SHOE STILE
+Isolated: 2367 (⍧) APL FUNCTIONAL SYMBOL LEFT SHOE STILE
+Isolated: 236F (⍯) APL FUNCTIONAL SYMBOL QUAD NOT EQUAL
+Isolated: 2370 (⍰) APL FUNCTIONAL SYMBOL QUAD QUESTION
+Isolated: 237D (⍽) SHOULDERED OPEN BOX
+Isolated: 237E (⍾) BELL SYMBOL
+Isolated: 2384 (⎄) COMPOSITION SYMBOL
+Isolated: 2385 (⎅) WHITE SQUARE WITH CENTRE VERTICAL LINE
+Isolated: 2386 (⎆) ENTER SYMBOL
+Isolated: 2387 (⎇) ALTERNATIVE KEY SYMBOL
+Isolated: 2389 (⎉) CIRCLED HORIZONTAL BAR WITH NOTCH
+Isolated: 238A (⎊) CIRCLED TRIANGLE DOWN
+Isolated: 238B (⎋) BROKEN CIRCLE WITH NORTHWEST ARROW
+Isolated: 238C (⎌) UNDO SYMBOL
+Isolated: 238D (⎍) MONOSTABLE SYMBOL
+Isolated: 238E (⎎) HYSTERESIS SYMBOL
+Isolated: 2394 (⎔) SOFTWARE-FUNCTION SYMBOL
+Isolated: 2396 (⎖) DECIMAL SEPARATOR KEY SYMBOL
+Isolated: 2397 (⎗) PREVIOUS PAGE
+Isolated: 2398 (⎘) NEXT PAGE
+Isolated: 2399 (⎙) PRINT SCREEN SYMBOL
+Isolated: 239A (⎚) CLEAR SCREEN SYMBOL
+Isolated: B1 (±) PLUS-MINUS SIGN
+Isolated: 2213 (∓) MINUS-OR-PLUS SIGN
+Isolated: 2200 (∀) FOR ALL
+Isolated: 2202 (∂) PARTIAL DIFFERENTIAL
+Isolated: 221A (√) SQUARE ROOT
+Isolated: 221B (∛) CUBE ROOT
+Isolated: 221C (∜) FOURTH ROOT
+Isolated: 221D (∝) PROPORTIONAL TO
+Isolated: 221E (∞) INFINITY
+Isolated: 222B (∫) INTEGRAL
+Isolated: 222E (∮) CONTOUR INTEGRAL
+Isolated: 2231 (∱) CLOCKWISE INTEGRAL
+Isolated: 2232 (∲) CLOCKWISE CONTOUR INTEGRAL
+Isolated: 2233 (∳) ANTICLOCKWISE CONTOUR INTEGRAL
+Isolated: 224B (≋) TRIPLE TILDE
+Isolated: 22B6 (⊶) ORIGINAL OF
+Isolated: 22B7 (⊷) IMAGE OF
 Isolated: 2022 (•) BULLET
 Isolated: 25C9 (◉) FISHEYE
 Isolated: 25CA (◊) LOZENGE
 Isolated: 25CD (◍) CIRCLE WITH VERTICAL FILL
 Isolated: 25CE (◎) BULLSEYE
+Isolated: 22C8 (⋈) BOWTIE
 Isolated: 2581 (▁) LOWER ONE EIGHTH BLOCK
 Isolated: 2582 (▂) LOWER ONE QUARTER BLOCK
 Isolated: 2583 (▃) LOWER THREE EIGHTHS BLOCK
@@ -5048,6 +5581,7 @@ Isolated: 272D (✭) OUTLINED BLACK STAR
 Isolated: 272E (✮) HEAVY OUTLINED BLACK STAR
 Isolated: 272F (✯) PINWHEEL STAR
 Isolated: 2730 (✰) SHADOWED WHITE STAR
+Isolated: 235F (⍟) APL FUNCTIONAL SYMBOL CIRCLE STAR
 Isolated: 2732 (✲) OPEN CENTRE ASTERISK
 Isolated: 2735 (✵) EIGHT POINTED PINWHEEL STAR
 Isolated: 2736 (✶) SIX POINTED BLACK STAR
@@ -5233,6 +5767,10 @@ Isolated: 266B (♫) BEAMED EIGHTH NOTES
 Isolated: 266C (♬) BEAMED SIXTEENTH NOTES
 Isolated: 2670 (♰) WEST SYRIAC CROSS
 Isolated: 2671 (♱) EAST SYRIAC CROSS
+Isolated: 2672 (♲) UNIVERSAL RECYCLING SYMBOL
+Isolated: 267A (♺) RECYCLING SYMBOL FOR GENERIC MATERIALS
+Isolated: 267C (♼) RECYCLED PAPER SYMBOL
+Isolated: 267D (♽) PARTIALLY-RECYCLED PAPER SYMBOL
 Isolated: 2680 (⚀) DIE FACE-1
 Isolated: 2681 (⚁) DIE FACE-2
 Isolated: 2682 (⚂) DIE FACE-3
@@ -5275,6 +5813,7 @@ Isolated: 26C6 (⛆) RAIN
 Isolated: 26C7 (⛇) BLACK SNOWMAN
 Isolated: 26C9 (⛉) TURNED WHITE SHOGI PIECE
 Isolated: 26CA (⛊) TURNED BLACK SHOGI PIECE
+Isolated: 26CB (⛋) WHITE DIAMOND IN SQUARE
 Isolated: 26CD (⛍) DISABLED CAR
 Isolated: 26D0 (⛐) CAR SLIDING
 Isolated: 26D5 (⛕) ALTERNATE ONE-WAY LEFT WAY TRAFFIC
@@ -5305,7 +5844,12 @@ Isolated: 26FB (⛻) JAPANESE BANK SYMBOL
 Isolated: 26FC (⛼) HEADSTONE GRAVEYARD SYMBOL
 Isolated: 26FE (⛾) CUP ON BLACK SQUARE
 Isolated: 26FF (⛿) WHITE FLAG WITH HORIZONTAL MIDDLE BLACK STRIPE
+Isolated: 2700 (✀) BLACK SAFETY SCISSORS
+Isolated: 2701 (✁) UPPER BLADE SCISSORS
 Isolated: 2703 (✃) LOWER BLADE SCISSORS
+Isolated: 2704 (✄) WHITE SCISSORS
+Isolated: 270E (✎) LOWER RIGHT PENCIL
+Isolated: 2710 (✐) UPPER RIGHT PENCIL
 Isolated: 2711 (✑) WHITE NIB
 Isolated: 2765 (❥) ROTATED HEAVY BLACK HEART BULLET
 Isolated: 2766 (❦) FLORAL HEART

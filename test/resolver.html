@@ -494,8 +494,7 @@ Katakana:
 <button>#️⃣</button>
 
 <b>Currency:</b>
-<button>$¢£¤¥€₿</button>
-
+<button>$¢£¤¥€₿Ξ</button>
 
 <a href="https://util.unicode.org/UnicodeJsps/confusables.jsp">Confusables</a>/
 <a href="https://unicode-org.github.io/cldr-staging/charts/latest/by_type/core_data.alphabetic_information.main.html">Exemplars</a>
@@ -610,6 +609,10 @@ function update_network(network) {
 		`function owner(bytes32 node) external view returns (address)`,
 	], active_provider);
 	eth_nft_contract = null;
+
+	if (input_field.value) {
+		schedule_resolve(250);
+	}
 }
 
 const EMOJI = ens_emoji();
