@@ -47,7 +47,7 @@ function span_from_cp(cp) {
 	return span;
 }
 
-export function dom_from_tokens(tokens, before) {
+export function dom_from_tokens(tokens, {before = false, components = true} = {}) {
 	let div = document.createElement('div');
 	div.classList.add('tokens');
 	if (before) {
@@ -68,7 +68,11 @@ export function dom_from_tokens(tokens, before) {
 			el.href = `https://emojipedia.org/${String.fromCodePoint(...token.emoji)}`;
 			el.title = `Emoji\n${hex_seq(cps)}`;
 			el.classList.add('glyph');
-			el.append(...cps.map(cp => span_from_cp(cp)));
+			if (components) {
+				el.append(...cps.map(cp => span_from_cp(cp)));
+			} else {
+				el.innerHTML = String.fromCodePoint(...token.emoji);
+			}
 		} else if (token.type === 'nfc') {
 			el = document.createElement('div');
 			el.classList.add('nfc');
@@ -206,13 +210,13 @@ export function use_default_style() {
 		border-radius: 5px;
 	}
 	.tokens .glyph .mod {
-		background: #333;		
+		background: #333;
 	}
 	.tokens .glyph .mod.zwj {
 		background: #0aa;
 	}
 	.tokens .glyph .mod.tag {
-		background: #666;
+		background: #0aa;
 	}
 	.tokens .glyph .mod.tag sub {
 		display: none;

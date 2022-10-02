@@ -296,6 +296,16 @@ export class UnicodeSpec {
 			}
 		});
 	}
+	emoji_skin_colors() {
+		// warning: this sucks
+		// 1F3FB..1F3FF  ; Emoji_Component      # E1.0   [5] (🏻..🏿)    light skin tone..dark skin tone
+		return this.emoji_data().Emoji_Component.filter(x => /\b(FITZPATRICK)\b/i.test(x.name));
+	}
+	emoji_hair_colors() {
+		// warning: this sucks
+		// 1F9B0..1F9B3  ; Emoji_Component      # E11.0  [4] (🦰..🦳)    red hair..white hair
+		return this.emoji_data().Emoji_Component.filter(x => /\b(HAIR|BALD)\b/i.test(x.name));
+	}
 	regional_indicators() {
 		return this.props().Regional_Indicator;
 	}

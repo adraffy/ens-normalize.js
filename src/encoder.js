@@ -75,7 +75,7 @@ export function bytes_from_bits(v) {
 }
 
 // vary symbol count to find best encoding 
-export function best_arithmetic(symbols, max = 512) {
+export function best_arithmetic(symbols, max = 128) { 
 	let best;
 	for (let n = 0; n <= max; n++) {
 		let v = encode_arithmetic(symbols, n);
@@ -118,6 +118,7 @@ export function encode_arithmetic(symbols, linear) {
 	symbols.push(0); // END
 	// create frequency table
 	let freq = Array(linear + 4).fill(0); // END + 1,2,3-byte symbols
+	if (freq.length > 255) throw new Error(`too many linear symbols`);
 	for (let x of symbols) freq[x]++;
 	freq = freq.map(x => Math.max(1, x)); // prevent sparse
 	// create accumulated table

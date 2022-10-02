@@ -194,7 +194,7 @@ ul.row {
 	border: 1px solid #ccc;
 	white-space: pre;
 }
-.tags .long {
+.long {
 	white-space: normal;
 	line-break: anywhere;
 }
@@ -341,6 +341,7 @@ footer {
 <button data-name="239.chonksociety.eth">Chonk #239</button>
 <button>raffy.antistupid.com</button>
 <button>barmstrong.cb.id</button>
+<button>offchainexample.eth</button>
 
 <!--
 <a href="./display.html"><b>Display:</b></a>
@@ -546,7 +547,8 @@ Katakana:
 </div>
 <div id="options">
 <label><input type="checkbox" id="auto_resolve_check" checked>Resolve on Input</label>
-<label><input type="checkbox" id="show_hashes_check" checked>Show Details</label>
+<label><input type="checkbox" id="show_hashes_check" checked>Details</label>
+<label><input type="checkbox" id="show_components_check" checked>Components</label>
 <span><input type="checkbox" id="skip_norm_check"><label class="nonstd" for="skip_norm_check">Skip Normalization</label></span>
 </div>
 <div id="input">
@@ -591,6 +593,7 @@ const input_field = document.querySelector('#input_field');
 const resolve_btn = document.querySelector('#resolve_btn');
 const primary_arrows = document.querySelector('#arrows');
 const auto_resolve_check = document.querySelector('#auto_resolve_check');
+const show_components_check = document.querySelector('#show_components_check');
 const skip_norm_check = document.querySelector('#skip_norm_check');
 const show_hashes_check = document.querySelector('#show_hashes_check');
 const options_div = document.querySelector('#options');
@@ -611,9 +614,10 @@ let resolve_timer = RESOLVE_MODE_IDLE;
 let resolve_options;
 let resolve_date0;
 
-examples_div.classList.toggle('hide', !!window.localStorage.getItem('hide_examples'));
-show_hashes_check.selected = !!window.localStorage.getItem('show_hashes');
-auto_resolve_check.selected = !!window.localStorage.getItem('auto_resolve');
+read_local_storage('hide_examples', x => examples_div.classList.toggle('hide', x));
+read_local_storage('show_hashes', x => show_hashes_check.selected = x);
+read_local_storage('auto_resolve', x=> auto_resolve_check.selected = x);
+read_local_storage('show_components', x=> show_components_check.selected = x);
 
 for (let btn of document.querySelectorAll('#examples button:not([id]), button[data-name]')) {
 	let name = btn.innerHTML;
@@ -689,25 +693,23 @@ document.querySelector('#link_btn').addEventListener('click', () => {
 });
 
 auto_resolve_check.addEventListener('input', () => {
-	window.localStorage.setItem('auto_resolve', auto_resolve_check.checked ? '1' : '');	
-	if (auto_resolve_check.checked && input_field.value) {
-		if (parse()) resolve();
-	}
+	window.localStorage.setItem('auto_resolve', !!auto_resolve_check.checked);	
+	resolve_if_auto();
 });
 show_hashes_check.addEventListener('input', () => {	
-	window.localStorage.setItem('show_hashes', show_hashes_check.checked ? '1' : '');
+	window.localStorage.setItem('show_hashes', !!show_hashes_check.checked);
 	for (let el of document.querySelectorAll('.hashes')) {
 		el.classList.toggle('hide', !show_hashes_check.checked);
 	}
 });
-skip_norm_check.addEventListener('input', () => {
-	if (auto_resolve_check.checked && input_field.value) {
-		resolve();
-	}
+show_components_check.addEventListener('input', () => {
+	window.localStorage.setItem('show_components', !!show_hashes_check.checked);
+	update_exploded();
 });
+skip_norm_check.addEventListener('input', resolve_if_auto);
 examples_btn.addEventListener('click', () => {
 	examples_div.classList.toggle('hide');
-	window.localStorage.setItem('hide_examples', examples_div.classList.contains('hide') ? '1' : '');
+	window.localStorage.setItem('hide_examples', !!examples_div.classList.contains('hide'));
 	update_examples();
 });
 
@@ -783,6 +785,12 @@ function schedule_resolve(delay) {
 		resolve_timer = setTimeout(() => resolve(resolve_options), delay);
 	}
 } 
+
+function resolve_if_auto() {
+	if (auto_resolve_check.checked && input_field.value) {
+		if (parse()) resolve();
+	}
+}
 
 function stop_resolving() {
 	clearTimeout(resolve_timer);
@@ -863,7 +871,7 @@ function add_transformed_row(input) {
 		let row = create_row('Mapped');
 		row.classList.add('transform');
 		make_exploded(row, input, true);
-		row.querySelector('.tags').remove();
+		row.querySelector('.tags').remove(); // dont need this
 		output_div.append(row);
 	}
 }
@@ -1014,13 +1022,38 @@ function utf8_length(s) {
 	return bytes;
 }
 
-function make_exploded(row, name, is_norm, downgrade_disallowed) {	
-	let tokens_div = dom_from_tokens(ens_tokenize(name), !is_norm);
-	if (downgrade_disallowed) {
-		for (let x of tokens_div.querySelectorAll('.disallowed')) {
-			x.classList.add('ignored');
-			x.classList.remove('disallowed');
+function update_exploded() {
+	for (let exploded of output_div.querySelectorAll('.exploded')) {
+		let tokens_div = dom_from_tokens(ens_tokenize(exploded.dataset.name), {
+			before: exploded.dataset.before,
+			components: show_components_check.checked,
+		});
+		if (exploded.dataset.downgraded) {
+			apply_downgrade(tokens_div);
 		}
+		exploded.replaceChild(tokens_div, exploded.querySelector('.tokens'));
+	}
+}
+
+function apply_downgrade(tokens_div) {
+	for (let x of tokens_div.querySelectorAll('.disallowed')) {
+		x.classList.add('ignored');
+		x.classList.remove('disallowed');
+	}
+}
+
+function make_exploded(row, name, is_norm, downgrade_disallowed) {	
+
+	let exploded = document.createElement('div');
+	exploded.classList.add('exploded');
+
+	let before = !is_norm;
+	let tokens_div = dom_from_tokens(ens_tokenize(name), {before, components: show_components_check.checked});
+	exploded.dataset.name = name;
+	exploded.dataset.before = before ? '1' : '';
+	if (downgrade_disallowed) {
+		exploded.dataset.downgraded = '1';
+		apply_downgrade(tokens_div);
 	}
 	/*
 	let n_cp = [...name].length;
@@ -1047,8 +1080,6 @@ function make_exploded(row, name, is_norm, downgrade_disallowed) {
 	bytes.innerHTML = `${utf8_length(name)}<sub>bytes</sub>`;
 	add_row_tag(row, bytes); 
 	
-	let exploded = document.createElement('div');
-	exploded.classList.add('exploded');
 	exploded.append(tokens_div, row.querySelector('.tags'));
 	row.append(exploded);
 }
@@ -1968,6 +1999,15 @@ function namehash(s) {
 	let hash = '0x0000000000000000000000000000000000000000000000000000000000000000';
 	if (s) hash = s.split('.').reduceRight((h, x) => ethers.utils.keccak256(h + ethers.utils.id(x).slice(2)), hash);
 	return hash.slice(0, 66);
+}
+
+function read_local_storage(key, fn) {
+	let stored = window.localStorage.getItem(key);
+	if (stored === null) return;
+	try {
+		fn(JSON.parse(stored));
+	} catch (err) {	
+	}
 }
 </script>
 </body>
