@@ -1,4 +1,4 @@
-Build Date: 2022-10-02T06:53:27.505Z
+Build Date: 2022-10-02T19:41:38.357Z
 Unicode Version: 15.0.0
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -5409,7 +5409,6 @@ Isolated: 2019 (’) RIGHT SINGLE QUOTATION MARK
 Isolated: 2044 (⁄) FRACTION SLASH
 Isolated: AC (¬) NOT SIGN
 Isolated: 2310 (⌐) REVERSED NOT SIGN
-Warning: Isolated not Valid: 2319 (⌙) TURNED NOT SIGN
 Isolated: 2319 (⌙) TURNED NOT SIGN
 Isolated: 24 ($) DOLLAR SIGN
 Isolated: A2 (¢) CENT SIGN
@@ -5421,9 +5420,7 @@ Isolated: 20BF (₿) BITCOIN SIGN
 Isolated: 2300 (⌀) DIAMETER SIGN
 Isolated: 2301 (⌁) ELECTRIC ARROW
 Isolated: 2302 (⌂) HOUSE
-Warning: Isolated not Valid: 2303 (⌃) UP ARROWHEAD
 Isolated: 2303 (⌃) UP ARROWHEAD
-Warning: Isolated not Valid: 2304 (⌄) DOWN ARROWHEAD
 Isolated: 2304 (⌄) DOWN ARROWHEAD
 Isolated: 2305 (⌅) PROJECTIVE
 Isolated: 2306 (⌆) PERSPECTIVE
@@ -5463,11 +5460,8 @@ Isolated: 23F4 (⏴) BLACK MEDIUM LEFT-POINTING TRIANGLE
 Isolated: 23F5 (⏵) BLACK MEDIUM RIGHT-POINTING TRIANGLE
 Isolated: 23F6 (⏶) BLACK MEDIUM UP-POINTING TRIANGLE
 Isolated: 23F7 (⏷) BLACK MEDIUM DOWN-POINTING TRIANGLE
-Warning: Isolated not Valid: 23F8 (⏸) DOUBLE VERTICAL BAR
 Isolated: 23F8 (⏸) DOUBLE VERTICAL BAR
-Warning: Isolated not Valid: 23F9 (⏹) BLACK SQUARE FOR STOP
 Isolated: 23F9 (⏹) BLACK SQUARE FOR STOP
-Warning: Isolated not Valid: 23FA (⏺) BLACK CIRCLE FOR RECORD
 Isolated: 23FA (⏺) BLACK CIRCLE FOR RECORD
 Isolated: 23FB (⏻) POWER SYMBOL
 Isolated: 23FC (⏼) POWER ON-OFF SYMBOL
@@ -5618,13 +5612,9 @@ Isolated: 2718 (✘) HEAVY BALLOT X
 Isolated: 2707 (✇) TAPE DRIVE
 Isolated: 2762 (❢) HEAVY EXCLAMATION MARK ORNAMENT
 Isolated: 2706 (✆) TELEPHONE LOCATION SIGN
-Warning: Isolated not Valid: 2686 (⚆) WHITE CIRCLE WITH DOT RIGHT
 Isolated: 2686 (⚆) WHITE CIRCLE WITH DOT RIGHT
-Warning: Isolated not Valid: 2687 (⚇) WHITE CIRCLE WITH TWO DOTS
 Isolated: 2687 (⚇) WHITE CIRCLE WITH TWO DOTS
-Warning: Isolated not Valid: 2688 (⚈) BLACK CIRCLE WITH WHITE DOT RIGHT
 Isolated: 2688 (⚈) BLACK CIRCLE WITH WHITE DOT RIGHT
-Warning: Isolated not Valid: 2689 (⚉) BLACK CIRCLE WITH TWO WHITE DOTS
 Isolated: 2689 (⚉) BLACK CIRCLE WITH TWO WHITE DOTS
 Isolated: 274F (❏) LOWER RIGHT DROP-SHADOWED WHITE SQUARE
 Isolated: 2750 (❐) UPPER RIGHT DROP-SHADOWED WHITE SQUARE
@@ -5674,19 +5664,14 @@ Isolated: 27C1 (⟁) WHITE TRIANGLE CONTAINING SMALL WHITE TRIANGLE
 Isolated: 27C2 (⟂) PERPENDICULAR
 Isolated: 27C3 (⟃) OPEN SUBSET
 Isolated: 27C4 (⟄) OPEN SUPERSET
-Warning: Isolated not Valid: 27C5 (⟅) LEFT S-SHAPED BAG DELIMITER
 Isolated: 27C5 (⟅) LEFT S-SHAPED BAG DELIMITER
-Warning: Isolated not Valid: 27C6 (⟆) RIGHT S-SHAPED BAG DELIMITER
 Isolated: 27C6 (⟆) RIGHT S-SHAPED BAG DELIMITER
 Isolated: 27C7 (⟇) OR WITH DOT INSIDE
 Isolated: 27C8 (⟈) REVERSE SOLIDUS PRECEDING SUBSET
 Isolated: 27C9 (⟉) SUPERSET PRECEDING SOLIDUS
-Warning: Isolated not Valid: 27CA (⟊) VERTICAL BAR WITH HORIZONTAL STROKE
 Isolated: 27CA (⟊) VERTICAL BAR WITH HORIZONTAL STROKE
-Warning: Isolated not Valid: 27CB (⟋) MATHEMATICAL RISING DIAGONAL
 Isolated: 27CB (⟋) MATHEMATICAL RISING DIAGONAL
 Isolated: 27CC (⟌) LONG DIVISION
-Warning: Isolated not Valid: 27CD (⟍) MATHEMATICAL FALLING DIAGONAL
 Isolated: 27CD (⟍) MATHEMATICAL FALLING DIAGONAL
 Isolated: 1F172 (🅲) NEGATIVE SQUARED LATIN CAPITAL LETTER C
 Isolated: 1F173 (🅳) NEGATIVE SQUARED LATIN CAPITAL LETTER D
@@ -6340,6 +6325,21 @@ Isolated: 1FA6B (🩫) XIANGQI BLACK CHARIOT
 Isolated: 1FA6C (🩬) XIANGQI BLACK CANNON
 Isolated: 1FA6D (🩭) XIANGQI BLACK SOLDIER
 Changed Script [Grek => Zyyy]: 3BE (ξ) GREEK SMALL LETTER XI
+*** Isolated not Valid: 2319 (⌙) TURNED NOT SIGN
+*** Isolated not Valid: 2303 (⌃) UP ARROWHEAD
+*** Isolated not Valid: 2304 (⌄) DOWN ARROWHEAD
+*** Isolated not Valid: 23F8 (⏸) DOUBLE VERTICAL BAR
+*** Isolated not Valid: 23F9 (⏹) BLACK SQUARE FOR STOP
+*** Isolated not Valid: 23FA (⏺) BLACK CIRCLE FOR RECORD
+*** Isolated not Valid: 2686 (⚆) WHITE CIRCLE WITH DOT RIGHT
+*** Isolated not Valid: 2687 (⚇) WHITE CIRCLE WITH TWO DOTS
+*** Isolated not Valid: 2688 (⚈) BLACK CIRCLE WITH WHITE DOT RIGHT
+*** Isolated not Valid: 2689 (⚉) BLACK CIRCLE WITH TWO WHITE DOTS
+*** Isolated not Valid: 27C5 (⟅) LEFT S-SHAPED BAG DELIMITER
+*** Isolated not Valid: 27C6 (⟆) RIGHT S-SHAPED BAG DELIMITER
+*** Isolated not Valid: 27CA (⟊) VERTICAL BAR WITH HORIZONTAL STROKE
+*** Isolated not Valid: 27CB (⟋) MATHEMATICAL RISING DIAGONAL
+*** Isolated not Valid: 27CD (⟍) MATHEMATICAL FALLING DIAGONAL
 Excluded Script: Aghb (53)
 Excluded Script: Ahom (65)
 Excluded Script: Armi (31)

@@ -55,16 +55,16 @@ export function compare_arrays(a, b) {
 	return c;
 }
 
-export function random_choice(v) {
-	return v[Math.random() * v.length|0];
+export function random_choice(v, rng = Math.random) {
+	return v[rng() * v.length|0];
 }
 
-export function random_sample(v, n) {
+export function random_sample(v, n, rng = Math.random) {
 	v = v.slice(); // make copy
 	if (v.length > n) {
 		for (let i = 0; i < n; i++) { // shuffle prefix n
 			let temp = v[i]; 
-			let j = Math.floor(i + Math.random() * (v.length - i));
+			let j = Math.floor(i + rng() * (v.length - i));
 			v[i] = v[j];
 			v[j] = temp;
 		}

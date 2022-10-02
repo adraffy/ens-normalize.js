@@ -75,12 +75,12 @@ export function bytes_from_bits(v) {
 }
 
 // vary symbol count to find best encoding 
-export function best_arithmetic(symbols, max = 64) {
+export function best_arithmetic(symbols, max = 512) {
 	let best;
 	for (let n = 0; n <= max; n++) {
 		let v = encode_arithmetic(symbols, n);
-		if (!best || v.length < best.length) {
-			best = v;
+		if (!best || v.length < best.data.length) {
+			best = {data: v, symbols: n};
 		}
 	}
 	return best;
@@ -166,8 +166,8 @@ export function encode_arithmetic(symbols, linear) {
 	return header.concat(payload, bytes_from_bits(bits));
 }
 
-export function unsafe_btoa(buf) {
-	return buf.toString('base64').replace(/=+$/, '');
+export function unsafe_btoa(v) {
+	return Buffer.from(v).toString('base64').replace(/=+$/, '');
 }
 
 export class Encoder {

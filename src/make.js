@@ -209,9 +209,9 @@ enc.write_member(qc);
 write('include-nf');
 
 function write(name) {
-	let buf = Buffer.from(enc.compressed());
-	console.log(`${name} = ${buf.length} bytes`);
-	let encoded = unsafe_btoa(buf);
+	let {data, symbols} = enc.compressed();
+	console.log(`${name} = ${data.length} bytes / ${symbols} symbols`);
+	let encoded = unsafe_btoa(data);
 	writeFileSync(new URL(`./${name}.js`, import.meta.url), [
 		`// created ${new Date().toJSON()}`,
 		`import {read_compressed_payload} from './decoder.js';`,

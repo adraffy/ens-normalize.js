@@ -23,7 +23,7 @@ for (let i = 0; i < 1000; i++) {
 console.log(`PASS arthimetic`);
 
 for (let i = 0; i < 10000; i++) {
-	let v0 = Buffer.from(Array(Math.random() * 1000|0).fill().map(() => Math.random() * 255|0));
+	let v0 = Array(Math.random() * 1000|0).fill().map(() => Math.random() * 255|0);
 	let s = unsafe_btoa(v0);
 	let v1 = Uint8Array.from(atob(s), c => c.codePointAt(0));
 	let v2 = unsafe_atob(s);

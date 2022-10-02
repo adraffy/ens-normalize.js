@@ -585,36 +585,6 @@ let window_provider;
 let registry_contract;
 let eth_nft_contract;
 
-if (window.ethereum) {
-	window_provider = new ethers.providers.Web3Provider(window.ethereum, 'any');
-	window_provider.on('network', update_network);
-} else {
-	update_network();
-}
-function update_network(network) {
-	let registry;
-	let name;
-	if (network && network.ensAddress) {
-		active_provider = window_provider;
-		name = `window.ethereum (${network.name.replace('homestead', 'mainnet')})`;
-		registry = network.ensAddress;
-	} else {
-		active_provider = infura_provider;
-		name = `Infura (mainnet)`;
-		registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
-	}
-	document.querySelector('#provider').innerHTML = `using ${name}`;
-	registry_contract = new ethers.Contract(registry, [
-		`function resolver(bytes32 node) external view returns (address)`,
-		`function owner(bytes32 node) external view returns (address)`,
-	], active_provider);
-	eth_nft_contract = null;
-
-	if (input_field.value) {
-		schedule_resolve(250);
-	}
-}
-
 const EMOJI = ens_emoji();
 
 const input_field = document.querySelector('#input_field');
@@ -660,8 +630,8 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 	btn.addEventListener('click', () => {
 		input_field.value = name;
 		skip_norm_check.checked = btn.dataset.skip;
-		if (options_div.getBoundingClientRect().top > window.innerHeigh * .9) {
-			options_div.scrollIntoView({smooth: true}); // scuffed
+		if (options_div.getBoundingClientRect().top > window.innerHeight * .9) {
+			options_div.scrollIntoView(); // scuffed
 		}
 		resolve();
 	});
@@ -741,10 +711,41 @@ examples_btn.addEventListener('click', () => {
 	update_examples();
 });
 
+if (window.ethereum) {
+	window_provider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+	window_provider.on('network', update_network);
+} else {
+	update_network();
+}
+
 update_examples();
 input_field.focus();
 apply_location_hash();
 window.addEventListener('hashchange', apply_location_hash);
+
+function update_network(network) {
+	let registry;
+	let name;
+	if (network && network.ensAddress) {
+		active_provider = window_provider;
+		name = `window.ethereum (${network.name.replace('homestead', 'mainnet')})`;
+		registry = network.ensAddress;
+	} else {
+		active_provider = infura_provider;
+		name = `Infura (mainnet)`;
+		registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
+	}
+	document.querySelector('#provider').innerHTML = `using ${name}`;
+	registry_contract = new ethers.Contract(registry, [
+		`function resolver(bytes32 node) external view returns (address)`,
+		`function owner(bytes32 node) external view returns (address)`,
+	], active_provider);
+	eth_nft_contract = null;
+
+	if (input_field.value) {
+		schedule_resolve(250);
+	}
+}
 
 function update_examples() {
 	if (examples_div.classList.contains('hide')) {

@@ -1,6 +1,6 @@
 import {readFileSync, writeFileSync} from 'node:fs';
 import {UNICODE} from '../derive/unicode-version.js';
-import {parse_cp_sequence} from '../derive/utils.js';
+import {parse_cp_sequence, mulberry32} from '../derive/utils.js';
 import {ens_normalize, ens_emoji, ens_beautify} from '../src/lib.js';
 import {random_sample, run_tests} from '../src/utils.js';
 import {read_labels, read_random, read_spec, SPEC_FILE} from './data.js';
@@ -152,6 +152,9 @@ for (let [k, v] of Object.entries(registered)) {
 let spec_hash = createHash('sha256').update(readFileSync(SPEC_FILE)).digest('hex');
 console.log(`Hash: ${spec_hash}`);
 
+// use seeded rng so git diff is useful
+let rng = mulberry32(0x2EC4373F); 
+
 let sample = 2048; // arbitrary, target: ~2MB
 let tests = [
 	{name: 'version', created: new Date(), spec_hash},
@@ -160,8 +163,8 @@ let tests = [
 	Object.values(require_fail), 
 	Object.values(expect_pass), 
 	Object.values(expect_fail), 
-	Object.values(registered).map(x => random_sample(x, sample)),
-	Object.values(process(RANDOM_NAMES)).map(x => random_sample(x, sample)),
+	Object.values(registered).map(x => random_sample(x, sample, rng)),
+	Object.values(process(RANDOM_NAMES)).map(x => random_sample(x, sample, rng)),
 ].flat(Infinity);
 
 console.log(`Tests: ${tests.length}`);
