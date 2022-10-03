@@ -850,7 +850,7 @@ export default [
 	0x2667, // (♧) WHITE CLUB SUIT
 
 	// trigrams
-	0x2630, // (☰) TRIGRAM FOR HEAVEN
+	0x2630, // (☰) TRIGRAM FOR HEAVEN (Xi/Ether-like)
 	0x2631, // (☱) TRIGRAM FOR LAKE
 	0x2632, // (☲) TRIGRAM FOR FIRE
 	0x2633, // (☳) TRIGRAM FOR THUNDER

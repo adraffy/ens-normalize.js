@@ -18,8 +18,9 @@ const ISOLATED = read_valid_subset();
 const SCRIPTS = ['Latin', 'Greek', 'Cyrillic'].map((k, i) => {
 	// this defines the priority
 	// order must match make.js
+	// note: there are no latin (index = 0) whole-script confusables
 	// (script name, script-set, whole-set?)
-	return [k, read_valid_subset(), i ? read_valid_subset() : 0];
+	return [k, read_valid_subset(), i ? read_valid_subset() : 0]; 
 });
 const EXCLUDED = read_array_while(() => {
 	let v = read_valid_subset(r);
