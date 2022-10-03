@@ -446,7 +446,7 @@ function create_tr({cps, form, norm, info, n}, first) {
 		<td class="info"><div class="cells">${cells.join('')}</div></td>
 	`;
 	let exploded = tr.querySelector('.exploded');
-	exploded.append(dom_from_tokens(ens_tokenize(form), true));
+	exploded.append(dom_from_tokens(ens_tokenize(form), {before: true}));
 	if (form !== norm) {
 		exploded.append('➔');
 		exploded.append(dom_from_tokens(ens_tokenize(norm)));
