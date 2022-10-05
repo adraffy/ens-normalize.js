@@ -1,12 +1,16 @@
 import {parse_cp, parse_cp_range, parse_cp_sequence, hex_cp, hex_seq, explode_cp} from './utils.js';
 import {readFileSync} from 'node:fs';
 
-export function read_regions() {
+export function read_valid_regions() {
 	return JSON.parse(readFileSync(new URL('./data/regions.json', import.meta.url)));
 }
 
 export function read_excluded_scripts() {
 	 return JSON.parse(readFileSync(new URL('./data/scripts-excluded.json', import.meta.url)));
+}
+
+export function read_limited_scripts() {
+	return JSON.parse(readFileSync(new URL('./data/scripts-limited.json', import.meta.url)));
 }
 
 export function parse_semicolon_file(file, impl = {}) {
@@ -120,7 +124,7 @@ export class UnicodeSpec {
 		if (typeof x === 'number') {
 			let form = String.fromCodePoint(x);
 			if (this.cm.has(x)) {
-				form = 'x' + form;
+				form = '◌' + form; // DOTTED CIRCLE
 			}
 			ret = `${hex_cp(x)} (${form}) ${this.get_name(x)}`;
 		} else if (Array.isArray(x)) {
@@ -310,7 +314,7 @@ export class UnicodeSpec {
 		return this.props().Regional_Indicator;
 	}
 	valid_emoji_flag_sequences() {
-		let regions = read_regions(); // WARNING: not versioned by spec
+		let regions = read_valid_regions(); // WARNING: not versioned by spec
 		let cps = this.regional_indicators();
 		if (cps.length != 26) throw new Error('expected 26 regionals');
 		let dx = cps[0] - 0x41; // 'A'
@@ -419,11 +423,27 @@ export class UnicodeScripts {
 			return {name, abbr, set: new Set(cps)};
 		});
 		this.by_abbr = Object.fromEntries(this.entries.map(x => [x.abbr, x])); // use Object so we can $.Latn
+		// merge in script extensions
+		for (let [abbr, cps] of spec.script_extensions()) {
+			// remove old
+			for (let cp of cps) {
+				for (let {set} of this.entries) {
+					set.delete(cp);
+				}
+			}
+			// apply new
+			let {set} = this.by_abbr[abbr];
+			for (let cp of cps) {
+				set.add(cp);
+			}
+		}
 	}
 	excluded() { 
 		return read_excluded_scripts(); 
 	}
-	//extensions() { return this.spec.script_extensions(); }
+	limited() { 
+		return read_limited_scripts(); 
+	}
 	get_script_set(cps) {
 		let ret = new Set();
 		for (let cp of cps) {

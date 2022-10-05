@@ -40,8 +40,6 @@ assert_distinct({
 	MAPPED: CHARS_MAPPED.map(x => x[0])
 });
 
-// missing data
-const Regional_Indicator = new Set(UNICODE.regional_indicators());
 
 console.log(`Build Date: ${new Date().toJSON()}`);
 console.log(`Unicode Version: ${UNICODE.version_str}`);
@@ -119,12 +117,15 @@ emoji_seqs.RGI_Emoji_Modifier_Sequence.forEach(register_emoji);
 // UNICODE.valid_emoji_flag_sequences().forEach(register_emoji);
 emoji_seqs.RGI_Emoji_Flag_Sequence.forEach(register_emoji); // use this instead
 
+let emoji_disabled = [];
+
 let emoji_chrs = UNICODE.emoji_data();
 let emoji_map = new Map(emoji_chrs.Emoji.map(x => [x.cp, x]));
 let emoji_demoted = new Set((await import('./rules/emoji-demoted.js')).default);
 for (let rec of emoji_map.values()) {
 	if (emoji_demoted.has(rec.cp)) {
 		rec.used = true;
+		emoji_disabled.push(rec);
 		console.log(`Demoted Emoji: ${UNICODE.format(rec)}`);
 	} else {
 		disallow_char(rec.cp, true);
@@ -132,9 +133,24 @@ for (let rec of emoji_map.values()) {
 }
 
 // disable single regionals
-for (let cp of Regional_Indicator) {
-	emoji_map.get(cp).used = true;
+for (let cp of UNICODE.regional_indicators()) {
+	let rec = emoji_map.get(cp);
+	rec.used = true;
+	emoji_disabled.push(rec);
 }
+// disable skin modifiers
+for (let info of UNICODE.emoji_skin_colors()) {
+	emoji_map.get(info.cp).used = true;
+	emoji_disabled.push(info);
+}
+// disable hair modifiers
+// 20221004: these don't seem to function the same as skin
+/* 
+for (let info of UNICODE.emoji_hair_colors()) {
+	emoji_map.get(info.cp).used = true;
+	emoji_disabled.push(info);
+}
+*/
 
 // register forced FE0F
 for (let info of emoji_seqs.Basic_Emoji) {
@@ -175,6 +191,7 @@ for (let seq of (await import('./rules/emoji-seq-blacklist.js')).default) {
 		continue;
 	}
 	console.log(`Blacklist Emoji by Sequence: ${UNICODE.format(info)}`);
+	emoji_disabled.push(info);
 	emoji.delete(key);
 }
 for (let [x, ys] of CHARS_MAPPED) {
@@ -216,7 +233,7 @@ let scripts = Object.fromEntries(SCRIPTS.entries.map(x => {
 }));
 
 // apply changes
-for (let cp of (await import('./rules/scripts.js')).default) {
+for (let cp of (await import('./rules/relaxed-scripts.js')).default) {
 	for (let [abbr0, set] of Object.entries(scripts)) {
 		if (set.delete(cp)) {
 			const abbr1 = 'Zyyy'; // TODO: generalize this
@@ -283,26 +300,31 @@ for (let cp of isolated) {
 	}
 }
 
+// make every disabled emoji a solo-sequence (not critical)
+for (let info of emoji_disabled) {
+	if (!info.cps) info.cps = [info.cp];
+	info.type = 'Disabled';
+}
+
 function sorted(v) {
 	return [...v].sort((a, b) => a - b);
 }
 
-// load excluded scripts
-let excluded = {};
-for (let abbr of SCRIPTS.excluded()) {	
+// load restricted scripts
+let restricted = {};
+for (let abbr of [SCRIPTS.excluded(), SCRIPTS.limited()].flat()) {	
 	let set  = scripts[abbr];
 	if (!set) throw new TypeError(`Expected script: ${abbr}`);
 	if (set.size == 0) continue;	
 	let decomposed = new Set(NF.nfd([...set])); // this is a good idea IMO
 	for (let cp of decomposed) {
 		if (!set.has(cp)) {
-			throw new Error(`Excluded script "${a}" decomposition: ${SPEC.format(cp)}`);
+			throw new Error(`Restricted script "${a}" decomposition: ${SPEC.format(cp)}`);
 		}
 	}
-	excluded[abbr] = sorted(decomposed);
-	console.log(`Excluded Script: ${abbr} (${decomposed.size})`);
+	restricted[abbr] = sorted(decomposed);
+	console.log(`Restricted Script: ${abbr} (${decomposed.size})`);
 }
-
 
 // wholes
 let wholes_Grek = (await import('./rules/confusables-Grek.js')).default.filter(cp => valid.has(cp));
@@ -320,7 +342,7 @@ writeFileSync(new URL('./spec.json', out_dir), JSON.stringify({
 	cm: sorted(cm),
 	emoji: [...emoji.values()].map(x => x.cps).sort(compare_arrays),
 	isolated: sorted(isolated),
-	excluded,	
+	excluded: restricted,	
 	// TODO: generalize wholes+scripts to [Latn, Grek, Cryl]
 	scripts: {
 		Latn: sorted(scripts.Latn),
@@ -345,7 +367,7 @@ writeFileSync(new URL('./nf.json', out_dir), JSON.stringify({
 writeFileSync(new URL('./nf-tests.json', out_dir), JSON.stringify(UNICODE.nf_tests()));
 
 // convenience file for emoji.html (not critical)
-writeFileSync(new URL('./emoji-info.json', out_dir), JSON.stringify([...emoji.values()].map(info => {
+writeFileSync(new URL('./emoji-info.json', out_dir), JSON.stringify([...emoji.values(), ...emoji_disabled].map(info => {
 	let {cps, name, version, type} = info;
 	return {form: String.fromCodePoint(...cps), name, version, type};
 })));

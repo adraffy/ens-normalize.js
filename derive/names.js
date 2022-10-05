@@ -6,16 +6,25 @@ import {UNICODE} from './unicode-version.js';
 import {parse_cp_range, explode_cp} from './utils.js';
 
 let args = process.argv.slice(2);
-let cps;
 let format;
 switch (args[0]) {
 	case 'md': // markdown (eg. draft.md)
 	case 'js': // javascript (eg. rules/*.js)
 		format = args.shift();
 }
-if (args[0] == '--') { // everything after is literal
-	cps = explode_cp(args.slice(1).join(' '));
-} else {
+let mode;
+switch (args[0]) {
+	case 'find': 
+	case '--':
+		mode = args.shift();
+}
+let cps;
+if (mode === 'find') { // search by name
+	let query = args.join(' ').toLowerCase();
+	cps = UNICODE.chars.filter(x => x.name.toLowerCase().includes(query) || x.old_name.toLowerCase().includes(query)).map(x => x.cp);
+} else if (mode == '--') { // everything is literal
+	cps = explode_cp(args.join(' '));
+} else { // everything is hex codepoint ranges
 	cps = [...new Set(args.flatMap(parse_cp_range))].sort((a, b) => a - b);
 }
 for (let cp of cps) {

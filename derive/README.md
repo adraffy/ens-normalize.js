@@ -9,7 +9,8 @@
 	* [unicode-logic.js/`idna_rules()`](./unicode-logic.js) — [src](https://unicode.org/reports/tr46/#Implementation_Notes)
 * [Unicode Technical Standard #51: Emoji](https://www.unicode.org/reports/tr51/)
 * [Unicode Standard Annex #15: Normalization Forms](https://unicode.org/reports/tr15/)
-* [Unicode Standard Annex #31: Script Property](https://www.unicode.org/reports/tr31/)
+* [Unicode Standard Annex #24: Script Property](https://www.unicode.org/reports/tr24/)
+* [Unicode Standard Annex #31: Identifier and Pattern Syntax](https://www.unicode.org/reports/tr31/)
 	* [scripts-excluded.json](./data/scripts-excluded.json) — [src](https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers)
 	* [scripts-recommended.json](./data/scripts-recommended.json) — [src](https://www.unicode.org/reports/tr31/#Table_Recommended_Scripts)
 	* [scripts-limited-use.json](./data/scripts-limited-use.json) — [src](https://www.unicode.org/reports/tr31/#Table_Limited_Use_Scripts)
@@ -41,10 +42,12 @@
 * [emoji-seq-blacklist.js](./rules/emoji-seq-blacklist.js)
 * [confusables-Grek.js](./rules/confusables-Grek.js) — Greek confusables
 * [confusables-Cyrl.js](./rules/confusables-Cyrl.js) — Cyrillic confusables
+* [relaxed-scripts.js](./rules/relaxed-scripts.js)
 
 ## Helpers
 
 * `node names.js 61..7A 200D` — print Unicode names for hex codepoints
 * `node names.js -- abc` — print Unicode names for everything after `--`
+* `node names.js find abc` — finds characters named `abc`
 * `node demoji.js` — print emoji that were mapped by IDNA
 * `node emoji-new.js` — print emoji added since Unicode version

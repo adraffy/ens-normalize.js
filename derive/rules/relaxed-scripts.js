@@ -8,6 +8,12 @@ export default [
 	0x3BE,
 
 	// not sure if this should be greek
-	// B5 (µ) MICRO SIGN => 3BC
+	// 0x0B5 (µ) MICRO SIGN (mapped)
+	// 0x3BC (μ) GREEK SMALL LETTER MU
+	0x3BC, 
+	// 0x3C3 (σ) GREEK SMALL LETTER SIGMA
+	0x3C3,
+	// 0x3C0 (π) GREEK SMALL LETTER PI
+	0x3C0,
 
 ];

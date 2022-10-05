@@ -152,7 +152,7 @@ export function ens_normalize_post_check(norm) {
 			check_combinining_marks(cps_nfd);
 			check_excluded_scripts(cps_nfd); // idea: it's probably safe to early terminate if this is pure
 		} catch (err) {
-			throw new Error(`Invalid label "${label}": ${err.message}`);
+			throw new Error(`Invalid label "${label}": ${err.message}`); // note: label might not exist in the input string
 		}
 	}
 	return norm;

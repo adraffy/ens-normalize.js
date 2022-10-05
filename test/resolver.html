@@ -149,8 +149,20 @@ input[type=checkbox]:checked + label.nonstd {
 .row.pretty {
 	background: linear-gradient(90deg, #fff, #fff0fc);
 }
-.row.ethmoji {
+.row.special {
 	background: linear-gradient(90deg,#fff,#efe);
+}
+.row.special .formula {
+	display: flex;
+}
+.row.special .formula code {
+	padding: 4px;
+}
+.row.special .formula code:hover {
+	background: #cff;
+}
+.row.special .formula code + code {
+	border-left: 4px solid #ccc;
 }
 .row .main {
 	font-size: 16pt;
@@ -249,6 +261,9 @@ ul.row {
 	background: #f8e8f0;
 	border-color: #f9e;
 	color: #c900a2;
+}
+.tags .palindrome {
+	background: #dfd;
 }
 .row.hashes {
 	display: grid;
@@ -419,11 +434,15 @@ footer {
 <button>😵💫😵💫😵💫</button>
 <button>👩🏽‍⚕️</button>
 <button>👨‍👩‍👦</button>
-<button>🤼🏻‍♂️</button>
-<button>🤼🏻‍♀️</button>
-
+<button>❌👨‍👩‍👦🏿</button>
+<button>❌🏻</button>
+<button>🦰</button>
 <button data-name="💩{200D}💩">❌💩+💩</button>
 <button data-name="{1F469}{1F3FE}{200D}{1F91D}{200D}{1F469}{1F3FE}">❌Mod+Mod</button>
+
+<a href="https://github.com/adraffy/ens-normalize.js/blob/main/derive/rules/emoji-seq-whitelist.js"><b>Whitelisted:</b></a>
+<button>👪🏻</button>
+<button>🤼🏻‍♀️</button>
 
 <b>Regional:</b>
 <button>❌🇦</button>
@@ -502,7 +521,8 @@ Katakana:
 <a href="https://util.unicode.org/UnicodeJsps/confusables.jsp">Confusables</a>/
 <a href="https://unicode-org.github.io/cldr-staging/charts/latest/by_type/core_data.alphabetic_information.main.html">Exemplars</a>
 <b>Single Script:</b>
-<button>aɑ</button>
+<button>a.ɑ</button>
+<button>ஶ்ரீ.ஸ்ரீ</button>
 
 <b>Mixed-Script:</b>
 <button data-name="1a〆">Digit+Latin+Han</button>
@@ -515,11 +535,11 @@ Katakana:
 <button>❌аррӏе</button>
 <button>❌ρον</button>
 
-<b>Arabic-Indic:</b>
+<a href="https://en.wikipedia.org/wiki/Arabic_numerals"><b>Arabic:</b></a>
 <button data-name="{661}{662}{663}"></button>
 <button data-name="{6F1}{6F2}{6F3}"></button>
-<button data-name="{661}{662}{664}"></button>
-<button data-name="{6F1}{6F2}{664}"></button>
+<button data-name="{661}{662}{665}"></button>
+<button data-name="{6F1}{6F2}{6F5}"></button>
 
 <a href="https://unicode.org/emoji/charts/emoji-released.html"><b>Unicode 15:</b></a>
 <button data-name="{1F6DC}{1FA75}{1FA76}{1FA77}{1FA87}{1FA88}{1FAAD}{1FAAE}{1FAAF}{1FABB}{1FABC}{1FABD}{1FABF}{1FACE}{1FACF}{1FADA}{1FADB}{1FAE8}{1FAF7}{1FAF8}">Single Emoji (20)</button>
@@ -539,6 +559,7 @@ Katakana:
 <b>Misc:</b>
 <button>•-•¬</button>
 <button>360°</button>
+<button>2πr</button>
 
 <a href="https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers"><b>Excluded:</b></a>
 <button data-name="𓀀𓀁𓀂">Egyptian Hieroglyphs</button>
@@ -550,7 +571,7 @@ Katakana:
 <div id="options">
 <label><input type="checkbox" id="auto_resolve_check" checked>Resolve on Input</label>
 <label><input type="checkbox" id="show_hashes_check" checked>Details</label>
-<label><input type="checkbox" id="show_components_check" checked>Components</label>
+<label><input type="checkbox" id="show_components_check" checked>Emoji Components</label>
 <span><input type="checkbox" id="skip_norm_check"><label class="nonstd" for="skip_norm_check">Skip Normalization</label></span>
 </div>
 <div id="input">
@@ -991,13 +1012,104 @@ function create_pretty_tag(short) {
 	return span;
 }
 
+function create_palindrome_tag() {
+	let span = document.createElement('span');
+	span.classList.add('palindrome');
+	span.innerHTML = '⇄ Palindrome';
+	return span;
+}
+
+function create_ethmoji_row(tokens) {
+	let row = create_row('Ethmoji');
+	row.classList.add('special');
+	let unique = new Set();
+	let grouped = [];
+	let last;
+	for (let token of tokens) {
+		let form = String.fromCodePoint(...token.emoji);
+		token.form = form; // save
+		unique.add(form);
+		if (!last || last.form !== form) {
+			grouped.push(token);
+			token.count = 1;
+			last = token;
+		} else {
+			last.count++;
+		}
+	}
+	let formula = document.createElement('div');
+	formula.classList.add('formula');
+	formula.innerHTML = grouped.map(token => {
+		return `<code>${token.form}<sup>${token.count}</sup></code>`;
+	}).join('');
+	row.append(formula);
+	
+	let span_grade = document.createElement('span');
+	if (tokens.reduce((a, t) => a + t.cps.length, 0) < 3) {
+		span_grade.innerHTML = 'Too Short';
+	} else if (tokens.every(t => t.emoji[2] == 0x20E3)) {
+		if (tokens.length == 2) {
+			span_grade.classList.add('best');
+			span_grade.innerHTML = '🔥️ Shortest Keycaps';
+		} else {
+			span_grade.classList.add('warn');
+			span_grade.innerHTML = `⭐️ Keycaps`;
+		}
+	} else if (unique.size == 1) {
+		let ncp = last.cps.length;
+		if ((ncp == 1 && last.count == 3) || (ncp == 2 && last.count == 2) || (ncp >= 3 && last.count == 1)) {
+			span_grade.classList.add('best');
+			span_grade.innerHTML = '🔥️ Shortest';
+		} else {
+			span_grade.classList.add('warn');
+			span_grade.innerHTML = '⭐️ Repeated';
+		}
+	} else {
+		span_grade.innerHTML = `Unique: ${unique.size}`;
+	}
+	add_row_tag(row, span_grade);
+
+	if (tokens.every((x, i) => x.form == tokens[tokens.length-1-i].form)) {
+		add_row_tag(row, create_palindrome_tag());
+	}
+	return row;
+}
+
+function create_digits_row(name, digits) {
+	let row = create_row(`${name} Digits`);
+	row.classList.add('special');
+	
+	let formula = document.createElement('div');
+	formula.classList.add('formula');
+	formula.innerHTML = digits.join(''); //`<code>${eth_label}</code>`;
+	row.append(formula);
+
+	if (digits.length == 3) {
+		let span = document.createElement('span');
+		span.classList.add('best');
+		span.innerHTML = '🔥️ Shortest';
+		add_row_tag(row, span);
+	}
+
+	if (digits.every((x, i) => x == digits[0])) {
+		let span = document.createElement('span');
+		span.classList.add('warn');
+		span.innerHTML = `⭐️ Repeated`;
+		add_row_tag(row, span);
+	}
+	if (digits.every((x, i) => x == digits[digits.length-1-i])) {
+		add_row_tag(row, create_palindrome_tag());
+	}
+	return row;
+}
+
 function add_dot_eth_links(row, name) {
 	let label = get_dot_eth_label(name);
 	if (!label) return ''; // only if 2LD .eth	
 	let hash = labelhash(label);
 	let contract = '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85';
 	
-	let os = create_link(`https://opensea.io/assets/${contract}/${ethers.BigNumber.from(hash)}`, 'OpenSea');
+	let os = create_link(`https://opensea.io/assets/ethereum/${contract}/${ethers.BigNumber.from(hash)}`, 'OpenSea');
 	os.classList.add('opensea');
 	add_row_tag(row, os);
 
@@ -1248,8 +1360,8 @@ function resolve(options) {
 				fetch(`https://metadata.ens.domains/mainnet/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/${v[3]}`).then(r => {
 					if (r.status !== 200) throw new Error(`HTTP Error ${r.status}`);
 					return r.json();
-				}).then(meta => {				
-					input_field.value = meta.name;
+				}).then(meta => {
+					input_field.value = meta.is_normalized ? meta.name : meta.description.replace(/^.*ENS name\. \((.*)\.eth.*$/, (_, x) => x);
 					setTimeout(resolve, 0);
 				}).catch(() => {}).finally(() => {
 					resolve_btn.disabled = false;
@@ -1476,67 +1588,37 @@ async function resolve0(input0, skip_norm) {
 	if (eth_label) {
 		let tokens = ens_tokenize(eth_label);
 		if (tokens.every(t => t.type === 'emoji')) {
-			let ethmoji_row = create_row('Ethmoji');
-			ethmoji_row.classList.add('ethmoji');
-			let unique = new Set();
-			let grouped = [];
-			let last;
-			for (let token of tokens) {
-				let form = String.fromCodePoint(...token.emoji);
-				unique.add(form);
-				if (!last || last.form !== form) {
-					grouped.push(token);
-					token.count = 1;
-					token.form = form;
-					last = token;
+			output_div.append(create_ethmoji_row(tokens));
+		} else {
+			let cps = explode_cp(eth_label);
+			let digits = cps.map(cp => {
+				if (cp >= 0x30 && cp <= 0x39) {
+					return {name: 'ASCII', i: cp - 0x30};
+				} else if (cp >= 0x660 && cp <= 0x669) {
+					return {name: 'Arabic', i: cp - 0x660, mixed: 1};
+				} else if (cp >= 0x6F0 && cp <= 0x6F9) {
+					return {name: 'Extended Arabic', i: cp - 0x6F0, mixed: 1};
+				}
+			});
+			if (digits.every(x => x)) {
+				let values = digits.map(x => x.i);
+				let name0 = digits[0].name;
+				if (digits.every(x => x.name === name0)) {
+					output_div.append(create_digits_row(name0, values));
+				} else if (digits.every(x => x.mixed)) {
+					let row = create_digits_row('Arabic', values);
+					let span = document.createElement('span');
+					apply_grade(span, 'warn', 'Mixture');
+					add_row_tag(row, span);
+					output_div.append(row);
 				} else {
-					last.count++;
+					let row = create_digits_row('Numeric', values);
+					let span = document.createElement('span');
+					apply_grade(span, 'warn', 'Multiple Scripts');
+					add_row_tag(row, span);
+					output_div.append(row);
 				}
 			}
-			let formula = document.createElement('code');
-			formula.innerHTML = grouped.map(token => {
-				return `${token.form}<sup>${token.count}</sup>`;
-			}).join('');
-			ethmoji_row.append(formula);
-			
-			let grade = document.createElement('span');
-			if ([...eth_label].length < 3) {
-				grade.innerHTML = 'Too Short';
-			} else if (tokens.every(t => t.emoji[2] == 0x20E3)) {
-				if (tokens.length == 2) {
-					grade.classList.add('best');
-					grade.innerHTML = '🔥️ Shortest Keycaps';
-				} else {
-					grade.classList.add('warn');
-					grade.innerHTML = `⭐️ Keycaps`;
-				}
-			} else if (unique.size == 1) {
-				let ncp = last.cps.length;
-				if ((ncp == 1 && last.count == 3) || (ncp == 2 && last.count == 2) || (ncp >= 3 && last.count == 1)) {
-					grade.classList.add('best');
-					grade.innerHTML = '🔥️ Shortest';
-				} else {
-					grade.classList.add('warn');
-					grade.innerHTML = '⭐️ Repeated';
-				}
-			} else {
-				grade.innerHTML = `Mixed: ${unique.size}`;
-			}
-			add_row_tag(ethmoji_row, grade);
-
-			let mirror = true;
-			for (let a = 0, b = grouped.length - 1; a < b; a++, b--) {
-				if (grouped[a].form !== grouped[b].form) {
-					mirror = false;
-					break;
-				}
-			}
-			if (mirror) { //&& unique.size > 1) {
-				let span = document.createElement('span');
-				span.innerHTML = '⇄ Palindrome';
-				add_row_tag(ethmoji_row, span);
-			}
-			output_div.append(ethmoji_row);
 		}
 	}
 
@@ -1599,48 +1681,25 @@ async function resolve0(input0, skip_norm) {
 		add_row_tag(resolver_row, create_elapsed());
 
 		// check if *.eth
-		let check_nft;
+		
 		if (eth_label) {
 			let hash = ethers.utils.id(eth_label);
+			let available;
+			let t_exp;
+			let len = [...eth_label].length;
 			let avail_row = create_row('Availability', true);
 			output_div.append(avail_row);
 			try {
-				await ensure_eth_nft();
-				let span_avail = document.createElement('span');
-				add_row_tag(avail_row, span_avail);
-				let len = [...eth_label].length;
-				if (len < 3) {
-					apply_grade(span_avail, 'fail', `Too Short`);
-				} else {
-					let available = await eth_nft_contract.callStatic.available(hash);
-					if (available) {
-						apply_grade(span_avail, 'good', 'Available');
-					} else {
-						apply_grade(span_avail, 'fail', `Not Available`);
-						let t_exp = (await eth_nft_contract.callStatic.nameExpires(hash)).toNumber();
-						let t_end = t_exp + eth_nft_contract.grace_period;
-						let t_now = Math.round(Date.now() / 1000);
-						if (t_now >= t_exp && t_now <= t_end) {
-							let days = (t_end - t_now) / 86400;
-							let span = document.createElement('span');
-							span.innerHTML = `Grace period (${format_dur(1000 * eth_nft_contract.grace_period)}) ends in ${format_dur(1000 * (t_end - t_now))}`;
-							add_row_tag(avail_row, span);
-						} else {
-							if (t_exp - t_now < 86400 * 60) {
-								let span = document.createElement('span');
-								span.innerHTML = `Expires in ${format_dur(1000 * (t_exp - t_now))}`;
-								add_row_tag(avail_row, span);
-							}
-							check_nft = true;
-						}
+				if (len >= 3) {
+					await ensure_eth_nft();
+					if (should_stop_resolving()) return;
+					available = await eth_nft_contract.callStatic.available(hash);
+					if (should_stop_resolving()) return;
+					if (!available) {
+						t_exp = (await eth_nft_contract.callStatic.nameExpires(hash)).toNumber();
+						if (should_stop_resolving()) return;
 					}
 				}
-				let span_len = document.createElement('span');
-				span_len.classList.add('bytes'); 
-				span_len.innerHTML = `${len}<sub>ch</sub>`;
-				add_row_tag(avail_row, span_len);
-				add_row_tag(avail_row, create_ens_link(name_norm));	
-				add_row_tag(avail_row, create_etherscan_address_link(eth_nft_contract.address, 'NFT'));	
 			} catch (err) {
 				avail_row.classList.add('error');
 				let span = document.createElement('span');
@@ -1650,8 +1709,45 @@ async function resolve0(input0, skip_norm) {
 			} finally {
 				remove_temporary(avail_row);
 			}
-			add_row_tag(avail_row, create_elapsed());
-			if (should_stop_resolving()) return;
+			if (available !== undefined) {
+				add_row_tag(avail_row, create_elapsed()); 
+			}
+			
+			let span_len = document.createElement('span');
+			span_len.classList.add('bytes'); 
+			span_len.innerHTML = `${len}<sub>ch</sub>`;
+			add_row_tag(avail_row, span_len);
+
+			let span_avail = document.createElement('span');
+			if (available === undefined) {
+				apply_grade(span_avail, 'fail', `Too Short`);
+			} else if (available) {
+				apply_grade(span_avail, 'good', 'Available');
+			} else {
+				apply_grade(span_avail, 'fail', `Not Available`);
+			}
+			add_row_tag(avail_row, span_avail);
+
+			let check_nft;
+			if (available === false) {
+				let t_end = t_exp + eth_nft_contract.grace_period;
+				let t_now = Math.round(Date.now() / 1000);
+				if (t_now >= t_exp && t_now <= t_end) {
+					let days = (t_end - t_now) / 86400;
+					let span = document.createElement('span');
+					span.innerHTML = `Grace period (${format_dur(1000 * eth_nft_contract.grace_period)}) ends in ${format_dur(1000 * (t_end - t_now))}`;
+					add_row_tag(avail_row, span);
+				} else {
+					if (t_exp - t_now < 86400 * 60) {
+						let span = document.createElement('span');
+						span.innerHTML = `Expires in ${format_dur(1000 * (t_exp - t_now))}`;
+						add_row_tag(avail_row, span);
+					}
+					check_nft = true;
+				}
+				//add_row_tag(avail_row, create_ens_link(name_norm));	
+				add_row_tag(avail_row, create_etherscan_address_link(eth_nft_contract.address, 'Contract'));
+			}
 
 			if (check_nft) {
 				let nft_row = create_row('NFT Owner', true);

@@ -1,4 +1,4 @@
-Build Date: 2022-10-03T07:24:34.546Z
+Build Date: 2022-10-05T07:05:09.363Z
 Unicode Version: 15.0.0
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -2786,11 +2786,6 @@ Register Emoji [Emoji_Presentation]: 1F3F4 (🏴) WAVING BLACK FLAG
 Register Emoji [Emoji_Presentation]: 1F3F8 (🏸) BADMINTON RACQUET AND SHUTTLECOCK
 Register Emoji [Emoji_Presentation]: 1F3F9 (🏹) BOW AND ARROW
 Register Emoji [Emoji_Presentation]: 1F3FA (🏺) AMPHORA
-Register Emoji [Emoji_Presentation]: 1F3FB (🏻) EMOJI MODIFIER FITZPATRICK TYPE-1-2
-Register Emoji [Emoji_Presentation]: 1F3FC (🏼) EMOJI MODIFIER FITZPATRICK TYPE-3
-Register Emoji [Emoji_Presentation]: 1F3FD (🏽) EMOJI MODIFIER FITZPATRICK TYPE-4
-Register Emoji [Emoji_Presentation]: 1F3FE (🏾) EMOJI MODIFIER FITZPATRICK TYPE-5
-Register Emoji [Emoji_Presentation]: 1F3FF (🏿) EMOJI MODIFIER FITZPATRICK TYPE-6
 Register Emoji [Emoji_Presentation]: 1F400 (🐀) RAT
 Register Emoji [Emoji_Presentation]: 1F401 (🐁) MOUSE
 Register Emoji [Emoji_Presentation]: 1F402 (🐂) OX
@@ -3973,6 +3968,8 @@ Removed Valid: 237 (ȷ) LATIN SMALL LETTER DOTLESS J
 Removed Valid: 249 (ɉ) LATIN SMALL LETTER J WITH STROKE
 --Mapping: 248 (Ɉ) LATIN CAPITAL LETTER J WITH STROKE => 249 (ɉ) LATIN SMALL LETTER J WITH STROKE
 Removed Valid: 1D4E (ᵎ) MODIFIER LETTER SMALL TURNED I
+Removed Valid: 277 (ɷ) LATIN SMALL LETTER CLOSED OMEGA
+--Mapping: 107A4 (𐞤) MODIFIER LETTER SMALL CLOSED OMEGA => 277 (ɷ) LATIN SMALL LETTER CLOSED OMEGA
 Removed Valid: 21D (ȝ) LATIN SMALL LETTER YOGH
 --Mapping: 21C (Ȝ) LATIN CAPITAL LETTER YOGH => 21D (ȝ) LATIN SMALL LETTER YOGH
 Removed Valid: 223 (ȣ) LATIN SMALL LETTER OU
@@ -3984,71 +3981,71 @@ Removed Valid: 1BE (ƾ) LATIN LETTER INVERTED GLOTTAL STOP WITH STROKE
 Removed Valid: 269 (ɩ) LATIN SMALL LETTER IOTA
 --Mapping: 196 (Ɩ) LATIN CAPITAL LETTER IOTA => 269 (ɩ) LATIN SMALL LETTER IOTA
 --Mapping: 1DA5 (ᶥ) MODIFIER LETTER SMALL IOTA => 269 (ɩ) LATIN SMALL LETTER IOTA
-Removed Valid: 320 (x̠) COMBINING MINUS SIGN BELOW
-Removed Valid: 330 (x̰) COMBINING TILDE BELOW
-Removed Valid: 331 (x̱) COMBINING MACRON BELOW
-Removed Valid: 332 (x̲) COMBINING LOW LINE
-Removed Valid: 333 (x̳) COMBINING DOUBLE LOW LINE
-Removed Valid: 33A (x̺) COMBINING INVERTED BRIDGE BELOW
-Removed Valid: 33C (x̼) COMBINING SEAGULL BELOW
-Removed Valid: 347 (x͇) COMBINING EQUALS SIGN BELOW
-Removed Valid: 34D (x͍) COMBINING LEFT RIGHT ARROW BELOW
-Removed Valid: 356 (x͖) COMBINING RIGHT ARROWHEAD AND UP ARROWHEAD BELOW
-Removed Valid: 35C (x͜) COMBINING DOUBLE BREVE BELOW
-Removed Valid: 35D (x͝) COMBINING DOUBLE BREVE
-Removed Valid: 35E (x͞) COMBINING DOUBLE MACRON
-Removed Valid: 35F (x͟) COMBINING DOUBLE MACRON BELOW
-Removed Valid: 360 (x͠) COMBINING DOUBLE TILDE
-Removed Valid: 361 (x͡) COMBINING DOUBLE INVERTED BREVE
-Removed Valid: 362 (x͢) COMBINING DOUBLE RIGHTWARDS ARROW BELOW
-Removed Valid: FE2B (x︫) COMBINING MACRON LEFT HALF BELOW
-Removed Valid: FE2C (x︬) COMBINING MACRON RIGHT HALF BELOW
-Removed Valid: FE2D (x︭) COMBINING CONJOINING MACRON BELOW
-Removed Valid: 315 (x̕) COMBINING COMMA ABOVE RIGHT
-Removed Valid: 31B (x̛) COMBINING HORN
-Removed Valid: 321 (x̡) COMBINING PALATALIZED HOOK BELOW
-Removed Valid: 322 (x̢) COMBINING RETROFLEX HOOK BELOW
-Removed Valid: 327 (x̧) COMBINING CEDILLA
-Removed Valid: 328 (x̨) COMBINING OGONEK
-Removed Valid: 334 (x̴) COMBINING TILDE OVERLAY
-Removed Valid: 335 (x̵) COMBINING SHORT STROKE OVERLAY
-Removed Valid: 336 (x̶) COMBINING LONG STROKE OVERLAY
-Removed Valid: 337 (x̷) COMBINING SHORT SOLIDUS OVERLAY
-Removed Valid: 338 (x̸) COMBINING LONG SOLIDUS OVERLAY
+Removed Valid: 320 (◌̠) COMBINING MINUS SIGN BELOW
+Removed Valid: 330 (◌̰) COMBINING TILDE BELOW
+Removed Valid: 331 (◌̱) COMBINING MACRON BELOW
+Removed Valid: 332 (◌̲) COMBINING LOW LINE
+Removed Valid: 333 (◌̳) COMBINING DOUBLE LOW LINE
+Removed Valid: 33A (◌̺) COMBINING INVERTED BRIDGE BELOW
+Removed Valid: 33C (◌̼) COMBINING SEAGULL BELOW
+Removed Valid: 347 (◌͇) COMBINING EQUALS SIGN BELOW
+Removed Valid: 34D (◌͍) COMBINING LEFT RIGHT ARROW BELOW
+Removed Valid: 356 (◌͖) COMBINING RIGHT ARROWHEAD AND UP ARROWHEAD BELOW
+Removed Valid: 35C (◌͜) COMBINING DOUBLE BREVE BELOW
+Removed Valid: 35D (◌͝) COMBINING DOUBLE BREVE
+Removed Valid: 35E (◌͞) COMBINING DOUBLE MACRON
+Removed Valid: 35F (◌͟) COMBINING DOUBLE MACRON BELOW
+Removed Valid: 360 (◌͠) COMBINING DOUBLE TILDE
+Removed Valid: 361 (◌͡) COMBINING DOUBLE INVERTED BREVE
+Removed Valid: 362 (◌͢) COMBINING DOUBLE RIGHTWARDS ARROW BELOW
+Removed Valid: FE2B (◌︫) COMBINING MACRON LEFT HALF BELOW
+Removed Valid: FE2C (◌︬) COMBINING MACRON RIGHT HALF BELOW
+Removed Valid: FE2D (◌︭) COMBINING CONJOINING MACRON BELOW
+Removed Valid: 315 (◌̕) COMBINING COMMA ABOVE RIGHT
+Removed Valid: 31B (◌̛) COMBINING HORN
+Removed Valid: 321 (◌̡) COMBINING PALATALIZED HOOK BELOW
+Removed Valid: 322 (◌̢) COMBINING RETROFLEX HOOK BELOW
+Removed Valid: 327 (◌̧) COMBINING CEDILLA
+Removed Valid: 328 (◌̨) COMBINING OGONEK
+Removed Valid: 334 (◌̴) COMBINING TILDE OVERLAY
+Removed Valid: 335 (◌̵) COMBINING SHORT STROKE OVERLAY
+Removed Valid: 336 (◌̶) COMBINING LONG STROKE OVERLAY
+Removed Valid: 337 (◌̷) COMBINING SHORT SOLIDUS OVERLAY
+Removed Valid: 338 (◌̸) COMBINING LONG SOLIDUS OVERLAY
 --Mapping: 2ADC (⫝̸) FORKING => [2ADD 338]
-Removed Valid: 20D0 (x⃐) COMBINING LEFT HARPOON ABOVE
-Removed Valid: 34A (x͊) COMBINING NOT TILDE ABOVE
-Removed Valid: 20D1 (x⃑) COMBINING RIGHT HARPOON ABOVE
-Removed Valid: 20D2 (x⃒) COMBINING LONG VERTICAL LINE OVERLAY
-Removed Valid: 20D3 (x⃓) COMBINING SHORT VERTICAL LINE OVERLAY
-Removed Valid: 20D4 (x⃔) COMBINING ANTICLOCKWISE ARROW ABOVE
-Removed Valid: 20D5 (x⃕) COMBINING CLOCKWISE ARROW ABOVE
-Removed Valid: 20D6 (x⃖) COMBINING LEFT ARROW ABOVE
-Removed Valid: 20D7 (x⃗) COMBINING RIGHT ARROW ABOVE
-Removed Valid: 20D8 (x⃘) COMBINING RING OVERLAY
-Removed Valid: 20D9 (x⃙) COMBINING CLOCKWISE RING OVERLAY
-Removed Valid: 20DA (x⃚) COMBINING ANTICLOCKWISE RING OVERLAY
-Removed Valid: 20DB (x⃛) COMBINING THREE DOTS ABOVE
-Removed Valid: 20DC (x⃜) COMBINING FOUR DOTS ABOVE
-Removed Valid: 20DD (x⃝) COMBINING ENCLOSING CIRCLE
-Removed Valid: 20DE (x⃞) COMBINING ENCLOSING SQUARE
-Removed Valid: 20DF (x⃟) COMBINING ENCLOSING DIAMOND
-Removed Valid: 20E0 (x⃠) COMBINING ENCLOSING CIRCLE BACKSLASH
-Removed Valid: 20E1 (x⃡) COMBINING LEFT RIGHT ARROW ABOVE
-Removed Valid: 20E2 (x⃢) COMBINING ENCLOSING SCREEN
-Removed Valid: 20E4 (x⃤) COMBINING ENCLOSING UPWARD POINTING TRIANGLE
-Removed Valid: 20E5 (x⃥) COMBINING REVERSE SOLIDUS OVERLAY
-Removed Valid: 20E6 (x⃦) COMBINING DOUBLE VERTICAL STROKE OVERLAY
-Removed Valid: 20E7 (x⃧) COMBINING ANNUITY SYMBOL
-Removed Valid: 20E8 (x⃨) COMBINING TRIPLE UNDERDOT
-Removed Valid: 20E9 (x⃩) COMBINING WIDE BRIDGE ABOVE
-Removed Valid: 20EA (x⃪) COMBINING LEFTWARDS ARROW OVERLAY
-Removed Valid: 20EB (x⃫) COMBINING LONG DOUBLE SOLIDUS OVERLAY
-Removed Valid: 20EC (x⃬) COMBINING RIGHTWARDS HARPOON WITH BARB DOWNWARDS
-Removed Valid: 20ED (x⃭) COMBINING LEFTWARDS HARPOON WITH BARB DOWNWARDS
-Removed Valid: 20EE (x⃮) COMBINING LEFT ARROW BELOW
-Removed Valid: 20EF (x⃯) COMBINING RIGHT ARROW BELOW
-Removed Valid: 20F0 (x⃰) COMBINING ASTERISK ABOVE
+Removed Valid: 20D0 (◌⃐) COMBINING LEFT HARPOON ABOVE
+Removed Valid: 34A (◌͊) COMBINING NOT TILDE ABOVE
+Removed Valid: 20D1 (◌⃑) COMBINING RIGHT HARPOON ABOVE
+Removed Valid: 20D2 (◌⃒) COMBINING LONG VERTICAL LINE OVERLAY
+Removed Valid: 20D3 (◌⃓) COMBINING SHORT VERTICAL LINE OVERLAY
+Removed Valid: 20D4 (◌⃔) COMBINING ANTICLOCKWISE ARROW ABOVE
+Removed Valid: 20D5 (◌⃕) COMBINING CLOCKWISE ARROW ABOVE
+Removed Valid: 20D6 (◌⃖) COMBINING LEFT ARROW ABOVE
+Removed Valid: 20D7 (◌⃗) COMBINING RIGHT ARROW ABOVE
+Removed Valid: 20D8 (◌⃘) COMBINING RING OVERLAY
+Removed Valid: 20D9 (◌⃙) COMBINING CLOCKWISE RING OVERLAY
+Removed Valid: 20DA (◌⃚) COMBINING ANTICLOCKWISE RING OVERLAY
+Removed Valid: 20DB (◌⃛) COMBINING THREE DOTS ABOVE
+Removed Valid: 20DC (◌⃜) COMBINING FOUR DOTS ABOVE
+Removed Valid: 20DD (◌⃝) COMBINING ENCLOSING CIRCLE
+Removed Valid: 20DE (◌⃞) COMBINING ENCLOSING SQUARE
+Removed Valid: 20DF (◌⃟) COMBINING ENCLOSING DIAMOND
+Removed Valid: 20E0 (◌⃠) COMBINING ENCLOSING CIRCLE BACKSLASH
+Removed Valid: 20E1 (◌⃡) COMBINING LEFT RIGHT ARROW ABOVE
+Removed Valid: 20E2 (◌⃢) COMBINING ENCLOSING SCREEN
+Removed Valid: 20E4 (◌⃤) COMBINING ENCLOSING UPWARD POINTING TRIANGLE
+Removed Valid: 20E5 (◌⃥) COMBINING REVERSE SOLIDUS OVERLAY
+Removed Valid: 20E6 (◌⃦) COMBINING DOUBLE VERTICAL STROKE OVERLAY
+Removed Valid: 20E7 (◌⃧) COMBINING ANNUITY SYMBOL
+Removed Valid: 20E8 (◌⃨) COMBINING TRIPLE UNDERDOT
+Removed Valid: 20E9 (◌⃩) COMBINING WIDE BRIDGE ABOVE
+Removed Valid: 20EA (◌⃪) COMBINING LEFTWARDS ARROW OVERLAY
+Removed Valid: 20EB (◌⃫) COMBINING LONG DOUBLE SOLIDUS OVERLAY
+Removed Valid: 20EC (◌⃬) COMBINING RIGHTWARDS HARPOON WITH BARB DOWNWARDS
+Removed Valid: 20ED (◌⃭) COMBINING LEFTWARDS HARPOON WITH BARB DOWNWARDS
+Removed Valid: 20EE (◌⃮) COMBINING LEFT ARROW BELOW
+Removed Valid: 20EF (◌⃯) COMBINING RIGHT ARROW BELOW
+Removed Valid: 20F0 (◌⃰) COMBINING ASTERISK ABOVE
 Removed Valid: 2DE (˞) MODIFIER LETTER RHOTIC HOOK
 Removed Valid: 2DF (˟) MODIFIER LETTER CROSS ACCENT
 Removed Valid: 2E5 (˥) MODIFIER LETTER EXTRA-HIGH TONE BAR
@@ -5131,32 +5128,32 @@ Removed Valid: 390 (ΐ) GREEK SMALL LETTER IOTA WITH DIALYTIKA AND TONOS
 --Mapping: 1FD3 (ΐ) GREEK SMALL LETTER IOTA WITH DIALYTIKA AND OXIA => 390 (ΐ) GREEK SMALL LETTER IOTA WITH DIALYTIKA AND TONOS
 Removed Valid: 3B0 (ΰ) GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND TONOS
 --Mapping: 1FE3 (ΰ) GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND OXIA => 3B0 (ΰ) GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND TONOS
-Removed Valid: 9CB (xো) BENGALI VOWEL SIGN O
-Removed Valid: 9CC (xৌ) BENGALI VOWEL SIGN AU
-Removed Valid: B48 (xୈ) ORIYA VOWEL SIGN AI
-Removed Valid: B4B (xୋ) ORIYA VOWEL SIGN O
-Removed Valid: B4C (xୌ) ORIYA VOWEL SIGN AU
-Removed Valid: BCA (xொ) TAMIL VOWEL SIGN O
-Removed Valid: BCB (xோ) TAMIL VOWEL SIGN OO
-Removed Valid: BCC (xௌ) TAMIL VOWEL SIGN AU
-Removed Valid: C48 (xై) TELUGU VOWEL SIGN AI
-Removed Valid: CC0 (xೀ) KANNADA VOWEL SIGN II
-Removed Valid: CC7 (xೇ) KANNADA VOWEL SIGN EE
-Removed Valid: CC8 (xೈ) KANNADA VOWEL SIGN AI
-Removed Valid: CCA (xೊ) KANNADA VOWEL SIGN O
-Removed Valid: CCB (xೋ) KANNADA VOWEL SIGN OO
-Removed Valid: D4A (xൊ) MALAYALAM VOWEL SIGN O
-Removed Valid: D4B (xോ) MALAYALAM VOWEL SIGN OO
-Removed Valid: D4C (xൌ) MALAYALAM VOWEL SIGN AU
-Removed Valid: DDA (xේ) SINHALA VOWEL SIGN DIGA KOMBUVA
-Removed Valid: DDC (xො) SINHALA VOWEL SIGN KOMBUVA HAA AELA-PILLA
-Removed Valid: DDD (xෝ) SINHALA VOWEL SIGN KOMBUVA HAA DIGA AELA-PILLA
-Removed Valid: DDE (xෞ) SINHALA VOWEL SIGN KOMBUVA HAA GAYANUKITTA
-Removed Valid: 1B3B (xᬻ) BALINESE VOWEL SIGN RA REPA TEDUNG
-Removed Valid: 1B3D (xᬽ) BALINESE VOWEL SIGN LA LENGA TEDUNG
-Removed Valid: 1B40 (xᭀ) BALINESE VOWEL SIGN TALING TEDUNG
-Removed Valid: 1B41 (xᭁ) BALINESE VOWEL SIGN TALING REPA TEDUNG
-Removed Valid: 1B43 (xᭃ) BALINESE VOWEL SIGN PEPET TEDUNG
+Removed Valid: 9CB (◌ো) BENGALI VOWEL SIGN O
+Removed Valid: 9CC (◌ৌ) BENGALI VOWEL SIGN AU
+Removed Valid: B48 (◌ୈ) ORIYA VOWEL SIGN AI
+Removed Valid: B4B (◌ୋ) ORIYA VOWEL SIGN O
+Removed Valid: B4C (◌ୌ) ORIYA VOWEL SIGN AU
+Removed Valid: BCA (◌ொ) TAMIL VOWEL SIGN O
+Removed Valid: BCB (◌ோ) TAMIL VOWEL SIGN OO
+Removed Valid: BCC (◌ௌ) TAMIL VOWEL SIGN AU
+Removed Valid: C48 (◌ై) TELUGU VOWEL SIGN AI
+Removed Valid: CC0 (◌ೀ) KANNADA VOWEL SIGN II
+Removed Valid: CC7 (◌ೇ) KANNADA VOWEL SIGN EE
+Removed Valid: CC8 (◌ೈ) KANNADA VOWEL SIGN AI
+Removed Valid: CCA (◌ೊ) KANNADA VOWEL SIGN O
+Removed Valid: CCB (◌ೋ) KANNADA VOWEL SIGN OO
+Removed Valid: D4A (◌ൊ) MALAYALAM VOWEL SIGN O
+Removed Valid: D4B (◌ോ) MALAYALAM VOWEL SIGN OO
+Removed Valid: D4C (◌ൌ) MALAYALAM VOWEL SIGN AU
+Removed Valid: DDA (◌ේ) SINHALA VOWEL SIGN DIGA KOMBUVA
+Removed Valid: DDC (◌ො) SINHALA VOWEL SIGN KOMBUVA HAA AELA-PILLA
+Removed Valid: DDD (◌ෝ) SINHALA VOWEL SIGN KOMBUVA HAA DIGA AELA-PILLA
+Removed Valid: DDE (◌ෞ) SINHALA VOWEL SIGN KOMBUVA HAA GAYANUKITTA
+Removed Valid: 1B3B (◌ᬻ) BALINESE VOWEL SIGN RA REPA TEDUNG
+Removed Valid: 1B3D (◌ᬽ) BALINESE VOWEL SIGN LA LENGA TEDUNG
+Removed Valid: 1B40 (◌ᭀ) BALINESE VOWEL SIGN TALING TEDUNG
+Removed Valid: 1B41 (◌ᭁ) BALINESE VOWEL SIGN TALING REPA TEDUNG
+Removed Valid: 1B43 (◌ᭃ) BALINESE VOWEL SIGN PEPET TEDUNG
 Removed Valid: 1E09 (ḉ) LATIN SMALL LETTER C WITH CEDILLA AND ACUTE
 --Mapping: 1E08 (Ḉ) LATIN CAPITAL LETTER C WITH CEDILLA AND ACUTE => 1E09 (ḉ) LATIN SMALL LETTER C WITH CEDILLA AND ACUTE
 Removed Valid: 1E15 (ḕ) LATIN SMALL LETTER E WITH MACRON AND GRAVE
@@ -5362,30 +5359,30 @@ Removed Valid: 1FD2 (ῒ) GREEK SMALL LETTER IOTA WITH DIALYTIKA AND VARIA
 Removed Valid: 1FD7 (ῗ) GREEK SMALL LETTER IOTA WITH DIALYTIKA AND PERISPOMENI
 Removed Valid: 1FE2 (ῢ) GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND VARIA
 Removed Valid: 1FE7 (ῧ) GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND PERISPOMENI
-Removed Valid: 1112E (x𑄮) CHAKMA VOWEL SIGN O
-Removed Valid: 1112F (x𑄯) CHAKMA VOWEL SIGN AU
-Removed Valid: 1134B (x𑍋) GRANTHA VOWEL SIGN OO
-Removed Valid: 1134C (x𑍌) GRANTHA VOWEL SIGN AU
-Removed Valid: 114BB (x𑒻) TIRHUTA VOWEL SIGN AI
-Removed Valid: 114BC (x𑒼) TIRHUTA VOWEL SIGN O
-Removed Valid: 114BE (x𑒾) TIRHUTA VOWEL SIGN AU
-Removed Valid: 115BA (x𑖺) SIDDHAM VOWEL SIGN O
-Removed Valid: 115BB (x𑖻) SIDDHAM VOWEL SIGN AU
-Removed Valid: 11938 (x𑤸) DIVES AKURU VOWEL SIGN O
-Removed Mapped: 344 (ẍ́) COMBINING GREEK DIALYTIKA TONOS => [308 301]
-Removed Mapped: F73 (xཱི) TIBETAN VOWEL SIGN II => [F71 F72]
-Removed Mapped: F75 (xཱུ) TIBETAN VOWEL SIGN UU => [F71 F74]
-Removed Mapped: F76 (xྲྀ) TIBETAN VOWEL SIGN VOCALIC R => [FB2 F80]
-Removed Mapped: F77 (xཷ) TIBETAN VOWEL SIGN VOCALIC RR => [FB2 F71 F80]
-Removed Mapped: F78 (xླྀ) TIBETAN VOWEL SIGN VOCALIC L => [FB3 F80]
-Removed Mapped: F79 (xཹ) TIBETAN VOWEL SIGN VOCALIC LL => [FB3 F71 F80]
-Removed Mapped: F81 (xཱྀ) TIBETAN VOWEL SIGN REVERSED II => [F71 F80]
-Removed Mapped: F93 (xྒྷ) TIBETAN SUBJOINED LETTER GHA => [F92 FB7]
-Removed Mapped: F9D (xྜྷ) TIBETAN SUBJOINED LETTER DDHA => [F9C FB7]
-Removed Mapped: FA2 (xྡྷ) TIBETAN SUBJOINED LETTER DHA => [FA1 FB7]
-Removed Mapped: FA7 (xྦྷ) TIBETAN SUBJOINED LETTER BHA => [FA6 FB7]
-Removed Mapped: FAC (xྫྷ) TIBETAN SUBJOINED LETTER DZHA => [FAB FB7]
-Removed Mapped: FB9 (xྐྵ) TIBETAN SUBJOINED LETTER KSSA => [F90 FB5]
+Removed Valid: 1112E (◌𑄮) CHAKMA VOWEL SIGN O
+Removed Valid: 1112F (◌𑄯) CHAKMA VOWEL SIGN AU
+Removed Valid: 1134B (◌𑍋) GRANTHA VOWEL SIGN OO
+Removed Valid: 1134C (◌𑍌) GRANTHA VOWEL SIGN AU
+Removed Valid: 114BB (◌𑒻) TIRHUTA VOWEL SIGN AI
+Removed Valid: 114BC (◌𑒼) TIRHUTA VOWEL SIGN O
+Removed Valid: 114BE (◌𑒾) TIRHUTA VOWEL SIGN AU
+Removed Valid: 115BA (◌𑖺) SIDDHAM VOWEL SIGN O
+Removed Valid: 115BB (◌𑖻) SIDDHAM VOWEL SIGN AU
+Removed Valid: 11938 (◌𑤸) DIVES AKURU VOWEL SIGN O
+Removed Mapped: 344 (◌̈́) COMBINING GREEK DIALYTIKA TONOS => [308 301]
+Removed Mapped: F73 (◌ཱི) TIBETAN VOWEL SIGN II => [F71 F72]
+Removed Mapped: F75 (◌ཱུ) TIBETAN VOWEL SIGN UU => [F71 F74]
+Removed Mapped: F76 (◌ྲྀ) TIBETAN VOWEL SIGN VOCALIC R => [FB2 F80]
+Removed Mapped: F77 (◌ཷ) TIBETAN VOWEL SIGN VOCALIC RR => [FB2 F71 F80]
+Removed Mapped: F78 (◌ླྀ) TIBETAN VOWEL SIGN VOCALIC L => [FB3 F80]
+Removed Mapped: F79 (◌ཹ) TIBETAN VOWEL SIGN VOCALIC LL => [FB3 F71 F80]
+Removed Mapped: F81 (◌ཱྀ) TIBETAN VOWEL SIGN REVERSED II => [F71 F80]
+Removed Mapped: F93 (◌ྒྷ) TIBETAN SUBJOINED LETTER GHA => [F92 FB7]
+Removed Mapped: F9D (◌ྜྷ) TIBETAN SUBJOINED LETTER DDHA => [F9C FB7]
+Removed Mapped: FA2 (◌ྡྷ) TIBETAN SUBJOINED LETTER DHA => [FA1 FB7]
+Removed Mapped: FA7 (◌ྦྷ) TIBETAN SUBJOINED LETTER BHA => [FA6 FB7]
+Removed Mapped: FAC (◌ྫྷ) TIBETAN SUBJOINED LETTER DZHA => [FAB FB7]
+Removed Mapped: FB9 (◌ྐྵ) TIBETAN SUBJOINED LETTER KSSA => [F90 FB5]
 Removed Mapped: FB2C (שּׁ) HEBREW LETTER SHIN WITH DAGESH AND SHIN DOT => [5E9 5BC 5C1]
 Removed Mapped: FB2D (שּׂ) HEBREW LETTER SHIN WITH DAGESH AND SIN DOT => [5E9 5BC 5C2]
 Removed Mapped: FCF2 (ﳲ) ARABIC LIGATURE SHADDA WITH FATHA MEDIAL FORM => [640 64E 651]
@@ -6325,6 +6322,9 @@ Isolated: 1FA6B (🩫) XIANGQI BLACK CHARIOT
 Isolated: 1FA6C (🩬) XIANGQI BLACK CANNON
 Isolated: 1FA6D (🩭) XIANGQI BLACK SOLDIER
 Changed Script [Grek => Zyyy]: 3BE (ξ) GREEK SMALL LETTER XI
+Changed Script [Grek => Zyyy]: 3BC (μ) GREEK SMALL LETTER MU
+Changed Script [Grek => Zyyy]: 3C3 (σ) GREEK SMALL LETTER SIGMA
+Changed Script [Grek => Zyyy]: 3C0 (π) GREEK SMALL LETTER PI
 *** Isolated not Valid: 2319 (⌙) TURNED NOT SIGN
 *** Isolated not Valid: 2303 (⌃) UP ARROWHEAD
 *** Isolated not Valid: 2304 (⌄) DOWN ARROWHEAD
@@ -6340,100 +6340,134 @@ Changed Script [Grek => Zyyy]: 3BE (ξ) GREEK SMALL LETTER XI
 *** Isolated not Valid: 27CA (⟊) VERTICAL BAR WITH HORIZONTAL STROKE
 *** Isolated not Valid: 27CB (⟋) MATHEMATICAL RISING DIAGONAL
 *** Isolated not Valid: 27CD (⟍) MATHEMATICAL FALLING DIAGONAL
-Excluded Script: Aghb (53)
-Excluded Script: Ahom (65)
-Excluded Script: Armi (31)
-Excluded Script: Avst (61)
-Excluded Script: Bass (36)
-Excluded Script: Bhks (97)
-Excluded Script: Brah (115)
-Excluded Script: Bugi (30)
-Excluded Script: Buhd (20)
-Excluded Script: Cari (49)
-Excluded Script: Chrs (28)
-Excluded Script: Copt (77)
-Excluded Script: Cpmn (99)
-Excluded Script: Cprt (55)
-Excluded Script: Diak (71)
-Excluded Script: Dogr (60)
-Excluded Script: Dsrt (40)
-Excluded Script: Dupl (143)
-Excluded Script: Egyp (1094)
-Excluded Script: Elba (40)
-Excluded Script: Elym (23)
-Excluded Script: Glag (86)
-Excluded Script: Gong (63)
-Excluded Script: Gonm (75)
-Excluded Script: Goth (27)
-Excluded Script: Gran (83)
-Excluded Script: Hano (21)
-Excluded Script: Hatr (26)
-Excluded Script: Hluw (583)
-Excluded Script: Hmng (127)
-Excluded Script: Hung (57)
-Excluded Script: Ital (39)
-Excluded Script: Kawi (86)
-Excluded Script: Khar (68)
-Excluded Script: Khoj (65)
-Excluded Script: Kits (471)
-Excluded Script: Kthi (63)
-Excluded Script: Lina (341)
-Excluded Script: Linb (211)
-Excluded Script: Lyci (29)
-Excluded Script: Lydi (27)
-Excluded Script: Maka (25)
-Excluded Script: Mahj (39)
-Excluded Script: Mani (51)
-Excluded Script: Marc (68)
-Excluded Script: Medf (59)
-Excluded Script: Mend (213)
-Excluded Script: Merc (90)
-Excluded Script: Mero (32)
-Excluded Script: Modi (79)
-Excluded Script: Mong (162)
-Excluded Script: Mroo (43)
-Excluded Script: Mult (38)
-Excluded Script: Nagm (42)
-Excluded Script: Narb (32)
-Excluded Script: Nand (65)
-Excluded Script: Nbat (40)
-Excluded Script: Nshu (397)
-Excluded Script: Ogam (28)
-Excluded Script: Orkh (73)
-Excluded Script: Osma (40)
-Excluded Script: Ougr (26)
-Excluded Script: Palm (32)
-Excluded Script: Pauc (57)
-Excluded Script: Perm (43)
-Excluded Script: Phag (56)
-Excluded Script: Phli (27)
-Excluded Script: Phlp (29)
-Excluded Script: Phnx (29)
-Excluded Script: Prti (30)
-Excluded Script: Rjng (37)
-Excluded Script: Runr (86)
-Excluded Script: Samr (61)
-Excluded Script: Sarb (32)
-Excluded Script: Sgnw (672)
-Excluded Script: Shaw (48)
-Excluded Script: Shrd (96)
-Excluded Script: Sidd (90)
-Excluded Script: Sind (69)
-Excluded Script: Sora (35)
-Excluded Script: Sogd (42)
-Excluded Script: Sogo (40)
-Excluded Script: Soyo (83)
-Excluded Script: Tagb (18)
-Excluded Script: Takr (68)
-Excluded Script: Tang (6914)
-Excluded Script: Tglg (23)
-Excluded Script: Tirh (79)
-Excluded Script: Tnsa (89)
-Excluded Script: Toto (31)
-Excluded Script: Ugar (31)
-Excluded Script: Vith (35)
-Excluded Script: Wara (52)
-Excluded Script: Xpeo (50)
-Excluded Script: Xsux (1234)
-Excluded Script: Yezi (47)
-Excluded Script: Zanb (72)
+Restricted Script: Aghb (53)
+Restricted Script: Ahom (65)
+Restricted Script: Armi (31)
+Restricted Script: Avst (61)
+Restricted Script: Bass (36)
+Restricted Script: Bhks (97)
+Restricted Script: Brah (115)
+Restricted Script: Bugi (30)
+Restricted Script: Buhd (20)
+Restricted Script: Cari (49)
+Restricted Script: Chrs (28)
+Restricted Script: Copt (105)
+Restricted Script: Cpmn (101)
+Restricted Script: Cprt (55)
+Restricted Script: Diak (71)
+Restricted Script: Dogr (60)
+Restricted Script: Dsrt (40)
+Restricted Script: Dupl (143)
+Restricted Script: Egyp (1094)
+Restricted Script: Elba (40)
+Restricted Script: Elym (23)
+Restricted Script: Glag (90)
+Restricted Script: Gong (63)
+Restricted Script: Gonm (75)
+Restricted Script: Goth (27)
+Restricted Script: Gran (84)
+Restricted Script: Hano (21)
+Restricted Script: Hatr (26)
+Restricted Script: Hluw (583)
+Restricted Script: Hmng (127)
+Restricted Script: Hung (57)
+Restricted Script: Ital (39)
+Restricted Script: Kawi (86)
+Restricted Script: Khar (68)
+Restricted Script: Khoj (75)
+Restricted Script: Kits (471)
+Restricted Script: Kthi (63)
+Restricted Script: Lina (386)
+Restricted Script: Linb (221)
+Restricted Script: Lyci (29)
+Restricted Script: Lydi (27)
+Restricted Script: Maka (25)
+Restricted Script: Mahj (49)
+Restricted Script: Mani (50)
+Restricted Script: Marc (68)
+Restricted Script: Medf (59)
+Restricted Script: Mend (213)
+Restricted Script: Merc (90)
+Restricted Script: Mero (32)
+Restricted Script: Modi (79)
+Restricted Script: Mong (162)
+Restricted Script: Mroo (43)
+Restricted Script: Mult (48)
+Restricted Script: Nagm (42)
+Restricted Script: Narb (32)
+Restricted Script: Nand (67)
+Restricted Script: Nbat (40)
+Restricted Script: Nshu (397)
+Restricted Script: Ogam (28)
+Restricted Script: Orkh (73)
+Restricted Script: Osma (40)
+Restricted Script: Ougr (27)
+Restricted Script: Palm (32)
+Restricted Script: Pauc (57)
+Restricted Script: Perm (44)
+Restricted Script: Phag (59)
+Restricted Script: Phli (27)
+Restricted Script: Phlp (29)
+Restricted Script: Phnx (29)
+Restricted Script: Prti (30)
+Restricted Script: Rjng (37)
+Restricted Script: Runr (86)
+Restricted Script: Samr (61)
+Restricted Script: Sarb (32)
+Restricted Script: Sgnw (672)
+Restricted Script: Shaw (48)
+Restricted Script: Shrd (101)
+Restricted Script: Sidd (90)
+Restricted Script: Sind (69)
+Restricted Script: Sora (35)
+Restricted Script: Sogd (43)
+Restricted Script: Sogo (40)
+Restricted Script: Soyo (83)
+Restricted Script: Tagb (18)
+Restricted Script: Takr (78)
+Restricted Script: Tang (6914)
+Restricted Script: Tglg (25)
+Restricted Script: Tirh (82)
+Restricted Script: Tnsa (89)
+Restricted Script: Toto (31)
+Restricted Script: Ugar (31)
+Restricted Script: Vith (35)
+Restricted Script: Wara (52)
+Restricted Script: Xpeo (50)
+Restricted Script: Xsux (1234)
+Restricted Script: Yezi (58)
+Restricted Script: Zanb (72)
+Restricted Script: Adlm (54)
+Restricted Script: Bali (113)
+Restricted Script: Bamu (657)
+Restricted Script: Batk (56)
+Restricted Script: Cakm (69)
+Restricted Script: Cans (725)
+Restricted Script: Cham (83)
+Restricted Script: Cher (86)
+Restricted Script: Hmnp (71)
+Restricted Script: Java (91)
+Restricted Script: Kali (48)
+Restricted Script: Lana (127)
+Restricted Script: Lepc (74)
+Restricted Script: Limb (69)
+Restricted Script: Lisu (49)
+Restricted Script: Mand (29)
+Restricted Script: Mtei (79)
+Restricted Script: Newa (97)
+Restricted Script: Nkoo (64)
+Restricted Script: Olck (48)
+Restricted Script: Osge (36)
+Restricted Script: Plrd (149)
+Restricted Script: Rohg (50)
+Restricted Script: Saur (82)
+Restricted Script: Sund (72)
+Restricted Script: Sylo (55)
+Restricted Script: Syrc (88)
+Restricted Script: Tale (45)
+Restricted Script: Talu (83)
+Restricted Script: Tavt (72)
+Restricted Script: Tfng (58)
+Restricted Script: Vaii (300)
+Restricted Script: Wcho (59)
+Restricted Script: Yiii (1233)

@@ -66,6 +66,9 @@ tbody tr:nth-child(odd) {
 tbody tr:hover {
 	background-color: #cff;
 }
+tbody tr.error td {
+	background: rgba(255, 0, 0, 0.1);
+}
 td {
 	border: 1px solid #ccc;
 	padding: 0 10px;
@@ -181,33 +184,19 @@ async function fetch_json(url) {
 	return res.json();
 }
 
+function is_not_emoji(x) {
+	return x.type === 'Disabled'; // matches /derive/make.js -> emoji-info.json
+}
+
 // this is optional
 let info_map = new Map();
 try {
 	for (let info of await fetch_json('../derive/output/emoji-info.json')) {
 		info_map.set(info.form, info);
+		if (is_not_emoji(info)) {
+			emoji_seqs.push(explode_cp(info.form));
+		}
 	}
-	/*
-	let flag_type = 'ValidRegionalFlag';
-	for (let region of await fetch_json('../derive/data/regions.json')) {
-		let cps = explode_cp(region).map(cp => 0x1F1E6 - 0x41 + cp);
-		let form = String.fromCodePoint(...cps);
-		if (!info_map.has(form)) {
-			info_map.set(form, {name: `Flag Sequence: ${region}`, type: flag_type});
-			emoji_seqs.push(cps);
-		}
-	}	
-	*/
-	/*
-	for (let x = 0; x < 26; x++) {
-		let form = String.fromCodePoint(0x1F1E6 + x);
-		if (!info_map.has(form)) {
-			let cps = explode_cp(form);
-			info_map.set(form, {cps, name: `regional indicator symbol letter ${String.fromCodePoint(0x41 + x)}`, type: 'Regional'});
-			emoji_seqs.push(cps);
-		}
-	}	
-	*/
 } catch (err) {
 	console.log(err);
 }
@@ -242,6 +231,7 @@ let keywords = [
 		'Blond Hair',
 		'Curly Hair',
 		'White Hair',
+		'{FE0F}',
 	],
 	[...versions].sort((a, b) => a - b).map(x => `v${x}`),
 ].flat(Infinity);
@@ -254,7 +244,12 @@ if (type_map.size || versions.size) {
 let buckets = [];
 for (let cps of emoji_seqs) {
 	let form = String.fromCodePoint(...cps);
-	let norm = ens_normalize(form);
+	let norm;
+	try {
+		norm = ens_normalize(form);
+	} catch (err) {
+		norm = form; 
+	}
 	let info = info_map.get(form);
 	let n = [...norm].length;
 	let bucket = buckets[n];
@@ -436,6 +431,7 @@ function create_tr({cps, form, norm, info, n}, first) {
 
 	let tr = document.createElement('tr');
 	tr.dataset.name = form;
+	if (info && is_not_emoji(info)) tr.classList.add('error');
 	let repeated = norm;
 	for (let i = 3 - [...norm].length; i > 0; i--) {
 		repeated += norm;
