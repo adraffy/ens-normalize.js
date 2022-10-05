@@ -420,21 +420,14 @@ export class UnicodeScripts {
 		this.entries = spec.scripts().map(([name, cps]) => {
 			let abbr = name2abbr.get(name);
 			if (!abbr) throw new TypeError(`unknown script abbr: ${name}`);
-			return {name, abbr, set: new Set(cps)};
+			return {name, abbr, set: new Set(cps), extended: new Set()};
 		});
 		this.by_abbr = Object.fromEntries(this.entries.map(x => [x.abbr, x])); // use Object so we can $.Latn
-		// merge in script extensions
+		// add in script extensions
 		for (let [abbr, cps] of spec.script_extensions()) {
-			// remove old
+			let {extended} = this.by_abbr[abbr];
 			for (let cp of cps) {
-				for (let {set} of this.entries) {
-					set.delete(cp);
-				}
-			}
-			// apply new
-			let {set} = this.by_abbr[abbr];
-			for (let cp of cps) {
-				set.add(cp);
+				extended.add(cp);
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-Build Date: 2022-10-05T07:38:21.228Z
+Build Date: 2022-10-05T07:53:28.005Z
 Unicode Version: 15.0.0
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -2290,8 +2290,6 @@ Demoted Emoji: 36 (6) DIGIT SIX
 Demoted Emoji: 37 (7) DIGIT SEVEN
 Demoted Emoji: 38 (8) DIGIT EIGHT
 Demoted Emoji: 39 (9) DIGIT NINE
-Demoted Emoji: 203C (‼) DOUBLE EXCLAMATION MARK
-Demoted Emoji: 2049 (⁉) EXCLAMATION QUESTION MARK
 Demoted Emoji: 2122 (™) TRADE MARK SIGN
 Demoted Emoji: 2139 (ℹ) INFORMATION SOURCE
 Demoted Emoji: 24C2 (Ⓜ) CIRCLED LATIN CAPITAL LETTER M
@@ -2314,6 +2312,8 @@ Demoted Emoji: 1F250 (🉐) CIRCLED IDEOGRAPH ADVANTAGE
 Demoted Emoji: 1F251 (🉑) CIRCLED IDEOGRAPH ACCEPT
 Register Emoji [Basic_Emoji]: [A9 FE0F] (©️) copyright
 Register Emoji [Basic_Emoji]: [AE FE0F] (®️) registered
+Register Emoji [Basic_Emoji]: [203C FE0F] (‼️) double exclamation mark
+Register Emoji [Basic_Emoji]: [2049 FE0F] (⁉️) exclamation question mark
 Register Emoji [Basic_Emoji]: [2194 FE0F] (↔️) left-right arrow
 Register Emoji [Basic_Emoji]: [2195 FE0F] (↕️) up-down arrow
 Register Emoji [Basic_Emoji]: [2196 FE0F] (↖️) up-left arrow
@@ -3696,8 +3696,8 @@ Register Emoji [Whitelisted]: [1F93C 1F3FC] (🤼🏼) people wrestling: medium-
 Register Emoji [Whitelisted]: [1F93C 1F3FD] (🤼🏽) people wrestling: medium skin tone
 Register Emoji [Whitelisted]: [1F93C 1F3FE] (🤼🏾) people wrestling: medium-dark skin tone
 Register Emoji [Whitelisted]: [1F93C 1F3FF] (🤼🏿) people wrestling: dark skin tone
-*** Blacklist Emoji: No match for 203C (‼) DOUBLE EXCLAMATION MARK
-*** Blacklist Emoji: No match for 2049 (⁉) EXCLAMATION QUESTION MARK
+Blacklist Emoji by Sequence: [203C FE0F] (‼️) double exclamation mark
+Blacklist Emoji by Sequence: [2049 FE0F] (⁉️) exclamation question mark
 Removed Valid: 238 (ȸ) LATIN SMALL LETTER DB DIGRAPH
 Added Mapped: 238 (ȸ) LATIN SMALL LETTER DB DIGRAPH => [64 62]
 Removed Valid: 239 (ȹ) LATIN SMALL LETTER QP DIGRAPH
@@ -6351,8 +6351,8 @@ Restricted Script: Bugi (30)
 Restricted Script: Buhd (20)
 Restricted Script: Cari (49)
 Restricted Script: Chrs (28)
-Restricted Script: Copt (105)
-Restricted Script: Cpmn (101)
+Restricted Script: Copt (77)
+Restricted Script: Cpmn (99)
 Restricted Script: Cprt (55)
 Restricted Script: Diak (71)
 Restricted Script: Dogr (60)
@@ -6361,11 +6361,11 @@ Restricted Script: Dupl (143)
 Restricted Script: Egyp (1094)
 Restricted Script: Elba (40)
 Restricted Script: Elym (23)
-Restricted Script: Glag (90)
+Restricted Script: Glag (86)
 Restricted Script: Gong (63)
 Restricted Script: Gonm (75)
 Restricted Script: Goth (27)
-Restricted Script: Gran (84)
+Restricted Script: Gran (83)
 Restricted Script: Hano (21)
 Restricted Script: Hatr (26)
 Restricted Script: Hluw (583)
@@ -6374,16 +6374,16 @@ Restricted Script: Hung (57)
 Restricted Script: Ital (39)
 Restricted Script: Kawi (86)
 Restricted Script: Khar (68)
-Restricted Script: Khoj (75)
+Restricted Script: Khoj (65)
 Restricted Script: Kits (471)
 Restricted Script: Kthi (63)
-Restricted Script: Lina (386)
-Restricted Script: Linb (221)
+Restricted Script: Lina (341)
+Restricted Script: Linb (211)
 Restricted Script: Lyci (29)
 Restricted Script: Lydi (27)
 Restricted Script: Maka (25)
-Restricted Script: Mahj (49)
-Restricted Script: Mani (50)
+Restricted Script: Mahj (39)
+Restricted Script: Mani (51)
 Restricted Script: Marc (68)
 Restricted Script: Medf (59)
 Restricted Script: Mend (213)
@@ -6392,20 +6392,20 @@ Restricted Script: Mero (32)
 Restricted Script: Modi (79)
 Restricted Script: Mong (162)
 Restricted Script: Mroo (43)
-Restricted Script: Mult (48)
+Restricted Script: Mult (38)
 Restricted Script: Nagm (42)
 Restricted Script: Narb (32)
-Restricted Script: Nand (67)
+Restricted Script: Nand (65)
 Restricted Script: Nbat (40)
 Restricted Script: Nshu (397)
 Restricted Script: Ogam (28)
 Restricted Script: Orkh (73)
 Restricted Script: Osma (40)
-Restricted Script: Ougr (27)
+Restricted Script: Ougr (26)
 Restricted Script: Palm (32)
 Restricted Script: Pauc (57)
-Restricted Script: Perm (44)
-Restricted Script: Phag (59)
+Restricted Script: Perm (43)
+Restricted Script: Phag (56)
 Restricted Script: Phli (27)
 Restricted Script: Phlp (29)
 Restricted Script: Phnx (29)
@@ -6416,18 +6416,18 @@ Restricted Script: Samr (61)
 Restricted Script: Sarb (32)
 Restricted Script: Sgnw (672)
 Restricted Script: Shaw (48)
-Restricted Script: Shrd (101)
+Restricted Script: Shrd (96)
 Restricted Script: Sidd (90)
 Restricted Script: Sind (69)
 Restricted Script: Sora (35)
-Restricted Script: Sogd (43)
+Restricted Script: Sogd (42)
 Restricted Script: Sogo (40)
 Restricted Script: Soyo (83)
 Restricted Script: Tagb (18)
-Restricted Script: Takr (78)
+Restricted Script: Takr (68)
 Restricted Script: Tang (6914)
-Restricted Script: Tglg (25)
-Restricted Script: Tirh (82)
+Restricted Script: Tglg (23)
+Restricted Script: Tirh (79)
 Restricted Script: Tnsa (89)
 Restricted Script: Toto (31)
 Restricted Script: Ugar (31)
@@ -6435,7 +6435,7 @@ Restricted Script: Vith (35)
 Restricted Script: Wara (52)
 Restricted Script: Xpeo (50)
 Restricted Script: Xsux (1234)
-Restricted Script: Yezi (58)
+Restricted Script: Yezi (47)
 Restricted Script: Zanb (72)
 Restricted Script: Adlm (54)
 Restricted Script: Bali (113)
@@ -6446,28 +6446,28 @@ Restricted Script: Cans (725)
 Restricted Script: Cham (83)
 Restricted Script: Cher (86)
 Restricted Script: Hmnp (71)
-Restricted Script: Java (91)
-Restricted Script: Kali (48)
+Restricted Script: Java (90)
+Restricted Script: Kali (47)
 Restricted Script: Lana (127)
 Restricted Script: Lepc (74)
-Restricted Script: Limb (69)
+Restricted Script: Limb (68)
 Restricted Script: Lisu (49)
 Restricted Script: Mand (29)
 Restricted Script: Mtei (79)
 Restricted Script: Newa (97)
-Restricted Script: Nkoo (64)
+Restricted Script: Nkoo (62)
 Restricted Script: Olck (48)
 Restricted Script: Osge (36)
 Restricted Script: Plrd (149)
 Restricted Script: Rohg (50)
 Restricted Script: Saur (82)
 Restricted Script: Sund (72)
-Restricted Script: Sylo (55)
-Restricted Script: Syrc (88)
-Restricted Script: Tale (45)
+Restricted Script: Sylo (45)
+Restricted Script: Syrc (87)
+Restricted Script: Tale (35)
 Restricted Script: Talu (83)
 Restricted Script: Tavt (72)
 Restricted Script: Tfng (58)
 Restricted Script: Vaii (300)
 Restricted Script: Wcho (59)
-Restricted Script: Yiii (1233)
+Restricted Script: Yiii (1220)

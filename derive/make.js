@@ -187,8 +187,8 @@ for (let seq of (await import('./rules/emoji-seq-blacklist.js')).default) {
 	let key = String.fromCodePoint(...cps);
 	let info = emoji.get(key);
 	if (!info) {
-		console.log(`*** Blacklist Emoji: No match for ${UNICODE.format(cps)}`); // should this be fatal?
-		continue;
+		console.log(`*** Blacklist Emoji: No match for ${UNICODE.format(cps)}`); // should this be fatal? (yes)
+		throw new Error('blacklist');
 	}
 	console.log(`Blacklist Emoji by Sequence: ${UNICODE.format(info)}`);
 	emoji_disabled.push(info);
