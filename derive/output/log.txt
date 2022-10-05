@@ -1,4 +1,4 @@
-Build Date: 2022-10-05T07:05:09.363Z
+Build Date: 2022-10-05T07:38:21.228Z
 Unicode Version: 15.0.0
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -3696,6 +3696,8 @@ Register Emoji [Whitelisted]: [1F93C 1F3FC] (🤼🏼) people wrestling: medium-
 Register Emoji [Whitelisted]: [1F93C 1F3FD] (🤼🏽) people wrestling: medium skin tone
 Register Emoji [Whitelisted]: [1F93C 1F3FE] (🤼🏾) people wrestling: medium-dark skin tone
 Register Emoji [Whitelisted]: [1F93C 1F3FF] (🤼🏿) people wrestling: dark skin tone
+*** Blacklist Emoji: No match for 203C (‼) DOUBLE EXCLAMATION MARK
+*** Blacklist Emoji: No match for 2049 (⁉) EXCLAMATION QUESTION MARK
 Removed Valid: 238 (ȸ) LATIN SMALL LETTER DB DIGRAPH
 Added Mapped: 238 (ȸ) LATIN SMALL LETTER DB DIGRAPH => [64 62]
 Removed Valid: 239 (ȹ) LATIN SMALL LETTER QP DIGRAPH
@@ -3714,8 +3716,6 @@ Removed Valid: 6F8 (۸) EXTENDED ARABIC-INDIC DIGIT EIGHT
 Added Mapped: 6F8 (۸) EXTENDED ARABIC-INDIC DIGIT EIGHT => 668 (٨) ARABIC-INDIC DIGIT EIGHT
 Removed Valid: 6F9 (۹) EXTENDED ARABIC-INDIC DIGIT NINE
 Added Mapped: 6F9 (۹) EXTENDED ARABIC-INDIC DIGIT NINE => 669 (٩) ARABIC-INDIC DIGIT NINE
-Added Mapped: 203C (‼) DOUBLE EXCLAMATION MARK => [2757 2757]
-Added Mapped: 2049 (⁉) EXCLAMATION QUESTION MARK => [2757 2753]
 Removed Mapped: 2011 (‑) NON-BREAKING HYPHEN => 2010 (‐) HYPHEN
 Added Mapped: 2011 (‑) NON-BREAKING HYPHEN => 2D (-) HYPHEN-MINUS
 Removed Valid: 2013 (–) EN DASH

@@ -15,8 +15,9 @@ export default [
 	[0x6F9, [0x669]], // 6F9 (۹) EXTENDED ARABIC-INDIC DIGIT NINE  => 669 (٩) ARABIC-INDIC DIGIT NINE
 
 	// emoji convenience
-	[0x203C, [0x2757, 0x2757]], // (‼️) double exclamation mark   => ❗+❗
-	[0x2049, [0x2757, 0x2753]], // (⁉️) exclamation question mark => ❗+❓
+	// 20221005: this is actually a bad idea
+	//[0x203C, [0x2757, 0x2757]], // (‼️) double exclamation mark   => ❗+❗
+	//[0x2049, [0x2757, 0x2753]], // (⁉️) exclamation question mark => ❗+❓
 
 	// initial hyphen-likes
 	[0x2011, [0x2D]], // 2011 (‑) NON-BREAKING HYPHEN
