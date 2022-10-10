@@ -190,7 +190,7 @@ function update_table() {
 			td.append(hex_span);
 
 			let info0 = char_map.get(cp);
-			if (info0) {
+			if (info0 && info0.name) {
 				let name_span = document.createElement('span');
 				name_span.classList.add('corner', 'name');
 				name_span.innerHTML = info0.name.toLowerCase();
