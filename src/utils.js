@@ -28,7 +28,7 @@ export function str_from_cps(cps) {
 export function escape_for_html(s, quoter = quote_cp) {
 	// invis: 0x00-0x20 control, 0x7F DEL, whitespace, joiners, tagspec
 	//  html: 0x26 &, 0x3C <, 0x3E >
-	return s.replace(/(?:([\x00-\x20\x7F\xA0\s\u200C\u200D\u2800\u{E0020}-\u{E007F}])|([\x26\x3C\x3E]))/gu, 
+	return s.replace(/(?:([\x00-\x20\x7F-\xA0\s\u200C\u200D\u2800\u{E0020}-\u{E007F}])|([\x26\x3C\x3E]))/gu, 
 		(_, a, b) => a ? quoter(a.codePointAt(0)) : `&#${b.codePointAt(0)};`);
 }
 

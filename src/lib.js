@@ -22,7 +22,7 @@ const SCRIPTS = ['Latin', 'Greek', 'Cyrillic'].map((k, i) => {
 	// (script name, script-set, whole-set?)
 	return [k, read_valid_subset(), i ? read_valid_subset() : 0]; 
 });
-const EXCLUDED = read_array_while(() => {
+const RESTRICTED = read_array_while(() => {
 	let v = read_valid_subset(r);
 	if (v.size) return v;
 });
@@ -104,12 +104,12 @@ function check_scripts_latin_like(cps) {
 }
 
 // requires decomposed codepoints
-function check_excluded_scripts(cps) {
+function check_restricted_scripts(cps) {
 	// https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers
-	for (let set of EXCLUDED) {
+	for (let set of RESTRICTED) {
 		if (cps.some(cp => set.has(cp))) { // first with one match
 			if (!cps.every(cp => set.has(cp) || cp == FE0F)) { // must match all (or emoji)
-				throw new Error(`excluded script cannot mix`);
+				throw new Error(`restricted script cannot mix`);
 			}
 			break; // pure
 		}
@@ -150,7 +150,7 @@ export function ens_normalize_post_check(norm) {
 			// replace emoji with single character
 			let cps_nfd = nfd(process(label, () => [FE0F])); 
 			check_combinining_marks(cps_nfd);
-			check_excluded_scripts(cps_nfd); // idea: it's probably safe to early terminate if this is pure
+			check_restricted_scripts(cps_nfd); // idea: it's probably safe to early terminate if this is pure
 		} catch (err) {
 			throw new Error(`Invalid label "${label}": ${err.message}`); // note: label might not exist in the input string
 		}
@@ -278,6 +278,42 @@ const TY_ISOLATED = 'isolated';
 const TY_NFC = 'nfc';
 const TY_STOP = 'stop';
 
+/*
+class EmojiToken {
+	constructor(input, emoji) {
+		this.input = input;
+		this.emoji = emoji;
+	}
+	get type() {
+		return TY_EMOJI;
+	}
+	get cps() {
+		return filter_fe0f(this.cps);
+	}	
+}
+class SingleToken {
+	constructor(type, cp) {
+		this.type = type;
+		this.cp = cp;
+	}
+	get input() { return [this.cp]; }
+	get cps() { return this.input() }
+}
+class MappedToken extends SingleToken {
+	constructor(cp, cps) {
+		this.cp = cp;
+		this.cps = cps;
+	}
+	get type() { return TY_MAPPED; }
+	get input() { return [this.cp]; }
+}
+class NFCToken {
+	constructor(tokens) {
+
+	}
+}
+*/
+
 export function ens_tokenize(name) {
 	let input = explode_cp(name).reverse();
 	let eaten = [];
@@ -289,7 +325,7 @@ export function ens_tokenize(name) {
 		} else {
 			let cp = input.pop();
 			if (cp === STOP) {
-				tokens.push({type: TY_STOP});
+				tokens.push({type: TY_STOP, cp});
 			} else if (VALID.has(cp)) {
 				if (ISOLATED.has(cp)) {
 					tokens.push({type: TY_ISOLATED, cp});

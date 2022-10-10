@@ -47,7 +47,17 @@ function span_from_cp(cp) {
 	return span;
 }
 
-export function dom_from_tokens(tokens, {before = false, components = true} = {}) {
+// title, dislayed_cps, token?
+function default_titler(title, cps, token) {
+	return `${title}\n${hex_seq(cps)}`;
+}
+
+export function dom_from_tokens(tokens, {
+	before = false, 
+	components = true, 
+	titler = default_titler,
+	emoji_url = 'https://emojipedia.org/%s'
+} = {}) {
 	let div = document.createElement('div');
 	div.classList.add('tokens');
 	if (before) {
@@ -65,8 +75,8 @@ export function dom_from_tokens(tokens, {before = false, components = true} = {}
 		if (token.type === 'emoji') {
 			let cps = before ? token.input : token.cps;
 			el = document.createElement('a');
-			el.href = `https://emojipedia.org/${String.fromCodePoint(...token.emoji)}`;
-			el.title = `Emoji\n${hex_seq(cps)}`;
+			el.href = emoji_url.replace('%s', String.fromCodePoint(...token.emoji));
+			el.title = titler('Emoji', cps, token);
 			el.classList.add('glyph');
 			if (components) {
 				el.append(...cps.map(cp => span_from_cp(cp)));
@@ -81,44 +91,42 @@ export function dom_from_tokens(tokens, {before = false, components = true} = {}
 			let rhs = document.createElement('div');
 			rhs.classList.add('valid');
 			rhs.innerHTML = String.fromCodePoint(...token.cps);
-			rhs.title = `NFC\n${hex_seq(token.cps)}`;
+			rhs.title = titler('NFC', token.cps, token); 
 			el.append(lhs, create_arrow_span(), rhs);
 		} else {
 			el = document.createElement('div');
 			if (token.type === 'valid') {
 				el.classList.add('valid');
 				el.innerHTML = String.fromCodePoint(...token.cps);
-				el.title = `Valid\n${hex_seq(token.cps)}`;
+				el.title = titler('Valid', token.cps, token);
 			} else if (token.type === 'mapped') {
 				el.classList.add('mapped');
 				let span = document.createElement('span');
 				span.classList.add('before');
 				span.innerHTML = String.fromCodePoint(token.cp);	
-				span.title = `Mapped\n${hex_cp(token.cp)}`;
+				span.title = titler('Mapped', [token.cp], token);
 				el.append(span);
 				if (!before) {
-					el.append(create_arrow_span(), ...token.cps.map(cp => {
-						let span = document.createElement('span');
-						span.innerHTML = String.fromCodePoint(cp);	
-						span.title = hex_cp(cp);
-						return span;
-					}));
+					let span_dst = document.createElement('span');
+					span_dst.innerHTML = token.cps.map(x => String.fromCodePoint(x)).join('\u{A0}');
+					span_dst.title = titler('Mapped (Output)', token.cps, token);
+					el.append(create_arrow_span(), span_dst);
 				}
 			} else if (token.type === 'ignored') {
 				el.innerHTML = hex_cp(token.cp); 
-				el.title = `Ignored\n${hex_cp(token.cp)}`;
+				el.title = titler('Ignored', [token.cp]);
 				el.classList.add('ignored');
 			} else if (token.type === 'disallowed') {
 				el = span_from_cp(token.cp);
 				el.classList.add('disallowed');
-				el.title = `Disallowed\n${hex_cp(token.cp)}`;
+				el.title = titler('Disallowed', [token.cp]);
 			} else if (token.type === 'stop') {
 				el.classList.add('stop');
 				el.innerHTML = '.';
 			} else if (token.type === 'isolated') {
 				el.classList.add('isolated');
 				el.innerHTML = String.fromCodePoint(token.cp);
-				el.title = `Valid (Isolated)\n${hex_cp(token.cp)}`;
+				el.title = titler('Valid (Isolated)', [token.cp]);
 			} else {
 				throw new TypeError(`unknown token type: ${token.type}`);
 			}
@@ -169,7 +177,7 @@ export function use_default_style() {
 		color: #fff;
 	}
 	.tokens .disallowed.code {
-		font-size: 65%;
+		font-size: 75%;
 		background: #800;
 	}
 	.tokens .tag sub {

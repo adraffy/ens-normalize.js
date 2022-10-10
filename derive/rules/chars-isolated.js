@@ -8,7 +8,6 @@ export default [
 	0x2044, // (⁄) FRACTION SLASH
 	0x00AC, // (¬) NOT SIGN
 	0x2310, // (⌐) REVERSED NOT SIGN
-	0x2319, // (⌙) TURNED NOT SIGN
 
 	// currency
 	0x0024, // ($) DOLLAR SIGN	
@@ -18,6 +17,7 @@ export default [
 	0x00A5, // (¥) YEN SIGN
 	0x20AC, // (€) EURO SIGN
 	0x20BF, // (₿) BITCOIN SIGN
+	0x20A1, // (₡) COLON SIGN
 
 	// more symbols
 	0x2300, // (⌀) DIAMETER SIGN
@@ -155,10 +155,11 @@ export default [
 	// bullet-likes
 	0x2022, // (•) BULLET
 	0x25C9, // (◉) FISHEYE
-	0x25CA, // (◊) LOZENGE
 	0x25CD, // (◍) CIRCLE WITH VERTICAL FILL
 	0x25CE, // (◎) BULLSEYE
 	0x22C8, // (⋈) BOWTIE
+	0x2B27, // (⬧) BLACK MEDIUM LOZENGE
+	0x2B28, // (⬨) WHITE MEDIUM LOZENGE
 
 	// blocks
 	0x2581, // (▁) LOWER ONE EIGHTH BLOCK
@@ -295,6 +296,13 @@ export default [
 	//0x2646, // (♆) NEPTUNE
 	//0x2647, // (♇) PLUTO
 
+	// leaves
+	0x1F654, // (🙔) TURNED NORTH WEST POINTING LEAF
+	0x1F655, // (🙕) TURNED SOUTH WEST POINTING LEAF
+	0x1F656, // (🙖) TURNED NORTH EAST POINTING LEAF
+	0x1F657, // (🙗) TURNED SOUTH EAST POINTING LEAF
+
+	// chess (picto)
 	//0x2654, // (♔) WHITE CHESS KING
 	//0x2655, // (♕) WHITE CHESS QUEEN
 	//0x2656, // (♖) WHITE CHESS ROOK
@@ -308,6 +316,7 @@ export default [
 	//0x265E, // (♞) BLACK CHESS KNIGHT
 	//0x265F, // (♟) BLACK CHESS PAWN
 	
+	// shogi (picto)
 	//0x2616, // (☖) WHITE SHOGI PIECE
 	//0x2617, // (☗) BLACK SHOGI PIECE
 
@@ -392,18 +401,25 @@ export default [
 	0x27C0, // (⟀) THREE DIMENSIONAL ANGLE
 	0x27C1, // (⟁) WHITE TRIANGLE CONTAINING SMALL WHITE TRIANGLE
 	0x27C2, // (⟂) PERPENDICULAR
-	0x27C3, // (⟃) OPEN SUBSET
-	0x27C4, // (⟄) OPEN SUPERSET
-	0x27C5, // (⟅) LEFT S-SHAPED BAG DELIMITER
-	0x27C6, // (⟆) RIGHT S-SHAPED BAG DELIMITER
-	0x27C7, // (⟇) OR WITH DOT INSIDE
-	0x27C8, // (⟈) REVERSE SOLIDUS PRECEDING SUBSET
-	0x27C9, // (⟉) SUPERSET PRECEDING SOLIDUS
-	0x27CA, // (⟊) VERTICAL BAR WITH HORIZONTAL STROKE
-	0x27CB, // (⟋) MATHEMATICAL RISING DIAGONAL
-	0x27CC, // (⟌) LONG DIVISION
-	0x27CD, // (⟍) MATHEMATICAL FALLING DIAGONAL
 
+	0x27F0, // (⟰) UPWARDS QUADRUPLE ARROW
+	0x27F1, // (⟱) DOWNWARDS QUADRUPLE ARROW
+	
+	// maybe?
+	0x1F67C, // (🙼) VERY HEAVY SOLIDUS
+	0x1F67D, // (🙽) VERY HEAVY REVERSE SOLIDUS
+
+	// san-serif arrows
+	0x1F850, // (🡐) LEFTWARDS SANS-SERIF ARROW
+	0x1F851, // (🡑) UPWARDS SANS-SERIF ARROW
+	0x1F852, // (🡒) RIGHTWARDS SANS-SERIF ARROW
+	0x1F853, // (🡓) DOWNWARDS SANS-SERIF ARROW
+	0x1F854, // (🡔) NORTH WEST SANS-SERIF ARROW
+	0x1F855, // (🡕) NORTH EAST SANS-SERIF ARROW
+	0x1F856, // (🡖) SOUTH EAST SANS-SERIF ARROW
+	0x1F857, // (🡗) SOUTH WEST SANS-SERIF ARROW
+	0x1F858, // (🡘) LEFT RIGHT SANS-SERIF ARROW
+	0x1F859, // (🡙) UP DOWN SANS-SERIF ARROW
 
 	// negative squared => a-z
 	//0x1F170, // (🅰) NEGATIVE SQUARED LATIN CAPITAL LETTER A (emoji)

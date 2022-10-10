@@ -152,17 +152,23 @@ input[type=checkbox]:checked + label.nonstd {
 .row.special {
 	background: linear-gradient(90deg,#fff,#efe);
 }
-.row.special .formula {
+.formula {
 	display: flex;
 }
-.row.special .formula code {
+.formula a {
 	padding: 4px;
+	cursor: pointer;
+	color: #000;
+	text-decoration: none;
 }
-.row.special .formula code:hover {
+.formula a:hover {
 	background: #cff;
 }
-.row.special .formula code + code {
+.formula a + a {
 	border-left: 4px solid #ccc;
+}
+.formula a sup {
+	font-family: monospace;
 }
 .row .main {
 	font-size: 16pt;
@@ -265,6 +271,10 @@ ul.row {
 .tags .palindrome {
 	background: #dfd;
 }
+.tags .white {
+	color: #000;
+	background: #fff;
+}
 .row.hashes {
 	display: grid;
 	background: none;
@@ -357,7 +367,7 @@ footer {
 <button>raffy.antistupid.com</button>
 
 <a href="https://docs.ens.domains/ens-improvement-proposals/ensip-10-wildcard-resolution"><b>Wildcard:</b></a>
-<button>offchainexample.eth</button>
+<button>1.offchainexample.eth</button>
 <button>barmstrong.cb.id</button>
 
 <!--
@@ -375,7 +385,7 @@ footer {
 <button>™️</button>
 <button>🈂️</button>
 <button>Ⅷ</button>
-<button data-name="hyph{2D}{2010}{2011}{2012}{2013}{2014}{2015}{2027}{2043}{207B}{208B}{2212}{23AF}{23BA}{23BB}{23BC}{23BD}{23E4}{FE31}{FE32}{FE58}ens">Hyphens</button>
+<button data-name="hyph{2D}{2010}{2011}{2012}{2013}{2014}{2015}{2043}{2212}{23AF}{23BA}{23BB}{23BC}{23BD}{23E4}{FE58}ens">Hyphens</button>
 
 <b>Ignored:</b> 
 <button data-name="{FE0E}{FE0F}">Emoji Style</button>
@@ -464,12 +474,12 @@ footer {
 
 <b>Circled/Squared:</b>
 <button>mmm</button>
-<button>ⓂⓂⓂ</button>
 <button>Ⓜ️Ⓜ️Ⓜ️</button>
-<button>🅜🅜🅜</button>
-<button>🅼🅼🅼</button>
-<button>❻❻❻</button>
-<button>➏➏➏</button>
+<button data-name="ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ">Ⓐ-Ⓩ</button>
+<button data-name="🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩">🅐-🅩</button>
+<button data-name="🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉">🅰-🆉</button>
+<button data-name="⓿❶❷❸❹❺❻❼❽❾❿">⓿-❿</button>
+<button data-name="🄌➊➋➌➍➎➏➐➑➒➓">🄌-➓</button>
 
 <a href="https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.1"><b>ContextJ:</b></a>
 ZWNJ:
@@ -559,7 +569,10 @@ Katakana:
 <button>360°</button>
 <button>2πr</button>
 
-<a href="https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers"><b>Excluded:</b></a>
+<button>ʀᴀꜰꜰʏ</button>
+<button>ʎɟɟɐɹ</button>
+
+<a href="https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers"><b>Restricted:</b></a>
 <button data-name="𓀀𓀁𓀂">Egyptian Hieroglyphs</button>
 <button>𓆏➡🐸️</button>
 <button data-name="𐌱𐌻𐍉𐌼𐌰">Gothic</button>
@@ -629,6 +642,7 @@ const RESOLVE_MODE_IDLE = 'idle';
 const RESOLVE_MODE_REPEAT = 'repeat';
 const RESOLVE_MODE_EMPTY = 'empty';
 
+const INPUT_NAME = 'Input';
 const SKIP_SUFFIX = '_!';
 
 let resolve_timer = RESOLVE_MODE_IDLE;
@@ -837,7 +851,7 @@ function parse() {
 		output_div.append(row);
 		return true;
 	}
-	let row = create_row('Name');
+	let row = create_row(INPUT_NAME);
 	make_exploded(row, name, false);
 	add_row_tag(row, create_class_tag(name));
 	output_div.append(row, create_hashes_row(name));
@@ -1038,7 +1052,7 @@ function create_ethmoji_row(tokens) {
 	let formula = document.createElement('div');
 	formula.classList.add('formula');
 	formula.innerHTML = grouped.map(token => {
-		return `<code>${token.form}<sup>${token.count}</sup></code>`;
+		return `<a href="./emoji.html#q=${String.fromCodePoint(...token.cps)}">${token.form}<sup>${token.count}</sup></a>`;
 	}).join('');
 	row.append(formula);
 	
@@ -1057,7 +1071,7 @@ function create_ethmoji_row(tokens) {
 		let ncp = last.cps.length;
 		if ((ncp == 1 && last.count == 3) || (ncp == 2 && last.count == 2) || (ncp >= 3 && last.count == 1)) {
 			span_grade.classList.add('best');
-			span_grade.innerHTML = '🔥️ Shortest';
+			span_grade.innerHTML = '🔥️ Shortest Repeated';
 		} else {
 			span_grade.classList.add('warn');
 			span_grade.innerHTML = '⭐️ Repeated';
@@ -1134,12 +1148,17 @@ function utf8_length(s) {
 	return bytes;
 }
 
+function make_tokens_div(name, before) {
+	return dom_from_tokens(ens_tokenize(name), {
+		before, 
+		emoji_url: './emoji.html#q=%s',
+		components: show_components_check.checked
+	});
+}
+
 function update_exploded() {
 	for (let exploded of output_div.querySelectorAll('.exploded')) {
-		let tokens_div = dom_from_tokens(ens_tokenize(exploded.dataset.name), {
-			before: exploded.dataset.before,
-			components: show_components_check.checked,
-		});
+		let tokens_div = make_tokens_div(exploded.dataset.name, exploded.dataset.before);
 		if (exploded.dataset.downgraded) {
 			apply_downgrade(tokens_div);
 		}
@@ -1160,7 +1179,7 @@ function make_exploded(row, name, is_norm, downgrade_disallowed) {
 	exploded.classList.add('exploded');
 
 	let before = !is_norm;
-	let tokens_div = dom_from_tokens(ens_tokenize(name), {before, components: show_components_check.checked});
+	let tokens_div = make_tokens_div(name, before);
 	exploded.dataset.name = name;
 	exploded.dataset.before = before ? '1' : '';
 	if (downgrade_disallowed) {
@@ -1359,7 +1378,9 @@ function resolve(options) {
 					if (r.status !== 200) throw new Error(`HTTP Error ${r.status}`);
 					return r.json();
 				}).then(meta => {
-					input_field.value = meta.is_normalized ? meta.name : meta.description.replace(/^.*ENS name\. \((.*)\.eth.*$/, (_, x) => x);
+					let name = meta.is_normalized ? meta.name : meta.description.replace(/^.*ENS name\. \((.*\.eth).*$/, (_, x) => x); // cheap hack
+					input_field.value = name;
+					//skip_norm_check.checked = true;
 					setTimeout(resolve, 0);
 				}).catch(() => {}).finally(() => {
 					resolve_btn.disabled = false;
@@ -1367,7 +1388,7 @@ function resolve(options) {
 				return;
 			}
 		}
-	} catch (err) {		
+	} catch (err) {
 	}
 	if (!options.automatic && /^\s*[0-9a-f]{2,}(\s+[0-9a-f]{2,})+\s*$/i.test(input)) {
 		input_field.value = input = input.trim().split(/\s+/).map(x => `{${x}}`).join('');	
@@ -1509,7 +1530,7 @@ async function resolve0(input0, skip_norm) {
 	} else {
 		
 		// the input is a name
-		input_row = normed_row = create_row('Name');
+		input_row = normed_row = create_row(INPUT_NAME);
 		make_exploded(input_row, input, false);
 		add_row_tag(input_row, create_class_tag(input));
 		//add_row_tag(input_row, input_grade);
@@ -1770,8 +1791,12 @@ async function resolve0(input0, skip_norm) {
 		return;
 	}
 
+	resolver_row.append(create_etherscan_address_link(resolver.address));
+
 	let is_wildcard = await resolver.supportsWildcard();
-	let resolver_name = resolver.address;
+	if (should_stop_resolving()) return;
+	
+	let resolver_span = document.createElement('span');
 	if (is_wildcard) {
 		// ethers doesn't expose this information
 		let v = name_norm.split('.');
@@ -1781,17 +1806,19 @@ async function resolve0(input0, skip_norm) {
 				let address = await registry_contract.callStatic.resolver(namehash(parent));
 				if (should_stop_resolving()) return;
 				if (address === resolver.address) {
-					resolver_name = parent;
+					apply_grade(resolver_span, 'warn', parent);
 					break;
 				}	
 				v.shift();
 			}
 		} catch (ignored) {			
 		}
-	} else if (resolver_name === '0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41') {
-		resolver_name = 'Public Resolver';
-	}	
-	resolver_row.append(create_etherscan_address_link(resolver.address, resolver_name));
+	} else if (resolver.address === '0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41') {
+		apply_grade(resolver_span, 'good', 'Public Resolver');
+	} else {
+		apply_grade(resolver_span, 'warn', 'Custom');
+	}
+	add_row_tag(resolver_row, resolver_span);
 	
 	if (is_wildcard) {
 		let span = document.createElement('span');

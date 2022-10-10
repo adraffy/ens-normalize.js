@@ -115,12 +115,27 @@ emoji_seqs.RGI_Emoji_Modifier_Sequence.forEach(register_emoji);
 // derive flag sequences with valid regions
 // warning: this contains EZ and QO
 // UNICODE.valid_emoji_flag_sequences().forEach(register_emoji);
-emoji_seqs.RGI_Emoji_Flag_Sequence.forEach(register_emoji); // use this instead
+// use the following instead
+emoji_seqs.RGI_Emoji_Flag_Sequence.forEach(register_emoji);
 
 let emoji_disabled = [];
 
 let emoji_chrs = UNICODE.emoji_data();
 let emoji_map = new Map(emoji_chrs.Emoji.map(x => [x.cp, x]));
+
+// names suck: old, ucd, emoji (incomplete)
+/*
+// modernize names
+for (let info of emoji_seqs.Basic_Emoji) {
+	let rec = emoji_map.get(info.cps[0]);
+	if (!rec) throw new Error(`Expected emoji: ${UNICODE.format(info)}`);
+	if (rec.name.localeCompare(info.name, 'en', {sensitivity: 'base'})) {
+		rec.name = `${rec.name} (${info.name})`;
+	}
+}
+*/
+
+// demote mapped emoji
 let emoji_demoted = new Set((await import('./rules/emoji-demoted.js')).default);
 for (let rec of emoji_map.values()) {
 	if (emoji_demoted.has(rec.cp)) {
@@ -128,7 +143,7 @@ for (let rec of emoji_map.values()) {
 		emoji_disabled.push(rec);
 		console.log(`Demoted Emoji: ${UNICODE.format(rec)}`);
 	} else {
-		disallow_char(rec.cp, true);
+		disallow_char(rec.cp, true); // quiet because there are a lot of these
 	}
 }
 
@@ -137,18 +152,23 @@ for (let cp of UNICODE.regional_indicators()) {
 	let rec = emoji_map.get(cp);
 	rec.used = true;
 	emoji_disabled.push(rec);
+	console.log(`Disabled Emoji: ${rec}`);
 }
+
 // disable skin modifiers
 for (let info of UNICODE.emoji_skin_colors()) {
 	emoji_map.get(info.cp).used = true;
 	emoji_disabled.push(info);
+	console.log(`Disabled Emoji: ${info}`);
 }
+
 // disable hair modifiers
 // 20221004: these don't seem to function the same as skin
 /* 
 for (let info of UNICODE.emoji_hair_colors()) {
 	emoji_map.get(info.cp).used = true;
 	emoji_disabled.push(info);
+	console.log(`Disabled Emoji: ${info}`);
 }
 */
 
@@ -366,8 +386,17 @@ writeFileSync(new URL('./nf.json', out_dir), JSON.stringify({
 }));
 writeFileSync(new URL('./nf-tests.json', out_dir), JSON.stringify(UNICODE.nf_tests()));
 
-// convenience file for emoji.html (not critical)
+// conveniences files (not critical)
+// for emoji.html
 writeFileSync(new URL('./emoji-info.json', out_dir), JSON.stringify([...emoji.values(), ...emoji_disabled].map(info => {
 	let {cps, name, version, type} = info;
 	return {form: String.fromCodePoint(...cps), name, version, type};
 })));
+
+// for chars.html
+writeFileSync(new URL('./names.json', out_dir), JSON.stringify(UNICODE.chars.map(info => {
+	let name = UNICODE.get_name(info.cp);
+	if (!name) return [];
+	return [info.cp, name];
+}).filter(x => x)));
+writeFileSync(new URL('./scripts.json', out_dir), JSON.stringify(SCRIPTS.entries, (_, x) => x instanceof Set ? [...x] : x));

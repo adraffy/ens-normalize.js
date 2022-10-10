@@ -108,6 +108,9 @@ td.info {
 	font-size: 120%;
 	padding: 2px 4px;
 }
+.whitelisted .cells code {
+	background: #fca;
+}
 .exploded {
 	display: flex;
 	flex-wrap: wrap;
@@ -177,6 +180,7 @@ const hover_div = document.querySelector('#hover');
 let last_hover;
 let search_timer;
 let emoji_seqs = ens_emoji();
+let emoji_disabled = [];
 
 async function fetch_json(url) {
 	let res = await fetch(url);
@@ -194,7 +198,7 @@ try {
 	for (let info of await fetch_json('../derive/output/emoji-info.json')) {
 		info_map.set(info.form, info);
 		if (is_not_emoji(info)) {
-			emoji_seqs.push(explode_cp(info.form));
+			emoji_disabled.push(explode_cp(info.form));
 		}
 	}
 } catch (err) {
@@ -241,34 +245,40 @@ if (type_map.size || versions.size) {
 	search_select.classList.remove('hide');
 }
 
-let buckets = [];
-for (let cps of emoji_seqs) {
+function make_rec(cps) {
 	let form = String.fromCodePoint(...cps);
 	let norm;
 	try {
 		norm = ens_normalize(form);
 	} catch (err) {
-		norm = form; 
+		norm = form;
 	}
-	let info = info_map.get(form);
-	let n = [...norm].length;
-	let bucket = buckets[n];
-	if (!bucket) buckets[n] = bucket = [];
-	let rec = {form, norm, cps, info, n};
-	rec.tr = create_tr(rec, cps.length);
-	bucket.push(rec);
+	let info = info_map.get(form);	
+	let rec = {form, norm, cps, info};
+	rec.tr = create_tr(rec, `${[...norm].length}<sub>ch</sub>`);
+	return rec;
 }
 
+let buckets = [];
+for (let cps of emoji_seqs) {
+	let rec = make_rec(cps);
+	let n = [...rec.norm].length;	
+	let bucket = buckets[n];
+	if (!bucket) buckets[n] = bucket = [];
+	bucket.push(rec);
+}
 let flat = buckets.flat();
-
 document.querySelector('h1').innerHTML += ` (${flat.length})`;
+for (let cps of emoji_disabled) {
+	flat.push(make_rec(cps));
+}
 
 main.innerHTML = '';
 
 for (let n = 1; n < buckets.length; n++) {
 	let bucket = buckets[n];
 	if (!bucket) continue;
-	let title = `${n} character${n==1?'':'s'} (${bucket.length})`;
+	let title =`${n} character${n==1?'':'s'} (${bucket.length})`;
 
 	let li = document.createElement('li');
 	li.innerHTML = `<a href="#${n}">${title}</a>`;
@@ -321,7 +331,7 @@ document.addEventListener('mousemove', e => {
 	let r = node.getBoundingClientRect();
 	let y = r.top + window.scrollY;
 	let gap = 0.5;
-	if (r.top < window.innerHeight * .6) {		
+	if (r.top < window.innerHeight * .5) {		
 		y += r.height * (1 + gap);
 		hover_div.style.transform = 'translate(-50%, 0)';
 	} else {
@@ -417,13 +427,16 @@ function create_table(bucket, search) {
 	return table;
 }
 
-function create_tr({cps, form, norm, info, n}, first) {
+function create_tr({cps, form, norm, info}, first) {
 	let cells = [];
+	let whitelisted;
 
 	if (info) {
-		let {name, version} = info;
+		let {name, version, type} = info;
 		let title = `<a href="https://emojipedia.org/${form}">${name}</a>`;
+		whitelisted = type === 'Whitelisted';
 		if (version) title += ` <span class="version">v${version}</span>`;
+		if (whitelisted) title += ` <span class="version">whitelisted</span>`;
 		cells.push(`<div>${title}</div>`);
 	}
 	cells.push(`<code>${cps.map(hex_cp).join(' ')}</code>`);
@@ -432,6 +445,7 @@ function create_tr({cps, form, norm, info, n}, first) {
 	let tr = document.createElement('tr');
 	tr.dataset.name = form;
 	if (info && is_not_emoji(info)) tr.classList.add('error');
+	if (whitelisted) tr.classList.add('whitelisted');
 	let repeated = norm;
 	for (let i = 3 - [...norm].length; i > 0; i--) {
 		repeated += norm;

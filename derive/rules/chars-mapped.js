@@ -1,9 +1,5 @@
 export default [
 
-	// latin cleanup
-	[0x238, [0x64, 0x62]], // (ȸ) LATIN SMALL LETTER DB DIGRAPH -> "db"
-	[0x239, [0x71, 0x70]], // (ȹ) LATIN SMALL LETTER QP DIGRAPH -> "qp"
-
 	// arabic numerals
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/172
 	[0x6F0, [0x660]], // 6F0 (۰) EXTENDED ARABIC-INDIC DIGIT ZERO  => 660 (٠) ARABIC-INDIC DIGIT ZERO
@@ -30,11 +26,12 @@ export default [
 	[0x2010, [0x2D]], // 2010 (‐) HYPHEN
 	[0x2012, [0x2D]], // 2012 (‒) FIGURE DASH
 	[0x2015, [0x2D]], // 2015 (―) HORIZONTAL BAR
-	[0x207B, [0x2D]], // 207B (⁻) SUPERSCRIPT MINUS
-	[0x208B, [0x2D]], // 208B (₋) SUBSCRIPT MINUS
-	[0xFE31, [0x2D]], // FE31 (︱) PRESENTATION FORM FOR VERTICAL EM DASH
-	[0xFE32, [0x2D]], // FE32 (︲) PRESENTATION FORM FOR VERTICAL EN DASH
-	[0xFE58, [0x2D]], // FE58 (﹘) SMALL EM DASH
+	[0xFE58, [0x2D]], // FE58 (﹘) SMALL EM DASH	
+	// 29221009: the following are too dangerous to map
+	//[0x207B, [0x2D]], // 207B (⁻) SUPERSCRIPT MINUS
+	//[0x208B, [0x2D]], // 208B (₋) SUBSCRIPT MINUS
+	//[0xFE31, [0x2D]], // FE31 (︱) PRESENTATION FORM FOR VERTICAL EM DASH
+	//[0xFE32, [0x2D]], // FE32 (︲) PRESENTATION FORM FOR VERTICAL EN DASH
 
 	// more hyphen-likes
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/393
@@ -48,7 +45,7 @@ export default [
 	// more hyphen-likes
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/396
 	[0x2043, [0x2D]], // (⁃) HYPHEN BULLET 
-	[0x2027, [0x2D]], // (‧) HYPHENATION POINT
+	//[0x2027, [0x2D]], // (‧) HYPHENATION POINT
 
 	// more hyphens!
 	[0x58A, [0x2D]], // (֊) ARMENIAN HYPHEN
@@ -106,6 +103,7 @@ export default [
 	[0x277E, [0x39]], // (❾) DINGBAT NEGATIVE CIRCLED DIGIT NINE
 	[0x277F, [0x31, 0x30]], // (❿) DINGBAT NEGATIVE CIRCLED NUMBER TEN
 	// circled sans-serif => digits
+	[0x1F10B, [0x30]], // (🄋) DINGBAT CIRCLED SANS-SERIF DIGIT ZERO
 	[0x2780, [0x31]], // (➀) DINGBAT CIRCLED SANS-SERIF DIGIT ONE
 	[0x2781, [0x32]], // (➁) DINGBAT CIRCLED SANS-SERIF DIGIT TWO
 	[0x2782, [0x33]], // (➂) DINGBAT CIRCLED SANS-SERIF DIGIT THREE
@@ -117,6 +115,7 @@ export default [
 	[0x2788, [0x39]], // (➈) DINGBAT CIRCLED SANS-SERIF DIGIT NINE
 	[0x2789, [0x31, 0x30]], // (➉) DINGBAT CIRCLED SANS-SERIF NUMBER TEN
 	// negative circled sans-serif => digits
+	[0x1F10C, [0x30]], // (🄌) DINGBAT NEGATIVE CIRCLED SANS-SERIF DIGIT ZERO
 	[0x278A, [0x31]], // (➊) DINGBAT NEGATIVE CIRCLED SANS-SERIF DIGIT ONE
 	[0x278B, [0x32]], // (➋) DINGBAT NEGATIVE CIRCLED SANS-SERIF DIGIT TWO
 	[0x278C, [0x33]], // (➌) DINGBAT NEGATIVE CIRCLED SANS-SERIF DIGIT THREE
@@ -161,5 +160,35 @@ export default [
 	// 0x1F17E, // (🅾) NEGATIVE SQUARED LATIN CAPITAL LETTER O
 	// 0x1F17F, // (🅿) NEGATIVE SQUARED LATIN CAPITAL LETTER P
 	// marked remainder as isolates
+
+	/*
+	// small capitals
+	[0x1D00, [0x61]], // (ᴀ) LATIN LETTER SMALL CAPITAL A
+	[0x0299, [0x62]], // (ʙ) LATIN LETTER SMALL CAPITAL B
+	[0x1D04, [0x63]], // (ᴄ) LATIN LETTER SMALL CAPITAL C
+	[0x1D05, [0x64]], // (ᴅ) LATIN LETTER SMALL CAPITAL D
+	[0x1D07, [0x65]], // (ᴇ) LATIN LETTER SMALL CAPITAL E
+	[0xA730, [0x66]], // (ꜰ) LATIN LETTER SMALL CAPITAL F
+	[0x0262, [0x67]], // (ɢ) LATIN LETTER SMALL CAPITAL G
+	[0x029C, [0x68]], // (ʜ) LATIN LETTER SMALL CAPITAL H
+	[0x026A, [0x69]], // (ɪ) LATIN LETTER SMALL CAPITAL I
+	[0x1D0A, [0x6A]], // (ᴊ) LATIN LETTER SMALL CAPITAL J
+	[0x1D0B, [0x6B]], // (ᴋ) LATIN LETTER SMALL CAPITAL K
+	[0x029F, [0x6C]], // (ʟ) LATIN LETTER SMALL CAPITAL L
+	[0x1D0D, [0x6D]], // (ᴍ) LATIN LETTER SMALL CAPITAL M
+	[0x0274, [0x6E]], // (ɴ) LATIN LETTER SMALL CAPITAL N
+	[0x1D0F, [0x6F]], // (ᴏ) LATIN LETTER SMALL CAPITAL O
+	[0x1D18, [0x70]], // (ᴘ) LATIN LETTER SMALL CAPITAL P
+	[0xA7AF, [0x71]], // (ꞯ) LATIN LETTER SMALL CAPITAL Q
+	[0x0280, [0x72]], // (ʀ) LATIN LETTER SMALL CAPITAL R
+	[0xA731, [0x73]], // (ꜱ) LATIN LETTER SMALL CAPITAL S
+	[0x1D1B, [0x74]], // (ᴛ) LATIN LETTER SMALL CAPITAL T
+	[0x1D1C, [0x75]], // (ᴜ) LATIN LETTER SMALL CAPITAL U
+	[0x1D20, [0x76]], // (ᴠ) LATIN LETTER SMALL CAPITAL V
+	[0x1D21, [0x77]], // (ᴡ) LATIN LETTER SMALL CAPITAL W
+	// no x?
+	[0x028F, [0x79]], // (ʏ) LATIN LETTER SMALL CAPITAL Y
+	[0x1D22, [0x7A]], // (ᴢ) LATIN LETTER SMALL CAPITAL Z
+	*/
 
 ];

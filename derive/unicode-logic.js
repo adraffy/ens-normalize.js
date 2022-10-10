@@ -273,10 +273,14 @@ export class UnicodeSpec {
 			row([src, type, name], comment) {
 				let version = parse_version_from_comment(comment);
 				if (src.includes('..')) {
-					let bucket = this.get_bucket(type);
-					for (let cp of parse_cp_range(src)) {
-						bucket.push({cps: [cp], type, name: self.get_name(cp), version});
-					}
+					let range = parse_cp_range(src).map(cp => {
+						return {cps: [cp], type, name: self.get_name(cp), version};
+					});
+					// use provide name if possible
+					let [first, last] = name.split('..');
+					range[0].name = first.trim();
+					range[range.length-1].name = last.trim();
+					this.get_bucket(type).push(...range);
 				} else {
 					let cps = parse_cp_sequence(src);
 					this.get_bucket(type).push({cps, type, name, version});
@@ -425,7 +429,9 @@ export class UnicodeScripts {
 		this.by_abbr = Object.fromEntries(this.entries.map(x => [x.abbr, x])); // use Object so we can $.Latn
 		// add in script extensions
 		for (let [abbr, cps] of spec.script_extensions()) {
-			let {extended} = this.by_abbr[abbr];
+			let rec = this.by_abbr[abbr];
+			if (!rec) throw new TypeError(`expected script abbr: ${name}`);
+			let {extended} = rec;
 			for (let cp of cps) {
 				extended.add(cp);
 			}
@@ -436,6 +442,13 @@ export class UnicodeScripts {
 	}
 	limited() { 
 		return read_limited_scripts(); 
+	}
+	get_script(cp) {
+		for (let {abbr, set} of this.entries) {
+			if (set.has(cp)) {
+				return abbr;
+			}
+		}
 	}
 	get_script_set(cps) {
 		let ret = new Set();

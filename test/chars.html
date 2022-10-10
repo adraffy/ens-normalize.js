@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Characters</title>
+<style>
+.hide {
+	display: none !important;
+}
+body {
+	margin: 0;
+}
+#grid {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	table-layout: fixed;
+	width: 100%;
+	height: 100vh;
+	font-size: 16pt;
+	border-collapse: collapse;
+}
+#grid td.index {
+	background: #ddd;
+	text-align: center;
+	color: #999;
+	font: 12pt monospace;
+}
+#grid .tokens {
+	justify-content: center;
+}
+#grid td {
+	position: relative;
+	border: 1px solid #ccc;
+	
+}
+span.corner {
+	color: #666;
+	position: absolute;
+}
+span.code {
+	font-family: monospace;
+	color: #000;
+	top: 0;
+	left: 0;
+	font-size: 12pt;
+}
+span.abbr {
+	top: 0;
+	right: 0;
+	font-size: 10pt;
+}
+span.name {
+	bottom: 0;
+	left: 0;
+	right: 0;
+	font-size: 8pt;
+}
+#grid tr:nth-child(even) {
+	background: rgba(0, 0, 0, .05);
+}
+footer {
+	text-align: center;
+	color: #666;
+	margin-top: 1rem;
+	margin-bottom: 0.5rem;
+}
+</style>
+</head>
+<body>
+<table id="grid">
+<tbody></tbody>
+</table>
+<script type="module">
+import {
+	ens_tokenize, 
+	escape_for_html, is_printable_ascii, hex_cp, explode_cp,
+	dom_from_tokens, use_default_style
+} from '../dist/all.min.js';
+use_default_style();
+
+
+let max_cp = 0x10FFFF; 
+const char_map = new Map();
+Promise.all([
+	fetch('../derive/output/names.json').then(r => r.json()),
+	fetch('../derive/output/scripts.json').then(r => r.json())
+]).then(([names, scripts]) => {
+	for (let [cp, name] of names) {
+		char_map.set(cp, {name});
+	}
+	for (let {name, abbr, set} of scripts) {
+		for (let cp of set) {
+			let info = char_map.get(cp);
+			if (!info) {
+				info = {};
+				char_map.set(cp, info);
+			}
+			info.script = name;
+			info.abbr = abbr;
+		}
+	}
+	scrollLast = undefined; // dirty
+	max_cp = Math.max(...char_map.keys()); // meh
+
+	
+	for (let s of scripts) {
+		s.avg = s.set.reduce((a, x) => a + x) / s.set.length;
+	}
+	scripts.sort((a, b) => a.avg - b.avg);
+	let style = document.createElement('style');
+	style.innerText = scripts.map(({abbr}, i) => {
+		return `td.${abbr} { background: hsla(${360*(i/10%1)},100%,50%,.15); }`
+	}).join('\n');
+	document.body.append(style);
+
+}).catch(console.log);
+
+function titler(name, cps, token) {
+	let v = [
+		`Type: ${name}`, 
+		`Hex: ${cps.map(cp => cp.toString(16).padStart(2, '0')).join(' ')}`,
+	];
+	if (cps.length === 1) {
+		let info = char_map.get(cps[0]);
+		if (info) {
+			v.unshift(`Name: ${info.name || 'Unknown'}`);
+			v.push(`Script: ${info.script}`);
+		}
+	}
+	return v.join('\n');
+}
+
+const table = document.querySelector('#grid');
+
+const ROW_WIDTH = 128;
+const ROW_HEIGHT = 80;
+
+let scrollLast;
+let scrollHeight;
+let grid_rows;
+let grid_cols;
+
+update_cols();
+window.addEventListener('resize', () => {
+	update_cols();
+});
+
+function update_cols() {
+	grid_rows = Math.round(window.innerHeight / ROW_HEIGHT);
+	grid_cols = Math.floor(window.innerWidth / ROW_WIDTH);
+	let max = Math.ceil((1 + max_cp) / grid_cols);
+	scrollLast = undefined; // dirty
+	scrollHeight = max * ROW_HEIGHT;
+	document.body.style.height = `${scrollHeight}px`;
+}
+
+/*
+function create_index_td(i) {
+	let td = document.createElement('td');
+	td.classList.add('index');
+	td.innerHTML = i.toString(16).padStart(2, '0').toUpperCase();
+	return td;
+}
+*/
+
+function update_table() {
+	let cp = grid_cols * Math.round(window.scrollY/ROW_HEIGHT);
+	let tr_header = document.createElement('tr');
+	/*
+	tr_header.innerHTML = '<td class="index"></td>';
+	for (let c = 0; c < grid_cols; c++) {
+		tr_header.append(create_index_td(c));
+	}
+	*/
+	table.innerHTML = '';
+	table.append(tr_header);
+	for (let r = 0; r < grid_rows; r++) {
+		let tr = document.createElement('tr');
+		//tr.append(create_index_td(cp));
+		for (let c = 0; c < grid_cols && cp <= max_cp; c++, cp++) {
+			let td = document.createElement('td');
+			
+			let hex_span = document.createElement('span');
+			hex_span.classList.add('corner', 'code');
+			hex_span.innerHTML = hex_cp(cp);			
+			td.append(hex_span);
+
+			let info0 = char_map.get(cp);
+			if (info0) {
+				let name_span = document.createElement('span');
+				name_span.classList.add('corner', 'name');
+				name_span.innerHTML = info0.name.toLowerCase();
+				td.append(name_span);
+			}
+
+			let tokens = ens_tokenize(String.fromCodePoint(cp));
+			if (tokens.length == 1) {
+				let abbr;
+				if (tokens[0].type === 'mapped') {
+					let v = tokens[0].cps.map(x => char_map.get(x));
+					let abbr0 = v.find(x => x)?.abbr;
+					if (v.every(x => x && x.abbr === abbr0)) {
+						abbr = abbr0;
+					}
+				} else {
+					let info = char_map.get(cp);
+					if (info) {
+						abbr = info.abbr;
+					}
+				}
+				if (abbr) {
+					td.classList.add(abbr);
+					let abbr_span = document.createElement('span');
+					abbr_span.classList.add('corner', 'abbr');
+					abbr_span.innerHTML = abbr;
+					td.append(abbr_span);
+				}
+			}
+			td.append(dom_from_tokens(tokens, {titler}));
+			tr.append(td);
+		}
+		table.append(tr);
+	}
+}
+
+
+check();
+function check() {
+	requestAnimationFrame(check);
+	let y = Math.max(0, Math.min(window.scrollY, scrollHeight));
+	if (scrollLast !== y) {
+		scrollLast = y;
+		update_table();
+	}
+}
+</script>
+</body>
+</html>
