@@ -643,6 +643,7 @@ const RESOLVE_MODE_REPEAT = 'repeat';
 const RESOLVE_MODE_EMPTY = 'empty';
 
 const INPUT_NAME = 'Input';
+const OPENSEA_NAME = 'OpenSea';
 const SKIP_SUFFIX = '_!';
 
 let resolve_timer = RESOLVE_MODE_IDLE;
@@ -1121,7 +1122,7 @@ function add_dot_eth_links(row, name) {
 	let hash = labelhash(label);
 	let contract = '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85';
 	
-	let os = create_link(`https://opensea.io/assets/ethereum/${contract}/${ethers.BigNumber.from(hash)}`, 'OpenSea');
+	let os = create_link(`https://opensea.io/assets/ethereum/${contract}/${ethers.BigNumber.from(hash)}`, OPENSEA_NAME);
 	os.classList.add('opensea');
 	add_row_tag(row, os);
 
@@ -2001,6 +2002,7 @@ async function resolve0(input0, skip_norm) {
 					add_row_tag(address_row, span);	
 				}
 			}
+			add_row_tag(address_row, create_link(`https://opensea.io/${address}`, OPENSEA_NAME));	
 		}
 	}
 	add_row_tag(address_row, create_elapsed());	

@@ -273,36 +273,6 @@ for (let cps of emoji_disabled) {
 	flat.push(make_rec(cps));
 }
 
-main.innerHTML = '';
-
-for (let n = 1; n < buckets.length; n++) {
-	let bucket = buckets[n];
-	if (!bucket) continue;
-	let title =`${n} character${n==1?'':'s'} (${bucket.length})`;
-
-	let li = document.createElement('li');
-	li.innerHTML = `<a href="#${n}">${title}</a>`;
-	toc_ul.append(li);
-
-	let section = document.createElement('section');
-	section.innerHTML = `<h2><a name="${n}">${title}</a></h2>`;
-	
-	// add jump
-	let a = document.createElement('a');
-	a.classList.add('top');
-	a.innerHTML = 'Top ⬆';
-	a.href = '#';
-	a.addEventListener('click', e => {
-		e.preventDefault();
-		window.history.replaceState(null, null, ' ');
-		window.scrollTo(0, 0);
-	});
-	section.querySelector('h2').append(a);
-
-	section.append(create_table(bucket));
-	main.append(section);
-}
-
 process_hash();
 
 window.addEventListener('hashchange', process_hash);
@@ -376,6 +346,32 @@ function update_search() {
 	if (!input) {
 		if (window.location.hash.startsWith(prefix)) {
 			window.history.replaceState(null, null, ' ');
+		}
+		if (main.querySelector('#loading')) {
+			main.innerHTML = '';
+			for (let n = 1; n < buckets.length; n++) {
+				let bucket = buckets[n];
+				if (!bucket) continue;
+				let title =`${n} character${n==1?'':'s'} (${bucket.length})`;
+				let li = document.createElement('li');
+				li.innerHTML = `<a href="#${n}">${title}</a>`;
+				toc_ul.append(li);
+				let section = document.createElement('section');
+				section.innerHTML = `<h2><a name="${n}">${title}</a></h2>`;
+				// add jump
+				let a = document.createElement('a');
+				a.classList.add('top');
+				a.innerHTML = 'Top ⬆';
+				a.href = '#';
+				a.addEventListener('click', e => {
+					e.preventDefault();
+					window.history.replaceState(null, null, ' ');
+					window.scrollTo(0, 0);
+				});
+				section.querySelector('h2').append(a);
+				section.append(create_table(bucket));
+				main.append(section);
+			}
 		}
 		return;
 	}
