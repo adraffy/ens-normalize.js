@@ -262,7 +262,8 @@ function make_rec(cps) {
 let buckets = [];
 for (let cps of emoji_seqs) {
 	let rec = make_rec(cps);
-	let n = [...rec.norm].length;	
+	let n = [...rec.norm].length;
+	rec.n = n;
 	let bucket = buckets[n];
 	if (!bucket) buckets[n] = bucket = [];
 	bucket.push(rec);
@@ -386,6 +387,25 @@ function update_search() {
 		results = flat.filter(x => x.info && parseInt(x.info.version) == version);
 	} else if (match = type_map.get(input)) {
 		results = flat.filter(x => x.info && x.info.type === match);
+	} else if (match = input.match(/^unmod\((\d+)\)$/i)) {
+		let max = parseInt(match[1]);
+		let ignored = new Set([
+			127995,127996,127997,127998,127999, // skin
+			//129456,129457,129458,129459, // hair
+			0xFE0F, 0x2640, 0x2642
+		]);
+		let dups = new Map();
+		for (let rec of flat) {
+			if (!(rec.n >= 3)) continue;						
+			let key = String.fromCodePoint(...rec.cps.filter(cp => !ignored.has(cp)));
+			let bucket = dups.get(key);
+			if (!bucket) {
+				bucket = [];
+				dups.set(key, bucket);
+			}
+			bucket.push(rec);
+		}
+		results = [...dups.values()].filter(v => v.length <= max).flat();		
 	} else {
 		let norm;
 		try {
@@ -424,24 +444,23 @@ function create_table(bucket, search) {
 }
 
 function create_tr({cps, form, norm, info}, first) {
+	let tr = document.createElement('tr');
 	let cells = [];
-	let whitelisted;
-
 	if (info) {
 		let {name, version, type} = info;
 		let title = `<a href="https://emojipedia.org/${form}">${name}</a>`;
-		whitelisted = type === 'Whitelisted';
 		if (version) title += ` <span class="version">v${version}</span>`;
-		if (whitelisted) title += ` <span class="version">whitelisted</span>`;
+		if (type === 'Whitelisted') {
+			title += ` <span class="version">whitelisted</span>`;
+			tr.classList.add('whitelisted');
+		}
+		if (is_not_emoji(info)) tr.classList.add('error');
 		cells.push(`<div>${title}</div>`);
 	}
 	cells.push(`<code>${cps.map(hex_cp).join(' ')}</code>`);
 	cells.push(`<div class="exploded"></div>`);
 
-	let tr = document.createElement('tr');
 	tr.dataset.name = form;
-	if (info && is_not_emoji(info)) tr.classList.add('error');
-	if (whitelisted) tr.classList.add('whitelisted');
 	let repeated = norm;
 	for (let i = 3 - [...norm].length; i > 0; i--) {
 		repeated += norm;

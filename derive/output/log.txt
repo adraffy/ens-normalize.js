@@ -1,4 +1,4 @@
-Build Date: 2022-10-11T06:41:55.431Z
+Build Date: 2022-10-12T08:32:42.034Z
 Unicode Version: 15.0.0
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -3702,31 +3702,6 @@ Register Emoji [Emoji_Presentation]: 1FAF5 (🫵) INDEX POINTING AT THE VIEWER
 Register Emoji [Emoji_Presentation]: 1FAF6 (🫶) HEART HANDS
 Register Emoji [Emoji_Presentation]: 1FAF7 (🫷) LEFTWARDS PUSHING HAND
 Register Emoji [Emoji_Presentation]: 1FAF8 (🫸) RIGHTWARDS PUSHING HAND
-Register Emoji [Whitelisted]: [1F93C 1F3FB 200D 2642 FE0F] (🤼🏻‍♂️) man wrestler: light skin tone
-Register Emoji [Whitelisted]: [1F93C 1F3FC 200D 2642 FE0F] (🤼🏼‍♂️) man wrestler: medium-light skin tone
-Register Emoji [Whitelisted]: [1F93C 1F3FD 200D 2642 FE0F] (🤼🏽‍♂️) man wrestler: medium skin tone
-Register Emoji [Whitelisted]: [1F93C 1F3FE 200D 2642 FE0F] (🤼🏾‍♂️) man wrestler: medium-dark skin tone
-Register Emoji [Whitelisted]: [1F93C 1F3FF 200D 2642 FE0F] (🤼🏿‍♂️) man wrestler: dark skin tone
-Register Emoji [Whitelisted]: [1F93C 1F3FB 200D 2640 FE0F] (🤼🏻‍♀️) woman wrestler: light skin tone
-Register Emoji [Whitelisted]: [1F93C 1F3FC 200D 2640 FE0F] (🤼🏼‍♀️) woman wrestler: medium-light skin tone
-Register Emoji [Whitelisted]: [1F93C 1F3FD 200D 2640 FE0F] (🤼🏽‍♀️) woman wrestler: medium skin tone
-Register Emoji [Whitelisted]: [1F93C 1F3FE 200D 2640 FE0F] (🤼🏾‍♀️) woman wrestler: medium-dark skin tone
-Register Emoji [Whitelisted]: [1F93C 1F3FF 200D 2640 FE0F] (🤼🏿‍♀️) woman wrestler: dark skin tone
-Register Emoji [Whitelisted]: [1F46A 1F3FB] (👪🏻) family: light skin tone
-Register Emoji [Whitelisted]: [1F46A 1F3FC] (👪🏼) family: medium-light skin tone
-Register Emoji [Whitelisted]: [1F46A 1F3FD] (👪🏽) family: medium skin tone
-Register Emoji [Whitelisted]: [1F46A 1F3FE] (👪🏾) family: medium-dark skin tone
-Register Emoji [Whitelisted]: [1F46A 1F3FF] (👪🏿) family: dark skin tone
-Register Emoji [Whitelisted]: [1F46F 1F3FB] (👯🏻) people with bunny ears: light skin tone
-Register Emoji [Whitelisted]: [1F46F 1F3FC] (👯🏼) people with bunny ears: medium-light skin tone
-Register Emoji [Whitelisted]: [1F46F 1F3FD] (👯🏽) people with bunny ears: medium skin tone
-Register Emoji [Whitelisted]: [1F46F 1F3FE] (👯🏾) people with bunny ears: medium-dark skin tone
-Register Emoji [Whitelisted]: [1F46F 1F3FF] (👯🏿) people with bunny ears: dark skin tone
-Register Emoji [Whitelisted]: [1F93C 1F3FB] (🤼🏻) people wrestling: light skin tone
-Register Emoji [Whitelisted]: [1F93C 1F3FC] (🤼🏼) people wrestling: medium-light skin tone
-Register Emoji [Whitelisted]: [1F93C 1F3FD] (🤼🏽) people wrestling: medium skin tone
-Register Emoji [Whitelisted]: [1F93C 1F3FE] (🤼🏾) people wrestling: medium-dark skin tone
-Register Emoji [Whitelisted]: [1F93C 1F3FF] (🤼🏿) people wrestling: dark skin tone
 Blacklist Emoji by Sequence: [203C FE0F] (‼️) double exclamation mark
 Blacklist Emoji by Sequence: [2049 FE0F] (⁉️) exclamation question mark
 Removed Valid: 6F0 (۰) EXTENDED ARABIC-INDIC DIGIT ZERO
@@ -4048,6 +4023,16 @@ Removed Valid: 26E (ɮ) LATIN SMALL LETTER LEZH
 --Mapping: 1079E (𐞞) MODIFIER LETTER SMALL LEZH => 26E (ɮ) LATIN SMALL LETTER LEZH
 Removed Valid: 1A3 (ƣ) LATIN SMALL LETTER OI
 --Mapping: 1A2 (Ƣ) LATIN CAPITAL LETTER OI => 1A3 (ƣ) LATIN SMALL LETTER OI
+Removed Valid: 1FD (ǽ) LATIN SMALL LETTER AE WITH ACUTE
+--Mapping: 1FC (Ǽ) LATIN CAPITAL LETTER AE WITH ACUTE => 1FD (ǽ) LATIN SMALL LETTER AE WITH ACUTE
+Removed Valid: 1E3 (ǣ) LATIN SMALL LETTER AE WITH MACRON
+--Mapping: 1E2 (Ǣ) LATIN CAPITAL LETTER AE WITH MACRON => 1E3 (ǣ) LATIN SMALL LETTER AE WITH MACRON
+Removed Valid: 1D6B (ᵫ) LATIN SMALL LETTER UE
+Removed Valid: 276 (ɶ) LATIN LETTER SMALL CAPITAL OE
+--Mapping: 107A3 (𐞣) MODIFIER LETTER SMALL CAPITAL OE => 276 (ɶ) LATIN LETTER SMALL CAPITAL OE
+Removed Valid: 1D01 (ᴁ) LATIN LETTER SMALL CAPITAL AE
+Removed Valid: 1F670 (🙰) SCRIPT LIGATURE ET ORNAMENT
+Removed Valid: 1F671 (🙱) HEAVY SCRIPT LIGATURE ET ORNAMENT
 Removed Mapped: 374 (ʹ) GREEK NUMERAL SIGN => 2B9 (ʹ) MODIFIER LETTER PRIME
 Removed Valid: 375 (͵) GREEK LOWER NUMERAL SIGN
 Removed Valid: 2AED (⫭) REVERSED DOUBLE STROKE NOT SIGN
@@ -4106,14 +4091,6 @@ Removed Valid: 2C65 (ⱥ) LATIN SMALL LETTER A WITH STROKE
 Removed Valid: 2C66 (ⱦ) LATIN SMALL LETTER T WITH DIAGONAL STROKE
 --Mapping: 23E (Ⱦ) LATIN CAPITAL LETTER T WITH DIAGONAL STROKE => 2C66 (ⱦ) LATIN SMALL LETTER T WITH DIAGONAL STROKE
 Removed Valid: 1D7A (ᵺ) LATIN SMALL LETTER TH WITH STRIKETHROUGH
-Removed Valid: 1FD (ǽ) LATIN SMALL LETTER AE WITH ACUTE
---Mapping: 1FC (Ǽ) LATIN CAPITAL LETTER AE WITH ACUTE => 1FD (ǽ) LATIN SMALL LETTER AE WITH ACUTE
-Removed Valid: 1E3 (ǣ) LATIN SMALL LETTER AE WITH MACRON
---Mapping: 1E2 (Ǣ) LATIN CAPITAL LETTER AE WITH MACRON => 1E3 (ǣ) LATIN SMALL LETTER AE WITH MACRON
-Removed Valid: 1D6B (ᵫ) LATIN SMALL LETTER UE
-Removed Valid: 276 (ɶ) LATIN LETTER SMALL CAPITAL OE
---Mapping: 107A3 (𐞣) MODIFIER LETTER SMALL CAPITAL OE => 276 (ɶ) LATIN LETTER SMALL CAPITAL OE
-Removed Valid: 1D01 (ᴁ) LATIN LETTER SMALL CAPITAL AE
 Removed Valid: 19E (ƞ) LATIN SMALL LETTER N WITH LONG RIGHT LEG
 --Mapping: 220 (Ƞ) LATIN CAPITAL LETTER N WITH LONG RIGHT LEG => 19E (ƞ) LATIN SMALL LETTER N WITH LONG RIGHT LEG
 Removed Valid: 23F (ȿ) LATIN SMALL LETTER S WITH SWASH TAIL
@@ -4248,8 +4225,6 @@ Removed Valid: 1E9C (ẜ) LATIN SMALL LETTER LONG S WITH DIAGONAL STROKE
 Removed Valid: 1E9D (ẝ) LATIN SMALL LETTER LONG S WITH HIGH STROKE
 Removed Valid: 1EBB (ẻ) LATIN SMALL LETTER E WITH HOOK ABOVE
 --Mapping: 1EBA (Ẻ) LATIN CAPITAL LETTER E WITH HOOK ABOVE => 1EBB (ẻ) LATIN SMALL LETTER E WITH HOOK ABOVE
-Removed Valid: 1EBD (ẽ) LATIN SMALL LETTER E WITH TILDE
---Mapping: 1EBC (Ẽ) LATIN CAPITAL LETTER E WITH TILDE => 1EBD (ẽ) LATIN SMALL LETTER E WITH TILDE
 Removed Valid: 1EF3 (ỳ) LATIN SMALL LETTER Y WITH GRAVE
 --Mapping: 1EF2 (Ỳ) LATIN CAPITAL LETTER Y WITH GRAVE => 1EF3 (ỳ) LATIN SMALL LETTER Y WITH GRAVE
 Removed Valid: 1EF9 (ỹ) LATIN SMALL LETTER Y WITH TILDE
@@ -4963,7 +4938,6 @@ Removed Valid: AB51 (ꭑ) LATIN SMALL LETTER TURNED UI
 Removed Valid: 1DF02 (𝼂) LATIN LETTER SMALL CAPITAL TURNED G
 Removed Valid: 1DF0D (𝼍) LATIN SMALL LETTER TURNED T WITH CURL
 Removed Valid: 1DF10 (𝼐) LATIN LETTER SMALL CAPITAL TURNED K
-Removed Valid: 214B (⅋) TURNED AMPERSAND
 Removed Valid: 2E38 (⸸) TURNED DAGGER
 Removed Valid: 2BC2 (⯂) TURNED BLACK PENTAGON
 Removed Valid: 1D1D (ᴝ) LATIN SMALL LETTER SIDEWAYS U
@@ -5325,6 +5299,12 @@ Removed Valid: 205A (⁚) TWO DOT PUNCTUATION
 Removed Valid: 205B (⁛) FOUR DOT MARK
 Removed Valid: 205E (⁞) VERTICAL FOUR DOTS
 Removed Valid: 1805 (᠅) MONGOLIAN FOUR DOTS
+Removed Valid: 6FD (۽) ARABIC SIGN SINDHI AMPERSAND
+Removed Valid: 214B (⅋) TURNED AMPERSAND
+Removed Valid: 1F672 (🙲) LIGATURE OPEN ET ORNAMENT
+Removed Valid: 1F673 (🙳) HEAVY LIGATURE OPEN ET ORNAMENT
+Removed Valid: 1F674 (🙴) HEAVY AMPERSAND ORNAMENT
+Removed Valid: 1F675 (🙵) SWASH AMPERSAND ORNAMENT
 Removed Valid: 60C (،) ARABIC COMMA
 Removed Valid: 55D (՝) ARMENIAN COMMA
 Removed Valid: 7F8 (߸) NKO COMMA
@@ -5540,6 +5520,8 @@ Removed Valid: 25AF (▯) WHITE VERTICAL RECTANGLE
 Removed Valid: 2311 (⌑) SQUARE LOZENGE
 Removed Valid: 2337 (⌷) APL FUNCTIONAL SYMBOL SQUISH QUAD
 Removed Valid: 2395 (⎕) APL FUNCTIONAL SYMBOL QUAD
+Removed Valid: 259A (▚) QUADRANT UPPER LEFT AND LOWER RIGHT
+Removed Valid: 259E (▞) QUADRANT UPPER RIGHT AND LOWER LEFT
 Removed Valid: 25B4 (▴) BLACK UP-POINTING SMALL TRIANGLE
 Removed Valid: 25B5 (▵) WHITE UP-POINTING SMALL TRIANGLE
 Removed Valid: 25B8 (▸) BLACK RIGHT-POINTING SMALL TRIANGLE
@@ -6287,6 +6269,26 @@ Removed Valid: 2676 (♶) RECYCLING SYMBOL FOR TYPE-4 PLASTICS
 Removed Valid: 2677 (♷) RECYCLING SYMBOL FOR TYPE-5 PLASTICS
 Removed Valid: 2678 (♸) RECYCLING SYMBOL FOR TYPE-6 PLASTICS
 Removed Valid: 2679 (♹) RECYCLING SYMBOL FOR TYPE-7 PLASTICS
+Removed Valid: 1F654 (🙔) TURNED NORTH WEST POINTING LEAF
+Removed Valid: 1F655 (🙕) TURNED SOUTH WEST POINTING LEAF
+Removed Valid: 1F656 (🙖) TURNED NORTH EAST POINTING LEAF
+Removed Valid: 1F657 (🙗) TURNED SOUTH EAST POINTING LEAF
+Removed Valid: 1F658 (🙘) NORTH WEST POINTING VINE LEAF
+Removed Valid: 1F659 (🙙) SOUTH WEST POINTING VINE LEAF
+Removed Valid: 1F65A (🙚) NORTH EAST POINTING VINE LEAF
+Removed Valid: 1F65B (🙛) SOUTH EAST POINTING VINE LEAF
+Removed Valid: 1F65C (🙜) HEAVY NORTH WEST POINTING VINE LEAF
+Removed Valid: 1F65D (🙝) HEAVY SOUTH WEST POINTING VINE LEAF
+Removed Valid: 1F65E (🙞) HEAVY NORTH EAST POINTING VINE LEAF
+Removed Valid: 1F65F (🙟) HEAVY SOUTH EAST POINTING VINE LEAF
+Removed Valid: 1F660 (🙠) NORTH WEST POINTING BUD
+Removed Valid: 1F661 (🙡) SOUTH WEST POINTING BUD
+Removed Valid: 1F662 (🙢) NORTH EAST POINTING BUD
+Removed Valid: 1F663 (🙣) SOUTH EAST POINTING BUD
+Removed Valid: 1F664 (🙤) HEAVY NORTH WEST POINTING BUD
+Removed Valid: 1F665 (🙥) HEAVY SOUTH WEST POINTING BUD
+Removed Valid: 1F666 (🙦) HEAVY NORTH EAST POINTING BUD
+Removed Valid: 1F667 (🙧) HEAVY SOUTH EAST POINTING BUD
 Removed Valid: 266D (♭) MUSIC FLAT SIGN
 Removed Valid: 266E (♮) MUSIC NATURAL SIGN
 Removed Valid: 266F (♯) MUSIC SHARP SIGN
@@ -8553,8 +8555,8 @@ Isolated: 2596 (▖) QUADRANT LOWER LEFT
 Isolated: 2597 (▗) QUADRANT LOWER RIGHT
 Isolated: 2598 (▘) QUADRANT UPPER LEFT
 Isolated: 259D (▝) QUADRANT UPPER RIGHT
-Isolated: 259A (▚) QUADRANT UPPER LEFT AND LOWER RIGHT
-Isolated: 259E (▞) QUADRANT UPPER RIGHT AND LOWER LEFT
+Isolated: 1F67E (🙾) CHECKER BOARD
+Isolated: 1F67F (🙿) REVERSE CHECKER BOARD
 Isolated: 2599 (▙) QUADRANT UPPER LEFT AND LOWER LEFT AND LOWER RIGHT
 Isolated: 259B (▛) QUADRANT UPPER LEFT AND UPPER RIGHT AND LOWER LEFT
 Isolated: 259C (▜) QUADRANT UPPER LEFT AND UPPER RIGHT AND LOWER RIGHT
@@ -8644,14 +8646,22 @@ Isolated: 271C (✜) HEAVY OPEN CENTRE CROSS
 Isolated: 271E (✞) SHADOWED WHITE LATIN CROSS
 Isolated: 271F (✟) OUTLINED LATIN CROSS
 Isolated: 2720 (✠) MALTESE CROSS
+Isolated: 1F668 (🙨) HOLLOW QUILT SQUARE ORNAMENT
+Isolated: 1F669 (🙩) HOLLOW QUILT SQUARE ORNAMENT IN BLACK SQUARE
+Isolated: 1F66A (🙪) SOLID QUILT SQUARE ORNAMENT
+Isolated: 1F66B (🙫) SOLID QUILT SQUARE ORNAMENT IN BLACK SQUARE
 Isolated: 2718 (✘) HEAVY BALLOT X
 Isolated: 2707 (✇) TAPE DRIVE
 Isolated: 2762 (❢) HEAVY EXCLAMATION MARK ORNAMENT
 Isolated: 2706 (✆) TELEPHONE LOCATION SIGN
-Isolated: 1F654 (🙔) TURNED NORTH WEST POINTING LEAF
-Isolated: 1F655 (🙕) TURNED SOUTH WEST POINTING LEAF
-Isolated: 1F656 (🙖) TURNED NORTH EAST POINTING LEAF
-Isolated: 1F657 (🙗) TURNED SOUTH EAST POINTING LEAF
+Isolated: 1F650 (🙐) NORTH WEST POINTING LEAF
+Isolated: 1F651 (🙑) SOUTH WEST POINTING LEAF
+Isolated: 1F652 (🙒) NORTH EAST POINTING LEAF
+Isolated: 1F653 (🙓) SOUTH EAST POINTING LEAF
+Isolated: 1F66C (🙬) LEFTWARDS ROCKET
+Isolated: 1F66D (🙭) UPWARDS ROCKET
+Isolated: 1F66E (🙮) RIGHTWARDS ROCKET
+Isolated: 1F66F (🙯) DOWNWARDS ROCKET
 Isolated: 2686 (⚆) WHITE CIRCLE WITH DOT RIGHT
 Isolated: 2687 (⚇) WHITE CIRCLE WITH TWO DOTS
 Isolated: 2688 (⚈) BLACK CIRCLE WITH WHITE DOT RIGHT

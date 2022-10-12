@@ -1,4 +1,9 @@
 export default [
+
+	// non-RGI emoji should NOT be whitelisted
+	// this should only be for PRE-RELEASE emoji sequences	
+	// https://discuss.ens.domains/t/ens-name-normalization-2nd/14564/16
+	/*
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/24
 	// MEN WRESTLING
 	// https://emojipedia.org/men-wrestling/
@@ -38,5 +43,6 @@ export default [
 	{hex: '1F93C 1F3FD', name: 'people wrestling: medium skin tone'}, // 🤼🏽
 	{hex: '1F93C 1F3FE', name: 'people wrestling: medium-dark skin tone'}, // 🤼🏾
 	{hex: '1F93C 1F3FF', name: 'people wrestling: dark skin tone'}, // 🤼🏿
+	*/
 
 ];
