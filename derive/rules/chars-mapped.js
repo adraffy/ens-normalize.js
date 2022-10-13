@@ -35,10 +35,10 @@ export default [
 
 	// more hyphen-likes
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/393
-	[0x23BA, [0x2D]], // (⎺) HORIZONTAL SCAN LINE-1
-	[0x23BB, [0x2D]], // (⎻) HORIZONTAL SCAN LINE-3
-	[0x23BC, [0x2D]], // (⎼) HORIZONTAL SCAN LINE-7
-	[0x23BD, [0x2D]], // (⎽) HORIZONTAL SCAN LINE-9
+	//[0x23BA, [0x2D]], // (⎺) HORIZONTAL SCAN LINE-1
+	//[0x23BB, [0x2D]], // (⎻) HORIZONTAL SCAN LINE-3
+	//[0x23BC, [0x2D]], // (⎼) HORIZONTAL SCAN LINE-7
+	//[0x23BD, [0x2D]], // (⎽) HORIZONTAL SCAN LINE-9
 	[0x23E4, [0x2D]], // (⏤) STRAIGHTNESS
 	[0x23AF, [0x2D]], // (⎯) HORIZONTAL LINE EXTENSION
 

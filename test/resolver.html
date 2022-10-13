@@ -139,6 +139,9 @@ input[type=checkbox]:checked + label.nonstd {
 .row.dns {
 	background:#f5faff; 
 }
+.row.dns .main {
+	border-bottom-style: dotted;
+}
 .row.dns.invalid2 {
 	background: #fcc;
 }
@@ -216,14 +219,15 @@ ul.row {
 	white-space: normal;
 	line-break: anywhere;
 }
-.tags .opensea {
+.tags .ens {
 	order: 8;
 }
 .tags .metadata {
 	order: 9;
 }
-.tags .ens {
+.tags .marketplace {
 	order: 10;
+	font-size: 90%;
 }
 .tags .elapsed {
 	background: #cff;
@@ -254,6 +258,9 @@ ul.row {
 .tags .warn {
 	background: #ffc;
 }
+.tags .second {
+	background: #ffedbc;
+}
 .tags .fail {
 	background: #fcc;
 	color: #600;
@@ -279,12 +286,15 @@ ul.row {
 	display: grid;
 	background: none;
 	padding: 0 0.5rem;
-	grid-template-columns: 20% min-content 30% auto;
+	grid-template-columns: 2fr min-content 3fr min-content 4fr min-content;
 	align-items: start;
 	gap: 0.5rem;
 	font-size: 12pt;
 	box-sizing: border-box;
 	width: 100%;
+}
+.hashes button {
+	white-space: pre;
 }
 .hashes .length {
 	text-align: center;
@@ -294,13 +304,21 @@ ul.row {
 	line-break: anywhere;
 	text-align: right;
 }
-.hashes .cp {
+.hashes code {
 	white-space: break-spaces;
+	font-size: 90%;
 }
-.hashes .name {
+.hashes .disabled {
+	color: #999;
+}
+.hashes .wide {
 	grid-column: 1 / -1;
 	text-align: center;
+	line-break: anywhere;
 } 
+.hashes .token {
+	font-size: 90%;
+}
 .tokens {
 	font-size: 16pt;
 }
@@ -329,6 +347,15 @@ footer {
 	}
 	#input, #controls, #options, #examples {
 		margin: 0 1rem;
+	}
+	.row {
+		flex-wrap: wrap;
+	}
+	.row .tokens {
+		justify-content: center;
+	}
+	.row.hashes button {
+		grid-column: 1 / -1;
 	}
 	.error {
 		border-left: 0;
@@ -452,7 +479,7 @@ footer {
 <button>❌‼️</button>
 <button>❌⁉️</button>
 
-<a href="https://github.com/adraffy/ens-normalize.js/blob/main/derive/rules/emoji-seq-whitelist.js"><b>Whitelisted:</b></a>
+<a href="https://github.com/adraffy/ens-normalize.js/blob/main/derive/rules/emoji-seq-whitelist.js"><b>Non-RGI:</b></a>
 <button>👪🏻</button>
 <button>🤼🏻‍♀️</button>
 
@@ -533,7 +560,7 @@ Katakana:
 <button>ஶ்ரீ.ஸ்ரீ</button>
 
 <b>Mixed-Script:</b>
-<button data-name="1a〆">Digit+Latin+Han</button>
+<button data-name="1a〇">Digit+Latin+Han</button>
 <button>дре</button>
 <button>❌aрe</button>
 <button>❌ѐè</button>
@@ -575,6 +602,7 @@ Katakana:
 <a href="https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers"><b>Restricted:</b></a>
 <button data-name="𓀀𓀁𓀂">Egyptian Hieroglyphs</button>
 <button>𓆏➡🐸️</button>
+<button data-name="שמונהמאותשמוניםושמונה">Hebrew</button>
 <button data-name="𐌱𐌻𐍉𐌼𐌰">Gothic</button>
 <button data-name="a𓀂">❌Mixed</button>
 
@@ -602,7 +630,9 @@ Katakana:
 <li>Click an <button data-name="bRANtly.eth">Example</button> to see how it works.</li>
 <li>Use <code>{FF}</code> or <code>[255]</code> to manually include codepoints, eg. <button data-escape data-name="a{200D}b.eth">ZWJ</button></li>
 <li>Input <code>"0123 4567 89AB CDEF"</code> to interpret as hex codepoints.</li>
-<li><b>Copy Link</b> to get a URL that resolves on page-load.</li>
+<li><a href="#vitalik.eth"><b>Copy Link</b></a> to get a URL that resolves on page-load.</li>
+<li><a href="./emoji.html">Find supported Emoji</a></li>
+<li><a href="./chars.html">Browse supported Characters.</a></li>
 </ul>
 </div>
 <footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
@@ -646,9 +676,24 @@ const INPUT_NAME = 'Input';
 const OPENSEA_NAME = 'OpenSea';
 const SKIP_SUFFIX = '_!';
 
+const ENS_REGISTRY = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
+const ENS_NFT = '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85';
+
 let resolve_timer = RESOLVE_MODE_IDLE;
 let resolve_options;
 let resolve_date0;
+
+const DIGIT_MAP = new Map();
+function add_digits(name, digits, extra = {}) {
+	explode_cp(digits).forEach((cp, i) => DIGIT_MAP.set(cp, {name, i, ...extra}));
+}
+add_digits('ASCII', '0123456789');
+add_digits('Arabic', '٠١٢٣٤٥٦٧٨٩', {mixed: 1});
+[[0x6F4, 4], [0x6F5, 5], [0x6F6, 6]].forEach(([cp, i]) => {
+	DIGIT_MAP.set(cp, {name: 'Extended Arabic', i, mixed: 1});
+});
+add_digits('Simplified Chinese', '〇一二三四五六七八九');
+add_digits('Devangari', '०१२३४५६७८९');
 
 read_local_storage('hide_examples', x => examples_div.classList.toggle('hide', x));
 read_local_storage('show_hashes', x => show_hashes_check.selected = x);
@@ -686,7 +731,7 @@ input_field.addEventListener('keydown', e => {
 });
 input_field.addEventListener('input', () => {
 	if (parse()) {
-		schedule_resolve(1000);
+		schedule_resolve(500);
 	}
 });
 
@@ -763,17 +808,20 @@ window.addEventListener('hashchange', apply_location_hash);
 
 function update_network(network) {
 	let registry;
-	let name;
+	let provider_name;
+	let network_name;
 	if (network && network.ensAddress) {
 		active_provider = window_provider;
-		name = `window.ethereum (${network.name.replace('homestead', 'mainnet')})`;
+		provider_name = `window.ethereum`;
+		network_name = network.name.replace('homestead', 'mainnet');
 		registry = network.ensAddress;
 	} else {
 		active_provider = infura_provider;
-		name = `Infura (mainnet)`;
-		registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
+		provider_name = 'Infura';
+		network_name = 'mainnet';
+		registry = ENS_REGISTRY;
 	}
-	document.querySelector('#provider').innerHTML = `using ${name}`;
+	document.querySelector('#provider').innerHTML = `using ${provider_name} (<b>${network_name}</b>)`;
 	registry_contract = new ethers.Contract(registry, [
 		`function resolver(bytes32 node) external view returns (address)`,
 		`function owner(bytes32 node) external view returns (address)`,
@@ -815,9 +863,11 @@ function schedule_resolve(delay) {
 		skip_norm: skip_norm_check.checked
 	};
 	if (is_working()) {
+		clearTimeout(resolve_timer);
 		resolve_timer = RESOLVE_MODE_REPEAT;
-	} else if (!should_stop_resolving()) {
+	} else { //if (!should_stop_resolving()) {
 		primary_arrows.classList.remove('hide');
+		clearTimeout(resolve_timer);
 		resolve_timer = setTimeout(() => resolve(resolve_options), delay);
 	}
 } 
@@ -907,7 +957,7 @@ function add_transformed_row(input) {
 		let row = create_row('Mapped');
 		row.classList.add('transform');
 		make_exploded(row, input, true);
-		row.querySelector('.tags').remove(); // dont need this
+		row.querySelector('.tags')?.remove(); // dont need this
 		output_div.append(row);
 	}
 }
@@ -919,35 +969,42 @@ function create_dns_row(ens_norm) {
 		let name = dns_from_normalized_ens(ens_norm);
 		let idna;
 		try {
-			idna = new URL(`https://${ens_norm}`).host;
+			idna = new URL(`https://${ens_norm}`).host; // use browser
 		} catch (ignored) {
 		}
 
-		let link = create_link(`https://${name}.limo`, name);
-		link.style.overflowWrap = 'anywhere';
-		row.append(link);
+		let span_encoded = document.createElement('span');
+		span_encoded.classList.add('main');
+		span_encoded.innerHTML = name;
+		row.append(span_encoded);
 
 		let same = name === ens_norm;
-
 		if (!same) {
-			row.append(create_copy_btn(name));
+			add_row_tag(row, create_copy_btn(name));
 		}
-
-		let span = document.createElement('span');	
+		let span_grade = document.createElement('span');	
 		if (same) {
-			apply_grade(span, 'good', 'Verbatim');
+			apply_grade(span_grade, 'good', 'Punycode Not Needed');
 		} else if (!idna || idna !== name) {
-			span.classList.add('fail');
-			span.innerHTML = '🛑 Pre-IDNA Punycode Required';
+			span_grade.classList.add('fail');
+			span_grade.innerHTML = '🛑 Pre-IDNA Punycode Required';
 			if (idna) {
 				add_row_tag(row, create_copy_btn(idna, 'Copy Mangled'));
 			}
 		} else {
-			apply_grade(span, 'warn', 'Punycode Compatible');
+			apply_grade(span_grade, 'second', 'Punycode Compatible');
 		}
-		add_row_tag(row, span);
+		add_row_tag(row, span_grade);
 
-		//row.append(create_link(`https://whois.uniregistry.net/rdap/domain/${name}.link`, 'WHOIS'));
+		add_row_tag(row, create_link(`https://${name}.limo`, '.limo'));
+		add_row_tag(row, create_link(`https://${name}.link`, '.link'));
+		add_row_tag(row, create_link(`https://${name}.xyz`, '.xyz'));
+
+		if (idna) {
+			add_row_tag(row, create_link(`https://adraffy.github.io/punycode.js/test/demo.html#p=${idna}`, 'Decode'));
+		} else {
+			add_row_tag(row, create_link(`https://adraffy.github.io/punycode.js/test/demo.html#u=${ens_norm}`, 'Encode'));
+		}
 	} catch (err) {
 		row.classList.add('invalid');
 		let span = document.createElement('span');
@@ -990,7 +1047,10 @@ function create_copy_btn(s, title = 'Copy') {
 	let btn = document.createElement('button');
 	btn.addEventListener('click', () => navigator.clipboard.writeText(s));
 	btn.innerHTML = title;
-	btn.title = `${s}\n${explode_cp(s).map(hex_cp).join(' ')}`;
+	btn.title = s;
+	if (!/^(0x)?[0-9a-f]*$/i.test(s)) {
+		btn.title += '\n' + explode_cp(s).map(hex_cp).join(' ');
+	}
 	return btn;
 }
 
@@ -1065,8 +1125,7 @@ function create_ethmoji_row(tokens) {
 			span_grade.classList.add('best');
 			span_grade.innerHTML = '🔥️ Shortest Keycaps';
 		} else {
-			span_grade.classList.add('warn');
-			span_grade.innerHTML = `⭐️ Keycaps`;
+			apply_grade(span_grade, 'second', 'Keycaps');
 		}
 	} else if (unique.size == 1) {
 		let ncp = last.cps.length;
@@ -1074,8 +1133,7 @@ function create_ethmoji_row(tokens) {
 			span_grade.classList.add('best');
 			span_grade.innerHTML = '🔥️ Shortest Repeated';
 		} else {
-			span_grade.classList.add('warn');
-			span_grade.innerHTML = '⭐️ Repeated';
+			apply_grade(span_grade, 'second', 'Repeated')
 		}
 	} else {
 		span_grade.innerHTML = `Unique: ${unique.size}`;
@@ -1120,33 +1178,42 @@ function add_dot_eth_links(row, name) {
 	let label = get_dot_eth_label(name);
 	if (!label) return ''; // only if 2LD .eth	
 	let hash = labelhash(label);
-	let contract = '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85';
 	
-	let os = create_link(`https://opensea.io/assets/ethereum/${contract}/${ethers.BigNumber.from(hash)}`, OPENSEA_NAME);
-	os.classList.add('opensea');
+	let os = create_link(`https://opensea.io/assets/ethereum/${ENS_NFT}/${ethers.BigNumber.from(hash)}`, OPENSEA_NAME);
+	os.classList.add('marketplace');
 	add_row_tag(row, os);
 
-	let meta = create_link(`https://metadata.ens.domains/mainnet/${contract}/${hash}`, 'Metadata');
+	let ev = create_link(`https://www.ens.vision/name/${encodeURIComponent(label)}`, 'ENS.Vision');
+	ev.classList.add('marketplace');
+	add_row_tag(row, ev);
+
+	let meta = create_link(`https://metadata.ens.domains/mainnet/${ENS_NFT}/${hash}`, 'Metadata');
 	meta.classList.add('metadata');
 	add_row_tag(row, meta);
 }
 
-function utf8_length(s) {
-	let bytes = 0;
+// https://github.com/adraffy/keccak.js/blob/main/src/utils.js#L96
+function bytes_from_utf8(s) {
+	if (typeof s !== 'string') throw new TypeError('expected string');
+	let v = [];
 	for (let pos = 0, len = s.length; pos < len; ) {
 		let cp = s.codePointAt(pos++);
 		if (cp < 0x800) {
-			bytes += cp < 0x80 ? 1 : 2;
+			if (cp < 0x80) {
+				v.push(cp);
+			} else {
+				v.push(0xC0 | (cp >> 6), 0x80 | (cp & 0x3F));
+			}
 		} else {
 			if (cp < 0x10000) {
-				bytes += 3;
+				v.push(0xE0 | (cp >> 12), 0x80 | ((cp >> 6) & 0x3F), 0x80 | (cp & 0x3F));
 			} else {
-				bytes += 4;
+				v.push(0xF0 | (cp >> 18), 0x80 | ((cp >> 12) & 0x3F), 0x80 | ((cp >> 6) & 0x3F), 0x80 | (cp & 0x3F));
 				pos++;
 			}
 		}
 	}
-	return bytes;
+	return Uint8Array.from(v);
 }
 
 function make_tokens_div(name, before) {
@@ -1206,20 +1273,25 @@ function make_exploded(row, name, is_norm, downgrade_disallowed) {
 		count.innerHTML = `${n_cp}<sub>chytes</sub>`;
 		count.title = '1-byte Characters';
 	}	
-	*/
 	let bytes = document.createElement('span');
 	bytes.classList.add('bytes');
-	bytes.innerHTML = `${utf8_length(name)}<sub>bytes</sub>`;
+	bytes.innerHTML = `${bytes_from_utf8(name).length}<sub>bytes</sub>`;
 	add_row_tag(row, bytes); 
-	
-	exploded.append(tokens_div, row.querySelector('.tags'));
+	*/
+	exploded.append(tokens_div);
 	row.append(exploded);
+	let tags = row.querySelector('.tags');	
+	if (tags) row.append(tags);
+
 }
 
 function apply_grade(span, type, s) {
 	span.classList.remove(...span.classList);
 	span.classList.add(type);
 	switch (type) {
+		case 'second': 
+			span.innerHTML = `⭐️ ${s}`;
+			break;
 		case 'warn': 
 			span.innerHTML = `⚠️ ${s}`;
 			break;
@@ -1232,6 +1304,7 @@ function apply_grade(span, type, s) {
 		case 'fail': 
 			span.innerHTML = `❌ ${s}`;
 			break;
+		default: throw new TypeError(`unknown grade: ${type}`);
 	}
 }
 
@@ -1274,25 +1347,57 @@ function create_hashes_row(name) {
 	// build table of label hashes
 	for (let label of name.split('.')) {
 		let cps = explode_cp(label);
-		let text = document.createElement('span');
-		text.classList.add('text');
-		text.innerHTML = label;
-		let len = document.createElement('span');
-		len.classList.add('length');
-		len.innerHTML = `${cps.length}<sub>ch</sub>`;
-		let hex = document.createElement('span');
-		hex.classList.add('cp');
-		hex.innerHTML = cps.length == 0 ? '«null»' : [...cps].map(hex_cp).join(' ');
-		let hash = document.createElement('span');
-		hash.classList.add('hash');
-		hash.innerHTML = labelhash(label);
-		row.append(text, len, hex, hash);
+		let v = bytes_from_utf8(label);
+		let hash = labelhash(label);
+
+		let text_span = document.createElement('span');
+		text_span.classList.add('text');
+		text_span.innerHTML = label;
+		
+		let ulen_span = document.createElement('span');
+		ulen_span.classList.add('length');
+		ulen_span.innerHTML = `${cps.length}<sub>ch</sub>`;
+		let uhex_code = document.createElement('code');
+		uhex_code.title = 'UTF-8 Codepoints';
+		uhex_code.innerHTML = cps.map(hex_cp).join(' ');
+		
+		let vlen_span = document.createElement('span');
+		vlen_span.classList.add('length');
+		vlen_span.innerHTML = `${v.length}<sub>byte</sub>`;
+		let vhex_code = document.createElement('code');
+		vhex_code.title = 'Encoded UTF-8 Bytes';
+		vhex_code.innerHTML = [...v].map(hex_cp).join(' ');
+
+		if (!cps.length) {
+			uhex_code.classList.add('disabled');
+			vhex_code.classList.add('disabled');
+			vhex_code.innerHTML = uhex_code.innerHTML = '«null»';
+		}
+
+		/*
+		let hash_span = document.createElement('span');
+		hash_span.classList.add('hex');
+		hash_span.innerHTML = hash.slice(2, 6) + '…' + hash.slice(-4);
+		*/
+
+
+		row.append(text_span, ulen_span, uhex_code, vlen_span, vhex_code, create_copy_btn(hash, hash.slice(2, 6) + '…' + hash.slice(-4)));
 	}
 	// add namehash
 	let hash = document.createElement('span');
-	hash.classList.add('name', 'hash');
-	hash.innerHTML = `<b>Namehash:</b> ${namehash(name)}`;
+	hash.classList.add('wide');
+	hash.innerHTML = `<b>Namehash:</b> <code>${namehash(name)}</code>`;
 	row.append(hash);
+
+	let label = get_dot_eth_label(name);
+	if (label) {
+		let token_span = document.createElement('span');
+		token_span.classList.add('wide', 'token');
+		token_span.innerHTML = `<b>Token:</b> <code>${ethers.BigNumber.from(labelhash(label))}</code>`;
+		row.append(token_span);
+	}
+
+
 	return row;
 }
 
@@ -1370,12 +1475,11 @@ function resolve(options) {
 	try {
 		let url = new URL(input);
 		if (url.hostname == 'opensea.io') {
-			// https://opensea.io/assets/ethereum/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
 			let v = url.pathname.toLowerCase().split('/').filter(x => x);
-			if (v[0] === 'assets' && v[1] === 'ethereum' && v[2] === '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85' && /^\d+$/.test(v[3])) {
+			if (v[0] === 'assets' && v[1] === 'ethereum' && v[2] === ENS_NFT.toLowerCase() && /^\d+$/.test(v[3])) {
 				resolve_btn.disabled = true;
 				primary_arrows.classList.remove('hide');
-				fetch(`https://metadata.ens.domains/mainnet/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/${v[3]}`).then(r => {
+				fetch(`https://metadata.ens.domains/mainnet/${ENS_NFT}/${v[3]}`).then(r => {
 					if (r.status !== 200) throw new Error(`HTTP Error ${r.status}`);
 					return r.json();
 				}).then(meta => {
@@ -1611,32 +1715,27 @@ async function resolve0(input0, skip_norm) {
 			output_div.append(create_ethmoji_row(tokens));
 		} else {
 			let cps = explode_cp(eth_label);
-			let digits = cps.map(cp => {
-				if (cp >= 0x30 && cp <= 0x39) {
-					return {name: 'ASCII', i: cp - 0x30};
-				} else if (cp >= 0x660 && cp <= 0x669) {
-					return {name: 'Arabic', i: cp - 0x660, mixed: 1};
-				} else if (cp >= 0x6F0 && cp <= 0x6F9) {
-					return {name: 'Extended Arabic', i: cp - 0x6F0, mixed: 1};
-				}
-			});
+			let digits = cps.map(cp => DIGIT_MAP.get(cp));
 			if (digits.every(x => x)) {
 				let values = digits.map(x => x.i);
 				let name0 = digits[0].name;
 				if (digits.every(x => x.name === name0)) {
 					output_div.append(create_digits_row(name0, values));
-				} else if (digits.every(x => x.mixed)) {
-					let row = create_digits_row('Arabic', values);
-					let span = document.createElement('span');
-					apply_grade(span, 'warn', 'Mixture');
-					add_row_tag(row, span);
-					output_div.append(row);
 				} else {
-					let row = create_digits_row('Numeric', values);
-					let span = document.createElement('span');
-					apply_grade(span, 'warn', 'Multiple Scripts');
-					add_row_tag(row, span);
-					output_div.append(row);
+					let first = digits[0].mixed;
+					if (first && digits.every(x => x.mixed == first)) {
+						let row = create_digits_row('Arabic', values);
+						let span = document.createElement('span');
+						apply_grade(span, 'warn', 'Mixed Digits');
+						add_row_tag(row, span);
+						output_div.append(row);
+					} else {
+						let row = create_digits_row('Numeric', values);
+						let span = document.createElement('span');
+						apply_grade(span, 'warn', 'Multiple Scripts');
+						add_row_tag(row, span);
+						output_div.append(row);
+					}
 				}
 			}
 		}

@@ -331,8 +331,18 @@ function sorted(v) {
 }
 
 // load restricted scripts
+let restricted_abbrs = new Set();
+for (let abbr of SCRIPTS.excluded()) {
+	restricted_abbrs.add(abbr);
+}
+for (let abbr of SCRIPTS.limited()) {
+	restricted_abbrs.add(abbr);
+}
+for (let abbr of (await import('./rules/restricted-scripts.js')).default) {
+	restricted_abbrs.add(abbr);
+}
 let restricted = {};
-for (let abbr of [SCRIPTS.excluded(), SCRIPTS.limited()].flat()) {	
+for (let abbr of restricted_abbrs) {	
 	let set  = scripts[abbr];
 	if (!set) throw new TypeError(`Expected script: ${abbr}`);
 	if (set.size == 0) continue;	

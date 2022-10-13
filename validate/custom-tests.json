@@ -58,7 +58,7 @@
 	{"name": "_a", "comment": "Leading Underscore"},
 	{"name": "_____a", "comment": "Leading Underscore"},
 	{"name": "a_b", "error": true, "comment": "Non-leading Underscore"},
-	{"name": "hyphens\u002D\u2010\u2011\u2012\u2013\u2014\u2015\u2043\u2212\u23AF\u23BA\u23BB\u23BC\u23BD\u23E4\uFE58", "norm": "hyphens----------------", "comment": "Hyphens"},
+	{"name": "hyphens\u002D\u2010\u2011\u2012\u2013\u2014\u2015\u2043\u2212\u23AF\u23E4\uFE58", "norm": "hyphens------------", "comment": "Hyphens"},
 	{"name": "$¢£¤¥€₿", "comment": "Currency symbols"},
 
 	{"name": "\u0303", "error": true, "comment": "Leading CM"},

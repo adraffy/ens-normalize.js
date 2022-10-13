@@ -17,7 +17,7 @@ export function version_ordinal(x) {
 }
 
 export function hex_cp(cp) {
-	return cp.toString(16).padStart(2, '0').toUpperCase();
+	return cp.toString(16).padStart(5, '0').toUpperCase();
 }
 
 export function hex_seq(cps) {

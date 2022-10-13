@@ -392,7 +392,8 @@ function update_search() {
 		let ignored = new Set([
 			127995,127996,127997,127998,127999, // skin
 			//129456,129457,129458,129459, // hair
-			0xFE0F, 0x2640, 0x2642
+			0x2640, 0x2642, // gender
+			0xFE0F,
 		]);
 		let dups = new Map();
 		for (let rec of flat) {
