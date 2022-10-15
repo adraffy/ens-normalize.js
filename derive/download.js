@@ -23,6 +23,9 @@ const FILES = [
 	['{SPEC}/ucd/ScriptExtensions.txt'],
 	['{SPEC}/ucd/PropertyValueAliases.txt'],
 	['{SECURITY}/confusables.txt'],
+	['{SECURITY}/IdentifierStatus.txt'],
+	['{SECURITY}/IdentifierType.txt'],
+	['{SECURITY}/intentional.txt'],
 ];
 
 function url_from_source(source, {major, minor = 0, patch = 0}) {

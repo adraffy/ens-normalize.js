@@ -103,6 +103,9 @@ input[type=checkbox]:checked + label.nonstd {
 	font-size: 16pt;
 	font-weight: bold;
 }
+#controls.hide + #output {	
+	margin-top: 0.5rem;
+}
 #output {
 	display: flex;
 	flex-direction: column;
@@ -134,7 +137,7 @@ input[type=checkbox]:checked + label.nonstd {
 	background: linear-gradient(90deg, #efe, #fcc);
 }
 .row.addr {
-	background: #ffd;
+	background: #fffff0;
 }
 .row.dns {
 	background:#f5faff; 
@@ -157,6 +160,7 @@ input[type=checkbox]:checked + label.nonstd {
 }
 .formula {
 	display: flex;
+	flex-wrap: wrap;
 }
 .formula a {
 	padding: 4px;
@@ -216,7 +220,7 @@ ul.row {
 	white-space: pre;
 }
 .long {
-	white-space: normal;
+	white-space: normal !important;
 	line-break: anywhere;
 }
 .tags .ens {
@@ -227,7 +231,6 @@ ul.row {
 }
 .tags .marketplace {
 	order: 10;
-	font-size: 90%;
 }
 .tags .elapsed {
 	background: #cff;
@@ -259,7 +262,7 @@ ul.row {
 	background: #ffc;
 }
 .tags .second {
-	background: #ffedbc;
+	background: #fff0dd;
 }
 .tags .fail {
 	background: #fcc;
@@ -286,15 +289,16 @@ ul.row {
 	display: grid;
 	background: none;
 	padding: 0 0.5rem;
-	grid-template-columns: 2fr min-content 3fr min-content 4fr min-content;
+	grid-template-columns: 2fr min-content 3fr min-content 4fr 80px;
 	align-items: start;
-	gap: 0.5rem;
+	gap: 0.3rem;
 	font-size: 12pt;
 	box-sizing: border-box;
 	width: 100%;
 }
 .hashes button {
-	white-space: pre;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 .hashes .length {
 	text-align: center;
@@ -316,8 +320,12 @@ ul.row {
 	text-align: center;
 	line-break: anywhere;
 } 
-.hashes .token {
-	font-size: 90%;
+.hashes .minor {
+	font-size: 80%;
+	color: #666;
+	padding: 0.2rem 0;
+	border-top: 1px dashed #ccc;
+	border-bottom: 1px solid #ccc;
 }
 .tokens {
 	font-size: 16pt;
@@ -412,7 +420,7 @@ footer {
 <button>™️</button>
 <button>🈂️</button>
 <button>Ⅷ</button>
-<button data-name="hyph{2D}{2010}{2011}{2012}{2013}{2014}{2015}{2043}{2212}{23AF}{23BA}{23BB}{23BC}{23BD}{23E4}{FE58}ens">Hyphens</button>
+<button data-name="hyph{2D}{2010}{2011}{2012}{2013}{2014}{2015}{2043}{2212}{23AF}{23E4}{FE58}ens">Hyphens</button>
 
 <b>Ignored:</b> 
 <button data-name="{FE0E}{FE0F}">Emoji Style</button>
@@ -545,13 +553,8 @@ Katakana:
 <button data-name="{202e}hte.elgoog">❌google.eth</button>
 
 <b>Keycaps:</b>
-<button>6️⃣9️⃣</button>
 <button>1⃣2️⃣🔟.eth</button>
-<button>*️⃣</button>
-<button>#️⃣</button>
-
-<b>Currency:</b>
-<button>$¢£¤¥€₿Ξ</button>
+<button data-name="0️⃣1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣🔟*️⃣#️⃣">*️⃣-🔟</button>
 
 <a href="https://util.unicode.org/UnicodeJsps/confusables.jsp">Confusables</a>/
 <a href="https://unicode-org.github.io/cldr-staging/charts/latest/by_type/core_data.alphabetic_information.main.html">Exemplars</a>
@@ -568,7 +571,7 @@ Katakana:
 <b>Whole-Script:</b>
 <button>дррӏе</button>
 <button>❌аррӏе</button>
-<button>❌ρον</button>
+<button data-name="ιϳοσρᴦβυνγ">❌Greek</button>
 
 <a href="https://en.wikipedia.org/wiki/Arabic_numerals"><b>Arabic:</b></a>
 <button data-name="{661}{662}{663}"></button>
@@ -592,24 +595,26 @@ Katakana:
 <button>000⁄000</button>
 
 <b>Misc:</b>
+<button data-name="$¢£¤¥₡₦₩₪₫€₭₮₯₱₲₴₵₸₹₺₼₽₾₿⃀">Currency</button>
 <button>•-•¬</button>
 <button>360°</button>
 <button>2πr</button>
 
-<button>ʀᴀꜰꜰʏ</button>
-<button>ʎɟɟɐɹ</button>
+<button data-name="ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘꞯʀꜱᴛᴜᴠᴡxʏᴢ">❌ꜱᴍᴀʟʟ ᴄᴀᴘꜱ</button>
+<button data-name="zʎxʍʌnʇsɹbdouɯꞁʞſ̣ᴉɥᵷɟǝpↄqɐ">❌pǝuɹnʇ</button>
 
 <a href="https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers"><b>Restricted:</b></a>
 <button data-name="𓀀𓀁𓀂">Egyptian Hieroglyphs</button>
-<button>𓆏➡🐸️</button>
 <button data-name="שמונהמאותשמוניםושמונה">Hebrew</button>
 <button data-name="𐌱𐌻𐍉𐌼𐌰">Gothic</button>
+<button>_𓆏➡🐸️</button>
 <button data-name="a𓀂">❌Mixed</button>
+<button>❌ᏎᏮᏂᎥ.eth</button>
 
 </div>
 <div id="options">
 <label><input type="checkbox" id="auto_resolve_check" checked>Resolve on Input</label>
-<label><input type="checkbox" id="show_hashes_check" checked>Details</label>
+<label><input type="checkbox" id="show_hashes_check">Details</label>
 <label><input type="checkbox" id="show_components_check" checked>Emoji Components</label>
 <span><input type="checkbox" id="skip_norm_check"><label class="nonstd" for="skip_norm_check">Skip Normalization</label></span>
 </div>
@@ -632,7 +637,7 @@ Katakana:
 <li>Input <code>"0123 4567 89AB CDEF"</code> to interpret as hex codepoints.</li>
 <li><a href="#vitalik.eth"><b>Copy Link</b></a> to get a URL that resolves on page-load.</li>
 <li><a href="./emoji.html">Find supported Emoji</a></li>
-<li><a href="./chars.html">Browse supported Characters.</a></li>
+<li><a href="./chars.html">Browse supported Characters</a></li>
 </ul>
 </div>
 <footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
@@ -694,6 +699,8 @@ add_digits('Arabic', '٠١٢٣٤٥٦٧٨٩', {mixed: 1});
 });
 add_digits('Simplified Chinese', '〇一二三四五六七八九');
 add_digits('Devangari', '०१२३४५६७८९');
+//add_digits('Thai', '๐๑๒๓๔๕๖๗๘๙');
+//add_digits('Myanmar', '႐႑႒႓႔႕႖႗႘႙');
 
 read_local_storage('hide_examples', x => examples_div.classList.toggle('hide', x));
 read_local_storage('show_hashes', x => show_hashes_check.selected = x);
@@ -974,17 +981,17 @@ function create_dns_row(ens_norm) {
 		}
 
 		let span_encoded = document.createElement('span');
-		span_encoded.classList.add('main');
+		span_encoded.classList.add('main', 'long');
 		span_encoded.innerHTML = name;
 		row.append(span_encoded);
 
 		let same = name === ens_norm;
-		if (!same) {
+		//if (!same) {
 			add_row_tag(row, create_copy_btn(name));
-		}
+		//}
 		let span_grade = document.createElement('span');	
 		if (same) {
-			apply_grade(span_grade, 'good', 'Punycode Not Needed');
+			apply_grade(span_grade, 'good', 'Verbatim');
 		} else if (!idna || idna !== name) {
 			span_grade.classList.add('fail');
 			span_grade.innerHTML = '🛑 Pre-IDNA Punycode Required';
@@ -1056,7 +1063,7 @@ function create_copy_btn(s, title = 'Copy') {
 
 function create_resolve_btn(s) {
 	let btn = document.createElement('button');
-	btn.innerHTML = 'Resolve';	
+	btn.innerHTML = 'Resolve';
 	btn.title = s;
 	btn.addEventListener('click', () => {
 		input_field.value = s;
@@ -1068,7 +1075,6 @@ function create_resolve_btn(s) {
 function create_ens_link(s) {
 	let a = create_link(`https://app.ens.domains/name/${encodeURIComponent(s)}`, 'ENS');
 	a.classList.add('ens');
-	a.title = `ENS: ${s}`;
 	return a;
 }
 
@@ -1341,6 +1347,8 @@ function create_class_tag(name) {
 }
 
 function create_hashes_row(name) {
+	let eth_label = get_dot_eth_label(name);
+
 	let row = create_row();
 	row.classList.add('hashes');
 	row.classList.toggle('hide', !show_hashes_check.checked);
@@ -1374,30 +1382,22 @@ function create_hashes_row(name) {
 			vhex_code.innerHTML = uhex_code.innerHTML = '«null»';
 		}
 
-		/*
 		let hash_span = document.createElement('span');
-		hash_span.classList.add('hex');
-		hash_span.innerHTML = hash.slice(2, 6) + '…' + hash.slice(-4);
-		*/
+		hash_span.classList.add('wide', 'minor');
+		hash_span.innerHTML = `<b>Labelhash:</b> <code>${hash}</code>`;
 
+		row.append(text_span, ulen_span, uhex_code, vlen_span, vhex_code, hash_span); 
 
-		row.append(text_span, ulen_span, uhex_code, vlen_span, vhex_code, create_copy_btn(hash, hash.slice(2, 6) + '…' + hash.slice(-4)));
+		if (label === eth_label) {
+			hash_span.innerHTML += `<br><b>Token:</b> <code>${ethers.BigNumber.from(labelhash(eth_label))}</code>`;
+					
+		}
 	}
 	// add namehash
-	let hash = document.createElement('span');
-	hash.classList.add('wide');
-	hash.innerHTML = `<b>Namehash:</b> <code>${namehash(name)}</code>`;
-	row.append(hash);
-
-	let label = get_dot_eth_label(name);
-	if (label) {
-		let token_span = document.createElement('span');
-		token_span.classList.add('wide', 'token');
-		token_span.innerHTML = `<b>Token:</b> <code>${ethers.BigNumber.from(labelhash(label))}</code>`;
-		row.append(token_span);
-	}
-
-
+	let hash_span = document.createElement('span');
+	hash_span.classList.add('wide');
+	hash_span.innerHTML = `<b>Namehash:</b> <code>${namehash(name)}</code>`;
+	row.append(hash_span);
 	return row;
 }
 
@@ -1748,7 +1748,7 @@ async function resolve0(input0, skip_norm) {
 		let row = create_row('Beautified');
 		row.classList.add('pretty');
 		let span = document.createElement('span');
-		span.classList.add('main');
+		span.classList.add('main', 'long');
 		span.innerHTML = pretty;
 		row.append(span);
 		add_row_tag(row, create_copy_btn(pretty));
@@ -1916,7 +1916,9 @@ async function resolve0(input0, skip_norm) {
 	} else if (resolver.address === '0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41') {
 		apply_grade(resolver_span, 'good', 'Public Resolver');
 	} else {
-		apply_grade(resolver_span, 'warn', 'Custom');
+		resolver_span.classList.add('second');
+		resolver_span.innerHTML = 'Custom';
+		//apply_grade(resolver_span, 'second', 'Custom');
 	}
 	add_row_tag(resolver_row, resolver_span);
 	

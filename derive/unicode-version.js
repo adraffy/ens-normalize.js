@@ -14,3 +14,5 @@ export const IDNA = UNICODE.idna_rules({
 });
 
 export const SCRIPTS = new UnicodeScripts(UNICODE);
+
+export const SCRIPT_ORDER = ['Latn', 'Grek', 'Cyrl'];

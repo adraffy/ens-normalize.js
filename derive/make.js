@@ -1,6 +1,7 @@
 import {mkdirSync, writeFileSync, createWriteStream} from 'node:fs';
 import {compare_arrays, parse_cp_sequence} from './utils.js';
-import {UNICODE, NF, IDNA, SCRIPTS} from './unicode-version.js';
+import {UNICODE, NF, IDNA, SCRIPTS, SCRIPT_ORDER} from './unicode-version.js';
+import {read_wholes} from './wholes.js';
 
 import CHARS_VALID from './rules/chars-valid.js';
 import CHARS_DISALLOWED from './rules/chars-disallow.js';
@@ -245,21 +246,24 @@ for (let info of emoji_chrs.Extended_Pictographic) {
 }
 
 // filter combining marks
-let cm = new Set(UNICODE.general_category('M').filter(x => valid.has(x.cp)).map(x => x.cp));
+let cm = new Set([...UNICODE.cm].filter(cp => valid.has(cp)));
 
-// load scripts
-let scripts = Object.fromEntries(SCRIPTS.entries.map(x => {
-	return [x.abbr, new Set([...x.set].filter(cp => valid.has(cp)))];
-}));
-
-// apply changes
-for (let cp of (await import('./rules/relaxed-scripts.js')).default) {
-	for (let [abbr0, set] of Object.entries(scripts)) {
-		if (set.delete(cp)) {
-			const abbr1 = 'Zyyy'; // TODO: generalize this
-			scripts[abbr1].add(cp);
-			console.log(`Changed Script [${abbr0} => ${abbr1}]: ${UNICODE.format(cp)}`);
-			break;
+// apply script changes
+for (let cp of (await import('./rules/chars-common.js')).default) {
+	let old = SCRIPTS.get_script_set(cp);
+	for (let abbr of old) {
+		SCRIPTS.require(abbr).set.delete(cp);
+	}
+	const relaxed = 'Zyyy';
+	SCRIPTS.require(relaxed).set.add(cp);
+	console.log(`Relaxed Script [${[...old].join('/')} => ${relaxed}]: ${UNICODE.format(cp)}`);
+}
+	
+// filter scripts
+for (let {set} of SCRIPTS.entries) {
+	for (let cp of set) {
+		if (!valid.has(cp)) {
+			set.delete(cp); 
 		}
 	}
 }
@@ -331,34 +335,69 @@ function sorted(v) {
 }
 
 // load restricted scripts
-let restricted_abbrs = new Set();
+let restricted = new Set();
+// https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers
 for (let abbr of SCRIPTS.excluded()) {
-	restricted_abbrs.add(abbr);
+	restricted.add(abbr);
 }
+// https://www.unicode.org/reports/tr31/#Table_Limited_Use_Scripts
 for (let abbr of SCRIPTS.limited()) {
-	restricted_abbrs.add(abbr);
+	restricted.add(abbr);
 }
+// additional restricted scripts
 for (let abbr of (await import('./rules/restricted-scripts.js')).default) {
-	restricted_abbrs.add(abbr);
+	restricted.add(abbr);
 }
-let restricted = {};
-for (let abbr of restricted_abbrs) {	
-	let set  = scripts[abbr];
-	if (!set) throw new TypeError(`Expected script: ${abbr}`);
-	if (set.size == 0) continue;	
-	let decomposed = new Set(NF.nfd([...set])); // this is a good idea IMO
-	for (let cp of decomposed) {
-		if (!set.has(cp)) {
-			throw new Error(`Restricted script "${a}" decomposition: ${SPEC.format(cp)}`);
+// require existance, remove empty
+restricted = [...restricted].map(abbr => SCRIPTS.require(abbr)).filter(x => x.set.size);
+// require decomposed sanity
+for (let script of restricted) {	
+	let set = new Set(NF.nfd([...script.set])); // this is a good idea IMO
+	for (let cp of set) {
+		if (!script.set.has(cp)) {
+			throw new Error(`Restricted script ${script.abbr} decomposition: ${UNICODE.format(cp)}`);
 		}
 	}
-	restricted[abbr] = sorted(decomposed);
-	console.log(`Restricted Script: ${abbr} (${decomposed.size})`);
+	script.restricted = set;
+}
+// remove unrestricted from restricted
+let unrestricted_union = new Set(SCRIPTS.entries.flatMap(x => x.restricted ? [] : NF.nfd([...x.set]))); // see above
+for (let script of restricted) {
+	for (let cp of unrestricted_union) {
+		script.restricted.delete(cp);
+	}
+}
+restricted = restricted.filter(x => x.restricted.size); // remove empty
+for (let script of restricted) {
+	console.log(`Restricted [${script.abbr}]: ${script.set.size} => ${script.restricted.size}`);
 }
 
 // wholes
-let wholes_Grek = (await import('./rules/confusables-Grek.js')).default.filter(cp => valid.has(cp));
-let wholes_Cyrl = (await import('./rules/confusables-Cyrl.js')).default.filter(cp => valid.has(cp));
+let wholes = await read_wholes(SCRIPTS);
+for (let script of wholes) {
+	console.log(`Wholes [${script.abbr}]: ${script.wholes.size}`);
+}
+// since restricted scripts cant intersect
+// all the wholes can be unioned together
+let restricted_wholes = new Set();
+for (let {wholes} of restricted) {
+	if (wholes) {
+		for (let cp of wholes) {
+			restricted_wholes.add(cp);
+		}
+		wholes.clear();
+	} 
+}
+console.log(`Restricted Wholes: ${restricted_wholes.size}`);
+wholes = wholes.filter(x => x.wholes.size); // remove restricted
+
+// create structures
+restricted = Object.fromEntries(restricted.map(x => [x.abbr, sorted(x.restricted)]));
+wholes = Object.fromEntries(wholes.map(x => [x.abbr, sorted(x.wholes)]));
+restricted_wholes = sorted(restricted_wholes);
+
+let scripts = Object.fromEntries(SCRIPT_ORDER.map(abbr => [abbr, sorted(SCRIPTS.require(abbr).set)]));
+let script_names = Object.fromEntries(SCRIPTS.entries.map(x => [x.abbr, x.name.replace('_', ' ')]));
 
 // note: sorting isn't important, just nice to have
 const created = new Date();
@@ -372,17 +411,12 @@ writeFileSync(new URL('./spec.json', out_dir), JSON.stringify({
 	cm: sorted(cm),
 	emoji: [...emoji.values()].map(x => x.cps).sort(compare_arrays),
 	isolated: sorted(isolated),
-	excluded: restricted,	
-	// TODO: generalize wholes+scripts to [Latn, Grek, Cryl]
-	scripts: {
-		Latn: sorted(scripts.Latn),
-		Grek: sorted(scripts.Grek),
-		Cyrl: sorted(scripts.Cyrl),
-	}, 
-	wholes: {
-		Grek: sorted(wholes_Grek),
-		Cyrl: sorted(wholes_Cyrl),
-	}
+	script_order: SCRIPT_ORDER,
+	script_names,
+	scripts,
+	wholes,
+	restricted,	
+	restricted_wholes,
 }));
 
 // this file should be independent so we can create a standalone nf implementation

@@ -1,4 +1,4 @@
-import r from './include-ens.js';
+import r, {SCRIPT_ORDER} from './include-ens.js';
 import {read_member_array, read_mapped, read_emoji_trie, read_array_while} from './decoder.js';
 import {explode_cp, str_from_cps, hex_cp} from './utils.js';
 import {nfc, nfd} from './nf.js';
@@ -15,14 +15,11 @@ function read_valid_subset() {
 }
 const CM = read_valid_subset();
 const ISOLATED = read_valid_subset();
-const SCRIPTS = ['Latin', 'Greek', 'Cyrillic'].map((k, i) => {
-	// this defines the priority
-	// order must match make.js
-	// note: there are no latin (index = 0) whole-script confusables
-	// (script name, script-set, whole-set?)
-	return [k, read_valid_subset(), i ? read_valid_subset() : 0]; 
+const SCRIPTS = SCRIPT_ORDER.map(name => {
+	return [name, read_valid_subset(), read_valid_subset()]; // [set, wholes]
 });
-const RESTRICTED = read_array_while(() => {
+const RESTRICTED_WHOLES = read_valid_subset();
+const RESTRICTED = read_array_while(() => { // TODO: include script names? (it's 2KB)
 	let v = read_valid_subset(r);
 	if (v.size) return v;
 });
@@ -36,12 +33,13 @@ const UNDERSCORE = 0x5F;
 const FE0F = 0xFE0F;
 
 function check_leading_underscore(cps) {
-	let i = cps.lastIndexOf(UNDERSCORE);
-	while (i > 0) {
+	let e = cps.lastIndexOf(UNDERSCORE);
+	for (let i = e; i > 0; ) {
 		if (cps[--i] !== UNDERSCORE) {
 			throw new Error(`underscore only allowed at start`);
 		}
 	}
+	return e + 1;
 }
 
 function check_label_extension(cps) {
@@ -91,7 +89,7 @@ function check_scripts_latin_like(cps) {
 					throw new Error(`mixed-script confusable: ${name} + ${name_j}`);
 				}
 			}
-			if (whole_set) { // aka non-latin
+			if (whole_set.size) { 
 				// https://www.unicode.org/reports/tr39/#def_whole_script_confusables
 				// if every char matching the script is confusable
 				if (cps.every(cp => !script_set.has(cp) || whole_set.has(cp))) {
@@ -108,10 +106,13 @@ function check_restricted_scripts(cps) {
 	// https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers
 	for (let set of RESTRICTED) {
 		if (cps.some(cp => set.has(cp))) { // first with one match
-			if (!cps.every(cp => set.has(cp) || cp == FE0F)) { // must match all (or emoji)
+			if (!cps.every(cp => cp == FE0F || set.has(cp))) { // must match all (or emoji)
 				throw new Error(`restricted script cannot mix`);
 			}
-			break; // pure
+			if (cps.every(cp => cp == FE0F || RESTRICTED_WHOLES.has(cp))) {
+				throw new Error(`restricted whole-script confusable`);
+			}
+			return true;
 		}
 	}
 }
@@ -142,15 +143,14 @@ export function ens_normalize_post_check(norm) {
 		if (!label) throw new Error('Empty label');
 		try {
 			let cps_nfc = explode_cp(label);
-			check_leading_underscore(cps_nfc);
+			let n_under = check_leading_underscore(cps_nfc);
+			let cps_nfd = nfd(process(label.slice(n_under), () => [FE0F])); // replace emoji with single character
+			check_combinining_marks(cps_nfd);
+			if (check_restricted_scripts(cps_nfd)) continue; // it's pure
 			check_label_extension(cps_nfc);
 			check_surrounding(cps_nfc, 0x2019, 'apostrophe', true, true); // question: can this be generalized better?
 			check_middle_dot(cps_nfc); // this a lot of effort for 1 character
 			check_scripts_latin_like(cps_nfc);
-			// replace emoji with single character
-			let cps_nfd = nfd(process(label, () => [FE0F])); 
-			check_combinining_marks(cps_nfd);
-			check_restricted_scripts(cps_nfd); // idea: it's probably safe to early terminate if this is pure
 		} catch (err) {
 			throw new Error(`Invalid label "${label}": ${err.message}`); // note: label might not exist in the input string
 		}
@@ -279,6 +279,7 @@ const TY_NFC = 'nfc';
 const TY_STOP = 'stop';
 
 /*
+// this is dumb, tokens are better are pure data
 class EmojiToken {
 	constructor(input, emoji) {
 		this.input = input;

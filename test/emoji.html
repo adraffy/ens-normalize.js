@@ -224,6 +224,8 @@ let keywords = [
 	[
 		'Man ',
 		'Woman',
+		'Gender: Man|{2640}',
+		'Gender: Woman|{2642}',
 		'Family',
 		'Person',
 		'Light Skin',
@@ -235,13 +237,23 @@ let keywords = [
 		'Blond Hair',
 		'Curly Hair',
 		'White Hair',
+		'Unmod(1)',
 		'{FE0F}',
 	],
 	[...versions].sort((a, b) => a - b).map(x => `v${x}`),
 ].flat(Infinity);
 
 if (type_map.size || versions.size) {
-	search_select.innerHTML = keywords.map(x => `<option>${x}</option>`).join('');
+	search_select.append(...keywords.map(s => {
+		let op = document.createElement('option');
+		let pos = s.indexOf('|');
+		if (pos >= 0) {
+			op.value = s.slice(pos + 1).trim();
+			s = s.slice(0, pos).trim();
+		}
+		op.innerHTML = s;
+		return op;
+	}));
 	search_select.classList.remove('hide');
 }
 
@@ -432,7 +444,7 @@ function create_table(bucket, search) {
 		<table>
 		<thead>
 		<tr>
-		<th class="index">${search ? 'n<sub>ch</sub>' : ''}</th>
+		<th class="index">${search ? 'n<sub>ch</sub>' : '#'}</th>
 		<th class="form">Form</th>
 		<th class="info">Name, Version, Hex Codepoints (Fully-Qualified), Normalized Parts</th>
 		</tr>

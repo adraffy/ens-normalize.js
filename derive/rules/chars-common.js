@@ -16,5 +16,6 @@ export default [
 	//0x3BC, 
 	// 0x3C3 (σ) GREEK SMALL LETTER SIGMA
 	//0x3C3,
+	// 0x3B1 (α) GREEK SMALL LETTER ALPHA
 	
 ];

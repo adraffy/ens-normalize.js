@@ -10,6 +10,11 @@ export default [
 	[0x6F8, [0x668]], // 6F8 (۸) EXTENDED ARABIC-INDIC DIGIT EIGHT => 668 (٨) ARABIC-INDIC DIGIT EIGHT
 	[0x6F9, [0x669]], // 6F9 (۹) EXTENDED ARABIC-INDIC DIGIT NINE  => 669 (٩) ARABIC-INDIC DIGIT NINE
 
+	// huh? why does IDNA incorrectly map this deviation
+	// 00DF ; deviation ; 0073 0073 # 1.1  LATIN SMALL LETTER SHARP S
+	// 1E9E ; mapped    ; 0073 0073 # 5.1  LATIN CAPITAL LETTER SHARP S
+	[0x1E9E, [0xDF]], // (ẞ) LATIN CAPITAL LETTER SHARP S => (ß) LATIN SMALL LETTER SHARP S 
+
 	// emoji convenience
 	// 20221005: this is actually a bad idea
 	//[0x203C, [0x2757, 0x2757]], // (‼️) double exclamation mark   => ❗+❗
@@ -27,7 +32,7 @@ export default [
 	[0x2012, [0x2D]], // 2012 (‒) FIGURE DASH
 	[0x2015, [0x2D]], // 2015 (―) HORIZONTAL BAR
 	[0xFE58, [0x2D]], // FE58 (﹘) SMALL EM DASH	
-	// 29221009: the following are too dangerous to map
+	// 20221009: the following are too dangerous to map
 	//[0x207B, [0x2D]], // 207B (⁻) SUPERSCRIPT MINUS
 	//[0x208B, [0x2D]], // 208B (₋) SUBSCRIPT MINUS
 	//[0xFE31, [0x2D]], // FE31 (︱) PRESENTATION FORM FOR VERTICAL EM DASH
@@ -54,7 +59,6 @@ export default [
 	[0x2E3A, [0x2D]], // (⸺) TWO-EM DASH
 	[0x2E3B, [0x2D]], // (⸻) THREE-EM DASH
 	[0x2E5D, [0x2D]], // (⹝) OBLIQUE HYPHEN
-	[0x301C, [0x2D]], // (〜) WAVE DASH
 	// 10EAD (𐺭) YEZIDI HYPHENATION MARK // i'm not sure what this is
 
 	// double hyphens

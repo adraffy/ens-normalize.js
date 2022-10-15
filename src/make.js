@@ -2,7 +2,11 @@ import {Encoder, unsafe_btoa} from './encoder.js';
 import {readFileSync, writeFileSync} from 'node:fs';
 
 let data_dir = new URL('../derive/output/', import.meta.url);
-let {valid, mapped, ignored, cm, isolated, emoji, scripts, wholes, excluded} = JSON.parse(readFileSync(new URL('./spec.json', data_dir)));
+let {
+	valid, mapped, ignored, cm, isolated, emoji, 
+	script_order, script_names, scripts, wholes, 
+	restricted, restricted_wholes
+} = JSON.parse(readFileSync(new URL('./spec.json', data_dir)));
 let {ranks, decomp, exclusions, qc} = JSON.parse(readFileSync(new URL('./nf.json', data_dir)));
 
 let emoji_solo = emoji.filter(v => v.length == 1);
@@ -179,12 +183,13 @@ function write_valid_sorted(cps) {
 }
 write_valid_sorted(cm);
 write_valid_sorted(isolated);
-write_valid_sorted(scripts.Latn);
-write_valid_sorted(scripts.Grek);
-write_valid_sorted(wholes.Grek);
-write_valid_sorted(scripts.Cyrl);
-write_valid_sorted(wholes.Cyrl);
-for (let cps of Object.values(excluded)) {
+for (let i = 0; i < script_order.length; i++) {
+	let script = script_order[i];
+	write_valid_sorted(scripts[script]);
+	write_valid_sorted(wholes[script] ?? []);
+}
+write_valid_sorted(restricted_wholes);
+for (let cps of Object.values(restricted)) {
 	write_valid_sorted(cps);
 }
 enc.write_member([]);
@@ -193,7 +198,9 @@ enc.write_member(sorted_emoji);
 encode_emoji(enc, root, sorted_emoji_map);
 //write('include-only'); // only saves 300 bytes
 write_valid_sorted(nfc_check);
-write('include-ens');
+write('include-ens', {
+	SCRIPT_ORDER: script_order.map(abbr => script_names[abbr])
+});
 
 // just nf 
 // (only ~30 bytes saved using joined file)
@@ -208,7 +215,7 @@ enc.write_mapped([
 enc.write_member(qc);
 write('include-nf');
 
-function write(name) {
+function write(name, vars = {}) {
 	let {data, symbols} = enc.compressed();
 	console.log(`${name} = ${data.length} bytes / ${symbols} symbols`);
 	let encoded = unsafe_btoa(data);
@@ -216,5 +223,12 @@ function write(name) {
 		`// created ${new Date().toJSON()}`,
 		`import {read_compressed_payload} from './decoder.js';`,
 		`export default read_compressed_payload('${encoded}');`,
+		...Object.entries(vars).map(([k, v]) => {
+			return `export const ${k} = ${JSON.stringify(v)};`;
+		}),
 	].join('\n'));
+}
+
+function write_vars(vars) {
+	
 }

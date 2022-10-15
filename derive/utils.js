@@ -17,17 +17,23 @@ export function version_ordinal(x) {
 }
 
 export function hex_cp(cp) {
-	return cp.toString(16).padStart(5, '0').toUpperCase();
+	return cp.toString(16).padStart(2, '0').toUpperCase();
 }
 
 export function hex_seq(cps) {
 	return `[${cps.map(hex_cp).join(' ')}]`;
 }
 
-// str to cps
-export function explode_cp(s) {
-	if (typeof s != 'string') throw new TypeError(`expected string`);	
-	return [...s].map(c => c.codePointAt(0));
+export function explode_cp(x) {
+	if (typeof x === 'string') {
+		return [...x].map(c => c.codePointAt(0));
+	} else if (Number.isInteger(x)) {
+		return [x];
+	} else if (Array.isArray(x)) {
+		return x;
+	} else {
+		throw new TypeError('expected codepoint coercible');
+	}
 }
 
 // hex to dec

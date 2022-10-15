@@ -7,6 +7,9 @@ import {readFileSync} from 'node:fs';
 import {parse_cp_range, explode_cp} from '../derive/utils.js';
 import {read_labels} from './data.js';
 
+
+
+
 //console.log(read_labels().length);
 
 // TODO FIX ME
@@ -48,7 +51,7 @@ if (args[0] == '--') { // everything after is literal
 */
 
 let cps = script.set;
-
+//let cps = UNICODE.allowed_identifiers().filter(x => x < 0x3000);
 
 
 //let cps = parse_cp_range('00..FF');
