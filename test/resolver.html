@@ -288,7 +288,7 @@ ul.row {
 .row.hashes {
 	display: grid;
 	background: none;
-	padding: 0 0.5rem;
+	padding: 0;
 	grid-template-columns: 2fr min-content 3fr min-content 4fr;
 	align-items: start;
 	gap: 0.3rem;
@@ -303,6 +303,8 @@ ul.row {
 .hashes .length {
 	text-align: center;
 	color: #777;
+	background: #f8eedd;
+	padding: 0 0.1rem;
 }
 .hashes .text {
 	line-break: anywhere;
@@ -319,13 +321,17 @@ ul.row {
 	grid-column: 1 / -1;
 	text-align: center;
 	line-break: anywhere;
+	padding-bottom: 2px;;
+	border-bottom: 3px solid #fff;
 } 
+.hashes .wide:last-child {
+	border-bottom: none;
+}
 .hashes .minor {
 	font-size: 80%;
 	color: #666;
 	padding: 0.2rem 0;
-	border-top: 1px dashed #ccc;
-	border-bottom: 1px solid #ccc;
+	border-top: 1px dotted #ccc;
 }
 .tokens {
 	font-size: 16pt;
@@ -1351,7 +1357,12 @@ function create_hashes_row(name) {
 	let row = create_row();
 	row.classList.add('hashes');
 	row.classList.toggle('hide', !show_hashes_check.checked);
-	// build table of label hashes
+
+	let hash_span = document.createElement('span');
+	hash_span.classList.add('wide');
+	hash_span.innerHTML = `<b>Namehash:</b> <code>${namehash(name)}</code>`;
+	row.append(hash_span);
+
 	for (let label of name.split('.')) {
 		let cps = explode_cp(label);
 		let v = bytes_from_utf8(label);
@@ -1388,15 +1399,10 @@ function create_hashes_row(name) {
 		row.append(text_span, ulen_span, uhex_code, vlen_span, vhex_code, hash_span); 
 
 		if (label === eth_label) {
-			hash_span.innerHTML += `<br><b>Token:</b> <code>${ethers.BigNumber.from(labelhash(eth_label))}</code>`;
-					
+			hash_span.innerHTML += `<br><b>Token:</b> <code>${ethers.BigNumber.from(labelhash(eth_label))}</code>`;					
 		}
 	}
-	// add namehash
-	let hash_span = document.createElement('span');
-	hash_span.classList.add('wide');
-	hash_span.innerHTML = `<b>Namehash:</b> <code>${namehash(name)}</code>`;
-	row.append(hash_span);
+	
 	return row;
 }
 
