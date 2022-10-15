@@ -391,14 +391,6 @@ for (let {wholes} of restricted) {
 console.log(`Restricted Wholes: ${restricted_wholes.size}`);
 wholes = wholes.filter(x => x.wholes.size); // remove restricted
 
-// create structures
-restricted = Object.fromEntries(restricted.map(x => [x.abbr, sorted(x.restricted)]));
-wholes = Object.fromEntries(wholes.map(x => [x.abbr, sorted(x.wholes)]));
-restricted_wholes = sorted(restricted_wholes);
-
-let scripts = Object.fromEntries(SCRIPT_ORDER.map(abbr => [abbr, sorted(SCRIPTS.require(abbr).set)]));
-let script_names = Object.fromEntries(SCRIPTS.entries.map(x => [x.abbr, x.name.replace('_', ' ')]));
-
 // note: sorting isn't important, just nice to have
 const created = new Date();
 mkdirSync(out_dir, {recursive: true});
@@ -412,11 +404,11 @@ writeFileSync(new URL('./spec.json', out_dir), JSON.stringify({
 	emoji: [...emoji.values()].map(x => x.cps).sort(compare_arrays),
 	isolated: sorted(isolated),
 	script_order: SCRIPT_ORDER,
-	script_names,
-	scripts,
-	wholes,
-	restricted,	
-	restricted_wholes,
+	script_names: Object.fromEntries(SCRIPTS.entries.map(x => [x.abbr, x.name.replace('_', ' ')])),
+	scripts: Object.fromEntries(SCRIPT_ORDER.map(abbr => [abbr, sorted(SCRIPTS.require(abbr).set)])),
+	wholes: Object.fromEntries(wholes.map(x => [x.abbr, sorted(x.wholes)])),
+	restricted: Object.fromEntries(restricted.map(x => [x.abbr, sorted(x.restricted)])),	
+	restricted_wholes: sorted(restricted_wholes)
 }));
 
 // this file should be independent so we can create a standalone nf implementation

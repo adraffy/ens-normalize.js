@@ -52,6 +52,7 @@ export default [
 	0x020C0, // (⃀) SOM SIGN (Kyrgyzstan)
 
 	0x0211E, // (℞) PRESCRIPTION TAKE
+	0x2117, // (℗) SOUND RECORDING COPYRIGHT
 
 	// more symbols
 	0x2301, // (⌁) ELECTRIC ARROW

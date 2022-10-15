@@ -1,4 +1,4 @@
-Build Date: 2022-10-15T07:29:20.483Z
+Build Date: 2022-10-15T07:58:19.584Z
 Unicode Version: 15.0.0
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -3934,6 +3934,7 @@ Removed Valid: 1803 (᠃) MONGOLIAN FULL STOP
 Removed Valid: 589 (։) ARMENIAN FULL STOP
 Removed Valid: 6D4 (۔) ARABIC FULL STOP
 Removed Valid: 2E3C (⸼) STENOGRAPHIC FULL STOP
+Removed Valid: 1809 (᠉) MONGOLIAN MANCHU FULL STOP
 Removed Valid: A1 (¡) INVERTED EXCLAMATION MARK
 Removed Valid: BF (¿) INVERTED QUESTION MARK
 Removed Valid: 55E (՞) ARMENIAN QUESTION MARK
@@ -4184,6 +4185,9 @@ Removed Valid: A78F (ꞏ) LATIN LETTER SINOLOGICAL DOT
 Removed Valid: 55B (՛) ARMENIAN EMPHASIS MARK
 Removed Valid: 55C (՜) ARMENIAN EXCLAMATION MARK
 Removed Valid: 55F (՟) ARMENIAN ABBREVIATION MARK
+Removed Valid: 1800 (᠀) MONGOLIAN BIRGA
+Removed Valid: 1807 (᠇) MONGOLIAN SIBE SYLLABLE BOUNDARY MARKER
+Removed Valid: 180A (᠊) MONGOLIAN NIRUGU
 Removed Valid: 2C65 (ⱥ) LATIN SMALL LETTER A WITH STROKE
 --Mapping: 23A (Ⱥ) LATIN CAPITAL LETTER A WITH STROKE => 2C65 (ⱥ) LATIN SMALL LETTER A WITH STROKE
 Removed Valid: 180 (ƀ) LATIN SMALL LETTER B WITH STROKE
@@ -9107,6 +9111,7 @@ Isolated: 20BE (₾) LARI SIGN
 Isolated: 20BF (₿) BITCOIN SIGN
 Isolated: 20C0 (⃀) SOM SIGN
 Isolated: 211E (℞) PRESCRIPTION TAKE
+Isolated: 2117 (℗) SOUND RECORDING COPYRIGHT
 Isolated: 2301 (⌁) ELECTRIC ARROW
 Isolated: 2307 (⌇) WAVY LINE
 Isolated: 2315 (⌕) TELEPHONE RECORDER
@@ -10006,7 +10011,7 @@ Restricted [Mend]: 213 => 213
 Restricted [Merc]: 90 => 90
 Restricted [Mero]: 32 => 32
 Restricted [Modi]: 89 => 79
-Restricted [Mong]: 159 => 159
+Restricted [Mong]: 155 => 155
 Restricted [Mroo]: 43 => 43
 Restricted [Mult]: 48 => 38
 Restricted [Nagm]: 42 => 42

@@ -150,7 +150,7 @@ input[type=checkbox]:checked + label.nonstd {
 }
 .row.dns.invalid {
 	background: #fff0f0;	
-	border: 3px dashed #fcc;
+	outline: 3px dashed #fcc;
 }
 .row.pretty {
 	background: linear-gradient(90deg, #fff, #fff0fc);
@@ -289,7 +289,7 @@ ul.row {
 	display: grid;
 	background: none;
 	padding: 0 0.5rem;
-	grid-template-columns: 2fr min-content 3fr min-content 4fr 80px;
+	grid-template-columns: 2fr min-content 3fr min-content 4fr;
 	align-items: start;
 	gap: 0.3rem;
 	font-size: 12pt;
@@ -332,7 +332,7 @@ ul.row {
 }
 .row.error {
 	background: #fcc;
-	border: 3px dashed #f00;
+	outline: 3px dashed #f00;
 }
 .transform {
 	background: #fffaf0;
@@ -356,6 +356,9 @@ footer {
 	#input, #controls, #options, #examples {
 		margin: 0 1rem;
 	}
+	#content {
+		font-size: 12pt;
+	}
 	.row {
 		flex-wrap: wrap;
 	}
@@ -364,10 +367,6 @@ footer {
 	}
 	.row.hashes button {
 		grid-column: 1 / -1;
-	}
-	.error {
-		border-left: 0;
-		border-right: 0;
 	}
 	#examples_btn {
 		display: block;
@@ -703,9 +702,9 @@ add_digits('Devangari', '०१२३४५६७८९');
 //add_digits('Myanmar', '႐႑႒႓႔႕႖႗႘႙');
 
 read_local_storage('hide_examples', x => examples_div.classList.toggle('hide', x));
-read_local_storage('show_hashes', x => show_hashes_check.selected = x);
-read_local_storage('auto_resolve', x=> auto_resolve_check.selected = x);
-read_local_storage('show_components', x=> show_components_check.selected = x);
+read_local_storage('show_hashes', x => show_hashes_check.checked = x);
+read_local_storage('auto_resolve', x=> auto_resolve_check.checked = x);
+read_local_storage('show_components', x=> show_components_check.checked = x);
 
 for (let btn of document.querySelectorAll('#examples button:not([id]), button[data-name]')) {
 	let name = btn.innerHTML;

@@ -1,8 +1,8 @@
 [
 	{
 		"name": "version",
-		"created": "2022-10-15T07:29:31.679Z",
-		"spec_hash": "6da289198aff01e95aac71f075281ea54ebd9c73aff11d4c21983370a99fdbcb"
+		"created": "2022-10-15T07:58:30.925Z",
+		"spec_hash": "8fe9c9a028c11fb059ede0f5f61655d23c2d78823de766758f92d50a359bd1e4"
 	},
 	{
 		"name": "",
@@ -13507,6 +13507,11 @@
 		"comment": "Disallowed codepoint: 0x2E3C"
 	},
 	{
+		"name": "᠉",
+		"error": true,
+		"comment": "Disallowed codepoint: 0x1809"
+	},
+	{
 		"name": "¡",
 		"error": true,
 		"comment": "Disallowed codepoint: 0xA1"
@@ -14365,6 +14370,21 @@
 		"name": "՟",
 		"error": true,
 		"comment": "Disallowed codepoint: 0x55F"
+	},
+	{
+		"name": "᠀",
+		"error": true,
+		"comment": "Disallowed codepoint: 0x1800"
+	},
+	{
+		"name": "᠇",
+		"error": true,
+		"comment": "Disallowed codepoint: 0x1807"
+	},
+	{
+		"name": "᠊",
+		"error": true,
+		"comment": "Disallowed codepoint: 0x180A"
 	},
 	{
 		"name": "ⱥ",
