@@ -1,4 +1,4 @@
-Build Date: 2022-10-24T09:58:31.004Z
+Build Date: 2022-10-24T10:46:10.975Z
 Unicode Version: 15.0.0
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -5192,6 +5192,8 @@ Removed Valid: A8F0 (◌꣰) COMBINING DEVANAGARI LETTER VI
 Removed Valid: A8F1 (◌꣱) COMBINING DEVANAGARI SIGN AVAGRAHA
 *** Already disallowed: 309B (゛) KATAKANA-HIRAGANA VOICED SOUND MARK
 *** Already disallowed: 309C (゜) KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK
+Removed Valid: 16FF0 (◌𖿰) VIETNAMESE ALTERNATE READING MARK CA
+Removed Valid: 16FF1 (◌𖿱) VIETNAMESE ALTERNATE READING MARK NHAY
 Removed Valid: 615 (◌ؕ) ARABIC SMALL HIGH TAH
 Removed Valid: 616 (◌ؖ) ARABIC SMALL HIGH LIGATURE ALEF WITH LAM WITH YEH
 Removed Valid: 617 (◌ؗ) ARABIC SMALL HIGH ZAIN
@@ -11860,7 +11862,7 @@ Removed Valid: 4F5 (ӵ) CYRILLIC SMALL LETTER CHE WITH DIAERESIS
 --Mapping: 4F4 (Ӵ) CYRILLIC CAPITAL LETTER CHE WITH DIAERESIS => 4F5 (ӵ) CYRILLIC SMALL LETTER CHE WITH DIAERESIS
 Removed Valid: 4F9 (ӹ) CYRILLIC SMALL LETTER YERU WITH DIAERESIS
 --Mapping: 4F8 (Ӹ) CYRILLIC CAPITAL LETTER YERU WITH DIAERESIS => 4F9 (ӹ) CYRILLIC SMALL LETTER YERU WITH DIAERESIS
-CM Isolated: 1744
+CM Isolated: 98928
 Removed Mapped: 130 (İ) LATIN CAPITAL LETTER I WITH DOT ABOVE => [69 307]
 Restricted [Beng]: All(96) Valid(91) Restricted(89)
 Restricted [Taml]: All(123) Valid(123) Restricted(119)
@@ -12014,9 +12016,9 @@ Ordered: Korean Test(Hang) Rest(Hani,ALL) Extra(26) Wholes(0)
 Ordered: Japanese Test(Kana,Hira) Rest(Hani,ALL) Extra(26) Wholes(0)
 Ordered: Han Test(Hani) Rest(ALL) Extra(26) Wholes(0)
 Ordered: Latin Test(Latn) Rest(ALL) Extra(0) Wholes(0)
-Ordered: Cyrillic Test(Cyrl) Rest(ALL) Extra(0) Wholes(23)
-Ordered: Arabic Test(Arab) Rest() Extra(0) Wholes(11)
-Ordered: Devanagari Test(Deva) Rest() Extra(0) Wholes(2)
 Ordered: Greek Test(Grek) Rest(ALL) Extra(0) Wholes(13)
-Ordered: Hebrew Test(Hebr) Rest() Extra(1) Wholes(6)
+Ordered: Cyrillic Test(Cyrl) Rest(ALL) Extra(0) Wholes(23)
 Ordered: Thai Test(Thai) Rest() Extra(1) Wholes(1)
+Ordered: Devanagari Test(Deva) Rest() Extra(0) Wholes(2)
+Ordered: Hebrew Test(Hebr) Rest() Extra(1) Wholes(6)
+Ordered: Arabic Test(Arab) Rest() Extra(0) Wholes(11)

@@ -1,12 +1,11 @@
 export const CM_DISALLOWED = [
 	'Zyyy',
-	// whitelisted
 	'Latn',
 	'Grek',
 	'Cyrl',
-	// 20221020: just sound marks
 	'Kana',
 	'Hira',
+	'Hani',
 ];
 
 // exemplars: https://unicode-org.github.io/cldr-staging/charts/latest/by_type/core_data.alphabetic_information.main.html
