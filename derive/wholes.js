@@ -45,8 +45,9 @@ export async function read_wholes(scripts) {
 		if (!match) continue;
 		let abbr = match[1];
 		let script = scripts.require(abbr);
+		let valid_set = script.valid ?? script.set;
 		let cps = (await import(new URL(name, dir))).default.filter(cp => {
-			return script.set.has(cp);
+			return valid_set.has(cp);
 		});
 		script.wholes = new Set(cps);
 		ret.push(script);

@@ -1,45 +1,83 @@
-import r, {SCRIPT_ORDER} from './include-ens.js';
-import {read_member_array, read_mapped, read_emoji_trie, read_array_while} from './decoder.js';
-import {explode_cp, str_from_cps, hex_cp} from './utils.js';
+import r, {ORDERED_SCRIPTS} from './include-ens.js';
+import {read_member_array, read_mapped, read_emoji_trie, read_array_while, read_sequences} from './decoder.js';
+import {explode_cp, str_from_cps, quote_cp, compare_arrays} from './utils.js';
 import {nfc, nfd} from './nf.js';
 //import {nfc, nfd} from './nf-native.js'; // replaced by rollup
 
 export {nfc, nfd}; 
 
 const SORTED_VALID = read_member_array(r).sort((a, b) => a - b);
-const VALID = new Set(SORTED_VALID);
-const IGNORED = new Set(read_member_array(r));
-const MAPPED = new Map(read_mapped(r));
-function read_valid_subset() {
-	return new Set(read_member_array(r, SORTED_VALID));
+function read_set(lookup) {
+	return new Set(read_member_array(r, lookup));
 }
+function read_valid_subset() {
+	return read_set(SORTED_VALID);
+}
+function read_valid_subsets() {
+	return read_array_while(() => { 
+		let v = read_valid_subset();
+		if (v.size) return v;
+	});
+}
+const VALID = new Set(SORTED_VALID);
+const IGNORED = read_set();
+const MAPPED = new Map(read_mapped(r));
 const CM = read_valid_subset();
-const ISOLATED = read_valid_subset();
-const SCRIPTS = SCRIPT_ORDER.map(name => {
-	return [name, read_valid_subset(), read_valid_subset()]; // [set, wholes]
+const CM_ISOLATED_PH = [];
+const CM_WHITELIST = new Map([
+	read_array_while(() => {
+		let cp = r();
+		if (cp) return [cp, read_sequences(r)];
+	}),
+	read_member_array(r, SORTED_VALID).map(cp => [cp, CM_ISOLATED_PH]),
+].flat());
+const SCRIPTS = read_valid_subsets(); // [0] is ALL
+const ORDERED = ORDERED_SCRIPTS.map(({name, test, rest}) => {
+	test = test.map(i => SCRIPTS[i]);
+	rest = [test, rest.map(i => SCRIPTS[i])].flat();
+	return {name, test, rest, extra: read_valid_subset(), wholes: read_valid_subset()};
 });
 const RESTRICTED_WHOLES = read_valid_subset();
-const RESTRICTED = read_array_while(() => { // TODO: include script names? (it's 2KB)
-	let v = read_valid_subset(r);
-	if (v.size) return v;
-});
-const EMOJI_SOLO = new Set(read_member_array(r));
+const RESTRICTED = read_valid_subsets();
+const EMOJI_SOLO = read_set();
 const EMOJI_ROOT = read_emoji_trie(r);
 const NFC_CHECK = read_valid_subset();
+const ESCAPE = read_set();
+const CM_INVALID = read_set();
 
 const STOP = 0x2E;
 const HYPHEN = 0x2D;
 const UNDERSCORE = 0x5F;
 const FE0F = 0xFE0F;
 
+const COMMON = 'Common';
+const STOP_CH = str_from_cps([STOP]);
+
 function check_leading_underscore(cps) {
 	let e = cps.lastIndexOf(UNDERSCORE);
 	for (let i = e; i > 0; ) {
 		if (cps[--i] !== UNDERSCORE) {
-			throw new Error(`underscore only allowed at start`);
+			throw new Error(`underscore allowed only at start`);
 		}
 	}
 	return e + 1;
+}
+
+export function safe_str_from_cps(cps, quoter = quote_cp) {
+	let buf = [];
+	if (is_printable_mark(cps[0])) buf.push('◌');
+	let prev = 0;
+	let n = cps.length;
+	for (let i = 0; i < n; i++) {
+		let cp = cps[i];
+		if (should_escape(cp)) {
+			buf.push(str_from_cps(cps.slice(prev, i)));
+			buf.push(quoter(cp));
+			prev = i + 1;
+		}
+	}
+	buf.push(str_from_cps(cps.slice(prev, n)));
+	return buf.join('');
 }
 
 function check_label_extension(cps) {
@@ -65,9 +103,12 @@ function check_surrounding(cps, cp, name, no_leading, no_trailing) {
 	if (no_trailing && last == cps.length-1) throw new Error(`trailing ${name}`);
 }
 
+/*
 // ContextO: MIDDLE DOT
 // https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.3
 // Between 'l' (U+006C) characters only, used to permit the Catalan character ela geminada to be expressed.
+// note: this a lot of effort for 1 character
+// 20221020: disabled
 function check_middle_dot(cps) {
 	let i = 0;
 	while (true) {
@@ -77,39 +118,38 @@ function check_middle_dot(cps) {
 		i += 2;
 	}
 }
+*/
 
-function check_scripts_latin_like(cps) {
-	// https://www.unicode.org/reports/tr39/#mixed_script_confusables
-	for (let i = 0; i < SCRIPTS.length; i++) {
-		let [name, script_set, whole_set] = SCRIPTS[i];
-		if (cps.some(cp => script_set.has(cp))) {
-			for (let j = i + 1; j < SCRIPTS.length; j++) { // scripts before already had no match
-				let [name_j, set_j] = SCRIPTS[j];
-				if (cps.some(cp => set_j.has(cp))) {
-					throw new Error(`mixed-script confusable: ${name} + ${name_j}`);
-				}
+function check_scripts(cps) {
+	for (let {name, test, rest, extra, wholes} of ORDERED) {
+		if (cps.some(cp => test.some(set => set.has(cp)))) {
+			// https://www.unicode.org/reports/tr39/#mixed_script_confusables
+			let bad = cps.filter(cp => !rest.some(set => set.has(cp)) && !extra.has(cp));
+			if (bad.length) {
+				throw new Error(`mixed-script ${name} confusable: "${str_from_cps(bad)}"`);
 			}
-			if (whole_set.size) { 
-				// https://www.unicode.org/reports/tr39/#def_whole_script_confusables
-				// if every char matching the script is confusable
-				if (cps.every(cp => !script_set.has(cp) || whole_set.has(cp))) {
-					throw new Error(`whole-script confusable: ${name}`);
-				}
+			// https://www.unicode.org/reports/tr39/#def_whole_script_confusables
+			if (cps.every(cp => wholes.has(cp) || SCRIPTS[0].has(cp))) {
+				throw new Error(`whole-script ${name} confusable`);
 			}
-			break;
+			return name;
 		}
 	}
+	return COMMON;
 }
 
 // requires decomposed codepoints
+// returns true if pure (emoji or single script)
 function check_restricted_scripts(cps) {
 	// https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers
+	cps = cps.filter(cp => cp != FE0F); // remove emoji (once)
+	if (!cps.length) return true; // purely emoji
 	for (let set of RESTRICTED) {
 		if (cps.some(cp => set.has(cp))) { // first with one match
-			if (!cps.every(cp => cp == FE0F || set.has(cp))) { // must match all (or emoji)
+			if (!cps.every(cp => set.has(cp))) { // must match all
 				throw new Error(`restricted script cannot mix`);
 			}
-			if (cps.every(cp => cp == FE0F || RESTRICTED_WHOLES.has(cp))) {
+			if (cps.every(cp => RESTRICTED_WHOLES.has(cp))) {
 				throw new Error(`restricted whole-script confusable`);
 			}
 			return true;
@@ -119,84 +159,119 @@ function check_restricted_scripts(cps) {
 
 // requires decomposed codepoints
 function check_combinining_marks(cps) {
-	for (let i = 0, j = -1; i < cps.length; i++) {
+	for (let i = 1, j = -1; i < cps.length; i++) {
 		if (CM.has(cps[i])) {
-			if (i == 0) {
-				throw new Error(`leading combining mark`);
-			} else if (i == j) {
-				throw new Error(`adjacent combining marks "${str_from_cps(cps.slice(i - 2, i + 1))}"`);
-			} else {
-				let prev = cps[i - 1];
-				if (prev == FE0F || ISOLATED.has(prev)) {
-					throw new Error(`isolate combining mark`);
+			let prev = cps[i - 1];
+			if (prev == FE0F) {
+				throw new Error(`emoji + combining mark: ${str_from_cps(cps.slice(i-1, i+1))}`);
+			}
+			let seqs = CM_WHITELIST.get(prev);
+			if (seqs) {
+				let k = i + 1;
+				while (k < cps.length && CM.has(cps[k])) k++;
+				let cms = cps.slice(i, k);
+				let match = seqs.find(seq => !compare_arrays(seq, cms));
+				if (!match) {
+					throw new Error(`disallowed combining mark sequence: "${str_from_cps(cps.slice(i-1, k))}"`)
 				}
-			}	
-			j = i + 1;
+				i = k; 
+			} else if (i == j) { 
+				// this needs to come after whitelist test since it can permit 2+
+				throw new Error(`adjacent combining marks "${str_from_cps(cps.slice(i-2, i+1))}"`);
+			} else {
+				j = i + 1;
+			}
 		}
 	}
 }
 
-// this function only makes sense if the input 
-// was an output of ens_normalize_fragment 
-export function ens_normalize_post_check(norm) {
-	for (let label of norm.split('.')) {
-		if (!label) throw new Error('Empty label');
-		try {
-			let cps_nfc = explode_cp(label);
-			let n_under = check_leading_underscore(cps_nfc);
-			let cps_nfd = nfd(process(label.slice(n_under), () => [FE0F])); // replace emoji with single character
-			check_combinining_marks(cps_nfd);
-			if (check_restricted_scripts(cps_nfd)) continue; // it's pure
-			check_label_extension(cps_nfc);
-			check_surrounding(cps_nfc, 0x2019, 'apostrophe', true, true); // question: can this be generalized better?
-			check_middle_dot(cps_nfc); // this a lot of effort for 1 character
-			check_scripts_latin_like(cps_nfc);
-		} catch (err) {
-			throw new Error(`Invalid label "${label}": ${err.message}`); // note: label might not exist in the input string
-		}
-	}
-	return norm;
+export function is_printable_mark(cp) {
+	return CM.has(cp) || CM_INVALID.has(cp);
+}
+
+export function should_escape(cp) {
+	return ESCAPE.has(cp);
 }
 
 export function ens_normalize_fragment(frag, nf = nfc) {
-	return str_from_cps(nf(process(frag, filter_fe0f)));
+	return frag.split(STOP_CH).map(label => str_from_cps(nf(process(explode_cp(label))))).join(STOP_CH);
 }
 
 export function ens_normalize(name) {
-	return ens_normalize_post_check(ens_normalize_fragment(name));
+	return flatten(ens_split(name));
 }
 
-// note: does not post_check
 export function ens_beautify(name) {
-	return str_from_cps(nfc(process(name, x => x)));
+	return flatten(ens_split(name, x => x));
 }
 
-function filter_fe0f(cps) {
-	return cps.filter(cp => cp != FE0F);
+export function ens_split(name, emoji_filter = filter_fe0f) {
+	let offset = 0;
+	return name.split(STOP_CH).map(label => {
+		let input = explode_cp(label);
+		let info = {
+			input,
+			offset, // codepoint not string!
+		};
+		offset += input.length + 1;
+		try {
+			let mapped = info.mapped = process(input);
+			let norm = info.output = nfc(mapped.flatMap(x => Array.isArray(x) ? emoji_filter(x) : x)); // strip FE0F from emoji
+			info.emoji = mapped.some(x => Array.isArray(x)); // mapped.reduce((a, x) => a + (Array.isArray(x)?1:0), 0);
+			check_leading_underscore(norm); // should restricted get underscores? (20221018: no)
+			if (CM.has(norm[0])) throw new Error(`leading combining mark`);
+			check_label_extension(norm);
+			let decomp = nfd(mapped.map(x => Array.isArray(x) ? FE0F : x)); // replace emoji with single character placeholder
+			if (check_restricted_scripts(decomp)) {
+				info.script = mapped.every(x => Array.isArray(x)) ? COMMON : 'Restricted';
+			} else {
+				check_combinining_marks(decomp);			
+				check_surrounding(norm, 0x2019, 'apostrophe', true, true); // question: can this be generalized better?
+				//check_middle_dot(norm);
+				info.script = check_scripts(nfc(mapped.flatMap(x => Array.isArray(x) ? [] : x))); // remove emoji
+			}
+		} catch (err) {
+			info.error = err.message;
+		}
+		return info;
+	});
 }
 
-function process(name, emoji_filter) {
-	let input = explode_cp(name).reverse(); // flip so we can pop
-	let output = [];
+// throw on first error
+function flatten(split) {
+	return split.map(({input, error, output}) => {
+		if (error) throw new Error(`Invalid label "${safe_str_from_cps(input)}": ${error}`); 
+		return str_from_cps(output);
+	}).join(STOP_CH);
+}
+
+function process(input) {
+	let ret = []; 
+	input = input.slice().reverse(); // flip so we can pop
 	while (input.length) {
 		let emoji = consume_emoji_reversed(input);
 		if (emoji) {
-			output.push(...emoji_filter(emoji)); // idea: emoji_filter(emoji, output.length); // provide position to callback
+			ret.push(emoji);
 		} else {
 			let cp = input.pop();
 			if (VALID.has(cp)) {
-				output.push(cp);
+				ret.push(cp);
 			} else {
 				let cps = MAPPED.get(cp);
 				if (cps) {
-					output.push(...cps);
+					ret.push(...cps);
 				} else if (!IGNORED.has(cp)) {
-					throw new Error(`Disallowed codepoint: 0x${hex_cp(cp)}`);
+					let form = should_escape(cp) ? '' : ` "${safe_str_from_cps([cp])}"`;
+					throw new Error(`disallowed character:${form} ${quote_cp(cp)}`); 
 				}
 			}
 		}
 	}
-	return output;
+	return ret;
+}
+
+function filter_fe0f(cps) {
+	return cps.filter(cp => cp != FE0F);
 }
 
 function consume_emoji_reversed(cps, eaten) {
@@ -245,11 +320,11 @@ function conform_emoji_copy(cps, node) {
 	return copy;
 }
 
-// return all supported emoji (not sorted)
+// return all supported emoji
 export function ens_emoji() {
 	let ret = [...EMOJI_SOLO].map(x => [x]);
 	build(EMOJI_ROOT, []);
-	return ret;
+	return ret.sort(compare_arrays);
 	function build(node, cps, saved) {
 		if (node.save) { // remember
 			saved = cps[cps.length-1];
@@ -274,48 +349,12 @@ const TY_MAPPED = 'mapped';
 const TY_IGNORED = 'ignored';
 const TY_DISALLOWED = 'disallowed';
 const TY_EMOJI = 'emoji';
-const TY_ISOLATED = 'isolated';
 const TY_NFC = 'nfc';
 const TY_STOP = 'stop';
 
-/*
-// this is dumb, tokens are better are pure data
-class EmojiToken {
-	constructor(input, emoji) {
-		this.input = input;
-		this.emoji = emoji;
-	}
-	get type() {
-		return TY_EMOJI;
-	}
-	get cps() {
-		return filter_fe0f(this.cps);
-	}	
-}
-class SingleToken {
-	constructor(type, cp) {
-		this.type = type;
-		this.cp = cp;
-	}
-	get input() { return [this.cp]; }
-	get cps() { return this.input() }
-}
-class MappedToken extends SingleToken {
-	constructor(cp, cps) {
-		this.cp = cp;
-		this.cps = cps;
-	}
-	get type() { return TY_MAPPED; }
-	get input() { return [this.cp]; }
-}
-class NFCToken {
-	constructor(tokens) {
-
-	}
-}
-*/
-
-export function ens_tokenize(name) {
+export function ens_tokenize(name, {
+	nf = true, // collapse unnormalized runs into a single token
+} = {}) {
 	let input = explode_cp(name).reverse();
 	let eaten = [];
 	let tokens = [];
@@ -328,11 +367,14 @@ export function ens_tokenize(name) {
 			if (cp === STOP) {
 				tokens.push({type: TY_STOP, cp});
 			} else if (VALID.has(cp)) {
-				if (ISOLATED.has(cp)) {
+				/*
+				if (CM_WHITELIST.get(cp) === CM_ISOLATED_PH) {
 					tokens.push({type: TY_ISOLATED, cp});
 				} else {
 					tokens.push({type: TY_VALID, cps: [cp]});
 				}
+				*/
+				tokens.push({type: TY_VALID, cps: [cp]});
 			} else if (IGNORED.has(cp)) {
 				tokens.push({type: TY_IGNORED, cp});
 			} else {
@@ -345,37 +387,38 @@ export function ens_tokenize(name) {
 			}
 		}
 	}
-	for (let i = 0, start = -1; i < tokens.length; i++) {
-		let token = tokens[i];
-		if (is_valid_or_mapped(token.type)) {
-			if (requires_check(token.cps)) { // normalization might be needed
-				let end = i + 1;
-				for (let pos = end; pos < tokens.length; pos++) { // find adjacent text
-					let {type, cps} = tokens[pos];
-					if (is_valid_or_mapped(type)) {
-						if (!requires_check(cps)) break;
-						end = pos + 1;
-					} else if (type !== TY_IGNORED) { // || type !== TY_DISALLOWED) { 
-						break;
+	if (nf) {
+		for (let i = 0, start = -1; i < tokens.length; i++) {
+			let token = tokens[i];
+			if (is_valid_or_mapped(token.type)) {
+				if (requires_check(token.cps)) { // normalization might be needed
+					let end = i + 1;
+					for (let pos = end; pos < tokens.length; pos++) { // find adjacent text
+						let {type, cps} = tokens[pos];
+						if (is_valid_or_mapped(type)) {
+							if (!requires_check(cps)) break;
+							end = pos + 1;
+						} else if (type !== TY_IGNORED) { // || type !== TY_DISALLOWED) { 
+							break;
+						}
 					}
+					if (start < 0) start = i;
+					let slice = tokens.slice(start, end);
+					let cps0 = slice.flatMap(x => is_valid_or_mapped(x.type) ? x.cps : []); // strip junk tokens
+					let cps = nfc(cps0);
+					if (compare_arrays(cps, cps0)) { // bundle into an nfc token
+						tokens.splice(start, end - start, {type: TY_NFC, input: cps0, cps, tokens: collapse_valid_tokens(slice)});
+						i = start;
+					} else { 
+						i = end - 1; // skip to end of slice
+					}
+					start = -1; // reset
+				} else {
+					start = i; // remember last
 				}
-				if (start < 0) start = i;
-				let slice = tokens.slice(start, end);
-				let cps0 = slice.flatMap(x => is_valid_or_mapped(x.type) ? x.cps : []); // strip junk tokens
-				let cps = nfc(cps0); // this does extra work for nf-native but oh well
-				//if (cps0.length === cps.length && cps0.every((cp, i) => cp === cps[i])) { 
-				if (str_from_cps(cps0) === str_from_cps(cps)) {
-					i = end - 1; // skip to end of slice
-				} else { // bundle into an nfc token
-					tokens.splice(start, end - start, {type: TY_NFC, input: cps0, cps, tokens: collapse_valid_tokens(slice)});
-					i = start;
-				}
+			} else if (token.type === TY_EMOJI) {
 				start = -1; // reset
-			} else {
-				start = i; // remember last
 			}
-		} else if (token.type === TY_EMOJI) {
-			start = -1; // reset
 		}
 	}
 	return collapse_valid_tokens(tokens);

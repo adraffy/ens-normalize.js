@@ -86,6 +86,8 @@ export function best_arithmetic(symbols, max = 128) {
 	return best;
 }
 
+export const MAX_LINEAR = 251;
+
 // TODO: make this adaptive
 // TODO: make payload symbols encoded as bit-width symbols
 // eg. instead of byte[1,2,3] use bits[5-20]
@@ -94,7 +96,8 @@ export function best_arithmetic(symbols, max = 128) {
 // 10000 => w=5 0000 
 export function encode_arithmetic(symbols, linear) {	
 	if (symbols.length == 0) throw new Error(`no symbols`);
-	if (linear < 0) throw new Error(`should be non-negative`);
+	if (linear < 0) throw new Error(`linear symbols must be non-negative`);
+	if (linear > MAX_LINEAR) throw new Error(`too many linear symbols`);
 	let payload = [];
 	symbols = symbols.map(x => {
 		if (x >= linear) {
@@ -118,7 +121,7 @@ export function encode_arithmetic(symbols, linear) {
 	symbols.push(0); // END
 	// create frequency table
 	let freq = Array(linear + 4).fill(0); // END + 1,2,3-byte symbols
-	if (freq.length > 255) throw new Error(`too many linear symbols`);
+	if (freq.length > 255) throw new Error(`bug`);
 	for (let x of symbols) freq[x]++;
 	freq = freq.map(x => Math.max(1, x)); // prevent sparse
 	// create accumulated table

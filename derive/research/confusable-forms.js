@@ -11,6 +11,7 @@ function get_scripts(cps) {
 	return [...set].sort();
 }
 
+// https://www.unicode.org/reports/tr24/#Script_Anomalies
 function check_scripts(cps) {
 	let raw = get_scripts(cps);
 	let nfc = get_scripts(NF.nfc(cps));

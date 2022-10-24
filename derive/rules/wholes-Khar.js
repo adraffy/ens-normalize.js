@@ -1,0 +1,21 @@
+// created: 2022-10-24T08:28:53.672Z
+// version: 15.0.0
+export default [
+	// "̣"
+	// 8ED (◌࣭) ARABIC TONE ONE DOT BELOW (Arab)
+	// 5B4 (◌ִ) HEBREW POINT HIRIQ (Hebr)
+	// 65C (◌ٜ) ARABIC VOWEL SIGN DOT BELOW (Arab)
+	// 93C (◌़) DEVANAGARI SIGN NUKTA (Deva)
+	// 9BC (◌়) BENGALI SIGN NUKTA (Beng)
+	// A3C (◌਼) GURMUKHI SIGN NUKTA (Guru)
+	// ABC (◌઼) GUJARATI SIGN NUKTA (Gujr)
+	// B3C (◌଼) ORIYA SIGN NUKTA (Orya)
+	// 111CA (◌𑇊) SHARADA SIGN NUKTA (Shrd)
+	// 114C3 (◌𑓃) TIRHUTA SIGN NUKTA (Tirh)
+	0x10A3A, // 10A3A (◌𐨺) KHAROSHTHI SIGN DOT BELOW
+	// "."
+	// 2E (.) FULL STOP (Zyyy)
+	// 660 (٠) ARABIC-INDIC DIGIT ZERO (Arab)
+	// A4F8 (ꓸ) LISU LETTER TONE MYA TI (Lisu)
+	0x10A50, // 10A50 (𐩐) KHAROSHTHI PUNCTUATION DOT
+]

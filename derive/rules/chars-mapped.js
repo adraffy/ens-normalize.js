@@ -13,59 +13,56 @@ export default [
 	// huh? why does IDNA incorrectly map this deviation
 	// 00DF ; deviation ; 0073 0073 # 1.1  LATIN SMALL LETTER SHARP S
 	// 1E9E ; mapped    ; 0073 0073 # 5.1  LATIN CAPITAL LETTER SHARP S
-	[0x1E9E, [0xDF]], // (ẞ) LATIN CAPITAL LETTER SHARP S => (ß) LATIN SMALL LETTER SHARP S 
+	// 20221016: this is bad idea, should just disallow
+	//[0x1E9E, [0xDF]], // (ẞ) LATIN CAPITAL LETTER SHARP S => (ß) LATIN SMALL LETTER SHARP S 
 
 	// emoji convenience
 	// 20221005: this is actually a bad idea
 	//[0x203C, [0x2757, 0x2757]], // (‼️) double exclamation mark   => ❗+❗
 	//[0x2049, [0x2757, 0x2753]], // (⁉️) exclamation question mark => ❗+❓
 
-	// initial hyphen-likes
-	[0x2011, [0x2D]], // 2011 (‑) NON-BREAKING HYPHEN
-	[0x2013, [0x2D]], // 2013 (–) EN DASH
-	[0x2014, [0x2D]], // 2014 (—) EM DASH
-	[0x2212, [0x2D]], // 2212 (−) MINUS SIGN
-
-	// additional hyphen-likes
+	// hyphen-likes
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/348
-	[0x2010, [0x2D]], // 2010 (‐) HYPHEN
-	[0x2012, [0x2D]], // 2012 (‒) FIGURE DASH
-	[0x2015, [0x2D]], // 2015 (―) HORIZONTAL BAR
-	[0xFE58, [0x2D]], // FE58 (﹘) SMALL EM DASH	
-	// 20221009: the following are too dangerous to map
-	//[0x207B, [0x2D]], // 207B (⁻) SUPERSCRIPT MINUS
-	//[0x208B, [0x2D]], // 208B (₋) SUBSCRIPT MINUS
-	//[0xFE31, [0x2D]], // FE31 (︱) PRESENTATION FORM FOR VERTICAL EM DASH
-	//[0xFE32, [0x2D]], // FE32 (︲) PRESENTATION FORM FOR VERTICAL EN DASH
-
-	// more hyphen-likes
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/393
+	// https://discuss.ens.domains/t/ens-name-normalization/8652/396
+	[0x2010, [0x2D]], // (‐) HYPHEN
+	[0x2011, [0x2D]], // (‑) NON-BREAKING HYPHEN
+	[0x2012, [0x2D]], // (‒) FIGURE DASH
+	[0x2013, [0x2D]], // (–) EN DASH
+	[0x2014, [0x2D]], // (—) EM DASH
+	[0x2015, [0x2D]], // (―) HORIZONTAL BAR
+	[0x2212, [0x2D]], // (−) MINUS SIGN
+	//[0x2027, [0x2D]], // (‧) HYPHENATION POINT (too small)
+	[0x2043, [0x2D]], // (⁃) HYPHEN BULLET 
+	[0xFE58, [0x2D]], // (﹘) SMALL EM DASH	
+	// 20221009: the following are too dangerous to map
+	//[0x207B, [0x2D]], // (⁻) SUPERSCRIPT MINUS
+	//[0x208B, [0x2D]], // (₋) SUBSCRIPT MINUS
+	//[0xFE31, [0x2D]], // (︱) PRESENTATION FORM FOR VERTICAL EM DASH
+	//[0xFE32, [0x2D]], // (︲) PRESENTATION FORM FOR VERTICAL EN DASH
+	// 20221014: better to disallow
 	//[0x23BA, [0x2D]], // (⎺) HORIZONTAL SCAN LINE-1
 	//[0x23BB, [0x2D]], // (⎻) HORIZONTAL SCAN LINE-3
 	//[0x23BC, [0x2D]], // (⎼) HORIZONTAL SCAN LINE-7
 	//[0x23BD, [0x2D]], // (⎽) HORIZONTAL SCAN LINE-9
 	[0x23E4, [0x2D]], // (⏤) STRAIGHTNESS
 	[0x23AF, [0x2D]], // (⎯) HORIZONTAL LINE EXTENSION
+	[0x2E3A, [0x2D, 0x2D]], // (⸺) TWO-EM DASH (20221018: added multiples)
+	[0x2E3B, [0x2D, 0x2D, 0x2D]], // (⸻) THREE-EM DASH
 
-	// more hyphen-likes
-	// https://discuss.ens.domains/t/ens-name-normalization/8652/396
-	[0x2043, [0x2D]], // (⁃) HYPHEN BULLET 
-	//[0x2027, [0x2D]], // (‧) HYPHENATION POINT
-
-	// more hyphens!
-	[0x58A, [0x2D]], // (֊) ARMENIAN HYPHEN
-	[0x5BE, [0x2D]], // (־) HEBREW PUNCTUATION MAQAF
-	[0x2E1A, [0x2D]], // (⸚) HYPHEN WITH DIAERESIS
-	[0x2E3A, [0x2D]], // (⸺) TWO-EM DASH
-	[0x2E3B, [0x2D]], // (⸻) THREE-EM DASH
-	[0x2E5D, [0x2D]], // (⹝) OBLIQUE HYPHEN
+	// scripted hyphens
+	// 20221018: disallowed instead
+	// 0x1806, // (᠆) MONGOLIAN TODO SOFT HYPHEN (idna disallowed)
+	//[0x58A, [0x2D]], // (֊) ARMENIAN HYPHEN (not sure)
 	// 10EAD (𐺭) YEZIDI HYPHENATION MARK // i'm not sure what this is
+	//[0x5BE, [0x2D]], // (־) HEBREW PUNCTUATION MAQAF
 
 	// double hyphens
-	[0x1400, [0x2D]], // (᐀) CANADIAN SYLLABICS HYPHEN
-	[0x2E17, [0x2D]], // (⸗) DOUBLE OBLIQUE HYPHEN]
-	[0x2E40, [0x2D]], // (⹀) DOUBLE HYPHEN
-	[0x30A0, [0x2D]], // (゠) KATAKANA-HIRAGANA DOUBLE HYPHEN
+	// 20221018: these should just be disallowed instead
+	//[0x2E5D, [0x2D]], // (⹝) OBLIQUE HYPHEN
+	//[0x2E17, [0x2D]], // (⸗) DOUBLE OBLIQUE HYPHEN]
+	//[0x1400, [0x2D]], // (᐀) CANADIAN SYLLABICS HYPHEN	
+	//[0x30A0, [0x2D]], // (゠) KATAKANA-HIRAGANA DOUBLE HYPHEN
 
 	// apostrophe convenience 
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/403
@@ -164,35 +161,5 @@ export default [
 	// 0x1F17E, // (🅾) NEGATIVE SQUARED LATIN CAPITAL LETTER O
 	// 0x1F17F, // (🅿) NEGATIVE SQUARED LATIN CAPITAL LETTER P
 	// marked remainder as isolates
-
-	/*
-	// small capitals
-	[0x1D00, [0x61]], // (ᴀ) LATIN LETTER SMALL CAPITAL A
-	[0x0299, [0x62]], // (ʙ) LATIN LETTER SMALL CAPITAL B
-	[0x1D04, [0x63]], // (ᴄ) LATIN LETTER SMALL CAPITAL C
-	[0x1D05, [0x64]], // (ᴅ) LATIN LETTER SMALL CAPITAL D
-	[0x1D07, [0x65]], // (ᴇ) LATIN LETTER SMALL CAPITAL E
-	[0xA730, [0x66]], // (ꜰ) LATIN LETTER SMALL CAPITAL F
-	[0x0262, [0x67]], // (ɢ) LATIN LETTER SMALL CAPITAL G
-	[0x029C, [0x68]], // (ʜ) LATIN LETTER SMALL CAPITAL H
-	[0x026A, [0x69]], // (ɪ) LATIN LETTER SMALL CAPITAL I
-	[0x1D0A, [0x6A]], // (ᴊ) LATIN LETTER SMALL CAPITAL J
-	[0x1D0B, [0x6B]], // (ᴋ) LATIN LETTER SMALL CAPITAL K
-	[0x029F, [0x6C]], // (ʟ) LATIN LETTER SMALL CAPITAL L
-	[0x1D0D, [0x6D]], // (ᴍ) LATIN LETTER SMALL CAPITAL M
-	[0x0274, [0x6E]], // (ɴ) LATIN LETTER SMALL CAPITAL N
-	[0x1D0F, [0x6F]], // (ᴏ) LATIN LETTER SMALL CAPITAL O
-	[0x1D18, [0x70]], // (ᴘ) LATIN LETTER SMALL CAPITAL P
-	[0xA7AF, [0x71]], // (ꞯ) LATIN LETTER SMALL CAPITAL Q
-	[0x0280, [0x72]], // (ʀ) LATIN LETTER SMALL CAPITAL R
-	[0xA731, [0x73]], // (ꜱ) LATIN LETTER SMALL CAPITAL S
-	[0x1D1B, [0x74]], // (ᴛ) LATIN LETTER SMALL CAPITAL T
-	[0x1D1C, [0x75]], // (ᴜ) LATIN LETTER SMALL CAPITAL U
-	[0x1D20, [0x76]], // (ᴠ) LATIN LETTER SMALL CAPITAL V
-	[0x1D21, [0x77]], // (ᴡ) LATIN LETTER SMALL CAPITAL W
-	// no x?
-	[0x028F, [0x79]], // (ʏ) LATIN LETTER SMALL CAPITAL Y
-	[0x1D22, [0x7A]], // (ᴢ) LATIN LETTER SMALL CAPITAL Z
-	*/
 
 ];

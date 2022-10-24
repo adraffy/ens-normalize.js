@@ -1,5 +1,6 @@
 import {parse_cp, parse_cp_range, parse_cp_sequence, hex_cp, hex_seq, explode_cp} from './utils.js';
 import {readFileSync} from 'node:fs';
+import UNPRINTABLES from './unprintables.js';
 
 export function read_valid_regions() {
 	return JSON.parse(readFileSync(new URL('./data/regions.json', import.meta.url)));
@@ -11,6 +12,26 @@ export function read_excluded_scripts() {
 
 export function read_limited_scripts() {
 	return JSON.parse(readFileSync(new URL('./data/scripts-limited.json', import.meta.url)));
+}
+
+export const AUGMENTED_ALL = 'ALL';
+
+// https://www.unicode.org/reports/tr39/#Mixed_Script_Detection
+export function augment_script_set(set) {
+	if (set.has('Hani')) {
+		set.add('Hanb');
+		set.add('Jpan');
+		set.add('Kore');
+	}
+	if (set.has('Hira')) set.add('Jpan');
+	if (set.has('Kana')) set.add('Jpan');
+	if (set.has('Hang')) set.add('Kore');
+	if (set.has('Bopo')) set.add('Hanb');
+	if (set.has('Zyyy') || set.has('Zinh')) {
+		set.clear();
+		set.add(AUGMENTED_ALL);
+	}
+	return set;
 }
 
 export function parse_semicolon_file(file, impl = {}) {
@@ -109,6 +130,13 @@ export class UnicodeSpec {
 	get version_str() {
 		return `${this.version.major}.${this.version.minor}.${this.version.patch}`;
 	}
+	get_display(cp) {
+		let form = !this.char_map.has(cp) || UNPRINTABLES.has(cp) ? '\u{FFFD}' : String.fromCodePoint(cp);		
+		if (this.cm.has(cp)) {
+			form = '◌' + form; // DOTTED CIRCLE
+		}
+		return form;
+	}	
 	get_name(cp) {
 		let info = this.char_map.get(cp);
 		if (info) {
@@ -118,6 +146,12 @@ export class UnicodeSpec {
 			}
 			return name;
 		}
+	}
+	js_format(...a) {		
+		// cheap hack
+		let s = this.format(...a);
+		let i = s.indexOf('(');
+		return `0x${s.slice(0, i-1)}, // ${s.slice(i)}`;
 	}
 	format(x, ...a) {
 		let ret;
@@ -152,6 +186,15 @@ export class UnicodeSpec {
 			}
 		});
 	}
+	core_props() {
+		// 002B          ; Math # Sm       PLUS SIGN
+		// 003C..003E    ; Math # Sm   [3] LESS-THAN SIGN..GREATER-THAN SIGN
+		return parse_semicolon_file(new URL('./DerivedCoreProperties.txt', this.dir), {
+			row([src, type]) {
+				this.get_bucket(type).push(...parse_cp_range(src));
+			}
+		});
+	}
 	prop_values() {
 		// AHex; N ; No ; F ; False
 		//sc ; Latn ; Latin
@@ -174,14 +217,20 @@ export class UnicodeSpec {
 	script_extensions() { // abbrs
 		// 102E0         ; Arab Copt # Mn       COPTIC EPACT THOUSANDS MARK
 		// 102E1..102FB  ; Arab Copt # No  [27] COPTIC EPACT DIGIT ONE..COPTIC EPACT NUMBER NINE HUNDRED
-		return Object.entries(parse_semicolon_file(new URL('./ScriptExtensions.txt', this.dir), {
+		return parse_semicolon_file(new URL('./ScriptExtensions.txt', this.dir), {
+			root: new Map(),
 			row([src, abbrs]) {
 				let cps = parse_cp_range(src);
+				abbrs = abbrs.trim().split(/\s+/);
+				for (let cp of cps) {
+					this.root.set(cp, abbrs); // not cloned
+				}
+				/*
 				for (let abbr of abbrs.trim().split(/\s+/)) {
 					this.get_bucket(abbr).push(...cps);
-				}
+				}*/
 			}
-		}));
+		});
 	}
 	combining_ranks() {
 		// return list of codepoints in order by increasing combining class
@@ -446,8 +495,6 @@ function parse_version_from_comment(s) {
 export class UnicodeScripts {
 	constructor(spec) {
 		this.spec = spec;
-		let ext = spec.script_extensions();
-		let ext_set = new Set(ext.flatMap(x => x[1]));
 		let {sc} = spec.prop_values(); // sc = Script
 		// this.names = new Map(sc.map(v => [v[0], v[1]])); // abbr -> name
 		let name2abbr = new Map(sc.map(v => [v[1], v[0]])); // name -> abbr
@@ -455,16 +502,12 @@ export class UnicodeScripts {
 		this.entries = spec.scripts().map(([name, cps]) => {
 			let abbr = name2abbr.get(name);
 			if (!abbr) throw new TypeError(`unknown script abbr: ${name}`);
-			return {name, abbr, set: new Set(cps.filter(cp => !ext_set.has(cp)))};
+			name = name.replaceAll('_', ' '); // fix name
+			return {name, abbr, set: new Set(cps)};
 		});
 		this.by_abbr = Object.fromEntries(this.entries.map(x => [x.abbr, x])); // use Object so we can $.Latn
-		// apply extensions
-		for (let [abbr, cps] of ext) {
-			let {set} = this.require(abbr);
-			for (let cp of cps) {
-				set.add(cp);
-			}
-		}
+		// load extensions
+		this.exts = spec.script_extensions();
 	}
 	require(abbr) {		
 		let script = this.by_abbr[abbr];
@@ -477,43 +520,49 @@ export class UnicodeScripts {
 	limited() { 
 		return read_limited_scripts(); 
 	}
-	/*
-	get_script(cp) {
-		for (let {abbr, set} of this.entries) {
-			if (set.has(cp)) {
-				return abbr;
-			}
+	get_details(cp) {
+		let script = this.get_script(cp);
+		let aug = this.get_extended_script_set(cp);
+		let ret = script?.abbr ?? 'Unknown';
+		if (script ? aug.size == 1 && aug.has(script.abbr) : aug.size == 0) {
+			// same, not aug
+		} else {
+			ret = `${ret} => ${[...aug].join(',')}`;
 		}
+		return `${this.spec.get_name(cp)} [${ret}]`;
 	}
-	*/
+	get_script(cp) {		
+		return this.entries.find(x => x.set.has(cp));
+	}
 	get_script_set(x) {
 		let ret = new Set();
 		for (let cp of explode_cp(x)) {
-			for (let {abbr, set} of this.entries) {
-				if (set.has(cp)) {
+			let script = this.get_script(cp);
+			if (script) {
+				ret.add(script.abbr);
+			}
+		}
+		return ret;
+	}
+	get_extended_script_set(x) {
+		let ret = new Set();
+		for (let cp of explode_cp(x)) {
+			let ext = this.exts.get(cp);
+			if (ext) {
+				for (let abbr of ext) {
 					ret.add(abbr);
+				}
+			} else {
+				let script = this.get_script(cp);
+				if (script) {
+					ret.add(script.abbr);
 				}
 			}
 		}
 		return ret;
 	}
 	get_augmented_script_set(x) {
-		// https://www.unicode.org/reports/tr39/#Mixed_Script_Detection
-		let ret = this.get_script_set(x);
-		if (ret.has('Hani')) {
-			ret.add('Hanb');
-			ret.add('Jpan');
-			ret.add('Kore');
-		}
-		if (ret.has('Hira')) ret.add('Jpan');
-		if (ret.has('Kana')) ret.add('Jpan');
-		if (ret.has('Hang')) ret.add('Kore');
-		if (ret.has('Bopo')) ret.add('Hanb');
-		if (ret.has('Zyyy') || ret.has('Zinh')) {
-			ret.clear();
-			ret.add('*');
-		}
-		return ret;
+		return augment_script_set(this.get_extended_script_set(x));
 	}
 	get_resolved_script_set(x) {
 		// https://www.unicode.org/reports/tr39/#def-resolved-script-set
@@ -522,8 +571,8 @@ export class UnicodeScripts {
 		let resolved = this.get_augmented_script_set(cps[0]);
 		for (let i = 1; i < cps.length; i++) {
 			let set = this.get_resolved_script_set(cps[i]);
-			if (set.has('*')) continue;
-			if (resolved.has('*')) {
+			if (set.has(AUGMENTED_ALL)) continue;
+			if (resolved.has(AUGMENTED_ALL)) {
 				resolved = set;
 			} else {
 				for (let abbr of set) {
@@ -541,5 +590,33 @@ export class UnicodeScripts {
 		}
 		return resolved;
 	}
-
+	apply_changes(map) { // abbr => [cp, ...]
+		for (let [abbr, cps] of Object.entries(map)) {
+			let dst = this.require(abbr);
+			for (let cp of cps) {
+				let src = this.get_script(cp);
+				if (!src) throw new Error(`Expected script: ${this.spec.format(cp)}`);
+				src.set.delete(cp);
+				dst.set.add(cp);
+				console.log(`Changed Script [${src.abbr} => ${dst.abbr}]: ${this.spec.format(cp)}`);
+			}
+		}
+	}
 }
+
+export class UnicodePrinter {
+	constructor(scripts) {
+		this.scripts = scripts;
+	}
+	js_char(cp) {
+		return `0x${hex_cp(cp)}, // (${this.scripts.spec.get_display(cp)}) ${this.scripts.spec.get_name(cp)}`;
+	}
+	js(x) {
+		if (Number.isInteger(x)) {
+			return this.js_char(x);
+		} else {
+			throw new TypeError('NYI');
+		}
+	}
+}
+

@@ -1,11 +1,15 @@
-import {mkdirSync, writeFileSync, createWriteStream} from 'node:fs';
-import {compare_arrays, parse_cp_sequence} from './utils.js';
-import {UNICODE, NF, IDNA, SCRIPTS, SCRIPT_ORDER} from './unicode-version.js';
-import {read_wholes} from './wholes.js';
-
+import {mkdirSync, writeFileSync, createWriteStream, existsSync} from 'node:fs';
+import {compare_arrays, explode_cp, parse_cp_sequence} from './utils.js';
+import {UNICODE, NF, IDNA, SCRIPTS} from './unicode-version.js';
+import {AUGMENTED_ALL} from './unicode-logic.js';
 import CHARS_VALID from './rules/chars-valid.js';
 import CHARS_DISALLOWED from './rules/chars-disallow.js';
 import CHARS_MAPPED from './rules/chars-mapped.js';
+import CHARS_ESCAPE from './rules/chars-escape.js';
+import {CM_DISALLOWED, CM_WHITELIST} from './rules/cm.js';
+import {ORDERED_SCRIPTS, RESTRICTED_SCRIPTS, CHANGED_SCRIPTS} from './rules/scripts.js';
+
+const Zinh = SCRIPTS.require('Zinh');
 
 let out_dir = new URL('./output/', import.meta.url);
 
@@ -41,6 +45,21 @@ assert_distinct({
 	MAPPED: CHARS_MAPPED.map(x => x[0])
 });
 
+// TODO: this is shitty improve this
+let ordered_scripts = [...new Set(ORDERED_SCRIPTS.flatMap(x => x.test))];
+let unordered_scripts = new Set(SCRIPTS.entries.map(x => x.abbr));
+ordered_scripts.forEach(x => unordered_scripts.delete(x));
+for (let abbr of RESTRICTED_SCRIPTS) {
+	if (!unordered_scripts.delete(abbr)) {
+		throw new Error(`Restricted duplicate: ${abbr}`);
+	}
+}
+unordered_scripts.delete('Zyyy');
+unordered_scripts.delete('Zinh');
+if (unordered_scripts.size) {
+	console.log(unordered_scripts);
+	throw new Error('unordered');
+}
 
 console.log(`Build Date: ${new Date().toJSON()}`);
 console.log(`Unicode Version: ${UNICODE.version_str}`);
@@ -49,7 +68,8 @@ console.log(`Unicode Version: ${UNICODE.version_str}`);
 let ignored = new Set(IDNA.ignored);
 let valid = new Set(IDNA.valid);
 let mapped = new Map(IDNA.mapped);
-let isolated = new Set();
+let escaped = new Set(CHARS_ESCAPE);
+//let isolated = new Set();
 let emoji = new Map();
 
 function disallow_char(cp, quiet) {	
@@ -64,8 +84,7 @@ function disallow_char(cp, quiet) {
 			console.log(`Removed Valid: ${UNICODE.format(cp)}`);
 			print = false;
 		};
-		if (!quiet)print();
-		if (!quiet) 
+		if (!quiet) print();
 		for (let [x, ys] of mapped) {
 			if (ys.includes(cp)) {
 				if (print) print();
@@ -97,6 +116,7 @@ function register_emoji(info) {
 	}
 }
 
+/*
 function set_isolated(cp) {
 	if (isolated.has(cp)) {
 		throw new Error(`Already Isolated: ${UNICODE.format(cp)}`);
@@ -104,6 +124,7 @@ function set_isolated(cp) {
 	isolated.add(cp);
 	console.log(`Isolated: ${UNICODE.format(cp)}`);
 }
+*/
 
 let emoji_zwjs = UNICODE.emoji_zwjs();
 emoji_zwjs.RGI_Emoji_ZWJ_Sequence.forEach(register_emoji);
@@ -226,7 +247,9 @@ for (let [x, ys] of CHARS_MAPPED) {
 }
 for (let cp of CHARS_DISALLOWED) {
 	if (!mapped.has(cp) && !ignored.has(cp) && !valid.has(cp)) {
-
+		//throw new Error(`Already disallowed: ${UNICODE.format(cp)}`);
+		console.log(`*** Already disallowed: ${UNICODE.format(cp)}`);
+		//await new Promise(f => setTimeout(f, 500));
 	}
 	disallow_char(cp);
 }
@@ -236,6 +259,7 @@ for (let cp of CHARS_VALID) {
 	valid.add(cp);
 	console.log(`Added Valid: ${UNICODE.format(cp)}`);
 }
+/*
 for (let cp of (await import('./rules/chars-isolated.js')).default) {
 	set_isolated(cp);
 }
@@ -244,34 +268,187 @@ for (let info of emoji_chrs.Extended_Pictographic) {
 		set_isolated(info.cp);
 	}
 }
-
-// filter combining marks
-let cm = new Set([...UNICODE.cm].filter(cp => valid.has(cp)));
+*/
 
 // apply script changes
-for (let cp of (await import('./rules/chars-common.js')).default) {
-	let old = SCRIPTS.get_script_set(cp);
-	for (let abbr of old) {
-		SCRIPTS.require(abbr).set.delete(cp);
+SCRIPTS.apply_changes(CHANGED_SCRIPTS);
+
+// compute characters that decompose to CM
+let cm_base = new Map();
+for (let {cp} of UNICODE.chars) {
+	if (UNICODE.cm.has(cp)) continue;
+	let [base_cp, ...cps] = NF.nfd([cp]);
+	if (base_cp === cp) continue;
+	if (!cps.every(x => UNICODE.cm.has(x))) continue;
+	let bucket = cm_base.get(base_cp);
+	if (!bucket) {
+		bucket = [];
+		cm_base.set(base_cp, bucket);
 	}
-	const relaxed = 'Zyyy';
-	SCRIPTS.require(relaxed).set.add(cp);
-	console.log(`Relaxed Script [${[...old].join('/')} => ${relaxed}]: ${UNICODE.format(cp)}`);
+	bucket.push(cp);
 }
-	
-// filter scripts
-for (let {set} of SCRIPTS.entries) {
-	for (let cp of set) {
+let cm_internal = new Set([...cm_base.values()].flat());
+
+console.log(`Applying CM whitelist...`);
+let cm_whitelist = new Map();
+for (let form of CM_WHITELIST) {
+	let [base_cp, ...cms] = NF.nfd(explode_cp(form));
+	if (!valid.has(base_cp)) {
+		throw new Error(`Restricted CM "${form}" Not Valid Base: ${UNICODE.format(base_cp)}`);
+	}
+	if (!cms.length) {
+		throw new Error(`Restricted CM "${form}" Expected CM`);
+	}
+	for (let cp of cms) {
+		if (!UNICODE.cm.has(cp)) {
+			throw new Error(`Restricted CM "${form}" Not CM: ${UNICODE.format(cp)}`);
+		}
 		if (!valid.has(cp)) {
-			set.delete(cp); 
+			throw new Error(`Restricted CM "${form}" Not Valid CM: ${UNICODE.format(cp)}`);
+		}
+	}
+	let bucket = cm_whitelist.get(base_cp);
+	if (!bucket) {
+		bucket = [];
+		cm_whitelist.set(base_cp, bucket);
+	}
+	if (bucket.some(v => compare_arrays(v, cms) == 0)) {
+		throw new Error(`Restricted CM "${form}" Duplicate`);
+	}
+	bucket.push(cms);
+	let [combo_cp] = NF.nfc([base_cp, ...cms]);
+	cm_internal.delete(combo_cp);
+	if (!valid.has(combo_cp)) {
+		disallow_char(combo_cp);
+		valid.add(combo_cp);
+		console.log(`Restricted CM Valid: ${UNICODE.format(combo_cp)}`);
+	}
+}
+console.log(`CM Whitelist: ${cm_whitelist.size}`);
+
+// filter scripts
+for (let script of SCRIPTS.entries) {
+	script.valid = new Set([...script.set].filter(cp => valid.has(cp)));
+}
+
+// for every character thats in an isolated script but not cm-whitelisted,
+// it's disallowed if it internally contains a CM (should of been whitelisted)
+// everything else is considered isolated
+console.log('Purging isolated...');
+let cm_isolated = new Set();
+for (let abbr of CM_DISALLOWED) {
+	let script = SCRIPTS.require(abbr);
+	for (let cp of script.valid) {
+		if (cm_whitelist.has(cp)) continue;
+		if (cm_internal.has(cp)) {
+			script.valid.delete(cp);
+			disallow_char(cp);
+		} else {
+			cm_isolated.add(cp);
+		}
+	}
+}
+console.log(`CM Isolated: ${cm_isolated.size}`)
+
+// remove dangling mappings
+for (let [x, ys] of mapped) {
+	let cps = NF.nfd(ys);
+	next: for (let i = 0; i < cps.length; i++) {
+		if (!UNICODE.cm.has(cps[i+1])) continue;
+		if (cm_isolated.has(cps[i])) {
+			disallow_char(x);
+		} else {
+			let bucket = cm_whitelist.get(cps[i]);
+			if (bucket) {
+				for (let cms of bucket) {
+					if (!compare_arrays(cps.slice(i+1, i+1+cms.length), cms)) {
+						continue next; // found a match
+					}
+				}
+				disallow_char(x); 
+			}
 		}
 	}
 }
 
+// load restricted scripts
+// require existance, remove empty
+let restricted = [...new Set(RESTRICTED_SCRIPTS)].map(abbr => SCRIPTS.require(abbr)).filter(x => x.valid.size).sort();
+// require decomposed sanity
+for (let script of restricted) {	
+	let set = new Set(NF.nfd([...script.valid])); // this is a good idea IMO
+	for (let cp of set) {
+		if (!script.valid.has(cp) && !Zinh.set.has(cp)) {
+			throw new Error(`Restricted script ${script.abbr} decomposition: ${UNICODE.format(cp)}`);
+		}
+	}
+	script.restricted = set;
+}
+// remove unrestricted from restricted
+let unrestricted_union = new Set(SCRIPTS.entries.flatMap(x => x.restricted ? [] : NF.nfd([...x.valid]))); // see above
+for (let script of restricted) {
+	for (let cp of unrestricted_union) {
+		script.restricted.delete(cp);
+	}
+}
+restricted = restricted.filter(x => x.restricted.size); // remove empty
+for (let script of restricted) {
+	console.log(`Restricted [${script.abbr}]: All(${script.set.size}) Valid(${script.valid.size}) Restricted(${script.restricted.size})`);
+}
+
+async function read_wholes(name) {
+	let file = new URL(`./rules/wholes-${name}.js`, import.meta.url);
+	if (!existsSync(file)) return [];
+	return (await import(file)).default;
+}
+
+// since restricted scripts cant intersect
+// all the wholes can be unioned together
+let restricted_wholes = new Set();
+for (let script of restricted) {	
+	let file = new URL(`./rules/wholes-${script.abbr}.js`, import.meta.url);
+	if (!existsSync(file)) continue;
+	for (let cp of (await read_wholes(script.abbr)).filter(cp => script.valid.has(cp))) {
+		restricted_wholes.add(cp);
+	}
+}
+console.log(`Restricted Wholes: ${restricted_wholes.size}`);
+
+// ordered
+let scripts = [];
+function register_ordered(name, set) {
+	let rec = scripts.find(x => x.name === name);
+	if (!rec) {
+		if (!set) set = SCRIPTS.require(name).valid;
+		rec = {name, set, index: scripts.length};
+		scripts.push(rec);
+	}
+	return rec;
+}
+register_ordered(AUGMENTED_ALL, new Set(['Zinh', 'Zyyy'].flatMap(abbr => [...SCRIPTS.require(abbr).valid])));
+let ordered = await Promise.all(ORDERED_SCRIPTS.map(async ({name, test, rest, extra = []}) => {
+	test = test.map(abbr => register_ordered(abbr));
+	rest = rest.map(abbr => register_ordered(abbr));
+	for (let cp of extra) {
+		if (!valid.has(cp)) {
+			throw new Error(`Expected valid: ${UNICODE.format(cp)}`);
+		}
+	}
+	let union = new Set([[test, rest].flat().flatMap(x => [...x.set]), extra].flat());
+	let wholes = (await read_wholes(name)).filter(cp => union.has(cp));
+	console.log(`Ordered: ${name} Test(${test.map(x => x.name)}) Rest(${rest.map(x => x.name)}) Extra(${extra.length}) Wholes(${wholes.length})`);
+	// convert to indices
+	test = test.map(x => x.index);
+	rest = rest.map(x => x.index);
+	return {name, test, rest, extra, wholes};
+}));
+
+
 // check that everything makes sense
+/*
 function has_adjacent_cm(cps) {
 	for (let i = 1; i < cps.length; i++) {
-		if (cm.has(cps[i]) && cm.has(cps[i-1])) {
+		if (UNICODE.cm.has(cps[i]) && UNICODE.cm.has(cps[i-1])) {
 			return true;
 		}
 	}
@@ -279,9 +456,10 @@ function has_adjacent_cm(cps) {
 for (let cp of valid) {
 	let decomposed = NF.nfd([cp]);
 	if (has_adjacent_cm(decomposed)) {
-		throw new Error(`Adjacent CM in Valid : ${UNICODE.format(cp, decomposed)}`);
+		throw new Error(`Adjacent CM in Valid: ${UNICODE.format(cp, decomposed)}`);
 	}
 }
+*/
 for (let cp of ignored) {
 	if (valid.has(cp)) {
 		throw new Error(`Ignored is valid: ${UNICODE.format(cp)}`);
@@ -298,12 +476,14 @@ for (let [x, ys] of mapped.entries()) {
 			throw new Error(`Mapping isn't valid or emoji: ${UNICODE.format(x, ys)}`);
 		}
 	}
+	/*
 	let decomposed = NF.nfd(ys);
 	if (has_adjacent_cm(decomposed)) {
 		throw new Error(`Adjacent CM in Mapping: ${UNICODE.format(x, ys, decomposed)}`);
 	}
+	*/
 	if (ys.includes(0x2E)) {
-		throw new Error(`Mapping includes stop: ${UNICODE.format(x, ys)}`);
+		throw new Error(`Mapping includes Stop: ${UNICODE.format(x, ys)}`);
 	}
 }
 let cc = new Set(UNICODE.chars.filter(x => x.cc > 0).map(x => x.cp)); 
@@ -314,13 +494,13 @@ for (let info of emoji.values()) {
 		throw new Error(`Emoji with non-zero combining class boundary: ${UNICODE.format(info)}`);
 	}
 }
-for (let cp of isolated) {	
-	if (!valid.has(cp)) {
-		isolated.delete(cp);
-		console.log(`*** Isolated not Valid: ${UNICODE.format(cp)}`); // non fatal
-	}
-	if (cc.has(cp)) {
-		throw new Error(`Isolated with non-zero combining class: ${UNICODE.format(cp)}`);
+for (let cp of Zinh.valid) {
+	if (UNICODE.cm.has(cp)) continue;
+	throw new Error(`Inherited Script isn't only CM: ${UNICODE.format(cp)}`);
+}
+for (let cp of escaped) {
+	if (valid.has(cp)) {
+		throw new Error(`Escaped character is valid: ${UNICODE.format(cp)}`);
 	}
 }
 
@@ -334,63 +514,6 @@ function sorted(v) {
 	return [...v].sort((a, b) => a - b);
 }
 
-// load restricted scripts
-let restricted = new Set();
-// https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers
-for (let abbr of SCRIPTS.excluded()) {
-	restricted.add(abbr);
-}
-// https://www.unicode.org/reports/tr31/#Table_Limited_Use_Scripts
-for (let abbr of SCRIPTS.limited()) {
-	restricted.add(abbr);
-}
-// additional restricted scripts
-for (let abbr of (await import('./rules/restricted-scripts.js')).default) {
-	restricted.add(abbr);
-}
-// require existance, remove empty
-restricted = [...restricted].map(abbr => SCRIPTS.require(abbr)).filter(x => x.set.size);
-// require decomposed sanity
-for (let script of restricted) {	
-	let set = new Set(NF.nfd([...script.set])); // this is a good idea IMO
-	for (let cp of set) {
-		if (!script.set.has(cp)) {
-			throw new Error(`Restricted script ${script.abbr} decomposition: ${UNICODE.format(cp)}`);
-		}
-	}
-	script.restricted = set;
-}
-// remove unrestricted from restricted
-let unrestricted_union = new Set(SCRIPTS.entries.flatMap(x => x.restricted ? [] : NF.nfd([...x.set]))); // see above
-for (let script of restricted) {
-	for (let cp of unrestricted_union) {
-		script.restricted.delete(cp);
-	}
-}
-restricted = restricted.filter(x => x.restricted.size); // remove empty
-for (let script of restricted) {
-	console.log(`Restricted [${script.abbr}]: ${script.set.size} => ${script.restricted.size}`);
-}
-
-// wholes
-let wholes = await read_wholes(SCRIPTS);
-for (let script of wholes) {
-	console.log(`Wholes [${script.abbr}]: ${script.wholes.size}`);
-}
-// since restricted scripts cant intersect
-// all the wholes can be unioned together
-let restricted_wholes = new Set();
-for (let {wholes} of restricted) {
-	if (wholes) {
-		for (let cp of wholes) {
-			restricted_wholes.add(cp);
-		}
-		wholes.clear();
-	} 
-}
-console.log(`Restricted Wholes: ${restricted_wholes.size}`);
-wholes = wholes.filter(x => x.wholes.size); // remove restricted
-
 // note: sorting isn't important, just nice to have
 const created = new Date();
 mkdirSync(out_dir, {recursive: true});
@@ -400,15 +523,22 @@ writeFileSync(new URL('./spec.json', out_dir), JSON.stringify({
 	valid: sorted(valid),
 	ignored: sorted(ignored),
 	mapped: [...mapped.entries()].sort((a, b) => a[0] - b[0]),
-	cm: sorted(cm),
+	cm: sorted([...UNICODE.cm].filter(cp => valid.has(cp))),
+	cm_isolated: sorted(cm_isolated),
+	cm_whitelist: [...cm_whitelist.entries()],
 	emoji: [...emoji.values()].map(x => x.cps).sort(compare_arrays),
-	isolated: sorted(isolated),
-	script_order: SCRIPT_ORDER,
-	script_names: Object.fromEntries(SCRIPTS.entries.map(x => [x.abbr, x.name.replace('_', ' ')])),
-	scripts: Object.fromEntries(SCRIPT_ORDER.map(abbr => [abbr, sorted(SCRIPTS.require(abbr).set)])),
-	wholes: Object.fromEntries(wholes.map(x => [x.abbr, sorted(x.wholes)])),
+	script_names: Object.fromEntries(SCRIPTS.entries.map(x => [x.abbr, x.name])),
+	scripts: scripts.map(x => [x.name, sorted(x.set)]),
+	ordered: ordered.map(x => {
+		x.wholes = sorted(x.wholes);
+		x.test = sorted(x.test);
+		x.rest = sorted(x.rest);
+		return x;
+	}),
 	restricted: Object.fromEntries(restricted.map(x => [x.abbr, sorted(x.restricted)])),	
-	restricted_wholes: sorted(restricted_wholes)
+	restricted_wholes: sorted(restricted_wholes),
+	escape: sorted(escaped),
+	cm_invalid: sorted([...UNICODE.cm].filter(cp => !valid.has(cp) && !escaped.has(cp)))
 }));
 
 // this file should be independent so we can create a standalone nf implementation
@@ -435,4 +565,8 @@ writeFileSync(new URL('./names.json', out_dir), JSON.stringify(UNICODE.chars.map
 	if (!name) return [];
 	return [info.cp, name];
 }).filter(x => x)));
-writeFileSync(new URL('./scripts.json', out_dir), JSON.stringify(SCRIPTS.entries, (_, x) => x instanceof Set ? [...x] : x));
+writeFileSync(new URL('./scripts.json', out_dir), JSON.stringify(SCRIPTS.entries.map(info => {
+	let {name, abbr, set} = info;
+	set = [...set];
+	return {name, abbr, set};
+})));

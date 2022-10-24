@@ -226,3 +226,13 @@ export function read_emoji_trie(next) {
 		return {branches, valid, fe0f, save, check};
 	}
 }
+
+// read a list of non-empty lists
+// where 0 is terminal
+// [1 0 1 2 0 0] => [[1],[1,2]]
+export function read_sequences(next) {
+	return read_array_while(() => {
+		let v = read_array_while(next);
+		if (v.length) return v.map(x => x - 1);
+	});
+}

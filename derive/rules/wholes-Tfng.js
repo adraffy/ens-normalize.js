@@ -1,0 +1,94 @@
+// created: 2022-10-24T08:28:52.791Z
+// version: 15.0.0
+export default [
+	// "E"
+	// 13AC (Ꭼ) CHEROKEE LETTER GV (Cher)
+	// A4F0 (ꓰ) LISU LETTER E (Lisu)
+	// 10286 (𐊆) LYCIAN LETTER I (Lyci)
+	0x2D39, // 2D39 (ⴹ) TIFINAGH LETTER YADD
+	// "Ǝ"
+	// A4F1 (ꓱ) LISU LETTER EU (Lisu)
+	0x2D3A, // 2D3A (ⴺ) TIFINAGH LETTER YADDH
+	// "l"
+	// 6C (l) LATIN SMALL LETTER L (Latn)
+	// 23FD (⏽) POWER ON SYMBOL (Zyyy)
+	// 31 (1) DIGIT ONE (Zyyy)
+	// 661 (١) ARABIC-INDIC DIGIT ONE (Arab)
+	// 10320 (𐌠) OLD ITALIC NUMERAL ONE (Ital)
+	// 1E8C7 (𞣇) MENDE KIKAKUI DIGIT ONE (Mend)
+	// 5D5 (ו) HEBREW LETTER VAV (Hebr)
+	// 5DF (ן) HEBREW LETTER FINAL NUN (Hebr)
+	// 627 (ا) ARABIC LETTER ALEF (Arab)
+	// 7CA (ߊ) NKO LETTER A (Nkoo)
+	// 16C1 (ᛁ) RUNIC LETTER ISAZ IS ISS I (Runr)
+	// A4F2 (ꓲ) LISU LETTER I (Lisu)
+	// 16F28 (𖼨) MIAO LETTER GHA (Plrd)
+	// 1028A (𐊊) LYCIAN LETTER J (Lyci)
+	// 10309 (𐌉) OLD ITALIC LETTER I (Ital)
+	0x2D4F, // 2D4F (ⵏ) TIFINAGH LETTER YAN
+	// "O"
+	// 30 (0) DIGIT ZERO (Zyyy)
+	// 7C0 (߀) NKO DIGIT ZERO (Nkoo)
+	// 9E6 (০) BENGALI DIGIT ZERO (Beng)
+	// B66 (୦) ORIYA DIGIT ZERO (Orya)
+	// 3007 (〇) IDEOGRAPHIC NUMBER ZERO (Hani)
+	// 114D0 (𑓐) TIRHUTA DIGIT ZERO (Tirh)
+	// 118E0 (𑣠) WARANG CITI DIGIT ZERO (Wara)
+	// 12D0 (ዐ) ETHIOPIC SYLLABLE PHARYNGEAL A (Ethi)
+	// B20 (ଠ) ORIYA LETTER TTHA (Orya)
+	// A4F3 (ꓳ) LISU LETTER O (Lisu)
+	// 10292 (𐊒) LYCIAN LETTER U (Lyci)
+	// 102AB (𐊫) CARIAN LETTER O (Cari)
+	// 10516 (𐔖) ELBASAN LETTER O (Elba)
+	0x2D54, // 2D54 (ⵔ) TIFINAGH LETTER YAR
+	// "O̵"
+	// 3B8 (θ) GREEK SMALL LETTER THETA (Grek)
+	// 13BE (Ꮎ) CHEROKEE LETTER NA (Cher)
+	// 13EB (Ꮻ) CHEROKEE LETTER WI (Cher)
+	0x2D31, // 2D31 (ⴱ) TIFINAGH LETTER YAB
+	// "Ʃ"
+	// 2211 (∑) N-ARY SUMMATION (Zyyy)
+	0x2D49, // 2D49 (ⵉ) TIFINAGH LETTER YI
+	// "V"
+	// 667 (٧) ARABIC-INDIC DIGIT SEVEN (Arab)
+	// 13D9 (Ꮩ) CHEROKEE LETTER DO (Cher)
+	// 142F (ᐯ) CANADIAN SYLLABICS PE (Cans)
+	// A6DF (ꛟ) BAMUM LETTER KO (Bamu)
+	// A4E6 (ꓦ) LISU LETTER HA (Lisu)
+	// 16F08 (𖼈) MIAO LETTER VA (Plrd)
+	// 1051D (𐔝) ELBASAN LETTER TE (Elba)
+	0x2D38, // 2D38 (ⴸ) TIFINAGH LETTER YADH
+	// "Ʌ"
+	// 668 (٨) ARABIC-INDIC DIGIT EIGHT (Arab)
+	// 1431 (ᐱ) CANADIAN SYLLABICS PI (Cans)
+	// A6CE (ꛎ) BAMUM LETTER MI (Bamu)
+	// A4E5 (ꓥ) LISU LETTER NGA (Lisu)
+	// 16F3D (𖼽) MIAO LETTER ZZA (Plrd)
+	// 1028D (𐊍) LYCIAN LETTER L (Lyci)
+	0x2D37, // 2D37 (ⴷ) TIFINAGH LETTER YAD
+	// "X"
+	// 166D (᙭) CANADIAN SYLLABICS CHI SIGN (Cans)
+	// 10322 (𐌢) OLD ITALIC NUMERAL TEN (Ital)
+	// 118EC (𑣬) WARANG CITI NUMBER THIRTY (Wara)
+	// 16B7 (ᚷ) RUNIC LETTER GEBO GYFU G (Runr)
+	// A4EB (ꓫ) LISU LETTER SHA (Lisu)
+	// 10290 (𐊐) LYCIAN LETTER MM (Lyci)
+	// 102B4 (𐊴) CARIAN LETTER X (Cari)
+	// 10317 (𐌗) OLD ITALIC LETTER EKS (Ital)
+	// 10527 (𐔧) ELBASAN LETTER KHE (Elba)
+	0x2D5D, // 2D5D (ⵝ) TIFINAGH LETTER YATH
+	// "ʘ"
+	// 2609 (☉) SUN (Zyyy)
+	0x2D59, // 2D59 (ⵙ) TIFINAGH LETTER YAS
+	// "Δ"
+	// 2206 (∆) INCREMENT (Zyyy)
+	// 25B3 (△) WHITE UP-POINTING TRIANGLE (Zyyy)
+	// 1403 (ᐃ) CANADIAN SYLLABICS I (Cans)
+	// 16F1A (𖼚) MIAO LETTER TLHA (Plrd)
+	// 10285 (𐊅) LYCIAN LETTER D (Lyci)
+	// 102A3 (𐊣) CARIAN LETTER L (Cari)
+	0x2D60, // 2D60 (ⵠ) TIFINAGH LETTER YAV
+	// "ᛯ"
+	// 16EF (ᛯ) RUNIC TVIMADUR SYMBOL (Runr)
+	0x2D63, // 2D63 (ⵣ) TIFINAGH LETTER YAZ
+]

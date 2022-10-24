@@ -75,13 +75,8 @@ footer {
 <tbody></tbody>
 </table>
 <script type="module">
-import {
-	ens_tokenize, 
-	escape_for_html, is_printable_ascii, hex_cp, explode_cp,
-	dom_from_tokens, use_default_style
-} from '../dist/all.min.js';
+import {ens_tokenize, hex_cp, dom_from_tokens, use_default_style} from '../dist/all.min.js';
 use_default_style();
-
 
 let max_cp = 0x10FFFF; 
 const char_map = new Map();
@@ -104,9 +99,7 @@ Promise.all([
 		}
 	}
 	scrollLast = undefined; // dirty
-	max_cp = Math.max(...char_map.keys()); // meh
-
-	
+	max_cp = Math.max(...char_map.keys()); // meh	
 	for (let s of scripts) {
 		s.avg = s.set.reduce((a, x) => a + x) / s.set.length;
 	}
@@ -119,19 +112,25 @@ Promise.all([
 
 }).catch(console.log);
 
-function titler(name, cps, token) {
-	let v = [
-		`Type: ${name}`, 
-		`Hex: ${cps.map(cp => cp.toString(16).padStart(2, '0')).join(' ')}`,
-	];
+function extra(type, cps) {
 	if (cps.length === 1) {
 		let info = char_map.get(cps[0]);
 		if (info) {
-			v.unshift(`Name: ${info.name || 'Unknown'}`);
-			v.push(`Script: ${info.script}`);
+			return [
+				`Name: ${info.name || 'Unknown'}`,
+				`Script: ${info.script}`
+			];
 		}
+	} else {
+		return cps.map((cp, i) => {
+			let info = char_map.get(cp);
+			let line = `${i+1}. ${info?.name || 'Unknown'}`;
+			if (info) {
+				 line = `${line} (${info.script})`;
+			}
+			return line;
+		});
 	}
-	return v.join('\n');
 }
 
 const table = document.querySelector('#grid');
@@ -162,7 +161,7 @@ function update_cols() {
 function create_index_td(i) {
 	let td = document.createElement('td');
 	td.classList.add('index');
-	td.innerHTML = i.toString(16).padStart(2, '0').toUpperCase();
+	td.innerText = i.toString(16).padStart(2, '0').toUpperCase();
 	return td;
 }
 */
@@ -186,14 +185,14 @@ function update_table() {
 			
 			let hex_span = document.createElement('span');
 			hex_span.classList.add('corner', 'code');
-			hex_span.innerHTML = hex_cp(cp);			
+			hex_span.innerText = hex_cp(cp);
 			td.append(hex_span);
 
 			let info0 = char_map.get(cp);
 			if (info0 && info0.name) {
 				let name_span = document.createElement('span');
 				name_span.classList.add('corner', 'name');
-				name_span.innerHTML = info0.name.toLowerCase();
+				name_span.innerText = info0.name.toLowerCase();
 				td.append(name_span);
 			}
 
@@ -216,11 +215,11 @@ function update_table() {
 					td.classList.add(abbr);
 					let abbr_span = document.createElement('span');
 					abbr_span.classList.add('corner', 'abbr');
-					abbr_span.innerHTML = abbr;
+					abbr_span.innerText = abbr;
 					td.append(abbr_span);
 				}
 			}
-			td.append(dom_from_tokens(tokens, {titler}));
+			td.append(dom_from_tokens(tokens, {extra}));
 			tr.append(td);
 		}
 		table.append(tr);

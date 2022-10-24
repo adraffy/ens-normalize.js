@@ -3,13 +3,12 @@ import {readFileSync, writeFileSync} from 'node:fs';
 
 let data_dir = new URL('../derive/output/', import.meta.url);
 let {
-	valid, mapped, ignored, cm, isolated, emoji, 
-	script_order, script_names, scripts, wholes, 
-	restricted, restricted_wholes
+	valid, mapped, ignored, cm, cm_whitelist, cm_isolated, emoji, 
+	ordered, scripts, restricted, restricted_wholes, escape, cm_invalid,
 } = JSON.parse(readFileSync(new URL('./spec.json', data_dir)));
 let {ranks, decomp, exclusions, qc} = JSON.parse(readFileSync(new URL('./nf.json', data_dir)));
 
-let emoji_solo = emoji.filter(v => v.length == 1);
+let emoji_solo = emoji.filter(v => v.length == 1).map(v => v[0]);
 let emoji_seqs = emoji.filter(v => v.length >= 2);
 
 // union of non-zero combining class + nfc_qc
@@ -165,6 +164,9 @@ let sorted_valid_map = index_map(sorted_valid);
 let sorted_emoji = unique_sorted(emoji_seqs.flat());
 let sorted_emoji_map = index_map(sorted_emoji);
 
+//let sorted_cm = unique_sorted(cm);
+//let sorted_cm_map = index_map(sorted_cm);
+
 let enc = new Encoder();
 enc.write_member(valid);
 enc.write_member(ignored);
@@ -182,24 +184,54 @@ function write_valid_sorted(cps) {
 	enc.write_member(cps.map(cp => sorted_valid_map[cp]));
 }
 write_valid_sorted(cm);
-write_valid_sorted(isolated);
+//cm_whitelist.sort((a, b) => a[0] - b[0]);
+//write_valid_sorted(cm_whitelist.map(x => x[0]));
+for (let [cp, seqs] of cm_whitelist) {
+	enc.unsigned(cp);
+	for (let cps of seqs) {
+		for (let cp of cps) {
+			enc.unsigned(1 + cp); // sorted_cm_map[cp]);
+		}
+		enc.unsigned(0);
+	}
+	enc.unsigned(0);
+}
+enc.unsigned(0);
+write_valid_sorted(cm_isolated);
+for (let [_, cps] of scripts) {
+	write_valid_sorted(cps);
+}
+enc.write_member([]);
+for (let {wholes, extra} of ordered) {
+	write_valid_sorted(extra);
+	write_valid_sorted(wholes);
+}
+/*
 for (let i = 0; i < script_order.length; i++) {
 	let script = script_order[i];
 	write_valid_sorted(scripts[script]);
 	write_valid_sorted(wholes[script] ?? []);
 }
+*/
 write_valid_sorted(restricted_wholes);
 for (let cps of Object.values(restricted)) {
 	write_valid_sorted(cps);
 }
 enc.write_member([]);
-enc.write_member(emoji_solo.map(v => v[0]));
+enc.write_member(emoji_solo);
 enc.write_member(sorted_emoji);
 encode_emoji(enc, root, sorted_emoji_map);
 //write('include-only'); // only saves 300 bytes
 write_valid_sorted(nfc_check);
+enc.write_member(escape); // only ~75 bytes
+enc.write_member(cm_invalid); // ~70 bytes
 write('include-ens', {
-	SCRIPT_ORDER: script_order.map(abbr => script_names[abbr])
+	//SCRIPT_ORDER: script_order.map(abbr => script_names[abbr])
+	ORDERED_SCRIPTS: ordered.map(x => {
+		delete x.extra;
+		delete x.wholes;
+		return x;
+	}),
 });
 
 // just nf 
@@ -227,8 +259,4 @@ function write(name, vars = {}) {
 			return `export const ${k} = ${JSON.stringify(v)};`;
 		}),
 	].join('\n'));
-}
-
-function write_vars(vars) {
-	
 }

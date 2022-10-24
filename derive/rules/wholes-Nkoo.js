@@ -1,0 +1,73 @@
+// created: 2022-10-24T08:28:52.500Z
+// version: 15.0.0
+export default [
+	// -
+	0x7D1, // (ߑ) NKO LETTER DAGBASINNA
+	// "̂"
+	// 65B (◌ٛ) ARABIC VOWEL SIGN INVERTED SMALL V ABOVE (Arab)
+	// A6F0 (◌꛰) BAMUM COMBINING MARK KOQNDON (Bamu)
+	0x7EE, // 7EE (◌߮) NKO COMBINING LONG DESCENDING TONE
+	// "̈"
+	// 8EB (◌࣫) ARABIC TONE TWO DOTS ABOVE (Arab)
+	0x7F3, // 7F3 (◌߳) NKO COMBINING DOUBLE DOT ABOVE
+	// "̇"
+	// 5C4 (◌ׄ) HEBREW MARK UPPER DOT (Hebr)
+	// 6EC (◌۬) ARABIC ROUNDED HIGH STOP WITH FILLED CENTRE (Arab)
+	// 740 (◌݀) SYRIAC FEMININE DOT (Syrc)
+	// 8EA (◌࣪) ARABIC TONE ONE DOT ABOVE (Arab)
+	// 741 (◌݁) SYRIAC QUSHSHAYA (Syrc)
+	// 5B9 (◌ֹ) HEBREW POINT HOLAM (Hebr)
+	// 5BA (◌ֺ) HEBREW POINT HOLAM HASER FOR VAV (Hebr)
+	// 5C2 (◌ׂ) HEBREW POINT SIN DOT (Hebr)
+	// 5C1 (◌ׁ) HEBREW POINT SHIN DOT (Hebr)
+	// 902 (◌ं) DEVANAGARI SIGN ANUSVARA (Deva)
+	// A02 (◌ਂ) GURMUKHI SIGN BINDI (Guru)
+	// A82 (◌ં) GUJARATI SIGN ANUSVARA (Gujr)
+	// BCD (◌்) TAMIL SIGN VIRAMA (Taml)
+	0x7ED, // 7ED (◌߭) NKO COMBINING SHORT RISING TONE
+	// "̄"
+	// 659 (◌ٙ) ARABIC ZWARAKAY (Arab)
+	// A6F1 (◌꛱) BAMUM COMBINING MARK TUKWENTIS (Bamu)
+	0x7EB, // 7EB (◌߫) NKO COMBINING SHORT HIGH TONE
+	// "l"
+	// 6C (l) LATIN SMALL LETTER L (Latn)
+	// 23FD (⏽) POWER ON SYMBOL (Zyyy)
+	// 31 (1) DIGIT ONE (Zyyy)
+	// 661 (١) ARABIC-INDIC DIGIT ONE (Arab)
+	// 10320 (𐌠) OLD ITALIC NUMERAL ONE (Ital)
+	// 1E8C7 (𞣇) MENDE KIKAKUI DIGIT ONE (Mend)
+	// 5D5 (ו) HEBREW LETTER VAV (Hebr)
+	// 5DF (ן) HEBREW LETTER FINAL NUN (Hebr)
+	// 627 (ا) ARABIC LETTER ALEF (Arab)
+	// 2D4F (ⵏ) TIFINAGH LETTER YAN (Tfng)
+	// 16C1 (ᛁ) RUNIC LETTER ISAZ IS ISS I (Runr)
+	// A4F2 (ꓲ) LISU LETTER I (Lisu)
+	// 16F28 (𖼨) MIAO LETTER GHA (Plrd)
+	// 1028A (𐊊) LYCIAN LETTER J (Lyci)
+	// 10309 (𐌉) OLD ITALIC LETTER I (Ital)
+	0x7CA, // 7CA (ߊ) NKO LETTER A
+	// "O"
+	// 30 (0) DIGIT ZERO (Zyyy)
+	// 9E6 (০) BENGALI DIGIT ZERO (Beng)
+	// B66 (୦) ORIYA DIGIT ZERO (Orya)
+	// 3007 (〇) IDEOGRAPHIC NUMBER ZERO (Hani)
+	// 114D0 (𑓐) TIRHUTA DIGIT ZERO (Tirh)
+	// 118E0 (𑣠) WARANG CITI DIGIT ZERO (Wara)
+	// 2D54 (ⵔ) TIFINAGH LETTER YAR (Tfng)
+	// 12D0 (ዐ) ETHIOPIC SYLLABLE PHARYNGEAL A (Ethi)
+	// B20 (ଠ) ORIYA LETTER TTHA (Orya)
+	// A4F3 (ꓳ) LISU LETTER O (Lisu)
+	// 10292 (𐊒) LYCIAN LETTER U (Lyci)
+	// 102AB (𐊫) CARIAN LETTER O (Cari)
+	// 10516 (𐔖) ELBASAN LETTER O (Elba)
+	0x7C0, // 7C0 (߀) NKO DIGIT ZERO
+	0x7CB, // (ߋ) NKO LETTER EE
+	0x7DB, // (ߛ) NKO LETTER SA
+	// u
+	0x7CE, // (ߎ) NKO LETTER U
+	//0x2207, // (∇) NABLA
+	0x7DC, // (ߜ) NKO LETTER GBA
+	//0x2206, // (∆) INCREMENT
+	0x7E1, // (ߡ) NKO LETTER MA
+
+];

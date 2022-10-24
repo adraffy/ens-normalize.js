@@ -1,7 +1,5 @@
-import {readFileSync} from 'node:fs';
-import {ens_normalize, ens_tokenize, ens_normalize_post_check} from '../src/lib.js';
-
-const TESTS = JSON.parse(readFileSync(new URL('../validate/tests.json', import.meta.url)));
+import {ens_normalize, ens_tokenize, nfc} from '../src/lib.js';
+import TESTS from '../validate/tests.json' assert {type: 'json'};
 
 function run_tests(fn) {
 	let errors = [];
@@ -25,16 +23,19 @@ function run_tests(fn) {
 }
 
 // proof of concept
-function ens_normalize_via_tokenize(name) {
-	return ens_normalize_post_check(ens_tokenize(name).flatMap(token => {
+function ens_normalize_via_tokenize(name) {	
+	let norm = String.fromCodePoint(...nfc(ens_tokenize(name).flatMap(token => {
 		switch (token.type) {
 			case 'disallowed': throw new Error('disallowed'); 
-			case 'ignored': return '';
-			case 'stop': return '.';
-			case 'isolated': return String.fromCodePoint(token.cp);
-			default: return String.fromCodePoint(...token.cps);
+			case 'ignored': return [];
+			case 'stop': return token.cp;
+			default: return token.cps;
 		}
-	}).join(''));
+	})));
+	if (ens_normalize(norm) !== norm) {
+		throw new Error('incomplete');
+	}
+	return norm;
 }
 
 test(ens_normalize);

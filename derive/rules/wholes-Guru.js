@@ -1,0 +1,97 @@
+// created: 2022-10-24T08:28:51.775Z
+// version: 15.0.0
+export default [
+	// "8"
+	// 38 (8) DIGIT EIGHT (Zyyy)
+	// B03 (◌ଃ) ORIYA SIGN VISARGA (Orya)
+	// 9EA (৪) BENGALI DIGIT FOUR (Beng)
+	// 1E8CB (𞣋) MENDE KIKAKUI DIGIT FIVE (Mend)
+	// 1031A (𐌚) OLD ITALIC LETTER EF (Ital)
+	0xA6A, // A6A (੪) GURMUKHI DIGIT FOUR
+	// "9"
+	// 39 (9) DIGIT NINE (Zyyy)
+	// B68 (୨) ORIYA DIGIT TWO (Orya)
+	// 9ED (৭) BENGALI DIGIT SEVEN (Beng)
+	// D6D (൭) MALAYALAM DIGIT SEVEN (Mlym)
+	// 118CC (𑣌) WARANG CITI SMALL LETTER KO (Wara)
+	// 118D6 (𑣖) WARANG CITI SMALL LETTER AM (Wara)
+	0xA67, // A67 (੧) GURMUKHI DIGIT ONE
+	// "̇"
+	// 5C4 (◌ׄ) HEBREW MARK UPPER DOT (Hebr)
+	// 6EC (◌۬) ARABIC ROUNDED HIGH STOP WITH FILLED CENTRE (Arab)
+	// 740 (◌݀) SYRIAC FEMININE DOT (Syrc)
+	// 8EA (◌࣪) ARABIC TONE ONE DOT ABOVE (Arab)
+	// 741 (◌݁) SYRIAC QUSHSHAYA (Syrc)
+	// 5B9 (◌ֹ) HEBREW POINT HOLAM (Hebr)
+	// 5BA (◌ֺ) HEBREW POINT HOLAM HASER FOR VAV (Hebr)
+	// 5C2 (◌ׂ) HEBREW POINT SIN DOT (Hebr)
+	// 5C1 (◌ׁ) HEBREW POINT SHIN DOT (Hebr)
+	// 7ED (◌߭) NKO COMBINING SHORT RISING TONE (Nkoo)
+	// 902 (◌ं) DEVANAGARI SIGN ANUSVARA (Deva)
+	// A82 (◌ં) GUJARATI SIGN ANUSVARA (Gujr)
+	// BCD (◌்) TAMIL SIGN VIRAMA (Taml)
+	0xA02, // A02 (◌ਂ) GURMUKHI SIGN BINDI
+	// "̣"
+	// 8ED (◌࣭) ARABIC TONE ONE DOT BELOW (Arab)
+	// 5B4 (◌ִ) HEBREW POINT HIRIQ (Hebr)
+	// 65C (◌ٜ) ARABIC VOWEL SIGN DOT BELOW (Arab)
+	// 93C (◌़) DEVANAGARI SIGN NUKTA (Deva)
+	// 9BC (◌়) BENGALI SIGN NUKTA (Beng)
+	// ABC (◌઼) GUJARATI SIGN NUKTA (Gujr)
+	// B3C (◌଼) ORIYA SIGN NUKTA (Orya)
+	// 111CA (◌𑇊) SHARADA SIGN NUKTA (Shrd)
+	// 114C3 (◌𑓃) TIRHUTA SIGN NUKTA (Tirh)
+	// 10A3A (◌𐨺) KHAROSHTHI SIGN DOT BELOW (Khar)
+	0xA3C, // A3C (◌਼) GURMUKHI SIGN NUKTA
+	// "ঃ"
+	// 983 (◌ঃ) BENGALI SIGN VISARGA (Beng)
+	// C03 (◌ః) TELUGU SIGN VISARGA (Telu)
+	// C83 (◌ಃ) KANNADA SIGN VISARGA (Knda)
+	// D03 (◌ഃ) MALAYALAM SIGN VISARGA (Mlym)
+	// D83 (◌ඃ) SINHALA SIGN VISARGAYA (Sinh)
+	// 1038 (◌း) MYANMAR SIGN VISARGA (Mymr)
+	// 114C1 (◌𑓁) TIRHUTA SIGN VISARGA (Tirh)
+	0xA03, // A03 (◌ਃ) GURMUKHI SIGN VISARGA
+	// "o"
+	// 6F (o) LATIN SMALL LETTER O (Latn)
+	// C02 (◌ం) TELUGU SIGN ANUSVARA (Telu)
+	// C82 (◌ಂ) KANNADA SIGN ANUSVARA (Knda)
+	// D02 (◌ം) MALAYALAM SIGN ANUSVARA (Mlym)
+	// D82 (◌ං) SINHALA SIGN ANUSVARAYA (Sinh)
+	// 966 (०) DEVANAGARI DIGIT ZERO (Deva)
+	// AE6 (૦) GUJARATI DIGIT ZERO (Gujr)
+	// BE6 (௦) TAMIL DIGIT ZERO (Taml)
+	// C66 (౦) TELUGU DIGIT ZERO (Telu)
+	// CE6 (೦) KANNADA DIGIT ZERO (Knda)
+	// D66 (൦) MALAYALAM DIGIT ZERO (Mlym)
+	// E50 (๐) THAI DIGIT ZERO (Thai)
+	// ED0 (໐) LAO DIGIT ZERO (Laoo)
+	// 1040 (၀) MYANMAR DIGIT ZERO (Mymr)
+	// 665 (٥) ARABIC-INDIC DIGIT FIVE (Arab)
+	// 6F5 (۵) EXTENDED ARABIC-INDIC DIGIT FIVE (Arab)
+	// 3BF (ο) GREEK SMALL LETTER OMICRON (Grek)
+	// 3C3 (σ) GREEK SMALL LETTER SIGMA (Grek)
+	// 2C9F (ⲟ) COPTIC SMALL LETTER O (Copt)
+	// 43E (о) CYRILLIC SMALL LETTER O (Cyrl)
+	// 10FF (ჿ) GEORGIAN LETTER LABIAL SIGN (Geor)
+	// 585 (օ) ARMENIAN SMALL LETTER OH (Armn)
+	// 5E1 (ס) HEBREW LETTER SAMEKH (Hebr)
+	// 647 (ه) ARABIC LETTER HEH (Arab)
+	// 6BE (ھ) ARABIC LETTER HEH DOACHASHMEE (Arab)
+	// 6C1 (ہ) ARABIC LETTER HEH GOAL (Arab)
+	// 6D5 (ە) ARABIC LETTER AE (Arab)
+	// D20 (ഠ) MALAYALAM LETTER TTHA (Mlym)
+	// 101D (ဝ) MYANMAR LETTER WA (Mymr)
+	// 104EA (𐓪) OSAGE SMALL LETTER O (Osge)
+	// 118C8 (𑣈) WARANG CITI SMALL LETTER E (Wara)
+	// 118D7 (𑣗) WARANG CITI SMALL LETTER BU (Wara)
+	// 1042C (𐐬) DESERET SMALL LETTER LONG O (Dsrt)
+	0xA66, // A66 (੦) GURMUKHI DIGIT ZERO
+	// "ॆ"
+	// 946 (◌ॆ) DEVANAGARI VOWEL SIGN SHORT E (Deva)
+	0xA4B, // A4B (◌ੋ) GURMUKHI VOWEL SIGN OO
+	// "्"
+	// 94D (◌्) DEVANAGARI SIGN VIRAMA (Deva)
+	// ACD (◌્) GUJARATI SIGN VIRAMA (Gujr)
+	0xA4D, // A4D (◌੍) GURMUKHI SIGN VIRAMA
+]

@@ -1,0 +1,61 @@
+// created: 2022-10-24T08:28:54.625Z
+// version: 15.0.0
+export default [
+	// "'"
+	// 2019 (’) RIGHT SINGLE QUOTATION MARK (Zyyy)
+	// 5D9 (י) HEBREW LETTER YOD (Hebr)
+	// 144A (ᑊ) CANADIAN SYLLABICS WEST-CREE P (Cans)
+	// 16F51 (◌𖽑) MIAO SIGN ASPIRATION (Plrd)
+	// 16F52 (◌𖽒) MIAO SIGN REFORMED VOICING (Plrd)
+	0x16CC, // 16CC (ᛌ) RUNIC LETTER SHORT-TWIG-SOL S
+	// "<"
+	// 1438 (ᐸ) CANADIAN SYLLABICS PA (Cans)
+	0x16B2, // 16B2 (ᚲ) RUNIC LETTER KAUNA
+	// "K"
+	// 13E6 (Ꮶ) CHEROKEE LETTER TSO (Cher)
+	// A4D7 (ꓗ) LISU LETTER KA (Lisu)
+	// 10518 (𐔘) ELBASAN LETTER QE (Elba)
+	0x16D5, // 16D5 (ᛕ) RUNIC LETTER OPEN-P
+	// "l"
+	// 6C (l) LATIN SMALL LETTER L (Latn)
+	// 23FD (⏽) POWER ON SYMBOL (Zyyy)
+	// 31 (1) DIGIT ONE (Zyyy)
+	// 661 (١) ARABIC-INDIC DIGIT ONE (Arab)
+	// 10320 (𐌠) OLD ITALIC NUMERAL ONE (Ital)
+	// 1E8C7 (𞣇) MENDE KIKAKUI DIGIT ONE (Mend)
+	// 5D5 (ו) HEBREW LETTER VAV (Hebr)
+	// 5DF (ן) HEBREW LETTER FINAL NUN (Hebr)
+	// 627 (ا) ARABIC LETTER ALEF (Arab)
+	// 7CA (ߊ) NKO LETTER A (Nkoo)
+	// 2D4F (ⵏ) TIFINAGH LETTER YAN (Tfng)
+	// A4F2 (ꓲ) LISU LETTER I (Lisu)
+	// 16F28 (𖼨) MIAO LETTER GHA (Plrd)
+	// 1028A (𐊊) LYCIAN LETTER J (Lyci)
+	// 10309 (𐌉) OLD ITALIC LETTER I (Ital)
+	0x16C1, // 16C1 (ᛁ) RUNIC LETTER ISAZ IS ISS I
+	// "M"
+	// 13B7 (Ꮇ) CHEROKEE LETTER LU (Cher)
+	// 15F0 (ᗰ) CANADIAN SYLLABICS CARRIER GO (Cans)
+	// A4DF (ꓟ) LISU LETTER MA (Lisu)
+	// 102B0 (𐊰) CARIAN LETTER S (Cari)
+	// 10311 (𐌑) OLD ITALIC LETTER SHE (Ital)
+	0x16D6, // 16D6 (ᛖ) RUNIC LETTER EHWAZ EH E
+	// "X"
+	// 166D (᙭) CANADIAN SYLLABICS CHI SIGN (Cans)
+	// 10322 (𐌢) OLD ITALIC NUMERAL TEN (Ital)
+	// 118EC (𑣬) WARANG CITI NUMBER THIRTY (Wara)
+	// 2D5D (ⵝ) TIFINAGH LETTER YATH (Tfng)
+	// A4EB (ꓫ) LISU LETTER SHA (Lisu)
+	// 10290 (𐊐) LYCIAN LETTER MM (Lyci)
+	// 102B4 (𐊴) CARIAN LETTER X (Cari)
+	// 10317 (𐌗) OLD ITALIC LETTER EKS (Ital)
+	// 10527 (𐔧) ELBASAN LETTER KHE (Elba)
+	0x16B7, // 16B7 (ᚷ) RUNIC LETTER GEBO GYFU G
+	// "Φ"
+	// 1240 (ቀ) ETHIOPIC SYLLABLE QA (Ethi)
+	// 102B3 (𐊳) CARIAN LETTER NN (Cari)
+	0x16F0, // 16F0 (ᛰ) RUNIC BELGTHOR SYMBOL
+	// "Ψ"
+	// 102B5 (𐊵) CARIAN LETTER N (Cari)
+	0x16D8, // 16D8 (ᛘ) RUNIC LETTER LONG-BRANCH-MADR M
+]

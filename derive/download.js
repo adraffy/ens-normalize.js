@@ -1,11 +1,11 @@
-import {writeFile, mkdir, access} from 'node:fs/promises';
+import {readFile, writeFile, mkdir} from 'node:fs/promises';
 import {parse_version} from './utils.js';
-
 
 const FILES = [
 	// UCD
 	['{SPEC}/ucd/UnicodeData.txt'],
 	['{SPEC}/ucd/PropList.txt'],
+	['{SPEC}/ucd/DerivedCoreProperties.txt'],
 	// IDNA
 	['{IDNA}/IdnaMappingTable.txt'],
 	['{IDNA}/IdnaTestV2.txt', /*old*/'{IDNA}/IdnaTest.txt'],
@@ -78,13 +78,23 @@ async function download({major, minor, patch}, files) {
 			let [i, buf] = await Promise.any(urls.map(async (url, i) => {
 				let res = await fetch(url);
 				if (res.status != 200) throw new Error(`HTTP error ${res.status}`);
-				return [i, await res.arrayBuffer()];
+				return [i, Buffer.from(await res.arrayBuffer())];
 			}));
 			let name = urls[i].pathname.split('/').pop();
 			let file = new URL(name, dir);
-			await mkdir(dir, {recursive: true});
-			await writeFile(file, Buffer.from(buf));
-			console.log(`[${i+1}/${sources.length}] ${urls[i]}`);
+			let verb;
+			try {
+				if (Buffer.compare(await readFile(file), buf) == 0) {
+					verb = 'Same';
+				}
+			} catch (ignored) {	
+			}
+			if (!verb) {
+				verb = 'Downloaded';
+				await mkdir(dir, {recursive: true});
+				await writeFile(file, buf);
+			}
+			console.log(`${verb} <${urls[i]}> [${i+1}/${sources.length}]`);
 		} catch (err) {
 			if (err instanceof AggregateError) {
 				for (let i = 0; i < sources.length; i++) {

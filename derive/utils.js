@@ -16,6 +16,20 @@ export function version_ordinal(x) {
 	return x.major + (1 - 1/(1 + x.minor + (1 - 1/(1 + x.patch)))); // use continued fraction expansion
 }
 
+export function group_by(iterable, fn) {
+	let map = new Map();
+	for (let x of iterable) {
+		let key = fn(x); 
+		let bucket = map.get(key);
+		if (!bucket) {
+			bucket = [];
+			map.set(key, bucket);
+		}
+		bucket.push(x);
+	}
+	return map;
+}
+
 export function hex_cp(cp) {
 	return cp.toString(16).padStart(2, '0').toUpperCase();
 }
@@ -67,6 +81,15 @@ export function parse_cp_range(s) {
 	}
 }
 
+export function parse_cps(spec) {
+	if (Number.isInteger(spec)) {
+		return [spec];
+	} else if (typeof spec === 'string') {
+		return spec.split(/\s+/).map(x => x.trim()).filter(x => x).flatMap(x => parse_cp_range(x));
+	}
+	throw new TypeError(`unknown character spec: ${spec}`);
+}
+
 export function compare_arrays(a, b) {
 	let n = a.length;
 	let c = n - b.length;
@@ -82,5 +105,5 @@ export function mulberry32(a) {
 		t = Math.imul(t ^ t >>> 15, t | 1);
 		t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
 		return ((t ^ (t >>> 14)) >>> 0) / 0x100000000;
-	}
+	};
 }

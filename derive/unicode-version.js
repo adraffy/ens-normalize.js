@@ -1,4 +1,4 @@
-import {UnicodeScripts, UnicodeSpec} from './unicode-logic.js';
+import {UnicodeScripts, UnicodeSpec, UnicodePrinter} from './unicode-logic.js';
 import {create_nf} from './nf.js';
 
 export const UNICODE = new UnicodeSpec(new URL('./data/15.0.0/', import.meta.url));
@@ -15,4 +15,4 @@ export const IDNA = UNICODE.idna_rules({
 
 export const SCRIPTS = new UnicodeScripts(UNICODE);
 
-export const SCRIPT_ORDER = ['Latn', 'Grek', 'Cyrl'];
+export const PRINTER = new UnicodePrinter(SCRIPTS);
