@@ -1392,7 +1392,7 @@ function create_details_row(name, before) {
 
 		let code = document.createElement('code');
 		if (cps.length) {
-			span_label.innerText = safe_str_from_cps(cps, () => INVALID_CH); //label.replace(/\s/ug, '');
+			span_label.innerText = label.replaceAll(/[\x0A\x0D]/igu, INVALID_CH); //safe_str_from_cps(cps, () => INVALID_CH); //label.replace(/\s/ug, '');
 			let swap_btn = document.createElement('button');
 			swap_btn.innerText = `⇄`;
 			swap_btn.title = `Swap Codepoints/Bytes`;

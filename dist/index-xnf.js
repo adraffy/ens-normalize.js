@@ -413,9 +413,9 @@ function check_scripts(cps) {
 	for (let {name, test, rest, extra, wholes} of ORDERED) {
 		if (cps.some(cp => test.some(set => set.has(cp)))) {
 			// https://www.unicode.org/reports/tr39/#mixed_script_confusables
-			let bad = cps.filter(cp => !rest.some(set => set.has(cp)) && !extra.has(cp));
-			if (bad.length) {
-				throw new Error(`mixed-script ${name} confusable: "${str_from_cps(bad)}"`);
+			let bad = cps.find(cp => !rest.some(set => set.has(cp)) && !extra.has(cp)); // should just show first char
+			if (bad >= 0) {
+				throw new Error(`mixed-script ${name} confusable: "${str_from_cps([bad])}"`);
 			}
 			// https://www.unicode.org/reports/tr39/#def_whole_script_confusables
 			if (cps.every(cp => wholes.has(cp) || SCRIPTS[0].has(cp))) {

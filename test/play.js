@@ -23,3 +23,5 @@ console.log(should_escape(0x202E));
 console.log(is_printable_mark(0x20E3));
 
 //console.log(str_from_cps(Array(10000).fill(65)));
+
+debug(ens_split('1️⃣Rãffy💩.eth'));
