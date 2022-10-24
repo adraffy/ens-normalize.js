@@ -26,8 +26,8 @@ export function str_from_cps(cps) {
 	let len = cps.length;
 	if (len < chunk) return String.fromCodePoint(...cps);
 	let buf = [];
-	for (let i = 0; i < chunk; ) {
-		buf.push(String.fromCodePoint(cps.slice(i, i += chunk)));
+	for (let i = 0; i < len; ) {
+		buf.push(String.fromCodePoint(...cps.slice(i, i += chunk)));
 	}
 	return buf.join('');
 }

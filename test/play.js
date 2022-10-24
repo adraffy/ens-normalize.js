@@ -2,6 +2,7 @@
 
 import {inspect} from 'node:util';
 import {ens_beautify, ens_emoji, ens_normalize, ens_tokenize, ens_split, should_escape, is_printable_mark} from '../src/lib.js';
+import { str_from_cps } from '../src/utils.js';
 
 function debug(x) {
 	console.log(inspect(x, {depth: null, colors: true}));
@@ -20,3 +21,5 @@ debug(ens_split('💩Raffy.eth_'));
 
 console.log(should_escape(0x202E));
 console.log(is_printable_mark(0x20E3));
+
+//console.log(str_from_cps(Array(10000).fill(65)));
