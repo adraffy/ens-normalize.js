@@ -1,4 +1,4 @@
-Build Date: 2022-10-24T10:46:10.975Z
+Build Date: 2022-10-24T18:13:13.812Z
 Unicode Version: 15.0.0
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -11862,7 +11862,7 @@ Removed Valid: 4F5 (ӵ) CYRILLIC SMALL LETTER CHE WITH DIAERESIS
 --Mapping: 4F4 (Ӵ) CYRILLIC CAPITAL LETTER CHE WITH DIAERESIS => 4F5 (ӵ) CYRILLIC SMALL LETTER CHE WITH DIAERESIS
 Removed Valid: 4F9 (ӹ) CYRILLIC SMALL LETTER YERU WITH DIAERESIS
 --Mapping: 4F8 (Ӹ) CYRILLIC CAPITAL LETTER YERU WITH DIAERESIS => 4F9 (ӹ) CYRILLIC SMALL LETTER YERU WITH DIAERESIS
-CM Isolated: 98928
+CM Isolated: 110100
 Removed Mapped: 130 (İ) LATIN CAPITAL LETTER I WITH DOT ABOVE => [69 307]
 Restricted [Beng]: All(96) Valid(91) Restricted(89)
 Restricted [Taml]: All(123) Valid(123) Restricted(119)
@@ -12016,9 +12016,9 @@ Ordered: Korean Test(Hang) Rest(Hani,ALL) Extra(26) Wholes(0)
 Ordered: Japanese Test(Kana,Hira) Rest(Hani,ALL) Extra(26) Wholes(0)
 Ordered: Han Test(Hani) Rest(ALL) Extra(26) Wholes(0)
 Ordered: Latin Test(Latn) Rest(ALL) Extra(0) Wholes(0)
-Ordered: Greek Test(Grek) Rest(ALL) Extra(0) Wholes(13)
 Ordered: Cyrillic Test(Cyrl) Rest(ALL) Extra(0) Wholes(23)
-Ordered: Thai Test(Thai) Rest() Extra(1) Wholes(1)
+Ordered: Greek Test(Grek) Rest(ALL) Extra(0) Wholes(13)
 Ordered: Devanagari Test(Deva) Rest() Extra(0) Wholes(2)
 Ordered: Hebrew Test(Hebr) Rest() Extra(1) Wholes(6)
-Ordered: Arabic Test(Arab) Rest() Extra(0) Wholes(11)
+Ordered: Thai Test(Thai) Rest() Extra(1) Wholes(1)
+Ordered: Arabic Test(Arab) Rest() Extra(1) Wholes(11)

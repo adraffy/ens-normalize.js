@@ -11,7 +11,7 @@ export const ORDERED_SCRIPTS = [
 	{name: 'Latin', test: ['Latn'], rest: [AUGMENTED_ALL]},
 	{name: 'Cyrillic', test: ['Cyrl'], rest: [AUGMENTED_ALL]},
 	{name: 'Greek', test: ['Grek'], rest: [AUGMENTED_ALL]}, // rest: [], extra: explode_cp('πξ')},
-	{name: 'Arabic', test: ['Arab'], rest: []}, //extra: explode_cp('-')},
+	{name: 'Arabic', test: ['Arab'], rest: [], extra: explode_cp('-')},
 	{name: 'Devanagari', test: ['Deva'], rest: []},
 	{name: 'Hebrew', test: ['Hebr'], rest: [], extra: explode_cp('₪')},
 	{name: 'Thai', test: ['Thai'], rest: [], extra: explode_cp('฿')},

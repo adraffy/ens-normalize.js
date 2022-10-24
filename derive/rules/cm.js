@@ -6,6 +6,7 @@ export const CM_DISALLOWED = [
 	'Kana',
 	'Hira',
 	'Hani',
+	'Hang',
 ];
 
 // exemplars: https://unicode-org.github.io/cldr-staging/charts/latest/by_type/core_data.alphabetic_information.main.html

@@ -1836,7 +1836,7 @@ async function resolve0(input0, skip_norm) {
 				add_row_tag(avail_row, create_typed_tag('good', 'Available'));
 				add_row_tag(avail_row, create_ens_link(name_norm, {title: 'Register'}));
 			} else {
-				add_row_tag(avail_row, create_typed_tag('stop', `Unavailable`));
+				add_row_tag(avail_row, create_typed_tag('fail', `Available`));
 			}
 
 			let check_nft;
