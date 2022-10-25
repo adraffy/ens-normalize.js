@@ -157,13 +157,17 @@ function check_restricted_scripts(cps) {
 	}
 }
 
+
+function check_leading_combining_mark(cps) {
+	if (CM.has(cps[0])) throw new Error(`leading combining mark`);
+}
 // requires decomposed codepoints
-function check_combinining_marks(cps) {
+function check_combining_marks(cps) {
 	for (let i = 1, j = -1; i < cps.length; i++) {
 		if (CM.has(cps[i])) {
 			let prev = cps[i - 1];
 			if (prev == FE0F) {
-				throw new Error(`emoji + combining mark: ${str_from_cps(cps.slice(i-1, i+1))}`);
+				throw new Error(`emoji + combining mark`); // we dont know the full emoji length efficiently 
 			}
 			let seqs = CM_WHITELIST.get(prev);
 			if (seqs) {
@@ -217,15 +221,15 @@ export function ens_split(name, emoji_filter = filter_fe0f) {
 		try {
 			let mapped = info.mapped = process(input);
 			let norm = info.output = nfc(mapped.flatMap(x => Array.isArray(x) ? emoji_filter(x) : x)); // strip FE0F from emoji
-			info.emoji = mapped.some(x => Array.isArray(x)); // mapped.reduce((a, x) => a + (Array.isArray(x)?1:0), 0);
+			info.emoji = mapped.some(x => Array.isArray(x)); // idea: count emoji? mapped.reduce((a, x) => a + (Array.isArray(x)?1:0), 0);
 			check_leading_underscore(norm); // should restricted get underscores? (20221018: no)
-			if (CM.has(norm[0])) throw new Error(`leading combining mark`);
+			check_leading_combining_mark(norm);
 			check_label_extension(norm);
 			let decomp = nfd(mapped.map(x => Array.isArray(x) ? FE0F : x)); // replace emoji with single character placeholder
 			if (check_restricted_scripts(decomp)) {
 				info.script = mapped.every(x => Array.isArray(x)) ? COMMON : 'Restricted';
 			} else {
-				check_combinining_marks(decomp);			
+				check_combining_marks(decomp);
 				check_surrounding(norm, 0x2019, 'apostrophe', true, true); // question: can this be generalized better?
 				//check_middle_dot(norm);
 				info.script = check_scripts(nfc(mapped.flatMap(x => Array.isArray(x) ? [] : x))); // remove emoji
@@ -417,7 +421,7 @@ export function ens_tokenize(name, {
 				} else {
 					start = i; // remember last
 				}
-			} else if (token.type === TY_EMOJI) {
+			} else if (token.type === TY_EMOJI) { // 20221024: is this correct?
 				start = -1; // reset
 			}
 		}
