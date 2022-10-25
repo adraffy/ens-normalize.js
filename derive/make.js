@@ -396,20 +396,20 @@ for (let script of restricted) {
 	console.log(`Restricted [${script.abbr}]: All(${script.set.size}) Valid(${script.valid.size}) Restricted(${script.restricted.size})`);
 }
 
-async function read_wholes(name) {
-	let file = new URL(`./rules/wholes-${name}.js`, import.meta.url);
-	if (!existsSync(file)) return [];
-	return (await import(file)).default;
+async function read_wholes(file) {
+	if (!existsSync(file)) return []; // uhhh
+	return (await import(file)).default; 
 }
 
 // since restricted scripts cant intersect
 // all the wholes can be unioned together
 let restricted_wholes = new Set();
-for (let script of restricted) {	
-	let file = new URL(`./rules/wholes-${script.abbr}.js`, import.meta.url);
-	if (!existsSync(file)) continue;
-	for (let cp of (await read_wholes(script.abbr)).filter(cp => script.valid.has(cp))) {
-		restricted_wholes.add(cp);
+for (let script of restricted) {
+	let wholes = await read_wholes(new URL(`./rules/restricted-wholes/${script.abbr}.js`, import.meta.url));	
+	for (let cp of wholes) {
+		if (script.valid.has(cp)) {
+			restricted_wholes.add(cp);
+		}
 	}
 }
 console.log(`Restricted Wholes: ${restricted_wholes.size}`);
@@ -425,6 +425,7 @@ function register_ordered(name, set) {
 	}
 	return rec;
 }
+// ALL must go first
 register_ordered(AUGMENTED_ALL, new Set(['Zinh', 'Zyyy'].flatMap(abbr => [...SCRIPTS.require(abbr).valid])));
 let ordered = await Promise.all(ORDERED_SCRIPTS.map(async ({name, test, rest, extra = []}) => {
 	test = test.map(abbr => register_ordered(abbr));
@@ -435,7 +436,7 @@ let ordered = await Promise.all(ORDERED_SCRIPTS.map(async ({name, test, rest, ex
 		}
 	}
 	let union = new Set([[test, rest].flat().flatMap(x => [...x.set]), extra].flat());
-	let wholes = (await read_wholes(name)).filter(cp => union.has(cp));
+	let wholes = (await read_wholes(new URL(`./rules/ordered-wholes/${name}.js`, import.meta.url))).filter(cp => union.has(cp));
 	console.log(`Ordered: ${name} Test(${test.map(x => x.name)}) Rest(${rest.map(x => x.name)}) Extra(${extra.length}) Wholes(${wholes.length})`);
 	// convert to indices
 	test = test.map(x => x.index);

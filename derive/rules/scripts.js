@@ -39,9 +39,9 @@ export const CHANGED_SCRIPTS = {
 	],
 	Hani: [
 		0x3013, // (〓) GETA MARK
-		0x30FB, // (・) KATAKANA MIDDLE DOT
 	],
 	Kana: [
+		0x30FB, // (・) KATAKANA MIDDLE DOT
 		0x30FC, // (ー) KATAKANA-HIRAGANA PROLONGED SOUND MARK (TODO: future, this could be "Jpan")
 	],
 	Arab: [

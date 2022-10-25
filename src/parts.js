@@ -49,8 +49,14 @@ function format_tooltip(obj, extra) {
 	if (Array.isArray(extra)) lines.push(...extra);	
 	return lines.join('\n');
 }
+
+function isolated_safe(cps) {
+	return cps.map(cp => safe_str_from_cps([cp])).join('\u{200B}')
+}
+
 export function dom_from_tokens(tokens, {
 	before = false, 
+	///isolate = false,
 	components = false, 
 	emoji_url = 'https://emojipedia.org/%s',
 	extra = () => {},
@@ -95,7 +101,7 @@ export function dom_from_tokens(tokens, {
 						Hex: hex_seq(token.input),
 					}, extra(token.type, token.input));
 				} else {	
-					let lhs = dom_from_tokens(token.tokens, {before, components, emoji_url, extra}); // recursive
+					let lhs = dom_from_tokens(token.tokens, {before, components, emoji_url, extra}); //, isolate: true}); // recursive
 					lhs.classList.add('before');
 					lhs.title = format_tooltip({
 						Type: 'NFC (Unnormalized)',
@@ -129,7 +135,7 @@ export function dom_from_tokens(tokens, {
 				el = document.createElement('div');
 				let span_src = document.createElement('span');
 				span_src.classList.add('before');
-				span_src.innerText = safe_str_from_cps([token.cp]);	
+				span_src.innerText = safe_str_from_cps([token.cp]);	// isolate ? isolated_safe([token.cp]) : 
 				span_src.title = format_tooltip({
 					Type: 'Mapped (Match)',
 					Hex: hex_cp(token.cp),
@@ -137,7 +143,7 @@ export function dom_from_tokens(tokens, {
 				el.append(span_src);
 				if (!before) {
 					let span_dst = document.createElement('span');
-					span_dst.innerText = safe_str_from_cps(token.cps); //token.cps.map(x => String.fromCodePoint(x)).join('\u{200B}');
+					span_dst.innerText = isolated_safe(token.cps); // safe_str_from_cps(token.cps);
 					span_dst.title = format_tooltip({
 						Type: 'Mapped (Replacement)',
 						Hex: hex_seq(token.cps),

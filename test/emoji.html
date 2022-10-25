@@ -54,16 +54,21 @@ h1 {
 	min-width: 300px;
 	text-align: center;
 }
+h2 {
+	display: flex;
+	align-items: center;
+}
+h2 .left {
+	flex: 1 0 auto;
+}
 h2 a.right {
 	font-size: 70%;
 	font-weight: normal;
 	text-decoration: none;
 }
-h2 .right {
-	float: right;
-}
 h2 .right button {
 	font-size: 16pt;
+	margin-left: 0.5rem;
 }
 table {
 	border-collapse: collapse;
@@ -250,8 +255,17 @@ try {
 function searchize(s) {
 	return s.toLowerCase()
 		.replace(/^\s+/, '') // leading whitespace
-		.replace(/\s+/, ' '); // repeated whitespace
-		//.replace(/[^a-z0-9 ]/, '');
+		.replaceAll(/\s+/gu, ' '); // repeated whitespace
+}
+
+function replace_escapes(s) {
+	return s.replaceAll(/\{([0-9a-f]+)\}/gui, (_, x) => {
+		try {
+			return String.fromCodePoint(parseInt(x, 16));
+		} catch (err) {
+			return x;
+		}
+	});
 }
 
 let type_map = new Map();
@@ -270,6 +284,7 @@ let keywords = [
 		'Gender: Woman|{2642}',
 		'Family',
 		'Person',
+		`Golden|=\\b(wo)?man\\b,\\bperson\\b!{1F3FB}{1F3FC}{1F3FD}{1F3FE}{1F3FF}`,
 		'Light Skin',
 		'Medium-light Skin',
 		'Medium Skin',
@@ -416,7 +431,7 @@ function update_search() {
 				li.innerHTML = `<a href="#${n}">${title}</a>`;
 				toc_ul.append(li);
 				let section = document.createElement('section');
-				section.innerHTML = `<h2><a name="${n}">${title}</a></h2>`;
+				section.innerHTML = `<h2><a class="left" name="${n}">${title}</a></h2>`;
 				// add jump
 				let a = document.createElement('a');
 				a.classList.add('right');
@@ -440,10 +455,7 @@ function update_search() {
 	if (input === 'gets-normed') {
 		results = flat.filter(x => x.is_norm && x.form !== x.norm);
 	} else if (input === 'already-norm') {
-		results = flat.filter(x => x.is_norm && x.form === x.norm);
-	} else if (match = input.match(/^{([0-9a-f]+)}$/i)) {
-		let cp = parseInt(match[1], 16);
-		results = flat.filter(x => x.cps.includes(cp));
+		results = flat.filter(x => x.is_norm && x.form === x.norm);	
 	} else if (match = input.match(/^v\d*$/)) {
 		let version = parseInt(input.slice(1));
 		results = flat.filter(x => x.info && parseInt(x.info.version) == version);
@@ -468,27 +480,78 @@ function update_search() {
 			}
 			bucket.push(rec);
 		}
-		results = [...dups.values()].filter(v => v.length <= max).flat();		
+		results = [...dups.values()].filter(v => v.length <= max).flat();
+	} else if (input.startsWith('=')) {
+		input = replace_escapes(input.slice(1));
+		let pos = input.indexOf('!');
+		let none = [];
+		function split(s) {
+			return s.split(',').map(x => x.trim()).filter(x => x).map(x => {
+				try {
+					return ens_normalize(x);
+				} catch (err) {
+				}
+				try {
+					return new RegExp(x, 'iu');
+				} catch (err)  {
+				}
+				return x;
+			});
+		}
+		if (pos >= 0) {
+			none = split(input.slice(pos + 1));
+			input = input.slice(0, pos);
+		} 
+		let any = split(input);
+		function check(x, test) {
+			if (test instanceof RegExp) {
+				return test.test(x.form) || x.info && test.test(x.info.query);
+			} else {
+				return x.norm.includes(test) || (x.info && x.info.query.includes(test));
+			}
+		}
+		results = flat.filter(x => (any.length == 0 || any.some(test => check(x, test))) && !none.some(test => check(x, test)));
 	} else {
+		input = replace_escapes(input);
 		let norm;
 		try {
-			norm = ens_normalize(input.replace(/\s+/, ''));
-		} catch (err) {
+			norm = ens_normalize(input.trim());
+		} catch (err) {			
 		}
 		results = flat.filter(x => {
-			if (x.info && x.info.query.includes(input)) return true;
-			if (x.norm.includes(norm)) return true;
+			if (x.info && x.info.query.includes(input)) return true; 
+			if (norm && x.norm.includes(norm)) return true; 
+			if (x.form.includes(input)) return true;
 		});
 	}
 	let n = results.length;
 	results_section.innerHTML = `
-		<h2>${n} result${n==1?'':'s'} (${(100*n/emoji_seqs.length).toFixed(2)}%)<span class="right"></span</h2>
+		<h2><span class="left">${n} result${n==1?'':'s'} (${(100*n/emoji_seqs.length).toFixed(2)}%)</span><span class="right"></span</h2>
 	`;
 
-	let copy_btn = document.createElement('button');
-	copy_btn.innerText = 'Copy Results';
-	copy_btn.addEventListener('click', () => navigator.clipboard.writeText(results.map(x => x.form).join('\n')));
-	results_section.querySelector('.right').append(copy_btn);
+	if (n) {
+		let csv_btn = document.createElement('button');
+		csv_btn.innerText = 'CSV';
+		csv_btn.addEventListener('click', () => {
+			let rows = results.map(x => {
+				if (x.info) {
+					return `${x.form},"${x.info.name}","${x.cps.map(hex_cp).join(' ')}","${x.info.type}","${x.info.version}"`
+				} else {
+					return x.form;
+				}
+			});
+			let a = document.createElement('a');
+			a.download = 'Emoji.csv';
+			a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent([`Form,Name,Hex,Type,Version,Norm`, ...rows].join('\n'));
+			a.click();
+		});
+
+		let repeated_btn = document.createElement('button');
+		repeated_btn.innerText = 'Copy Min Repeated';
+		repeated_btn.addEventListener('click', () => navigator.clipboard.writeText(results.map(x => repeated(x.norm)).join('\n')));
+		results_section.querySelector('.right').append(repeated_btn, csv_btn);
+
+	}
 
 	results_section.append(create_table(results, true));
 	hover_div.classList.add('hide');
@@ -531,13 +594,9 @@ function create_tr({cps, form, norm, info}, first) {
 	cells.push(`<div class="exploded"></div>`);
 
 	tr.dataset.name = form;
-	let repeated = norm;
-	for (let i = 3 - [...norm].length; i > 0; i--) {
-		repeated += norm;
-	}
 	tr.innerHTML = `
 		<td class="index" data-copy="${form}">${first}</td>
-		<td class="form"><a href="./resolver.html#${repeated}.eth">${form}</a></td>
+		<td class="form"><a href="./resolver.html#${repeated(norm)}.eth">${form}</a></td>
 		<td class="info"><div class="cells">${cells.join('')}</div></td>
 	`;
 	let emoji_url = false;
@@ -554,6 +613,10 @@ function create_tr({cps, form, norm, info}, first) {
 		exploded.append(span_arrow, span_norm);
 	}
 	return tr;
+}
+
+function repeated(norm, n = 3) {
+	return Array(Math.max(1, Math.floor(n / [...norm].length))).fill(norm).join('');
 }
 
 // avoid inserting extra dom
