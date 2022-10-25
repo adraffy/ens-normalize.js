@@ -1087,7 +1087,7 @@ function create_link(url, s, cls) {
 	a.href = url;
 	a.innerHTML = s ?? url;
 	if (cls) a.classList.add(cls);
-	if (!url.includes('ens.domains/') && !url.includes('adraffy.github.io/')) {
+	if (!url.includes('ens.domains/') && !url.includes('adraffy.github.io/') && !url.includes('etherscan.io/')) {
 		a.classList.add('third-party');
 	}
 	try {
@@ -1343,6 +1343,9 @@ function create_typed_tag(type, desc) {
 		case 'second': 
 			desc = `⭐️ ${desc}`;
 			break;
+		case 'sad': 
+			desc = `☹️ ${desc}`;
+			break;
 		case 'warn': 
 			desc = `⚠️ ${desc}`;
 			break;
@@ -1492,13 +1495,29 @@ function trim_trailing_decimal_zeros(s) {
 function format_dur(t) {
 	if (t < 1000) return `${Math.ceil(t)}ms`;
 	t /= 1000;
-	if (t < 60) return `${trim_trailing_decimal_zeros(t.toFixed(1))}s`;
-	t /= 60;
-	if (t < 60) return `${trim_trailing_decimal_zeros(t.toFixed(1))}m`;
-	t /= 60;
-	if (t < 24) return `${trim_trailing_decimal_zeros(t.toFixed(1))}h`;
-	t /= 24;
-	return `${trim_trailing_decimal_zeros(t.toFixed(1))}d`;
+	let unit;
+	if (t < 60) {
+		unit = 's';
+	} else {
+		t /= 60;
+		if (t < 60) {
+			unit = 'm';
+		} else {
+			t /= 60;
+			if (t < 24) {
+				unit = 'h';
+			} else {
+				t /= 24;
+				if (t < 365) {
+					unit = 'd';
+				} else {
+					t /= 365;
+					unit = 'y';
+				}
+			}
+		}
+	}
+	return trim_trailing_decimal_zeros(t.toFixed(1)) + unit;
 }
 
 function is_working() {
@@ -1827,7 +1846,7 @@ async function resolve0(input0, skip_norm) {
 	}
 	// check if *.eth	
 	let available;	
-	let owner_prefix = '';
+	let check_nft;
 	if (eth_label) {
 		let hash = ethers.utils.id(eth_label);
 		let avail_err;
@@ -1841,9 +1860,7 @@ async function resolve0(input0, skip_norm) {
 				if (should_stop_resolving()) return;
 				available = await eth_nft_contract.callStatic.available(hash);
 				if (should_stop_resolving()) return;
-				if (!available) {
-					t_exp = (await eth_nft_contract.callStatic.nameExpires(hash)).toNumber();
-				}
+				t_exp = (await eth_nft_contract.callStatic.nameExpires(hash)).toNumber();
 			}
 		} catch (err) {
 			avail_err = err;
@@ -1859,15 +1876,15 @@ async function resolve0(input0, skip_norm) {
 		} else if (available === undefined) {
 			add_row_tag(avail_row, create_typed_tag('fail', `Too Short`));
 		} else if (available) {
-			owner_prefix = 'Old ';
 			add_row_tag(avail_row, create_typed_tag('fire', 'Available'));
 			add_row_tag(avail_row, create_ens_link(name_norm, {title: 'Register'}));
 		} else {
-			add_row_tag(avail_row, create_typed_tag('fail', `Available`));
+			let date = new Date(1000 * t_exp);
+			add_row_tag(avail_row, create_typed_tag('sad', `Registered until ${date.toLocaleDateString()} (${format_dur(date.getTime() - Date.now())})`));
 		}
 
-		let check_nft;
 		if (available === false) {
+			check_nft = hash; 
 			let t_end = t_exp + eth_nft_contract.grace_period;
 			let t_now = Math.round(Date.now() / 1000);
 			if (t_now >= t_exp && t_now <= t_end) {
@@ -1877,13 +1894,13 @@ async function resolve0(input0, skip_norm) {
 				if (t_exp - t_now < 86400 * 60) {
 					add_row_tag(avail_row, `Expires in ${format_dur(1000 * (t_exp - t_now))}`);
 				}
-				check_nft = true;
 			}
 			add_row_tag(avail_row, create_etherscan_address_link(eth_nft_contract.address, {title: 'Contract', contract: true}));
 		}
 
+		/*
 		if (check_nft) {
-			let nft_row = create_row(`${owner_prefix}NFT Owner`, true);
+			let nft_row = create_row(`NFT Owner`, true);
 			output_div.append(nft_row);
 			let nft_owner, nft_error;
 			try {
@@ -1901,9 +1918,9 @@ async function resolve0(input0, skip_norm) {
 				nft_row.append(create_etherscan_address_link(nft_owner));
 				add_row_tag(nft_row, create_copy_btn(nft_owner));
 				add_row_tag(nft_row, create_resolve_btn(nft_owner));
-				nft_row.classList.toggle('old', available);
 			}
 		}
+		*/
 	}			
 	//	return;
 	//}
@@ -1916,12 +1933,17 @@ async function resolve0(input0, skip_norm) {
 		//owner = await resolver._fetch('0x02571be3'); // owner(bytes32)
 		//owner = await resolver._fetch('0x38a699a4'); // exists(bytes32)
 		//owner = await resolver._fetch('0x7dd56411'); // ownerOf(bytes32)
-		let owner_row = create_row(`${owner_prefix}Owner`, true);
+		let owner_row = create_row(available ? 'Previous Owner' : 'Owner', true);
 		let owner_err;
 		output_div.append(owner_row);
 		try {
 			owner = await registry_contract.callStatic.owner(namehash(name_norm));
+			if (should_stop_resolving()) return;
 			if (is_null_hex(owner)) owner = false;
+			if (!owner && check_nft) {
+				owner = await eth_nft_contract.callStatic.ownerOf(check_nft);
+				if (is_null_hex(owner)) owner = false;
+			}
 		} catch (err) {
 			owner_err = err;
 		}
@@ -1952,7 +1974,7 @@ async function resolve0(input0, skip_norm) {
 			}
 
 			if (eth_label) {
-				let cont_row = create_row(`${owner_prefix}Controller`, true);
+				let cont_row = create_row(`Controller`, true);
 				output_div.append(cont_row);
 				let cont;
 				try {
@@ -1978,7 +2000,7 @@ async function resolve0(input0, skip_norm) {
 	let address;
 	if (resolver) {
 		let address_err;
-		let address_row = create_row(`${owner_prefix}ETH Address`, true);
+		let address_row = create_row(`ETH Address`, true);
 		address_row.classList.add(available ? 'old' : 'addr');
 		output_div.append(address_row);	
 		try {
