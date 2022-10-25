@@ -147,6 +147,10 @@ input[type=checkbox]:checked + label.nonstd {
 .row.dns {
 	background:#f5faff; 
 }
+.row.old {
+	opacity: 65%;
+	outline: 1px solid #aaa;
+}
 .row.dns .main {
 	border-bottom-style: dotted;
 }
@@ -220,9 +224,6 @@ button.tags {
 }
 .tags.length {
 	background: var(--length-color);
-}
-.tags.okay {
-	background: #ffc;
 }
 .tags.good {
 	color: #060;
@@ -1231,7 +1232,7 @@ function create_digits_row(name, digits, negative) {
 	let main = document.createElement('span');
 	main.innerText = (negative ? '-' : '') + digits.join('');
 	row.append(main);
-	if (digits.length == 3) {
+	if (digits.length == (negative ? 2 : 3)) {
 		add_row_tag(row, create_typed_tag('fire', 'Shortest'));
 	}
 	if (digits.every((x, i) => x == digits[0])) {
@@ -1806,102 +1807,107 @@ async function resolve0(input0, skip_norm) {
 	}
 	
 	// name doesn't exist
-	if (!resolver) { 
-		add_row_tag(resolver_row, create_typed_tag('warn', `Name Not Found`));	
-		// check if *.eth		
-		if (eth_label) {
-			let hash = ethers.utils.id(eth_label);
-			let available;
-			let avail_err;
-			let t_exp;
-			let len = [...eth_label].length;
-			let avail_row = create_row('Availability', true);
-			output_div.append(avail_row);
-			try {
-				if (len >= 3) {
-					await ensure_eth_nft();
-					if (should_stop_resolving()) return;
-					available = await eth_nft_contract.callStatic.available(hash);
-					if (should_stop_resolving()) return;
-					if (!available) {
-						t_exp = (await eth_nft_contract.callStatic.nameExpires(hash)).toNumber();
-					}
-				}
-			} catch (err) {
-				avail_err = err;
-			}
-			remove_temporary(avail_row);
-			if (should_stop_resolving()) return;
-			add_row_tag(avail_row, create_elapsed()); 
-			add_row_tag(avail_row, create_length_span(len));
-
-			if (avail_err) {
-				avail_row.classList.add('error');
-				add_row_tag(avail_row, create_typed_tag('warn', avail_err));
-			} else if (available === undefined) {
-				add_row_tag(avail_row, create_typed_tag('fail', `Too Short`));
-			} else if (available) {
-				add_row_tag(avail_row, create_typed_tag('good', 'Available'));
-				add_row_tag(avail_row, create_ens_link(name_norm, {title: 'Register'}));
+	if (resolver) { 
+		resolver_row.append(create_etherscan_address_link(resolver.address, {contract: true}));
+		if (is_wildcard) {
+			add_row_tag(resolver_row, create_typed_tag('special', 'Wildcard'));
+			if (wildcard_domain) {
+				add_row_tag(resolver_row, wildcard_domain);
 			} else {
-				add_row_tag(avail_row, create_typed_tag('fail', `Available`));
+				add_row_tag(resolver_row, create_typed_tag('warn', 'Unknown Parent'));
 			}
-
-			let check_nft;
-			if (available === false) {
-				let t_end = t_exp + eth_nft_contract.grace_period;
-				let t_now = Math.round(Date.now() / 1000);
-				if (t_now >= t_exp && t_now <= t_end) {
-					let days = (t_end - t_now) / 86400;
-					add_row_tag(avail_row, `Grace period (${format_dur(1000 * eth_nft_contract.grace_period)}) ends in ${format_dur(1000 * (t_end - t_now))}`);
-				} else {
-					if (t_exp - t_now < 86400 * 60) {
-						add_row_tag(avail_row, `Expires in ${format_dur(1000 * (t_exp - t_now))}`);
-					}
-					check_nft = true;
-				}
-				add_row_tag(avail_row, create_etherscan_address_link(eth_nft_contract.address, {title: 'Contract', contract: true}));
-			}
-
-			if (check_nft) {
-				let nft_row = create_row('NFT Owner', true);
-				output_div.append(nft_row);
-				let nft_owner, nft_error;
-				try {
-					nft_owner = await eth_nft_contract.callStatic.ownerOf(hash);	
-				} catch (err) {
-					nft_error = err;
-				}
-				if (should_stop_resolving()) return;
-				remove_temporary(nft_row);
-				add_row_tag(nft_row, create_elapsed());
-				if (nft_error) {
-					nft_row.classList.add('error');
-					add_row_tag(nft_row, create_typed_tag('warn', nft_error));
-				} else {
-					nft_row.append(create_etherscan_address_link(nft_owner));
-					add_row_tag(nft_row, create_copy_btn(nft_owner));
-					add_row_tag(nft_row, create_resolve_btn(nft_owner));
-				}
-			}
-		}			
-		return;
-	}
-
-	resolver_row.append(create_etherscan_address_link(resolver.address, {contract: true}));
-	if (is_wildcard) {
-		add_row_tag(resolver_row, create_typed_tag('special', 'Wildcard'));
-		if (wildcard_domain) {
-			add_row_tag(resolver_row, wildcard_domain);
+		} else if (resolver.address === '0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41') {
+			add_row_tag(resolver_row, create_typed_tag('good', 'Public Resolver'));
 		} else {
-			add_row_tag(resolver_row, create_typed_tag('warn', 'Unknown Parent'));
+			add_row_tag(resolver_row, create_typed_tag('second', 'Custom'));
 		}
-	} else if (resolver.address === '0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41') {
-		add_row_tag(resolver_row, create_typed_tag('good', 'Public Resolver'));
+		add_row_tag(resolver_row, create_copy_btn(resolver.address));
 	} else {
-		add_row_tag(resolver_row, create_typed_tag('second', 'Custom'));
+		add_row_tag(resolver_row, create_typed_tag('warn', `Name Not Found`));	
 	}
-	add_row_tag(resolver_row, create_copy_btn(resolver.address));
+	// check if *.eth	
+	let available;	
+	let owner_prefix = '';
+	if (eth_label) {
+		let hash = ethers.utils.id(eth_label);
+		let avail_err;
+		let t_exp;
+		let len = [...eth_label].length;
+		let avail_row = create_row('Availability', true);
+		output_div.append(avail_row);
+		try {
+			if (len >= 3) {
+				await ensure_eth_nft();
+				if (should_stop_resolving()) return;
+				available = await eth_nft_contract.callStatic.available(hash);
+				if (should_stop_resolving()) return;
+				if (!available) {
+					t_exp = (await eth_nft_contract.callStatic.nameExpires(hash)).toNumber();
+				}
+			}
+		} catch (err) {
+			avail_err = err;
+		}
+		remove_temporary(avail_row);
+		if (should_stop_resolving()) return;
+		add_row_tag(avail_row, create_elapsed()); 
+		add_row_tag(avail_row, create_length_span(len));
+
+		if (avail_err) {
+			avail_row.classList.add('error');
+			add_row_tag(avail_row, create_typed_tag('warn', avail_err));
+		} else if (available === undefined) {
+			add_row_tag(avail_row, create_typed_tag('fail', `Too Short`));
+		} else if (available) {
+			owner_prefix = 'Old ';
+			add_row_tag(avail_row, create_typed_tag('fire', 'Available'));
+			add_row_tag(avail_row, create_ens_link(name_norm, {title: 'Register'}));
+		} else {
+			add_row_tag(avail_row, create_typed_tag('fail', `Available`));
+		}
+
+		let check_nft;
+		if (available === false) {
+			let t_end = t_exp + eth_nft_contract.grace_period;
+			let t_now = Math.round(Date.now() / 1000);
+			if (t_now >= t_exp && t_now <= t_end) {
+				let days = (t_end - t_now) / 86400;
+				add_row_tag(avail_row, `Grace period (${format_dur(1000 * eth_nft_contract.grace_period)}) ends in ${format_dur(1000 * (t_end - t_now))}`);
+			} else {
+				if (t_exp - t_now < 86400 * 60) {
+					add_row_tag(avail_row, `Expires in ${format_dur(1000 * (t_exp - t_now))}`);
+				}
+				check_nft = true;
+			}
+			add_row_tag(avail_row, create_etherscan_address_link(eth_nft_contract.address, {title: 'Contract', contract: true}));
+		}
+
+		if (check_nft) {
+			let nft_row = create_row(`${owner_prefix}NFT Owner`, true);
+			output_div.append(nft_row);
+			let nft_owner, nft_error;
+			try {
+				nft_owner = await eth_nft_contract.callStatic.ownerOf(hash);	
+			} catch (err) {
+				nft_error = err;
+			}
+			if (should_stop_resolving()) return;
+			remove_temporary(nft_row);
+			add_row_tag(nft_row, create_elapsed());
+			if (nft_error) {
+				nft_row.classList.add('error');
+				add_row_tag(nft_row, create_typed_tag('warn', nft_error));
+			} else {
+				nft_row.append(create_etherscan_address_link(nft_owner));
+				add_row_tag(nft_row, create_copy_btn(nft_owner));
+				add_row_tag(nft_row, create_resolve_btn(nft_owner));
+				nft_row.classList.toggle('old', available);
+			}
+		}
+	}			
+	//	return;
+	//}
+
 	
 	// get the owner
 	let owner;
@@ -1910,27 +1916,30 @@ async function resolve0(input0, skip_norm) {
 		//owner = await resolver._fetch('0x02571be3'); // owner(bytes32)
 		//owner = await resolver._fetch('0x38a699a4'); // exists(bytes32)
 		//owner = await resolver._fetch('0x7dd56411'); // ownerOf(bytes32)
-		let owner_row = create_row('Owner', true);
+		let owner_row = create_row(`${owner_prefix}Owner`, true);
 		let owner_err;
 		output_div.append(owner_row);
 		try {
 			owner = await registry_contract.callStatic.owner(namehash(name_norm));
+			if (is_null_hex(owner)) owner = false;
 		} catch (err) {
 			owner_err = err;
 		}
 		remove_temporary(owner_row);
 		if (should_stop_resolving()) return;
+		add_row_tag(owner_row, create_elapsed());
 
 		if (owner_err) {
 			owner_row.classList.add('error');
 			owner_row.add(create_typed_tag('warn', err));
+		} else if (!owner) {
+			add_row_tag(owner_row, create_typed_tag('good', 'None'));
 		} else {
 			
-			owner_row.classList.add('owner');
+			owner_row.classList.add(available ? 'old' : 'owner');
 			owner_row.append(create_etherscan_address_link(owner));
 			add_row_tag(owner_row, create_copy_btn(owner));
-			add_row_tag(owner_row, create_elapsed());
-
+			//owner_row.classList.toggle('old', available);
 			// if the input was an address, we can validate
 			if (input_is_address) {
 				add_row_tag(reverse_row, create_typed_tag(owner === input ? 'good' : 'fail', 'Owned'));
@@ -1943,72 +1952,77 @@ async function resolve0(input0, skip_norm) {
 			}
 
 			if (eth_label) {
-				let row = create_row('Controller', true);
-				output_div.append(row);
-				let controller;
+				let cont_row = create_row(`${owner_prefix}Controller`, true);
+				output_div.append(cont_row);
+				let cont;
 				try {
 					await ensure_eth_nft();
-					controller = await eth_nft_contract.callStatic.getApproved(labelhash(eth_label));
-					if (is_null_hex(controller)) controller = false;
+					cont = await eth_nft_contract.callStatic.getApproved(labelhash(eth_label));
+					if (is_null_hex(cont)) cont = false;
 				} catch (err) {				
 				}
 				if (should_stop_resolving()) return;
-				if (controller) {
-					row.append(create_etherscan_address_link(controller));
-					add_row_tag(row, create_elapsed());
-					remove_temporary(row);
+				if (cont) {
+					cont_row.append(create_etherscan_address_link(cont));
+					add_row_tag(cont_row, create_elapsed());
+					remove_temporary(cont_row);
+					cont_row.classList.toggle('old', available);
 				} else {
-					row.remove();
+					cont_row.remove();
 				}
 			}
 		}
 	}
 
 	// add address
-	let address, address_err;
-	let address_row = create_row('ETH Address', true);
-	address_row.classList.add('addr');
-	output_div.append(address_row);	
-	try {
-		address = await resolver.getAddress();
-		if (is_null_hex(address)) address = false;
-	} catch (err) {
-		address_err = err;
-	}
-	remove_temporary(address_row);
-	if (should_stop_resolving()) return;
-	if (address_err) {
-		address_row.classList.add('error');
-		add_row_tag(address_row, create_typed_tag('warn', address_err));
-	} else if (!address) {
-		add_row_tag(address_row, create_typed_tag('warn', 'Not Set'));
-	} else {
-		address_row.append(create_etherscan_address_link(address));
-		if (input_is_address) {
-			if (address === input) {
-				add_row_tag(input_row, create_typed_tag('fire', 'Primary'));
-				add_row_tag(address_row, 'Same as Input');
-			} else if (address) {
-				add_row_tag(address_row, create_copy_btn(address));
-				add_row_tag(address_row, create_resolve_btn(address));
-				add_row_tag(address_row, create_typed_tag('warn', 'Different from Owner'));	
-			}
-		} else {
-			if (owner === address) {
-				add_row_tag(address_row, create_typed_tag('good', 'Same as Owner'));	
-			} else {
-				add_row_tag(address_row, create_copy_btn(address));
-				add_row_tag(address_row, create_resolve_btn(address));
-				if (owner) {
-					//add_row_tag(address_row, create_typed_tag('warn', 'Not Owner'));	
-					add_row_tag(address_row, create_typed_tag('fail', 'Owner'));	
-				}
-			}
-			add_row_tag(address_row, create_link(`https://opensea.io/${address}?tab=collected`, OPENSEA_NAME));
-			add_row_tag(address_row, create_link(`https://rainbow.me/${address}`, 'Rainbow'));	
+	let address;
+	if (resolver) {
+		let address_err;
+		let address_row = create_row(`${owner_prefix}ETH Address`, true);
+		address_row.classList.add(available ? 'old' : 'addr');
+		output_div.append(address_row);	
+		try {
+			address = await resolver.getAddress();
+			if (is_null_hex(address)) address = false;
+		} catch (err) {
+			address_err = err;
 		}
+		remove_temporary(address_row);
+		if (should_stop_resolving()) return;
+		if (address_err) {
+			address_row.classList.add('error');
+			add_row_tag(address_row, create_typed_tag('warn', address_err));
+		} else if (!address) {
+			add_row_tag(address_row, create_typed_tag('warn', 'Not Set'));
+		} else {
+			address_row.append(create_etherscan_address_link(address));
+			if (input_is_address) {
+				if (address === input) {
+					add_row_tag(input_row, create_typed_tag('fire', 'Primary'));
+					add_row_tag(address_row, 'Same as Input');
+				} else if (address) {
+					add_row_tag(address_row, create_copy_btn(address));
+					add_row_tag(address_row, create_resolve_btn(address));
+					add_row_tag(address_row, create_typed_tag('warn', 'Different from Owner'));	
+				}
+			} else {
+				if (owner === address) {
+					add_row_tag(address_row, create_typed_tag('good', 'Same as Owner'));	
+				} else {
+					add_row_tag(address_row, create_copy_btn(address));
+					add_row_tag(address_row, create_resolve_btn(address));
+					if (owner) {
+						//add_row_tag(address_row, create_typed_tag('warn', 'Not Owner'));	
+						add_row_tag(address_row, create_typed_tag('fail', 'Owner'));	
+					}
+				}
+				add_row_tag(address_row, create_link(`https://opensea.io/${address}?tab=collected`, OPENSEA_NAME));
+				add_row_tag(address_row, create_link(`https://rainbow.me/${address}`, 'Rainbow'));	
+			}
+		}
+		add_row_tag(address_row, create_elapsed());	
 	}
-	add_row_tag(address_row, create_elapsed());	
+
 	if (input_is_address || !address) return; // nothing more to do
 
 	// lookup primary from eth address 
@@ -2024,6 +2038,8 @@ async function resolve0(input0, skip_norm) {
 	if (should_stop_resolving()) return;
 	add_row_tag(primary_row, create_elapsed());
 	
+	primary_row.classList.toggle('old', available);
+
 	if (primary_err) {
 		primary_row.classList.add('error');
 		add_row_tag(primary_row, create_typed_tag('warn', primary_err));
@@ -2033,6 +2049,8 @@ async function resolve0(input0, skip_norm) {
 		add_row_tag(primary_row, create_typed_tag('warn', 'Not Set'));
 		return;
 	}
+
+
 
 	// primary exists
 	make_exploded(primary_row, primary, false);
