@@ -284,7 +284,7 @@ let keywords = [
 		'Gender: Woman|{2642}',
 		'Family',
 		'Person',
-		`Golden|=\\b(wo)?man\\b,\\bperson\\b!{1F3FB},{1F3FC},{1F3FD},{1F3FE},{1F3FF}`,
+		`Golden|=\\b(wo)?man\\b,\\bperson\\b!{1F3FB},{1F3FC},{1F3FD},{1F3FE},{1F3FF},^flag`,
 		'Light Skin',
 		'Medium-light Skin',
 		'Medium Skin',
@@ -534,15 +534,15 @@ function update_search() {
 		csv_btn.innerText = 'CSV';
 		csv_btn.addEventListener('click', () => {
 			let rows = results.map(x => {
+				let v = [x.form, x.cps.map(hex_cp).join(' '), x.norm, [...x.norm].length];
 				if (x.info) {
-					return `${x.form},"${x.info.name}","${x.cps.map(hex_cp).join(' ')}","${x.info.type}","${x.info.version}"`
-				} else {
-					return x.form;
+					v.push(x.info.name, x.info.type, x.info.version);
 				}
+				return v.map(x => typeof x === 'number' ? x : `"${x}"`).join(',');
 			});
 			let a = document.createElement('a');
 			a.download = 'Emoji.csv';
-			a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent([`Form,Name,Hex,Type,Version,Norm`, ...rows].join('\n'));
+			a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent([`Form,Hex,Norm,Length,Name,Type,Version`, ...rows].join('\n'));
 			a.click();
 		});
 
