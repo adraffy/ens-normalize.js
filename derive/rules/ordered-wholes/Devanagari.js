@@ -20,7 +20,7 @@ export default [
 	//0x93C, // 93C (◌़) DEVANAGARI SIGN NUKTA
 	// "٩"
 	// 669 (٩) ARABIC-INDIC DIGIT NINE (Arab)
-	0x967, // 967 (१) DEVANAGARI DIGIT ONE
+	//0x967, // 967 (१) DEVANAGARI DIGIT ONE (20221025: changed)
 	// "o"
 	// 6F (o) LATIN SMALL LETTER O (Latn)
 	// E50 (๐) THAI DIGIT ZERO (Thai)
@@ -34,5 +34,5 @@ export default [
 	// 6BE (ھ) ARABIC LETTER HEH DOACHASHMEE (Arab)
 	// 6C1 (ہ) ARABIC LETTER HEH GOAL (Arab)
 	// 6D5 (ە) ARABIC LETTER AE (Arab)
-	0x966, // 966 (०) DEVANAGARI DIGIT ZERO
+	//0x966, // 966 (०) DEVANAGARI DIGIT ZERO (20221025: changed)
 ]

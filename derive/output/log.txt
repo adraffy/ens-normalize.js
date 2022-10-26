@@ -1,4 +1,4 @@
-Build Date: 2022-10-25T03:50:20.852Z
+Build Date: 2022-10-26T03:24:11.332Z
 Unicode Version: 15.0.0
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -12017,8 +12017,8 @@ Ordered: Japanese Test(Kana,Hira) Rest(Hani,ALL) Extra(26) Wholes(0)
 Ordered: Han Test(Hani) Rest(ALL) Extra(26) Wholes(0)
 Ordered: Latin Test(Latn) Rest(ALL) Extra(0) Wholes(0)
 Ordered: Thai Test(Thai) Rest() Extra(1) Wholes(0)
-Ordered: Cyrillic Test(Cyrl) Rest(ALL) Extra(0) Wholes(23)
+Ordered: Arabic Test(Arab) Rest() Extra(1) Wholes(8)
+Ordered: Devanagari Test(Deva) Rest() Extra(0) Wholes(0)
 Ordered: Greek Test(Grek) Rest(ALL) Extra(0) Wholes(13)
-Ordered: Devanagari Test(Deva) Rest() Extra(0) Wholes(2)
-Ordered: Arabic Test(Arab) Rest() Extra(1) Wholes(11)
 Ordered: Hebrew Test(Hebr) Rest() Extra(1) Wholes(6)
+Ordered: Cyrillic Test(Cyrl) Rest(ALL) Extra(0) Wholes(23)
