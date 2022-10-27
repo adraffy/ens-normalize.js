@@ -524,12 +524,17 @@ function update_search() {
 			if (x.form.includes(input)) return true;
 		});
 	}
-	let n = results.length;
+	let valid = results.reduce((a, x) => a + (x.info && is_not_emoji(x.info)?0:1), 0);
+	let title = `${valid} result${valid==1?'':'s'} (${(100*valid/emoji_seqs.length).toFixed(2)}%)`;
+	if (valid < results.length) {
+		title += ` +${results.length - valid} disabled`;
+	}
+
 	results_section.innerHTML = `
-		<h2><span class="left">${n} result${n==1?'':'s'} (${(100*n/emoji_seqs.length).toFixed(2)}%)</span><span class="right"></span</h2>
+		<h2><span class="left">${title}</span><span class="right"></span</h2>
 	`;
 
-	if (n) {
+	if (results.length) {
 		let csv_btn = document.createElement('button');
 		csv_btn.innerText = 'CSV';
 		csv_btn.addEventListener('click', () => {
