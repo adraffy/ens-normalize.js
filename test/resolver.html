@@ -1257,7 +1257,7 @@ function create_digits_row(name, digits, negative) {
 	if (negative) {
 		add_row_tag(row, 'Negative');
 	}
-	if (digits[0] == 0) {
+	if (digits[0] === 0) {
 		add_row_tag(row, '0-Pad');
 	}
 	return row;
@@ -1744,27 +1744,29 @@ async function resolve0(input0, skip_norm) {
 		if (tokens.every(t => t.type === 'emoji')) {
 			output_div.append(create_ethmoji_row(tokens));
 		} else {
-			let digits = eth_label;
-			let negative = digits.startsWith('-');
-			if (negative) digits = digits.slice(1);
-			let cps = explode_cp(digits);
-			digits = cps.map(cp => DIGIT_MAP.get(cp));
-			if (digits.every(x => x)) {
-				let values = digits.map(x => x.i);
-				let name0 = digits[0].name;
-				if (digits.every(x => x.name === name0)) {
-					//if (digits[0].reversed) values.reverse(); // LTR
-					output_div.append(create_digits_row(name0, values, negative));
-				} else {
-					let first = digits[0].mixed;
-					if (first && digits.every(x => x.mixed == first)) {
-						let row = create_digits_row('Arabic', values, negative); //values.reverse()); // LTR
-						add_row_tag(row, create_typed_tag('warn', 'Mixed Digits'));
-						output_div.append(row);
+			let number = eth_label;
+			let negative = number.startsWith('-');
+			if (negative) number = number.slice(1);
+			if (number) {
+				let cps = explode_cp(number);
+				let digits = cps.map(cp => DIGIT_MAP.get(cp));
+				if (digits.every(x => x)) {
+					let values = digits.map(x => x.i);
+					let name0 = digits[0].name;
+					if (digits.every(x => x.name === name0)) {
+						//if (digits[0].reversed) values.reverse(); // LTR
+						output_div.append(create_digits_row(name0, values, negative));
 					} else {
-						let row = create_digits_row('Numeric', values, negative);
-						add_row_tag(row, create_typed_tag('warn', 'Multiple Scripts'));
-						output_div.append(row);
+						let first = digits[0].mixed;
+						if (first && digits.every(x => x.mixed == first)) {
+							let row = create_digits_row('Arabic', values, negative); //values.reverse()); // LTR
+							add_row_tag(row, create_typed_tag('warn', 'Mixed Digits'));
+							output_div.append(row);
+						} else {
+							let row = create_digits_row('Numeric', values, negative);
+							add_row_tag(row, create_typed_tag('warn', 'Multiple Scripts'));
+							output_div.append(row);
+						}
 					}
 				}
 			}
