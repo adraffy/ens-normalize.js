@@ -8,7 +8,7 @@ const AZ26 = explode_cp('abcdefghijklmnopqrstuvwxyz');
 // TODO: move allow/deny into rule files: wholes => {wholes, allow, deny}
 export const ORDERED_SCRIPTS = [
 	{name: 'Korean', test: ['Hang'], rest: ['Hani', AUGMENTED_ALL], allow: AZ26},
-	{name: 'Japanese', test: ['Kana', 'Hira'], rest: ['Hani', AUGMENTED_ALL], allow: AZ26, deny: [0x4E00]},
+	{name: 'Japanese', test: ['Kana', 'Hira'], rest: ['Hani', AUGMENTED_ALL], allow: AZ26}, //, deny: [0x4E00]}, grr this is also number 1
 	{name: 'Han', test: ['Hani'], rest: [AUGMENTED_ALL], allow: AZ26},
 	{name: 'Latin', test: ['Latn'], rest: [AUGMENTED_ALL]},
 	{name: 'Cyrillic', test: ['Cyrl'], rest: [AUGMENTED_ALL]},
