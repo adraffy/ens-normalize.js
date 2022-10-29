@@ -19,7 +19,7 @@ export const ORDERED_SCRIPTS = [
 	{name: 'Thai', test: ['Thai'], rest: [], allow: explode_cp('฿')},
 ];
 
-// TODO: give script extensions to restricted
+// TODO: give script extensions to restricted (low priority)
 export const CHANGED_SCRIPTS = {
 	Zyyy: [
 		// relax ethereum symbol
