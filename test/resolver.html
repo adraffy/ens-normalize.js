@@ -617,13 +617,15 @@ Hebrew Geresh:
 <b>Questionable:</b>
 <button>½</button>
 <button>123⁄456</button>
-<button>_-一ー</button>
+<button data-name="あー.〇一.一ー.一.一">CJK One/Sound Mark</button>
+<button data-name="ooo.٥٥٥.०००">ooo</button>
 
 <b>Misc:</b>
-<button data-name="$¢£¤¥₡₦₩₪₫€₭₮₱₲₴₵₸₹₺₼₽₾₿⃀.؋">Currency</button>
+<button data-name="$¢£¤¥₡₦₩₪₫€₭₮₱₲₴₵₸₹₺₼₽₾⃀₿Ξ.؋">Currency</button>
 <button data-name="•-•¬.⌐◨-◨.⌐〇-〇¬">Glasses</button>
 <button>360°</button>
 <button>2πr</button>
+<button>Ξ.≡.☰</button>
 
 <button data-name="ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘꞯʀꜱᴛᴜᴠᴡxʏᴢ">❌ꜱᴍᴀʟʟ ᴄᴀᴘꜱ</button>
 <button data-name="zʎxʍʌnʇsɹbdouɯꞁʞſ̣ᴉɥᵷɟǝpↄqɐ">❌pǝuɹnʇ</button>
@@ -687,6 +689,8 @@ let active_provider = infura_provider;
 let window_provider;
 let registry_contract;
 let eth_nft_contract;
+let price_oracle_contract;
+//let eth_controller_contract;
 
 const EMOJI = ens_emoji();
 
@@ -870,7 +874,6 @@ function update_network(network) {
 		`function owner(bytes32 node) external view returns (address)`,
 	], active_provider);
 	eth_nft_contract = null;
-
 	if (input_field.value) {
 		schedule_resolve(250);
 	}
@@ -941,7 +944,8 @@ function parse() {
 	}
 	if (is_checksum_address(name)) {
 		let row = create_row('Address');
-		row.append(create_etherscan_address_link(name));
+		row.append(create_etherscan_address_link(name));		
+		add_row_tag(row, create_reverse_resolve_btn(name));
 		output_div.append(row);
 		return true;
 	}
@@ -1124,9 +1128,12 @@ function create_copy_btn(s, {title = 'Copy', explode} = {}) {
 	return btn;
 }
 
-function create_resolve_btn(s) {
+function create_reverse_resolve_btn(addr) {
+	return create_resolve_btn(`${addr.slice(2).toLowerCase()}.addr.reverse`, 'Reverse Record');
+}
+function create_resolve_btn(s, title = 'Resolve') {
 	let btn = document.createElement('button');
-	btn.innerHTML = 'Resolve';
+	btn.innerHTML = title;
 	btn.title = s;
 	btn.addEventListener('click', () => {
 		input_field.value = s;
@@ -1208,6 +1215,7 @@ function create_ethmoji_row(tokens) {
 	let span_grade = document.createElement('span');
 	if (tokens.reduce((a, t) => a + t.cps.length, 0) < 3) {
 		add_row_tag(row, 'Too Short');
+
 	} else if (tokens.every(t => t.emoji[2] == 0x20E3)) {
 		if (tokens.length == 2) {
 			add_row_tag(row, create_typed_tag('fire', 'Shortest Keycaps'));
@@ -1631,6 +1639,7 @@ async function resolve0(input0, skip_norm) {
 		input_row = create_row('Address');
 		input_row.append(create_etherscan_address_link(input));
 		add_row_tag(input_row, create_copy_btn(input));
+		add_row_tag(input_row, create_reverse_resolve_btn(input));
 		output_div.append(input_row);
 		
 		reverse_row = normed_row = create_row('Reverse', true);
@@ -1855,6 +1864,7 @@ async function resolve0(input0, skip_norm) {
 		let t_exp;
 		let len = [...eth_label].length;
 		let avail_row = create_row('Availability', true);
+		let premium;
 		output_div.append(avail_row);
 		try {
 			if (len >= 3) {
@@ -1863,6 +1873,10 @@ async function resolve0(input0, skip_norm) {
 				available = await eth_nft_contract.callStatic.available(hash);
 				if (should_stop_resolving()) return;
 				t_exp = (await eth_nft_contract.callStatic.nameExpires(hash)).toNumber();
+				if (available) {
+					if (should_stop_resolving()) return;
+					premium = await price_oracle_contract.callStatic.premium(eth_label, t_exp, 0);
+				}
 			}
 		} catch (err) {
 			avail_err = err;
@@ -1877,9 +1891,20 @@ async function resolve0(input0, skip_norm) {
 			add_row_tag(avail_row, create_typed_tag('warn', avail_err));
 		} else if (available === undefined) {
 			add_row_tag(avail_row, create_typed_tag('fail', `Too Short`));
+			let padded = Array(Math.max(1, 4 - len)).fill(eth_label).join('');
+			add_row_tag(avail_row, create_resolve_btn(`${padded}.eth`, 'Repeat until 3+'));
 		} else if (available) {
-			add_row_tag(avail_row, create_typed_tag('fire', 'Available'));
-			add_row_tag(avail_row, create_ens_link(name_norm, {title: 'Register'}));
+			let btn = document.createElement('button');
+			btn.innerHTML = '👌️ Available to Register';
+			btn.style.outline = '3px solid #afa';
+			btn.addEventListener('click', () => create_ens_link(name_norm).click());
+			add_row_tag(avail_row, btn);
+			let ether = parseFloat(ethers.utils.formatEther(premium));
+			if (ether) {
+				add_row_tag(avail_row, create_typed_tag('warn', `${ether.toFixed(2)} ETH Premium`));
+			}
+			//add_row_tag(avail_row, create_typed_tag('fire', 'Available'));
+			//add_row_tag(avail_row, create_ens_link(name_norm, {title: 'Register'}));
 		} else {
 			let date = new Date(1000 * t_exp);
 			check_nft = hash; 
@@ -1899,8 +1924,8 @@ async function resolve0(input0, skip_norm) {
 					span_reg.innerHTML += ` (${format_dur(1000 * (t_exp - t_now))})`;
 				}
 			}
-			add_row_tag(avail_row, create_etherscan_address_link(eth_nft_contract.address, {title: 'Contract', contract: true}));
 		}
+		add_row_tag(avail_row, create_etherscan_address_link(eth_nft_contract.address, {title: 'Contract', contract: true}));
 
 		/*
 		if (check_nft) {
@@ -2147,14 +2172,23 @@ async function ensure_eth_nft() {
 	// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar
 	let resolver = await active_provider.getResolver('eth');
 	if (!resolver) throw new Error(`No .eth resolver`);
+	let resolver_contract = new ethers.Contract(resolver.address, [
+		'function interfaceImplementer(bytes32 node, bytes4 interfaceID) external view returns (address)'
+	], active_provider);
 	eth_nft_contract = new ethers.Contract(await resolver.getAddress(), [
-		`function available(uint256 id) external view returns(bool)`,
-		`function nameExpires(uint256 id) external view returns(uint256)`,
-		`function ownerOf(uint256 id) external view returns (address)`,
-		`function getApproved(uint256 id) external view returns (address)`,
-		`function GRACE_PERIOD() external view returns (uint256)`,
+		'function available(uint256 id) external view returns(bool)',
+		'function nameExpires(uint256 id) external view returns(uint256)',
+		'function ownerOf(uint256 id) external view returns (address)',
+		'function getApproved(uint256 id) external view returns (address)',
+		'function GRACE_PERIOD() external view returns (uint256)',
 	], active_provider);
 	eth_nft_contract.grace_period = (await eth_nft_contract.callStatic.GRACE_PERIOD()).toNumber();
+	let controller_address = await resolver_contract.callStatic.interfaceImplementer(namehash(resolver.name), '0x018fac06');
+	// https://etherscan.io/address/0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5#code
+	let price_oracle_address = await active_provider.getStorageAt(controller_address, 2);
+	price_oracle_contract = new ethers.Contract('0x' + price_oracle_address.slice(-40), [
+		'function premium(string calldata name, uint256 expires, uint256 duration) external view returns (uint256)',
+	], active_provider);
 }
 
 function is_checksum_address(s) {

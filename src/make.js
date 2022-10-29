@@ -202,8 +202,9 @@ for (let [_, cps] of scripts) {
 	write_valid_sorted(cps);
 }
 enc.write_member([]);
-for (let {wholes, extra} of ordered) {
-	write_valid_sorted(extra);
+for (let {wholes, allow, deny} of ordered) {
+	write_valid_sorted(allow);
+	write_valid_sorted(deny);
 	write_valid_sorted(wholes);
 }
 /*

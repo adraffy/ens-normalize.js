@@ -427,21 +427,21 @@ function register_ordered(name, set) {
 }
 // ALL must go first
 register_ordered(AUGMENTED_ALL, new Set(['Zinh', 'Zyyy'].flatMap(abbr => [...SCRIPTS.require(abbr).valid])));
-let ordered = await Promise.all(ORDERED_SCRIPTS.map(async ({name, test, rest, extra = []}) => {
+let ordered = await Promise.all(ORDERED_SCRIPTS.map(async ({name, test, rest, allow = [], deny = []}) => {
 	test = test.map(abbr => register_ordered(abbr));
 	rest = rest.map(abbr => register_ordered(abbr));
-	for (let cp of extra) {
+	for (let cp of [allow, deny].flat()) {
 		if (!valid.has(cp)) {
-			throw new Error(`Expected valid: ${UNICODE.format(cp)}`);
+			throw new Error(`Expected ordered ${name} valid: ${UNICODE.format(cp)}`);
 		}
 	}
-	let union = new Set([[test, rest].flat().flatMap(x => [...x.set]), extra].flat());
+	let union = new Set([[test, rest].flat().flatMap(x => [...x.set]), allow].flat());
 	let wholes = (await read_wholes(new URL(`./rules/ordered-wholes/${name}.js`, import.meta.url))).filter(cp => union.has(cp));
-	console.log(`Ordered: ${name} Test(${test.map(x => x.name)}) Rest(${rest.map(x => x.name)}) Extra(${extra.length}) Wholes(${wholes.length})`);
+	console.log(`Ordered: ${name} Test(${test.map(x => x.name)}) Rest(${rest.map(x => x.name)}) Allow(${allow.length}) Deny(${deny.length}) Wholes(${wholes.length})`);
 	// convert to indices
 	test = test.map(x => x.index);
 	rest = rest.map(x => x.index);
-	return {name, test, rest, extra, wholes};
+	return {name, test, rest, allow, deny, wholes};
 }));
 
 

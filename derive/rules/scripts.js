@@ -4,19 +4,22 @@ import {AUGMENTED_ALL} from '../unicode-logic.js';
 const AZ26 = explode_cp('abcdefghijklmnopqrstuvwxyz');
 
 // order here is important
+// TODO: move non-restricted scripts into this format
+// TODO: move allow/deny into rule files: wholes => {wholes, allow, deny}
 export const ORDERED_SCRIPTS = [
-	{name: 'Korean', test: ['Hang'], rest: ['Hani', AUGMENTED_ALL], extra: AZ26},
-	{name: 'Japanese', test: ['Kana', 'Hira'], rest: ['Hani', AUGMENTED_ALL], extra: AZ26},
-	{name: 'Han', test: ['Hani'], rest: [AUGMENTED_ALL], extra: AZ26},
+	{name: 'Korean', test: ['Hang'], rest: ['Hani', AUGMENTED_ALL], allow: AZ26},
+	{name: 'Japanese', test: ['Kana', 'Hira'], rest: ['Hani', AUGMENTED_ALL], allow: AZ26, deny: [0x4E00]},
+	{name: 'Han', test: ['Hani'], rest: [AUGMENTED_ALL], allow: AZ26},
 	{name: 'Latin', test: ['Latn'], rest: [AUGMENTED_ALL]},
 	{name: 'Cyrillic', test: ['Cyrl'], rest: [AUGMENTED_ALL]},
 	{name: 'Greek', test: ['Grek'], rest: [AUGMENTED_ALL]}, // rest: [], extra: explode_cp('πξ')},
-	{name: 'Arabic', test: ['Arab'], rest: [], extra: explode_cp('-')},
+	{name: 'Arabic', test: ['Arab'], rest: [], allow: explode_cp('-')},
 	{name: 'Devanagari', test: ['Deva'], rest: []},
-	{name: 'Hebrew', test: ['Hebr'], rest: [], extra: explode_cp('₪')},
-	{name: 'Thai', test: ['Thai'], rest: [], extra: explode_cp('฿')},
+	{name: 'Hebrew', test: ['Hebr'], rest: [], allow: explode_cp('₪')},
+	{name: 'Thai', test: ['Thai'], rest: [], allow: explode_cp('฿')},
 ];
 
+// TODO: give script extensions to restricted
 export const CHANGED_SCRIPTS = {
 	Zyyy: [
 		// relax ethereum symbol
@@ -62,6 +65,7 @@ export const CHANGED_SCRIPTS = {
 
 export const RESTRICTED_SCRIPTS = [
 
+	// moved to ordered
 	//'Arab', // Arabic -- 15000 pure, underscores, only 11 latin mixed (spoofs), and "0x"
 	//'Deva', // Devanagari -- 2700 pure but 4
 	//'Hebr', // Hebrew -- 1466 pure, 17 spoofs with Latin

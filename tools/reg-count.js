@@ -36,17 +36,22 @@ function main(args) {
 		}
 		console.log(`Found: ${found}`);
 	} else if (args[0] === 'script') {
-		let script = SCRIPTS.require(args[1]);
+		args.shift();
+		let script = SCRIPTS.require(args.shift());
 		let filter = new Set();
 		for (let cp of script.set) {
 			filter.add(cp);
 		}
-		dump_filter(filter);
+		let filters = [filter];
+		if (args.length) {
+			filters.push(new Set(args.flatMap(parse_cp_range)));
+		}
+		filters.forEach(dump_filter);
 		let found = [];
 		let tally = {};
 		for (let label of read_labels()) {
 			let cps = explode_cp(label);
-			if (cps.some(cp => filter.has(cp))) {
+			if (filters.every(f => cps.some(cp => f.has(cp)))) {
 				let key = [...SCRIPTS.get_script_set(cps)].sort().join('_');
 				tally[key] = (tally[key] ?? 0) + 1;
 				found.push(label);
@@ -105,21 +110,22 @@ function main(args) {
 		console.log(tally);
 	} else {
 		let filter = new Set();
-		let pos = args.indexOf('--');
-		if (pos == -1) pos = args.length;
-		for (let i = 0; i < pos; i++) {
-			for (let cp of parse_cp_range(args[i])) {
-				filter.add(cp);
+		let filters = [filter];
+		for (let arg of args) {
+			if (arg == '+') {
+				filter = new Set();
+				filters.push(filter);
+			} else {
+				for (let cp of parse_cp_range(arg)) {
+					filter.add(cp);
+				}
 			}
 		}
-		for (let cp of explode_cp(args.slice(pos).join(''))) {
-			filter.add(cp);
-		}
-		dump_filter(filter);	
+		filters.forEach(dump_filter);
 		let found = [];
 		for (let label of read_labels()) {
 			let cps = explode_cp(label);
-			if (cps.some(cp => filter.has(cp))) {
+			if (filters.every(f => cps.some(cp => f.has(cp)))) {
 				found.push(label);
 			}
 		}

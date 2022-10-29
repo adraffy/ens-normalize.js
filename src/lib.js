@@ -35,7 +35,7 @@ const SCRIPTS = read_valid_subsets(); // [0] is ALL
 const ORDERED = ORDERED_SCRIPTS.map(({name, test, rest}) => {
 	test = test.map(i => SCRIPTS[i]);
 	rest = [test, rest.map(i => SCRIPTS[i])].flat();
-	return {name, test, rest, extra: read_valid_subset(), wholes: read_valid_subset()};
+	return {name, test, rest, allow: read_valid_subset(), deny: read_valid_subset(), wholes: read_valid_subset()};
 });
 const RESTRICTED_WHOLES = read_valid_subset();
 const RESTRICTED = read_valid_subsets();
@@ -63,6 +63,9 @@ function check_leading_underscore(cps) {
 	return e + 1;
 }
 
+// create a safe to print string 
+// invisibles are escaped
+// leading cm use placeholder
 export function safe_str_from_cps(cps, quoter = quote_cp) {
 	let buf = [];
 	if (is_printable_mark(cps[0])) buf.push('◌');
@@ -121,12 +124,17 @@ function check_middle_dot(cps) {
 */
 
 function check_scripts(cps) {
-	for (let {name, test, rest, extra, wholes} of ORDERED) {
+	for (let {name, test, rest, allow, deny, wholes} of ORDERED) {
 		if (cps.some(cp => test.some(set => set.has(cp)))) {
-			// https://www.unicode.org/reports/tr39/#mixed_script_confusables
-			let bad = cps.find(cp => !rest.some(set => set.has(cp)) && !extra.has(cp)); // should just show first char
-			if (bad >= 0) {
-				throw new Error(`mixed-script ${name} confusable: "${str_from_cps([bad])}"`);
+			for (let cp of cps) {
+				// https://www.unicode.org/reports/tr39/#mixed_script_confusables
+				if (!rest.some(set => set.has(cp)) && !allow.has(cp)) {
+					throw new Error(`mixed-script ${name} confusable: "${safe_str_from_cps([cp])}"`);
+				}
+				// https://www.unicode.org/reports/tr39/#single_script_confusables
+				if (deny.has(cp)) {
+					throw new Error(`single-script ${name} confusable: "${safe_str_from_cps([cp])}"`);
+				}
 			}
 			// https://www.unicode.org/reports/tr39/#def_whole_script_confusables
 			if (cps.every(cp => wholes.has(cp) || SCRIPTS[0].has(cp))) {
@@ -206,7 +214,19 @@ export function ens_normalize(name) {
 }
 
 export function ens_beautify(name) {
-	return flatten(ens_split(name, x => x));
+	let split = ens_split(name, x => x);
+	for (let {script, output} of split) {
+		if (script !== 'Greek') {
+			let prev = 0;
+			while (true) {
+				let next = output.indexOf(0x3BE, prev);
+				if (next < 0) break;
+				output[next] = 0x39E; // ξ => Ξ if not greek
+				prev = next + 1;
+			}
+		}
+	}
+	return flatten(split);
 }
 
 export function ens_split(name, emoji_filter = filter_fe0f) {
@@ -215,7 +235,7 @@ export function ens_split(name, emoji_filter = filter_fe0f) {
 		let input = explode_cp(label);
 		let info = {
 			input,
-			offset, // codepoint not string!
+			offset, // codepoint, not string!
 		};
 		offset += input.length + 1;
 		try {
@@ -227,7 +247,7 @@ export function ens_split(name, emoji_filter = filter_fe0f) {
 			check_label_extension(norm);
 			let decomp = nfd(mapped.map(x => Array.isArray(x) ? FE0F : x)); // replace emoji with single character placeholder
 			if (check_restricted_scripts(decomp)) {
-				info.script = mapped.every(x => Array.isArray(x)) ? COMMON : 'Restricted';
+				info.script = mapped.every(x => Array.isArray(x)) ? COMMON : 'Restricted'; // name might be all emoji
 			} else {
 				check_combining_marks(decomp);
 				check_surrounding(norm, 0x2019, 'apostrophe', true, true); // question: can this be generalized better?
