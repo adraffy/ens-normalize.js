@@ -14,6 +14,7 @@ export const CM_DISALLOWED = [
 export const CM_WHITELIST = [
 
 	// === Latn ===
+	// note: this is only a subset of the exemplars
 	// vietnamese want "ơưđ" but too dangerous
 
 	'à', // E0 (à) LATIN SMALL LETTER A WITH GRAVE
@@ -54,6 +55,7 @@ export const CM_WHITELIST = [
 	'õ', // F5 (õ) LATIN SMALL LETTER O WITH TILDE
 	'ö', // F6 (ö) LATIN SMALL LETTER O WITH DIAERESIS
 	'ǒ', // 1D2 (ǒ) LATIN SMALL LETTER O WITH CARON
+	'ō', // 14D (ō) LATIN SMALL LETTER O WITH MACRON (20221029: added for dutch)
 
 	'š', // 161 (š) LATIN SMALL LETTER S WITH CARON
 
@@ -62,6 +64,7 @@ export const CM_WHITELIST = [
 	'û', // FB (û) LATIN SMALL LETTER U WITH CIRCUMFLEX
 	'ü', // FC (ü) LATIN SMALL LETTER U WITH DIAERESIS
 	'ǔ', // 1D4 (ǔ) LATIN SMALL LETTER U WITH CARON
+	'ū', // 16B (ū) LATIN SMALL LETTER U WITH MACRON (20221029: added)
 
 	'ý', // FD (ý) LATIN SMALL LETTER Y WITH ACUTE
 

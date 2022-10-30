@@ -626,6 +626,7 @@ Hebrew Geresh:
 <button>360°</button>
 <button>2πr</button>
 <button>Ξ.≡.☰</button>
+<button>◊⟠⧫</button>
 
 <button data-name="ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘꞯʀꜱᴛᴜᴠᴡxʏᴢ">❌ꜱᴍᴀʟʟ ᴄᴀᴘꜱ</button>
 <button data-name="zʎxʍʌnʇsɹbdouɯꞁʞſ̣ᴉɥᵷɟǝpↄqɐ">❌pǝuɹnʇ</button>
@@ -669,8 +670,11 @@ Hebrew:
 <li>Use <code>{FF}</code> or <code>[255]</code> to manually include codepoints, eg. <button data-escape data-name="a{200D}b.eth">ZWJ</button></li>
 <li>Input <code>"0123 4567 89AB CDEF"</code> to interpret as hex codepoints.</li>
 <li><a href="#vitalik.eth"><b>Copy Link</b></a> to get a URL that resolves on page-load.</li>
-<li><a href="./emoji.html">Find supported Emoji</a></li>
-<li><a href="./chars.html">Browse supported Characters</a></li>
+<li><a href="./emoji.html">Find Supported Emoji</a></li>
+<li><a href="./chars.html">Browse Supported Characters</a></li>
+<li><a href="https://raffy.antistupid.com/eth/ens-regs.html">Recent Registrations</a></li>
+<li><a href="https://adraffy.github.io/punycode.js/test/demo.html">Punycode Coder</a></li>
+<li><a href="https://adraffy.github.io/keccak.js/test/demo.html">Keccak Hasher</a></li>
 </ul>
 </div>
 <footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
@@ -1389,7 +1393,7 @@ function create_details_row(name, before) {
 
 	let hash_span = document.createElement('span');
 	hash_span.classList.add('wide');
-	hash_span.innerHTML = `<b>Namehash:</b> <code>${namehash(name)}</code>`;
+	hash_span.innerHTML = `<a href="https://adraffy.github.io/keccak.js/test/demo.html#algo=namehash&s=${encodeURIComponent(name)}">Namehash:</a> <code>${namehash(name)}</code>`;
 	row.append(hash_span);
 
 	let split = ens_split(name);

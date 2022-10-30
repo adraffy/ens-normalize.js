@@ -3,6 +3,7 @@ export default [
 	// non-RGI emoji should NOT be whitelisted
 	// this should only be for PRE-RELEASE emoji sequences	
 	// https://discuss.ens.domains/t/ens-name-normalization-2nd/14564/16
+
 	/*
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/24
 	// MEN WRESTLING

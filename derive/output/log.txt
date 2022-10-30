@@ -1,4 +1,4 @@
-Build Date: 2022-10-29T08:26:56.953Z
+Build Date: 2022-10-30T00:28:29.520Z
 Unicode Version: 15.0.0
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -7731,11 +7731,11 @@ Removed Valid: 298 (ʘ) LATIN LETTER BILABIAL CLICK
 *** Already disallowed: 2B2D (⬭) WHITE HORIZONTAL ELLIPSE
 *** Already disallowed: 2B2F (⬯) WHITE VERTICAL ELLIPSE
 Removed Valid: 1F541 (🕁) CROSS POMMEE WITH HALF-CIRCLE BELOW
-Removed Valid: 25CA (◊) LOZENGE
-Removed Valid: 29EB (⧫) BLACK LOZENGE
-Removed Valid: 27E0 (⟠) LOZENGE DIVIDED BY HORIZONTAL RULE
+Removed Valid: 2B27 (⬧) BLACK MEDIUM LOZENGE
+Removed Valid: 2B28 (⬨) WHITE MEDIUM LOZENGE
 Removed Valid: 2B2A (⬪) BLACK SMALL LOZENGE
 Removed Valid: 2B2B (⬫) WHITE SMALL LOZENGE
+Removed Valid: 2BD1 (⯑) UNCERTAINTY SIGN
 Removed Valid: 1F79D (🞝) BLACK TINY LOZENGE
 Removed Valid: 1F79E (🞞) BLACK VERY SMALL LOZENGE
 Removed Valid: 1F79F (🞟) BLACK MEDIUM SMALL LOZENGE
@@ -7746,7 +7746,6 @@ Removed Valid: 1F799 (🞙) BLACK MEDIUM SMALL DIAMOND
 Removed Valid: 1F79A (🞚) WHITE DIAMOND CONTAINING BLACK VERY SMALL DIAMOND
 Removed Valid: 1F79B (🞛) WHITE DIAMOND CONTAINING BLACK MEDIUM DIAMOND
 Removed Valid: 1F79C (🞜) DIAMOND TARGET
-Removed Valid: 2BD1 (⯑) UNCERTAINTY SIGN
 Removed Valid: 29CA (⧊) TRIANGLE WITH DOT ABOVE
 Removed Valid: 29CB (⧋) TRIANGLE WITH UNDERBAR
 Removed Valid: 29CC (⧌) S IN TRIANGLE
@@ -11276,8 +11275,6 @@ Removed Valid: 146 (ņ) LATIN SMALL LETTER N WITH CEDILLA
 --Mapping: 145 (Ņ) LATIN CAPITAL LETTER N WITH CEDILLA => 146 (ņ) LATIN SMALL LETTER N WITH CEDILLA
 Removed Valid: 148 (ň) LATIN SMALL LETTER N WITH CARON
 --Mapping: 147 (Ň) LATIN CAPITAL LETTER N WITH CARON => 148 (ň) LATIN SMALL LETTER N WITH CARON
-Removed Valid: 14D (ō) LATIN SMALL LETTER O WITH MACRON
---Mapping: 14C (Ō) LATIN CAPITAL LETTER O WITH MACRON => 14D (ō) LATIN SMALL LETTER O WITH MACRON
 Removed Valid: 14F (ŏ) LATIN SMALL LETTER O WITH BREVE
 --Mapping: 14E (Ŏ) LATIN CAPITAL LETTER O WITH BREVE => 14F (ŏ) LATIN SMALL LETTER O WITH BREVE
 Removed Valid: 151 (ő) LATIN SMALL LETTER O WITH DOUBLE ACUTE
@@ -11300,8 +11297,6 @@ Removed Valid: 165 (ť) LATIN SMALL LETTER T WITH CARON
 --Mapping: 164 (Ť) LATIN CAPITAL LETTER T WITH CARON => 165 (ť) LATIN SMALL LETTER T WITH CARON
 Removed Valid: 169 (ũ) LATIN SMALL LETTER U WITH TILDE
 --Mapping: 168 (Ũ) LATIN CAPITAL LETTER U WITH TILDE => 169 (ũ) LATIN SMALL LETTER U WITH TILDE
-Removed Valid: 16B (ū) LATIN SMALL LETTER U WITH MACRON
---Mapping: 16A (Ū) LATIN CAPITAL LETTER U WITH MACRON => 16B (ū) LATIN SMALL LETTER U WITH MACRON
 Removed Valid: 16D (ŭ) LATIN SMALL LETTER U WITH BREVE
 --Mapping: 16C (Ŭ) LATIN CAPITAL LETTER U WITH BREVE => 16D (ŭ) LATIN SMALL LETTER U WITH BREVE
 Removed Valid: 16F (ů) LATIN SMALL LETTER U WITH RING ABOVE
@@ -11862,7 +11857,7 @@ Removed Valid: 4F5 (ӵ) CYRILLIC SMALL LETTER CHE WITH DIAERESIS
 --Mapping: 4F4 (Ӵ) CYRILLIC CAPITAL LETTER CHE WITH DIAERESIS => 4F5 (ӵ) CYRILLIC SMALL LETTER CHE WITH DIAERESIS
 Removed Valid: 4F9 (ӹ) CYRILLIC SMALL LETTER YERU WITH DIAERESIS
 --Mapping: 4F8 (Ӹ) CYRILLIC CAPITAL LETTER YERU WITH DIAERESIS => 4F9 (ӹ) CYRILLIC SMALL LETTER YERU WITH DIAERESIS
-CM Isolated: 110100
+CM Isolated: 110103
 Removed Mapped: 130 (İ) LATIN CAPITAL LETTER I WITH DOT ABOVE => [69 307]
 Restricted [Beng]: All(96) Valid(91) Restricted(89)
 Restricted [Taml]: All(123) Valid(123) Restricted(119)
@@ -12015,10 +12010,10 @@ Restricted Wholes: 455
 Ordered: Korean Test(Hang) Rest(Hani,ALL) Allow(26) Deny(0) Wholes(0)
 Ordered: Latin Test(Latn) Rest(ALL) Allow(0) Deny(0) Wholes(0)
 Ordered: Thai Test(Thai) Rest() Allow(1) Deny(0) Wholes(0)
-Ordered: Japanese Test(Kana,Hira) Rest(Hani,ALL) Allow(26) Deny(0) Wholes(1)
 Ordered: Han Test(Hani) Rest(ALL) Allow(26) Deny(0) Wholes(1)
-Ordered: Cyrillic Test(Cyrl) Rest(ALL) Allow(0) Deny(0) Wholes(26)
-Ordered: Arabic Test(Arab) Rest() Allow(1) Deny(0) Wholes(8)
-Ordered: Devanagari Test(Deva) Rest() Allow(0) Deny(0) Wholes(0)
 Ordered: Greek Test(Grek) Rest(ALL) Allow(0) Deny(0) Wholes(13)
+Ordered: Japanese Test(Kana,Hira) Rest(Hani,ALL) Allow(26) Deny(0) Wholes(1)
+Ordered: Devanagari Test(Deva) Rest() Allow(0) Deny(0) Wholes(0)
+Ordered: Arabic Test(Arab) Rest() Allow(1) Deny(0) Wholes(8)
 Ordered: Hebrew Test(Hebr) Rest() Allow(1) Deny(0) Wholes(6)
+Ordered: Cyrillic Test(Cyrl) Rest(ALL) Allow(0) Deny(0) Wholes(26)
