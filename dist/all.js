@@ -807,7 +807,7 @@ function check_group(g, cps) {
 	// https://www.unicode.org/reports/tr39/#def_whole_script_confusables
 	for (let set of W) {
 		if (cps.every(cp => set.has(cp))) {
-			throw new Error(`spoofable`);
+			throw new Error(`whole-label confusable`);
 		}
 	}
 }
