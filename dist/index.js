@@ -712,7 +712,10 @@ function determine_group(cps) {
 function flatten(split) {
 	return split.map(({input, error, output}) => {
 		// don't print label again if just a single label
-		if (error) throw new Error(split.length == 1 ? error : `Invalid label "${safe_str_from_cps(input)}": ${error.message}`);
+		if (error) {
+			let msg = error.message;
+			throw new Error(split.length == 1 ? msg : `Invalid label "${safe_str_from_cps(input)}": ${msg}`);
+		}
 		return str_from_cps(output);
 	}).join(STOP_CH);
 }
