@@ -1,32 +1,36 @@
-import {UNICODE} from '../derive/unicode-version.js';
-import {read_spec} from './data.js';
+// print out all decimal digits
 
-let valid = new Set(read_spec().valid);
+import {UNICODE} from '../derive/unicode-version.js';
+import {ens_normalize} from '../src/lib.js';
 
 let buckets = new Map();
-for (let info of UNICODE.chars) {
-	if (!Number.isInteger(info.dec)) continue;
-	let pos = info.name.lastIndexOf(' '); // meh
-	let prefix = info.name.slice(0, pos).trim();
+for (let char of UNICODE.char_map.values()) {
+	if (!Number.isInteger(char.dec)) continue;
+	let pos = char.name.lastIndexOf(' '); // meh
+	let prefix = char.name.slice(0, pos).trim();
 	let bucket = buckets.get(prefix);
 	if (!bucket) {
 		bucket = Array(10).fill(null);
 		buckets.set(prefix, bucket);
 	}
-	bucket[info.dec] = info;
+	bucket[char.dec] = char;
 }
 
 for (let [k, v] of buckets.entries()) {
 	if (!v.every(x => x)) {
 		buckets.delete(k);
-		console.log(`Partial: ${k}`);
+		console.log(`*** Not Decimal: ${k}`);
+		continue;
 	}
-}
-
-for (let [k, v] of buckets.entries()) {
-	if (!v.every(info => valid.has(info.cp))) {
+	try {
+		let name = String.fromCodePoint(...v.map(x => x.cp));
+		let norm = ens_normalize(name);
+		if (name !== norm) {
+			console.log(`[${k}] "${name}" => "${norm}"`);
+		}
+	} catch (err) {
 		buckets.delete(k);
-		console.log(`Not Valid: ${k}`);
+		console.log(`*** Unable to Normalize: ${k} => ${err.message}`);
 	}
 }
 

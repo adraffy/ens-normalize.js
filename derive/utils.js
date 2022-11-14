@@ -1,3 +1,28 @@
+export function print_section(s) {
+	console.log(`==== ${s} ====`); 
+}
+
+export function print_checked(s = 'OK') {
+	console.log(`[✓] ${s}`)
+}
+
+export function print_table(cols, m, sep = ' | ') {
+	let widths = cols.map((_, i) => m.reduce((a, v) => Math.max(a, String(v[i]).length), 0));
+	console.log(cols.map((x, i) => {
+		let w = widths[i];
+		return x.slice(0, w).padEnd(w);
+	}).join(sep));
+	for (let v of m) {
+		console.log(v.map((x, i) => {
+			let w = widths[i];
+			if (typeof x === 'number') {
+				return x.toString().padStart(w);
+			} else {
+				return x;
+			}
+		}).join(sep));
+	}
+}
 
 export function parse_version(s) {
 	let match = s.match(/^(\d+)(\.(\d+)(\.(\d+))?)?$/);
@@ -16,6 +41,32 @@ export function version_ordinal(x) {
 	return x.major + (1 - 1/(1 + x.minor + (1 - 1/(1 + x.patch)))); // use continued fraction expansion
 }
 
+// returns single reference
+export function* permutations(v) {
+	let n = v.length;
+	if (!n) return;
+	v = v.slice();
+	yield v;
+	if (n == 1) return;
+	let u = Array(n).fill(0);
+	let i = 1;
+	while (i < n) {
+		if (u[i] < i) {
+			let swap = i&1 ? u[i] : 0;
+			let temp = v[swap];
+			v[swap] = v[i];
+			v[i] = temp;
+			yield v;
+			u[i]++;
+			i = 1;
+		} else {
+			u[i] = 0;
+			i++;
+		}
+	}
+}
+
+
 export function group_by(iterable, fn) {
 	let map = new Map();
 	for (let x of iterable) {
@@ -28,6 +79,19 @@ export function group_by(iterable, fn) {
 		bucket.push(x);
 	}
 	return map;
+}
+
+export const MAX_CP = 0x10FFFF;
+
+export function require_cp(cp) {
+	if (!Number.isSafeInteger(cp) || cp < 0 || cp > MAX_CP) { // ignore upper
+		throw new TypeError(`expected codepoint: ${cp}`);
+	}
+	return cp;
+}
+
+export function quote_cp(cp) {
+	return `{${hex_cp(cp)}}`;
 }
 
 export function hex_cp(cp) {
@@ -53,12 +117,9 @@ export function explode_cp(x) {
 // hex to dec
 export function parse_cp(s) {
 	if (/^[0-9a-f]+$/i.test(s)) {
-		let cp = parseInt(s, 16);
-		if (Number.isSafeInteger(cp) && cp >= 0) {
-			return cp;
-		}
+		return require_cp(parseInt(s, 16));
 	}
-	throw new TypeError(`expected code point: ${s}`);
+	throw new TypeError(`expected hex codepoint: ${s}`);
 }
 
 // "AAAA"      => [0xAAAA]

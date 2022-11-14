@@ -1,4 +1,5 @@
 import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
 
 export function read_labels() {
 	try {
@@ -27,4 +28,8 @@ export function read_spec() {
 		console.log('Missing "spec.json".  Try running `npm run derive`');
 		throw new Error('spec');
 	} 
+}
+
+export function compute_spec_hash() {
+	return createHash('sha256').update(readFileSync(SPEC_FILE)).digest('hex');
 }

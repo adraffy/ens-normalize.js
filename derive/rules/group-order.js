@@ -1,0 +1,36 @@
+// Computed: 2022-11-13T21:47:53.548Z
+export default [
+	'ASCII', // 1390987
+	'Latin', // 37004
+	'Emoji', // 26222
+	'Han', // 19332
+	'Common', // 17741
+	'error', // 14142
+	'Arabic', // 11192
+	'Devanagari', // 2363
+	'Korean', // 2036
+	'Japanese', // 1991
+	'Hebrew', // 1413
+	'Cyrillic', // 1111
+	'Thai', // 1054
+	'Bengali', // 770
+	'Bopomofo', // 308
+	'Tamil', // 267
+	'Greek', // 237
+	'Restricted', // 185
+	'Tibetan', // 162
+	'Lao', // 50
+	'Gurmukhi', // 32
+	'Telugu', // 25
+	'Armenian', // 19
+	'Khmer', // 18
+	'Gujarati', // 15
+	'Ethiopic', // 15
+	'Malayalam', // 14
+	'Georgian', // 14
+	'Myanmar', // 12
+	'Kannada', // 10
+	'Oriya', // 5
+	'Sinhala', // 4
+	'None', // 2
+];

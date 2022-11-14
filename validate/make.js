@@ -1,10 +1,9 @@
 import {readFileSync, writeFileSync} from 'node:fs';
 import {UNICODE} from '../derive/unicode-version.js';
-import {parse_cp_sequence, mulberry32} from '../derive/utils.js';
+import {parse_cp_sequence, mulberry32, print_section, print_checked} from '../derive/utils.js';
 import {ens_normalize, ens_emoji, ens_beautify} from '../src/lib.js';
 import {random_sample, run_tests} from '../src/utils.js';
-import {read_labels, read_random, read_spec, SPEC_FILE} from './data.js';
-import {createHash} from 'node:crypto';
+import {read_labels, read_random, read_spec, compute_spec_hash} from './data.js';
 
 // get custom tests
 const CUSTOM_TESTS = JSON.parse(readFileSync(new URL('./custom-tests.json', import.meta.url)));
@@ -37,6 +36,7 @@ const REQUIRE_PASS = new Set();
 const REQUIRE_FAIL = new Set();
 const EXPECT_PASS = new Set();
 const EXPECT_FAIL = new Set();
+const EXPECT_IGNORED = new Set();
 
 // make tests from library
 for (let cps of ens_emoji()) {
@@ -55,19 +55,31 @@ for (let [x] of (await import('../derive/rules/chars-mapped.js')).default) {
 for (let cp of (await import('../derive/rules/chars-valid.js')).default) {
 	EXPECT_PASS.add(String.fromCodePoint(cp));
 }
-for (let cp of (await import('../derive/rules/emoji-demoted.js')).default) {
+import {EMOJI_DEMOTED, EMOJI_DISABLED, EMOJI_SEQ_BLACKLIST, EMOJI_SEQ_WHITELIST} from '../derive/rules/emoji.js';
+for (let cp of EMOJI_DEMOTED) {
 	EXPECT_PASS.add(String.fromCodePoint(cp));
 }
-for (let s of (await import('../derive/rules/emoji-seq-blacklist.js')).default) {
-	REQUIRE_FAIL.add(String.fromCodePoint(...parse_cp_sequence(s)));
+for (let cp of EMOJI_DISABLED) {
+	REQUIRE_FAIL.add(String.fromCodePoint(cp));
 }
-for (let {hex} of (await import('../derive/rules/emoji-seq-whitelist.js')).default) {
+for (let hex of EMOJI_SEQ_BLACKLIST) {
+	REQUIRE_FAIL.add(String.fromCodePoint(...parse_cp_sequence(hex)));
+}
+for (let {hex} of EMOJI_SEQ_WHITELIST) {
 	EXPECT_PASS.add(String.fromCodePoint(...parse_cp_sequence(hex)));
 }
 
 // make tests from unicode spec
-for (let cp of UNICODE.props().White_Space) {
-	EXPECT_FAIL.add(String.fromCodePoint(cp));
+let props = UNICODE.read_props();
+for (let prop of ['White_Space', 'Noncharacter_Code_Point', 'Pattern_White_Space', 'Sentence_Terminal']) { 
+	for (let cp of props[prop]) {
+		EXPECT_FAIL.add(String.fromCodePoint(cp));
+	}
+}
+for (let prop of ['Variation_Selector']) {
+	for (let cp of props[prop]) {
+		EXPECT_IGNORED.add(String.fromCodePoint(cp));
+	}
 }
 
 // load random names
@@ -89,11 +101,13 @@ for (let set of [REQUIRE_PASS, REQUIRE_FAIL, EXPECT_PASS, EXPECT_FAIL]) {
 	}
 }
 
+print_section('Summary');
 console.log(`Custom: ${CUSTOM_TESTS.length}`);
 console.log(`Require Pass: ${REQUIRE_PASS.size}`);
 console.log(`Require Fail: ${REQUIRE_FAIL.size}`);
 console.log(`Expect Pass: ${EXPECT_PASS.size}`);
 console.log(`Expect Fail: ${EXPECT_FAIL.size}`);
+console.log(`Expect Ignored: ${EXPECT_IGNORED.size}`);
 console.log(`Random: ${RANDOM_NAMES.length}`);
 console.log(`Labels: ${LABELS.size} (Non-trivial)`);
 
@@ -117,39 +131,67 @@ function process(names) {
 	return {valid, need_norm, error};
 }
 
+print_section('Check Required');
+
 let require_pass = process(REQUIRE_PASS);
 if (require_pass.error.length) {
 	console.log(require_pass);
 	throw new Error('require pass');
 }
+print_checked('Pass');
+
 let require_fail = process(REQUIRE_FAIL);
 if (require_fail.valid.length || require_fail.need_norm.length) {
 	console.log('Valid:', require_fail.valid);
 	console.log('NeedNorm:', require_fail.need_norm);
 	throw new Error('require fail');
 }
+print_checked('Fail');
+
 
 // note: these are only approximate as they 
 // might not account for positional-logic
 let expect_pass = process(EXPECT_PASS);
 if (expect_pass.error.length) {
-	console.log('*** REVIEW: expected PASS ***');
+	print_section('REVIEW: expected PASS');
 	console.log(expect_pass.error);
 }
+
 let expect_fail = process(EXPECT_FAIL);
-if (expect_fail.valid.length || expect_fail.need_norm.length) {
-	console.log('*** REVIEW: expected FAIL ***');
-	console.log('Valid:', expect_fail.valid);
-	console.log('NeedNorm:', expect_fail.need_norm);
+if (expect_fail.valid.length) {
+	print_section('REVIEW: VALID expected FAIL');
+	console.log(expect_fail.valid);
+}
+if (expect_fail.need_norm.length) {
+	print_section('REVIEW: NORMED expected FAIL');
+	console.log(expect_fail.need_norm);
+}
+let expect_ignore = [];
+for (let name of EXPECT_IGNORED) {
+	try {
+		let norm = ens_normalize(name);
+		if (norm.length) {
+			expect_ignore.add({name, norm});
+		}
+	} catch (err) {
+		expect_ignore.add(name, err);
+	}
+}
+if (expect_ignore.length) {
+	print_section(`REVIEW: expected IGNORED`);
+	console.log(expect_ignore);
 }
 
 let registered = process(LABELS);
-console.log(`Registered Distribution:`);
+print_section(`Registered Distribution`);
 for (let [k, v] of Object.entries(registered)) {
 	console.log(`  ${k}: ${v.length}`);
 }
 
-let spec_hash = createHash('sha256').update(readFileSync(SPEC_FILE)).digest('hex');
+
+print_section(`Write Output`);
+
+let spec_hash = compute_spec_hash();
 console.log(`Hash: ${spec_hash}`);
 
 // use seeded rng so git diff is useful

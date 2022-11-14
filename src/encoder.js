@@ -1,4 +1,4 @@
-import {compare_arrays} from './utils.js'; 
+import {compare_arrays, explode_cp} from './utils.js'; 
 
 // group list into collection
 // [1, 2, 2, 3] + odd => [odd:[1,3], even:[2,2]]
@@ -188,6 +188,11 @@ export class Encoder {
 	signed(i) { this.unsigned(i < 0 ? ~(i << 1) : (i << 1)); }
 	positive(i) { this.unsigned(i - 1); }
 	positive_counts(v) { for (let x of v) this.positive(x); }
+	array(v) {
+		for (let x of v) {
+			this.unsigned(x);
+		}
+	}
 	ascending(v) {
 		let prev = 0;
 		for (let x of v) {
@@ -213,6 +218,30 @@ export class Encoder {
 		if (v.some(x => !Number.isSafeInteger(x) || x < 0)) {
 			throw new TypeError('expected unsigned');
 		}
+		let prev = 0;
+		for (let run of split_between(v.sort((a, b) => a - b), (a, b) => b - a > 1)) {
+			this.unsigned(run[0] - prev);
+			this.unsigned(run.length);
+			prev = run[run.length-1] + 2;
+		}
+		this.unsigned(0);
+		this.unsigned(0);
+	}
+	/*
+	write_member(v) {
+		return this.write_member2(v);
+	}
+	write_member1(v) {
+		if (v instanceof Set) {
+			v = [...v];
+		} else if (Array.isArray(v)) {
+			v = [...new Set(v)];
+		} else {
+			throw new TypeError('expected set or array');
+		}
+		if (v.some(x => !Number.isSafeInteger(x) || x < 0)) {
+			throw new TypeError('expected unsigned');
+		}
 		v = v.sort((a, b) => a - b);
 		let m = split_between(v, (a, b) => b - a > 1);
 		let g1 = m.filter(g => g.length == 1);
@@ -223,6 +252,7 @@ export class Encoder {
 		this.ascending(gN.map(g => g[0]));
 		this.positive_counts(gN.map(g => g.length));
 	}
+	*/
 	write_transposed(m) {
 		if (m.length == 0) return;
 		let w = m[0].length;

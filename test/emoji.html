@@ -601,7 +601,7 @@ function create_tr({cps, form, norm, info}, first) {
 	tr.dataset.name = form;
 	tr.innerHTML = `
 		<td class="index" data-copy="${form}">${first}</td>
-		<td class="form"><a href="./resolver.html#${repeated(norm)}.eth">${form}</a></td>
+		<td class="form"><a title="Resolve" href="./resolver.html#${repeated(norm)}.eth">${form}</a></td>
 		<td class="info"><div class="cells">${cells.join('')}</div></td>
 	`;
 	let emoji_url = false;

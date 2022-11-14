@@ -3,7 +3,7 @@
 // see: /derive/nf.js
 
 import r from './include-nf.js';
-import {read_member_array, read_mapped, read_array_while} from './decoder.js';
+import {read_sorted, read_sorted_arrays, read_mapped} from './decoder.js';
 
 function unpack_cc(packed) {
 	return (packed >> 24) & 0xFF;
@@ -12,12 +12,8 @@ function unpack_cp(packed) {
 	return packed & 0xFFFFFF;
 }
 
-const SHIFTED_RANK = new Map(read_array_while(() => {
-	let v = read_member_array(r);
-	if (v.length) return v;
-}).flatMap((v, i) => v.map(x => [x, (i+1) << 24]))); // pre-shifted
-
-const EXCLUSIONS = new Set(read_member_array(r));
+const SHIFTED_RANK = new Map(read_sorted_arrays(r).flatMap((v, i) => v.map(x => [x, (i+1) << 24]))); // pre-shifted
+const EXCLUSIONS = new Set(read_sorted(r));
 const DECOMP = new Map();
 const RECOMP = new Map();
 for (let [cp, cps] of read_mapped(r)) {

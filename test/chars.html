@@ -80,15 +80,18 @@ use_default_style();
 
 let max_cp = 0x10FFFF; 
 const char_map = new Map();
-Promise.all([
-	fetch('../derive/output/names.json').then(r => r.json()),
-	fetch('../derive/output/scripts.json').then(r => r.json())
-]).then(([names, scripts]) => {
-	for (let [cp, name] of names) {
+fetch('../derive/output/names.json').then(r => r.json()).then(({chars, ranges, scripts}) => {
+	for (let [cp, name] of chars) {
 		char_map.set(cp, {name});
 	}
-	for (let {name, abbr, set} of scripts) {
-		for (let cp of set) {
+	for (let [cp0, cp1, prefix] of ranges) {
+		for (let cp = cp0; cp <= cp1; cp++) {
+			let name = `${prefix} [${1+cp-cp0}/${1+cp1-cp0}]`;
+			char_map.set(cp, {name});
+		}
+	}
+	for (let {name, abbr, cps} of scripts) {
+		for (let cp of cps) {
 			let info = char_map.get(cp);
 			if (!info) {
 				info = {};
@@ -101,7 +104,7 @@ Promise.all([
 	scrollLast = undefined; // dirty
 	max_cp = Math.max(...char_map.keys()); // meh	
 	for (let s of scripts) {
-		s.avg = s.set.reduce((a, x) => a + x) / s.set.length;
+		s.avg = s.cps.reduce((a, x) => a + x) / s.cps.length;
 	}
 	scripts.sort((a, b) => a.avg - b.avg);
 	let style = document.createElement('style');

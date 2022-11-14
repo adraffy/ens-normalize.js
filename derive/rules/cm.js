@@ -1,21 +1,11 @@
-export const CM_DISALLOWED = [
-	'Zyyy',
-	'Latn',
-	'Grek',
-	'Cyrl',
-	'Kana',
-	'Hira',
-	'Hani',
-	'Hang',
-];
-
 // exemplars: https://unicode-org.github.io/cldr-staging/charts/latest/by_type/core_data.alphabetic_information.main.html
 // note: these can be arbitrary length sequences
 export const CM_WHITELIST = [
 
 	// === Latn ===
 	// note: this is only a subset of the exemplars
-	// vietnamese want "ơưđ" but too dangerous
+	// 20221104: checked English, German, French, Spanish, Portuguese, 
+	//   Irish, Danish, Croatian, Dutch, Polish, Italian
 
 	'à', // E0 (à) LATIN SMALL LETTER A WITH GRAVE
 	'á', // E1 (á) LATIN SMALL LETTER A WITH ACUTE
@@ -25,11 +15,14 @@ export const CM_WHITELIST = [
 	'ä', // E4 (ä) LATIN SMALL LETTER A WITH DIAERESIS
 	'å', // E5 (å) LATIN SMALL LETTER A WITH RING ABOVE
 	'ǎ', // 1CE (ǎ) LATIN SMALL LETTER A WITH CARON
+	//'ą', // 105 (ą) LATIN SMALL LETTER A WITH OGONEK (polish)
 
 	'ć', // 107 (ć) LATIN SMALL LETTER C WITH ACUTE
 	'ĉ', // 109 (ĉ) LATIN SMALL LETTER C WITH CIRCUMFLEX
 	'č', // 10D (č) LATIN SMALL LETTER C WITH CARON
 	'ç', // E7 (ç) LATIN SMALL LETTER C WITH CEDILLA
+
+	//'đ', // 111 (đ) LATIN SMALL LETTER D WITH STROKE (vietnamese)
 
 	'è', // E8 (è) LATIN SMALL LETTER E WITH GRAVE
 	'é', // E9 (é) LATIN SMALL LETTER E WITH ACUTE
@@ -45,6 +38,8 @@ export const CM_WHITELIST = [
 	'ï', // EF (ï) LATIN SMALL LETTER I WITH DIAERESIS
 	'ǐ', // 1D0 (ǐ) LATIN SMALL LETTER I WITH CARON
 
+	//[NOT COMPOSED] 'ł', // 142 (ł) LATIN SMALL LETTER L WITH STROKE
+
 	'ǹ', // 1F9 (ǹ) LATIN SMALL LETTER N WITH GRAVE
 	'ń', // 144 (ń) LATIN SMALL LETTER N WITH ACUTE
 	'ñ', // F1 (ñ) LATIN SMALL LETTER N WITH TILDE
@@ -56,8 +51,11 @@ export const CM_WHITELIST = [
 	'ö', // F6 (ö) LATIN SMALL LETTER O WITH DIAERESIS
 	'ǒ', // 1D2 (ǒ) LATIN SMALL LETTER O WITH CARON
 	'ō', // 14D (ō) LATIN SMALL LETTER O WITH MACRON (20221029: added for dutch)
+	//[NOT COMPOSED] 'ø', // F8 (ø) LATIN SMALL LETTER O WITH STROKE
+	//'ơ', // 1A1 (ơ) LATIN SMALL LETTER O WITH HORN (vietnamese)
 
 	'š', // 161 (š) LATIN SMALL LETTER S WITH CARON
+	//'ś', // 15B (ś) LATIN SMALL LETTER S WITH ACUTE (polish)
 
 	'ù', // F9 (ù) LATIN SMALL LETTER U WITH GRAVE
 	'ú', // FA (ú) LATIN SMALL LETTER U WITH ACUTE
@@ -65,10 +63,12 @@ export const CM_WHITELIST = [
 	'ü', // FC (ü) LATIN SMALL LETTER U WITH DIAERESIS
 	'ǔ', // 1D4 (ǔ) LATIN SMALL LETTER U WITH CARON
 	'ū', // 16B (ū) LATIN SMALL LETTER U WITH MACRON (20221029: added)
+	//'ư', // 1B0 (ư) LATIN SMALL LETTER U WITH HORN (vietnamese)
 
 	'ý', // FD (ý) LATIN SMALL LETTER Y WITH ACUTE
 
 	'ž', // 17E (ž) LATIN SMALL LETTER Z WITH CARON
+	//'ź', // 17A (ź) LATIN SMALL LETTER Z WITH ACUTE (polish)
 
 	// === Grek ===
 	'ά', // 3AC (ά) GREEK SMALL LETTER ALPHA WITH TONOS

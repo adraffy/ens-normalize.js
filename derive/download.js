@@ -107,5 +107,6 @@ async function download({major, minor, patch}, files) {
 			throw new Error(`Download failed`);
 		}
 	}
-	await writeFile(new URL('./version.json', dir), JSON.stringify({major, minor, patch, date: new Date()}));	
+	let version = `${major}.${minor}.${patch}`;
+	await writeFile(new URL('./version.json', dir), JSON.stringify({version, major, minor, patch, date: new Date()}));	
 }

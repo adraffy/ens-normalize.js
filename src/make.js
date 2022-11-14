@@ -1,18 +1,13 @@
 import {Encoder, unsafe_btoa} from './encoder.js';
 import {readFileSync, writeFileSync} from 'node:fs';
+import {explode_cp} from './utils.js';
 
 let data_dir = new URL('../derive/output/', import.meta.url);
-let {
-	valid, mapped, ignored, cm, cm_whitelist, cm_isolated, emoji, 
-	ordered, scripts, restricted, restricted_wholes, escape, cm_invalid,
-} = JSON.parse(readFileSync(new URL('./spec.json', data_dir)));
+let {mapped, ignored, emoji, cm, fenced, escape, groups, nfc_check} = JSON.parse(readFileSync(new URL('./spec.json', data_dir)));
 let {ranks, decomp, exclusions, qc} = JSON.parse(readFileSync(new URL('./nf.json', data_dir)));
 
 let emoji_solo = emoji.filter(v => v.length == 1).map(v => v[0]);
 let emoji_seqs = emoji.filter(v => v.length >= 2);
-
-// union of non-zero combining class + nfc_qc
-let nfc_check = [...new Set([ranks, qc].flat(Infinity))].filter(cp => valid.includes(cp));
 
 class Node {
 	constructor() {
@@ -138,7 +133,7 @@ console.log(`After: ${root.nodes}`);
 
 function encode_emoji(enc, node, map) {
 	for (let [keys, x] of Object.entries(node.branches)) {
-		enc.write_member(keys.split(',').map(k => map[k]));
+		enc.write_member(keys.split(',').map(k => map.get(parseInt(k))));
 		encode_emoji(enc, x, map);
 	}
 	enc.write_member([]);
@@ -151,25 +146,59 @@ function encode_emoji(enc, node, map) {
 	enc.unsigned(6*mod + 3*fe0f + flag); // 11833
 }
 
+function find_shared_chunks(groups, {min_overlap = 0.9, min_size = 1} = {}) {
+	let union = new Set();
+	let shared = new Set();
+	for (let cps of groups) {
+		for (let cp of cps) {
+			if (union.has(cp)) {
+				shared.add(cp);
+			} else {
+				union.add(cp);
+			}
+		}
+	}
+	let chunks = [];
+	while (true) {
+		groups = groups.map(cps => cps.filter(cp => shared.has(cp))).filter(cps => cps.length);
+		if (groups.length <= 1) break;
+		groups.sort((a, b) => b.length - a.length);
+		let share = [0];
+		let set0 = new Set(groups[0]);
+		for (let i = 1; i < groups.length; i++) {
+			let set = groups[i].filter(cp => set0.has(cp));
+			if (set.length / set0.size >= min_overlap) {
+				set0 = new Set(set);
+				share.push(i);
+			}
+		}
+		for (let i of share) {
+			groups[i] = groups[i].filter(cp => !set0.has(cp));
+		}
+		if (set0.size >= min_size) {
+			chunks.push([...set0]);
+		}
+	}
+	return chunks;
+}
+
 function unique_sorted(v) {
 	return [...new Set(v)].sort((a, b) => a - b);
 }
 function index_map(v) {
-	return Object.fromEntries(v.map((x, i) => [x, i]));
+	return new Map(v.map((x, i) => [x, i]));
 }
 
-let sorted_valid = unique_sorted(valid);
-let sorted_valid_map = index_map(sorted_valid);
 
-let sorted_emoji = unique_sorted(emoji_seqs.flat());
-let sorted_emoji_map = index_map(sorted_emoji);
+if (emoji_solo.length == 0) {
+	console.log(`*** There are 0 solo-emoji!`);
+}
+if (groups.every(g => Number.isInteger(g.cm) || !g.cm.length)) {
+	console.log(`*** There are 0 complex CM sequences!`);
+}
 
-//let sorted_cm = unique_sorted(cm);
-//let sorted_cm_map = index_map(sorted_cm);
 
 let enc = new Encoder();
-enc.write_member(valid);
-enc.write_member(ignored);
 enc.write_mapped([
 	[1, 1, 0], // adjacent that map to a constant
 	[2, 1, 0], // eg. AAAA..BBBB => CCCC
@@ -179,61 +208,69 @@ enc.write_mapped([
 //	[1, 3, 3],
 //	[3, 1, 0],
 //	[4, 1, 0],
-], mapped); //.map(kv => [kv[0], kv[1].map(x => sorted_valid_map[x])])); // not worth it
-function write_valid_sorted(cps) {
-	enc.write_member(cps.map(cp => sorted_valid_map[cp]));
-}
-write_valid_sorted(cm);
-//cm_whitelist.sort((a, b) => a[0] - b[0]);
-//write_valid_sorted(cm_whitelist.map(x => x[0]));
-for (let [cp, seqs] of cm_whitelist) {
+], mapped); 
+enc.write_member(ignored);
+for (let [cp, name] of fenced) {
 	enc.unsigned(cp);
-	for (let cps of seqs) {
-		for (let cp of cps) {
-			enc.unsigned(1 + cp); // sorted_cm_map[cp]);
-		}
-		enc.unsigned(0);
-	}
-	enc.unsigned(0);
+	let cps = explode_cp(name);
+	enc.unsigned(cps.length);
+	enc.deltas(cps);
 }
 enc.unsigned(0);
-write_valid_sorted(cm_isolated);
-for (let [_, cps] of scripts) {
-	write_valid_sorted(cps);
-}
+enc.write_member(cm);
+enc.write_member(escape); 
+enc.write_member(nfc_check); // for ens_tokenize (can probably derived)
+let chunks = find_shared_chunks(groups.flatMap(g => [g.primary, g.secondary]), {min_overlap: 0.9, min_size: 10});
+chunks.forEach(v => enc.write_member(v));
 enc.write_member([]);
-for (let {wholes, allow, deny} of ordered) {
-	write_valid_sorted(allow);
-	write_valid_sorted(deny);
-	write_valid_sorted(wholes);
+for (let g of groups) {
+	if (g.restricted) { // 500B to enable these names
+		enc.unsigned(1);
+	} else {
+		let cps = explode_cp(g.name);
+		enc.unsigned(cps.length+1);
+		enc.deltas(cps);
+	}
+	for (let v of [g.primary, g.secondary]) {
+		let set = new Set(v);
+		let parts = [];
+		chunks.forEach((chunk, i) => {
+			if (chunk.every(cp => set.has(cp))) {
+				parts.push(i);
+				chunk.forEach(cp => set.delete(cp));
+			}
+		});
+		enc.write_member(parts);
+		enc.write_member(set);
+	}
+	let map = index_map([g.primary, g.secondary].flat().sort((a, b) => a-b));
+	g.wholes.forEach(({cps}) => enc.write_member(cps.map(cp => map.get(cp))));
+	enc.write_member([]);
+	if (Array.isArray(g.cm)) {
+		enc.unsigned(0);
+		for (let [cp, seqs] of g.cm) {
+			enc.unsigned(1 + map.get(cp));
+			for (let cps of seqs) {
+				cps.forEach(cp => enc.unsigned(1 + cp)); // todo: fix
+				enc.unsigned(0);
+			}
+			enc.unsigned(0);
+		}
+		enc.unsigned(0);
+	} else {
+		enc.unsigned(g.cm+1);
+	}
 }
-/*
-for (let i = 0; i < script_order.length; i++) {
-	let script = script_order[i];
-	write_valid_sorted(scripts[script]);
-	write_valid_sorted(wholes[script] ?? []);
-}
-*/
-write_valid_sorted(restricted_wholes);
-for (let cps of Object.values(restricted)) {
-	write_valid_sorted(cps);
-}
-enc.write_member([]);
-enc.write_member(emoji_solo);
+enc.unsigned(0);
+
+let sorted_emoji = unique_sorted([emoji_solo, emoji_seqs].flat(Infinity));
+let sorted_emoji_map = index_map(sorted_emoji);
 enc.write_member(sorted_emoji);
+enc.write_member(emoji_solo.map(cp => sorted_emoji_map.get(cp))); // there currently arent any of these
 encode_emoji(enc, root, sorted_emoji_map);
+
 //write('include-only'); // only saves 300 bytes
-write_valid_sorted(nfc_check);
-enc.write_member(escape); // only ~75 bytes
-enc.write_member(cm_invalid); // ~70 bytes
-write('include-ens', {
-	//SCRIPT_ORDER: script_order.map(abbr => script_names[abbr])
-	ORDERED_SCRIPTS: ordered.map(x => {
-		delete x.extra;
-		delete x.wholes;
-		return x;
-	}),
-});
+write('include-ens');
 
 // just nf 
 // (only ~30 bytes saved using joined file)
@@ -243,15 +280,15 @@ enc.write_member([]);
 enc.write_member(exclusions);
 enc.write_mapped([
 	[1, 1, 0],
-	[1, 1, 1],	
+	[1, 1, 1],
 ], decomp);
 enc.write_member(qc);
 write('include-nf');
 
 function write(name, vars = {}) {
 	let {data, symbols} = enc.compressed();
-	console.log(`${name} = ${data.length} bytes / ${symbols} symbols`);
 	let encoded = unsafe_btoa(data);
+	console.log(`${name} = ${data.length} bytes / ${symbols} symbols / ${encoded.length} base64`);
 	writeFileSync(new URL(`./${name}.js`, import.meta.url), [
 		`// created ${new Date().toJSON()}`,
 		`import {read_compressed_payload} from './decoder.js';`,

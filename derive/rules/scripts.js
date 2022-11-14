@@ -1,103 +1,79 @@
-import {explode_cp} from '../utils.js';
-import {AUGMENTED_ALL} from '../unicode-logic.js';
 
-const AZ26 = explode_cp('abcdefghijklmnopqrstuvwxyz');
+const $AZ = 'abcdefghijklmnopqrstuvwxyz';
 
-// order here is important
-// TODO: move non-restricted scripts into this format
-// TODO: move allow/deny into rule files: wholes => {wholes, allow, deny}
-export const ORDERED_SCRIPTS = [
-	{name: 'Korean', test: ['Hang'], rest: ['Hani', AUGMENTED_ALL], allow: AZ26},
-	{name: 'Japanese', test: ['Kana', 'Hira'], rest: ['Hani', AUGMENTED_ALL], allow: AZ26}, //, deny: [0x4E00]}, grr this is also number 1
-	{name: 'Han', test: ['Hani'], rest: [AUGMENTED_ALL], allow: AZ26},
-	{name: 'Latin', test: ['Latn'], rest: [AUGMENTED_ALL]},
-	{name: 'Cyrillic', test: ['Cyrl'], rest: [AUGMENTED_ALL]},
-	{name: 'Greek', test: ['Grek'], rest: [AUGMENTED_ALL]}, // rest: [], extra: explode_cp('πξ')},
-	{name: 'Arabic', test: ['Arab'], rest: [], allow: explode_cp('-')},
-	{name: 'Devanagari', test: ['Deva'], rest: []},
-	{name: 'Hebrew', test: ['Hebr'], rest: [], allow: explode_cp('₪')},
-	{name: 'Thai', test: ['Thai'], rest: [], allow: explode_cp('฿')},
+// note: order doesn't matter
+// gets re-ordered by rules/group-order.js
+// which is derived from tools/group-order.js
+
+export const SCRIPT_GROUPS = [
+
+	// CJK
+	{name: 'Japanese', test: ['Kana', 'Hira'], rest: ['Hani', 'Zyyy'], extra: [$AZ], cm: -1},	// 2241
+	{name: 'Korean', test: ['Hang'], rest: ['Hani', 'Zyyy'], extra: [$AZ], cm: -1},				// 2060
+	{name: 'Han', test: ['Hani'], rest: ['Zyyy'], extra: [$AZ], cm: -1},						// 20K+
+	{name: 'Bopomofo', test: ['Bopo'], rest: ['Hani'], cm: -1},									// pure(35?, spoof mixed
+
+	// Latin-like
+	{name: 'Latin', test: ['Latn'], rest: ['Zyyy', 'Zinh'], cm: -1, extra: [
+		0x3C0, // (π) GREEK SMALL LETTER PI
+		//0x2044 // (⁄) FRACTION SLASH 
+	], cm: -1},	// 1.2M
+	{name: 'Cyrillic', test: ['Cyrl'], rest: ['Zyyy', 'Zinh'], cm: -1},				// 1817
+	{name: 'Greek', test: ['Grek'], rest: ['Zyyy', 'Zinh'], cm: -1}, 				// 200 pures with 80+ spoofs
+	{name: 'Common', test: ['Zyyy'], cm: 0},
+
+	// Pure with Many Regs
+	{name: 'Arabic', test: ['Arab'], extra: ['-']}, 				// 15000 pure, underscores, only 11 latin mixed (spoofs), and "0x"
+	{name: 'Devanagari', test: ['Deva'], cm: 2}, 					// 2700 pure but 4
+	{name: 'Hebrew', test: ['Hebr'], cm: 2, extra: ['₪']},			// 1466 pure, 17 spoofs with Latin
+	{name: 'Thai', test: ['Thai'], cm: 2,  extra: ['฿']},			// 1000+ pure, spoof mixed
+	{name: 'Bengali', test: ['Beng'], cm: 2},	// pure(827)
+	{name: 'Tamil', test: ['Taml']},			// pure(428)
+	{name: 'Tibetan', test: ['Tibt']},			// pure(175) + mixed are faces	
+	//{name: 'Braille', test: ['Brai]},			// pure(540), 70 ascii/spacer-spoofs
+
+	// Pure
+	{name: 'Oriya', test: ['Orya']},			// no legit non-pure registrations
+	{name: 'Thaana', test: ['Thaa'], cm: 2},	// pure(1)
+	{name: 'Sinhala', test: ['Sinh']},			// all junk
+	{name: 'Gurmukhi', test: ['Guru']},			// pure(73) not(1)
+	{name: 'Gujarati', test: ['Gujr']},			// pure(47) 
+	{name: 'Telugu', test: ['Telu']},			// pure(52) not(3), faces/memes
+	{name: 'Kannada', test: ['Knda']},			// few digits + eye balls (50)
+	{name: 'Malayalam', test: ['Mlym']}, 		// pure(22) 
+	{name: 'Lao', test: ['Laoo']},				// pure(56) not(6) 
+	{name: 'Georgian', test: ['Geor']},			// pure(14) not(1)
+	{name: 'Myanmar', test: ['Mymr']},			// pure(22) 
+	{name: 'Ethiopic', test: ['Ethi']},			// pure(15) 
+	{name: 'Khmer', test: ['Khmr']}, 			// pure(20) 
+	{name: 'Armenian', test: ['Armn']},			// pure(20) spoof(6)
 ];
 
-// TODO: give script extensions to restricted (low priority)
-export const CHANGED_SCRIPTS = {
-	Zyyy: [
-		// relax ethereum symbol
-		// https://discuss.ens.domains/t/ens-name-normalization-2nd/14564/2
-		// 0x3BE (ξ) GREEK SMALL LETTER XI
-		// 0x39E (Ξ) GREEK CAPITAL LETTER XI (is mapped)
-		0x3BE,
+export const SCRIPT_EXTENSIONS = [
+	// relax ethereum symbol
+	// https://discuss.ens.domains/t/ens-name-normalization-2nd/14564/2
+	// 0x39E (Ξ) GREEK CAPITAL LETTER XI => 0x3BE (ξ) GREEK SMALL LETTER XI
+	[0x3BE, ['Zyyy']],
+];
 
-		// https://discuss.ens.domains/t/ens-name-normalization-2nd/14564/10
-		// 0x3C0 (π) GREEK SMALL LETTER PI
-		0x3C0,
+export const DISALLOWED_SCRIPTS = [
+	// https://discuss.ens.domains/t/ens-name-normalization/8652/88
+	// https://discuss.ens.domains/t/ens-name-normalization/8652/203
+	// https://discuss.ens.domains/t/ens-name-normalization/8652/418 
+	// (we can fix this later, requires massive whole-script confusables on .:'s)
+	'Brai', // Braille
+	// https://en.wikipedia.org/wiki/Linear_A
+	// 20221031: disabled
+	'Lina', // Linear A 
+	// https://en.wikipedia.org/wiki/Linear_B
+	// 20221031: disabled
+	'Linb', // Linear B 
+	// 202209XX: disabled
+	'Sgnw', // SignWriting
+];
 
-		// not sure if this should be greek
-		// 0x0B5 (µ) MICRO SIGN (mapped)
-		// 0x3BC (μ) GREEK SMALL LETTER MU
-		//0x3BC, 
-		// 0x3C3 (σ) GREEK SMALL LETTER SIGMA
-		//0x3C3,
-		// 0x3B1 (α) GREEK SMALL LETTER ALPHA
-	],
-	Hani: [
-		0x3013, // (〓) GETA MARK
-	],
-	Kana: [
-		0x30FB, // (・) KATAKANA MIDDLE DOT
-		0x30FC, // (ー) KATAKANA-HIRAGANA PROLONGED SOUND MARK (TODO: future, this could be "Jpan")
-	],
-	Arab: [
-		// from script ext
-		0x64B, // (◌ً) ARABIC FATHATAN
-		0x64C, // (◌ٌ) ARABIC DAMMATAN
-		0x64D, // (◌ٍ) ARABIC KASRATAN
-		0x64E, // (◌َ) ARABIC FATHA
-		0x64F, // (◌ُ) ARABIC DAMMA
-		0x650, // (◌ِ) ARABIC KASRA
-		0x651, // (◌ّ) ARABIC SHADDA
-		0x652, // (◌ْ) ARABIC SUKUN
-		0x653, // (◌ٓ) ARABIC MADDAH ABOVE
-		0x654, // (◌ٔ) ARABIC HAMZA ABOVE
-		0x655, // (◌ٕ) ARABIC HAMZA BELOW
-	],
-};
 
 export const RESTRICTED_SCRIPTS = [
-
-	// moved to ordered
-	//'Arab', // Arabic -- 15000 pure, underscores, only 11 latin mixed (spoofs), and "0x"
-	//'Deva', // Devanagari -- 2700 pure but 4
-	//'Hebr', // Hebrew -- 1466 pure, 17 spoofs with Latin
-	//'Thai', // Thai -- 1000+ pure, spoof mixed
-	//'Grek', // Greek -- 200 pures with 80+ spoofs
-	
-	// 20221018
-	'Beng', // Bengali -- all(827) pure
-	'Taml', // Tamil -- all(428) pure
-	'Tibt', // Tibetan -- pure(175) + mixed are faces
-
-	// disabled
-	'Brai', // Braille
-
-	// 20221017
-	// to get normalization to V1
-	// these can get fixed later
-	'Bopo', // Bopomofo -- all spoofs
-	'Orya', // Oriya -- no legit non-pure registrations
-	'Thaa', // Thaana -- 1 reg, pure
-	'Sinh', // Sinhala -- all junk
-	'Guru', // Gurmukhi -- all(73) pure but 1 
-	'Gujr', // Gujarati -- all(47) pure
-	'Telu', // Telugu -- 52, 3 not pure, faces/memes
-	'Knda', // Kannada -- few digits + eye balls (50)
-	'Mlym', // Malayalam -- all(22) pure
-	'Laoo', // Lao -- all pure(56) but 6 
-	'Geor', // Georgian -- all(14) pure but 1 
-	'Mymr', // Myanmar -- all(22) pure
-	'Ethi', // Ethiopic -- all(15) pure
-	'Khmr', // Khmer -- all(20) pure
-	'Armn', // Armenian -- all(20) pure but 6 (all spoofs)
 
 	// https://www.unicode.org/reports/tr31/#Table_Limited_Use_Scripts
 	'Adlm', // Adlam -- 0 registrations
@@ -173,8 +149,8 @@ export const RESTRICTED_SCRIPTS = [
 	'Khoj', // Khojki
 	'Kits', // Khitan Small Script
 	'Kthi', // Kaithi
-	'Lina', // Linear A
-	'Linb', // Linear B
+	//'Lina', // Linear A
+	//'Linb', // Linear B 
 	'Lyci', // Lycian
 	'Lydi', // Lydian
 	'Maka', // Makasar
@@ -210,7 +186,7 @@ export const RESTRICTED_SCRIPTS = [
 	'Runr', // Runic
 	'Samr', // Samaritan
 	'Sarb', // Old South Arabian
-	'Sgnw', // SignWriting
+	//'Sgnw', // SignWriting
 	'Shaw', // Shavian
 	'Shrd', // Sharada
 	'Sidd', // Siddham

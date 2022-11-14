@@ -1,74 +1,107 @@
-import r, {ORDERED_SCRIPTS} from './include-ens.js';
-import {read_member_array, read_mapped, read_emoji_trie, read_array_while, read_sequences} from './decoder.js';
+import r from './include-ens.js';
+
+import {read_deltas, read_sorted, read_sorted_arrays, read_mapped, read_array_while} from './decoder.js';
 import {explode_cp, str_from_cps, quote_cp, compare_arrays} from './utils.js';
 import {nfc, nfd} from './nf.js';
 //import {nfc, nfd} from './nf-native.js'; // replaced by rollup
 
 export {nfc, nfd}; 
 
-const SORTED_VALID = read_member_array(r).sort((a, b) => a - b);
-function read_set(lookup) {
-	return new Set(read_member_array(r, lookup));
+function read_set() {
+	return new Set(read_sorted(r));
 }
-function read_valid_subset() {
-	return read_set(SORTED_VALID);
+function read_str(n) {
+	return str_from_cps(read_deltas(n, r));
 }
-function read_valid_subsets() {
-	return read_array_while(() => { 
-		let v = read_valid_subset();
-		if (v.size) return v;
-	});
+
+const MAPPED = new Map(read_mapped(r)); 
+const IGNORED = read_set(); // ignored characters are not valid, so just read raw codepoints
+const FENCED = new Map(read_array_while(() => {
+	let cp = r();
+	if (cp) return [cp, read_str(r())];
+}));
+const CM = read_set();
+const ESCAPE = read_set(); // characters that should not be printed
+const NFC_CHECK = read_set();
+const CHUNKS = read_sorted_arrays(r);
+function read_chunked() {
+	return new Set([read_sorted(r).map(i => CHUNKS[i]), read_sorted(r)].flat(2));
 }
-const VALID = new Set(SORTED_VALID);
-const IGNORED = read_set();
-const MAPPED = new Map(read_mapped(r));
-const CM = read_valid_subset();
-const CM_ISOLATED_PH = [];
-const CM_WHITELIST = new Map([
-	read_array_while(() => {
-		let cp = r();
-		if (cp) return [cp, read_sequences(r)];
-	}),
-	read_member_array(r, SORTED_VALID).map(cp => [cp, CM_ISOLATED_PH]),
-].flat());
-const SCRIPTS = read_valid_subsets(); // [0] is ALL
-const ORDERED = ORDERED_SCRIPTS.map(({name, test, rest}) => {
-	test = test.map(i => SCRIPTS[i]);
-	rest = [test, rest.map(i => SCRIPTS[i])].flat();
-	return {name, test, rest, allow: read_valid_subset(), deny: read_valid_subset(), wholes: read_valid_subset()};
+const GROUPS = read_array_while(() => {
+	let N = r();
+	if (N) {
+		let R = N==1;
+		N = R ? 'Restricted' : read_str(N-1);
+		let P = read_chunked(r); // primary
+		let Q = read_chunked(r); // secondary
+		let V = [...P, ...Q].sort((a, b) => a-b); // valid (sorted)
+		let W = read_sorted_arrays(r).map(v => new Set(v.map(i => V[i]))); // whole (sets)
+		let M = r()-1; // combining mark
+		if (M < 0) { // whitelisted
+			M = new Map(read_array_while(() => {
+				let i = r();
+				if (i) return [V[i-1], read_array_while(() => {
+					let v = read_array_while(r);
+					if (v.length) return v.map(x => x-1);
+				})];
+			}));
+		}
+		return {N, P, W, M, R, V: new Set(V)};
+	}
 });
-const RESTRICTED_WHOLES = read_valid_subset();
-const RESTRICTED = read_valid_subsets();
-const EMOJI_SOLO = read_set();
-const EMOJI_ROOT = read_emoji_trie(r);
-const NFC_CHECK = read_valid_subset();
-const ESCAPE = read_set();
-const CM_INVALID = read_set();
+const EMOJI_SORTED = read_sorted(r);
+const EMOJI_SOLO = new Set(read_sorted(r).map(i => EMOJI_SORTED[i]));
+const EMOJI_ROOT = read_emoji_trie([]);
+function read_emoji_trie(cps) {
+	let B = read_array_while(() => {
+		let keys = read_sorted(r).map(i => EMOJI_SORTED[i]);
+		if (keys.length) return read_emoji_trie(keys);
+	}).sort((a, b) => b.Q.size - a.Q.size); // sort by likelihood
+	let temp = r();
+	let V = temp % 3; // valid (0 = false, 1 = true, 2 = weird)
+	temp = (temp / 3)|0;
+	let F = temp & 1; // allow FE0F
+	temp >>= 1;
+	let S = temp & 1; // save
+	let C = temp & 2; // check
+	return {B, V, F, S, C, Q: new Set(cps)};
+}
 
-const STOP = 0x2E;
-const HYPHEN = 0x2D;
-const UNDERSCORE = 0x5F;
-const FE0F = 0xFE0F;
-
-const COMMON = 'Common';
-const STOP_CH = str_from_cps([STOP]);
-
-function check_leading_underscore(cps) {
-	let e = cps.lastIndexOf(UNDERSCORE);
-	for (let i = e; i > 0; ) {
-		if (cps[--i] !== UNDERSCORE) {
-			throw new Error(`underscore allowed only at start`);
+const VALID = new Set();
+const MULTI = new Set();
+for (let g of GROUPS) {
+	for (let cp of g.V) {
+		if (VALID.has(cp)) {
+			MULTI.add(cp);
+		} else {
+			VALID.add(cp);
 		}
 	}
-	return e + 1;
+}
+for (let cp0 of VALID) {
+	for (let cp of nfd([cp0])) {
+		VALID.add(cp);
+	}
+}
+const UNIQUE = new Map(GROUPS.flatMap(g => [...g.V].filter(cp => !MULTI.has(cp)).map(cp => [cp, g])));
+
+const STOP = 0x2E;
+const FE0F = 0xFE0F;
+const STOP_CH = str_from_cps([STOP]);
+
+// free tagging system
+class Emoji extends Array {
+	get is_emoji() { return true; }
 }
 
 // create a safe to print string 
 // invisibles are escaped
-// leading cm use placeholder
+// leading cm uses placeholder
 export function safe_str_from_cps(cps, quoter = quote_cp) {
+	//if (Number.isInteger(cps)) cps = [cps];
+	//if (!Array.isArray(cps)) throw new TypeError(`expected codepoints`);
 	let buf = [];
-	if (is_printable_mark(cps[0])) buf.push('◌');
+	if (is_combining_mark(cps[0])) buf.push('◌');
 	let prev = 0;
 	let n = cps.length;
 	for (let i = 0; i < n; i++) {
@@ -83,122 +116,64 @@ export function safe_str_from_cps(cps, quoter = quote_cp) {
 	return buf.join('');
 }
 
+// if escaped: {HEX}
+//       else: "x" {HEX}
+function quoted_cp(cp) {
+	return should_escape(cp) ? '' : `"${safe_str_from_cps([cp])}" ` + quote_cp(cp);
+}
+
 function check_label_extension(cps) {
-	if (cps.length >= 4 && cps[2] === HYPHEN && cps[3] === HYPHEN && cps.every(cp => cp < 0x80)) {
-		throw new Error(`invalid label extension`);
+	const HYPHEN = 0x2D;
+	if (cps.length >= 4 && cps[2] == HYPHEN && cps[3] == HYPHEN) {
+		throw new Error('invalid label extension');
 	}
 }
-
-// check that cp is not touching another cp
-// optionally disallow leading/trailing
-function check_surrounding(cps, cp, name, no_leading, no_trailing) {
+function check_leading_combining_mark(cps) {
+	if (CM.has(cps[0])) throw new Error('leading combining mark');
+}
+function check_leading_underscore(cps) {
+	const UNDERSCORE = 0x5F;
+	for (let i = cps.lastIndexOf(UNDERSCORE); i > 0; ) {
+		if (cps[--i] !== UNDERSCORE) {
+			throw new Error('underscore allowed only at start');
+		}
+	}
+}
+// check that a fenced cp is not leading, trailing, or touching another fenced cp
+function check_fenced(cps) {
+	let cp = cps[0];
+	let name = FENCED.get(cp);
+	if (name) throw new Error(`leading ${name}`);
 	let last = -1;
-	if (cps[0] === cp) {
-		if (no_leading) throw new Error(`leading ${name}`);
-		last = 0;
+	for (let i = 1; i < cps.length; i++) {
+		cp = cps[i];
+		let match = FENCED.get(cp);
+		if (match) {
+			if (last == i) throw new Error(`adjacent ${name} + ${match}`);
+			last = i + 1;
+			name = match;
+		}
 	}
-	while (true) {
-		let i = cps.indexOf(cp, last+1);
-		if (i == -1) break;
-		if (last == i-1) throw new Error(`adjacent ${name}`);
-		last = i;
-	}
-	if (no_trailing && last == cps.length-1) throw new Error(`trailing ${name}`);
+	if (last == cps.length) throw new Error(`trailing ${name}`);
 }
-
 /*
-// ContextO: MIDDLE DOT
-// https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.3
-// Between 'l' (U+006C) characters only, used to permit the Catalan character ela geminada to be expressed.
-// note: this a lot of effort for 1 character
-// 20221020: disabled
-function check_middle_dot(cps) {
-	let i = 0;
-	while (true) {
-		i = cps.indexOf(0xB7, i);
-		if (i == -1) break;
-		if (cps[i-1] !== 0x6C || cps[i+1] !== 0x6C) throw new Error('ContextO: middle dot');
-		i += 2;
+function check_fenced(cps) {
+	for (let [cp, name] of FENCED) {
+		if (cps[0] == cp) throw new Error(`leading ${name}`);
+		let last = -1;
+		while (true) {
+			let next = cps.indexOf(cp, last+1);
+			if (next == -1) break;
+			if (next == last) throw new Error(`adjacent ${name}`);
+			last = next + 1;
+		}
+		if (last == cps.length) throw new Error(`trailing ${name}`);
 	}
 }
 */
 
-function check_scripts(cps) {
-	for (let {name, test, rest, allow, deny, wholes} of ORDERED) {
-		if (cps.some(cp => test.some(set => set.has(cp)))) {
-			for (let cp of cps) {
-				// https://www.unicode.org/reports/tr39/#mixed_script_confusables
-				if (!rest.some(set => set.has(cp)) && !allow.has(cp)) {
-					throw new Error(`mixed-script ${name} confusable: "${safe_str_from_cps([cp])}"`);
-				}
-				// https://www.unicode.org/reports/tr39/#single_script_confusables
-				if (deny.has(cp)) {
-					throw new Error(`single-script ${name} confusable: "${safe_str_from_cps([cp])}"`);
-				}
-			}
-			// https://www.unicode.org/reports/tr39/#def_whole_script_confusables
-			if (cps.every(cp => wholes.has(cp) || SCRIPTS[0].has(cp))) {
-				throw new Error(`whole-script ${name} confusable`);
-			}
-			return name;
-		}
-	}
-	return COMMON;
-}
-
-// requires decomposed codepoints
-// returns true if pure (emoji or single script)
-function check_restricted_scripts(cps) {
-	// https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers
-	cps = cps.filter(cp => cp != FE0F); // remove emoji (once)
-	if (!cps.length) return true; // purely emoji
-	for (let set of RESTRICTED) {
-		if (cps.some(cp => set.has(cp))) { // first with one match
-			if (!cps.every(cp => set.has(cp))) { // must match all
-				throw new Error(`restricted script cannot mix`);
-			}
-			if (cps.every(cp => RESTRICTED_WHOLES.has(cp))) {
-				throw new Error(`restricted whole-script confusable`);
-			}
-			return true;
-		}
-	}
-}
-
-
-function check_leading_combining_mark(cps) {
-	if (CM.has(cps[0])) throw new Error(`leading combining mark`);
-}
-// requires decomposed codepoints
-function check_combining_marks(cps) {
-	for (let i = 1, j = -1; i < cps.length; i++) {
-		if (CM.has(cps[i])) {
-			let prev = cps[i - 1];
-			if (prev == FE0F) {
-				throw new Error(`emoji + combining mark`); // we dont know the full emoji length efficiently 
-			}
-			let seqs = CM_WHITELIST.get(prev);
-			if (seqs) {
-				let k = i + 1;
-				while (k < cps.length && CM.has(cps[k])) k++;
-				let cms = cps.slice(i, k);
-				let match = seqs.find(seq => !compare_arrays(seq, cms));
-				if (!match) {
-					throw new Error(`disallowed combining mark sequence: "${str_from_cps(cps.slice(i-1, k))}"`)
-				}
-				i = k; 
-			} else if (i == j) { 
-				// this needs to come after whitelist test since it can permit 2+
-				throw new Error(`adjacent combining marks "${str_from_cps(cps.slice(i-2, i+1))}"`);
-			} else {
-				j = i + 1;
-			}
-		}
-	}
-}
-
-export function is_printable_mark(cp) {
-	return CM.has(cp) || CM_INVALID.has(cp);
+export function is_combining_mark(cp) {
+	return CM.has(cp);
 }
 
 export function should_escape(cp) {
@@ -206,7 +181,7 @@ export function should_escape(cp) {
 }
 
 export function ens_normalize_fragment(frag, nf = nfc) {
-	return frag.split(STOP_CH).map(label => str_from_cps(nf(process(explode_cp(label))))).join(STOP_CH);
+	return frag.split(STOP_CH).map(label => str_from_cps(process(explode_cp(label), nf).flatMap(x => x.is_emoji ? filter_fe0f(x) : x))).join(STOP_CH);
 }
 
 export function ens_normalize(name) {
@@ -214,14 +189,15 @@ export function ens_normalize(name) {
 }
 
 export function ens_beautify(name) {
-	let split = ens_split(name, x => x);
+	let split = ens_split(name, true);
+	// this is experimental
 	for (let {script, output} of split) {
-		if (script !== 'Greek') {
+		if (script !== 'Greek') { // ξ => Ξ if not greek
 			let prev = 0;
 			while (true) {
 				let next = output.indexOf(0x3BE, prev);
 				if (next < 0) break;
-				output[next] = 0x39E; // ξ => Ξ if not greek
+				output[next] = 0x39E; 
 				prev = next + 1;
 			}
 		}
@@ -229,68 +205,196 @@ export function ens_beautify(name) {
 	return flatten(split);
 }
 
-export function ens_split(name, emoji_filter = filter_fe0f) {
+export function ens_split(name, preserve_emoji) {
 	let offset = 0;
+	// https://unicode.org/reports/tr46/#Validity_Criteria 4.1 Rule 4
+	// "The label must not contain a U+002E ( . ) FULL STOP."
 	return name.split(STOP_CH).map(label => {
 		let input = explode_cp(label);
 		let info = {
 			input,
-			offset, // codepoint, not string!
+			offset, // codepoint, not substring!
 		};
-		offset += input.length + 1;
+		offset += input.length + 1; // + stop
+		let norm;
 		try {
-			let mapped = info.mapped = process(input);
-			let norm = info.output = nfc(mapped.flatMap(x => Array.isArray(x) ? emoji_filter(x) : x)); // strip FE0F from emoji
-			info.emoji = mapped.some(x => Array.isArray(x)); // idea: count emoji? mapped.reduce((a, x) => a + (Array.isArray(x)?1:0), 0);
-			check_leading_underscore(norm); // should restricted get underscores? (20221018: no)
-			check_leading_combining_mark(norm);
-			check_label_extension(norm);
-			let decomp = nfd(mapped.map(x => Array.isArray(x) ? FE0F : x)); // replace emoji with single character placeholder
-			if (check_restricted_scripts(decomp)) {
-				info.script = mapped.every(x => Array.isArray(x)) ? COMMON : 'Restricted'; // name might be all emoji
+			let tokens = info.tokens = process(input, nfc); // if we parse, we get [norm and mapped]
+			let token_count = tokens.length;
+			let type;
+			if (!token_count) { // the label was effectively empty (could of had ignored characters)
+				norm = [];
+				type = 'None'; // use this instead of "Common"
 			} else {
-				check_combining_marks(decomp);
-				check_surrounding(norm, 0x2019, 'apostrophe', true, true); // question: can this be generalized better?
-				//check_middle_dot(norm);
-				info.script = check_scripts(nfc(mapped.flatMap(x => Array.isArray(x) ? [] : x))); // remove emoji
+				let chars = tokens[0];
+				let emoji = token_count > 1 || chars.is_emoji;
+				if (!emoji && chars.every(cp => cp < 0x80)) { // special case for ascii
+					norm = chars;
+					check_label_extension(norm); // only needed for ascii
+					type = 'ASCII';
+				} else {
+					if (emoji) { // there is at least one emoji
+						info.emoji = true; 
+						chars = tokens.flatMap(x => x.is_emoji ? [] : x); // all of the nfc tokens concat together
+					}
+					norm = tokens.flatMap(x => !preserve_emoji && x.is_emoji ? filter_fe0f(x) : x);
+					if (!chars.length) {
+						type = 'Emoji';
+					} else {
+						check_leading_combining_mark(norm);
+						check_fenced(norm);
+						for (let i = 1; i < token_count; i++) { // we've already checked the first token
+							let cps = tokens[i];
+							if (!cps.is_emoji && CM.has(cps[0])) { // every text token has emoji neighbors, eg. EtEEEtEt...
+								throw new Error(`emoji + combining mark: "${str_from_cps(tokens[i-1])} + ${safe_str_from_cps([cps[i][0]])}"`);
+							}
+						}
+						type = determine_group(chars).N;
+					}
+				}
+				if (!emoji) check_leading_underscore(norm);
 			}
+			info.type = type;
 		} catch (err) {
-			info.error = err.message;
+			info.error = err;
 		}
+		info.output = norm;
 		return info;
 	});
+}
+
+function determine_group(cps) {
+	for (let cp of cps) {
+		let g = UNIQUE.get(cp);
+		if (g) { 
+			// we got a unique character match
+			// either we are member of this group or throw
+			check_group(g, cps);
+			return g;
+		}
+	}
+	// we didn't have a unique character
+	let err0;
+	for (let g of GROUPS) {
+		if (cps.some(cp => g.P.has(cp))) { // check groups with a primary match
+			try {
+				check_group(g, cps);
+				return g; // take the first one that accepts 
+			} catch (err) {
+				if (!err0) err0 = err; // remember the first error
+			}
+		}
+	}
+	// if error exists, we had 1+ matches
+	if (err0) throw err0;
+	// we had 0 matches:
+	// likely the name was composed of parts, each of which is valid
+	// but when nfc'd, it formed a disallowed character
+	// eg. valid(a) + ignored + valid(breve) => invalid(a-breve)
+	process(cps, x=>x); // should probably throw
+	throw new Error(`no match`); // can this happen?
 }
 
 // throw on first error
 function flatten(split) {
 	return split.map(({input, error, output}) => {
 		// don't print label again if just a single label
-		if (error) throw new Error(split.length == 1 ? error : `Invalid label "${safe_str_from_cps(input)}": ${error}`);
+		if (error) throw new Error(split.length == 1 ? error : `Invalid label "${safe_str_from_cps(input)}": ${error.message}`);
 		return str_from_cps(output);
 	}).join(STOP_CH);
 }
 
-function process(input) {
-	let ret = []; 
+function check_group(g, cps) {
+	let {V, W, M} = g;
+	let cm_whitelist = M instanceof Map;
+	for (let i = 0, e = cps.length; i < e; ) {
+		let cp = cps[i++];
+		let seqs = cm_whitelist && M.get(cp);
+		if (seqs) { 
+			// list of codepoints that can follow
+			// if this exists, this will always be 1+
+			let j = i;
+			while (j < e && CM.has(cps[j])) j++;
+			let cms = cps.slice(i, j);
+			let match = seqs.find(seq => !compare_arrays(seq, cms));
+			if (!match) throw new Error(`disallowed combining mark sequence: "${safe_str_from_cps([cp, ...cms])}"`);
+			i = j;
+		} else if (!V.has(cp)) {
+			// https://www.unicode.org/reports/tr39/#mixed_script_confusables
+			let quoted = quoted_cp(cp);
+			for (let cp of cps) {
+				let u = UNIQUE.get(cp);
+				if (u && u !== g) {
+					// if both scripts are restricted this error is confusing
+					// because we don't differentiate RestrictedA from RestrictedB 
+					if (!u.R) quoted = `${quoted} is ${u.N}`;
+					break;
+				}
+			}
+			throw new Error(`disallowed ${g.N} character: ${quoted}`);
+			//throw new Error(`disallowed character: ${quoted} (expected ${g.N})`);
+			//throw new Error(`${g.N} does not allow: ${quoted}`);
+		}
+	}
+	if (!cm_whitelist) {
+		let decomposed = nfd(cps);
+		for (let i = 1, e = decomposed.length; i < e; i++) { // we know it can't be cm leading
+			if (CM.has(cps[i])) {
+				let j = i + 1;
+				while (j < e && CM.has(cps[j])) j++;
+				if (j - i >= M) {
+					throw new Error(`too many combining marks: "${str_from_cps(cps.slice(i-1, j))}" (max: ${M})`);
+				}
+				i = j;
+			}
+		}
+	}
+	// https://www.unicode.org/reports/tr39/#def_whole_script_confusables
+	for (let set of W) {
+		if (cps.every(cp => set.has(cp))) {
+			throw new Error(`spoofable`);
+		}
+	}
+}
+
+// given a list of codepoints
+// returns a list of lists, where emoji are a fully-qualified (as Array subclass)
+// eg. explode_cp("abc💩d") => [[61, 62, 63], Emoji[1F4A9, FE0F], [64]]
+function process(input, nf) {
+	let ret = [];
+	let chars = [];
 	input = input.slice().reverse(); // flip so we can pop
 	while (input.length) {
 		let emoji = consume_emoji_reversed(input);
 		if (emoji) {
+			if (chars.length) {
+				ret.push(nf(chars));
+				chars = [];
+			}
 			ret.push(emoji);
 		} else {
 			let cp = input.pop();
+			/*
+			let cps = MAPPED.get(cp);
+			if (cps) {
+				chars.push(...cps);
+			} else {
+				chars.push(cp);
+			}
+			*/
 			if (VALID.has(cp)) {
-				ret.push(cp);
+				chars.push(cp);
 			} else {
 				let cps = MAPPED.get(cp);
 				if (cps) {
-					ret.push(...cps);
+					chars.push(...cps);
 				} else if (!IGNORED.has(cp)) {
-					let form = should_escape(cp) ? '' : ` "${safe_str_from_cps([cp])}"`;
-					throw new Error(`disallowed character:${form} ${quote_cp(cp)}`); 
+					throw new Error(`disallowed character: ${quoted_cp(cp)}`); 
 				}
 			}
 		}
+	}
+	if (chars.length) {
+		ret.push(nf(chars));
 	}
 	return ret;
 }
@@ -299,6 +403,12 @@ function filter_fe0f(cps) {
 	return cps.filter(cp => cp != FE0F);
 }
 
+// given array of codepoints
+// returns the longest valid emoji sequence (or undefined if no match)
+// *MUTATES* the supplied array
+// allows optional FE0F
+// disallows interleaved ignored characters
+// fills (optional) eaten array with matched codepoints
 function consume_emoji_reversed(cps, eaten) {
 	let node = EMOJI_ROOT;
 	let emoji;
@@ -308,20 +418,19 @@ function consume_emoji_reversed(cps, eaten) {
 	if (eaten) eaten.length = 0; // clear input buffer (if needed)
 	while (pos) {
 		let cp = cps[--pos];
-		let br = node.branches.find(x => x.set.has(cp));
-		if (!br) break;
-		node = br.node;
-		if (node.save) { // remember
+		node = node.B.find(x => x.Q.has(cp));
+		if (!node) break;
+		if (node.S) { // remember
 			saved = cp;
-		} else if (node.check) { // check exclusion
+		} else if (node.C) { // check exclusion
 			if (cp === saved) break;
 		}
 		stack.push(cp);
-		if (node.fe0f) {
+		if (node.F) {
 			stack.push(FE0F);
 			if (pos > 0 && cps[pos - 1] == FE0F) pos--; // consume optional FE0F
 		}
-		if (node.valid) { // this is a valid emoji (so far)
+		if (node.V) { // this is a valid emoji (so far)
 			emoji = conform_emoji_copy(stack, node);
 			if (eaten) eaten.push(...cps.slice(pos).reverse()); // copy input (if needed)
 			cps.length = pos; // truncate
@@ -331,7 +440,7 @@ function consume_emoji_reversed(cps, eaten) {
 		let cp = cps[cps.length-1];
 		if (EMOJI_SOLO.has(cp)) {
 			if (eaten) eaten.push(cp);
-			emoji = [cp];
+			emoji = Emoji.of(cp);
 			cps.pop();
 		}
 	}
@@ -340,27 +449,28 @@ function consume_emoji_reversed(cps, eaten) {
 
 // create a copy and fix any unicode quirks
 function conform_emoji_copy(cps, node) {
-	let copy = cps.slice(); // copy stack
-	if (node.valid == 2) copy.splice(1, 1); // delete FE0F at position 1 (see: make.js)
+	let copy = Emoji.from(cps); // copy stack
+	if (node.V == 2) copy.splice(1, 1); // delete FE0F at position 1 (see: make.js)
 	return copy;
 }
 
-// return all supported emoji
+// return all supported emoji as fully-qualified emoji 
+// ordered by length then lexicographic 
 export function ens_emoji() {
 	let ret = [...EMOJI_SOLO].map(x => [x]);
 	build(EMOJI_ROOT, []);
 	return ret.sort(compare_arrays);
 	function build(node, cps, saved) {
-		if (node.save) { // remember
+		if (node.S) { 
 			saved = cps[cps.length-1];
-		} else if (node.check) { // check exclusion
+		} else if (node.C) { 
 			if (saved === cps[cps.length-1]) return;
 		}
-		if (node.fe0f) cps.push(FE0F);
-		if (node.valid) ret.push(conform_emoji_copy(cps, node));
-		for (let br of node.branches) {
-			for (let cp of br.set) {
-				build(br.node, [...cps, cp], saved);
+		if (node.F) cps.push(FE0F);
+		if (node.V) ret.push(conform_emoji_copy(cps, node));
+		for (let br of node.B) {
+			for (let cp of br.Q) {
+				build(br, [...cps, cp], saved);
 			}
 		}
 	}
@@ -389,16 +499,9 @@ export function ens_tokenize(name, {
 			tokens.push({type: TY_EMOJI, emoji, input: eaten.slice(), cps: filter_fe0f(emoji)});
 		} else {
 			let cp = input.pop();
-			if (cp === STOP) {
+			if (cp == STOP) {
 				tokens.push({type: TY_STOP, cp});
 			} else if (VALID.has(cp)) {
-				/*
-				if (CM_WHITELIST.get(cp) === CM_ISOLATED_PH) {
-					tokens.push({type: TY_ISOLATED, cp});
-				} else {
-					tokens.push({type: TY_VALID, cps: [cp]});
-				}
-				*/
 				tokens.push({type: TY_VALID, cps: [cp]});
 			} else if (IGNORED.has(cp)) {
 				tokens.push({type: TY_IGNORED, cp});
@@ -441,7 +544,7 @@ export function ens_tokenize(name, {
 				} else {
 					start = i; // remember last
 				}
-			} else if (token.type === TY_EMOJI) { // 20221024: is this correct?
+			} else if (token.type == TY_EMOJI) { // 20221024: is this correct?
 				start = -1; // reset
 			}
 		}
@@ -450,7 +553,7 @@ export function ens_tokenize(name, {
 }
 
 function is_valid_or_mapped(type) {
-	return type === TY_VALID || type === TY_MAPPED;
+	return type == TY_VALID || type == TY_MAPPED;
 }
 
 function requires_check(cps) {
@@ -459,9 +562,9 @@ function requires_check(cps) {
 
 function collapse_valid_tokens(tokens) {
 	for (let i = 0; i < tokens.length; i++) {
-		if (tokens[i].type === TY_VALID) {
+		if (tokens[i].type == TY_VALID) {
 			let j = i + 1;
-			while (j < tokens.length && tokens[j].type === TY_VALID) j++;
+			while (j < tokens.length && tokens[j].type == TY_VALID) j++;
 			tokens.splice(i, j - i, {type: TY_VALID, cps: tokens.slice(i, j).flatMap(x => x.cps)});
 		}
 	}

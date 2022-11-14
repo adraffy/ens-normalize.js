@@ -1,9 +1,9 @@
 // find emoji that are new
 
-import {UNICODE} from './unicode-version.js';
+import {PRINTER, UNICODE} from './unicode-version.js';
 import {version_ordinal} from './utils.js';
 
-const version0 = version_ordinal(UNICODE.version);
+const version0 = version_ordinal(UNICODE.unicode_version);
 
 let found = new Map();
 function add(cps, info) {
@@ -29,5 +29,6 @@ for (let info of Object.values(UNICODE.emoji_zwjs()).flat()) {
 }
 
 for (let info of found.values()) {
-	console.log(`${UNICODE.format(info)} <${info.types}>`);
+	console.log(`${PRINTER.desc_for_emoji(info)} [${info.types}]`);
 }
+console.log(found.size);

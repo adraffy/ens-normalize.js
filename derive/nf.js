@@ -51,7 +51,7 @@ function unpack_cp(packed) {
 export function create_nf(unicode) {
 
 	const SHIFTED_RANK = new Map(unicode.combining_ranks().flatMap((v, i) => v.map(cp => [cp, (i+1) << 24])));
-	const COMP_EXCLUSIONS = new Set(unicode.composition_exclusions());
+	const COMP_EXCLUSIONS = new Set(unicode.read_composition_exclusions());
 	const DECOMP = new Map();
 	const RECOMP = new Map();
 
@@ -176,9 +176,17 @@ export function create_nf(unicode) {
 		nfc(cps) {
 			return composed_from_decomposed(decomposed(cps));
 		},
+		is_nfc(cp) {
+			let cps = this.nfc([cp]);
+			return cps.length === 1 && cps[0] === cp;
+		},
+		is_composite(cp) {
+			let cps = this.nfd([cp]);
+			return cps.length !== 1 || cps[0] !== cp;
+		},
 		run_tests() {
 			let errors = [];
-			for (let [name, cases] of Object.entries(unicode.nf_tests())) {
+			for (let [name, cases] of Object.entries(unicode.read_nf_tests())) {
 				for (let strs of cases) {
 					let [input, nfd0, nfc0] = strs.map(explode_cp);
 					let nfd1 = this.nfd(input);

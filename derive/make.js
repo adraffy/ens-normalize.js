@@ -1,15 +1,19 @@
-import {mkdirSync, writeFileSync, createWriteStream, existsSync} from 'node:fs';
-import {compare_arrays, explode_cp, parse_cp_sequence} from './utils.js';
-import {UNICODE, NF, IDNA, SCRIPTS} from './unicode-version.js';
-import {AUGMENTED_ALL} from './unicode-logic.js';
+import {mkdirSync, writeFileSync, createWriteStream} from 'node:fs';
+import {compare_arrays, explode_cp, permutations, parse_cp_sequence, print_section, print_checked, print_table} from './utils.js';
+import {UNICODE, NF, IDNA, PRINTER} from './unicode-version.js';
 import CHARS_VALID from './rules/chars-valid.js';
 import CHARS_DISALLOWED from './rules/chars-disallow.js';
 import CHARS_MAPPED from './rules/chars-mapped.js';
 import CHARS_ESCAPE from './rules/chars-escape.js';
-import {CM_DISALLOWED, CM_WHITELIST} from './rules/cm.js';
-import {ORDERED_SCRIPTS, RESTRICTED_SCRIPTS, CHANGED_SCRIPTS} from './rules/scripts.js';
+import CHARS_FENCED from './rules/chars-fenced.js';
+import GROUP_ORDER from './rules/group-order.js';
+import {CONFUSE_GROUPS, CONFUSE_DEFAULT_ALLOW, CONFUSE_TYPE_VALID, CONFUSE_TYPE_ALLOW} from './rules/confuse.js';
+import {EMOJI_DEMOTED, EMOJI_DISABLED, EMOJI_SEQ_WHITELIST, EMOJI_SEQ_BLACKLIST} from './rules/emoji.js';
+import {CM_WHITELIST} from './rules/cm.js';
+import {SCRIPT_GROUPS, RESTRICTED_SCRIPTS, SCRIPT_EXTENSIONS, DISALLOWED_SCRIPTS} from './rules/scripts.js';
 
-const Zinh = SCRIPTS.require('Zinh');
+const STOP = 0x2E; // label separator
+const FE0F = 0xFE0F;
 
 let out_dir = new URL('./output/', import.meta.url);
 
@@ -23,75 +27,29 @@ let out_dir = new URL('./output/', import.meta.url);
 	};
 })(process.stdout);
 
-// quick idiot check
-function assert_distinct(things) {
-	let m = Object.entries(things).map(([k, v]) => [k, new Set(v)]);
-	for (let i = 0; i < m.length; i++) {
-		let set_i = m[i][1];
-		for (let j = i + 1; j < m.length; j++) {
-			let set_j = m[j][1];
-			for (let x of set_i) {
-				if (set_j.has(x)) {
-					console.log(m[i][0], m[j][0], x);
-					throw new Error('distinct');
-				}
-			}
-		}
-	}
-}
-assert_distinct({
-	CHARS_VALID, 
-	CHARS_DISALLOWED, 
-	MAPPED: CHARS_MAPPED.map(x => x[0])
-});
-
-// TODO: this is shitty improve this
-let ordered_scripts = [...new Set(ORDERED_SCRIPTS.flatMap(x => x.test))];
-let unordered_scripts = new Set(SCRIPTS.entries.map(x => x.abbr));
-ordered_scripts.forEach(x => unordered_scripts.delete(x));
-for (let abbr of RESTRICTED_SCRIPTS) {
-	if (!unordered_scripts.delete(abbr)) {
-		throw new Error(`Restricted duplicate: ${abbr}`);
-	}
-}
-unordered_scripts.delete('Zyyy');
-unordered_scripts.delete('Zinh');
-if (unordered_scripts.size) {
-	console.log(unordered_scripts);
-	throw new Error('unordered');
+function version_str(obj) {
+	return `${obj.version} (${obj.date})`;
 }
 
 console.log(`Build Date: ${new Date().toJSON()}`);
-console.log(`Unicode Version: ${UNICODE.version_str}`);
+console.log(`Unicode Version: ${version_str(UNICODE.unicode_version)}`);
+console.log(`CLDR Version: ${version_str(UNICODE.cldr_version)}`);
 
 // these are our primary output structures
 let ignored = new Set(IDNA.ignored);
 let valid = new Set(IDNA.valid);
 let mapped = new Map(IDNA.mapped);
-let escaped = new Set(CHARS_ESCAPE);
-//let isolated = new Set();
-let emoji = new Map();
+let valid_emoji = new Map();
 
-function disallow_char(cp, quiet) {	
-	let replacement = mapped.get(cp);
-	if (replacement) {
+function disallow_char(cp) {	
+	let ys = mapped.get(cp);
+	if (ys) {
 		mapped.delete(cp);
-		console.log(`Removed Mapped: ${UNICODE.format(cp, replacement)}`);
+		console.log(`Removed Mapped: ${PRINTER.desc_for_mapped(cp, ys)}`);
 	} else if (ignored.delete(cp)) {
-		console.log(`Removed Ignored: ${UNICODE.format(cp)}`);
+		console.log(`Removed Ignored: ${PRINTER.desc_for_cp(cp)}`);
 	} else if (valid.delete(cp)) {
-		let print = () => {
-			console.log(`Removed Valid: ${UNICODE.format(cp)}`);
-			print = false;
-		};
-		if (!quiet) print();
-		for (let [x, ys] of mapped) {
-			if (ys.includes(cp)) {
-				if (print) print();
-				mapped.delete(x);
-				console.log(`--Mapping: ${UNICODE.format(x, ys)}`);
-			}
-		}
+		console.log(`Removed Valid: ${PRINTER.desc_for_cp(cp)}`);
 	}
 }
 
@@ -101,473 +59,800 @@ function register_emoji(info) {
 		if (!Array.isArray(cps) || !cps.length) throw new Error('expected cps');
 		if (!info.name) throw new Error('expected name');
 		if (!info.type) throw new Error('expected type');
-		info.name = info.name.replace(/\\x{([0-9a-f]{2})}/g, (_, x) => String.fromCharCode(parseInt(x, 16)));
 		let key = String.fromCodePoint(...cps);
-		let old = emoji.get(key);
+		let old = valid_emoji.get(key);
 		if (old) {
 			console.log(old);
 			throw new Error(`duplicate`);
 		}
-		console.log(`Register Emoji [${info.type}]: ${UNICODE.format(info)}`);		
-		emoji.set(key, info);
+		console.log(`Register Emoji [${info.type}]: ${PRINTER.desc_for_emoji(info)}`);
+		valid_emoji.set(key, info);
 	} catch (err) {
 		console.log(info);
-		throw new Error(`Register Emoji: ${err.message}`);
+		throw err;
 	}
 }
 
-/*
-function set_isolated(cp) {
-	if (isolated.has(cp)) {
-		throw new Error(`Already Isolated: ${UNICODE.format(cp)}`);
-	}
-	isolated.add(cp);
-	console.log(`Isolated: ${UNICODE.format(cp)}`);
-}
-*/
-
-let emoji_zwjs = UNICODE.emoji_zwjs();
+let emoji_zwjs = UNICODE.read_emoji_zwjs();
+print_section('RGI Emoji ZWJ Sequences');
 emoji_zwjs.RGI_Emoji_ZWJ_Sequence.forEach(register_emoji);
 
-let emoji_seqs = UNICODE.emoji_seqs();
+let emoji_seqs = UNICODE.read_emoji_seqs();
+print_section('RGI Emoji Keycap Sequences');
 emoji_seqs.Emoji_Keycap_Sequence.forEach(register_emoji);
+print_section('RGI Emoji Tag Sequences');
 emoji_seqs.RGI_Emoji_Tag_Sequence.forEach(register_emoji);
+print_section('RGI Emoji Modifier Sequences');
 emoji_seqs.RGI_Emoji_Modifier_Sequence.forEach(register_emoji);
-
 // derive flag sequences with valid regions
 // warning: this contains EZ and QO
-// UNICODE.valid_emoji_flag_sequences().forEach(register_emoji);
+// UNICODE.derive_emoji_flag_sequences().forEach(register_emoji);
 // use the following instead
+print_section('RGI Emoji Flag Sequences');
 emoji_seqs.RGI_Emoji_Flag_Sequence.forEach(register_emoji);
 
 let emoji_disabled = [];
-
-let emoji_chrs = UNICODE.emoji_data();
+let emoji_chrs = UNICODE.read_emoji_data();
 let emoji_map = new Map(emoji_chrs.Emoji.map(x => [x.cp, x]));
 
-// names suck: old, ucd, emoji (incomplete)
-/*
-// modernize names
-for (let info of emoji_seqs.Basic_Emoji) {
-	let rec = emoji_map.get(info.cps[0]);
-	if (!rec) throw new Error(`Expected emoji: ${UNICODE.format(info)}`);
-	if (rec.name.localeCompare(info.name, 'en', {sensitivity: 'base'})) {
-		rec.name = `${rec.name} (${info.name})`;
-	}
-}
-*/
-
-// demote mapped emoji
-let emoji_demoted = new Set((await import('./rules/emoji-demoted.js')).default);
-for (let rec of emoji_map.values()) {
-	if (emoji_demoted.has(rec.cp)) {
-		rec.used = true;
-		emoji_disabled.push(rec);
-		console.log(`Demoted Emoji: ${UNICODE.format(rec)}`);
-	} else {
-		disallow_char(rec.cp, true); // quiet because there are a lot of these
-	}
-}
-
-// disable single regionals
-for (let cp of UNICODE.regional_indicators()) {
-	let rec = emoji_map.get(cp);
-	rec.used = true;
-	emoji_disabled.push(rec);
-	console.log(`Disabled Emoji: ${rec}`);
-}
-
-// disable skin modifiers
-for (let info of UNICODE.emoji_skin_colors()) {
-	emoji_map.get(info.cp).used = true;
+print_section(`Demote Emoji to Characters`);
+for (let cp of EMOJI_DEMOTED) {
+	let info = emoji_map.get(cp);
+	if (!info) throw new Error(`Expected emoji: ${PRINTER.desc_for_cp(cp)}`);
+	if (info.used) throw new Error(`Duplicate: ${PRINTER.desc_for_cp(cp)}`);
+	info.used = true;
 	emoji_disabled.push(info);
-	console.log(`Disabled Emoji: ${info}`);
+	console.log(`Demoted Emoji: ${PRINTER.desc_for_emoji(info)}`);
 }
 
-// disable hair modifiers
-// 20221004: these don't seem to function the same as skin
-/* 
-for (let info of UNICODE.emoji_hair_colors()) {
-	emoji_map.get(info.cp).used = true;
+print_section(`Disable Emoji (and Characters)`);
+for (let cp of EMOJI_DISABLED) {
+	let info = emoji_map.get(cp);
+	if (!info) throw new Error(`Expected emoji: ${PRINTER.desc_for_cp(cp)}`);
+	if (info.used) throw new Error(`Duplicate: ${PRINTER.desc_for_cp(cp)}`);
+	info.used = true;
 	emoji_disabled.push(info);
-	console.log(`Disabled Emoji: ${info}`);
-}
-*/
-
-// register forced FE0F
-for (let info of emoji_seqs.Basic_Emoji) {
-	if (info.cps.length == 2 && info.cps[1] == 0xFE0F) { // X + FE0F
-		let rec = emoji_map.get(info.cps[0]);
-		if (!rec) throw new Error(`Expected emoji: ${UNICODE.format(info)}`);	
-		if (rec.used) continue;
-		rec.used = true;
-		register_emoji(info);
-	}
+	disallow_char(cp);
 }
 
-// register default emoji-presentation
-for (let info of emoji_chrs.Emoji_Presentation) {
-	let rec = emoji_map.get(info.cp);
-	if (!rec) throw new Error(`Expected emoji: ${UNICODE.format(info)}`);	
-	if (rec.used) continue;
-	rec.used = true;
-	register_emoji({cps: [info.cp, 0xFE0F], ...info});
-}
-
-// register default text-presentation (leftovers)
+print_section('Remove Emoji from Characters');
 for (let info of emoji_map.values()) {
-	if (!info.used) {	
+	if (info.used) continue;
+	disallow_char(info.cp);
+}
+
+print_section('Register Basic Emoji with Forced Emoji-Presentation');
+for (let seq of emoji_seqs.Basic_Emoji) {
+	let {cps} = seq;
+	if (cps.length == 2 && cps[1] == FE0F) { // X + FE0F
+		let info = emoji_map.get(cps[0]);
+		if (!info) throw new Error(`Expected emoji: ${PRINTER.desc_for_emoji(seq)}`);	
+		if (info.used) continue;
+		info.used = true;
+		register_emoji(seq);
+	}
+}
+
+print_section('Register Default Emoji-Presentation Emoji');
+for (let seq of emoji_chrs.Emoji_Presentation) {
+	let info = emoji_map.get(seq.cp);
+	if (!info) throw new Error(`Expected emoji: ${PRINTER.desc_for_emoji(seq)}`);	
+	if (info.used) continue;
+	info.used = true;
+	register_emoji({cps: [seq.cp, FE0F], ...seq});
+}
+
+print_section('Register Leftover Emoji');
+for (let info of emoji_map.values()) {
+	if (!info.used) {
 		register_emoji({cps: [info.cp], ...info});
 	}
 }
 
-for (let info of (await import('./rules/emoji-seq-whitelist.js')).default) {
+print_section(`Whitelist Emoji`);
+for (let info of EMOJI_SEQ_WHITELIST) {
 	register_emoji({cps: parse_cp_sequence(info.hex), type: 'Whitelisted', name: info.name});
 }
-for (let seq of (await import('./rules/emoji-seq-blacklist.js')).default) {
-	let cps = parse_cp_sequence(seq);
+
+print_section(`Blacklist Emoji`);
+for (let def of EMOJI_SEQ_BLACKLIST) {
+	let cps = Number.isInteger(def) ? [def] : parse_cp_sequence(def);
 	let key = String.fromCodePoint(...cps);
-	let info = emoji.get(key);
-	if (!info) {
-		console.log(`*** Blacklist Emoji: No match for ${UNICODE.format(cps)}`); // should this be fatal? (yes)
-		throw new Error('blacklist');
-	}
-	console.log(`Blacklist Emoji by Sequence: ${UNICODE.format(info)}`);
+	let info = valid_emoji.get(key);
+	if (!info) throw new Error(`Expected emoji sequence: ${PRINTER.desc_for_cps(cps)}`);
+	console.log(`Unregistered Emoji: ${PRINTER.desc_for_emoji(info)}`);
 	emoji_disabled.push(info);
-	emoji.delete(key);
+	valid_emoji.delete(key);
 }
+
+print_section(`Add Mapped Characters`);
 for (let [x, ys] of CHARS_MAPPED) {
 	let old = mapped.get(x);
-	if (old && compare_arrays(old, ys) == 0) {
-		throw new Error(`Already mapped: ${UNICODE.format(x, ys)}`);
-	}
+	if (old && !compare_arrays(old, ys)) throw new Error(`Duplicate mapped: ${PRINTER.desc_for_mapped(x, ys)}`);
 	disallow_char(x);
 	mapped.set(x, ys);
-	console.log(`Added Mapped: ${UNICODE.format(x, ys)}`);
+	console.log(`Add Mapped: ${PRINTER.desc_for_mapped(x, ys)}`);
 }
+
+print_section(`Remove Disallowed Characters`);
 for (let cp of CHARS_DISALLOWED) {
 	if (!mapped.has(cp) && !ignored.has(cp) && !valid.has(cp)) {
-		//throw new Error(`Already disallowed: ${UNICODE.format(cp)}`);
-		console.log(`*** Already disallowed: ${UNICODE.format(cp)}`);
-		//await new Promise(f => setTimeout(f, 500));
+		console.log(`*** Already disallowed: ${PRINTER.desc_for_cp(cp)}`); // not fatal		
 	}
 	disallow_char(cp);
 }
+
+print_section(`Add Valid Characters`);
 for (let cp of CHARS_VALID) {
-	if (valid.has(cp)) throw new Error(`Already valid: ${UNICODE.format(cp)}`);
+	if (valid.has(cp)) throw new Error(`Already valid: ${PRINTER.desc_for_cp(cp)}`);
 	disallow_char(cp);
 	valid.add(cp);
-	console.log(`Added Valid: ${UNICODE.format(cp)}`);
+	console.log(`Added Valid: ${PRINTER.desc_for_cp(cp)}`);
 }
+
+
+print_section(`Apply ScriptExt`);
+for (let [cp, abbrs] of SCRIPT_EXTENSIONS) {
+	try {
+		if (!valid.has(cp)) throw new Error(`Not Valid`);
+		if (!abbrs.length) throw new Error(`Empty`);
+		//if (abbrs.includes('Zyyy') && abbrs.length > 1) throw new Error(`Common + 1`)
+		let scripts = [...new Set(abbrs.sort().map(x => UNICODE.require_script(x)))]; // sorted
+		let char = UNICODE.require_char(cp);
+		console.log(`${PRINTER.desc_for_cp(cp)} [${char.get_extended().map(x => x.abbr)} => ${scripts.map(x => x.abbr)}]`);
+		char.extended = scripts; // replace
+	} catch (err) {
+		throw new Error(`ScriptExt "${err.message}": ${PRINTER.desc_for_cp(cp)}`);
+	}
+}
+
 /*
-for (let cp of (await import('./rules/chars-isolated.js')).default) {
-	set_isolated(cp);
-}
-for (let info of emoji_chrs.Extended_Pictographic) { 
-	if (!emoji_map.has(info.cp) && valid.has(info.cp)) {
-		set_isolated(info.cp);
+// this should happen automatically
+// remove characters that are specific to this script 
+// and not extended beyond the disallowed set
+print_section('Remove Disallowed Scripts');
+for (let script of disallowed_scripts) {
+	console.log(`Script: ${script.description}`);
+	for (let char of script.map.values()) {
+		if (!char.extended || char.extended.every(x => disallowed_scripts.has(x))) {
+			disallow_char(char.cp);
+		}
 	}
 }
 */
 
-// apply script changes
-SCRIPTS.apply_changes(CHANGED_SCRIPTS);
 
-// compute characters that decompose to CM
-let cm_base = new Map();
-for (let {cp} of UNICODE.chars) {
-	if (UNICODE.cm.has(cp)) continue;
-	let [base_cp, ...cps] = NF.nfd([cp]);
-	if (base_cp === cp) continue;
-	if (!cps.every(x => UNICODE.cm.has(x))) continue;
-	let bucket = cm_base.get(base_cp);
-	if (!bucket) {
-		bucket = [];
-		cm_base.set(base_cp, bucket);
+// these are some more primary output structures
+print_section('Create Groups');
+
+class ScriptGroup {
+	constructor(name, test, rest, extra, cm) {
+		this.name = name;
+		this.test_script_set = test;
+		this.rest_script_set = rest;
+		this.extra_set = extra;
+		this.cm = cm;
+		this.valid_set = new Set();
+		this.cm_map = new Map();
+		this.whole_map = new Map();
 	}
-	bucket.push(cp);
+	register_whole(cp, groups) {
+		if (!this.valid_set.has(cp)) return;
+		let {whole_map} = this;
+		for (let g of groups) {
+			if (g === this) continue; // ignore self
+			let set = whole_map.get(g);
+			if (!set) {
+				set = new Set();
+				whole_map.set(g, set);
+			}
+			set.add(cp);
+		}
+	}
 }
-let cm_internal = new Set([...cm_base.values()].flat());
 
-console.log(`Applying CM whitelist...`);
-let cm_whitelist = new Map();
+let untested_set = new Set(UNICODE.script_map.values());	
+untested_set.delete(UNICODE.require_script('Zinh')); // should not be testable
+untested_set.delete(UNICODE.require_script('Zzzz')); // should not be used
+let script_groups = [];
+for (let config of SCRIPT_GROUPS) {
+	let {name, test, rest = [], extra = [], cm = 1} = config;
+	try {
+		if (!name) throw new Error(`Expected name`);
+		if (!Array.isArray(test) || test.length == 0) throw new Error(`Expected test`);
+		let test_set = new Set();
+		for (let abbr of test) {
+			let script = UNICODE.require_script(abbr);
+			// every testable script can only be used once
+			if (!untested_set.delete(script)) {
+				throw new Error(`Duplicate: ${script.description}`);
+			}
+			test_set.add(script);
+		}
+		let rest_set = new Set();
+		for (let abbr of rest) {
+			let script = UNICODE.require_script(abbr);
+			if (test_set.has(script)) {
+				throw new Error(`Test + Rest: ${script.description}`);
+			}
+			if (rest_set.has(script)) {
+				throw new Error(`Duplicate: ${script.description}`);
+			}
+			rest_set.add(script);
+		}
+		// there are no restrictions on extra
+		// we can enforce this later
+		let extra_set = new Set(extra.flat(Infinity).flatMap(x => typeof x === 'string' ? explode_cp(x) : x));
+		let group = new ScriptGroup(name, test_set, rest_set, extra_set, cm);
+		script_groups.push(group);
+	} catch (err) {
+		console.log(config);
+		throw err;
+	}
+}
+for (let abbr of DISALLOWED_SCRIPTS) {
+	let script = UNICODE.require_script(abbr);
+	if (!untested_set.delete(script)) {
+		throw new Error(`Missing disallowed script: ${script.description}`);
+	}
+	console.log(`Disallowed Script: ${script.description}`);
+}
+for (let abbr of RESTRICTED_SCRIPTS) {
+	let script = UNICODE.require_script(abbr);
+	if (!untested_set.delete(script)) {
+		throw new Error(`Missing restricted script: ${script.description}`);
+	}
+	let group = new ScriptGroup(/*script.name*/script.abbr, new Set([script]), new Set(), new Set(), 1);
+	group.restricted = true;
+	script_groups.push(group);
+}
+if (untested_set.size) {
+	console.log([...untested_set].map(x => x.description));
+	throw new Error('leftover scripts');
+}
+for (let cp of valid) {
+	let char = UNICODE.require_char(cp);
+	let scripts = char.get_extended();
+	for (let g of script_groups) {
+		if (scripts.some(s => g.test_script_set.has(s) || g.rest_script_set.has(s)) || g.extra_set.has(cp)) {
+			g.valid_set.add(cp);
+		}
+	}
+}
+const MAX_GROUP_NAME_LEN = Math.max(...script_groups.map(g => g.name.length));
+for (let g of script_groups) {
+	let desc = `${g.valid_set.size.toString().padStart(7)} ${g.name.padEnd(MAX_GROUP_NAME_LEN)}`;
+	desc += ` [${[...g.test_script_set].map(s => s.abbr)}]`;
+	if (g.rest_script_set.size) {
+		desc += ` + [${[...g.rest_script_set].map(s => s.abbr)}]`;
+	}
+	if (g.extra_set.size) {
+		desc += ` + "${[...g.extra_set].map(cp => UNICODE.safe_str(cp, true)).join('')}"`;
+	}
+	if (g.restricted) {
+		desc += ' (Restricted)';
+	}
+	console.log(desc);
+}
+
+print_section(`Compute CM Whitelist`);
+let cm_whitelist = new Set();
 for (let form of CM_WHITELIST) {
-	let [base_cp, ...cms] = NF.nfd(explode_cp(form));
-	if (!valid.has(base_cp)) {
-		throw new Error(`Restricted CM "${form}" Not Valid Base: ${UNICODE.format(base_cp)}`);
-	}
-	if (!cms.length) {
-		throw new Error(`Restricted CM "${form}" Expected CM`);
-	}
-	for (let cp of cms) {
-		if (!UNICODE.cm.has(cp)) {
-			throw new Error(`Restricted CM "${form}" Not CM: ${UNICODE.format(cp)}`);
+	let cps = NF.nfc(explode_cp(form));
+	try {
+		let key = String.fromCodePoint(...cps); 
+		if (cm_whitelist.has(key)) {
+			throw new Error('Duplicate');
 		}
-		if (!valid.has(cp)) {
-			throw new Error(`Restricted CM "${form}" Not Valid CM: ${UNICODE.format(cp)}`);
+		cm_whitelist.add(key);
+		let [nfc_cp0, ...cms] = cps;
+		let base_char = UNICODE.require_char(nfc_cp0);
+		if (!valid.has(nfc_cp0)) throw new Error(`Base not Valid: ${PRINTER.desc_for_cp(nfc_cp0)}`);
+		if (base_char.is_cm) throw new Error(`Base is CM: ${PRINTER.desc_for_cp(nfc_cp0)}`);
+		let groups = script_groups.filter(g => g.valid_set.has(nfc_cp0));
+		if (!groups.length) {
+			throw new Error(`No group`);
 		}
-	}
-	let bucket = cm_whitelist.get(base_cp);
-	if (!bucket) {
-		bucket = [];
-		cm_whitelist.set(base_cp, bucket);
-	}
-	if (bucket.some(v => compare_arrays(v, cms) == 0)) {
-		throw new Error(`Restricted CM "${form}" Duplicate`);
-	}
-	bucket.push(cms);
-	let [combo_cp] = NF.nfc([base_cp, ...cms]);
-	cm_internal.delete(combo_cp);
-	if (!valid.has(combo_cp)) {
-		disallow_char(combo_cp);
-		valid.add(combo_cp);
-		console.log(`Restricted CM Valid: ${UNICODE.format(combo_cp)}`);
-	}
-}
-console.log(`CM Whitelist: ${cm_whitelist.size}`);
-
-// filter scripts
-for (let script of SCRIPTS.entries) {
-	script.valid = new Set([...script.set].filter(cp => valid.has(cp)));
-}
-
-// for every character thats in an isolated script but not cm-whitelisted,
-// it's disallowed if it internally contains a CM (should of been whitelisted)
-// everything else is considered isolated
-console.log('Purging isolated...');
-let cm_isolated = new Set();
-for (let abbr of CM_DISALLOWED) {
-	let script = SCRIPTS.require(abbr);
-	for (let cp of script.valid) {
-		if (cm_whitelist.has(cp)) continue;
-		if (cm_internal.has(cp)) {
-			script.valid.delete(cp);
-			disallow_char(cp);
-		} else {
-			cm_isolated.add(cp);
-		}
-	}
-}
-console.log(`CM Isolated: ${cm_isolated.size}`)
-
-// remove dangling mappings
-for (let [x, ys] of mapped) {
-	let cps = NF.nfd(ys);
-	next: for (let i = 0; i < cps.length; i++) {
-		if (!UNICODE.cm.has(cps[i+1])) continue;
-		if (cm_isolated.has(cps[i])) {
-			disallow_char(x);
-		} else {
-			let bucket = cm_whitelist.get(cps[i]);
-			if (bucket) {
-				for (let cms of bucket) {
-					if (!compare_arrays(cps.slice(i+1, i+1+cms.length), cms)) {
-						continue next; // found a match
-					}
+		for (let cp of cms) {
+			let char = UNICODE.require_char(cp);
+			if (!char.is_cm) {
+				throw new Error(`Not CM: ${PRINTER.desc_for_cp(cp)}`);
+			}
+			if (!valid.has(cp)) {
+				throw new Error(`CM not Valid: ${PRINTER.desc_for_cp(cp)}`);
+			}			
+			for (let g of groups) {
+				if (!g.valid_set.has(cp)) {
+					throw new Error(`Group "${g.name} missing CM: ${PRINTER.desc_for_cp(cp)}`);
 				}
-				disallow_char(x); 
+			}
+		}
+		for (let g of groups) {
+			let bucket = g.cm_map.get(nfc_cp0);
+			if (!bucket) {
+				bucket = [];
+				g.cm_map.set(nfc_cp0, bucket);
+			}
+			bucket.push(cms);
+		}
+		console.log(`${PRINTER.desc_for_cps(cps)} <${cms.length}> "${ NF.nfd(cps).map(cp => UNICODE.safe_str(cp, true)).join('+')}" [${groups.map(g => g.name)}]`);
+	} catch (err) {
+		throw new Error(`Whitelist CM "${form}": ${err.message}`);
+	}
+}
+
+for (let g of script_groups) {
+	let purged = [];
+	switch (g.cm) {
+		case -1: { 
+			// allow only whitelisted cm
+			// remove unreachable
+			let cm = new Set([...g.cm_map.values()].flat(Infinity)); 
+			for (let cp of g.valid_set) {
+				if (g.cm_map.has(cp)) continue; // whitelisted
+				if (UNICODE.cm.has(cp) && cm.has(cp)) continue; // necessary
+				if (NF.nfd([cp]).every(cp => !UNICODE.cm.has(cp) || cm.has(cp))) continue;	
+				purged.push(cp);
+			}
+			break;
+		}
+		case 0: {
+			// remove all cm
+			for (let cp of g.valid_set) {
+				if (UNICODE.cm.has(cp)) {
+					purged.push(cp);
+				}
+			}
+			break;
+		}
+		default: {
+			// remove any char decomposes into too many cp
+			for (let cp of g.valid_set) {
+				let cps = NF.nfd([cp]);
+				let cms = cps.filter(cp => UNICODE.cm.has(cp));
+				if (cms.length > g.cm) {
+					purged.push(cp);
+				}
+			}
+		}
+	}
+	if (!purged.length) continue;
+	print_section(`Purge CM: ${g.name} (${purged.length})`);
+	for (let cp of purged) {		
+		g.valid_set.delete(cp);
+		console.log(PRINTER.desc_for_cp(cp));
+	}
+}
+/*
+for (let group of script_groups) {
+	if (group.restricted) {
+		let decomp = new Set([...group.valid].flatMap(cp => NF.nfd([cp])));
+		for (let cp of decomp) {
+			if (!group.valid.has(cp)) {
+				throw new Error(`Group ${group.name} not self-contained: ${PRINTER.desc_for_cp(cp)}`);
 			}
 		}
 	}
 }
+*/
 
-// load restricted scripts
-// require existance, remove empty
-let restricted = [...new Set(RESTRICTED_SCRIPTS)].map(abbr => SCRIPTS.require(abbr)).filter(x => x.valid.size).sort();
-// require decomposed sanity
-for (let script of restricted) {	
-	let set = new Set(NF.nfd([...script.valid])); // this is a good idea IMO
-	for (let cp of set) {
-		if (!script.valid.has(cp) && !Zinh.set.has(cp)) {
-			throw new Error(`Restricted script ${script.abbr} decomposition: ${UNICODE.format(cp)}`);
+
+function group_parts(g) {
+	return new Set([
+		// nfc chars
+		...g.valid_set,
+		// nfd parts
+		[...g.valid_set].map(cp => NF.nfd([cp])),
+		// necessary cm
+		...g.cm_map.values(),
+	].flat(Infinity));
+}
+
+print_section('Compute Confusables');
+script_groups.forEach(g => g.parts = group_parts(g)); // part intersection
+for (let [target, ...defs0] of CONFUSE_GROUPS) {
+	let defs = [];
+	for (let def of defs0) {
+		if (Number.isInteger(def)) def = {cp: def};
+		switch (def.type) {
+			case undefined:
+			case CONFUSE_TYPE_VALID:
+			case CONFUSE_TYPE_ALLOW: break;
+			default: throw new Error(`Unknown Confusable Type "${def.type}": ${PRINTER.desc_for_cp(def.cp)}`);
+		}
+		let groups = script_groups.filter(g => g.parts.has(def.cp));
+		if (groups.length == 0) continue;
+		def.char = UNICODE.require_char(def.cp);
+		def.groups = new Set(groups);
+		def.restricted = groups.every(g => g.restricted);
+		defs.push(def);
+	}
+	if (defs.length < 2) {
+		//console.log(`Inactive: ${target}`); // too spammy
+		continue;
+	}
+	let union = new Set(defs.flatMap(x => [...x.groups]));
+	if (!defs.some(x => x.type)) {
+		let free = defs.filter(x => !x.restricted);
+		if (free.length === 1) {
+			let def = free[0];
+			def.auto = true;
+			def.type = CONFUSE_TYPE_VALID;
 		}
 	}
-	script.restricted = set;
-}
-// remove unrestricted from restricted
-let unrestricted_union = new Set(SCRIPTS.entries.flatMap(x => x.restricted ? [] : NF.nfd([...x.valid]))); // see above
-for (let script of restricted) {
-	for (let cp of unrestricted_union) {
-		script.restricted.delete(cp);
-	}
-}
-restricted = restricted.filter(x => x.restricted.size); // remove empty
-for (let script of restricted) {
-	console.log(`Restricted [${script.abbr}]: All(${script.set.size}) Valid(${script.valid.size}) Restricted(${script.restricted.size})`);
-}
-
-async function read_wholes(file) {
-	if (!existsSync(file)) return []; // uhhh
-	return (await import(file)).default; 
-}
-
-// since restricted scripts cant intersect
-// all the wholes can be unioned together
-let restricted_wholes = new Set();
-for (let script of restricted) {
-	let wholes = await read_wholes(new URL(`./rules/restricted-wholes/${script.abbr}.js`, import.meta.url));	
-	for (let cp of wholes) {
-		if (script.valid.has(cp)) {
-			restricted_wholes.add(cp);
+	let unresolved = {};
+	for (let g of union) {
+		let confuse = defs.filter(x => x.groups.has(g));
+		let decided = confuse.filter(x => x.type); 
+		// if there's only 1 group and they're all decided...
+		// we dont need to do anything
+		if (union.size == 1 && decided.length === confuse.length) {
+			continue; 
+		}
+		// if theres an annotated decision, use that
+		if (decided.length) {
+			for (let {type, cp} of confuse) {
+				switch (type) {
+					case CONFUSE_TYPE_VALID: // char can be used freely
+						break;
+					case CONFUSE_TYPE_ALLOW: // char requires additional hints
+						g.register_whole(cp, union);
+						break;
+					default: // char is single-script confusable
+						g.valid_set.delete(cp);
+				}
+			}
+			continue;
+		}	
+		if (confuse.length == 1) {
+			g.register_whole(confuse[0].cp, union);
+			continue;
+		}
+		let key = confuse.map(def => def.cp).sort().join(); // meh
+		let bucket = unresolved[key];
+		if (!bucket) unresolved[key] = bucket = [];
+		bucket.push(g);
+		for (let def of confuse) {
+			if (CONFUSE_DEFAULT_ALLOW) {
+				g.register_whole(def.cp, union);
+			} else {
+				g.valid_set.delete(def.cp);
+			}
 		}
 	}
-}
-console.log(`Restricted Wholes: ${restricted_wholes.size}`);
-
-// ordered
-let scripts = [];
-function register_ordered(name, set) {
-	let rec = scripts.find(x => x.name === name);
-	if (!rec) {
-		if (!set) set = SCRIPTS.require(name).valid;
-		rec = {name, set, index: scripts.length};
-		scripts.push(rec);
-	}
-	return rec;
-}
-// ALL must go first
-register_ordered(AUGMENTED_ALL, new Set(['Zinh', 'Zyyy'].flatMap(abbr => [...SCRIPTS.require(abbr).valid])));
-let ordered = await Promise.all(ORDERED_SCRIPTS.map(async ({name, test, rest, allow = [], deny = []}) => {
-	test = test.map(abbr => register_ordered(abbr));
-	rest = rest.map(abbr => register_ordered(abbr));
-	for (let cp of [allow, deny].flat()) {
-		if (!valid.has(cp)) {
-			throw new Error(`Expected ordered ${name} valid: ${UNICODE.format(cp)}`);
+	for (let def of defs) {
+		if (def.type === CONFUSE_TYPE_VALID) {
+			if (def.auto) {
+				console.log(`Auto-Override: ${PRINTER.desc_for_cp(def.cp)} [${[...def.groups].map(g => g.name)} vs ${[...union].filter(g => !def.groups.has(g)).map(g => g.name)}]`);
+			} else {		
+				console.log(`Override: ${PRINTER.desc_for_cp(def.cp)} [${[...def.groups].map(x => x.name)}]`);
+			}
 		}
 	}
-	let union = new Set([[test, rest].flat().flatMap(x => [...x.set]), allow].flat());
-	let wholes = (await read_wholes(new URL(`./rules/ordered-wholes/${name}.js`, import.meta.url))).filter(cp => union.has(cp));
-	console.log(`Ordered: ${name} Test(${test.map(x => x.name)}) Rest(${rest.map(x => x.name)}) Allow(${allow.length}) Deny(${deny.length}) Wholes(${wholes.length})`);
-	// convert to indices
-	test = test.map(x => x.index);
-	rest = rest.map(x => x.index);
-	return {name, test, rest, allow, deny, wholes};
-}));
+	for (let [joined, gs] of Object.entries(unresolved)) {
+		let cps = joined.split(',').map(s => parseInt(s));
+		console.log(`Unresolved: [${gs.map(g => g.name)}] ${cps.map(x => PRINTER.desc_for_cp(x)).join(' vs ')}`);
+	}
+}
+script_groups.forEach(g => delete g.parts); // remove cache
 
+
+
+// find characters that:
+// - match no group
+// - aren't part of a whitelisted cm sequence
+// - a component of a character thats in a group
+print_section('Disallow Leftover Characters');
+let parts_union = new Set(script_groups.flatMap(g => [...group_parts(g)]));
+for (let cp of valid) {
+	if (!parts_union.has(cp)) {	
+		disallow_char(cp);
+	}
+}
+
+// this should be last so we dont need to recover toggled mappings
+print_section('Remove Invalid Mappings');
+for (let [x, ys] of mapped) {
+	if (!ys.every(cp => valid.has(cp))) {
+		mapped.delete(x);
+		console.log(`Removed Mapping: ${PRINTER.desc_for_mapped(x, ys)}`);
+	}
+}
+
+print_section('Remove Empty Groups');
+script_groups = script_groups.filter(g => {
+	if (g.valid_set.size) return true;
+	console.log(`Removed Group: ${g.name}`);
+	for (let gg of script_groups) {
+		gg.whole_map.delete(g);
+	}
+});
+	
 
 // check that everything makes sense
-/*
-function has_adjacent_cm(cps) {
-	for (let i = 1; i < cps.length; i++) {
-		if (UNICODE.cm.has(cps[i]) && UNICODE.cm.has(cps[i-1])) {
-			return true;
-		}
-	}
-}
-for (let cp of valid) {
-	let decomposed = NF.nfd([cp]);
-	if (has_adjacent_cm(decomposed)) {
-		throw new Error(`Adjacent CM in Valid: ${UNICODE.format(cp, decomposed)}`);
-	}
-}
-*/
+print_section('Assert Invariants');
+
+// check ignored exclusion
 for (let cp of ignored) {
 	if (valid.has(cp)) {
-		throw new Error(`Ignored is valid: ${UNICODE.format(cp)}`);
+		throw new Error(`Ignored is Valid: ${PRINTER.desc_for_cp(cp)}`);
 	} else if (mapped.has(cp)) {
-		throw new Error(`Ignored is mapped: ${UNICODE.format(cp)}`);
+		throw new Error(`Ignored is Mapped: ${PRINTER.desc_for_cp(cp)}`);
 	}
 }
-for (let [x, ys] of mapped.entries()) {
+print_checked(`Ignored`);
+
+// check mapped exclusion
+for (let [x, ys] of mapped) {
 	if (valid.has(x)) {
-		throw new Error(`Mapped is valid: ${UNICODE.format(x)}`);
+		throw new Error(`Mapped is Valid: ${PRINTER.desc_for_mapped(x, ys)}`);
 	}
-	if (!ys.every(cp => valid.has(cp))) { // not valid chars
-		if (!ys.every(cp => emoji_map.has(cp))) { // not multiple single emoji
-			throw new Error(`Mapping isn't valid or emoji: ${UNICODE.format(x, ys)}`);
+}
+print_checked('Mapped is Valid');
+
+// check stop is valid
+if (!valid.has(STOP)) {
+	throw new Error(`Stop isn't Valid`);
+}
+for (let [x, ys] of mapped) {
+	if (x == STOP || ys.includes(STOP)) {
+		throw new Error(`Mapped contains Stop: ${PRINTER.desc_for_mapped(x, ys)}`);
+	}
+}
+print_checked(`Stop isn't Mapped`);
+
+for (let cp of valid) {
+	if (!NF.is_nfc(cp)) {
+		throw new Error(`Valid Non-NFC: ${PRINTER.desc_for_cp(cp)}`)
+	}
+}
+print_checked(`Valid are NFC`);
+
+// this prevents us from disabling a non-trivial intermediate part
+for (let cp0 of valid) {
+	let cps0 = NF.nfd([cp0]);
+	let [base_cp, ...extra] = cps0;
+	if (!extra.length) continue;
+	for (let perm of permutations(extra)) {
+		for (let n = 1; n <= perm.length; n++) {
+			// rearrange it and see if it comes back together
+			// this is safer than reimplementing NF reodering 
+			let cps_part = NF.nfc([base_cp, ...perm.slice(0, n)]);
+			let cps_rest = NF.nfc([...cps_part, ...perm.slice(n)]);
+			if (cps_rest.length === 1 && cps_rest[0] === cp0) {
+				for (let cp of cps_part) {
+					if (!valid.has(cp)) {
+						throw new Error(`Not Closed: ${PRINTER.desc_for_cp(cp0)} w/part ${PRINTER.desc_for_cp(cp)}`);
+					}
+				}
+			}
 		}
 	}
-	/*
-	let decomposed = NF.nfd(ys);
-	if (has_adjacent_cm(decomposed)) {
-		throw new Error(`Adjacent CM in Mapping: ${UNICODE.format(x, ys, decomposed)}`);
-	}
-	*/
-	if (ys.includes(0x2E)) {
-		throw new Error(`Mapping includes Stop: ${UNICODE.format(x, ys)}`);
-	}
 }
-let cc = new Set(UNICODE.chars.filter(x => x.cc > 0).map(x => x.cp)); 
-for (let info of emoji.values()) {
-	let {cps} = info;
-	if (cc.has(cps[0]) || cc.has(cps[cps.length-1])) {
-		console.log(info);
-		throw new Error(`Emoji with non-zero combining class boundary: ${UNICODE.format(info)}`);
-	}
-}
-for (let cp of Zinh.valid) {
-	if (UNICODE.cm.has(cp)) continue;
-	throw new Error(`Inherited Script isn't only CM: ${UNICODE.format(cp)}`);
-}
+print_checked(`Valid is Closed (via Brute-force)`);
+
+let escaped = new Set(CHARS_ESCAPE);
 for (let cp of escaped) {
 	if (valid.has(cp)) {
-		throw new Error(`Escaped character is valid: ${UNICODE.format(cp)}`);
+		throw new Error(`Escaped character is valid: ${PRINTER.desc_for_cp(cp)}`);
 	}
 }
+print_checked(`No Valid Escaped`);
 
-// make every disabled emoji a solo-sequence (not critical)
-for (let info of emoji_disabled) {
-	if (!info.cps) info.cps = [info.cp];
-	info.type = 'Disabled';
+for (let cp of UNICODE.get_noncharacter_cps()) {
+	if (valid.has(cp)) {
+		throw new Error(`Non-character is valid: ${PRINTER.desc_for_cp(cp)}`);
+	}
+}
+print_checked('No Valid Non-Characters');
+
+let fenced_map = new Map();
+for (let [cp, name] of CHARS_FENCED) {
+	if (!valid.has(cp)) {
+		throw new Error(`Fenced character is not valid: ${PRINTER.desc_for_cp(cp)}`);
+	}
+	if (!name) name = UNICODE.get_name(cp, true);
+	fenced_map.set(cp, name);
+}
+print_checked('Fenced are Valid');
+
+let nonzero_cc = new Set([...UNICODE.char_map.values()].filter(x => x.cc).map(x => x.cp)); 
+for (let info of valid_emoji.values()) {
+	let {cps} = info;
+	if (nonzero_cc.has(cps[0]) || nonzero_cc.has(cps[cps.length-1])) {
+		throw new Error(`Emoji with non-zero CC Boundary: ${PRINTER.desc_for_emoji(info)}`);
+	}
+}
+print_checked('Emoji Boundaries');
+
+for (let info of valid_emoji.values()) {
+	let {cps} = info;
+	if (compare_arrays(cps, NF.nfc(cps))) {
+		throw new Error(`Emoji doesn't survive NFC: ${PRINTER.desc_for_emoji(info)}`);
+	}
+}
+print_checked('Emoji are NFC');
+
+// check that ASCII can be fast-pathed
+for (let cp = 0; cp < 0x80; cp++) {
+	if (!valid.has(cp)) continue;
+	try {
+		let char = UNICODE.require_char(cp);
+		if (!char.script) throw new Error(`Missing script`);
+		if (NF.is_composite(cp)) throw new Error(`Decomposes`); // wont happen
+		if (char.is_cm) throw new Error('CM'); // wont happen
+		if (fenced_map.has(cp)) throw new Error('Fenced'); // shouldnt happen
+		switch (char.script.abbr) {
+			case 'Zyyy':
+			case 'Latn': continue;
+			default: throw new Error(`Unexpected script: ${char.script.description}`);
+		}
+	} catch (err) {
+		throw new Error(`ASCII ${PRINTER.desc_for_cp(cp)}: ${err.message}`);
+	}
+}
+print_checked(`Fastpath ASCII`);
+
+print_section('Find Unique Characters');
+let valid_union = new Set();
+let multi_group = new Set();
+for (let g of script_groups) {
+	for (let cp of g.valid_set) {
+		if (valid_union.has(cp)) {
+			multi_group.add(cp);
+		} else {
+			valid_union.add(cp);
+		}
+	}
+}
+console.log(`Valid: ${valid_union.size}`);
+console.log(`Multi: ${multi_group.size}`);
+console.log(`Unique: ${valid_union.size-multi_group.size}`);
+for (let g of script_groups) {
+	g.unique_set = new Set([...g.valid_set].filter(cp => !multi_group.has(cp)));
 }
 
+
+// note: sorting isn't important, just nice to have
 function sorted(v) {
 	return [...v].sort((a, b) => a - b);
 }
 
-// note: sorting isn't important, just nice to have
+for (let g0 of script_groups) {
+	// recursively find largest set and them remove subsets
+	let {whole_map} = g0;
+	let wholes = [];
+	if (whole_map.size) {
+		let remaining = [...whole_map];
+		next: while (remaining.length) {
+			let max = remaining.reduce((a, [_, set]) => Math.max(a, set.size), 0); // find largest set size
+			let index = remaining.findIndex(([_, set]) => set.size === max); // find first set with that size
+			let [[g, set]] = remaining.splice(index, 1); // remove it
+			let cps = [...set];
+			for (let [gs, cover] of wholes) {
+				if (cps.every(cp => cover.has(cp))) { // already covered
+					gs.push(g);
+					continue next;
+				}
+			}
+			wholes.push([[g], set]); // new cover
+		}
+		print_section(`Compress Wholes: ${g0.name}`);
+		for (let [gs, set] of wholes) {
+			console.log(`${set.size.toString().padStart(5)}x${gs.length} [${gs.map(g => g.name)}]`);
+		}
+	}
+	g0.wholes = wholes.map(([gs, set]) => ({names: gs.map(g => g.name), cps: sorted(set)}));
+}
+
+print_section('Compress Groups');
+for (let g of script_groups) {
+	let {name, test_script_set, valid_set, cm, cm_map, wholes, restricted} = g;
+	if (cm == -1) {
+		cm = [];
+		for (let [cp, seqs] of cm_map) {
+			if (seqs.length == 1 && seqs[0].length == 0) continue; // just a valid char
+			seqs.sort(compare_arrays);
+			cm.push({cp, seqs});
+		}
+		cm.sort((a, b) => a.cp - b.cp);
+	}
+	let primary = [];
+	let secondary = [];
+	for (let cp of sorted(valid_set)) {
+		if (UNICODE.require_char(cp).get_extended().some(s => test_script_set.has(s))) {
+			primary.push(cp);
+		} else {
+			secondary.push(cp);
+		}
+	}
+	g.spec = {name, primary, secondary, cm, wholes, restricted};
+}
+
+print_section('Order Groups');
+for (let g of script_groups) {
+	g.order = (1 + GROUP_ORDER.indexOf(g.name)) || Infinity;
+}
+script_groups.sort((a, b) => {
+	let c = (a.restricted|0) - (b.restricted|0);
+	if (c == 0) c = a.order - b.order;
+	return c;
+});
+
+print_section('Group Summary');
+print_table(['Order', 'Valid', 'Unique', 'Primary', 'Secondary', 'CM', 'Group'], script_groups.map((g, i) => [
+	i+1,
+	g.valid_set.size,
+	g.unique_set.size,
+	g.spec.primary.length,
+	g.spec.secondary.length,
+	g.cm == -1 ? `[${g.spec.cm.length}]` : `N=${g.cm}`,
+	g.name
+]));
+
+// union of non-zero combining class + nfc_qc
+print_section('NFC Quick Check');
+let ranks = UNICODE.combining_ranks();
+let nfc_qc = UNICODE.read_nf_props().NFC_QC.map(x => x[0]);
+let nfc_check0 = [...new Set([ranks, nfc_qc].flat(Infinity))];
+let nfc_check = nfc_check0.filter(cp => parts_union.has(cp));
+console.log(`Optimized: ${nfc_check0.length} => ${nfc_check.length}`);
+
+
+print_section('Write Output');
+
 const created = new Date();
 mkdirSync(out_dir, {recursive: true});
-writeFileSync(new URL('./spec.json', out_dir), JSON.stringify({
+function write_json(name, json) {
+	let file = new URL(name, out_dir);
+	let buf = Buffer.from(JSON.stringify(json));
+	writeFileSync(file, buf);
+	console.log(`Wrote: ${name} [${buf.length}]`);
+}
+
+write_json('spec.json', {
 	created,
-	unicode: UNICODE.version_str,
-	valid: sorted(valid),
+	unicode: version_str(UNICODE.unicode_version),
+	cldr: version_str(UNICODE.cldr_version),
+	emoji: [...valid_emoji.values()].map(x => x.cps).sort(compare_arrays),
 	ignored: sorted(ignored),
-	mapped: [...mapped.entries()].sort((a, b) => a[0] - b[0]),
-	cm: sorted([...UNICODE.cm].filter(cp => valid.has(cp))),
-	cm_isolated: sorted(cm_isolated),
-	cm_whitelist: [...cm_whitelist.entries()],
-	emoji: [...emoji.values()].map(x => x.cps).sort(compare_arrays),
-	script_names: Object.fromEntries(SCRIPTS.entries.map(x => [x.abbr, x.name])),
-	scripts: scripts.map(x => [x.name, sorted(x.set)]),
-	ordered: ordered.map(x => {
-		x.wholes = sorted(x.wholes);
-		x.test = sorted(x.test);
-		x.rest = sorted(x.rest);
-		return x;
-	}),
-	restricted: Object.fromEntries(restricted.map(x => [x.abbr, sorted(x.restricted)])),	
-	restricted_wholes: sorted(restricted_wholes),
+	mapped: [...mapped].sort((a, b) => a[0] - b[0]),
+	fenced: [...fenced_map].sort((a, b) => a[0] - b[0]),
+	cm: sorted(UNICODE.cm),
 	escape: sorted(escaped),
-	cm_invalid: sorted([...UNICODE.cm].filter(cp => !valid.has(cp) && !escaped.has(cp)))
-}));
+	groups: script_groups.map(g => g.spec),
+	nfc_check: sorted(nfc_check)
+});
 
 // this file should be independent so we can create a standalone nf implementation
-writeFileSync(new URL('./nf.json', out_dir), JSON.stringify({
+write_json('nf.json', {
 	created,
-	unicode: UNICODE.version_str,
-	ranks: UNICODE.combining_ranks(),
-	exclusions: UNICODE.composition_exclusions(),
-	decomp: UNICODE.decompositions(),
-	qc: sorted(UNICODE.nf_props().NFC_QC.map(x => x[0]))
-}));
-writeFileSync(new URL('./nf-tests.json', out_dir), JSON.stringify(UNICODE.nf_tests()));
+	unicode: version_str(UNICODE.unicode_version),
+	ranks, // already sorted 
+	exclusions: sorted(UNICODE.read_composition_exclusions()),
+	decomp: UNICODE.decompositions(), // already sorted 
+	qc: sorted(nfc_qc)
+});
+write_json('nf-tests.json', UNICODE.read_nf_tests());
 
 // conveniences files (not critical)
 // for emoji.html
-writeFileSync(new URL('./emoji-info.json', out_dir), JSON.stringify([...emoji.values(), ...emoji_disabled].map(info => {
+for (let info of emoji_disabled) { // make every disabled emoji a solo-sequence 
+	if (!info.cps) info.cps = [info.cp];
+	info.type = 'Disabled';
+}
+write_json('emoji-info.json', [...valid_emoji.values(), ...emoji_disabled].map(info => {
 	let {cps, name, version, type} = info;
 	return {form: String.fromCodePoint(...cps), name, version, type};
-})));
+}));
 
 // for chars.html
-writeFileSync(new URL('./names.json', out_dir), JSON.stringify(UNICODE.chars.map(info => {
-	let name = UNICODE.get_name(info.cp);
-	if (!name) return [];
-	return [info.cp, name];
-}).filter(x => x)));
-writeFileSync(new URL('./scripts.json', out_dir), JSON.stringify(SCRIPTS.entries.map(info => {
-	let {name, abbr, set} = info;
-	set = [...set];
-	return {name, abbr, set};
-})));
+// TODO: collapse this more
+// TODO: include more information
+write_json('names.json', {
+	chars: [...UNICODE.char_map.values()].filter(x => !x.range).map(x => [x.cp, x.get_name(true)]),
+	ranges: [...new Set([...UNICODE.char_map.values()].map(x => x.range).filter(x => x))].map(x => [x.cp0, x.cp1, x.prefix]),
+	scripts: [...UNICODE.script_map.values()].map(({name, abbr, map}) => {
+		return {name, abbr, cps: sorted(map.keys())};
+	})
+});

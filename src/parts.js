@@ -1,4 +1,4 @@
-import {should_escape, is_printable_mark, safe_str_from_cps} from './lib.js';
+import {should_escape, safe_str_from_cps} from './lib.js';
 import {hex_cp} from './utils.js';
 
 function hex_seq(cps) {
@@ -121,8 +121,8 @@ export function dom_from_tokens(tokens, {
 			case 'valid': {
 				el = document.createElement('span');		
 				let form = safe_str_from_cps(token.cps);
-				if (i === tokens.length - 1 && form === 'eth') { // special .eth styling
-					el.classList.add('eth');
+				if (tokens.length >= 3 && i === tokens.length - 1 && form === 'eth' && tokens[i-1].type === 'stop') { 
+					el.classList.add('eth'); // special .eth styling
 				}
 				el.innerText = form;
 				el.title = format_tooltip({
@@ -183,6 +183,7 @@ export function use_default_style() {
 		display: flex;
 		align-items: center;
 		gap: 4px;
+		border-radius: 5px;
 	}
 	.tokens a {
 		text-decoration: none;
@@ -191,7 +192,6 @@ export function use_default_style() {
 		outline: 2px solid #00f;
 	}
 	.tokens .valid {
-		border-radius: 5px;
 		background: #cfc;
 		border: 2px solid #0a0;
 		line-break: anywhere;
@@ -207,11 +207,11 @@ export function use_default_style() {
 		min-width: 5px;
 		font-size: 75%;
 		font-family: monospace;
-		border-radius: 5px;
 	}
 	.tokens .disallowed {
 		background: #c00;	
 		min-width: 5px;
+		min-height: 1em;
 		border-radius: 5px;
 		color: #fff;
 	}
@@ -231,7 +231,6 @@ export function use_default_style() {
 		display: flex;
 		border: 2px solid #66f;
 		background: #ccf;
-		border-radius: 5px;
 	}
 	.tokens .mapped span:first-child {
 		margin-bottom: -4px;
@@ -239,23 +238,22 @@ export function use_default_style() {
 	}
 	.tokens .stop {
 		font-weight: bold;
-	}
-	.tokens .isolated {
-		border: 2px solid #87e;
-		border-radius: 5px;
-		background: #ecf;
+		background: linear-gradient(#fff, #f80)
+		padding-bottom: 0;
 	}
 	.tokens .emoji {
 		border: 2px solid #0aa;
-		border-radius: 5px;
 		background: #cff;
+		margin: 0 2px;
 		color: #000;
 	}
 	.tokens .mod {
+		color: #fff;
+	}
+	.tokens * .mod {
 		font-size: 70%;
 		padding: 2px;
-		color: #fff;
-		border-radius: 5px;
+		border-radius: 3px;
 	}
 	.tokens .emoji .mod {
 		background: #333;
@@ -283,6 +281,10 @@ export function use_default_style() {
 		border: 2px solid #c80;
 		background: #fd8;
 		border-radius: 5px;
+	}
+	.tokens .nfc > .valid {
+		background: none;
+		border: none;
 	}`;
 	document.body.append(style);
 }

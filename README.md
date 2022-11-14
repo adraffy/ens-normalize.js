@@ -18,6 +18,8 @@ import {ens_normalize} from '@adraffy/ens-normalize';
 // npm i @adraffy/ens-normalize
 // browser: https://cdn.jsdelivr.net/npm/@adraffy/ens-normalize@latest/dist/index.min.js
 
+// *** ALL errors throw by this library are safe to print ***
+
 // string -> string
 // throws on invalid names
 // output ready for namehash
@@ -59,9 +61,9 @@ let tokens = ens_tokenize('_R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./');
 //     }, 
 //     { 
 //         type: 'emoji',
-//         input: [ 128169, 65039 ],  // input 
-//         emoji: [ 128169, 65039 ],  // fully-qualified
-//         cps: [ 128169 ]            // output
+//         input: Emoji(2) [ 128169, 65039 ],  // input 
+//         emoji: [ 128169, 65039 ],           // fully-qualified
+//         cps: Emoji(1) [ 128169 ]            // output
 //     },
 //     {
 //         type: 'nfc',
@@ -91,20 +93,23 @@ Get label-level normalization details:
 let labels = ens_split('💩Raffy.eth_');
 // [
 //   {
-//     input: [ 128169, 82, 97, 102, 102, 121 ],
+//     input: [ 128169, 82, 97, 102, 102, 121 ],  
 //     offset: 0,
-//     mapped: [ [ 128169, 65039 ], 114, 97, 102, 102, 121 ],
+//     tokens: [
+//       Emoji(2) [ 128169, 65039 ],   // emoji
+//       [ 114, 97, 102, 102, 121 ]    // nfc-text
+//     ],
 //     output: [ 128169, 114, 97, 102, 102, 121 ],
 //     emoji: true,
-//     script: 'Latin'
+//     type: 'Latin'
 //   },
 //   {
 //     input: [ 101, 116, 104, 95 ],
 //     offset: 7,
+//     tokens: [ [ 101, 116, 104, 95 ] ],
 //     output: [ 101, 116, 104, 95 ],
-//     mapped: [ 101, 116, 104, 95 ],
 //     emoji: false,
-//     error: 'underscore only allowed at start'
+//     error: Error('underscore only allowed at start')
 //   }
 // ]
 

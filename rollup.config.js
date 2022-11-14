@@ -54,11 +54,17 @@ export default [
 	{
 		input: './src/all.js',
 		plugins: [NODE],
-		output: {
-			file: './dist/all.min.js',
-			format: 'es',
-			plugins: [TERSER],
-		},
+		output: [
+			{
+				file: './dist/all.js',
+				format: 'es',
+			},
+			{
+				file: './dist/all.min.js',
+				format: 'es',
+				plugins: [TERSER],
+			}
+		],
 	},
 ];
 

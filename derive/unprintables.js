@@ -93,5 +93,5 @@ export default new Set([
 	0x2067, // RIGHT-TO-LEFT ISOLATE
 	0x2068, // FIRST STRONG ISOLATE
 	0x2069, // POP DIRECTIONAL ISOLATE
-	
+
 ]);
