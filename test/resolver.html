@@ -214,7 +214,7 @@ ul .tokens {
 }
 .row.legend {
 	background: none;
-	gap: 0;
+	gap: 2px;
 }
 .row.links {
 	display: grid;	
@@ -704,12 +704,12 @@ Hebrew:
 <li><a href="#vitalik.eth"><b>Copy Link</b></a> to get a URL that resolves on page-load.</li>
 </ul>
 <ul class="row legend">
-<li>This is a <b>valid</b> sequence of characters: <div data-tokenize="abc"></div></li>
+<li>This is a <b>valid</b> sequence of characters: <div data-tokenize="abc"></div> and <b>.eth</b> gTLD <div data-tokenize=".eth"></div></li>
 <li>This is an <b>emoji</b> <div data-tokenize="👩🏽‍⚕️"></div> and it's corresponding <b>components</b> <div data-tokenize="👩🏽‍⚕️" data-parts="1"></div></li>
-<li>This is a <b>mapped</b> token <div data-tokenize="™"></div> which transform into <b>valid</b> sequence: <div data-tokenize="tm"></div></li>
+<li>This is a <b>mapped</b> token <div data-tokenize="™"></div> which transforms into a <b>valid</b> sequence: <div data-tokenize="tm"></div></li>
 <li>Characters not in canonical form require <b>NFC</b>: <div data-tokenize="a{303}"></div></li>
-<li>An <b>ignored</b> character: <div data-tokenize="{FE0F}"></div></li>
-<li>Various <b>disallowed</b> characters: <div data-tokenize="#{00}{1FFFFF}{E0061}{200D}"></div>
+<li>This is an <b>ignored</b> character: <div data-tokenize="{FE0F}"></div></li>
+<li>These are the <b>disallowed</b> formats: <div data-tokenize="#{00}{1FFFFF}{E0061}{200D}"></div></li>
 </ul>
 <ul class="row links">
 <li><a href="./emoji.html">Find Supported Emoji</a></li>

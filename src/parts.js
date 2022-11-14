@@ -238,7 +238,7 @@ export function use_default_style() {
 	}
 	.tokens .stop {
 		font-weight: bold;
-		background: linear-gradient(#fff, #f80)
+		background: linear-gradient(#fff, #ff0);
 		padding-bottom: 0;
 	}
 	.tokens .emoji {
