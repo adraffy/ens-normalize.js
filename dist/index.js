@@ -533,7 +533,7 @@ function safe_str_from_cps(cps, quoter = quote_cp) {
 // if escaped: {HEX}
 //       else: "x" {HEX}
 function quoted_cp(cp) {
-	return should_escape(cp) ? '' : `"${safe_str_from_cps([cp])}" ` + quote_cp(cp);
+	return (should_escape(cp) ? '' : `"${safe_str_from_cps([cp])}" `) + quote_cp(cp);
 }
 
 function check_label_extension(cps) {
