@@ -1,6 +1,6 @@
 // download a list of registered names
 
-import {writeFileSync} from 'node:fs';
+import {writeFileSync, readFileSync} from 'node:fs';
 
 async function fetch_json(url) {
 	let res = await fetch(url);
@@ -8,11 +8,21 @@ async function fetch_json(url) {
 	return res.json();
 }
 
+let file = new URL('./labels.json', import.meta.url);
+
 let labels = [...new Set((await Promise.all([
-	fetch_json('https://raw.githubusercontent.com/adraffy/ens-norm-tests/main/eth-labels/registered.json'),
-	fetch_json('https://raw.githubusercontent.com/adraffy/ens-norm-tests/main/eth-labels/reverse.json')
+	fetch_json('https://raw.githubusercontent.com/adraffy/ens-labels/master/registered.json'),
+	fetch_json('https://raw.githubusercontent.com/adraffy/ens-labels/master/reverse.json')
 ])).flat().flatMap(s => s.split('.')))].sort((a, b) => a.localeCompare(b));
 
-console.log(labels.length);
 
-writeFileSync(new URL('./labels.json', import.meta.url), JSON.stringify(labels));
+let before = 0;
+try {
+	before = JSON.parse(readFileSync(file)).length;
+	console.log(`Old: ${before}`);
+} catch (ignored) {	
+}
+console.log(`New: ${labels.length} (+${labels.length - before})`);
+
+writeFileSync(file, JSON.stringify(labels));
+

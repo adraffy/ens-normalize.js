@@ -1,4 +1,4 @@
-Build Date: 2022-11-14T07:35:12.448Z
+Build Date: 2022-11-14T08:36:16.538Z
 Unicode Version: 15.0.0 (2022-10-23T06:00:57.990Z)
 CLDR Version: 42 (2022-11-04T04:55:37.180Z)
 ==== RGI Emoji ZWJ Sequences ====

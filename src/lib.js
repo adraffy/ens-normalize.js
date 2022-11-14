@@ -251,7 +251,7 @@ export function ens_split(name, preserve_emoji) {
 						type = determine_group(chars).N;
 					}
 				}
-				if (!emoji) check_leading_underscore(norm);
+				check_leading_underscore(norm);
 			}
 			info.type = type;
 		} catch (err) {
