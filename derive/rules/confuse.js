@@ -5255,6 +5255,9 @@ export const CONFUSE_GROUPS = [
 		0x16F28, // (𖼨) MIAO LETTER GHA [Plrd]=>[Plrd]
 		0x1028A, // (𐊊) LYCIAN LETTER J [Lyci]=>[Lyci]
 		0x10309, // (𐌉) OLD ITALIC LETTER I [Ital]=>[Ital]
+		// 20221117: moved from '16D0'
+		0x16D0, // (ᛐ) RUNIC LETTER SHORT-TWIG-TYR T [Runr]=>[Runr]
+		0x21BF, // (↿) UPWARDS HARPOON WITH BARB LEFTWARDS [Zyyy]=>[ALL]		
 	],
 	[
 		// "L" <Same>
@@ -12321,12 +12324,14 @@ export const CONFUSE_GROUPS = [
 		0x16CF, // (ᛏ) RUNIC LETTER TIWAZ TIR TYR T [Runr]=>[Runr]
 		0x2191, // (↑) UPWARDS ARROW [Zyyy]=>[ALL]
 	],
+	/*
 	[
 		// "ᛐ" <Same>
 		'16D0', // RUNIC LETTER SHORT-TWIG-TYR T [Runr]=>[Runr]
 		0x16D0, // (ᛐ) RUNIC LETTER SHORT-TWIG-TYR T [Runr]=>[Runr]
 		0x21BF, // (↿) UPWARDS HARPOON WITH BARB LEFTWARDS [Zyyy]=>[ALL]
 	],
+	*/
 	[
 		// "ᛐ⇂" <Same>
 		'16D0 21C2', // RUNIC LETTER SHORT-TWIG-TYR T + DOWNWARDS HARPOON WITH BARB RIGHTWARDS [Runr,Zyyy]=>[Runr]

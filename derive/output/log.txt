@@ -1,4 +1,4 @@
-Build Date: 2022-11-18T05:00:58.709Z
+Build Date: 2022-11-18T09:53:57.290Z
 Unicode Version: 15.0.0 (2022-10-23T06:00:57.990Z)
 CLDR Version: 42 (2022-11-04T04:55:37.180Z)
 ==== RGI Emoji ZWJ Sequences ====
@@ -11692,6 +11692,7 @@ Override: 31 (1) DIGIT ONE [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common]
 Override: 661 (١) ARABIC-INDIC DIGIT ONE [Arabic,Thaana,Yezi]
 Unresolved: [Ital] 10309 (𐌉) OLD ITALIC LETTER I vs 10320 (𐌠) OLD ITALIC NUMERAL ONE
 Unresolved: [Hebrew] 5D5 (ו) HEBREW LETTER VAV vs 5DF (ן) HEBREW LETTER FINAL NUN
+Unresolved: [Runr] 16C1 (ᛁ) RUNIC LETTER ISAZ IS ISS I vs 16D0 (ᛐ) RUNIC LETTER SHORT-TWIG-TYR T
 Override: 6E (n) LATIN SMALL LETTER N [Japanese,Korean,Han,Latin]
 Unresolved: [Armenian] 578 (ո) ARMENIAN SMALL LETTER VO vs 57C (ռ) ARMENIAN SMALL LETTER RA
 Auto-Override: 438 (и) CYRILLIC SMALL LETTER I [Cyrillic vs Dsrt]
@@ -14585,6 +14586,7 @@ Removed Mapping: 1F248 (🉈) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-655
 [✓] Emoji Boundaries
 [✓] Emoji are NFC
 [✓] Fastpath ASCII
+[✓] Groups Names are A-Z
 ==== Find Unique Characters ====
 Valid: [33m133753[39m
 Multi: [33m98511[39m
@@ -14597,6 +14599,7 @@ Non-Confusable Non-Unique: [33m51[39m
 Wholes: [33m152[39m
 ==== Compress Groups ====
 ==== Order Groups ====
+[✓] Unrestricted before Restricted
 ==== Group Summary ====
 Ord | Valid  | Uniqu | Prima | Secon | CM  | Group     
   1 |   1269 |    47 |    73 |  1196 | [0] | Latin
@@ -14759,7 +14762,7 @@ Ord | Valid  | Uniqu | Prima | Secon | CM  | Group
 ==== NFC Quick Check ====
 Optimized: 2110 => 540
 ==== Write Output ====
-Wrote: spec.json [3110961]
+Wrote: spec.json [3110966]
 Wrote: nf.json [48402]
 Wrote: nf-tests.json [503302]
 Wrote: emoji-info.json [391345]

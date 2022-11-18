@@ -195,12 +195,19 @@ function index_map(v) {
 	return new Map(v.map((x, i) => [x, i]));
 }
 
-
+/*
 if (emoji_solo.length == 0) {
 	console.log(`*** There are 0 solo-emoji!`);
 }
-if (groups.every(g => Number.isInteger(g.cm) || !g.cm.length)) {
+if (groups.some(g => !Number.isInteger(g.cm) || !g.cm.length)) {
 	console.log(`*** There are 0 complex CM sequences!`);
+}
+*/
+if (emoji_solo.length) {
+	throw new Error(`Assumption wrong: there are solo emoji!`)
+}
+if (groups.some(g => Array.isArray(g.cm) && g.cm.length)) {
+	throw new Error(`Assumption wrong: there are complex CM sequences!`);	
 }
 
 // assign each group to an index
@@ -224,6 +231,7 @@ enc.write_mapped([
 //	[4, 1, 0],
 ], mapped); 
 enc.write_member(ignored);
+/*
 for (let [cp, name] of fenced) {
 	enc.unsigned(cp);
 	let cps = explode_cp(name);
@@ -231,13 +239,25 @@ for (let [cp, name] of fenced) {
 	enc.deltas(cps);
 }
 enc.unsigned(0);
+*/
 enc.write_member(cm);
 enc.write_member(escape); 
 enc.write_member(nfc_check); // for ens_tokenize (can probably derived)
 let chunks = find_shared_chunks(groups.flatMap(g => [g.primary, g.secondary]), {min_overlap: 0.9, min_size: 256});
 chunks.forEach(v => enc.write_member(v));
 enc.write_member([]);
+/*
+// 4 char names
 for (let g of groups) {
+	if (g.restricted) {
+		encode_lower(enc, g.name);
+	}
+}
+*/
+
+
+for (let g of groups) {
+	/*
 	if (g.restricted) { // 500B to enable these names
 		enc.unsigned(1);
 	} else {
@@ -245,6 +265,17 @@ for (let g of groups) {
 		enc.unsigned(cps.length+1);
 		enc.deltas(cps);
 	}
+	*/
+	/*
+	let alphas = explode_cp(g.name.toLowerCase()).map(cp => cp - 0x60);
+	enc.unsigned(alphas.length);
+	enc.deltas(alphas);
+	*/
+	//console.log(explode_cp(g.name.toLowerCase()).map(cp => cp - 0x60));
+	enc.array(explode_cp(g.name.toLowerCase()).map(cp => cp - 0x60));
+	enc.unsigned(0);
+	//enc.unsigned(g.restricted|0);
+	
 	for (let v of [g.primary, g.secondary]) {
 		let set = new Set(v);
 		let parts = [];
@@ -257,12 +288,15 @@ for (let g of groups) {
 		enc.write_member(parts);
 		enc.write_member(set);
 	}
-	let map = index_map([g.primary, g.secondary].flat().sort((a, b) => a-b));
+	//let map = index_map([g.primary, g.secondary].flat().sort((a, b) => a-b));
 
 	//enc.write_member(wholes.filter(w => w.groups.includes(g)).flatMap(w => w.cps).flatMap(cp => map.get(cp) ?? [])); 
 	//g.wholes.forEach(({cps}) => enc.write_member(cps.map(cp => map.get(cp))));
 	//enc.write_member([]);
 
+
+	enc.unsigned(Array.isArray(g.cm) ? 0 : g.cm+1);
+	/*
 	if (Array.isArray(g.cm)) {
 		enc.unsigned(0);
 		for (let [cp, seqs] of g.cm) {
@@ -277,6 +311,7 @@ for (let g of groups) {
 	} else {
 		enc.unsigned(g.cm+1);
 	}
+	*/
 }
 enc.unsigned(0);
 
@@ -309,11 +344,15 @@ let sorted_emoji = unique_sorted([emoji_solo, emoji_seqs].flat(Infinity));
 let sorted_emoji_map = index_map(sorted_emoji);
 
 enc.write_member(sorted_emoji);
-enc.write_member(emoji_solo.map(cp => sorted_emoji_map.get(cp))); // there currently arent any of these
+//enc.write_member(emoji_solo.map(cp => sorted_emoji_map.get(cp))); 
 encode_emoji(enc, root, sorted_emoji_map);
 
 //write('include-only'); // only saves 300 bytes
-write('include-ens');
+write('include-ens', {
+	FENCED: new Map(fenced), 
+	NR: groups.filter(g => !g.restricted).length
+	//NAMES: groups.map(g => g.restricted ? g.name.toLowerCase() : g.name)
+});
 
 // just nf 
 // (only ~30 bytes saved using joined file)
@@ -331,13 +370,20 @@ write('include-nf');
 function write(name, vars = {}) {
 	let {data, symbols} = enc.compressed();
 	let encoded = unsafe_btoa(data);
-	console.log(`${name} = ${data.length} bytes / ${symbols} symbols / ${encoded.length} base64`);
-	writeFileSync(new URL(`./${name}.js`, import.meta.url), [
+	let buf = Buffer.from([
 		`// created ${new Date().toJSON()}`,
 		`import {read_compressed_payload} from './decoder.js';`,
 		`export default read_compressed_payload('${encoded}');`,
 		...Object.entries(vars).map(([k, v]) => {
-			return `export const ${k} = ${JSON.stringify(v)};`;
+			let expr;
+			if (v instanceof Map) {
+				expr = `new Map(${JSON.stringify([...v])})`;
+			} else {
+				expr = JSON.stringify(v);
+			}
+			return `export const ${k} = ${expr};`;
 		}),
 	].join('\n'));
+	console.log(`${name} = ${data.length} bytes / ${symbols} symbols / ${encoded.length} base64 => ${buf.length}`);
+	writeFileSync(new URL(`./${name}.js`, import.meta.url), buf);
 }

@@ -6,9 +6,9 @@
 * Custom [`NFC`](https://unicode.org/reports/tr15/) Implementation (or use native)
 	* Passes [**100%**](https://adraffy.github.io/ens-normalize.js/test/report-nf.html) Unicode `15.0.0` [Normalization Tests](https://www.unicode.org/Public/15.0.0/ucd/NormalizationTest.txt)
 * Minified File Sizes: 
-	* [`25KB`](./dist/index-xnf.min.js) — native `NFC` via [nf-native.js](./src/nf-native.js) using `String.normalize()`
-	* [`34KB` **Default** ](./dist/index.min.js) — custom `NFC` via [nf.js](./src/nf.js)
-	* [`40KB`](./dist/all.min.js) *Everything!* — custom `NFC` + sub-libraries: [parts.js](./src/parts.js), [utils.js](./src/utils.js)
+	* [`27KB`](./dist/index-xnf.min.js) — native `NFC` via [nf-native.js](./src/nf-native.js) using `String.normalize()`
+	* [`35KB` **Default** ](./dist/index.min.js) — custom `NFC` via [nf.js](./src/nf.js)
+	* [`41KB`](./dist/all.min.js) *Everything!* — custom `NFC` + sub-libraries: [parts.js](./src/parts.js), [utils.js](./src/utils.js)
 * [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 * [Character Viewer](https://adraffy.github.io/ens-normalize.js/test/chars.html)
 * [List of Supported Emoji](https://adraffy.github.io/ens-normalize.js/test/emoji.html)
@@ -139,7 +139,7 @@ console.log(should_escape(0x202E)); // eg. RIGHT-TO-LEFT OVERRIDE => true
 Determine if a character is a printable combining mark:
 ```Javascript
 // number -> bool
-console.log(is_printable_mark(0x20E3)); // eg. COMBINING ENCLOSING KEYCAP => true
+console.log(is_combining_mark(0x20E3)); // eg. COMBINING ENCLOSING KEYCAP => true
 ```
 
 ## Build

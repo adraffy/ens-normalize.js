@@ -1,4 +1,4 @@
-import r from './include-ens.js';
+import r, {FENCED, NR} from './include-ens.js';
 
 import {read_deltas, read_sorted, read_sorted_arrays, read_mapped, read_array_while} from './decoder.js';
 import {explode_cp, str_from_cps, quote_cp, compare_arrays} from './utils.js';
@@ -10,16 +10,19 @@ export {nfc, nfd};
 function read_set() {
 	return new Set(read_sorted(r));
 }
+/*
 function read_str(n) {
 	return str_from_cps(read_deltas(n, r));
 }
-
+*/
 const MAPPED = new Map(read_mapped(r)); 
 const IGNORED = read_set(); // ignored characters are not valid, so just read raw codepoints
+/*
 const FENCED = new Map(read_array_while(() => {
 	let cp = r();
 	if (cp) return [cp, read_str(r())];
 }));
+*/
 const CM = read_set();
 const ESCAPE = read_set(); // characters that should not be printed
 const NFC_CHECK = read_set();
@@ -27,17 +30,19 @@ const CHUNKS = read_sorted_arrays(r);
 function read_chunked() {
 	return new Set([read_sorted(r).map(i => CHUNKS[i]), read_sorted(r)].flat(2));
 }
-const GROUPS = read_array_while(() => {
-	let N = r();
-	if (N) {
-		let R = N==1;
-		N = R ? 'Restricted' : read_str(N-1);
+const GROUPS = read_array_while(i => {
+	let N = read_array_while(r).map(x => x+0x60);
+	if (N.length) {
+		let R = i >= NR; // first NR are non-restricted
+		N[0] -= 32; // capitalize
+		N = str_from_cps(N);
+		if (R) N=`Restricted[${N}]`;
 		let P = read_chunked(r); // primary
 		let Q = read_chunked(r); // secondary
 		let V = [...P, ...Q].sort((a, b) => a-b); // derive: sorted valid
-		//let W = read_set(); // wholes
 		let M = r()-1; // combining mark
-		if (M < 0) { // whitelisted
+		// code currently isn't needed
+		/*if (M < 0) { // whitelisted
 			M = new Map(read_array_while(() => {
 				let i = r();
 				if (i) return [V[i-1], read_array_while(() => {
@@ -45,7 +50,7 @@ const GROUPS = read_array_while(() => {
 					if (v.length) return v.map(x => x-1);
 				})];
 			}));
-		}
+		}*/
 		return {N, P, M, R, V: new Set(V)};
 	}
 });
@@ -59,7 +64,7 @@ const WHOLES = new Map(read_array_while(() => {
 	}
 }).flat());
 const EMOJI_SORTED = read_sorted(r);
-const EMOJI_SOLO = new Set(read_sorted(r).map(i => EMOJI_SORTED[i]));
+//const EMOJI_SOLO = new Set(read_sorted(r).map(i => EMOJI_SORTED[i]));
 const EMOJI_ROOT = read_emoji_trie([]);
 function read_emoji_trie(cps) {
 	let B = read_array_while(() => {
@@ -200,8 +205,8 @@ export function ens_normalize(name) {
 export function ens_beautify(name) {
 	let split = ens_split(name, true);
 	// this is experimental
-	for (let {script, output, error} of split) {
-		if (script !== 'Greek') { // ξ => Ξ if not greek
+	for (let {type, output, error} of split) {
+		if (!error && type !== 'Greek') { // ξ => Ξ if not greek
 			let prev = 0;
 			while (true) {
 				let next = output.indexOf(0x3BE, prev);
@@ -238,7 +243,10 @@ export function ens_split(name, preserve_emoji) {
 				let emoji = token_count > 1 || chars.is_emoji;
 				if (!emoji && chars.every(cp => cp < 0x80)) { // special case for ascii
 					norm = chars;
+					check_leading_underscore(norm);
 					check_label_extension(norm); // only needed for ascii
+					// cant have fenced
+					// cant have cm
 					type = 'ASCII';
 				} else {
 					if (emoji) { // there is at least one emoji
@@ -246,7 +254,8 @@ export function ens_split(name, preserve_emoji) {
 						chars = tokens.flatMap(x => x.is_emoji ? [] : x); // all of the nfc tokens concat together
 					}
 					norm = tokens.flatMap(x => !preserve_emoji && x.is_emoji ? filter_fe0f(x) : x);
-					if (!chars.length) {
+					check_leading_underscore(norm);
+					if (!chars.length) { // theres no text, just emoji
 						type = 'Emoji';
 					} else {
 						check_leading_combining_mark(norm);
@@ -260,7 +269,6 @@ export function ens_split(name, preserve_emoji) {
 						type = determine_group(chars).N;
 					}
 				}
-				check_leading_underscore(norm);
 			}
 			info.type = type;
 		} catch (err) {
@@ -300,19 +308,21 @@ function determine_group(cps) {
 	}
 	if (cover) {
 		// we have 1+ confusable
-		// does any other group have all of these characters?
-		// "0x" vs "0"+cyrl(x)
-		// cover: [Latin, Cyrl]
-		// free: ["0"]
+		// if free is empty, this is confusable
+		// else, does any other group have all of these characters?
+		//       if it does, does it also have the confusables?
+		//
+		// eg. "0x" vs "0"+cyrl(x)
+		// cover: [Latin, Cyrl] <-- at least one
+		// free: ["0"]          <-- could be empty!
 		for (let i of cover) {
 			let g = GROUPS[i];
-			//if (free.every(cp => g.V.has(cp)) && !confused.every(cps => cps.some(cp => g.V.has(cp)))) {
-			if (free.every(cp => g.V.has(cp)) && !confused.every(cp => g.V.has(cp))) {
+			if (!free.length || (free.every(cp => g.V.has(cp)) && !confused.every(cp => g.V.has(cp)))) {
 				throw new Error(`whole-label confusable`);
 			}
 		}
 	}
-	// is the cover a hint?
+	// TODO: is the cover a hint?
 	// we didn't have a unique character
 	let err0;
 	for (let g of GROUPS) {
@@ -332,7 +342,7 @@ function determine_group(cps) {
 	// but when nfc'd, it formed a disallowed character
 	// eg. valid(a) + ignored + valid(breve) => invalid(a-breve)
 	process(cps, x=>x); // should probably throw
-	throw new Error(`no match`); // can this happen?
+	throw new Error(`no match`); // can this happen? hangul parts
 }
 
 // throw on first error
@@ -349,6 +359,35 @@ function flatten(split) {
 
 function check_group(g, cps) {
 	let {V, M} = g;
+	for (let cp of cps) {
+		if (!V.has(cp)) {
+			// https://www.unicode.org/reports/tr39/#mixed_script_confusables
+			let quoted = quoted_cp(cp);
+			for (let cp of cps) {
+				let u = UNIQUE.get(cp);
+				if (u && u !== g) {
+					if (!u.R) quoted = `${quoted} is ${u.N}`;
+					break;
+				}
+			}
+			throw new Error(`disallowed ${g.N} character: ${quoted}`);
+		}
+	}
+	if (M >= 0) {
+		let decomposed = nfd(cps);
+		for (let i = 1, e = decomposed.length; i < e; i++) { // we know it can't be cm leading
+			if (CM.has(cps[i])) {
+				let j = i + 1;
+				while (j < e && CM.has(cps[j])) j++;
+				if (j - i > M) {
+					throw new Error(`too many combining marks: "${str_from_cps(cps.slice(i-1, j))}" (${j-i}/${M})`);
+				}
+				i = j;
+			}
+		}
+	}
+	// this code currently isn't needed
+	/*
 	let cm_whitelist = M instanceof Map;
 	for (let i = 0, e = cps.length; i < e; ) {
 		let cp = cps[i++];
@@ -392,6 +431,7 @@ function check_group(g, cps) {
 			}
 		}
 	}
+	*/
 }
 
 // given a list of codepoints
@@ -474,6 +514,7 @@ function consume_emoji_reversed(cps, eaten) {
 			cps.length = pos; // truncate
 		}
 	}
+	/*
 	if (!emoji) {
 		let cp = cps[cps.length-1];
 		if (EMOJI_SOLO.has(cp)) {
@@ -482,6 +523,7 @@ function consume_emoji_reversed(cps, eaten) {
 			cps.pop();
 		}
 	}
+	*/
 	return emoji;
 }
 
@@ -495,7 +537,8 @@ function conform_emoji_copy(cps, node) {
 // return all supported emoji as fully-qualified emoji 
 // ordered by length then lexicographic 
 export function ens_emoji() {
-	let ret = [...EMOJI_SOLO].map(x => [x]);
+	//let ret = [...EMOJI_SOLO].map(x => [x]);
+	let ret = [];
 	build(EMOJI_ROOT, []);
 	return ret.sort(compare_arrays);
 	function build(node, cps, saved) {

@@ -237,28 +237,16 @@ class ScriptGroup {
 		this.whole_set = new Set();
 		this.whole_map = new Map();
 	}
-		/*
-		this.whole_map = new Map();
+	compute_parts() {
+		return new Set([
+			// nfc chars
+			...this.valid_set,
+			// nfd parts
+			[...this.valid_set].map(cp => NF.nfd([cp])),
+			// necessary cm
+			...this.cm_map.values(),
+		].flat(Infinity));
 	}
-	register_whole(cp, target) {
-		this.whole_map.set(target, cp);
-	}
-	*/
-	/*
-	register_whole(cp, groups) {
-		if (!this.valid_set.has(cp)) return;
-		let {whole_map} = this;
-		for (let g of groups) {
-			if (g === this) continue; // ignore self
-			let set = whole_map.get(g);
-			if (!set) {
-				set = new Set();
-				whole_map.set(g, set);
-			}
-			set.add(cp);
-		}
-	}
-	*/
 }
 
 let untested_set = new Set(UNICODE.script_map.values());	
@@ -433,76 +421,10 @@ for (let g of script_groups) {
 		console.log(PRINTER.desc_for_cp(cp));
 	}
 }
-/*
-for (let group of script_groups) {
-	if (group.restricted) {
-		let decomp = new Set([...group.valid].flatMap(cp => NF.nfd([cp])));
-		for (let cp of decomp) {
-			if (!group.valid.has(cp)) {
-				throw new Error(`Group ${group.name} not self-contained: ${PRINTER.desc_for_cp(cp)}`);
-			}
-		}
-	}
-}
-*/
-
-
-function group_parts(g) {
-	return new Set([
-		// nfc chars
-		...g.valid_set,
-		// nfd parts
-		[...g.valid_set].map(cp => NF.nfd([cp])),
-		// necessary cm
-		...g.cm_map.values(),
-	].flat(Infinity));
-}
-
-
-/*
-function register_whole(target, g, def, union) {
-	if (g.whole_map.has(def.cp)) {
-		throw new Error('wtf bro');
-	}
-	//g.whole_map.set(def.cp, def.groups);
-	g.whole_map.set(def.cp, union);
-
-	//confuse_map.set(def.cp, union);
-}
-*/
-	/*&
-	let bucket = confuse_map.get(target);
-	if (!bucket) {
-		bucket = [];
-		confuse_map.set(target, bucket);
-	}
-	bucket.push([cp, g, union]);
-	*/
-	/*
-
-	let map = confuse_map.get(target);
-	if (!map) {
-		map = new Map();
-		confuse_map.set(target, map);
-	}
-	let set = map.get(cp);
-	if (!set) {
-		set = new Set();
-		map.set(cp, g);
-	}
-	set.add(cp);
-	*/
-	/*
-	let g0 = map.get(cp);
-	if (g0 && g !== g0) {
-		console.log(g.name, g0.name, PRINTER.desc_for_cp(cp));
-	}*/
-	//map.set(cp, g);
 
 class Whole {
 	constructor(target, valid) {
 		this.target = target;
-		//this.union = union;
 		this.valid = valid; // cp
 		this.map = new Map(); // cp -> set<g>
 	}
@@ -514,14 +436,12 @@ class Whole {
 		}
 		set.add(g);
 	}
-	
 }
-
 
 print_section('Compute Confusables');
 let wholes_list = [];
 let confused_union = new Set();
-script_groups.forEach(g => g.parts = group_parts(g)); // part intersection
+script_groups.forEach(g => g.parts = g.compute_parts()); // cache
 for (let [target, ...defs0] of CONFUSE_GROUPS) {
 	let defs = [];
 	for (let def of defs0) {
@@ -650,7 +570,7 @@ script_groups.forEach(g => delete g.parts); // remove cache
 
 // find characters that can never be part of a name or its construction
 print_section('Disallow Leftover Characters');
-let parts_union = new Set(script_groups.flatMap(g => [...group_parts(g)]));
+let parts_union = new Set(script_groups.flatMap(g => [...g.compute_parts()]));
 for (let cp of valid) {
 	if (!parts_union.has(cp)) {	
 		disallow_char(cp);
@@ -670,7 +590,7 @@ print_section('Remove Empty Groups');
 script_groups = script_groups.filter(g => {
 	if (g.valid_set.size) return true;
 	console.log(`Removed Group: ${g.name}`);
-
+	// remove whole links
 	wholes_list = wholes_list.filter(w => {
 		if (w.union.delete(g)) {
 			if (!w.union.size) return false; // empty
@@ -808,6 +728,18 @@ for (let cp = 0; cp < 0x80; cp++) {
 }
 print_checked(`Fastpath ASCII`);
 
+for (let g of script_groups) {
+	if (!/^[a-z]+$/i.test(g.name)) {
+		throw new Error(`${g.name} isn't A-Z`);
+	}
+	let upper = g.name.slice(0, 1);
+	let lower = g.name.slice(1);
+	if (upper !== upper.toUpperCase() || lower !== lower.toLowerCase()) {
+		throw new Error(`${g.name} has weird casing`);
+	}
+}
+print_checked(`Groups Names are A-Z`);
+
 print_section('Find Unique Characters');
 let valid_union = new Set();
 let multi_group = new Set();
@@ -909,6 +841,7 @@ script_groups.sort((a, b) => {
 	if (c == 0) c = a.order - b.order;
 	return c;
 });
+print_checked(`Unrestricted before Restricted`);
 
 print_section('Group Summary');
 print_table(['Order', 'Valid', 'Unique', 'Primary', 'Secondary', 'CM', 'Group'], script_groups.map((g, i) => [

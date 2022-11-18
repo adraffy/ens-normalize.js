@@ -187,7 +187,7 @@ export function read_mapped(next) {
 export function read_array_while(next) {
 	let v = [];
 	while (true) {
-		let x = next();
+		let x = next(v.length);
 		if (!x) break;
 		v.push(x);
 	}

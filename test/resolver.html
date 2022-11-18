@@ -392,6 +392,9 @@ button.tags {
 	border-bottom: 5px solid #d00;
 	margin-bottom: -5px;
 }
+.token-wrapper > .error:not(.first) {
+	border-bottom-color: rgba(221, 0, 0, 0.5);
+}
 .row.error {
 	background: #fcc;
 	outline: 3px dashed #d00;
@@ -514,9 +517,7 @@ footer {
 <button data-name="💩{300}">Emoji</button>
 
 <b>Whitespace:</b>
-<button data-name="te st">Inner</button>
-<button data-name=" test">Leading</button>
-<button data-name="test ">Trailing</button>
+<button data-name="test .te st. test">❌Invalid</button>
 
 <b>Stops:</b>
 <button>。</button>
@@ -627,23 +628,23 @@ Hebrew Geresh:
 
 <a href="https://unicode-org.github.io/cldr-staging/charts/latest/by_type/core_data.alphabetic_information.main.html">Exemplars</a> /
 <a href="https://util.unicode.org/UnicodeJsps/confusables.jsp"><b>Confusables:</b></a>
-<button>aɑα</button>
+<button>aα.ɑ</button>
 <button>ஶ்ரீ.ஸ்ரீ</button>
 <button>❌ii̇</button>
+<button>❌èѐ</button>
 
 <b>Mixed-Script:</b>
 <button data-name="0a〇.黑a8">Digit+Latin+Han</button>
 <button data-name="あアいイうウえエおオ">Kana+Hira</button>
-<button data-name="0x.0х">"0x"</button>
-<button>дре</button>
-<button>❌aрe</button>
 <button>❌ァ힣</button>
-<button>❌èѐ</button>
 
 <b>Whole-Script:</b>
-<button>дррӏе</button>
-<button>❌аррӏе</button>
+<button data-name="0x.0х.0χ">"0x"</button>
+<button data-name="ape.дре.aрe">"ape"</button>
+<button data-name="apple.дррӏе.аррӏе">"apple"</button>
 <button data-name="ιοσρβυνγ">❌Greek</button>
+<button data-name="o.٥.०.౦.੦.൦.ο.օ">"o"</button>
+<button data-name="あー.〇一.一ー.一.ー.ᅳ">CJK Dash</button>
 
 <a href="https://unicode.org/emoji/charts/emoji-released.html"><b>Unicode 15:</b></a>
 <button data-name="{1F6DC}{1FA75}{1FA76}{1FA77}{1FA87}{1FA88}{1FAAD}{1FAAE}{1FAAF}{1FABB}{1FABC}{1FABD}{1FABF}{1FACE}{1FACF}{1FADA}{1FADB}{1FAE8}{1FAF7}{1FAF8}">Single Emoji (20)</button>
@@ -651,23 +652,16 @@ Hebrew Geresh:
 <button data-name="{1F426}{200D}{2B1B}">Black Bird</button>
 
 <b>Apostrophe:</b>
-<button>a'</button>
-<button>’z</button>
-<button>a'’b</button>
 <button>O'Brian</button>
-
-<b>Questionable:</b>
 <button>½</button>
-<button>123⁄456</button>
-<button>a⁄'</button>
-<button data-name="あー.〇一.一ー.一.一">CJK One/Sound Mark</button>
-<button data-name="ooo.٥٥٥.०००">ooo</button>
+<button>123⁄456’s</button>
+<button data-name="a'.’z.a'’b.a⁄'.⁄a">❌Invalid</button>
 
 <b>Misc:</b>
 <button data-name="$¢£¤¥₡₦₩₪₫€₭₮₱₲₴₵₸₹₺₼₽₾⃀₿Ξ.؋">Currency</button>
 <button data-name="•-•¬.⌐◨-◨.⌐〇-〇¬">Glasses</button>
 <button>360°</button>
-<button>2πr</button>
+<button>2πr.4π</button>
 <button>Ξ.≡.☰</button>
 <button>♢⟠⧫</button>
 
@@ -1369,6 +1363,7 @@ function make_tokens_div(name, before, show_errors) {
 	if (show_errors) {
 		let split = ens_split(name);
 		let wrapper = document.createElement('div');
+		let first = true;
 		wrapper.classList.add('token-wrapper');
 		for (let i = 0; i < split.length; i++) {
 			if (i > 0) {
@@ -1378,6 +1373,10 @@ function make_tokens_div(name, before, show_errors) {
 			let div = make_tokens_div(String.fromCodePoint(...input), before);
 			if (error) {
 				div.classList.add('error');
+				if (first) {
+					div.classList.add('first');
+					first = false;
+				}
 			}
 			wrapper.append(div);
 		}
