@@ -1,4 +1,4 @@
-Build Date: 2022-11-14T08:36:16.538Z
+Build Date: 2022-11-18T05:00:58.709Z
 Unicode Version: 15.0.0 (2022-10-23T06:00:57.990Z)
 CLDR Version: 42 (2022-11-04T04:55:37.180Z)
 ==== RGI Emoji ZWJ Sequences ====
@@ -11628,17 +11628,17 @@ Unresolved: [Hebrew] 599 (◌֙) HEBREW ACCENT PASHTA vs 5A8 (◌֨) HEBREW ACCE
 Unresolved: [Hebrew] 59A (◌֚) HEBREW ACCENT YETIV vs 5A4 (◌֤) HEBREW ACCENT MAHAPAKH
 Unresolved: [Hebrew] 59C (◌֜) HEBREW ACCENT GERESH vs 59D (◌֝) HEBREW ACCENT GERESH MUQDAM
 Unresolved: [Syrc] 64E (◌َ) ARABIC FATHA vs 747 (◌݇) SYRIAC OBLIQUE LINE ABOVE
-Auto-Override: 302 (◌̂) COMBINING CIRCUMFLEX ACCENT [Latin vs Nkoo,Bamu]
+Auto-Override: 8EB (◌࣫) ARABIC TONE TWO DOTS ABOVE [Arabic vs Nkoo]
 Unresolved: [Arabic] 64B (◌ً) ARABIC FATHATAN vs 8F0 (◌ࣰ) ARABIC OPEN FATHATAN
 Unresolved: [Hebrew] 5B9 (◌ֹ) HEBREW POINT HOLAM vs 5BA (◌ֺ) HEBREW POINT HOLAM HASER FOR VAV vs 5C1 (◌ׁ) HEBREW POINT SHIN DOT vs 5C2 (◌ׂ) HEBREW POINT SIN DOT vs 5C4 (◌ׄ) HEBREW MARK UPPER DOT
 Unresolved: [Arabic] 6EC (◌۬) ARABIC ROUNDED HIGH STOP WITH FILLED CENTRE vs 8EA (◌࣪) ARABIC TONE ONE DOT ABOVE
 Unresolved: [Syrc] 740 (◌݀) SYRIAC FEMININE DOT vs 741 (◌݁) SYRIAC QUSHSHAYA
-Auto-Override: 304 (◌̄) COMBINING MACRON [Latin,Cyrillic vs Nkoo,Bamu]
 Unresolved: [Arabic] 8F8 (◌ࣸ) ARABIC RIGHT ARROWHEAD ABOVE vs 8FF (◌ࣿ) ARABIC MARK SIDEWAYS NOON GHUNNA
 Unresolved: [Arabic] 64C (◌ٌ) ARABIC DAMMATAN vs 8E5 (◌ࣥ) ARABIC CURLY DAMMA vs 8E8 (◌ࣨ) ARABIC CURLY DAMMATAN vs 8F1 (◌ࣱ) ARABIC OPEN DAMMATAN
 Unresolved: [Arabic] 64D (◌ٍ) ARABIC KASRATAN vs 8F2 (◌ࣲ) ARABIC OPEN KASRATAN
 Unresolved: [Syrc] 73C (◌ܼ) SYRIAC HBASA-ESASA DOTTED vs 742 (◌݂) SYRIAC RUKKAKHA
 Override: 2E (.) FULL STOP [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common]
+Override: 660 (٠) ARABIC-INDIC DIGIT ZERO [Arabic,Thaana,Yezi]
 Override: 2022 (•) BULLET [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common]
 Unresolved: [Cans] 1437 (ᐷ) CANADIAN SYLLABICS CARRIER HI vs 1440 (ᑀ) CANADIAN SYLLABICS PWO
 Unresolved: [Cans] 1454 (ᑔ) CANADIAN SYLLABICS CARRIER DI vs 145D (ᑝ) CANADIAN SYLLABICS TWO
@@ -11646,7 +11646,8 @@ Override: 2019 (’) RIGHT SINGLE QUOTATION MARK [Japanese,Korean,Han,Latin,Cyri
 Unresolved: [Hebrew] 5D9 (י) HEBREW LETTER YOD vs 5F3 (׳) HEBREW PUNCTUATION GERESH
 Unresolved: [Plrd] 16F51 (◌𖽑) MIAO SIGN ASPIRATION vs 16F52 (◌𖽒) MIAO SIGN REFORMED VOICING
 Unresolved: [Japanese] 304F (く) HIRAGANA LETTER KU vs 21FE8 (𡿨) CJK Ideograph Extension B-21FE8 [8169/42720]
-Override: 2044 (⁄) FRACTION SLASH [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common]
+Unresolved: [Japanese] 30CE (ノ) KATAKANA LETTER NO vs 4E3F (丿) CJK Ideograph-4E3F [64/20992] vs 2044 (⁄) FRACTION SLASH
+Unresolved: [Korean,Han] 4E3F (丿) CJK Ideograph-4E3F [64/20992] vs 2044 (⁄) FRACTION SLASH
 Unresolved: [Tamil] BF3 (௳) TAMIL DAY SIGN vs BF5 (௵) TAMIL YEAR SIGN
 Auto-Override: 2202 (∂) PARTIAL DIFFERENTIAL [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common vs Mend]
 Auto-Override: 2627 (☧) CHI RHO [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common vs Copt]
@@ -11654,13 +11655,17 @@ Unresolved: [Bali] 1B50 (᭐) BALINESE DIGIT ZERO vs 1B5C (᭜) BALINESE WINDU
 Unresolved: [Java] A9C6 (꧆) JAVANESE PADA WINDU vs A9D0 (꧐) JAVANESE DIGIT ZERO
 Auto-Override: 9E7 (১) BENGALI DIGIT ONE [Bengali,Cakm,Sylo vs Tirh]
 Auto-Override: 662 (٢) ARABIC-INDIC DIGIT TWO [Arabic,Thaana,Yezi vs Java,Bugi]
+Override: 968 (२) DEVANAGARI DIGIT TWO [Devanagari,Dogr,Kthi,Mahj]
 Auto-Override: 9E8 (২) BENGALI DIGIT TWO [Bengali,Cakm,Sylo vs Tirh]
 Auto-Override: 663 (٣) ARABIC-INDIC DIGIT THREE [Arabic,Thaana,Yezi vs Mend]
+Override: 969 (३) DEVANAGARI DIGIT THREE [Devanagari,Dogr,Kthi,Mahj]
 Override: 664 (٤) ARABIC-INDIC DIGIT FOUR [Arabic,Thaana,Yezi]
 Override: 6F4 (۴) EXTENDED ARABIC-INDIC DIGIT FOUR [Arabic]
+Override: 96A (४) DEVANAGARI DIGIT FOUR [Devanagari,Dogr,Kthi,Mahj]
 Override: 666 (٦) ARABIC-INDIC DIGIT SIX [Arabic,Thaana,Yezi]
 Override: 6F6 (۶) EXTENDED ARABIC-INDIC DIGIT SIX [Arabic]
 Auto-Override: 9EC (৬) BENGALI DIGIT SIX [Bengali,Cakm,Sylo vs Tirh]
+Override: 96E (८) DEVANAGARI DIGIT EIGHT [Devanagari,Dogr,Kthi,Mahj]
 Override: 669 (٩) ARABIC-INDIC DIGIT NINE [Arabic,Thaana,Yezi]
 Override: 967 (१) DEVANAGARI DIGIT ONE [Devanagari,Dogr,Kthi,Mahj]
 Override: 61 (a) LATIN SMALL LETTER A [Japanese,Korean,Han,Latin]
@@ -11699,10 +11704,13 @@ Unresolved: [Malayalam] D02 (◌ം) MALAYALAM SIGN ANUSVARA vs D20 (ഠ) MALAYA
 Unresolved: [Myanmar] 101D (ဝ) MYANMAR LETTER WA vs 1040 (၀) MYANMAR DIGIT ZERO
 Unresolved: [Greek] 3BF (ο) GREEK SMALL LETTER OMICRON vs 3C3 (σ) GREEK SMALL LETTER SIGMA
 Unresolved: [Wara] 118C8 (𑣈) WARANG CITI SMALL LETTER E vs 118D7 (𑣗) WARANG CITI SMALL LETTER BU
+Unresolved: [Talu] 199E (ᦞ) NEW TAI LUE LETTER LOW VA vs 19D0 (᧐) NEW TAI LUE DIGIT ZERO
 Override: 30 (0) DIGIT ZERO [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common]
+Override: 3007 (〇) IDEOGRAPHIC NUMBER ZERO [Japanese,Korean,Han,Bopomofo]
 Unresolved: [Oriya] B20 (ଠ) ORIYA LETTER TTHA vs B66 (୦) ORIYA DIGIT ZERO
 Auto-Override: 3B8 (θ) GREEK SMALL LETTER THETA [Greek vs Tfng,Cher]
 Unresolved: [Cher] 13BE (Ꮎ) CHEROKEE LETTER NA vs 13EB (Ꮻ) CHEROKEE LETTER WI
+Unresolved: [Talu] 19B1 (ᦱ) NEW TAI LUE VOWEL SIGN AA vs 19D1 (᧑) NEW TAI LUE DIGIT ONE
 Override: 70 (p) LATIN SMALL LETTER P [Japanese,Korean,Han,Latin]
 Override: 71 (q) LATIN SMALL LETTER Q [Japanese,Korean,Han,Latin]
 Unresolved: [Armenian] 563 (գ) ARMENIAN SMALL LETTER GIM vs 566 (զ) ARMENIAN SMALL LETTER ZA
@@ -11733,6 +11741,8 @@ Override: 7A (z) LATIN SMALL LETTER Z [Japanese,Korean,Han,Latin]
 Auto-Override: 2609 (☉) SUN [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common vs Tfng]
 Auto-Override: 25B3 (△) WHITE UP-POINTING TRIANGLE [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common vs Tfng,Cans,Plrd,Lyci,Cari]
 Auto-Override: 3BB (λ) GREEK SMALL LETTER LAMDA [Greek vs Osge]
+Override: 3C0 (π) GREEK SMALL LETTER PI [Latin,Greek]
+Override: 43F (п) CYRILLIC SMALL LETTER PE [Cyrillic]
 Auto-Override: 220F (∏) N-ARY PRODUCT [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common vs Bamu]
 Auto-Override: 1240 (ቀ) ETHIOPIC SYLLABLE QA [Ethiopic vs Runr,Cari]
 Auto-Override: 3C7 (χ) GREEK SMALL LETTER CHI [Greek vs Copt]
@@ -11784,7 +11794,9 @@ Auto-Override: 9CD (◌্) BENGALI SIGN VIRAMA [Bengali vs Tirh]
 Auto-Override: 9D7 (◌ৗ) BENGALI AU LENGTH MARK [Bengali vs Tirh]
 Unresolved: [Tamil] B85 (அ) TAMIL LETTER A vs BEE (௮) TAMIL DIGIT EIGHT
 Unresolved: [Tamil] B88 (ஈ) TAMIL LETTER II vs BB0 (ர) TAMIL LETTER RA vs BBE (◌ா) TAMIL VOWEL SIGN AA
-Unresolved: [Tamil] B89 (உ) TAMIL LETTER U vs BE8 (௨) TAMIL DIGIT TWO
+Override: B89 (உ) TAMIL LETTER U [Tamil]
+Override: BE8 (௨) TAMIL DIGIT TWO [Tamil,Gran]
+Override: D09 (ഉ) MALAYALAM LETTER U [Malayalam]
 Unresolved: [Tamil] B8E (எ) TAMIL LETTER E vs BED (௭) TAMIL DIGIT SEVEN
 Unresolved: [Tamil] B90 (ஐ) TAMIL LETTER AI vs B9C (ஜ) TAMIL LETTER JA
 Unresolved: [Tamil] B95 (க) TAMIL LETTER KA vs BE7 (௧) TAMIL DIGIT ONE
@@ -11817,8 +11829,6 @@ Unresolved: [Thai] E20 (ภ) THAI CHARACTER PHO SAMPHAO vs E26 (ฦ) THAI CHARAC
 Unresolved: [Thai] E32 (า) THAI CHARACTER SARA AA vs E45 (ๅ) THAI CHARACTER LAKKHANGYAO
 Unresolved: [Tibetan] F62 (ར) TIBETAN LETTER RA vs F6A (ཪ) TIBETAN LETTER FIXED-FORM RA
 Unresolved: [Marc] 11CAA (◌𑲪) MARCHEN SUBJOINED LETTER RA vs 11CB2 (◌𑲲) MARCHEN VOWEL SIGN U
-Unresolved: [Talu] 199E (ᦞ) NEW TAI LUE LETTER LOW VA vs 19D0 (᧐) NEW TAI LUE DIGIT ZERO
-Unresolved: [Talu] 19B1 (ᦱ) NEW TAI LUE VOWEL SIGN AA vs 19D1 (᧑) NEW TAI LUE DIGIT ONE
 Unresolved: [Lana] 1A45 (ᩅ) TAI THAM LETTER WA vs 1A80 (᪀) TAI THAM HORA DIGIT ZERO vs 1A90 (᪐) TAI THAM THAM DIGIT ZERO
 Unresolved: [Cham] AA01 (ꨁ) CHAM LETTER I vs AA53 (꩓) CHAM DIGIT THREE
 Unresolved: [Cham] AA23 (ꨣ) CHAM LETTER RA vs AA56 (꩖) CHAM DIGIT SIX
@@ -11935,13 +11945,15 @@ Unresolved: [Korean] 4E28 (丨) CJK Ideograph-4E28 [41/20992] vs 1175 (ᅵ) HANG
 Unresolved: [Japanese,Korean,Han,Bopomofo] 2E83 (⺃) CJK RADICAL SECOND TWO vs 4E5A (乚) CJK Ideograph-4E5A [91/20992]
 Unresolved: [Japanese,Korean,Han,Bopomofo] 2E82 (⺂) CJK RADICAL SECOND ONE vs 4E5B (乛) CJK Ideograph-4E5B [92/20992]
 Unresolved: [Japanese,Korean,Han,Bopomofo] 2EF2 (⻲) CJK RADICAL J-SIMPLIFIED TURTLE vs 4E80 (亀) CJK Ideograph-4E80 [129/20992]
-Unresolved: [Japanese] 30CB (ニ) KATAKANA LETTER NI vs 4E8C (二) CJK Ideograph-4E8C [141/20992]
+Override: 4E8C (二) CJK Ideograph-4E8C [141/20992] [Japanese,Korean,Han,Bopomofo]
+Override: 30CB (ニ) KATAKANA LETTER NI [Japanese]
 Unresolved: [Japanese] 2E85 (⺅) CJK RADICAL PERSON vs 30A4 (イ) KATAKANA LETTER I vs 4EBB (亻) CJK Ideograph-4EBB [188/20992]
 Unresolved: [Korean,Han,Bopomofo] 2E85 (⺅) CJK RADICAL PERSON vs 4EBB (亻) CJK Ideograph-4EBB [188/20992]
 Unresolved: [Japanese,Korean,Han,Bopomofo] 4F75 (併) CJK Ideograph-4F75 [374/20992] vs 5002 (倂) CJK Ideograph-5002 [515/20992]
 Unresolved: [Japanese,Korean,Han,Bopomofo] 5024 (値) CJK Ideograph-5024 [549/20992] vs 503C (值) CJK Ideograph-503C [573/20992]
 Unresolved: [Japanese,Korean,Han,Bopomofo] 2E8E (⺎) CJK RADICAL LAME ONE vs 5140 (兀) CJK Ideograph-5140 [833/20992]
-Unresolved: [Japanese] 30CF (ハ) KATAKANA LETTER HA vs 516B (八) CJK Ideograph-516B [876/20992]
+Override: 516B (八) CJK Ideograph-516B [876/20992] [Japanese,Korean,Han,Bopomofo]
+Override: 30CF (ハ) KATAKANA LETTER HA [Japanese]
 Unresolved: [Japanese,Korean,Han,Bopomofo] 2E89 (⺉) CJK RADICAL KNIFE TWO vs 5202 (刂) CJK Ideograph-5202 [1027/20992]
 Unresolved: [Japanese] 30AB (カ) KATAKANA LETTER KA vs 529B (力) CJK Ideograph-529B [1180/20992]
 Unresolved: [Japanese] 30C8 (ト) KATAKANA LETTER TO vs 535C (卜) CJK Ideograph-535C [1373/20992]
@@ -12140,7 +12152,6 @@ Removed Valid: 305 (◌̅) COMBINING OVERLINE
 Removed Valid: 307 (◌̇) COMBINING DOT ABOVE
 Removed Valid: 309 (◌̉) COMBINING HOOK ABOVE
 Removed Valid: 30B (◌̋) COMBINING DOUBLE ACUTE ACCENT
-Removed Valid: 431 (б) CYRILLIC SMALL LETTER BE
 Removed Valid: 450 (ѐ) CYRILLIC SMALL LETTER IE WITH GRAVE
 Removed Valid: 45D (ѝ) CYRILLIC SMALL LETTER I WITH GRAVE
 Removed Valid: 477 (ѷ) CYRILLIC SMALL LETTER IZHITSA WITH DOUBLE GRAVE ACCENT
@@ -12162,7 +12173,6 @@ Removed Valid: 4F3 (ӳ) CYRILLIC SMALL LETTER U WITH DOUBLE ACUTE
 Removed Valid: 4F5 (ӵ) CYRILLIC SMALL LETTER CHE WITH DIAERESIS
 Removed Valid: 4F9 (ӹ) CYRILLIC SMALL LETTER YERU WITH DIAERESIS
 Removed Valid: 63F (ؿ) ARABIC LETTER FARSI YEH WITH THREE DOTS ABOVE
-Removed Valid: 67E (پ) ARABIC LETTER PEH
 Removed Valid: 6A7 (ڧ) ARABIC LETTER QAF WITH DOT ABOVE
 Removed Valid: 6AA (ڪ) ARABIC LETTER SWASH KAF
 Removed Valid: 6BD (ڽ) ARABIC LETTER NOON WITH THREE DOTS ABOVE
@@ -12393,7 +12403,6 @@ Removed Valid: 1FE5 (ῥ) GREEK SMALL LETTER RHO WITH DASIA
 Removed Valid: 1FE6 (ῦ) GREEK SMALL LETTER UPSILON WITH PERISPOMENI
 Removed Valid: 1FE7 (ῧ) GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND PERISPOMENI
 Removed Valid: 1FF6 (ῶ) GREEK SMALL LETTER OMEGA WITH PERISPOMENI
-Removed Valid: 30CE (ノ) KATAKANA LETTER NO
 Removed Valid: 10000 (𐀀) LINEAR B SYLLABLE B008 A
 Removed Valid: 10001 (𐀁) LINEAR B SYLLABLE B038 E
 Removed Valid: 10002 (𐀂) LINEAR B SYLLABLE B028 I
@@ -14053,7 +14062,6 @@ Removed Mapping: 3FE (Ͼ) GREEK CAPITAL DOTTED LUNATE SIGMA SYMBOL => [37C] (ͼ)
 Removed Mapping: 3FF (Ͽ) GREEK CAPITAL REVERSED DOTTED LUNATE SIGMA SYMBOL => [37D] (ͽ) GREEK SMALL REVERSED DOTTED LUNATE SIGMA SYMBOL
 Removed Mapping: 400 (Ѐ) CYRILLIC CAPITAL LETTER IE WITH GRAVE => [450] (ѐ) CYRILLIC SMALL LETTER IE WITH GRAVE
 Removed Mapping: 40D (Ѝ) CYRILLIC CAPITAL LETTER I WITH GRAVE => [45D] (ѝ) CYRILLIC SMALL LETTER I WITH GRAVE
-Removed Mapping: 411 (Б) CYRILLIC CAPITAL LETTER BE => [431] (б) CYRILLIC SMALL LETTER BE
 Removed Mapping: 460 (Ѡ) CYRILLIC CAPITAL LETTER OMEGA => [461] (ѡ) CYRILLIC SMALL LETTER OMEGA
 Removed Mapping: 462 (Ѣ) CYRILLIC CAPITAL LETTER YAT => [463] (ѣ) CYRILLIC SMALL LETTER YAT
 Removed Mapping: 464 (Ѥ) CYRILLIC CAPITAL LETTER IOTIFIED E => [465] (ѥ) CYRILLIC SMALL LETTER IOTIFIED E
@@ -14365,9 +14373,6 @@ Removed Mapping: 2C75 (Ⱶ) LATIN CAPITAL LETTER HALF H => [2C76] (ⱶ) LATIN SM
 Removed Mapping: 2C7E (Ȿ) LATIN CAPITAL LETTER S WITH SWASH TAIL => [23F] (ȿ) LATIN SMALL LETTER S WITH SWASH TAIL
 Removed Mapping: 2C7F (Ɀ) LATIN CAPITAL LETTER Z WITH SWASH TAIL => [240] (ɀ) LATIN SMALL LETTER Z WITH SWASH TAIL
 Removed Mapping: 3036 (〶) CIRCLED POSTAL MARK => [3012] (〒) POSTAL MARK
-Removed Mapping: 32E8 (㋨) CIRCLED KATAKANA NO => [30CE] (ノ) KATAKANA LETTER NO
-Removed Mapping: 3328 (㌨) SQUARE NANO => [30CA 30CE] (ナノ) KATAKANA LETTER NA + KATAKANA LETTER NO
-Removed Mapping: 3329 (㌩) SQUARE NOTTO => [30CE 30C3 30C8] (ノット) KATAKANA LETTER NO + KATAKANA LETTER SMALL TU + KATAKANA LETTER TO
 Removed Mapping: 33A7 (㎧) SQUARE M OVER S => [6D 2215 73] (m∕s) LATIN SMALL LETTER M + DIVISION SLASH + LATIN SMALL LETTER S
 Removed Mapping: 33A8 (㎨) SQUARE M OVER S SQUARED => [6D 2215 73 32] (m∕s2) LATIN SMALL LETTER M + DIVISION SLASH + LATIN SMALL LETTER S + DIGIT TWO
 Removed Mapping: 33AE (㎮) SQUARE RAD OVER S => [72 61 64 2215 73] (rad∕s) LATIN SMALL LETTER R + LATIN SMALL LETTER A + LATIN SMALL LETTER D + DIVISION SLASH + LATIN SMALL LETTER S
@@ -14499,10 +14504,6 @@ Removed Mapping: A7D6 (Ꟗ) LATIN CAPITAL LETTER MIDDLE SCOTS S => [A7D7] (ꟗ) 
 Removed Mapping: A7D8 (Ꟙ) LATIN CAPITAL LETTER SIGMOID S => [A7D9] (ꟙ) LATIN SMALL LETTER SIGMOID S
 Removed Mapping: FB50 (ﭐ) ARABIC LETTER ALEF WASLA ISOLATED FORM => [671] (ٱ) ARABIC LETTER ALEF WASLA
 Removed Mapping: FB51 (ﭑ) ARABIC LETTER ALEF WASLA FINAL FORM => [671] (ٱ) ARABIC LETTER ALEF WASLA
-Removed Mapping: FB56 (ﭖ) ARABIC LETTER PEH ISOLATED FORM => [67E] (پ) ARABIC LETTER PEH
-Removed Mapping: FB57 (ﭗ) ARABIC LETTER PEH FINAL FORM => [67E] (پ) ARABIC LETTER PEH
-Removed Mapping: FB58 (ﭘ) ARABIC LETTER PEH INITIAL FORM => [67E] (پ) ARABIC LETTER PEH
-Removed Mapping: FB59 (ﭙ) ARABIC LETTER PEH MEDIAL FORM => [67E] (پ) ARABIC LETTER PEH
 Removed Mapping: FB86 (ﮆ) ARABIC LETTER DUL ISOLATED FORM => [68E] (ڎ) ARABIC LETTER DUL
 Removed Mapping: FB87 (ﮇ) ARABIC LETTER DUL FINAL FORM => [68E] (ڎ) ARABIC LETTER DUL
 Removed Mapping: FBAA (ﮪ) ARABIC LETTER HEH DOACHASHMEE ISOLATED FORM => [6BE] (ھ) ARABIC LETTER HEH DOACHASHMEE
@@ -14542,7 +14543,6 @@ Removed Mapping: FF60 (｠) FULLWIDTH RIGHT WHITE PARENTHESIS => [2986] (⦆) RI
 Removed Mapping: FF62 (｢) HALFWIDTH LEFT CORNER BRACKET => [300C] (「) LEFT CORNER BRACKET
 Removed Mapping: FF63 (｣) HALFWIDTH RIGHT CORNER BRACKET => [300D] (」) RIGHT CORNER BRACKET
 Removed Mapping: FF64 (､) HALFWIDTH IDEOGRAPHIC COMMA => [3001] (、) IDEOGRAPHIC COMMA
-Removed Mapping: FF89 (ﾉ) HALFWIDTH KATAKANA LETTER NO => [30CE] (ノ) KATAKANA LETTER NO
 Removed Mapping: FFE4 (￤) FULLWIDTH BROKEN BAR => [A6] (¦) BROKEN BAR
 Removed Mapping: FFE8 (￨) HALFWIDTH FORMS LIGHT VERTICAL => [2502] (│) BOX DRAWINGS LIGHT VERTICAL
 Removed Mapping: FFED (￭) HALFWIDTH BLACK SQUARE => [25A0] (■) BLACK SQUARE
@@ -14586,276 +14586,36 @@ Removed Mapping: 1F248 (🉈) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-655
 [✓] Emoji are NFC
 [✓] Fastpath ASCII
 ==== Find Unique Characters ====
-Valid: 133750
-Multi: 98510
-Unique: 35240
-==== Compress Wholes: Japanese ====
-  256x21 [Korean,Han,Bopomofo,Latin,Cyrillic,Greek,Common,Yiii,Nkoo,Bengali,Cakm,Sylo,Oriya,Tirh,Wara,Tfng,Ethiopic,Lisu,Lyci,Cari,Elba]
-==== Compress Wholes: Korean ====
-  247x21 [Japanese,Han,Bopomofo,Latin,Cyrillic,Greek,Common,Yiii,Nkoo,Bengali,Cakm,Sylo,Oriya,Tirh,Wara,Tfng,Ethiopic,Lisu,Lyci,Cari,Elba]
-==== Compress Wholes: Han ====
-  246x21 [Japanese,Korean,Bopomofo,Latin,Cyrillic,Greek,Common,Yiii,Nkoo,Bengali,Cakm,Sylo,Oriya,Tirh,Wara,Tfng,Ethiopic,Lisu,Lyci,Cari,Elba]
-==== Compress Wholes: Bopomofo ====
-  247x21 [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common,Yiii,Nkoo,Bengali,Cakm,Sylo,Oriya,Tirh,Wara,Tfng,Ethiopic,Lisu,Lyci,Cari,Elba]
-==== Compress Wholes: Latin ====
-    1x2 [Greek,Cyrillic]
-==== Compress Wholes: Cyrillic ====
-   19x34 [Latin,Japanese,Korean,Han,Armenian,Cher,Georgian,Telugu,Kannada,Malayalam,Sinhala,Devanagari,Dogr,Kthi,Mahj,Gurmukhi,Mult,Gujarati,Khoj,Tamil,Gran,Nand,Thai,Lao,Myanmar,Cakm,Tale,Arabic,Thaana,Yezi,Hebrew,Osge,Ahom,Cans]
-   11x1 [Greek]
-    7x1 [Copt]
-    6x1 [Wara]
-    4x1 [Dsrt]
-==== Compress Wholes: Greek ====
-   11x27 [Cyrillic,Copt,Dsrt,Georgian,Telugu,Kannada,Malayalam,Sinhala,Devanagari,Dogr,Kthi,Mahj,Gurmukhi,Mult,Gujarati,Khoj,Tamil,Gran,Nand,Thai,Lao,Myanmar,Cakm,Tale,Arabic,Thaana,Yezi]
-   10x8 [Latin,Japanese,Korean,Han,Hebrew,Osge,Cher,Ahom]
-    7x1 [Wara]
-    4x2 [Armenian,Cans]
-==== Compress Wholes: Arabic ====
-   13x2 [Syrc,Khmer]
-    8x38 [Latin,Cyrillic,Greek,Japanese,Korean,Han,Thaana,Yezi,Myanmar,Gran,Thai,Lao,Common,Lisu,Ital,Mend,Tfng,Runr,Plrd,Lyci,Telugu,Kannada,Malayalam,Sinhala,Dogr,Kthi,Mahj,Mult,Khoj,Nand,Cakm,Tale,Copt,Georgian,Armenian,Osge,Wara,Dsrt]
-    7x9 [Hebrew,Devanagari,Gurmukhi,Gujarati,Tamil,Bengali,Oriya,Shrd,Tirh]
-    4x1 [Nkoo]
-    2x1 [Khar]
-==== Compress Wholes: Devanagari ====
-   14x42 [Gujarati,Kthi,Dogr,Mahj,Khoj,Hebrew,Arabic,Bengali,Oriya,Tirh,Tamil,Shrd,Syrc,Nkoo,Khar,Lisu,Japanese,Korean,Han,Latin,Telugu,Kannada,Malayalam,Sinhala,Mult,Gran,Nand,Thai,Lao,Myanmar,Cakm,Tale,Thaana,Yezi,Greek,Copt,Cyrillic,Georgian,Armenian,Osge,Wara,Dsrt]
-    5x1 [Gurmukhi]
-==== Compress Wholes: Hebrew ====
-   12x41 [Arabic,Syrc,Nkoo,Devanagari,Gurmukhi,Gujarati,Tamil,Thaana,Yezi,Myanmar,Gran,Thai,Lao,Ital,Mend,Tfng,Lisu,Lyci,Khmer,Bengali,Oriya,Shrd,Tirh,Khar,Telugu,Kannada,Malayalam,Sinhala,Dogr,Kthi,Mahj,Mult,Khoj,Nand,Cakm,Tale,Copt,Georgian,Armenian,Osge,Dsrt]
-    9x12 [Latin,Greek,Cyrillic,Japanese,Korean,Han,Common,Runr,Plrd,Cans,Wara,Ahom]
-==== Compress Wholes: Thai ====
-   15x36 [Lao,Latin,Hebrew,Japanese,Arabic,Myanmar,Gran,Syrc,Korean,Han,Telugu,Kannada,Malayalam,Sinhala,Devanagari,Dogr,Kthi,Mahj,Gurmukhi,Mult,Gujarati,Khoj,Tamil,Nand,Cakm,Tale,Thaana,Yezi,Greek,Copt,Cyrillic,Georgian,Armenian,Osge,Wara,Dsrt]
-   10x1 [Khmer]
-==== Compress Wholes: Bengali ====
-    5x28 [Oriya,Japanese,Korean,Han,Latin,Cyrillic,Greek,Common,Cakm,Sylo,Mult,Wara,Devanagari,Gujarati,Mend,Ital,Arabic,Hebrew,Shrd,Khar,Nkoo,Bopomofo,Tfng,Ethiopic,Lisu,Lyci,Cari,Elba]
-    4x6 [Gurmukhi,Malayalam,Telugu,Kannada,Sinhala,Myanmar]
-    4x1 [Tirh]
-==== Compress Wholes: Tamil ====
-   15x29 [Gran,Japanese,Korean,Han,Latin,Telugu,Kannada,Sinhala,Dogr,Kthi,Mahj,Mult,Khoj,Nand,Thai,Lao,Myanmar,Cakm,Tale,Thaana,Yezi,Greek,Copt,Cyrillic,Georgian,Armenian,Osge,Wara,Dsrt]
-    9x1 [Malayalam]
-    2x7 [Hebrew,Arabic,Devanagari,Gurmukhi,Gujarati,Syrc,Nkoo]
-==== Compress Wholes: Oriya ====
-    6x31 [Bengali,Japanese,Korean,Han,Latin,Cyrillic,Greek,Common,Cakm,Sylo,Tirh,Gurmukhi,Wara,Mult,Devanagari,Gujarati,Nkoo,Bopomofo,Tfng,Ethiopic,Lisu,Lyci,Cari,Elba,Mend,Ital,Malayalam,Arabic,Hebrew,Shrd,Khar]
-==== Compress Wholes: Thaana ====
-    1x11 [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common,Khar,Arabic,Yezi,Lisu]
-==== Compress Wholes: Sinhala ====
-    2x37 [Gurmukhi,Telugu,Kannada,Malayalam,Myanmar,Bengali,Tirh,Japanese,Korean,Han,Latin,Devanagari,Dogr,Kthi,Mahj,Mult,Gujarati,Khoj,Tamil,Gran,Nand,Thai,Lao,Cakm,Tale,Arabic,Thaana,Yezi,Greek,Copt,Cyrillic,Georgian,Armenian,Hebrew,Osge,Wara,Dsrt]
-==== Compress Wholes: Gurmukhi ====
-    5x25 [Devanagari,Gujarati,Hebrew,Arabic,Tamil,Syrc,Nkoo,Shrd,Khar,Dogr,Kthi,Mahj,Khoj,Gran,Nand,Thai,Lao,Tale,Thaana,Yezi,Copt,Georgian,Armenian,Osge,Dsrt]
-    4x7 [Bengali,Oriya,Common,Sylo,Tirh,Mend,Ital]
-    3x9 [Japanese,Korean,Han,Latin,Cyrillic,Greek,Cakm,Mult,Wara]
-    3x5 [Malayalam,Telugu,Kannada,Sinhala,Myanmar]
-==== Compress Wholes: Gujarati ====
-   14x43 [Devanagari,Kthi,Dogr,Mahj,Khoj,Gurmukhi,Hebrew,Arabic,Bengali,Oriya,Tirh,Tamil,Shrd,Syrc,Nkoo,Khar,Lisu,Japanese,Korean,Han,Latin,Telugu,Kannada,Malayalam,Sinhala,Mult,Gran,Nand,Thai,Lao,Myanmar,Cakm,Tale,Thaana,Yezi,Greek,Copt,Cyrillic,Georgian,Armenian,Osge,Wara,Dsrt]
-==== Compress Wholes: Telugu ====
-   18x37 [Kannada,Nand,Gurmukhi,Malayalam,Sinhala,Myanmar,Japanese,Korean,Han,Latin,Devanagari,Dogr,Kthi,Mahj,Mult,Gujarati,Khoj,Tamil,Gran,Thai,Lao,Cakm,Tale,Arabic,Thaana,Yezi,Greek,Copt,Cyrillic,Georgian,Armenian,Hebrew,Osge,Wara,Dsrt,Bengali,Tirh]
-==== Compress Wholes: Kannada ====
-   18x37 [Telugu,Nand,Gurmukhi,Malayalam,Sinhala,Myanmar,Japanese,Korean,Han,Latin,Devanagari,Dogr,Kthi,Mahj,Mult,Gujarati,Khoj,Tamil,Gran,Thai,Lao,Cakm,Tale,Arabic,Thaana,Yezi,Greek,Copt,Cyrillic,Georgian,Armenian,Hebrew,Osge,Wara,Dsrt,Bengali,Tirh]
-==== Compress Wholes: Malayalam ====
-   10x21 [Tamil,Gran,Devanagari,Dogr,Kthi,Mahj,Gujarati,Khoj,Nand,Thai,Lao,Tale,Arabic,Thaana,Yezi,Copt,Georgian,Armenian,Hebrew,Osge,Dsrt]
-    5x19 [Gurmukhi,Japanese,Korean,Han,Latin,Cyrillic,Greek,Mult,Cakm,Wara,Telugu,Kannada,Sinhala,Myanmar,Bengali,Common,Oriya,Sylo,Tirh]
-==== Compress Wholes: Lao ====
-   15x37 [Thai,Latin,Hebrew,Japanese,Arabic,Myanmar,Khmer,Gran,Syrc,Korean,Han,Telugu,Kannada,Malayalam,Sinhala,Devanagari,Dogr,Kthi,Mahj,Gurmukhi,Mult,Gujarati,Khoj,Tamil,Nand,Cakm,Tale,Thaana,Yezi,Greek,Copt,Cyrillic,Georgian,Armenian,Osge,Wara,Dsrt]
-==== Compress Wholes: Georgian ====
-    2x35 [Japanese,Korean,Han,Latin,Greek,Cyrillic,Wara,Telugu,Kannada,Malayalam,Sinhala,Devanagari,Dogr,Kthi,Mahj,Gurmukhi,Mult,Gujarati,Khoj,Tamil,Gran,Nand,Thai,Lao,Myanmar,Cakm,Tale,Arabic,Thaana,Yezi,Copt,Armenian,Hebrew,Osge,Dsrt]
-==== Compress Wholes: Myanmar ====
-    3x30 [Latin,Hebrew,Japanese,Arabic,Gran,Thai,Lao,Korean,Han,Devanagari,Dogr,Kthi,Mahj,Mult,Gujarati,Khoj,Tamil,Nand,Thaana,Yezi,Greek,Copt,Cyrillic,Georgian,Armenian,Osge,Wara,Dsrt,Syrc,Khmer]
-    3x7 [Gurmukhi,Telugu,Kannada,Malayalam,Sinhala,Bengali,Tirh]
-    3x2 [Cakm,Tale]
-==== Compress Wholes: Ethiopic ====
-    2x1 [Armenian]
-    1x20 [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common,Nkoo,Bengali,Cakm,Sylo,Oriya,Bopomofo,Tirh,Wara,Tfng,Lisu,Lyci,Cari,Elba]
-==== Compress Wholes: Khmer ====
-   10x9 [Thai,Lao,Latin,Hebrew,Japanese,Arabic,Syrc,Myanmar,Gran]
-==== Compress Wholes: Armenian ====
-   10x36 [Japanese,Korean,Han,Latin,Cyrillic,Osge,Wara,Cher,Telugu,Kannada,Malayalam,Sinhala,Devanagari,Dogr,Kthi,Mahj,Gurmukhi,Mult,Gujarati,Khoj,Tamil,Gran,Nand,Thai,Lao,Myanmar,Cakm,Tale,Arabic,Thaana,Yezi,Copt,Georgian,Hebrew,Dsrt,Ahom]
-    3x2 [Greek,Cans]
-    2x1 [Ethiopic]
-==== Compress Wholes: Bamu ====
-    4x8 [Latin,Cyrillic,Japanese,Korean,Han,Greek,Common,Nkoo]
-    3x9 [Cans,Arabic,Thaana,Yezi,Tfng,Lisu,Plrd,Elba,Lyci]
-    3x1 [Cher]
-    1x1 [Runr]
-==== Compress Wholes: Cakm ====
-    4x48 [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common,Oriya,Bengali,Sylo,Gurmukhi,Mult,Wara,Malayalam,Mend,Ital,Telugu,Kannada,Sinhala,Devanagari,Dogr,Kthi,Mahj,Gujarati,Khoj,Tamil,Gran,Nand,Thai,Lao,Arabic,Thaana,Yezi,Copt,Georgian,Armenian,Hebrew,Osge,Dsrt,Nkoo,Bopomofo,Tirh,Tfng,Ethiopic,Lisu,Lyci,Cari,Elba]
-    2x2 [Myanmar,Tale]
-==== Compress Wholes: Cans ====
-   21x8 [Lisu,Elba,Ital,Wara,Ethiopic,Arabic,Thaana,Yezi]
-   16x1 [Cher]
-   10x2 [Plrd,Hebrew]
-    9x1 [Cari]
-    8x6 [Japanese,Korean,Han,Latin,Cyrillic,Common]
-    6x1 [Lyci]
-    4x2 [Greek,Armenian]
-    4x1 [Runr]
-    4x1 [Tfng]
-    3x1 [Bamu]
-==== Compress Wholes: Cher ====
-   25x9 [Lisu,Cari,Lyci,Ital,Elba,Runr,Arabic,Thaana,Yezi]
-   15x1 [Cans]
-   12x1 [Plrd]
-    7x7 [Latin,Japanese,Korean,Han,Cyrillic,Common,Armenian]
-    6x1 [Greek]
-    6x1 [Wara]
-    4x1 [Bamu]
-    4x1 [Tfng]
-==== Compress Wholes: Java ====
-    1x4 [Arabic,Thaana,Yezi,Bugi]
-    1x1 [Glag]
-==== Compress Wholes: Lisu ====
-   20x1 [Cher]
-   20x2 [Cans,Bamu]
-   11x3 [Plrd,Mend,Hebrew]
-   10x7 [Cari,Bengali,Cakm,Sylo,Oriya,Bopomofo,Tirh]
-   10x2 [Lyci,Nkoo]
-    8x1 [Elba]
-    7x1 [Tfng]
-    6x1 [Ital]
-    6x1 [Wara]
-    4x8 [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common,Khar]
-    4x3 [Arabic,Thaana,Yezi]
-    4x1 [Runr]
-    3x1 [Ethiopic]
-    1x2 [Devanagari,Gujarati]
-==== Compress Wholes: Nkoo ====
-    5x27 [Latin,Cyrillic,Greek,Bamu,Japanese,Korean,Han,Common,Tfng,Lisu,Lyci,Thaana,Yezi,Ital,Mend,Runr,Plrd,Bengali,Cakm,Sylo,Oriya,Bopomofo,Tirh,Wara,Ethiopic,Cari,Elba]
-    3x7 [Arabic,Hebrew,Syrc,Devanagari,Gurmukhi,Gujarati,Tamil]
-==== Compress Wholes: Osge ====
-    4x35 [Greek,Japanese,Korean,Han,Latin,Armenian,Wara,Telugu,Kannada,Malayalam,Sinhala,Devanagari,Dogr,Kthi,Mahj,Gurmukhi,Mult,Gujarati,Khoj,Tamil,Gran,Nand,Thai,Lao,Myanmar,Cakm,Tale,Arabic,Thaana,Yezi,Copt,Cyrillic,Georgian,Hebrew,Dsrt]
-==== Compress Wholes: Plrd ====
-   11x4 [Cans,Elba,Bamu,Ethiopic]
-   11x7 [Lisu,Arabic,Thaana,Yezi,Ital,Mend,Nkoo]
-    9x1 [Cher]
-    5x10 [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common,Hebrew,Runr,Wara]
-    5x1 [Lyci]
-    4x1 [Cari]
-    4x1 [Tfng]
-==== Compress Wholes: Sylo ====
-    3x25 [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common,Oriya,Bengali,Cakm,Gurmukhi,Mult,Wara,Mend,Ital,Malayalam,Nkoo,Bopomofo,Tirh,Tfng,Ethiopic,Lisu,Lyci,Cari,Elba]
-==== Compress Wholes: Syrc ====
-    9x16 [Arabic,Hebrew,Latin,Cyrillic,Greek,Nkoo,Devanagari,Gurmukhi,Gujarati,Tamil,Japanese,Myanmar,Khmer,Gran,Thai,Lao]
-==== Compress Wholes: Tale ====
-    2x35 [Myanmar,Cakm,Japanese,Korean,Han,Latin,Telugu,Kannada,Malayalam,Sinhala,Devanagari,Dogr,Kthi,Mahj,Gurmukhi,Mult,Gujarati,Khoj,Tamil,Gran,Nand,Thai,Lao,Arabic,Thaana,Yezi,Greek,Copt,Cyrillic,Georgian,Armenian,Hebrew,Osge,Wara,Dsrt]
-==== Compress Wholes: Tfng ====
-    7x18 [Lisu,Arabic,Thaana,Yezi,Elba,Ital,Nkoo,Wara,Bamu,Mend,Hebrew,Bengali,Cakm,Sylo,Oriya,Bopomofo,Tirh,Ethiopic]
-    6x1 [Lyci]
-    6x7 [Greek,Japanese,Korean,Han,Latin,Cyrillic,Common]
-    4x1 [Plrd]
-    4x1 [Cari]
-    4x1 [Cans]
-    3x1 [Cher]
-    3x1 [Runr]
-==== Compress Wholes: Yiii ====
-    1x8 [Japanese,Korean,Han,Bopomofo,Latin,Cyrillic,Greek,Common]
-==== Compress Wholes: Ahom ====
-    5x9 [Japanese,Korean,Han,Latin,Cyrillic,Armenian,Wara,Greek,Hebrew]
-==== Compress Wholes: Bugi ====
-    1x4 [Arabic,Thaana,Yezi,Java]
-==== Compress Wholes: Cari ====
-   10x11 [Lisu,Cher,Wara,Elba,Nkoo,Bengali,Cakm,Sylo,Oriya,Bopomofo,Tirh]
-    8x1 [Cans]
-    6x1 [Lyci]
-    6x1 [Ital]
-    4x1 [Plrd]
-    4x1 [Runr]
-    4x1 [Tfng]
-    3x7 [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common]
-    2x1 [Ethiopic]
-==== Compress Wholes: Copt ====
-   10x34 [Cyrillic,Japanese,Korean,Han,Latin,Wara,Common,Telugu,Kannada,Malayalam,Sinhala,Devanagari,Dogr,Kthi,Mahj,Gurmukhi,Mult,Gujarati,Khoj,Tamil,Gran,Nand,Thai,Lao,Myanmar,Cakm,Tale,Arabic,Thaana,Yezi,Georgian,Armenian,Hebrew,Osge]
-    8x1 [Greek]
-    4x1 [Dsrt]
-==== Compress Wholes: Dogr ====
-    5x35 [Devanagari,Kthi,Mahj,Gujarati,Khoj,Japanese,Korean,Han,Latin,Telugu,Kannada,Malayalam,Sinhala,Gurmukhi,Mult,Tamil,Gran,Nand,Thai,Lao,Myanmar,Cakm,Tale,Arabic,Thaana,Yezi,Greek,Copt,Cyrillic,Georgian,Armenian,Hebrew,Osge,Wara,Dsrt]
-==== Compress Wholes: Dsrt ====
-    5x34 [Cyrillic,Japanese,Korean,Han,Latin,Wara,Greek,Telugu,Kannada,Malayalam,Sinhala,Devanagari,Dogr,Kthi,Mahj,Gurmukhi,Mult,Gujarati,Khoj,Tamil,Gran,Nand,Thai,Lao,Myanmar,Cakm,Tale,Arabic,Thaana,Yezi,Georgian,Armenian,Hebrew,Osge]
-    4x1 [Copt]
-==== Compress Wholes: Egyp ====
-    1x8 [Mero,Japanese,Korean,Han,Latin,Cyrillic,Greek,Common]
-==== Compress Wholes: Elba ====
-    8x29 [Lisu,Wara,Cher,Cari,Cans,Lyci,Tfng,Ital,Runr,Plrd,Japanese,Korean,Han,Latin,Cyrillic,Greek,Common,Nkoo,Bengali,Cakm,Sylo,Oriya,Bopomofo,Tirh,Ethiopic,Arabic,Thaana,Yezi,Bamu]
-==== Compress Wholes: Glag ====
-    1x1 [Java]
-==== Compress Wholes: Gran ====
-    8x28 [Tamil,Malayalam,Korean,Han,Telugu,Kannada,Sinhala,Devanagari,Dogr,Kthi,Mahj,Gurmukhi,Mult,Gujarati,Khoj,Nand,Cakm,Tale,Thaana,Yezi,Greek,Copt,Cyrillic,Georgian,Armenian,Osge,Wara,Dsrt]
-    2x9 [Latin,Hebrew,Japanese,Arabic,Myanmar,Thai,Lao,Syrc,Khmer]
-==== Compress Wholes: Ital ====
-    8x14 [Lisu,Lyci,Runr,Cher,Cans,Tfng,Wara,Elba,Plrd,Arabic,Thaana,Yezi,Hebrew,Nkoo]
-    7x1 [Cari]
-    3x14 [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common,Mend,Oriya,Bengali,Cakm,Sylo,Gurmukhi,Mult]
-==== Compress Wholes: Khar ====
-    2x19 [Arabic,Hebrew,Devanagari,Bengali,Gurmukhi,Gujarati,Oriya,Shrd,Tirh,Japanese,Korean,Han,Latin,Cyrillic,Greek,Common,Thaana,Yezi,Lisu]
-==== Compress Wholes: Khoj ====
-    5x35 [Devanagari,Dogr,Kthi,Mahj,Gujarati,Japanese,Korean,Han,Latin,Telugu,Kannada,Malayalam,Sinhala,Gurmukhi,Mult,Tamil,Gran,Nand,Thai,Lao,Myanmar,Cakm,Tale,Arabic,Thaana,Yezi,Greek,Copt,Cyrillic,Georgian,Armenian,Hebrew,Osge,Wara,Dsrt]
-==== Compress Wholes: Kthi ====
-    6x36 [Devanagari,Gujarati,Dogr,Mahj,Khoj,Shrd,Japanese,Korean,Han,Latin,Telugu,Kannada,Malayalam,Sinhala,Gurmukhi,Mult,Tamil,Gran,Nand,Thai,Lao,Myanmar,Cakm,Tale,Arabic,Thaana,Yezi,Greek,Copt,Cyrillic,Georgian,Armenian,Hebrew,Osge,Wara,Dsrt]
-==== Compress Wholes: Lyci ====
-   10x19 [Lisu,Cher,Ital,Wara,Elba,Arabic,Thaana,Yezi,Nkoo,Mend,Hebrew,Bengali,Cakm,Sylo,Oriya,Bopomofo,Tirh,Ethiopic,Bamu]
-    6x1 [Cans]
-    6x1 [Cari]
-    6x1 [Tfng]
-    5x1 [Plrd]
-    4x7 [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common]
-    3x1 [Runr]
-==== Compress Wholes: Mahj ====
-    5x35 [Devanagari,Dogr,Kthi,Gujarati,Khoj,Japanese,Korean,Han,Latin,Telugu,Kannada,Malayalam,Sinhala,Gurmukhi,Mult,Tamil,Gran,Nand,Thai,Lao,Myanmar,Cakm,Tale,Arabic,Thaana,Yezi,Greek,Copt,Cyrillic,Georgian,Armenian,Hebrew,Osge,Wara,Dsrt]
-==== Compress Wholes: Mend ====
-    3x21 [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common,Ital,Oriya,Bengali,Cakm,Sylo,Gurmukhi,Mult,Hebrew,Nkoo,Tfng,Runr,Lisu,Plrd,Lyci]
-    2x3 [Arabic,Thaana,Yezi]
-==== Compress Wholes: Mero ====
-    1x8 [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common,Egyp]
-==== Compress Wholes: Mult ====
-    3x41 [Japanese,Korean,Han,Latin,Cyrillic,Greek,Cakm,Gurmukhi,Common,Oriya,Bengali,Sylo,Malayalam,Wara,Mend,Ital,Telugu,Kannada,Sinhala,Devanagari,Dogr,Kthi,Mahj,Gujarati,Khoj,Tamil,Gran,Nand,Thai,Lao,Myanmar,Tale,Arabic,Thaana,Yezi,Copt,Georgian,Armenian,Hebrew,Osge,Dsrt]
-==== Compress Wholes: Nand ====
-    4x35 [Telugu,Kannada,Japanese,Korean,Han,Latin,Malayalam,Sinhala,Devanagari,Dogr,Kthi,Mahj,Gurmukhi,Mult,Gujarati,Khoj,Tamil,Gran,Thai,Lao,Myanmar,Cakm,Tale,Arabic,Thaana,Yezi,Greek,Copt,Cyrillic,Georgian,Armenian,Hebrew,Osge,Wara,Dsrt]
-==== Compress Wholes: Runr ====
-    5x14 [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common,Hebrew,Plrd,Arabic,Thaana,Yezi,Mend,Nkoo]
-    4x2 [Cans,Wara]
-    4x4 [Lisu,Ital,Cher,Elba]
-    4x2 [Cari,Ethiopic]
-    3x1 [Tfng]
-    3x1 [Lyci]
-    1x1 [Bamu]
-==== Compress Wholes: Shrd ====
-    3x10 [Devanagari,Gujarati,Arabic,Hebrew,Bengali,Gurmukhi,Oriya,Tirh,Khar,Kthi]
-==== Compress Wholes: Tirh ====
-   33x32 [Bengali,Cakm,Sylo,Oriya,Devanagari,Gujarati,Gurmukhi,Arabic,Hebrew,Shrd,Khar,Telugu,Kannada,Malayalam,Sinhala,Myanmar,Japanese,Korean,Han,Latin,Cyrillic,Greek,Common,Nkoo,Bopomofo,Wara,Tfng,Ethiopic,Lisu,Lyci,Cari,Elba]
-==== Compress Wholes: Ugar ====
-    2x1 [Xpeo]
-    1x1 [Xsux]
-==== Compress Wholes: Wara ====
-   15x34 [Japanese,Korean,Han,Latin,Common,Cakm,Gurmukhi,Mult,Malayalam,Oriya,Bengali,Sylo,Georgian,Armenian,Hebrew,Osge,Telugu,Kannada,Sinhala,Gujarati,Khoj,Tamil,Gran,Nand,Thai,Lao,Myanmar,Tale,Ahom,Plrd,Nkoo,Bopomofo,Tirh,Ethiopic]
-   13x2 [Greek,Copt]
-   12x2 [Cyrillic,Dsrt]
-    8x8 [Lisu,Cari,Elba,Ital,Lyci,Cans,Tfng,Runr]
-    7x1 [Cher]
-    3x7 [Arabic,Thaana,Yezi,Devanagari,Dogr,Kthi,Mahj]
-==== Compress Wholes: Xpeo ====
-    2x1 [Ugar]
-==== Compress Wholes: Xsux ====
-    1x1 [Ugar]
-==== Compress Wholes: Yezi ====
-    1x11 [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common,Khar,Arabic,Thaana,Lisu]
+Valid: [33m133753[39m
+Multi: [33m98511[39m
+Unique: [33m35242[39m
+[✓] Assert Whole Membership
+Confusable: [33m512[39m
+Not Confusable: [33m121[39m
+Non-Confusable Non-Unique: [33m51[39m
+==== Compress Wholes ====
+Wholes: [33m152[39m
 ==== Compress Groups ====
 ==== Order Groups ====
 ==== Group Summary ====
 Ord | Valid  | Uniqu | Prima | Secon | CM  | Group     
   1 |   1269 |    47 |    73 |  1196 | [0] | Latin
-  2 |  98404 |     0 | 97183 |  1221 | [0] | Han
+  2 |  98405 |     0 | 97184 |  1221 | [0] | Han
   3 |   1195 |     0 |  1195 |     0 | N=0 | Common
-  4 |    394 |   371 |   393 |     1 | N=1 | Arabic
+  4 |    395 |   372 |   394 |     1 | N=2 | Arabic
   5 |    120 |   110 |   120 |     0 | N=2 | Devanagari
-  6 | 109930 | 11526 | 11528 | 98402 | [0] | Korean
-  7 |  98610 |   206 |   208 | 98402 | [0] | Japanese
+  6 | 109931 | 11526 | 11528 | 98403 | [0] | Korean
+  7 |  98612 |   207 |   209 | 98403 | [0] | Japanese
   8 |     84 |    83 |    83 |     1 | N=2 | Hebrew
-  9 |   1297 |   102 |   102 |  1195 | [0] | Cyrillic
+  9 |   1298 |   103 |   103 |  1195 | [0] | Cyrillic
  10 |     86 |    85 |    85 |     1 | N=2 | Thai
  11 |     91 |    81 |    91 |     0 | N=2 | Bengali
- 12 |  97258 |    75 |    76 | 97182 | [0] | Bopomofo
+ 12 |  97258 |    74 |    76 | 97182 | [0] | Bopomofo
  13 |    123 |   102 |   123 |     0 | N=1 | Tamil
  14 |   1230 |    34 |    35 |  1195 | [0] | Greek
  15 |    186 |   186 |   186 |     0 | N=1 | Tibetan
  16 |     80 |    80 |    80 |     0 | N=1 | Lao
- 17 |     74 |    64 |    74 |     0 | N=1 | Gurmukhi
+ 17 |     74 |    64 |    74 |     0 | N=2 | Gurmukhi
  18 |     95 |    95 |    95 |     0 | N=1 | Telugu
  19 |     43 |    43 |    43 |     0 | N=1 | Armenian
  20 |    137 |   137 |   137 |     0 | N=1 | Khmer
@@ -14999,7 +14759,7 @@ Ord | Valid  | Uniqu | Prima | Secon | CM  | Group
 ==== NFC Quick Check ====
 Optimized: 2110 => 540
 ==== Write Output ====
-Wrote: spec.json [3130530]
+Wrote: spec.json [3110961]
 Wrote: nf.json [48402]
 Wrote: nf-tests.json [503302]
 Wrote: emoji-info.json [391345]

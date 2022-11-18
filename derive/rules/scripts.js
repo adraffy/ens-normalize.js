@@ -23,7 +23,7 @@ export const SCRIPT_GROUPS = [
 	{name: 'Common', test: ['Zyyy'], cm: 0},
 
 	// Pure with Many Regs
-	{name: 'Arabic', test: ['Arab'], extra: ['-']}, 				// 15000 pure, underscores, only 11 latin mixed (spoofs), and "0x"
+	{name: 'Arabic', test: ['Arab'], cm: 2, extra: ['-']}, 				// 15000 pure, underscores, only 11 latin mixed (spoofs), and "0x"
 	{name: 'Devanagari', test: ['Deva'], cm: 2}, 					// 2700 pure but 4
 	{name: 'Hebrew', test: ['Hebr'], cm: 2, extra: ['₪']},			// 1466 pure, 17 spoofs with Latin
 	{name: 'Thai', test: ['Thai'], cm: 2,  extra: ['฿']},			// 1000+ pure, spoof mixed
@@ -36,7 +36,7 @@ export const SCRIPT_GROUPS = [
 	{name: 'Oriya', test: ['Orya']},			// no legit non-pure registrations
 	{name: 'Thaana', test: ['Thaa'], cm: 2},	// pure(1)
 	{name: 'Sinhala', test: ['Sinh']},			// all junk
-	{name: 'Gurmukhi', test: ['Guru']},			// pure(73) not(1)
+	{name: 'Gurmukhi', test: ['Guru'], cm: 2},	// pure(73) not(1)
 	{name: 'Gujarati', test: ['Gujr']},			// pure(47) 
 	{name: 'Telugu', test: ['Telu']},			// pure(52) not(3), faces/memes
 	{name: 'Kannada', test: ['Knda']},			// few digits + eye balls (50)

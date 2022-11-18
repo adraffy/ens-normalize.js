@@ -1,5 +1,5 @@
-import {mkdirSync, writeFileSync, createWriteStream} from 'node:fs';
-import {compare_arrays, explode_cp, permutations, parse_cp_sequence, print_section, print_checked, print_table} from './utils.js';
+import {mkdirSync, writeFileSync, createWriteStream, cp} from 'node:fs';
+import {compare_arrays, explode_cp, permutations, parse_cp_sequence, print_section, print_checked, print_table, group_by} from './utils.js';
 import {UNICODE, NF, IDNA, PRINTER} from './unicode-version.js';
 import CHARS_VALID from './rules/chars-valid.js';
 import CHARS_DISALLOWED from './rules/chars-disallow.js';
@@ -234,8 +234,17 @@ class ScriptGroup {
 		this.cm = cm;
 		this.valid_set = new Set();
 		this.cm_map = new Map();
+		this.whole_set = new Set();
 		this.whole_map = new Map();
 	}
+		/*
+		this.whole_map = new Map();
+	}
+	register_whole(cp, target) {
+		this.whole_map.set(target, cp);
+	}
+	*/
+	/*
 	register_whole(cp, groups) {
 		if (!this.valid_set.has(cp)) return;
 		let {whole_map} = this;
@@ -249,6 +258,7 @@ class ScriptGroup {
 			set.add(cp);
 		}
 	}
+	*/
 }
 
 let untested_set = new Set(UNICODE.script_map.values());	
@@ -448,30 +458,113 @@ function group_parts(g) {
 	].flat(Infinity));
 }
 
+
+/*
+function register_whole(target, g, def, union) {
+	if (g.whole_map.has(def.cp)) {
+		throw new Error('wtf bro');
+	}
+	//g.whole_map.set(def.cp, def.groups);
+	g.whole_map.set(def.cp, union);
+
+	//confuse_map.set(def.cp, union);
+}
+*/
+	/*&
+	let bucket = confuse_map.get(target);
+	if (!bucket) {
+		bucket = [];
+		confuse_map.set(target, bucket);
+	}
+	bucket.push([cp, g, union]);
+	*/
+	/*
+
+	let map = confuse_map.get(target);
+	if (!map) {
+		map = new Map();
+		confuse_map.set(target, map);
+	}
+	let set = map.get(cp);
+	if (!set) {
+		set = new Set();
+		map.set(cp, g);
+	}
+	set.add(cp);
+	*/
+	/*
+	let g0 = map.get(cp);
+	if (g0 && g !== g0) {
+		console.log(g.name, g0.name, PRINTER.desc_for_cp(cp));
+	}*/
+	//map.set(cp, g);
+
+class Whole {
+	constructor(target, valid) {
+		this.target = target;
+		//this.union = union;
+		this.valid = valid; // cp
+		this.map = new Map(); // cp -> set<g>
+	}
+	add(cp, g) {
+		let set = this.map.get(cp);
+		if (!set) {
+			set = new Set();
+			this.map.set(cp, set);
+		}
+		set.add(g);
+	}
+	
+}
+
+
 print_section('Compute Confusables');
+let wholes_list = [];
+let confused_union = new Set();
 script_groups.forEach(g => g.parts = group_parts(g)); // part intersection
 for (let [target, ...defs0] of CONFUSE_GROUPS) {
 	let defs = [];
 	for (let def of defs0) {
-		if (Number.isInteger(def)) def = {cp: def};
-		switch (def.type) {
+		if (Number.isInteger(def)) { // turn into structure
+			def = {cp: def};
+		}
+		let {cp, type} = def;
+		// assert that every confusable is unique
+		if (confused_union.has(cp)) {
+			throw new Error(`Duplicate confusable "${def.target}": ${PRINTER.desc_for_cp(cp)}`);
+		}
+		confused_union.add(cp);
+		// check the type
+		switch (type) {
 			case undefined:
 			case CONFUSE_TYPE_VALID:
 			case CONFUSE_TYPE_ALLOW: break;
-			default: throw new Error(`Unknown Confusable Type "${def.type}": ${PRINTER.desc_for_cp(def.cp)}`);
+			default: throw new Error(`Unknown confusable type "${type}": ${PRINTER.desc_for_cp(cp)}`);
 		}
-		let groups = script_groups.filter(g => g.parts.has(def.cp));
-		if (groups.length == 0) continue;
-		def.char = UNICODE.require_char(def.cp);
+		let char = UNICODE.require_char(cp);
+		// find the groups that COULD contain this character
+		let groups = script_groups.filter(g => g.parts.has(cp));
+		if (char.is_cm) {
+			groups = groups.filter(g => g.cm > 0);
+		}
+		if (!groups.length) continue;
+		/*if (char.is_cm) {
+			if (!groups.every(g => g.cm == -1)) {
+				console.log(PRINTER.desc_for_cp(cp));
+				throw new Error('wtf');
+			}
+			continue;
+		}*/
+		def.target = target;
+		def.char = char;
 		def.groups = new Set(groups);
-		def.restricted = groups.every(g => g.restricted);
+		def.restricted = groups.every(g => g.restricted); 
 		defs.push(def);
 	}
-	if (defs.length < 2) {
-		//console.log(`Inactive: ${target}`); // too spammy
-		continue;
-	}
+	if (defs.length < 2) continue;	
 	let union = new Set(defs.flatMap(x => [...x.groups]));
+	
+	// if theres no decisions and only 1 character is in unrestricted group, make it valid
 	if (!defs.some(x => x.type)) {
 		let free = defs.filter(x => !x.restricted);
 		if (free.length === 1) {
@@ -480,45 +573,63 @@ for (let [target, ...defs0] of CONFUSE_GROUPS) {
 			def.type = CONFUSE_TYPE_VALID;
 		}
 	}
+
+	let whole = new Whole(target, defs.filter(def => def.type === CONFUSE_TYPE_VALID).map(def => def.cp));
+	wholes_list.push(whole);
+
 	let unresolved = {};
 	for (let g of union) {
 		let confuse = defs.filter(x => x.groups.has(g));
 		let decided = confuse.filter(x => x.type); 
-		// if there's only 1 group and they're all decided...
-		// we dont need to do anything
-		if (union.size == 1 && decided.length === confuse.length) {
-			continue; 
-		}
-		// if theres an annotated decision, use that
+		
+		// if theres any decisions, use that
 		if (decided.length) {
-			for (let {type, cp} of confuse) {
-				switch (type) {
+			for (let def of confuse) {
+				switch (def.type) {
 					case CONFUSE_TYPE_VALID: // char can be used freely
 						break;
 					case CONFUSE_TYPE_ALLOW: // char requires additional hints
-						g.register_whole(cp, union);
+						//g.register_whole(cp, union);
+						//allow.push([g, def.cp]);
+						whole.add(def.cp, g);
 						break;
 					default: // char is single-script confusable
-						g.valid_set.delete(cp);
+						g.valid_set.delete(def.cp);
 				}
 			}
 			continue;
-		}	
+		}
+
+		// there's only 1 for this group, ALLOW it
 		if (confuse.length == 1) {
-			g.register_whole(confuse[0].cp, union);
+			//g.register_whole(confuse[0].cp, union);
+			//allow.push([g, confuse[0].cp]);
+			whole.add(confuse[0].cp, g);
+			//register_whole(target, g, confuse[0], union);
 			continue;
 		}
+
+		// keep track of it
 		let key = confuse.map(def => def.cp).sort().join(); // meh
 		let bucket = unresolved[key];
 		if (!bucket) unresolved[key] = bucket = [];
 		bucket.push(g);
+
+		// there are 2 more confusables without a decision
+		// for the same group 
 		for (let def of confuse) {
 			if (CONFUSE_DEFAULT_ALLOW) {
-				g.register_whole(def.cp, union);
+				//g.register_whole(def.cp, union);
+				//register_whole(target, g, def, union);
+				//allow.push([g, def.cp]);
+				whole.add(def.cp, g);
 			} else {
 				g.valid_set.delete(def.cp);
 			}
 		}
+	}
+	if (!whole.map.size && !whole.valid.length) {
+		throw new Error('bug');
 	}
 	for (let def of defs) {
 		if (def.type === CONFUSE_TYPE_VALID) {
@@ -537,11 +648,7 @@ for (let [target, ...defs0] of CONFUSE_GROUPS) {
 script_groups.forEach(g => delete g.parts); // remove cache
 
 
-
-// find characters that:
-// - match no group
-// - aren't part of a whitelisted cm sequence
-// - a component of a character thats in a group
+// find characters that can never be part of a name or its construction
 print_section('Disallow Leftover Characters');
 let parts_union = new Set(script_groups.flatMap(g => [...group_parts(g)]));
 for (let cp of valid) {
@@ -563,11 +670,19 @@ print_section('Remove Empty Groups');
 script_groups = script_groups.filter(g => {
 	if (g.valid_set.size) return true;
 	console.log(`Removed Group: ${g.name}`);
-	for (let gg of script_groups) {
-		gg.whole_map.delete(g);
-	}
+
+	wholes_list = wholes_list.filter(w => {
+		if (w.union.delete(g)) {
+			if (!w.union.size) return false; // empty
+			for (let [cp, set] of w.map) {
+				if (set.delete(g) && set.size == 0) {
+					w.map.delete(cp);
+				}
+			}
+		}
+		return true;
+	});
 });
-	
 
 // check that everything makes sense
 print_section('Assert Invariants');
@@ -705,11 +820,12 @@ for (let g of script_groups) {
 		}
 	}
 }
-console.log(`Valid: ${valid_union.size}`);
-console.log(`Multi: ${multi_group.size}`);
-console.log(`Unique: ${valid_union.size-multi_group.size}`);
+let valid_unique = new Set([...valid_union].filter(cp => !multi_group.has(cp)));
+console.log('Valid:', valid_union.size);
+console.log('Multi:', multi_group.size);
+console.log('Unique:', valid_unique.size);
 for (let g of script_groups) {
-	g.unique_set = new Set([...g.valid_set].filter(cp => !multi_group.has(cp)));
+	g.unique_set = new Set([...valid_unique].filter(cp => g.valid_set.has(cp)));
 }
 
 
@@ -718,36 +834,51 @@ function sorted(v) {
 	return [...v].sort((a, b) => a - b);
 }
 
-for (let g0 of script_groups) {
-	// recursively find largest set and them remove subsets
-	let {whole_map} = g0;
-	let wholes = [];
-	if (whole_map.size) {
-		let remaining = [...whole_map];
-		next: while (remaining.length) {
-			let max = remaining.reduce((a, [_, set]) => Math.max(a, set.size), 0); // find largest set size
-			let index = remaining.findIndex(([_, set]) => set.size === max); // find first set with that size
-			let [[g, set]] = remaining.splice(index, 1); // remove it
-			let cps = [...set];
-			for (let [gs, cover] of wholes) {
-				if (cps.every(cp => cover.has(cp))) { // already covered
-					gs.push(g);
-					continue next;
-				}
+print_checked(`Assert Whole Membership`);
+for (let w of wholes_list) {
+	for (let [cp, set] of w.map) {
+		for (let g of set) {
+			if (!g.valid_set.has(cp)) {
+				throw new Error('bug');
 			}
-			wholes.push([[g], set]); // new cover
-		}
-		print_section(`Compress Wholes: ${g0.name}`);
-		for (let [gs, set] of wholes) {
-			console.log(`${set.size.toString().padStart(5)}x${gs.length} [${gs.map(g => g.name)}]`);
 		}
 	}
-	g0.wholes = wholes.map(([gs, set]) => ({names: gs.map(g => g.name), cps: sorted(set)}));
 }
+
+let confused_whole = wholes_list.flatMap(w => w.map.keys());
+let confused_valid = wholes_list.flatMap(w => w.valid); 
+
+console.log('Confusable:', confused_whole.length);
+console.log('Not Confusable:', confused_valid.length);
+console.log('Non-Confusable Non-Unique:', confused_valid.filter(cp => valid_unique.has(cp)).length);
+
+print_section('Compress Wholes');
+const SEP = '|';
+let wholes = {};
+for (let w of wholes_list) {
+	if (!w.map.size) continue; // no characters
+	let cover = new Set();
+	for (let g of script_groups) {
+		if (w.valid.some(cp => g.valid_set.has(cp))) {
+			cover.add(g);
+		}
+	}
+	for (let set of w.map.values()) {
+		for (let g of set) {
+			cover.add(g);
+		}
+	}
+	let key = [...cover].map(g => g.name).sort().join(SEP);
+	let cps = wholes[key];
+	if (!cps) wholes[key] = cps = [];
+	cps.push(...w.map.keys());
+}
+wholes = Object.entries(wholes).map(([key, cps]) => [key.split(SEP), sorted(cps)]);
+console.log('Wholes:', wholes.length);
 
 print_section('Compress Groups');
 for (let g of script_groups) {
-	let {name, test_script_set, valid_set, cm, cm_map, wholes, restricted} = g;
+	let {name, test_script_set, valid_set, cm, cm_map, restricted} = g;
 	if (cm == -1) {
 		cm = [];
 		for (let [cp, seqs] of cm_map) {
@@ -766,7 +897,7 @@ for (let g of script_groups) {
 			secondary.push(cp);
 		}
 	}
-	g.spec = {name, primary, secondary, cm, wholes, restricted};
+	g.spec = {name, primary, secondary, cm, restricted};
 }
 
 print_section('Order Groups');
@@ -818,6 +949,7 @@ write_json('spec.json', {
 	ignored: sorted(ignored),
 	mapped: [...mapped].sort((a, b) => a[0] - b[0]),
 	fenced: [...fenced_map].sort((a, b) => a[0] - b[0]),
+	wholes,
 	cm: sorted(UNICODE.cm),
 	escape: sorted(escaped),
 	groups: script_groups.map(g => g.spec),

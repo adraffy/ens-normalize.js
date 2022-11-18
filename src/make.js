@@ -1,9 +1,15 @@
 import {Encoder, unsafe_btoa} from './encoder.js';
 import {readFileSync, writeFileSync} from 'node:fs';
 import {explode_cp} from './utils.js';
+/*
+// this appears to be bugged in 18.12.1
+// randomly fails on keys
+import {mapped, ignored, emoji,  fenced, escape, wholes, groups, nfc_check} from '../derive/output/spec.json' assert {type: 'json'};
+import {ranks, decomp, exclusions, qc} from '../derive/output/nf.json' assert {type: 'json'};
+*/
 
 let data_dir = new URL('../derive/output/', import.meta.url);
-let {mapped, ignored, emoji, cm, fenced, escape, groups, nfc_check} = JSON.parse(readFileSync(new URL('./spec.json', data_dir)));
+let {mapped, ignored, emoji, cm, fenced, escape, wholes, groups, nfc_check} = JSON.parse(readFileSync(new URL('./spec.json', data_dir)));
 let {ranks, decomp, exclusions, qc} = JSON.parse(readFileSync(new URL('./nf.json', data_dir)));
 
 let emoji_solo = emoji.filter(v => v.length == 1).map(v => v[0]);
@@ -197,6 +203,14 @@ if (groups.every(g => Number.isInteger(g.cm) || !g.cm.length)) {
 	console.log(`*** There are 0 complex CM sequences!`);
 }
 
+// assign each group to an index
+// (sort was provided by derive)
+groups.forEach((g, i) => g.index = i);
+
+// map group names to groups
+wholes = wholes.map(([names, cps]) => {
+	return {groups: names.map(name => groups.find(g => g.name === name)), cps};
+});
 
 let enc = new Encoder();
 enc.write_mapped([
@@ -220,7 +234,7 @@ enc.unsigned(0);
 enc.write_member(cm);
 enc.write_member(escape); 
 enc.write_member(nfc_check); // for ens_tokenize (can probably derived)
-let chunks = find_shared_chunks(groups.flatMap(g => [g.primary, g.secondary]), {min_overlap: 0.9, min_size: 10});
+let chunks = find_shared_chunks(groups.flatMap(g => [g.primary, g.secondary]), {min_overlap: 0.9, min_size: 256});
 chunks.forEach(v => enc.write_member(v));
 enc.write_member([]);
 for (let g of groups) {
@@ -244,8 +258,11 @@ for (let g of groups) {
 		enc.write_member(set);
 	}
 	let map = index_map([g.primary, g.secondary].flat().sort((a, b) => a-b));
-	g.wholes.forEach(({cps}) => enc.write_member(cps.map(cp => map.get(cp))));
-	enc.write_member([]);
+
+	//enc.write_member(wholes.filter(w => w.groups.includes(g)).flatMap(w => w.cps).flatMap(cp => map.get(cp) ?? [])); 
+	//g.wholes.forEach(({cps}) => enc.write_member(cps.map(cp => map.get(cp))));
+	//enc.write_member([]);
+
 	if (Array.isArray(g.cm)) {
 		enc.unsigned(0);
 		for (let [cp, seqs] of g.cm) {
@@ -263,8 +280,34 @@ for (let g of groups) {
 }
 enc.unsigned(0);
 
+//wholes = wholes.filter(w => w.groups.length > 1);
+
+for (let w of wholes) {
+	enc.write_member(w.cps);
+	enc.write_member(w.groups.map(g => g.index));
+}
+enc.write_member([]);
+
+/*
+enc.write_mapped([
+	[1, 1, 0], // adjacent that map to a constant
+	[2, 1, 0], // eg. AAAA..BBBB => CCCC
+	[3, 1, 0],
+], wholes.flatMap(w => w.cps.map(cp => [cp, w.groups.map(g => g.index)])));
+*/
+
+/*
+enc.write_mapped([
+	[1, 1, 0], // adjacent that map to a constant
+	[2, 1, 0], // eg. AAAA..BBBB => CCCC
+	[3, 1, 0],
+], wholes.flatMap(w => w.groups.map(g => [g.index, w.cps])));
+*/
+
+
 let sorted_emoji = unique_sorted([emoji_solo, emoji_seqs].flat(Infinity));
 let sorted_emoji_map = index_map(sorted_emoji);
+
 enc.write_member(sorted_emoji);
 enc.write_member(emoji_solo.map(cp => sorted_emoji_map.get(cp))); // there currently arent any of these
 encode_emoji(enc, root, sorted_emoji_map);

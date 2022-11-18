@@ -54,9 +54,11 @@ function isolated_safe(cps) {
 	return cps.map(cp => safe_str_from_cps([cp])).join('\u{200B}')
 }
 
+// TODO: these options are shit, fix this
 export function dom_from_tokens(tokens, {
 	before = false, 
 	///isolate = false,
+	tld_class = true,
 	components = false, 
 	emoji_url = 'https://emojipedia.org/%s',
 	extra = () => {},
@@ -121,8 +123,9 @@ export function dom_from_tokens(tokens, {
 			case 'valid': {
 				el = document.createElement('span');		
 				let form = safe_str_from_cps(token.cps);
-				if (tokens.length >= 3 && i === tokens.length - 1 && form === 'eth' && tokens[i-1].type === 'stop') { 
-					el.classList.add('eth'); // special .eth styling
+				if (tld_class && (tokens.length == 1 || (i === tokens.length-1 && tokens[i-1].type === 'stop'))) { 
+					// theres just 1 token/or we're the last token with a stop before us
+					el.classList.add(form);
 				}
 				el.innerText = form;
 				el.title = format_tooltip({
@@ -199,12 +202,16 @@ export function use_default_style() {
 	.tokens .valid.eth {
 		color: #fff;
 		background: #58f;
-		border-color: #35b;
+		border: none;
+	}
+	.tokens .valid.com {
+		color: #fff;
+		background: #0a0;
+		border: none;
 	}
 	.tokens .ignored {
 		color: #fff;
 		background: #aaa;
-		min-width: 5px;
 		font-size: 75%;
 		font-family: monospace;
 	}
@@ -235,6 +242,8 @@ export function use_default_style() {
 	.tokens .mapped span:first-child {
 		margin-bottom: -4px;
 		border-bottom: 4px solid #000;
+		text-align: center;
+		min-width: 0.5rem;
 	}
 	.tokens .stop {
 		font-weight: bold;

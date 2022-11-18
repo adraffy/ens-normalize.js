@@ -381,9 +381,20 @@ button.tags {
 	font-size: 16pt;
 	align-self: stretch;
 }
+.token-wrapper {
+	display: flex;
+	gap: 4px;
+}
+.token-wrapper > * {
+	padding-bottom: 3px;
+}
+.token-wrapper > .error {
+	border-bottom: 5px solid #d00;
+	margin-bottom: -5px;
+}
 .row.error {
 	background: #fcc;
-	outline: 3px dashed #f00;
+	outline: 3px dashed #d00;
 }
 .transform {
 	background: #fffaf0;
@@ -501,7 +512,6 @@ footer {
 <button data-name="{300}">Leading</button>
 <button data-name="x{300}{300}">Adjacent</button>
 <button data-name="💩{300}">Emoji</button>
-<button data-name="-{300}">Isolated</button>
 
 <b>Whitespace:</b>
 <button data-name="te st">Inner</button>
@@ -622,8 +632,9 @@ Hebrew Geresh:
 <button>❌ii̇</button>
 
 <b>Mixed-Script:</b>
-<button data-name="0a〇">Digit+Latin+Han</button>
+<button data-name="0a〇.黑a8">Digit+Latin+Han</button>
 <button data-name="あアいイうウえエおオ">Kana+Hira</button>
+<button data-name="0x.0х">"0x"</button>
 <button>дре</button>
 <button>❌aрe</button>
 <button>❌ァ힣</button>
@@ -704,12 +715,12 @@ Hebrew:
 <li><a href="#vitalik.eth"><b>Copy Link</b></a> to get a URL that resolves on page-load.</li>
 </ul>
 <ul class="row legend">
-<li>This is a <b>valid</b> sequence of characters: <div data-tokenize="abc"></div> and <b>.eth</b> gTLD <div data-tokenize=".eth"></div></li>
-<li>This is an <b>emoji</b> <div data-tokenize="👩🏽‍⚕️"></div> and it's corresponding <b>components</b> <div data-tokenize="👩🏽‍⚕️" data-parts="1"></div></li>
-<li>This is a <b>mapped</b> token <div data-tokenize="™"></div> which transforms into a <b>valid</b> sequence: <div data-tokenize="tm"></div></li>
+<li>This is a <b>valid</b> sequence of characters: <div data-tokenize="abc"></div> and <b>.eth</b> name: <div data-tokenize="abc.eth"></div></li>
+<li>This is an <b>emoji</b>: <div data-tokenize="👩🏽‍⚕️"></div> and it's corresponding <b>components</b>: <div data-tokenize="👩🏽‍⚕️" data-parts="1"></div></li>
+<li>This is a <b>mapped</b> token: <div data-tokenize="™"></div> which transforms into a <b>valid</b> sequence: <div data-tokenize="tm"></div></li>
 <li>Characters not in canonical form require <b>NFC</b>: <div data-tokenize="a{303}"></div></li>
 <li>This is an <b>ignored</b> character: <div data-tokenize="{FE0F}"></div></li>
-<li>These are the <b>disallowed</b> formats: <div data-tokenize="#{00}{1FFFFF}{E0061}{200D}"></div></li>
+<li>These are <b>disallowed</b> characters: <div data-tokenize="#{00}{1FFFFF}{E0061}{200D}"></div></li>
 </ul>
 <ul class="row links">
 <li><a href="./emoji.html">Find Supported Emoji</a></li>
@@ -1027,6 +1038,8 @@ function parse() {
 		row.classList.add('error');
 		add_row_tag(row, create_typed_tag('warn', err));
 		if (skip_norm_check.checked) return true;
+		// replace with more information
+		row.querySelector('.exploded').replaceWith(make_tokens_div(name, false, true));
 		stop_resolving();
 		let tokens = ens_tokenize(name).flatMap(token => token.type === 'nfc' ? token.tokens : token);
 		if (tokens.some(x => x.type === 'disallowed')) {
@@ -1352,7 +1365,24 @@ function bytes_from_utf8(s) {
 	return Uint8Array.from(v);
 }
 
-function make_tokens_div(name, before) {
+function make_tokens_div(name, before, show_errors) {
+	if (show_errors) {
+		let split = ens_split(name);
+		let wrapper = document.createElement('div');
+		wrapper.classList.add('token-wrapper');
+		for (let i = 0; i < split.length; i++) {
+			if (i > 0) {
+				wrapper.append(make_tokens_div('.'));
+			}
+			let {input, error} = split[i];
+			let div = make_tokens_div(String.fromCodePoint(...input), before);
+			if (error) {
+				div.classList.add('error');
+			}
+			wrapper.append(div);
+		}
+		return wrapper;
+	}
 	let tokens = dom_from_tokens(ens_tokenize(name), {
 		before, 
 		emoji_url,
@@ -1753,7 +1783,7 @@ async function resolve0(input0, skip_norm) {
 		} catch (err) {
 			input_row.classList.add('error');
 			add_row_tag(input_row, create_typed_tag('warn', err));
-			if (!skip_norm) return;
+			if (!skip_norm) return; // i think this is always true
 			name_norm = input;
 			norm_err = err;
 		}	
@@ -2030,7 +2060,7 @@ async function resolve0(input0, skip_norm) {
 
 		if (owner_err) {
 			owner_row.classList.add('error');
-			owner_row.add(create_typed_tag('warn', owner_err));
+			owner_row.append(create_typed_tag('warn', owner_err));
 		} else if (!owner) {
 			add_row_tag(owner_row, create_typed_tag('good', 'None'));
 		} else {

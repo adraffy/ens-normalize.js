@@ -2,8 +2,8 @@ export const CONFUSE_TYPE_ALLOW = 'allow';
 export const CONFUSE_TYPE_VALID = 'primary';
 
 // markup convenience
-function valid(cp) { return {cp, type: CONFUSE_TYPE_VALID}; }
-function allow(cp) { return {cp, type: CONFUSE_TYPE_ALLOW}; } 
+function valid(cp) { return {cp, priority: 2, type: CONFUSE_TYPE_VALID}; }
+function allow(cp) { return {cp, priority: 1, type: CONFUSE_TYPE_ALLOW}; } 
 
 // when there are 2+ confusables for a script without a decision
 export const CONFUSE_DEFAULT_ALLOW = true;
@@ -85,7 +85,7 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0x1D7FC, // (𝟼) MATHEMATICAL MONOSPACE DIGIT SIX [Zyyy]=>[ALL]
 		//IDNA:0x1FBF6, // (🯶) SEGMENTED DIGIT SIX [Zyyy]=>[ALL]
 		//IDNA:0x2CD2, // (Ⳓ) COPTIC CAPITAL LETTER OLD COPTIC HEI [Copt]=>[Copt]
-		0x431, // (б) CYRILLIC SMALL LETTER BE [Cyrl]=>[Cyrl]
+		allow(0x431), // (б) CYRILLIC SMALL LETTER BE [Cyrl]=>[Cyrl]
 		0x13EE, // (Ꮾ) CHEROKEE LETTER WV [Cher]=>[Cher]
 		0x118D5, // (𑣕) WARANG CITI SMALL LETTER AT [Wara]=>[Wara]
 	],
@@ -791,7 +791,7 @@ export const CONFUSE_GROUPS = [
 		0x702, // (܂) SYRIAC SUBLINEAR FULL STOP [Syrc]=>[Syrc]
 		0xA60E, // (꘎) VAI FULL STOP [Vaii]=>[Vaii]
 		0x10A50, // (𐩐) KHAROSHTHI PUNCTUATION DOT [Khar]=>[Khar]
-		0x660, // (٠) ARABIC-INDIC DIGIT ZERO [Arab]=>[Arab,Thaa,Yezi]
+		valid(0x660), // (٠) ARABIC-INDIC DIGIT ZERO [Arab]=>[Arab,Thaa,Yezi]
 		0x6F0, // (۰) EXTENDED ARABIC-INDIC DIGIT ZERO [Arab]=>[Arab]
 		0xA4F8, // (ꓸ) LISU LETTER TONE MYA TI [Lisu]=>[Lisu]
 	],
@@ -2281,7 +2281,7 @@ export const CONFUSE_GROUPS = [
 		0x1735, // (᜵) PHILIPPINE SINGLE PUNCTUATION [Zyyy]=>[Buhd,Hano,Tagb,Tglg]
 		0x2041, // (⁁) CARET INSERTION POINT [Zyyy]=>[ALL]
 		0x2215, // (∕) DIVISION SLASH [Zyyy]=>[ALL]
-		valid(0x2044), // (⁄) FRACTION SLASH [Zyyy]=>[ALL]
+		0x2044, // (⁄) FRACTION SLASH [Zyyy]=>[ALL]
 		0x2571, // (╱) BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO LOWER LEFT [Zyyy]=>[ALL]
 		0x27CB, // (⟋) MATHEMATICAL RISING DIAGONAL [Zyyy]=>[ALL]
 		0x29F8, // (⧸) BIG SOLIDUS [Zyyy]=>[ALL]
@@ -3343,7 +3343,7 @@ export const CONFUSE_GROUPS = [
 	[
 		// "२" <Same>
 		'968', // DEVANAGARI DIGIT TWO [Deva]=>[Deva Dogr,Kthi,Mahj]
-		0x968, // (२) DEVANAGARI DIGIT TWO [Deva]=>[Deva Dogr,Kthi,Mahj]
+		valid(0x968), // (२) DEVANAGARI DIGIT TWO [Deva]=>[Deva Dogr,Kthi,Mahj]
 		0xAE8, // (૨) GUJARATI DIGIT TWO [Gujr]=>[Gujr,Khoj]
 	],
 	[
@@ -3494,7 +3494,7 @@ export const CONFUSE_GROUPS = [
 	[
 		// "३" <Same>
 		'969', // DEVANAGARI DIGIT THREE [Deva]=>[Deva Dogr,Kthi,Mahj]
-		0x969, // (३) DEVANAGARI DIGIT THREE [Deva]=>[Deva Dogr,Kthi,Mahj]
+		valid(0x969), // (३) DEVANAGARI DIGIT THREE [Deva]=>[Deva Dogr,Kthi,Mahj]
 		0xAE9, // (૩) GUJARATI DIGIT THREE [Gujr]=>[Gujr,Khoj]
 	],
 	[
@@ -3552,7 +3552,7 @@ export const CONFUSE_GROUPS = [
 	[
 		// "४" <Same>
 		'96A', // DEVANAGARI DIGIT FOUR [Deva]=>[Deva Dogr,Kthi,Mahj]
-		0x96A, // (४) DEVANAGARI DIGIT FOUR [Deva]=>[Deva Dogr,Kthi,Mahj]
+		valid(0x96A), // (४) DEVANAGARI DIGIT FOUR [Deva]=>[Deva Dogr,Kthi,Mahj]
 		0xAEA, // (૪) GUJARATI DIGIT FOUR [Gujr]=>[Gujr,Khoj]
 	],
 	[
@@ -3699,7 +3699,7 @@ export const CONFUSE_GROUPS = [
 	[
 		// "८" <Same>
 		'96E', // DEVANAGARI DIGIT EIGHT [Deva]=>[Deva Dogr,Kthi,Mahj]
-		0x96E, // (८) DEVANAGARI DIGIT EIGHT [Deva]=>[Deva Dogr,Kthi,Mahj]
+		valid(0x96E), // (८) DEVANAGARI DIGIT EIGHT [Deva]=>[Deva Dogr,Kthi,Mahj]
 		0xAEE, // (૮) GUJARATI DIGIT EIGHT [Gujr]=>[Gujr,Khoj]
 	],
 	[
@@ -5876,6 +5876,9 @@ export const CONFUSE_GROUPS = [
 		0x118C8, // (𑣈) WARANG CITI SMALL LETTER E [Wara]=>[Wara]
 		0x118D7, // (𑣗) WARANG CITI SMALL LETTER BU [Wara]=>[Wara]
 		0x1042C, // (𐐬) DESERET SMALL LETTER LONG O [Dsrt]=>[Dsrt]
+		// 2022115: moved from '199E'
+		0x199E, // (ᦞ) NEW TAI LUE LETTER LOW VA [Talu]=>[Talu]
+		0x19D0, // (᧐) NEW TAI LUE DIGIT ZERO [Talu]=>[Talu]
 	],
 	[
 		// "O" <Same>
@@ -5885,7 +5888,7 @@ export const CONFUSE_GROUPS = [
 		0x7C0, // (߀) NKO DIGIT ZERO [Nkoo]=>[Nkoo]
 		0x9E6, // (০) BENGALI DIGIT ZERO [Beng]=>[Beng,Cakm,Sylo]
 		0xB66, // (୦) ORIYA DIGIT ZERO [Orya]=>[Orya]
-		allow(0x3007), // (〇) IDEOGRAPHIC NUMBER ZERO [Hani]=>[Hani,Hanb,Jpan,Kore]
+		valid(0x3007), // (〇) IDEOGRAPHIC NUMBER ZERO [Hani]=>[Hani,Hanb,Jpan,Kore]
 		0x114D0, // (𑓐) TIRHUTA DIGIT ZERO [Tirh]=>[Tirh]
 		0x118E0, // (𑣠) WARANG CITI DIGIT ZERO [Wara]=>[Wara]
 		//IDNA:0x1D7CE, // (𝟎) MATHEMATICAL BOLD DIGIT ZERO [Zyyy]=>[ALL]
@@ -6154,6 +6157,9 @@ export const CONFUSE_GROUPS = [
 		0x1D10, // (ᴐ) LATIN LETTER SMALL CAPITAL OPEN O [Latn]=>[Latn]
 		0x37B, // (ͻ) GREEK SMALL REVERSED LUNATE SIGMA SYMBOL [Grek]=>[Grek]
 		0x1044B, // (𐑋) DESERET SMALL LETTER EM [Dsrt]=>[Dsrt]
+		// 20221115: moved from '19B1'
+		0x19B1, // (ᦱ) NEW TAI LUE VOWEL SIGN AA [Talu]=>[Talu]
+		0x19D1, // (᧑) NEW TAI LUE DIGIT ONE [Talu]=>[Talu]
 	],
 	[
 		// "Ɔ" <Same>
@@ -7671,7 +7677,7 @@ export const CONFUSE_GROUPS = [
 	[
 		// "π" <Same>
 		'3C0', // GREEK SMALL LETTER PI [Grek]=>[Grek]
-		0x3C0, // (π) GREEK SMALL LETTER PI [Grek]=>[Grek]
+		valid(0x3C0), // (π) GREEK SMALL LETTER PI [Grek]=>[Grek]
 		//IDNA:0x3D6, // (ϖ) GREEK PI SYMBOL [Grek]=>[Grek]
 		//IDNA:0x213C, // (ℼ) DOUBLE-STRUCK SMALL PI [Zyyy]=>[ALL]
 		//IDNA:0x1D6D1, // (𝛑) MATHEMATICAL BOLD SMALL PI [Zyyy]=>[ALL]
@@ -7685,7 +7691,7 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0x1D7B9, // (𝞹) MATHEMATICAL SANS-SERIF BOLD ITALIC SMALL PI [Zyyy]=>[ALL]
 		//IDNA:0x1D7C9, // (𝟉) MATHEMATICAL SANS-SERIF BOLD ITALIC PI SYMBOL [Zyyy]=>[ALL]
 		0x1D28, // (ᴨ) GREEK LETTER SMALL CAPITAL PI [Grek]=>[Grek]
-		0x43F, // (п) CYRILLIC SMALL LETTER PE [Cyrl]=>[Cyrl]
+		valid(0x43F), // (п) CYRILLIC SMALL LETTER PE [Cyrl]=>[Cyrl]
 	],
 	[
 		// "Π" <Same>
@@ -10111,13 +10117,14 @@ export const CONFUSE_GROUPS = [
 	],
 	[
 		// "ىۛ" <Same>
+		// 20221114: 62B (190) 67E (21) 6BD/6D1/63F (0)
 		'649 6DB', // ARABIC LETTER ALEF MAKSURA + ARABIC SMALL HIGH THREE DOTS [Arab]=>[Arab]
-		0x67E, // (پ) ARABIC LETTER PEH [Arab]=>[Arab]
+		allow(0x67E), // (پ) ARABIC LETTER PEH [Arab]=>[Arab]
 		//IDNA:0xFB58, // (ﭘ) ARABIC LETTER PEH INITIAL FORM [Arab]=>[Arab]
 		//IDNA:0xFB59, // (ﭙ) ARABIC LETTER PEH MEDIAL FORM [Arab]=>[Arab]
 		//IDNA:0xFB57, // (ﭗ) ARABIC LETTER PEH FINAL FORM [Arab]=>[Arab]
 		//IDNA:0xFB56, // (ﭖ) ARABIC LETTER PEH ISOLATED FORM [Arab]=>[Arab]
-		allow(0x62B), // (ث) ARABIC LETTER THEH [Arab]=>[Arab]
+		allow(0x62B), // (ث) ARABIC LETTER THEH [Arab]=>[Arab] 
 		//IDNA:0x1EE16, // (𞸖) ARABIC MATHEMATICAL THEH [Arab]=>[Arab]
 		//IDNA:0x1EE36, // (𞸶) ARABIC MATHEMATICAL INITIAL THEH [Arab]=>[Arab]
 		//IDNA:0x1EE76, // (𞹶) ARABIC MATHEMATICAL STRETCHED THEH [Arab]=>[Arab]
@@ -10812,9 +10819,10 @@ export const CONFUSE_GROUPS = [
 	[
 		// "உ" <Same>
 		'B89', // TAMIL LETTER U [Taml]=>[Taml]
-		0xB89, // (உ) TAMIL LETTER U [Taml]=>[Taml]
-		0xBE8, // (௨) TAMIL DIGIT TWO [Taml]=>[Gran,Taml]
-		0xD09, // (ഉ) MALAYALAM LETTER U [Mlym]=>[Mlym]
+		// 20221114: dont look confusing
+		valid(0xB89), // (உ) TAMIL LETTER U [Taml]=>[Taml]
+		valid(0xBE8), // (௨) TAMIL DIGIT TWO [Taml]=>[Gran,Taml]
+		valid(0xD09), // (ഉ) MALAYALAM LETTER U [Mlym]=>[Mlym]
 	],
 	[
 		// "உள" <Same>
@@ -11489,7 +11497,7 @@ export const CONFUSE_GROUPS = [
 		0x17A2, // (អ) KHMER LETTER QA [Khmr]=>[Khmr]
 		0x17A3, // (ឣ) KHMER INDEPENDENT VOWEL QAQ [Khmr]=>[Khmr]
 	],
-	[
+	/*[
 		// "ᦞ" <Same>
 		'199E', // NEW TAI LUE LETTER LOW VA [Talu]=>[Talu]
 		0x199E, // (ᦞ) NEW TAI LUE LETTER LOW VA [Talu]=>[Talu]
@@ -11500,7 +11508,7 @@ export const CONFUSE_GROUPS = [
 		'19B1', // NEW TAI LUE VOWEL SIGN AA [Talu]=>[Talu]
 		0x19B1, // (ᦱ) NEW TAI LUE VOWEL SIGN AA [Talu]=>[Talu]
 		0x19D1, // (᧑) NEW TAI LUE DIGIT ONE [Talu]=>[Talu]
-	],
+	],*/
 	[
 		// "ᩅ" <Same>
 		'1A45', // TAI THAM LETTER WA [Lana]=>[Lana]
@@ -14250,8 +14258,8 @@ export const CONFUSE_GROUPS = [
 	[
 		// "二" <Same>
 		'4E8C', // CJK Ideograph-4E8C <141/20992> [Hani]=>[Hani,Hanb,Jpan,Kore]
-		0x4E8C, // (二) CJK Ideograph-4E8C <141/20992> [Hani]=>[Hani,Hanb,Jpan,Kore]
-		0x30CB, // (ニ) KATAKANA LETTER NI [Kana]=>[Kana,Jpan]
+		valid(0x4E8C), // (二) CJK Ideograph-4E8C <141/20992> [Hani]=>[Hani,Hanb,Jpan,Kore]
+		valid(0x30CB), // (ニ) KATAKANA LETTER NI [Kana]=>[Kana,Jpan]
 		//IDNA:0x2F06, // (⼆) KANGXI RADICAL TWO [Hani]=>[Hani,Hanb,Jpan,Kore]
 	],
 	[
@@ -14467,8 +14475,8 @@ export const CONFUSE_GROUPS = [
 	[
 		// "八" <Same>
 		'516B', // CJK Ideograph-516B <876/20992> [Hani]=>[Hani,Hanb,Jpan,Kore]
-		0x516B, // (八) CJK Ideograph-516B <876/20992> [Hani]=>[Hani,Hanb,Jpan,Kore]
-		0x30CF, // (ハ) KATAKANA LETTER HA [Kana]=>[Kana,Jpan]
+		valid(0x516B), // (八) CJK Ideograph-516B <876/20992> [Hani]=>[Hani,Hanb,Jpan,Kore]
+		valid(0x30CF), // (ハ) KATAKANA LETTER HA [Kana]=>[Kana,Jpan]
 		//IDNA:0x2F0B, // (⼋) KANGXI RADICAL EIGHT [Hani]=>[Hani,Hanb,Jpan,Kore]
 	],
 	[

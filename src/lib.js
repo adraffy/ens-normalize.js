@@ -34,8 +34,8 @@ const GROUPS = read_array_while(() => {
 		N = R ? 'Restricted' : read_str(N-1);
 		let P = read_chunked(r); // primary
 		let Q = read_chunked(r); // secondary
-		let V = [...P, ...Q].sort((a, b) => a-b); // valid (sorted)
-		let W = read_sorted_arrays(r).map(v => new Set(v.map(i => V[i]))); // whole (sets)
+		let V = [...P, ...Q].sort((a, b) => a-b); // derive: sorted valid
+		//let W = read_set(); // wholes
 		let M = r()-1; // combining mark
 		if (M < 0) { // whitelisted
 			M = new Map(read_array_while(() => {
@@ -46,9 +46,18 @@ const GROUPS = read_array_while(() => {
 				})];
 			}));
 		}
-		return {N, P, W, M, R, V: new Set(V)};
+		return {N, P, M, R, V: new Set(V)};
 	}
 });
+const WHOLES = new Map(read_array_while(() => {
+	let cps = read_sorted(r);
+	if (cps.length) {
+		let set = read_set();
+		//let whole = {set, cps};
+		// at the moment, we just need the set
+		return cps.map(cp => [cp, set]);
+	}
+}).flat());
 const EMOJI_SORTED = read_sorted(r);
 const EMOJI_SOLO = new Set(read_sorted(r).map(i => EMOJI_SORTED[i]));
 const EMOJI_ROOT = read_emoji_trie([]);
@@ -191,7 +200,7 @@ export function ens_normalize(name) {
 export function ens_beautify(name) {
 	let split = ens_split(name, true);
 	// this is experimental
-	for (let {script, output} of split) {
+	for (let {script, output, error} of split) {
 		if (script !== 'Greek') { // ξ => Ξ if not greek
 			let prev = 0;
 			while (true) {
@@ -245,7 +254,7 @@ export function ens_split(name, preserve_emoji) {
 						for (let i = 1; i < token_count; i++) { // we've already checked the first token
 							let cps = tokens[i];
 							if (!cps.is_emoji && CM.has(cps[0])) { // every text token has emoji neighbors, eg. EtEEEtEt...
-								throw new Error(`emoji + combining mark: "${str_from_cps(tokens[i-1])} + ${safe_str_from_cps([cps[i][0]])}"`);
+								throw new Error(`emoji + combining mark: "${str_from_cps(tokens[i-1])} + ${safe_str_from_cps([cps[0]])}"`);
 							}
 						}
 						type = determine_group(chars).N;
@@ -262,16 +271,48 @@ export function ens_split(name, preserve_emoji) {
 	});
 }
 
+
 function determine_group(cps) {
+	// https://www.unicode.org/reports/tr39/#def_whole_script_confusables
+	let free = [];
+	let confused = [];
+	let cover;
 	for (let cp of cps) {
-		let g = UNIQUE.get(cp);
-		if (g) { 
-			// we got a unique character match
-			// either we are member of this group or throw
-			check_group(g, cps);
-			return g;
+		let set = WHOLES.get(cp);
+		if (set) { // character is confusable
+			//let {cps, set} = whole;
+			confused.push(cp);
+			if (cover) {
+				cover = cover.filter(i => set.has(i)); // reduce cover intersection
+				if (!cover.length) break; 
+			} else {
+				cover = [...set];
+			}
+		} else {
+			let g = UNIQUE.get(cp);
+			if (g) {
+				// this is the only group with this non-confusable character
+				check_group(g, cps);
+				return g; 
+			}
+			free.push(cp);
 		}
 	}
+	if (cover) {
+		// we have 1+ confusable
+		// does any other group have all of these characters?
+		// "0x" vs "0"+cyrl(x)
+		// cover: [Latin, Cyrl]
+		// free: ["0"]
+		for (let i of cover) {
+			let g = GROUPS[i];
+			//if (free.every(cp => g.V.has(cp)) && !confused.every(cps => cps.some(cp => g.V.has(cp)))) {
+			if (free.every(cp => g.V.has(cp)) && !confused.every(cp => g.V.has(cp))) {
+				throw new Error(`whole-label confusable`);
+			}
+		}
+	}
+	// is the cover a hint?
 	// we didn't have a unique character
 	let err0;
 	for (let g of GROUPS) {
@@ -307,7 +348,7 @@ function flatten(split) {
 }
 
 function check_group(g, cps) {
-	let {V, W, M} = g;
+	let {V, M} = g;
 	let cm_whitelist = M instanceof Map;
 	for (let i = 0, e = cps.length; i < e; ) {
 		let cp = cps[i++];
@@ -344,17 +385,11 @@ function check_group(g, cps) {
 			if (CM.has(cps[i])) {
 				let j = i + 1;
 				while (j < e && CM.has(cps[j])) j++;
-				if (j - i >= M) {
-					throw new Error(`too many combining marks: "${str_from_cps(cps.slice(i-1, j))}" (max: ${M})`);
+				if (j - i > M) {
+					throw new Error(`too many combining marks: "${str_from_cps(cps.slice(i-1, j))}" (${j-i}/${M})`);
 				}
 				i = j;
 			}
-		}
-	}
-	// https://www.unicode.org/reports/tr39/#def_whole_script_confusables
-	for (let set of W) {
-		if (cps.every(cp => set.has(cp))) {
-			throw new Error(`whole-label confusable`);
 		}
 	}
 }
