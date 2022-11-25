@@ -43,6 +43,8 @@ export default [
 	0x16E98, // (𖺘) MEDEFAIDRIN FULL STOP
 	0x1BC9F, // (𛲟) DUPLOYAN PUNCTUATION CHINOOK FULL STOP
 	
+	0x740, // (◌݀) SYRIAC FEMININE DOT (added: 20221125)
+
 	// exclaim/question mark
 	0xA1, // (¡) INVERTED EXCLAMATION MARK
 	0xBF, // (¿) INVERTED QUESTION MARK

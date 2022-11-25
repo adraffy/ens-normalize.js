@@ -32,10 +32,10 @@ function read_chunked() {
 	return new Set([read_sorted(r).map(i => CHUNKS[i]), read_sorted(r)].flat(2));
 }
 const UNRESTRICTED = r();
-const GROUPS = read_array_while(I => {
+const GROUPS = read_array_while(i => {
 	let N = read_array_while(r).map(x => x+0x60);
 	if (N.length) {
-		let R = I >= UNRESTRICTED; // first arent restricted
+		let R = i >= UNRESTRICTED; // first arent restricted
 		N[0] -= 32; // capitalize
 		N = str_from_cps(N);
 		if (R) N=`Restricted[${N}]`;
@@ -53,7 +53,7 @@ const GROUPS = read_array_while(I => {
 				})];
 			}));
 		}*/
-		return {I, N, P, M, R, V: new Set(V)};
+		return {N, P, M, R, V: new Set(V)};
 	}
 });
 

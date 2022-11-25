@@ -1,8 +1,8 @@
 [
 	{
 		"name": "version",
-		"created": "2022-11-25T10:06:31.445Z",
-		"spec_hash": "dde093da3fefaab64378720fc57aa8395ee34d7819a736e9853c466c2e54544e"
+		"created": "2022-11-25T21:26:51.637Z",
+		"spec_hash": "8ae3aa10d3b331748cbcf15f0a998c8f7ecd2c878847812e063ab846cb655433"
 	},
 	{
 		"name": "",
@@ -13650,6 +13650,11 @@
 		"name": "𛲟",
 		"error": true,
 		"comment": "disallowed character: \"𛲟\" {1BC9F}"
+	},
+	{
+		"name": "݀",
+		"error": true,
+		"comment": "disallowed character: \"◌݀\" {740}"
 	},
 	{
 		"name": "¡",
@@ -61215,7 +61220,7 @@
 	{
 		"name": "e݀t݀h",
 		"error": true,
-		"comment": "illegal mixture: Latin + Restricted[Syrc] \"◌݀\" {740}"
+		"comment": "disallowed character: \"◌݀\" {740}"
 	},
 	{
 		"name": "hre∀m",
@@ -83812,7 +83817,7 @@
 	{
 		"name": "ꮞ݀Ɪ💸️㋱串𣳕🧋️年⥍🧑🏼‍❤️‍💋‍🧑🏻",
 		"error": true,
-		"comment": "disallowed character: \"Ɪ\" {A7AE}"
+		"comment": "disallowed character: \"◌݀\" {740}"
 	},
 	{
 		"name": "ﶚ𝔜💇🏻‍♂️👇🏾㌱󠅬👫️ꊷ🧑🏼‍🔧𡾸𝪯🧑🏾‍🌾",

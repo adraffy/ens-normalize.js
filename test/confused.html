@@ -3,17 +3,27 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Confused</title>
+<title>Confused Matrix</title>
 <style>
 .hide {
 	display: none !important;
 }
-button {
+button, .control {
 	cursor: pointer;
+}
+label {
+	user-select: none;
 }
 body { 
 	margin: 3rem; 
 	background: #eee;
+}
+h1 {
+	margin: 0;
+}
+#version {
+	float: right;
+	text-align: right;
 }
 table {
 	border-collapse: collapse;
@@ -35,6 +45,10 @@ th.active {
 	background: #f88;
 }
 th.valid {
+	background: #0c0;
+}
+th.matched {
+	border: 2px solid #000;
 	background: #0f0;
 }
 th img {
@@ -61,6 +75,11 @@ tr.free {
 	text-align: center;
 	font-size: 20px;
 }
+.form .tokens > * {
+	flex: 1;
+	justify-content: center;
+}
+
 .name {
 	font-size: 12px;
 }
@@ -91,33 +110,73 @@ tr.free {
 .norm-valid {
 	font-weight: bold;
 }
-
+main > * {
+	margin-top: 1rem;
+}
 #input_field {
 	display: block;
 	padding: 0.5rem;
 	font-size: 16pt;
 	width: 100%;
+	box-sizing: border-box;
 }
-#output {
+#exploded {
+	font-size: 14pt;
+	display: flex;
+	gap: 4px;
+}
+#exploded .error {
+	color: #555;
+	background: #ffc;
+	padding: 0.3rem;
+	font-size: 12pt;
+	border-radius: 0.5rem;
+	border: 1px solid #ccc;
+}
+#output.error {
+	background: #fcc;
+	padding: 1rem;
+	outline: 3px dashed #d00;
+}
+footer {
+	text-align: center;
+	color: #666;
 	margin-top: 1rem;
+	margin-bottom: 0.5rem;
 }
 </style>
 </head>
 <body>
 <header>
-<h1>Confusables</h1>
+<span id="version">
+<a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a><br>
+<a href="https://github.com/adraffy/ensip-norm">@adraffy/ensip-norm</a>
+</span>
+<h1>Confused Matrix</h1>
 </header>
 <main>
+<div id="options">
+<label class="control"><input type="checkbox" id="norm_check">Enforce Normalization</label>
+</div>
 <div id="input">
 <input id="input_field">	
 </div>
+<div id="exploded"></div>
 <div id="output">Downloading data files...</div>	
 </main>
+<footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
 <script type="module">
-import {explode_cp, hex_cp, safe_str_from_cps} from '../dist/all.min.js';
+import {
+	ens_split, ens_tokenize,
+	explode_cp, hex_cp, safe_str_from_cps, 
+	dom_from_tokens, use_default_style
+} from '../dist/all.min.js';
+use_default_style();
 
 const input_field = document.querySelector('#input_field');
 const output_div = document.querySelector('#output');
+const exploded_div = document.querySelector('#exploded');
+const norm_check = document.querySelector('#norm_check');
 
 let wholes;
 let groups;
@@ -149,9 +208,10 @@ let init = (async () => {
 	let headerer = make_rotated_headerer(groups.map(g => g.name));
 	form_header = headerer('Form');
 	cp_header = headerer('Codepoint');
+	ascii_header = headerer('ASCII');
 	groups.forEach((g, i) => {
 		g.index = i;
-		g.header = headerer(g.name);
+		g.header = headerer(g.name, g.restricted ? '#666' : '#000');
 		g.valid_set = new Set([...g.primary, ...g.secondary]);
 	});
 
@@ -192,23 +252,28 @@ let init = (async () => {
 	init = undefined;
 })();
 
-let form_header;
-let cp_header;
+let form_header, cp_header, ascii_header;
+input_field.addEventListener('input', update);
+norm_check.addEventListener('input', update);
+window.addEventListener('hashchange', check_hash);
+check_hash();
 
-input_field.addEventListener('input', async e => {	
+async function check_hash(e) {
+	input_field.value = decodeURIComponent(window.location.hash.slice(1));
 	return update();
-});
-update();
+}
 
 async function update() {
 	output_div.innerHTML = '';
 	output_div.classList.remove('error');
+	let name = replace_escapes(input_field.value);
+	window.history.replaceState(null, null, name ? `#${name}` : ' ');
 	try {
 		if (init) await init;
-		await create_grid(replace_escapes(input_field.value.trim()));
+		await create_grid(name);
 	} catch (err) {
 		output_div.classList.add('error');
-		output_div.innerHTML = err.message;
+		output_div.innerHTML = `⚠️ ${err.message}`;
 		console.log(err);
 	}
 }
@@ -216,18 +281,51 @@ async function update() {
 async function create_grid(input) {
 	
 	let cps, match;
-	if (match = input.match(/^group:(.*)$/)) {
-		let name = match[1].toLowerCase().trim();
-		let group = groups.find(g => g.name.toLowerCase() === name);
-		if (!group) {
-			throw new Error(`Unknown group: ${match[1]}`);
-		}
-		cps = group.cps;
-		//cps = wholes.flatMap(w => w.defs.filter(def => def.groups.has(group)).map(def => def.cp));
- 	} else {
-		cps = [...new Set(explode_cp(input))];
+	let matched_type;
+
+	if (match = input.match(/^group:(.*)$/i)) {
+		let query = match[1].trim();
+		let group = groups.find(g => strcmp(g.name, query) == 0);
+		if (!group) throw new Error(`Unknown group: ${query}`);
+		cps = group.primary;
+	} else if (match = input.match(/^script:(.*)$/i)) {
+		let query = match[1].trim();
+		let script = scripts.find(s => strcmp(s.name, query) == 0 || strcmp(s.abbr, query) == 0);
+		if (!script) throw new Error(`Unknown script: ${query}`);
+		cps = script.cps;
+	} else if (match = input.match(/^range:([0-9a-f]+)\.\.([0-9a-f]+)$/i)) {
+		let lo = parseInt(match[1], 16);
+		let hi = parseInt(match[2], 16);
+		cps = [];
+		while (lo <= hi) cps.push(lo++);
+	} else if (!norm_check.checked) {
+		cps = explode_cp(input);
 	}
-	let free = [];
+
+	exploded_div.classList.toggle('hide', !!cps);
+	if (!cps) {
+		let tokens = ens_tokenize(input, {nf: false});
+		exploded_div.innerHTML = '';
+		exploded_div.append(dom_from_tokens(tokens, {
+			emoji_url: './emoji.html#q=%s',
+		}));
+
+		let split = ens_split(input);
+		if (split.length != 1) throw new Error('multiple labels');
+		split = split[0];
+		if (split.error) {
+			let error = document.createElement('div');
+			error.classList.add('error');
+			error.innerText = `⚠️ ${split.error.message}`;
+			exploded_div.append(error);
+		}
+		matched_type = split.type;
+
+		cps = split.tokens ? split.tokens.filter(x => !x.is_emoji).flat() : split.input;
+	}
+
+	if (!cps.length) return;
+
 	let ws = new Set();
 	let order = [...new Set(cps.map(cp => {
 		let w = whole_map.get(cp);
@@ -235,7 +333,6 @@ async function create_grid(input) {
 			ws.add(w);
 			return w;
 		} else {
-			free.push(cp);
 			return cp;
 		}
 	}))];
@@ -244,9 +341,8 @@ async function create_grid(input) {
 	let cur_valid = new Set(groups.filter(g => cps.every(cp => g.valid_set.has(cp))));
 
 	let group_universe = [...new Set(ws.flatMap(w => w.groups))].sort((a, b) => a.index - b.index);
-	let grid = document.createElement('table');
-		
-
+	let table = document.createElement('table');
+	
 	let maker = group_universe;
 	let shared = [];
 	for (let cp of cps) {
@@ -265,11 +361,12 @@ async function create_grid(input) {
 
 	maker = new Set(maker);
 
+	let is_ascii = matched_type === 'ASCII';
 
 	let added = Infinity;
 	for (let ch of order) {
 		if (Number.isInteger(ch)) {
-			add(1);
+			add_rows(1);
 			let tr = document.createElement('tr');
 			tr.classList.add('first', 'free');
 			if ([...cur_valid].some(g => g.valid_set.has(ch))) {
@@ -284,10 +381,10 @@ async function create_grid(input) {
 				}
 				tr.append(td);
 			}
-			grid.append(tr);
+			table.append(tr);
 		} else {
 			let {defs, valid, confused, decided, norm_set} = ch;
-			add(defs.length);
+			add_rows(defs.length);
 			let first = true;
 
 			for (let def of defs) {
@@ -326,17 +423,17 @@ async function create_grid(input) {
 					}
 					tr.append(td);
 				}
-				grid.append(tr);
+				table.append(tr);
 			}
 		}
 	}
-	output_div.append(grid);
+	output_div.append(table);
 
-	function add(n) {		
+	function add_rows(n) {		
 		added += n;
 		if (added > 20) {
 			added = n;
-			grid.append(header());
+			table.append(header());
 		}
 	}
 
@@ -348,30 +445,45 @@ async function create_grid(input) {
 			create_th(cp_header),
 			create_th('Name'),
 			create_th('Script'),
-			...group_universe.map(g => {
-				let th = create_th(g.header);
-				if (cur_valid.has(g)) {
-					th.classList.add('valid');
-				}
-				if (maker.has(g)) {
-					th.classList.add('active');
-				}
-				return th;
-			}),
 		);
+		tr.append(...group_universe.map(g => {
+			let {name, header} = g;
+			if (matched_type === 'ASCII' && name === 'Latin') {
+				name = matched_type;
+				header = ascii_header;
+			}
+			let th = create_th(header, `#group:${g.name}`);
+			if (cur_valid.has(g)) {
+				th.classList.add('valid');
+			}
+			if (maker.has(g)) {
+				th.classList.add('active');
+			}
+			if (matched_type == name) {
+				th.classList.add('matched');
+			}
+			return th;
+		}));
 		return tr;
 	}
 
 }
 
-function create_th(s) {
+function create_th(s, url) {
 	let th = document.createElement('th');
+	let holder = th;
+	if (url) {
+		let a = document.createElement('a');
+		a.href = url;
+		holder = a;
+		th.append(a);
+	}
 	if (s.startsWith('data:')) {
 		let img = new Image();
 		img.src = s;
-		th.append(img);
+		holder.append(img);
 	} else {
-		th.innerHTML = s;
+		holder.innerHTML = s;
 	}
 	return th;
 }
@@ -390,6 +502,7 @@ function add_td_for_cp(tr, cp) {
 	let td_info = document.createElement('td');
 	td_info.classList.add('form');
 	td_info.innerText = safe_str_from_cps([cp]);
+	//td_info.append(dom_from_tokens(ens_tokenize(String.fromCodePoint(cp)), {before: true}));
 	tr.append(td_info);
 
 	let td_hex = document.createElement('td');
@@ -406,7 +519,7 @@ function add_td_for_cp(tr, cp) {
 
 	let td_script = document.createElement('td');
 	td_script.classList.add('script');
-	td_script.innerText = char.script.name;
+	td_script.innerHTML = `<a href="#script:${char.script.abbr}">${char.script.name}</a>`;
 	tr.append(td_script);
 }
 
@@ -414,6 +527,10 @@ async function fetch_json(url) {
 	let res = await fetch(url);
 	if (res.status !== 200) throw new Error(`HTTP Error ${res.status}`);
 	return res.json();
+}
+
+function strcmp(a, b) {
+	return a.localeCompare(b, 'en', {sensitivity: 'base'});
 }
 
 function replace_escapes(s) {
@@ -433,12 +550,13 @@ function make_rotated_headerer(names, font = '36px monospace') {
 	let metrics = names.map(name => ctx0.measureText(name));
 	let width = metrics.reduce((a, x) => Math.max(a, x.actualBoundingBoxRight - x.actualBoundingBoxLeft), 0);
 	let height = 2 * metrics.reduce((a, x) => Math.max(a, Math.max(x.actualBoundingBoxAscent, -x.actualBoundingBoxDescent)), 0);
-	return (name) => {
+	return (name, color = '#000') => {
 		let canvas = document.createElement('canvas');
 		canvas.width = height;
 		canvas.height = width;
 		let ctx = canvas.getContext('2d');
 		ctx.font = font;
+		ctx.fillStyle = color;
 		ctx.textAlign = 'left';
 		ctx.textBaseline = 'middle';
 		let xc = height/2;

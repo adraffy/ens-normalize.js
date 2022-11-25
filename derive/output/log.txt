@@ -1,4 +1,4 @@
-Build Date: 2022-11-25T10:06:15.727Z
+Build Date: 2022-11-25T21:26:36.147Z
 Unicode Version: 15.0.0 (2022-10-23T06:00:57.990Z)
 CLDR Version: 42 (2022-11-04T04:55:37.180Z)
 ==== RGI Emoji ZWJ Sequences ====
@@ -5301,6 +5301,7 @@ Removed Valid: A6F3 (꛳) BAMUM FULL STOP
 Removed Valid: 16AF5 (𖫵) BASSA VAH FULL STOP
 Removed Valid: 16E98 (𖺘) MEDEFAIDRIN FULL STOP
 Removed Valid: 1BC9F (𛲟) DUPLOYAN PUNCTUATION CHINOOK FULL STOP
+Removed Valid: 740 (◌݀) SYRIAC FEMININE DOT
 Removed Valid: A1 (¡) INVERTED EXCLAMATION MARK
 Removed Valid: BF (¿) INVERTED QUESTION MARK
 Removed Valid: 55E (՞) ARMENIAN QUESTION MARK
@@ -10940,6 +10941,7 @@ Removed Valid: A612 (ꘒ) VAI SYLLABLE NDOLE SOO
 Removed Valid: A62A (ꘪ) VAI SYLLABLE NDOLE MA
 Removed Valid: A62B (ꘫ) VAI SYLLABLE NDOLE DO
 Removed Valid: 16FE3 (𖿣) OLD CHINESE ITERATION MARK
+Removed Valid: 2E (.) FULL STOP
 ==== Add Valid Characters ====
 Added Valid: 24 ($) DOLLAR SIGN
 Added Valid: 5F (_) LOW LINE
@@ -10950,14 +10952,14 @@ Disallowed Script: [Brai] Braille
 Disallowed Script: [Lina] Linear A [X]
 Disallowed Script: [Linb] Linear B [X]
 Disallowed Script: [Sgnw] SignWriting [X]
-  98614 Japanese   [Kana,Hira] + [Hani,Zyyy] + "abcdefghijklmnopqrstuvwxyz"
- 109932 Korean     [Hang] + [Hani,Zyyy] + "abcdefghijklmnopqrstuvwxyz"
-  98405 Han        [Hani] + [Zyyy] + "abcdefghijklmnopqrstuvwxyz"
+  98613 Japanese   [Kana,Hira] + [Hani,Zyyy] + "abcdefghijklmnopqrstuvwxyz"
+ 109931 Korean     [Hang] + [Hani,Zyyy] + "abcdefghijklmnopqrstuvwxyz"
+  98404 Han        [Hani] + [Zyyy] + "abcdefghijklmnopqrstuvwxyz"
   97258 Bopomofo   [Bopo] + [Hani]
-   1487 Latin      [Latn] + [Zyyy,Zinh] + "πμ"
-   1332 Cyrillic   [Cyrl] + [Zyyy,Zinh]
-   1320 Greek      [Grek] + [Zyyy,Zinh]
-   1195 Common     [Zyyy]
+   1486 Latin      [Latn] + [Zyyy,Zinh] + "πμ"
+   1331 Cyrillic   [Cyrl] + [Zyyy,Zinh]
+   1319 Greek      [Grek] + [Zyyy,Zinh]
+   1194 Common     [Zyyy]
     405 Arabic     [Arab] + "-"
     120 Devanagari [Deva]
      84 Hebrew     [Hebr] + "₪"
@@ -11005,7 +11007,7 @@ Disallowed Script: [Sgnw] SignWriting [X]
      80 Saur       [Saur] (Restricted)
      72 Sund       [Sund] (Restricted)
      55 Sylo       [Sylo] (Restricted)
-     87 Syrc       [Syrc] (Restricted)
+     86 Syrc       [Syrc] (Restricted)
      45 Tale       [Tale] (Restricted)
      83 Talu       [Talu] (Restricted)
      72 Tavt       [Tavt] (Restricted)
@@ -11638,12 +11640,10 @@ Auto-Override: 8EB (◌࣫) ARABIC TONE TWO DOTS ABOVE [Arabic vs Nkoo]
 Unresolved: [Arabic] 64B (◌ً) ARABIC FATHATAN vs 8F0 (◌ࣰ) ARABIC OPEN FATHATAN
 Unresolved: [Hebrew] 5B9 (◌ֹ) HEBREW POINT HOLAM vs 5BA (◌ֺ) HEBREW POINT HOLAM HASER FOR VAV vs 5C1 (◌ׁ) HEBREW POINT SHIN DOT vs 5C2 (◌ׂ) HEBREW POINT SIN DOT vs 5C4 (◌ׄ) HEBREW MARK UPPER DOT
 Unresolved: [Arabic] 6EC (◌۬) ARABIC ROUNDED HIGH STOP WITH FILLED CENTRE vs 8EA (◌࣪) ARABIC TONE ONE DOT ABOVE
-Unresolved: [Syrc] 740 (◌݀) SYRIAC FEMININE DOT vs 741 (◌݁) SYRIAC QUSHSHAYA
 Unresolved: [Arabic] 8F8 (◌ࣸ) ARABIC RIGHT ARROWHEAD ABOVE vs 8FF (◌ࣿ) ARABIC MARK SIDEWAYS NOON GHUNNA
 Unresolved: [Arabic] 64C (◌ٌ) ARABIC DAMMATAN vs 8E5 (◌ࣥ) ARABIC CURLY DAMMA vs 8E8 (◌ࣨ) ARABIC CURLY DAMMATAN vs 8F1 (◌ࣱ) ARABIC OPEN DAMMATAN
 Unresolved: [Arabic] 64D (◌ٍ) ARABIC KASRATAN vs 8F2 (◌ࣲ) ARABIC OPEN KASRATAN
 Unresolved: [Syrc] 73C (◌ܼ) SYRIAC HBASA-ESASA DOTTED vs 742 (◌݂) SYRIAC RUKKAKHA
-Override: 2E (.) FULL STOP [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common]
 Override: 660 (٠) ARABIC-INDIC DIGIT ZERO [Arabic,Thaana,Yezi]
 Override: 2022 (•) BULLET [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common]
 Unresolved: [Cans] 1437 (ᐷ) CANADIAN SYLLABICS CARRIER HI vs 1440 (ᑀ) CANADIAN SYLLABICS PWO
@@ -14593,12 +14593,12 @@ Removed Mapping: 1F248 (🉈) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-655
 [✓] Fastpath ASCII
 [✓] Groups Names are A-Z
 ==== Find Unique Characters ====
-Valid: [33m133747[39m
-Multi: [33m98512[39m
-Unique: [33m35235[39m
+Valid: [33m133745[39m
+Multi: [33m98511[39m
+Unique: [33m35234[39m
 [✓] Assert Whole Membership
 Confusable: 513
-Not Confusable: 121
+Not Confusable: 120
 Non-Confusable Non-Unique: 51
 ==== Compress Wholes ====
 ==== Compress Groups ====
@@ -14607,20 +14607,20 @@ Non-Confusable Non-Unique: 51
 [✓] Ordered by Registration Likelihood
 ==== Group Summary ====
 Ord | Valid  | Uniqu | Prima | Secon | CM  | Group     
-  1 |   1270 |    47 |    73 |  1197 | [0] | Latin
-  2 |  98405 |     0 | 97184 |  1221 | [0] | Han
-  3 |   1195 |     0 |  1195 |     0 | N=0 | Common
+  1 |   1269 |    47 |    73 |  1196 | [0] | Latin
+  2 |  98404 |     0 | 97184 |  1220 | [0] | Han
+  3 |   1194 |     0 |  1194 |     0 | N=0 | Common
   4 |    395 |   372 |   394 |     1 | N=2 | Arabic
   5 |    120 |   110 |   120 |     0 | N=2 | Devanagari
-  6 | 109931 | 11526 | 11528 | 98403 | [0] | Korean
-  7 |  98612 |   207 |   209 | 98403 | [0] | Japanese
+  6 | 109930 | 11526 | 11528 | 98402 | [0] | Korean
+  7 |  98611 |   207 |   209 | 98402 | [0] | Japanese
   8 |     84 |    83 |    83 |     1 | N=2 | Hebrew
-  9 |   1298 |   103 |   103 |  1195 | [0] | Cyrillic
+  9 |   1297 |   103 |   103 |  1194 | [0] | Cyrillic
  10 |     86 |    85 |    85 |     1 | N=2 | Thai
  11 |     91 |    81 |    91 |     0 | N=2 | Bengali
  12 |  97258 |    74 |    76 | 97182 | [0] | Bopomofo
  13 |    123 |   102 |   123 |     0 | N=1 | Tamil
- 14 |   1230 |    33 |    35 |  1195 | [0] | Greek
+ 14 |   1229 |    33 |    35 |  1194 | [0] | Greek
  15 |    186 |   186 |   186 |     0 | N=1 | Tibetan
  16 |     80 |    80 |    80 |     0 | N=1 | Lao
  17 |     74 |    64 |    74 |     0 | N=2 | Gurmukhi
@@ -14662,7 +14662,7 @@ Ord | Valid  | Uniqu | Prima | Secon | CM  | Group
  53 |     80 |    80 |    80 |     0 | N=1 | Saur
  54 |     72 |    72 |    72 |     0 | N=1 | Sund
  55 |     55 |    45 |    55 |     0 | N=1 | Sylo
- 56 |     87 |    76 |    87 |     0 | N=1 | Syrc
+ 56 |     86 |    75 |    86 |     0 | N=1 | Syrc
  57 |     45 |    35 |    45 |     0 | N=1 | Tale
  58 |     83 |    83 |    83 |     0 | N=1 | Talu
  59 |     72 |    72 |    72 |     0 | N=1 | Tavt
@@ -14765,11 +14765,11 @@ Ord | Valid  | Uniqu | Prima | Secon | CM  | Group
 156 |     57 |    47 |    57 |     0 | N=1 | Yezi
 157 |     70 |    70 |    70 |     0 | N=1 | Zanb
 ==== NFC Quick Check ====
-Optimized: 2110 => 540
+Optimized: 2110 => 539
 ==== Write Output ====
-Wrote: spec.json [3125844]
+Wrote: spec.json [3125805]
 Wrote: nf.json [48402]
 Wrote: nf-tests.json [503302]
 Wrote: emoji-info.json [391345]
 Wrote: names.json [3334376]
-Wrote: confused.json [72066]
+Wrote: confused.json [71979]
