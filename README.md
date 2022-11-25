@@ -133,7 +133,6 @@ Determine if a character shouldn't be printed directly:
 ```Javascript
 // number -> bool
 console.log(should_escape(0x202E)); // eg. RIGHT-TO-LEFT OVERRIDE => true
-// note: this is independent of normalization
 ```
 
 Determine if a character is a printable combining mark:

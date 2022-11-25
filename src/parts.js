@@ -8,7 +8,7 @@ function hex_seq(cps) {
 function create_arrow_span() {
 	let span = document.createElement('span');
 	span.classList.add('arrow');
-	span.innerHTML = '➔'; //'&rarr;';
+	span.innerHTML = '➔'; // '→'; 
 	return span;
 }
 
@@ -103,15 +103,16 @@ export function dom_from_tokens(tokens, {
 						Hex: hex_seq(token.input),
 					}, extra(token.type, token.input));
 				} else {	
-					let lhs = dom_from_tokens(token.tokens, {before, components, emoji_url, extra}); //, isolate: true}); // recursive
+					let lhs = dom_from_tokens(token.tokens0, {components, emoji_url, extra});;
+					if (token.tokens0.every(x => x.type === 'valid')) { // trival case hack
+						lhs.querySelector('.valid').innerHTML = token.input.map(cp => safe_str_from_cps([cp])).join('<span>+</span>');
+					}
 					lhs.classList.add('before');
 					lhs.title = format_tooltip({
 						Type: 'NFC (Unnormalized)',
 						Hex: hex_seq(token.input),
 					}, extra(token.type, token.input));
-					let rhs = document.createElement('div');
-					rhs.classList.add('valid');
-					rhs.innerText = safe_str_from_cps(token.cps);
+					let rhs = dom_from_tokens(token.tokens, {components, emoji_url, extra});
 					rhs.title = format_tooltip({
 						Type: 'NFC (Normalized)',
 						Hex: hex_seq(token.cps),
@@ -123,7 +124,7 @@ export function dom_from_tokens(tokens, {
 			case 'valid': {
 				el = document.createElement('span');		
 				let form = safe_str_from_cps(token.cps);
-				if (tld_class && (tokens.length == 1 || (i === tokens.length-1 && tokens[i-1].type === 'stop'))) { 
+				if (tld_class && (tokens.length == 1 || (i === tokens.length-1 && tokens[i-1].type === 'stop')) && /[a-z]/.test(form)) { 
 					// theres just 1 token/or we're the last token with a stop before us
 					el.classList.add(form);
 				}
@@ -249,6 +250,7 @@ export function use_default_style() {
 		font-weight: bold;
 		background: linear-gradient(#fff, #ff0);
 		padding-bottom: 0;
+		border: 1px solid #ccc;
 	}
 	.tokens .emoji {
 		border: 2px solid #0aa;
@@ -290,10 +292,10 @@ export function use_default_style() {
 		border: 2px solid #c80;
 		background: #fd8;
 		border-radius: 5px;
+		padding: 2px;
 	}
-	.tokens .nfc > .valid {
-		background: none;
-		border: none;
+	.tokens .nfc .before .valid span {
+		color: rgba(0, 0, 0, 0.35);
 	}`;
 	document.body.append(style);
 }

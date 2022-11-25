@@ -5255,9 +5255,8 @@ export const CONFUSE_GROUPS = [
 		0x16F28, // (𖼨) MIAO LETTER GHA [Plrd]=>[Plrd]
 		0x1028A, // (𐊊) LYCIAN LETTER J [Lyci]=>[Lyci]
 		0x10309, // (𐌉) OLD ITALIC LETTER I [Ital]=>[Ital]
-		// 20221117: moved from '16D0'
-		0x16D0, // (ᛐ) RUNIC LETTER SHORT-TWIG-TYR T [Runr]=>[Runr]
-		0x21BF, // (↿) UPWARDS HARPOON WITH BARB LEFTWARDS [Zyyy]=>[ALL]		
+		// 20221119: added
+		0x10A7D, // (𐩽) OLD SOUTH ARABIAN NUMBER ONE
 	],
 	[
 		// "L" <Same>
@@ -7263,6 +7262,7 @@ export const CONFUSE_GROUPS = [
 		0x102B4, // (𐊴) CARIAN LETTER X [Cari]=>[Cari]
 		0x10317, // (𐌗) OLD ITALIC LETTER EKS [Ital]=>[Ital]
 		0x10527, // (𐔧) ELBASAN LETTER KHE [Elba]=>[Elba]
+		0x10A69, // (𐩩) OLD SOUTH ARABIAN LETTER TAW [Sarb] 
 	],
 	[
 		// "ẋ" <NFC(false) NFD(true)>
@@ -12324,14 +12324,13 @@ export const CONFUSE_GROUPS = [
 		0x16CF, // (ᛏ) RUNIC LETTER TIWAZ TIR TYR T [Runr]=>[Runr]
 		0x2191, // (↑) UPWARDS ARROW [Zyyy]=>[ALL]
 	],
-	/*
 	[
 		// "ᛐ" <Same>
 		'16D0', // RUNIC LETTER SHORT-TWIG-TYR T [Runr]=>[Runr]
 		0x16D0, // (ᛐ) RUNIC LETTER SHORT-TWIG-TYR T [Runr]=>[Runr]
 		0x21BF, // (↿) UPWARDS HARPOON WITH BARB LEFTWARDS [Zyyy]=>[ALL]
+		0x10A61, // (𐩡) OLD SOUTH ARABIAN LETTER LAMEDH [Sarb]
 	],
-	*/
 	[
 		// "ᛐ⇂" <Same>
 		'16D0 21C2', // RUNIC LETTER SHORT-TWIG-TYR T + DOWNWARDS HARPOON WITH BARB RIGHTWARDS [Runr,Zyyy]=>[Runr]

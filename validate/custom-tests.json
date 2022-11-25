@@ -91,6 +91,20 @@
 
 	{"name": "🏴󠁷󠁴󠁦󠁿", "error": true, "comment": "Invalid Emoji Tag Sequence"},
 
-	{"name": "\u06F0\u06F1\u06F2\u06F3\u06F8\u06F9", "norm": "\u0660\u0661\u0662\u0663\u0668\u0669", "comment": "Arabic Mapping"}
+	{"name": "\u06F0\u06F1\u06F2\u06F3\u06F8\u06F9", "norm": "\u0660\u0661\u0662\u0663\u0668\u0669", "comment": "Arabic Mapping"},
 
+	{"name": "тӕ", "comment": "confuse"},
+	{"name": "ᎫᏦᎥ", "comment": "confuse"},
+	{"name": "0x𐱅𐰇𐰼𐰰", "error": true, "comment": "confuse"},
+	{"name": "аррӏе", "error": true, "comment": "confuse"},
+	{"name": "ଠ୦୨\u0B01", "error": true, "comment": "confuse"},
+	{"name": "0nephi⳩", "error": true, "comment": "confuse"},
+	{"name": "ѐ", "error": true, "comment": "confuse"},
+	{"name": "0x", "comment": "confuse"},
+	{"name": "0х", "error": true, "comment": "confuse"},
+	{"name": "½", "norm": "1⁄2", "comment": "confuse"},
+	{"name": "黑", "comment": "confuse"},
+	{"name": "黑a8", "comment": "confuse"},
+	{"name": "ー一a", "comment": "confuse"}
+	
 ]

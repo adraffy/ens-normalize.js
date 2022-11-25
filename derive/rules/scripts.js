@@ -16,6 +16,7 @@ export const SCRIPT_GROUPS = [
 	// Latin-like
 	{name: 'Latin', test: ['Latn'], rest: ['Zyyy', 'Zinh'], cm: -1, extra: [
 		0x3C0, // (π) GREEK SMALL LETTER PI
+		0x3BC, // (μ) GREEK SMALL LETTER MU
 		//0x2044 // (⁄) FRACTION SLASH 
 	], cm: -1},	// 1.2M
 	{name: 'Cyrillic', test: ['Cyrl'], rest: ['Zyyy', 'Zinh'], cm: -1},				// 1817

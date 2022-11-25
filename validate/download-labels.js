@@ -15,7 +15,6 @@ let labels = [...new Set((await Promise.all([
 	fetch_json('https://raw.githubusercontent.com/adraffy/ens-labels/master/reverse.json')
 ])).flat().flatMap(s => s.split('.')))].sort((a, b) => a.localeCompare(b));
 
-
 let before = 0;
 try {
 	before = JSON.parse(readFileSync(file)).length;

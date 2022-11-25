@@ -1,4 +1,4 @@
-Build Date: 2022-11-18T09:53:57.290Z
+Build Date: 2022-11-25T10:06:15.727Z
 Unicode Version: 15.0.0 (2022-10-23T06:00:57.990Z)
 CLDR Version: 42 (2022-11-04T04:55:37.180Z)
 ==== RGI Emoji ZWJ Sequences ====
@@ -7017,6 +7017,12 @@ Removed Valid: 11EF8 (𑻸) MAKASAR END OF SECTION
 Removed Valid: 16B37 (𖬷) PAHAWH HMONG SIGN VOS THOM
 Removed Valid: 16B38 (𖬸) PAHAWH HMONG SIGN VOS TSHAB CEEB
 Removed Valid: 16B44 (𖭄) PAHAWH HMONG SIGN XAUS
+Removed Valid: 10A50 (𐩐) KHAROSHTHI PUNCTUATION DOT
+Removed Valid: 10A51 (𐩑) KHAROSHTHI PUNCTUATION SMALL CIRCLE
+Removed Valid: 10A52 (𐩒) KHAROSHTHI PUNCTUATION CIRCLE
+Removed Valid: 10A53 (𐩓) KHAROSHTHI PUNCTUATION CRESCENT BAR
+Removed Valid: 10A54 (𐩔) KHAROSHTHI PUNCTUATION MANGALAM
+Removed Valid: 10A58 (𐩘) KHAROSHTHI PUNCTUATION LINES
 Removed Valid: 204E (⁎) LOW ASTERISK
 Removed Valid: 26B9 (⚹) SEXTILE
 Removed Valid: 2051 (⁑) TWO ASTERISKS ALIGNED VERTICALLY
@@ -10948,7 +10954,7 @@ Disallowed Script: [Sgnw] SignWriting [X]
  109932 Korean     [Hang] + [Hani,Zyyy] + "abcdefghijklmnopqrstuvwxyz"
   98405 Han        [Hani] + [Zyyy] + "abcdefghijklmnopqrstuvwxyz"
   97258 Bopomofo   [Bopo] + [Hani]
-   1486 Latin      [Latn] + [Zyyy,Zinh] + "π"
+   1487 Latin      [Latn] + [Zyyy,Zinh] + "πμ"
    1332 Cyrillic   [Cyrl] + [Zyyy,Zinh]
    1320 Greek      [Grek] + [Zyyy,Zinh]
    1195 Common     [Zyyy]
@@ -11040,7 +11046,7 @@ Disallowed Script: [Sgnw] SignWriting [X]
      57 Hung       [Hung] (Restricted)
      39 Ital       [Ital] (Restricted)
      84 Kawi       [Kawi] (Restricted)
-     66 Khar       [Khar] (Restricted)
+     60 Khar       [Khar] (Restricted)
      71 Khoj       [Khoj] (Restricted)
     471 Kits       [Kits] (Restricted)
      72 Kthi       [Kthi] (Restricted)
@@ -11692,7 +11698,6 @@ Override: 31 (1) DIGIT ONE [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common]
 Override: 661 (١) ARABIC-INDIC DIGIT ONE [Arabic,Thaana,Yezi]
 Unresolved: [Ital] 10309 (𐌉) OLD ITALIC LETTER I vs 10320 (𐌠) OLD ITALIC NUMERAL ONE
 Unresolved: [Hebrew] 5D5 (ו) HEBREW LETTER VAV vs 5DF (ן) HEBREW LETTER FINAL NUN
-Unresolved: [Runr] 16C1 (ᛁ) RUNIC LETTER ISAZ IS ISS I vs 16D0 (ᛐ) RUNIC LETTER SHORT-TWIG-TYR T
 Override: 6E (n) LATIN SMALL LETTER N [Japanese,Korean,Han,Latin]
 Unresolved: [Armenian] 578 (ո) ARMENIAN SMALL LETTER VO vs 57C (ռ) ARMENIAN SMALL LETTER RA
 Auto-Override: 438 (и) CYRILLIC SMALL LETTER I [Cyrillic vs Dsrt]
@@ -14588,21 +14593,21 @@ Removed Mapping: 1F248 (🉈) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-655
 [✓] Fastpath ASCII
 [✓] Groups Names are A-Z
 ==== Find Unique Characters ====
-Valid: [33m133753[39m
-Multi: [33m98511[39m
-Unique: [33m35242[39m
+Valid: [33m133747[39m
+Multi: [33m98512[39m
+Unique: [33m35235[39m
 [✓] Assert Whole Membership
-Confusable: [33m512[39m
-Not Confusable: [33m121[39m
-Non-Confusable Non-Unique: [33m51[39m
+Confusable: 513
+Not Confusable: 121
+Non-Confusable Non-Unique: 51
 ==== Compress Wholes ====
-Wholes: [33m152[39m
 ==== Compress Groups ====
 ==== Order Groups ====
-[✓] Unrestricted before Restricted
+[✓] All Unrestricted before Restricted
+[✓] Ordered by Registration Likelihood
 ==== Group Summary ====
 Ord | Valid  | Uniqu | Prima | Secon | CM  | Group     
-  1 |   1269 |    47 |    73 |  1196 | [0] | Latin
+  1 |   1270 |    47 |    73 |  1197 | [0] | Latin
   2 |  98405 |     0 | 97184 |  1221 | [0] | Han
   3 |   1195 |     0 |  1195 |     0 | N=0 | Common
   4 |    395 |   372 |   394 |     1 | N=2 | Arabic
@@ -14615,7 +14620,7 @@ Ord | Valid  | Uniqu | Prima | Secon | CM  | Group
  11 |     91 |    81 |    91 |     0 | N=2 | Bengali
  12 |  97258 |    74 |    76 | 97182 | [0] | Bopomofo
  13 |    123 |   102 |   123 |     0 | N=1 | Tamil
- 14 |   1230 |    34 |    35 |  1195 | [0] | Greek
+ 14 |   1230 |    33 |    35 |  1195 | [0] | Greek
  15 |    186 |   186 |   186 |     0 | N=1 | Tibetan
  16 |     80 |    80 |    80 |     0 | N=1 | Lao
  17 |     74 |    64 |    74 |     0 | N=2 | Gurmukhi
@@ -14698,7 +14703,7 @@ Ord | Valid  | Uniqu | Prima | Secon | CM  | Group
  94 |     57 |    57 |    57 |     0 | N=1 | Hung
  95 |     39 |    39 |    39 |     0 | N=1 | Ital
  96 |     84 |    84 |    84 |     0 | N=1 | Kawi
- 97 |     66 |    66 |    66 |     0 | N=1 | Khar
+ 97 |     60 |    60 |    60 |     0 | N=1 | Khar
  98 |     71 |    61 |    71 |     0 | N=1 | Khoj
  99 |    471 |   471 |   471 |     0 | N=1 | Kits
 100 |     72 |    62 |    72 |     0 | N=1 | Kthi
@@ -14762,8 +14767,9 @@ Ord | Valid  | Uniqu | Prima | Secon | CM  | Group
 ==== NFC Quick Check ====
 Optimized: 2110 => 540
 ==== Write Output ====
-Wrote: spec.json [3110966]
+Wrote: spec.json [3125844]
 Wrote: nf.json [48402]
 Wrote: nf-tests.json [503302]
 Wrote: emoji-info.json [391345]
 Wrote: names.json [3334376]
+Wrote: confused.json [72066]

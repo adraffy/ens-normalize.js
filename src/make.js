@@ -15,6 +15,22 @@ let {ranks, decomp, exclusions, qc} = JSON.parse(readFileSync(new URL('./nf.json
 let emoji_solo = emoji.filter(v => v.length == 1).map(v => v[0]);
 let emoji_seqs = emoji.filter(v => v.length >= 2);
 
+// check assumptions
+if (emoji_solo.length) {
+	throw new Error(`Assumption wrong: there are solo emoji!`)
+}
+if (groups.some(g => Array.isArray(g.cm) && g.cm.length)) {
+	throw new Error(`Assumption wrong: there are complex CM sequences!`);	
+}
+/*
+if (emoji_solo.length == 0) {
+	console.log(`*** There are 0 solo-emoji!`);
+}
+if (groups.some(g => !Number.isInteger(g.cm) || !g.cm.length)) {
+	console.log(`*** There are 0 complex CM sequences!`);
+}
+*/
+
 class Node {
 	constructor() {
 		this.branches = {};
@@ -132,10 +148,11 @@ for (let cps of emoji_seqs) {
 }
 
 // compress
-console.log(`Before: ${root.nodes}`);
+console.log('Compress Emoji:')
+console.log(` Before: ${root.nodes}`);
 root.collapse_nodes();
 root.collapse_keys();
-console.log(`After: ${root.nodes}`);
+console.log(`  After: ${root.nodes}`);
 
 function encode_emoji(enc, node, map) {
 	for (let [keys, x] of Object.entries(node.branches)) {
@@ -157,11 +174,7 @@ function find_shared_chunks(groups, {min_overlap = 0.9, min_size = 1} = {}) {
 	let shared = new Set();
 	for (let cps of groups) {
 		for (let cp of cps) {
-			if (union.has(cp)) {
-				shared.add(cp);
-			} else {
-				union.add(cp);
-			}
+			(union.has(cp) ? shared : union).add(cp);
 		}
 	}
 	let chunks = [];
@@ -195,30 +208,6 @@ function index_map(v) {
 	return new Map(v.map((x, i) => [x, i]));
 }
 
-/*
-if (emoji_solo.length == 0) {
-	console.log(`*** There are 0 solo-emoji!`);
-}
-if (groups.some(g => !Number.isInteger(g.cm) || !g.cm.length)) {
-	console.log(`*** There are 0 complex CM sequences!`);
-}
-*/
-if (emoji_solo.length) {
-	throw new Error(`Assumption wrong: there are solo emoji!`)
-}
-if (groups.some(g => Array.isArray(g.cm) && g.cm.length)) {
-	throw new Error(`Assumption wrong: there are complex CM sequences!`);	
-}
-
-// assign each group to an index
-// (sort was provided by derive)
-groups.forEach((g, i) => g.index = i);
-
-// map group names to groups
-wholes = wholes.map(([names, cps]) => {
-	return {groups: names.map(name => groups.find(g => g.name === name)), cps};
-});
-
 let enc = new Encoder();
 enc.write_mapped([
 	[1, 1, 0], // adjacent that map to a constant
@@ -231,51 +220,20 @@ enc.write_mapped([
 //	[4, 1, 0],
 ], mapped); 
 enc.write_member(ignored);
-/*
-for (let [cp, name] of fenced) {
-	enc.unsigned(cp);
-	let cps = explode_cp(name);
-	enc.unsigned(cps.length);
-	enc.deltas(cps);
-}
-enc.unsigned(0);
-*/
 enc.write_member(cm);
 enc.write_member(escape); 
 enc.write_member(nfc_check); // for ens_tokenize (can probably derived)
 let chunks = find_shared_chunks(groups.flatMap(g => [g.primary, g.secondary]), {min_overlap: 0.9, min_size: 256});
 chunks.forEach(v => enc.write_member(v));
 enc.write_member([]);
-/*
-// 4 char names
+enc.unsigned(groups.filter(g => !g.restricted).length); 
 for (let g of groups) {
-	if (g.restricted) {
-		encode_lower(enc, g.name);
-	}
-}
-*/
-
-
-for (let g of groups) {
-	/*
-	if (g.restricted) { // 500B to enable these names
-		enc.unsigned(1);
-	} else {
-		let cps = explode_cp(g.name);
-		enc.unsigned(cps.length+1);
-		enc.deltas(cps);
-	}
-	*/
-	/*
-	let alphas = explode_cp(g.name.toLowerCase()).map(cp => cp - 0x60);
-	enc.unsigned(alphas.length);
-	enc.deltas(alphas);
-	*/
-	//console.log(explode_cp(g.name.toLowerCase()).map(cp => cp - 0x60));
+	// all names are "Abcd...e"
+	// (which can be auto-capitalized)
+	// for unrestricted, names are primary-script/language names
+	// for restricted, names are just script abbr
 	enc.array(explode_cp(g.name.toLowerCase()).map(cp => cp - 0x60));
 	enc.unsigned(0);
-	//enc.unsigned(g.restricted|0);
-	
 	for (let v of [g.primary, g.secondary]) {
 		let set = new Set(v);
 		let parts = [];
@@ -289,14 +247,10 @@ for (let g of groups) {
 		enc.write_member(set);
 	}
 	//let map = index_map([g.primary, g.secondary].flat().sort((a, b) => a-b));
-
-	//enc.write_member(wholes.filter(w => w.groups.includes(g)).flatMap(w => w.cps).flatMap(cp => map.get(cp) ?? [])); 
-	//g.wholes.forEach(({cps}) => enc.write_member(cps.map(cp => map.get(cp))));
-	//enc.write_member([]);
-
-
 	enc.unsigned(Array.isArray(g.cm) ? 0 : g.cm+1);
+	// *** this code isn't needed based on current assumptions ***
 	/*
+	let map = index_map([g.primary, g.secondary].flat().sort((a, b) => a-b));
 	if (Array.isArray(g.cm)) {
 		enc.unsigned(0);
 		for (let [cp, seqs] of g.cm) {
@@ -315,47 +269,36 @@ for (let g of groups) {
 }
 enc.unsigned(0);
 
-//wholes = wholes.filter(w => w.groups.length > 1);
-
-for (let w of wholes) {
-	enc.write_member(w.cps);
-	enc.write_member(w.groups.map(g => g.index));
-}
-enc.write_member([]);
-
-/*
-enc.write_mapped([
-	[1, 1, 0], // adjacent that map to a constant
-	[2, 1, 0], // eg. AAAA..BBBB => CCCC
-	[3, 1, 0],
-], wholes.flatMap(w => w.cps.map(cp => [cp, w.groups.map(g => g.index)])));
-*/
-
-/*
-enc.write_mapped([
-	[1, 1, 0], // adjacent that map to a constant
-	[2, 1, 0], // eg. AAAA..BBBB => CCCC
-	[3, 1, 0],
-], wholes.flatMap(w => w.groups.map(g => [g.index, w.cps])));
-*/
-
+let flat_wholes = wholes.flatMap(w => {
+	return [
+		w.valid.map(cp => ({cp, w, valid: true})),
+		w.confused.map(cp => ({cp, w}))
+	].flat()
+}).sort((a, b) => a.cp - b.cp);
+enc.write_member(flat_wholes.filter(f => f.valid).map(f => f.cp));
+enc.write_member(flat_wholes.filter(f => !f.valid).map(f => f.cp));
+flat_wholes.forEach((f, i) => {
+	if (f.w.last === undefined) {
+		enc.unsigned(0);	
+	} else {
+		enc.unsigned(i - f.w.last);
+	}
+	f.w.last = i;
+});
 
 let sorted_emoji = unique_sorted([emoji_solo, emoji_seqs].flat(Infinity));
 let sorted_emoji_map = index_map(sorted_emoji);
-
 enc.write_member(sorted_emoji);
+// *** this code isn't needed based on current assumptions ***
 //enc.write_member(emoji_solo.map(cp => sorted_emoji_map.get(cp))); 
 encode_emoji(enc, root, sorted_emoji_map);
 
 //write('include-only'); // only saves 300 bytes
 write('include-ens', {
-	FENCED: new Map(fenced), 
-	NR: groups.filter(g => !g.restricted).length
-	//NAMES: groups.map(g => g.restricted ? g.name.toLowerCase() : g.name)
+	FENCED: new Map(fenced)
 });
 
 // just nf 
-// (only ~30 bytes saved using joined file)
 enc = new Encoder();
 for (let v of ranks) enc.write_member(v);
 enc.write_member([]);
@@ -378,12 +321,16 @@ function write(name, vars = {}) {
 			let expr;
 			if (v instanceof Map) {
 				expr = `new Map(${JSON.stringify([...v])})`;
+			} else if (v instanceof Set) {
+				expr = `new Set(${JSON.stringify([...v])})`;
 			} else {
 				expr = JSON.stringify(v);
 			}
 			return `export const ${k} = ${expr};`;
 		}),
 	].join('\n'));
-	console.log(`${name} = ${data.length} bytes / ${symbols} symbols / ${encoded.length} base64 => ${buf.length}`);
+	console.log(`${name} [${data.length} bytes, ${symbols} symbols, ${encoded.length} base64] => ${buf.length} bytes`);
+
 	writeFileSync(new URL(`./${name}.js`, import.meta.url), buf);
+	//writeFileSync(new URL(`./${name}.json`, import.meta.url), JSON.stringify(enc.values.slice()));
 }

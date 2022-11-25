@@ -326,6 +326,9 @@ button.tags {
 	display: flex;
 	text-align: center;
 }
+.details .label br {
+	display: none;
+}
 .details .label .text {
 	flex: 1;
 }
@@ -385,15 +388,14 @@ button.tags {
 	display: flex;
 	gap: 4px;
 }
-.token-wrapper > * {
-	padding-bottom: 3px;
-}
 .token-wrapper > .error {
-	border-bottom: 5px solid #d00;
-	margin-bottom: -5px;
+	background: #f77;
+	margin: -5px 0;
+	padding: 5px;
+	border-radius: 5px;
 }
 .token-wrapper > .error:not(.first) {
-	border-bottom-color: rgba(221, 0, 0, 0.5);
+	background-color: #f97;
 }
 .row.error {
 	background: #fcc;
@@ -601,8 +603,8 @@ Middle Dot:
 <button data-name="{6C}{B7}{6C}"></button>
 
 Katakana Dot:
-<button data-name="{30A1}{30FB}"></button>
-<button data-name="a{30FB}a{300}"></button>
+<button data-name="月・水"></button>
+<button data-name="a・a{300}"></button>
 
 Greek Keraia: 
 <button data-name="{375}α"></button>
@@ -630,18 +632,18 @@ Hebrew Geresh:
 <a href="https://util.unicode.org/UnicodeJsps/confusables.jsp"><b>Confusables:</b></a>
 <button>aα.ɑ</button>
 <button>ஶ்ரீ.ஸ்ரீ</button>
-<button>❌ii̇</button>
-<button>❌èѐ</button>
+<button data-name="i.i̇.ı̇">i̇</button>
+<button data-name="è.è.ѐ.ѐ">è</button>
 
 <b>Mixed-Script:</b>
 <button data-name="0a〇.黑a8">Digit+Latin+Han</button>
 <button data-name="あアいイうウえエおオ">Kana+Hira</button>
+<button data-name="bitcoin.bitcοin">"bitcoin"</button>
 <button>❌ァ힣</button>
 
 <b>Whole-Script:</b>
-<button data-name="0x.0х.0χ">"0x"</button>
-<button data-name="ape.дре.aрe">"ape"</button>
-<button data-name="apple.дррӏе.аррӏе">"apple"</button>
+<button data-name="0x.0χ.0х">"0x"</button>
+<button data-name="apple.дррӏе.аррӏе.aррӏе">"apple"</button>
 <button data-name="ιοσρβυνγ">❌Greek</button>
 <button data-name="o.٥.०.౦.੦.൦.ο.օ">"o"</button>
 <button data-name="あー.〇一.一ー.一.ー.ᅳ">CJK Dash</button>
@@ -651,9 +653,9 @@ Hebrew Geresh:
 <button data-name="{1FAF7}{1F3FB}{1FAF7}{1F3FC}{1FAF7}{1F3FD}{1FAF7}{1F3FE}{1FAF7}{1F3FF}{1FAF8}{1F3FB}{1FAF8}{1F3FC}{1FAF8}{1F3FD}{1FAF8}{1F3FE}{1FAF8}{1F3FF}">Sequences (10)</button>
 <button data-name="{1F426}{200D}{2B1B}">Black Bird</button>
 
-<b>Apostrophe:</b>
+<b>Fenced:</b>
 <button>O'Brian</button>
-<button>½</button>
+<button data-name="¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞⅟↉">"½"</button>
 <button>123⁄456’s</button>
 <button data-name="a'.’z.a'’b.a⁄'.⁄a">❌Invalid</button>
 
@@ -661,7 +663,7 @@ Hebrew Geresh:
 <button data-name="$¢£¤¥₡₦₩₪₫€₭₮₱₲₴₵₸₹₺₼₽₾⃀₿Ξ.؋">Currency</button>
 <button data-name="•-•¬.⌐◨-◨.⌐〇-〇¬">Glasses</button>
 <button>360°</button>
-<button>2πr.4π</button>
+<button data-name="2πr.4πθ.8п">"π"</button>
 <button>Ξ.≡.☰</button>
 <button>♢⟠⧫</button>
 
@@ -710,7 +712,7 @@ Hebrew:
 </ul>
 <ul class="row legend">
 <li>This is a <b>valid</b> sequence of characters: <div data-tokenize="abc"></div> and <b>.eth</b> name: <div data-tokenize="abc.eth"></div></li>
-<li>This is an <b>emoji</b>: <div data-tokenize="👩🏽‍⚕️"></div> and it's corresponding <b>components</b>: <div data-tokenize="👩🏽‍⚕️" data-parts="1"></div></li>
+<li>This is an <b>emoji</b>: <div data-tokenize="👩🏽‍⚕️"></div> and its corresponding <b>components</b>: <div data-tokenize="👩🏽‍⚕️" data-parts="1"></div></li>
 <li>This is a <b>mapped</b> token: <div data-tokenize="™"></div> which transforms into a <b>valid</b> sequence: <div data-tokenize="tm"></div></li>
 <li>Characters not in canonical form require <b>NFC</b>: <div data-tokenize="a{303}"></div></li>
 <li>This is an <b>ignored</b> character: <div data-tokenize="{FE0F}"></div></li>
@@ -769,7 +771,6 @@ const INPUT_NAME = 'Input';
 const OPENSEA_NAME = 'OpenSea';
 const SKIP_SUFFIX = '_!';
 const PRETTY_NAME = '💖️'; // 🌷️ 🌺️
-const INVALID_CH = '�';
 
 const emoji_url = './emoji.html#q=%s';
 
@@ -1070,7 +1071,7 @@ function parse() {
 
 function add_transformed_row(input) {
 	if (ens_tokenize(input).some(x => x.type === 'nfc' || x.type === 'mapped')) {
-		let row = create_row('Mapped');
+		let row = create_row('Transformed');
 		row.classList.add('transform', 'detailed');
 		row.classList.toggle('hide', !show_details_check.checked);
 		make_exploded(row, input, true);
@@ -1148,7 +1149,7 @@ function replace_escapes(s) {
 		try {
 			return String.fromCodePoint(a ? parseInt(a, 16) : parseInt(b)); 
 		} catch (err) {
-			return INVALID_CH;
+			return '�';
 		}
 	});
 }
@@ -1487,7 +1488,7 @@ function create_details_row(name, before) {
 
 		let code = document.createElement('code');
 		if (cps.length) {
-			span_label.innerText = label.replaceAll(/[\x0A\x0D]/igu, INVALID_CH); //safe_str_from_cps(cps, () => INVALID_CH); //label.replace(/\s/ug, '');
+			span_label.innerText = label; // this will <br> CR LF, disabled with css
 			let swap_btn = document.createElement('button');
 			swap_btn.innerText = `⇄`;
 			swap_btn.title = `Swap Codepoints/Bytes`;
@@ -1776,6 +1777,10 @@ async function resolve0(input0, skip_norm) {
 		output_div.append(input_row);
 		output_div.append(create_details_row(input, true));
 		add_row_tag(input_row, create_copy_btn(input));
+
+		if (!input.includes('.')) {
+			add_row_tag(input_row, create_resolve_btn(`${input}.eth`, 'Use ".eth"'));
+		}
 
 		try {
 			name_norm = ens_normalize(input);

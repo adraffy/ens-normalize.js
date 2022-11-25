@@ -3,7 +3,10 @@ import {createHash} from 'node:crypto';
 
 export function read_labels() {
 	try {
-		return JSON.parse(readFileSync(new URL('./labels.json', import.meta.url)));
+		let t = performance.now();
+		let v = JSON.parse(readFileSync(new URL('./labels.json', import.meta.url)));
+		console.log(`Loaded ${v.length} labels in ${((performance.now() - t)/1000).toFixed(1)}s`);
+		return v;
 	} catch (err) {
 		console.log('Missing "labels.js".  Try running `node validate/download-labels.js`');
 		throw new Error('labels');

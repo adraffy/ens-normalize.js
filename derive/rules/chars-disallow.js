@@ -2034,7 +2034,13 @@ export default [
 	0x16B37, // (𖬷) PAHAWH HMONG SIGN VOS THOM
 	0x16B38, // (𖬸) PAHAWH HMONG SIGN VOS TSHAB CEEB
 	0x16B44, // (𖭄) PAHAWH HMONG SIGN XAUS
-
+	0x10A50, // (𐩐) KHAROSHTHI PUNCTUATION DOT
+	0x10A51, // (𐩑) KHAROSHTHI PUNCTUATION SMALL CIRCLE
+	0x10A52, // (𐩒) KHAROSHTHI PUNCTUATION CIRCLE
+	0x10A53, // (𐩓) KHAROSHTHI PUNCTUATION CRESCENT BAR
+	0x10A54, // (𐩔) KHAROSHTHI PUNCTUATION MANGALAM
+	0x10A58, // (𐩘) KHAROSHTHI PUNCTUATION LINES
+	
 	// asterisk
 	0x204E, // (⁎) LOW ASTERISK
 	0x26B9, // (⚹) SEXTILE
@@ -5600,6 +5606,8 @@ export default [
 	/*	
 	// hangul jamo
 	// https://en.wikipedia.org/wiki/List_of_Hangul_jamo
+	// https://www.koreanwikiproject.com/wiki/Archaic_and_obsolete_letters
+	// TODO: i don't know how to reduce this, likely these components should be disallowed
 	// CHOSEONG, JUNGSEONG, JONGSEONG
 
 	// hangul choseong (obsolete)

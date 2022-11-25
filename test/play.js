@@ -19,5 +19,3 @@ console.log(should_escape(0x202E));
 console.log(is_combining_mark(0x20E3));
 
 debug(ens_split('1️⃣Rãffy💩.eth'));
-
-debug(ens_split('ᎫᏦᎥ'));

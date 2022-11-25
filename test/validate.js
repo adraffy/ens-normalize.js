@@ -1,5 +1,7 @@
 import {ens_normalize, ens_tokenize, nfc} from '../src/lib.js';
-import TESTS from '../validate/tests.json' assert {type: 'json'};
+import {readFileSync} from 'node:fs';
+
+const TESTS = JSON.parse(readFileSync(new URL('../validate/tests.json', import.meta.url)));
 
 function run_tests(fn) {
 	let errors = [];
@@ -33,7 +35,7 @@ function ens_normalize_via_tokenize(name) {
 		}
 	})));
 	if (ens_normalize(norm) !== norm) {
-		throw new Error('incomplete');
+		throw new Error(`wrong: ${norm}`);
 	}
 	return norm;
 }

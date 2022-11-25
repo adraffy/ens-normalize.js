@@ -10,4 +10,8 @@ export default [
 		0x2044, // (⁄) FRACTION SLASH
 		'fraction slash'
 	], 
+	[
+		0x30FB, // (・) KATAKANA MIDDLE DOT
+		'middle dot',
+	],
 ];

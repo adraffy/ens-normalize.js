@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confused</title>
+<style>
+.hide {
+	display: none !important;
+}
+button {
+	cursor: pointer;
+}
+body { 
+	margin: 3rem; 
+	background: #eee;
+}
+table {
+	border-collapse: collapse;
+	border: 2px solid #888;
+	background: #fff;
+}
+tr {
+	height: 100%;
+}
+td, th {
+	border: 1px solid #ccc;
+}
+th {
+	background: #ddd;
+	vertical-align: bottom;
+	font: 12px monospace;
+}
+th.active {
+	background: #f88;
+}
+th.valid {
+	background: #0f0;
+}
+th img {
+	width: 1rem;
+}
+
+tr.valid {
+	background: #eef;
+}
+tr.active {
+	background: #ffc;
+}
+tr.first {
+	border-top: 2px solid #888;
+}
+tr.free {
+	background: #dff;
+}
+.hex {
+	text-align: center;
+	font: 12px monospace;
+}
+.form {
+	text-align: center;
+	font-size: 20px;
+}
+.name {
+	font-size: 12px;
+}
+.script {
+	text-align: center;
+	font-size: 12px;
+	border-right: 2px solid #888;
+}
+.cell {
+	padding: 2px;
+	text-align: center;
+}
+.boxed {
+	background: #ccc;
+}
+.primary {
+	background: #afa;
+}
+.allow {
+	background: #ccf;
+}	
+.unknown {
+	background: #fc0;
+}
+.invalid {
+	background: #fcc;
+}
+.norm-valid {
+	font-weight: bold;
+}
+
+#input_field {
+	display: block;
+	padding: 0.5rem;
+	font-size: 16pt;
+	width: 100%;
+}
+#output {
+	margin-top: 1rem;
+}
+</style>
+</head>
+<body>
+<header>
+<h1>Confusables</h1>
+</header>
+<main>
+<div id="input">
+<input id="input_field">	
+</div>
+<div id="output">Downloading data files...</div>	
+</main>
+<script type="module">
+import {explode_cp, hex_cp, safe_str_from_cps} from '../dist/all.min.js';
+
+const input_field = document.querySelector('#input_field');
+const output_div = document.querySelector('#output');
+
+let wholes;
+let groups;
+let scripts;
+let char_map;
+let whole_map;
+let init = (async () => {
+
+	let chars, ranges;
+	[{wholes}, {chars, ranges, scripts}, {groups}] = await Promise.all([
+		'../derive/output/confused.json',
+		'../derive/output/names.json',
+		'../derive/output/spec.json',
+	].map(fetch_json));
+
+	char_map = new Map(chars.map(([cp, name]) => [cp, {name}]));
+	for (let [cp0, cp1, prefix] of ranges) {
+		for (let cp = cp0; cp <= cp1; cp++) {
+			let name = `${prefix} [${1+cp-cp0}/${1+cp1-cp0}]`;
+			char_map.set(cp, {name});
+		}
+	}
+	for (let s of scripts) {
+		for (let cp of s.cps) {
+			char_map.get(cp).script = s;
+		}
+	}
+
+	let headerer = make_rotated_headerer(groups.map(g => g.name));
+	form_header = headerer('Form');
+	cp_header = headerer('Codepoint');
+	groups.forEach((g, i) => {
+		g.index = i;
+		g.header = headerer(g.name);
+		g.valid_set = new Set([...g.primary, ...g.secondary]);
+	});
+
+	for (let w of wholes) {
+		w.norm_set = new Set([...w.valid, ...w.confused]);
+
+		w.defs.sort((a, b) => Math.min(...a.groups) - Math.min(...b.groups));
+		w.defs.forEach(def => def.groups = def.groups.map(i => groups[i]));
+
+		w.groups = [...new Set(w.defs.flatMap(def => def.groups))].sort((a, b) => a.index - b.index);
+
+		w.decided = w.defs.some(def => def.type);
+
+		let recs = [];
+		for (let def of w.defs) {
+			if (!w.norm_set.has(def.cp)) continue;
+			//def.confused = w.confused.includes(def.cp);
+			let gs = groups.filter(g => g.valid_set.has(def.cp));
+			let rec = recs.find(({set}) => gs.some(g => set.has(g)));
+			if (!rec) {
+				rec = {w, set: new Set(), defs: [], tag: make_tag(recs.length)};
+				recs.push(rec);
+			}
+			gs.forEach(g => rec.set.add(g));
+			def.rec = rec;
+			rec.defs.push(def);
+		}
+		w.recs = recs;
+
+		let union = [...new Set(recs.flatMap(rec => [...rec.set]))];
+		for (let rec of recs) {
+			rec.complement = new Set(union.filter(g => !rec.set.has(g)));
+		}
+		w.rec_map = new Map(recs.flatMap(rec => rec.defs.map(def => [def.cp, rec]))); 
+
+	}
+	whole_map = new Map(wholes.flatMap(w => w.defs.map(def => [def.cp, w])));
+	init = undefined;
+})();
+
+let form_header;
+let cp_header;
+
+input_field.addEventListener('input', async e => {	
+	return update();
+});
+update();
+
+async function update() {
+	output_div.innerHTML = '';
+	output_div.classList.remove('error');
+	try {
+		if (init) await init;
+		await create_grid(replace_escapes(input_field.value.trim()));
+	} catch (err) {
+		output_div.classList.add('error');
+		output_div.innerHTML = err.message;
+		console.log(err);
+	}
+}
+
+async function create_grid(input) {
+	
+	let cps, match;
+	if (match = input.match(/^group:(.*)$/)) {
+		let name = match[1].toLowerCase().trim();
+		let group = groups.find(g => g.name.toLowerCase() === name);
+		if (!group) {
+			throw new Error(`Unknown group: ${match[1]}`);
+		}
+		cps = group.cps;
+		//cps = wholes.flatMap(w => w.defs.filter(def => def.groups.has(group)).map(def => def.cp));
+ 	} else {
+		cps = [...new Set(explode_cp(input))];
+	}
+	let free = [];
+	let ws = new Set();
+	let order = [...new Set(cps.map(cp => {
+		let w = whole_map.get(cp);
+		if (w) {
+			ws.add(w);
+			return w;
+		} else {
+			free.push(cp);
+			return cp;
+		}
+	}))];
+	ws = [...ws];
+
+	let cur_valid = new Set(groups.filter(g => cps.every(cp => g.valid_set.has(cp))));
+
+	let group_universe = [...new Set(ws.flatMap(w => w.groups))].sort((a, b) => a.index - b.index);
+	let grid = document.createElement('table');
+		
+
+	let maker = group_universe;
+	let shared = [];
+	for (let cp of cps) {
+		let whole = whole_map.get(cp);
+		if (whole) {		
+			if (whole.confused.includes(cp)) {
+				let rec = whole.rec_map.get(cp);
+				let set = rec.complement;
+				maker = maker.filter(g => set.has(g));
+				continue;
+			}
+		}
+		shared.push(cp); 
+	}
+	maker = maker.filter(g => shared.every(cp => g.valid_set.has(cp)));
+
+	maker = new Set(maker);
+
+
+	let added = Infinity;
+	for (let ch of order) {
+		if (Number.isInteger(ch)) {
+			add(1);
+			let tr = document.createElement('tr');
+			tr.classList.add('first', 'free');
+			if ([...cur_valid].some(g => g.valid_set.has(ch))) {
+				tr.classList.add('valid');
+			}
+			add_td_for_cp(tr, ch);
+			for (let g of group_universe) {
+				let td = document.createElement('td');
+				if (g.valid_set.has(ch)) {
+					td.classList.add('cell', 'primary', 'norm-valid');
+					td.innerText = make_tag(0);
+				}
+				tr.append(td);
+			}
+			grid.append(tr);
+		} else {
+			let {defs, valid, confused, decided, norm_set} = ch;
+			add(defs.length);
+			let first = true;
+
+			for (let def of defs) {
+				let tr = document.createElement('tr');
+				if (first) {
+					tr.classList.add('first');
+					first = false;
+				}
+				if (cps.includes(def.cp)) {
+					tr.classList.add('active');
+				}
+				if ([...cur_valid].some(g => g.valid_set.has(def.cp))) {
+					tr.classList.add('valid');
+				}
+				add_td_for_cp(tr, def.cp);
+
+				let type = def.type;
+				if (!type) {
+					type = decided ? 'invalid' : 'unknown';
+				}
+
+				for (let g of group_universe) {
+					let td = document.createElement('td');
+					td.classList.add('cell');
+					if (def.groups.includes(g)) {
+						td.classList.add(type);
+					}
+					if (def.rec && def.rec.set.has(g)) {
+						td.innerText = def.rec.tag;
+						td.classList.add('boxed');
+						if (valid.includes(def.cp)) {
+							td.classList.add('norm-valid');
+						} else if (confused.includes(def.cp)) {
+							td.classList.add('norm-allow');
+						}
+					}
+					tr.append(td);
+				}
+				grid.append(tr);
+			}
+		}
+	}
+	output_div.append(grid);
+
+	function add(n) {		
+		added += n;
+		if (added > 20) {
+			added = n;
+			grid.append(header());
+		}
+	}
+
+	function header() {
+		let tr = document.createElement('tr');
+		tr.classList.add('first');
+		tr.append(
+			create_th(form_header),
+			create_th(cp_header),
+			create_th('Name'),
+			create_th('Script'),
+			...group_universe.map(g => {
+				let th = create_th(g.header);
+				if (cur_valid.has(g)) {
+					th.classList.add('valid');
+				}
+				if (maker.has(g)) {
+					th.classList.add('active');
+				}
+				return th;
+			}),
+		);
+		return tr;
+	}
+
+}
+
+function create_th(s) {
+	let th = document.createElement('th');
+	if (s.startsWith('data:')) {
+		let img = new Image();
+		img.src = s;
+		th.append(img);
+	} else {
+		th.innerHTML = s;
+	}
+	return th;
+}
+
+
+function make_tag(i) {
+	if (i < 26) {
+		return String.fromCharCode(0x41 + i);
+	} else {
+		return String.fromCharCode(0x40 + (i / 26|0), 0x41 + (i % 26));
+	}
+}
+
+function add_td_for_cp(tr, cp) {
+
+	let td_info = document.createElement('td');
+	td_info.classList.add('form');
+	td_info.innerText = safe_str_from_cps([cp]);
+	tr.append(td_info);
+
+	let td_hex = document.createElement('td');
+	td_hex.classList.add('hex');
+	td_hex.innerText = hex_cp(cp);
+	tr.append(td_hex);
+
+	let char = char_map.get(cp);
+
+	let td_name = document.createElement('td');
+	td_name.classList.add('name');
+	td_name.innerText = char.name;
+	tr.append(td_name);
+
+	let td_script = document.createElement('td');
+	td_script.classList.add('script');
+	td_script.innerText = char.script.name;
+	tr.append(td_script);
+}
+
+async function fetch_json(url) {
+	let res = await fetch(url);
+	if (res.status !== 200) throw new Error(`HTTP Error ${res.status}`);
+	return res.json();
+}
+
+function replace_escapes(s) {
+	return s.replace(/(?:(?:\{([0-9a-f]+)\})|(?:\[((?:0x[0-9a-f]+)|[0-9]+)\]))/uig, (_, a, b, c) => {
+		try {
+			return String.fromCodePoint(a ? parseInt(a, 16) : parseInt(b)); 
+		} catch (err) {
+			return '�';
+		}
+	});
+}
+
+function make_rotated_headerer(names, font = '36px monospace') {
+	let canvas0 = document.createElement('canvas');
+	let ctx0 = canvas0.getContext('2d');
+	ctx0.font = font;
+	let metrics = names.map(name => ctx0.measureText(name));
+	let width = metrics.reduce((a, x) => Math.max(a, x.actualBoundingBoxRight - x.actualBoundingBoxLeft), 0);
+	let height = 2 * metrics.reduce((a, x) => Math.max(a, Math.max(x.actualBoundingBoxAscent, -x.actualBoundingBoxDescent)), 0);
+	return (name) => {
+		let canvas = document.createElement('canvas');
+		canvas.width = height;
+		canvas.height = width;
+		let ctx = canvas.getContext('2d');
+		ctx.font = font;
+		ctx.textAlign = 'left';
+		ctx.textBaseline = 'middle';
+		let xc = height/2;
+		let yc = width/2;
+		ctx.translate(xc, yc);
+		ctx.rotate(-Math.PI / 2);
+		ctx.translate(-yc, -xc);
+		ctx.fillText(name, 0, xc);
+		return canvas.toDataURL();
+	};
+}
+
+</script>
+</body>
+</html>
