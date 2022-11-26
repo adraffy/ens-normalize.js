@@ -10,16 +10,12 @@ interface ValidToken {
 	type: 'valid';
 	cps: number[];
 }
-interface IsolatedToken {
-	type: 'isolated';
-	cp: number;
-}
 interface MappedToken {
 	type: 'mapped';	
 	cp: number;
 	cps: number[];
 }
-type TextToken = DisallowedToken | IgnoredToken | ValidToken | IsolatedToken | MappedToken;
+type TextToken = DisallowedToken | IgnoredToken | ValidToken | MappedToken;
 interface EmojiToken {
 	type: 'emoji';
 	input: number[];
@@ -40,11 +36,11 @@ type Token = TextToken | EmojiToken | NFCToken | StopToken;
 interface Label {
 	input: number[];
 	offset: number;
-	error?: string;
-	mapped?: [];
+	error?: Error;
+	tokens?: number[][];
 	output?: number[];
 	emoji?: boolean;
-	script?: string;
+	type?: string;
 }
 
 export function ens_normalize(name: string): string;
@@ -60,4 +56,4 @@ export function nfc(cps: number[]): number[];
 
 export function should_escape(cp: number): boolean;
 export function is_combining_mark(cp: number): boolean;
-export function safe_str_from_cps(cps: number, quoter?: (cp: number) => string): string;
+export function safe_str_from_cps(cps: number): string;

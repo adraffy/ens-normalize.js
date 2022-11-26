@@ -12,6 +12,7 @@
 * [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 * [Character Viewer](https://adraffy.github.io/ens-normalize.js/test/chars.html)
 * [List of Supported Emoji](https://adraffy.github.io/ens-normalize.js/test/emoji.html)
+* [Confused Explainer](https://adraffy.github.io/ens-normalize.js/test/confused.html)
 
 ```Javascript
 import {ens_normalize} from '@adraffy/ens-normalize';

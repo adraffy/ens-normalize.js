@@ -629,7 +629,8 @@ Hebrew Geresh:
 <button data-name="0️⃣1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣🔟*️⃣#️⃣">*️⃣-🔟</button>
 
 <a href="https://unicode-org.github.io/cldr-staging/charts/latest/by_type/core_data.alphabetic_information.main.html">Exemplars</a> /
-<a href="https://util.unicode.org/UnicodeJsps/confusables.jsp"><b>Confusables:</b></a>
+<a href="https://util.unicode.org/UnicodeJsps/confusables.jsp">Confusables</a> /
+<a href="./confused.html"><b>Confused:</b></a>
 <button>aα.ɑ</button>
 <button>ஶ்ரீ.ஸ்ரீ</button>
 <button data-name="i.i̇.ı̇">i̇</button>
@@ -721,6 +722,7 @@ Hebrew:
 <ul class="row links">
 <li><a href="./emoji.html">Find Supported Emoji</a></li>
 <li><a href="./chars.html">Browse Supported Characters</a></li>
+<li><a href="./confused.html">Confused</a>
 <li><a href="https://adraffy.github.io/punycode.js/test/demo.html">Punycode Coder</a></li>
 <li><a href="https://adraffy.github.io/keccak.js/test/demo.html">Keccak Hasher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-regs.html">Recent ENS Registrations</a></li>
@@ -758,7 +760,7 @@ const show_details_check = document.querySelector('#show_details_check');
 const options_div = document.querySelector('#options');
 const controls_div = document.querySelector('#controls');
 const output_div = document.querySelector('#output');
-const readme_rows = [...output_div.childNodes]; // save initial ux
+const readme_dom = [...output_div.childNodes]; // save initial ux
 const examples_div = document.querySelector('#examples');
 const examples_btn = document.createElement('button');
 examples_btn.id = 'examples_btn';
@@ -997,7 +999,7 @@ function parse() {
 	controls_div.classList.toggle('hide', !name);
 	if (!name) {
 		stop_resolving();
-		output_div.append(...readme_rows);
+		output_div.append(...readme_dom);
 		return;
 	}
 	if (resolve_timer === RESOLVE_MODE_EMPTY) {
@@ -1379,6 +1381,7 @@ function make_tokens_div(name, before, show_errors) {
 					first = false;
 				}
 			}
+			div.dataset.errors = '1';
 			wrapper.append(div);
 		}
 		return wrapper;
@@ -1396,7 +1399,7 @@ function make_tokens_div(name, before, show_errors) {
 
 function update_exploded() {
 	for (let exploded of output_div.querySelectorAll('.exploded')) {
-		let tokens_div = make_tokens_div(exploded.dataset.name, exploded.dataset.before);
+		let tokens_div = make_tokens_div(exploded.dataset.name, exploded.dataset.before, exploded.dataset.errors);
 		if (exploded.dataset.downgraded) {
 			apply_downgrade(tokens_div);
 		}
