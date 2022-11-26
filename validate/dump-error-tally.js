@@ -6,7 +6,10 @@ let labels = read_labels();
 let tally = {};
 for (let label of labels) {
 	try {
-		ens_normalize(label);
+		let norm = ens_normalize(label);
+		if (norm != label) {
+			throw new Error('diff norm');
+		}
 	} catch (err) {
 		let error = err.message;
 		let i = error.indexOf(':');
