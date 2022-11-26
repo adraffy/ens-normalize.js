@@ -1,5 +1,4 @@
-
-const $AZ = 'abcdefghijklmnopqrstuvwxyz';
+const $AZ = 'abcdefghijklmnopqrstuvwxyz'; // a-z for romanization
 
 // note: order doesn't matter
 // gets re-ordered by rules/group-order.js
@@ -11,20 +10,19 @@ export const SCRIPT_GROUPS = [
 	{name: 'Japanese', test: ['Kana', 'Hira'], rest: ['Hani', 'Zyyy'], extra: [$AZ], cm: -1},	// 2241
 	{name: 'Korean', test: ['Hang'], rest: ['Hani', 'Zyyy'], extra: [$AZ], cm: -1},				// 2060
 	{name: 'Han', test: ['Hani'], rest: ['Zyyy'], extra: [$AZ], cm: -1},						// 20K+
-	{name: 'Bopomofo', test: ['Bopo'], rest: ['Hani'], cm: -1},									// pure(35?, spoof mixed
+	{name: 'Bopomofo', test: ['Bopo'], rest: ['Hani'], cm: -1},									// 35 pure, spoof mixed
 
 	// Latin-like
 	{name: 'Latin', test: ['Latn'], rest: ['Zyyy', 'Zinh'], cm: -1, extra: [
 		0x3C0, // (π) GREEK SMALL LETTER PI
-		0x3BC, // (μ) GREEK SMALL LETTER MU
-		//0x2044 // (⁄) FRACTION SLASH 
-	], cm: -1},	// 1.2M
-	{name: 'Cyrillic', test: ['Cyrl'], rest: ['Zyyy', 'Zinh'], cm: -1},				// 1817
-	{name: 'Greek', test: ['Grek'], rest: ['Zyyy', 'Zinh'], cm: -1}, 				// 200 pures with 80+ spoofs
+		0x3BC, // (μ) GREEK SMALL LETTER MU (since Latin mu is mapped)
+	], cm: -1},																// 1.2M
+	{name: 'Cyrillic', test: ['Cyrl'], rest: ['Zyyy', 'Zinh'], cm: -1},		// 1817
+	{name: 'Greek', test: ['Grek'], rest: ['Zyyy', 'Zinh'], cm: -1}, 		// 200 pures with 80+ spoofs
 	{name: 'Common', test: ['Zyyy'], cm: 0},
 
 	// Pure with Many Regs
-	{name: 'Arabic', test: ['Arab'], cm: 2, extra: ['-']}, 				// 15000 pure, underscores, only 11 latin mixed (spoofs), and "0x"
+	{name: 'Arabic', test: ['Arab'], cm: 2, extra: ['-']}, 			// 15000 pure, underscores, only 11 latin mixed (spoofs), and "0x"
 	{name: 'Devanagari', test: ['Deva'], cm: 2}, 					// 2700 pure but 4
 	{name: 'Hebrew', test: ['Hebr'], cm: 2, extra: ['₪']},			// 1466 pure, 17 spoofs with Latin
 	{name: 'Thai', test: ['Thai'], cm: 2,  extra: ['฿']},			// 1000+ pure, spoof mixed
@@ -72,7 +70,6 @@ export const DISALLOWED_SCRIPTS = [
 	// 202209XX: disabled
 	'Sgnw', // SignWriting
 ];
-
 
 export const RESTRICTED_SCRIPTS = [
 

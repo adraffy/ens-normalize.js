@@ -208,6 +208,7 @@ footer {
 <div id="output">
 <ul class="readme">
 	<li>Only works on single-labels.</li>
+	<li>Only includes confusables for valid <a href="https://github.com/adraffy/ens-normalize.js/blob/main/derive/data/15.0.0/IdnaMappingTable.txt">IDNA 2003</a> characters.</li>
 	<li><b>Emoji</b> are never confusable.</li>
 </ul>
 </div>	
@@ -351,6 +352,7 @@ async function update() {
 	exploded_div.classList.add('hide');
 	let input = replace_escapes(input_field.value);
 	window.history.replaceState(null, null, input ? `#${input}` : ' ');
+	input_field.focus();
 	if (!input) {
 		output_div.append(...readme_dom);
 		return;

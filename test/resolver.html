@@ -1030,6 +1030,7 @@ function parse() {
 		row.classList.add('error');
 		add_row_tag(row, create_typed_tag('warn', err));
 		if (skip_norm_check.checked) return true;
+		make_exploded(row, name, true); // show the mapping during the error
 		stop_resolving();
 		let tokens = ens_tokenize(name).flatMap(token => token.type === 'nfc' ? token.tokens : token);
 		if (tokens.some(x => x.type === 'disallowed')) {
@@ -1413,7 +1414,12 @@ function make_exploded(row, name, is_norm, downgrade_disallowed) {
 	if (downgrade_disallowed) {
 		apply_downgrade(tokens_div);
 	}
-	row.append(tokens_div);
+	let old = row.querySelector('.exploded');
+	if (old) {
+		old.replaceWith(tokens_div);
+	} else {
+		row.append(tokens_div);
+	}
 }
 
 function create_typed_tag(type, desc) {

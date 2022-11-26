@@ -2,8 +2,8 @@ export const CONFUSE_TYPE_ALLOW = 'allow';
 export const CONFUSE_TYPE_VALID = 'primary';
 
 // markup convenience
-function valid(cp) { return {cp, priority: 2, type: CONFUSE_TYPE_VALID}; }
-function allow(cp) { return {cp, priority: 1, type: CONFUSE_TYPE_ALLOW}; } 
+function valid(cp) { return {cp, type: CONFUSE_TYPE_VALID}; }
+function allow(cp) { return {cp, type: CONFUSE_TYPE_ALLOW}; } 
 
 // when there are 2+ confusables for a script without a decision
 export const CONFUSE_DEFAULT_ALLOW = true;

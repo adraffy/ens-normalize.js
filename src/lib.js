@@ -179,19 +179,20 @@ function check_leading_underscore(cps) {
 // check that a fenced cp is not leading, trailing, or touching another fenced cp
 function check_fenced(cps) {
 	let cp = cps[0];
-	let name = FENCED.get(cp);
-	if (name) throw new Error(`leading ${name}`);
+	let prev = FENCED.get(cp);
+	if (prev) throw new Error(`leading ${prev}`);
+	let n = cps.length;
 	let last = -1;
-	for (let i = 1; i < cps.length; i++) {
+	for (let i = 1; i < n; i++) {
 		cp = cps[i];
 		let match = FENCED.get(cp);
 		if (match) {
-			if (last == i) throw new Error(`adjacent ${name} + ${match}`);
+			if (last == i) throw new Error(`adjacent ${prev} + ${match}`);
 			last = i + 1;
-			name = match;
+			prev = match;
 		}
 	}
-	if (last == cps.length) throw new Error(`trailing ${name}`);
+	if (last == n) throw new Error(`trailing ${prev}`);
 }
 
 export function is_combining_mark(cp) {
