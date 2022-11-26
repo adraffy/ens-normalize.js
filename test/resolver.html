@@ -384,18 +384,13 @@ button.tags {
 	font-size: 16pt;
 	align-self: stretch;
 }
-.token-wrapper {
-	display: flex;
-	gap: 4px;
-}
-.token-wrapper > .error {
-	background: #f77;
-	margin: -5px 0;
-	padding: 5px;
+.exploded > .error {
+	background-color: #f97;
+	padding: 3px;
 	border-radius: 5px;
 }
-.token-wrapper > .error:not(.first) {
-	background-color: #f97;
+.exploded > .error.first {
+	background: #f77;
 }
 .row.error {
 	background: #fcc;
@@ -639,7 +634,7 @@ Hebrew Geresh:
 <b>Mixed-Script:</b>
 <button data-name="0a〇.黑a8">Digit+Latin+Han</button>
 <button data-name="あアいイうウえエおオ">Kana+Hira</button>
-<button data-name="bitcoin.bitcοin">"bitcoin"</button>
+<button data-name="bitcoin.bitcοin.bi̇tcoin.bitсoin">"bitcoin"</button>
 <button>❌ァ힣</button>
 
 <b>Whole-Script:</b>
@@ -1035,8 +1030,6 @@ function parse() {
 		row.classList.add('error');
 		add_row_tag(row, create_typed_tag('warn', err));
 		if (skip_norm_check.checked) return true;
-		// replace with more information
-		row.querySelector('.exploded').replaceWith(make_tokens_div(name, false, true));
 		stop_resolving();
 		let tokens = ens_tokenize(name).flatMap(token => token.type === 'nfc' ? token.tokens : token);
 		if (tokens.some(x => x.type === 'disallowed')) {
@@ -1362,44 +1355,43 @@ function bytes_from_utf8(s) {
 	return Uint8Array.from(v);
 }
 
-function make_tokens_div(name, before, show_errors) {
-	if (show_errors) {
-		let split = ens_split(name);
-		let wrapper = document.createElement('div');
-		let first = true;
-		wrapper.classList.add('token-wrapper');
-		for (let i = 0; i < split.length; i++) {
-			if (i > 0) {
-				wrapper.append(make_tokens_div('.'));
-			}
-			let {input, error} = split[i];
-			let div = make_tokens_div(String.fromCodePoint(...input), before);
-			if (error) {
-				div.classList.add('error');
-				if (first) {
-					div.classList.add('first');
-					first = false;
-				}
-			}
-			div.dataset.errors = '1';
-			wrapper.append(div);
+function make_tokens_div(name, before) {
+	// tokenize each label separately so we can show major/minor errors
+	// flatten non-errors tokens into wrapper	
+	let split = ens_split(name);
+	let wrapper = document.createElement('div');
+	wrapper.classList.add('tokens');
+	let first = true;
+	for (let i = 0; i < split.length; i++) {
+		if (i > 0) {
+			wrapper.append(...dom_from_tokens(ens_tokenize('.')).children);
 		}
-		return wrapper;
+		let {input, error} = split[i];
+		let tokens = dom_from_tokens(ens_tokenize(String.fromCodePoint(...input)), {
+			before, 
+			emoji_url,
+			components: show_components_check.checked
+		});
+		if (error) {
+			tokens.classList.add('error');
+			if (first) {
+				tokens.classList.add('first');
+				first = false;
+			}
+			wrapper.append(tokens);
+		} else {
+			wrapper.append(...tokens.children);
+		}		
 	}
-	let tokens = dom_from_tokens(ens_tokenize(name), {
-		before, 
-		emoji_url,
-		components: show_components_check.checked
-	});
-	tokens.classList.add('exploded');
-	tokens.dataset.name = name;
-	tokens.dataset.before = before ? '1' : '';
-	return tokens;
+	wrapper.classList.add('exploded');
+	wrapper.dataset.name = name;
+	if (before) wrapper.dataset.before = 1;
+	return wrapper;
 }
 
 function update_exploded() {
 	for (let exploded of output_div.querySelectorAll('.exploded')) {
-		let tokens_div = make_tokens_div(exploded.dataset.name, exploded.dataset.before, exploded.dataset.errors);
+		let tokens_div = make_tokens_div(exploded.dataset.name, exploded.dataset.before);
 		if (exploded.dataset.downgraded) {
 			apply_downgrade(tokens_div);
 		}
@@ -1416,7 +1408,6 @@ function apply_downgrade(tokens_div) {
 }
 
 function make_exploded(row, name, is_norm, downgrade_disallowed) {	
-
 	let before = !is_norm;
 	let tokens_div = make_tokens_div(name, before);
 	if (downgrade_disallowed) {

@@ -60,7 +60,10 @@ th.matched {
 th img {
 	width: 1rem;
 }
-
+th.link:hover,
+td.script:hover {
+	background: #aaf;
+}
 tr.valid {
 	background: #eef;
 }
@@ -201,7 +204,7 @@ footer {
 <input id="input_field">
 </div>
 <div id="init">Downloading data files...</div>
-<div id="exploded"></div>
+<div id="exploded" class="hide"></div>
 <div id="output">
 <ul class="readme">
 	<li>Only works on single-labels.</li>
@@ -548,6 +551,7 @@ function create_th(s, url, cls) {
 		a.href = url;
 		holder = a;
 		th.append(a);
+		th.classList.add('link');
 	}
 	if (s.startsWith('data:')) {
 		let img = new Image();

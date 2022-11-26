@@ -193,7 +193,7 @@ export function use_default_style() {
 		text-decoration: none;
 	}
 	.tokens a:hover {
-		outline: 2px solid #00f;
+		border-color: #00f;
 	}
 	.tokens .valid {
 		background: #cfc;
@@ -255,7 +255,6 @@ export function use_default_style() {
 	.tokens .emoji {
 		border: 2px solid #0aa;
 		background: #cff;
-		margin: 0 2px;
 		color: #000;
 	}
 	.tokens .mod {

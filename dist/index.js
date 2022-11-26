@@ -677,10 +677,10 @@ function ens_split(name, preserve_emoji) {
 								throw new Error(`emoji + combining mark: "${str_from_cps(tokens[i-1])} + ${safe_str_from_cps([cps[0]])}"`);
 							}
 						}
-						let unique_cps = [...new Set(chars)];
-						let [g] = determine_group(unique_cps, chars);
+						let unique = [...new Set(chars)];
+						let [g] = determine_group(unique);
 						check_group(g, chars);
-						check_whole(g, unique_cps);
+						check_whole(g, unique);
 						type = g.N;
 					}
 				}

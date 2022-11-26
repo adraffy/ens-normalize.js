@@ -716,10 +716,10 @@ function ens_split(name, preserve_emoji) {
 								throw new Error(`emoji + combining mark: "${str_from_cps(tokens[i-1])} + ${safe_str_from_cps([cps[0]])}"`);
 							}
 						}
-						let unique_cps = [...new Set(chars)];
-						let [g] = determine_group(unique_cps, chars);
+						let unique = [...new Set(chars)];
+						let [g] = determine_group(unique);
 						check_group(g, chars);
-						check_whole(g, unique_cps);
+						check_whole(g, unique);
 						type = g.N;
 					}
 				}
@@ -1305,7 +1305,7 @@ function use_default_style() {
 		text-decoration: none;
 	}
 	.tokens a:hover {
-		outline: 2px solid #00f;
+		border-color: #00f;
 	}
 	.tokens .valid {
 		background: #cfc;
@@ -1367,7 +1367,6 @@ function use_default_style() {
 	.tokens .emoji {
 		border: 2px solid #0aa;
 		background: #cff;
-		margin: 0 2px;
 		color: #000;
 	}
 	.tokens .mod {
