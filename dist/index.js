@@ -414,13 +414,15 @@ function composed_from_decomposed(v) {
 	return ret;
 }
 
+// note: cps can be iterable
 function nfd(cps) {
 	return decomposed(cps).map(unpack_cp);
 }
-
 function nfc(cps) {
 	return composed_from_decomposed(decomposed(cps));
 }
+
+//const t0 = performance.now();
 
 const STOP = 0x2E;
 const FE0F = 0xFE0F;
@@ -470,7 +472,6 @@ const GROUPS = read_array_while(i => {
 		return {N, P, M, R, V: new Set(V)};
 	}
 });
-
 const WHOLE_VALID = read_set();
 const WHOLE_MAP = new Map();
 [...WHOLE_VALID, ...read_set()].sort((a, b) => a-b).map((cp, i, v) => {
@@ -501,15 +502,28 @@ for (let {V, M} of new Set(WHOLE_MAP.values())) {
 		}
 	}
 }
+let union = new Set();
+let multi = new Set();
+for (let g of GROUPS) {
+	for (let cp of g.V) {
+		(union.has(cp) ? multi : union).add(cp);
+	}
+}
+for (let cp of union) {
+	if (!WHOLE_MAP.has(cp) && !multi.has(cp)) {
+		WHOLE_MAP.set(cp, UNIQUE_PH);
+	}
+}
+/*
+// this is too slow, 500ms+
 let valid_union = [...new Set(GROUPS.flatMap(g => [...g.V]))];
 for (let cp of valid_union) {
 	if (!WHOLE_MAP.has(cp) && GROUPS.filter(g => g.V.has(cp)).length == 1) {
 		WHOLE_MAP.set(cp, UNIQUE_PH);
 	}
 }
-
-const VALID = new Set([...valid_union, ...nfd(valid_union)]);
-
+*/
+const VALID = new Set([...union, ...nfd(union)]); // 30ms
 const EMOJI_SORTED = read_sorted(r$1);
 //const EMOJI_SOLO = new Set(read_sorted(r).map(i => EMOJI_SORTED[i]));
 const EMOJI_ROOT = read_emoji_trie([]);
@@ -527,6 +541,8 @@ function read_emoji_trie(cps) {
 	let C = temp & 2; // check
 	return {B, V, F, S, C, Q: new Set(cps)};
 }
+//console.log(performance.now() - t0);
+
 
 // free tagging system
 class Emoji extends Array {

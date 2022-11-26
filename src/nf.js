@@ -167,10 +167,10 @@ function composed_from_decomposed(v) {
 	return ret;
 }
 
+// note: cps can be iterable
 export function nfd(cps) {
 	return decomposed(cps).map(unpack_cp);
 }
-
 export function nfc(cps) {
 	return composed_from_decomposed(decomposed(cps));
 }
