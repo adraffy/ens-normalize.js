@@ -22,13 +22,24 @@ for (let label of labels) {
 		if (!tokens.some(t => t.emoji)) continue; // no emoji
 		some++;
 		if (tokens.every(t => t.emoji)) pure++;
-		label = ens_beautify(label);
+		label = ens_beautify(label); // make it purdy
 		for (let form of new Set(tokens.filter(t => t.emoji).map(t => String.fromCodePoint(...t.emoji)))) {
-			tally.get(form).names.push(label);
+			tally.get(form).names.push(label); // +1 per unique emoji per name
 		}
 	} catch (err) {
 	}
 }
+
+/*
+for (let [key,x] of tally) {
+	//x.names = x.names.filter(x => [...ens_normalize(x)].length == 4);
+	x.names = x.names.filter(x => x.startsWith('0x'));
+	if (!x.names.length) {
+		tally.delete(key);
+	}
+}
+*/
+
 tally = [...tally.values()].sort((a, b) => b.names.length - a.names.length);
 
 let args = process.argv.slice(2);
