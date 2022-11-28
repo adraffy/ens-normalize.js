@@ -2,7 +2,7 @@ import {Encoder, unsafe_btoa} from './encoder.js';
 import {readFileSync, writeFileSync} from 'node:fs';
 import {explode_cp} from './utils.js';
 /*
-// this appears to be bugged in 18.12.1
+// this appears to be bugged in node 18.12.1
 // randomly fails on keys
 import {mapped, ignored, emoji,  fenced, escape, wholes, groups, nfc_check} from '../derive/output/spec.json' assert {type: 'json'};
 import {ranks, decomp, exclusions, qc} from '../derive/output/nf.json' assert {type: 'json'};

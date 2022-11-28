@@ -568,22 +568,6 @@ for (let cp of valid) {
 	}
 }
 
-for (let g of script_groups) {
-	for (let cp of g.valid_set) {
-		if (NF.nfd([cp]).includes(0x6C1)) {
-			console.log(PRINTER.desc_for_cp(cp));
-		}
-
-	}
-
-	if (g.valid_set.has(0x6C1)) {
-		console.log(g.name);
-	}
-}
-console.log(parts_union.has(0x6C1));
-throw 1;
-
-
 // this should be last so we dont need to recover toggled mappings
 print_section('Remove Invalid Mappings');
 for (let [x, ys] of mapped) {

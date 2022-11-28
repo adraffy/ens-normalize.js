@@ -2,19 +2,9 @@
 
 import {writeFileSync, readFileSync} from 'node:fs';
 
-async function fetch_json(url) {
-	let res = await fetch(url);
-	if (res.status !== 200) throw new Error(`HTTP Error ${res.status}`);
-	return res.json();
-}
-
 let file = new URL('./labels.json', import.meta.url);
 
-let labels = [...new Set((await Promise.all([
-	fetch_json('https://raw.githubusercontent.com/adraffy/ens-labels/master/registered.json'),
-	fetch_json('https://raw.githubusercontent.com/adraffy/ens-labels/master/reverse.json')
-])).flat().flatMap(s => s.split('.')))].sort((a, b) => a.localeCompare(b));
-
+let labels = await fetch('https://raw.githubusercontent.com/adraffy/ens-labels/master/labels.json').then(r => r.json());
 let before = 0;
 try {
 	before = JSON.parse(readFileSync(file)).length;

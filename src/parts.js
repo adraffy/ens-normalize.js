@@ -188,6 +188,7 @@ export function use_default_style() {
 		align-items: center;
 		gap: 4px;
 		border-radius: 5px;
+		overflow: hidden;
 	}
 	.tokens a {
 		text-decoration: none;

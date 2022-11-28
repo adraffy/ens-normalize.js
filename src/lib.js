@@ -125,7 +125,6 @@ function read_emoji_trie(cps) {
 }
 //console.log(performance.now() - t0);
 
-
 // free tagging system
 class Emoji extends Array {
 	get is_emoji() { return true; }
@@ -165,9 +164,6 @@ function check_label_extension(cps) {
 		throw new Error('invalid label extension');
 	}
 }
-function check_leading_combining_mark(cps) {
-	if (CM.has(cps[0])) throw new Error('leading combining mark');
-}
 function check_leading_underscore(cps) {
 	const UNDERSCORE = 0x5F;
 	for (let i = cps.lastIndexOf(UNDERSCORE); i > 0; ) {
@@ -180,19 +176,19 @@ function check_leading_underscore(cps) {
 function check_fenced(cps) {
 	let cp = cps[0];
 	let prev = FENCED.get(cp);
-	if (prev) throw new Error(`leading ${prev}`);
+	if (prev) throw error_placement(`leading ${prev}`);
 	let n = cps.length;
 	let last = -1;
 	for (let i = 1; i < n; i++) {
 		cp = cps[i];
 		let match = FENCED.get(cp);
 		if (match) {
-			if (last == i) throw new Error(`adjacent ${prev} + ${match}`);
+			if (last == i) throw error_placement(`${prev} + ${match}`);
 			last = i + 1;
 			prev = match;
 		}
 	}
-	if (last == n) throw new Error(`trailing ${prev}`);
+	if (last == n) throw error_placement(`trailing ${prev}`);
 }
 
 export function is_combining_mark(cp) {
@@ -268,14 +264,14 @@ export function ens_split(name, preserve_emoji) {
 					if (!chars.length) { // theres no text, just emoji
 						type = 'Emoji';
 					} else {
-						check_leading_combining_mark(norm);
-						check_fenced(norm);
+						if (CM.has(norm[0])) throw error_placement('leading combining mark');
 						for (let i = 1; i < token_count; i++) { // we've already checked the first token
 							let cps = tokens[i];
 							if (!cps.is_emoji && CM.has(cps[0])) { // every text token has emoji neighbors, eg. EtEEEtEt...
-								throw new Error(`emoji + combining mark: "${str_from_cps(tokens[i-1])} + ${safe_str_from_cps([cps[0]])}"`);
+								throw error_placement(`emoji + combining mark: "${str_from_cps(tokens[i-1])} + ${safe_str_from_cps([cps[0]])}"`);
 							}
 						}
+						check_fenced(norm);
 						let unique = [...new Set(chars)];
 						let [g] = determine_group(unique);
 						check_group(g, chars);
@@ -293,10 +289,9 @@ export function ens_split(name, preserve_emoji) {
 	});
 }
 
-
 function check_whole(group, unique) {
 	let maker;
-	let shared = [];
+	let shared = []; // TODO: can this be avoided?
 	for (let cp of unique) {
 		let whole = WHOLE_MAP.get(cp);
 		if (whole === UNIQUE_PH) return; // unique, non-confusable
@@ -359,6 +354,11 @@ function flatten(split) {
 	}).join(STOP_CH);
 }
 
+
+function error_disallowed(cp) {
+	// TODO: add cp to error?
+	return new Error(`disallowed character: ${quoted_cp(cp)}`); 
+}
 function error_group_member(g, cp) {
 	let quoted = quoted_cp(cp);
 	let gg = GROUPS.find(g => g.P.has(cp));
@@ -367,9 +367,8 @@ function error_group_member(g, cp) {
 	}
 	return new Error(`illegal mixture: ${g.N} + ${quoted}`);
 }
-
-function error_disallowed(cp) {
-	return new Error(`disallowed character: ${quoted_cp(cp)}`); 
+function error_placement(where) {
+	return new Error(`illegal placement: ${where}`);
 }
 
 // assumption: cps.length > 0

@@ -21,6 +21,20 @@ for (let label of labels) {
 }
 tally = Object.values(tally).sort((a, b) => b.count - a.count);
 
+console.log(new Date().toJSON());
 for (let {count, error} of tally) {
 	console.log(String(count).padStart(7), error);
 }
+
+/*
+Loaded 2350342 labels in 2.0s
+2022-11-27T07:33:22.604Z
+  14198 disallowed character
+   8844 diff norm
+   1263 illegal mixture
+    946 underscore allowed only at start
+    376 whole-script confusable
+    203 invalid label extension
+    162 illegal placement
+     38 too many combining marks
+*/

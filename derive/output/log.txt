@@ -1,4 +1,4 @@
-Build Date: 2022-11-25T21:26:36.147Z
+Build Date: 2022-11-28T06:03:32.547Z
 Unicode Version: 15.0.0 (2022-10-23T06:00:57.990Z)
 CLDR Version: 42 (2022-11-04T04:55:37.180Z)
 ==== RGI Emoji ZWJ Sequences ====
@@ -5302,6 +5302,12 @@ Removed Valid: 16AF5 (𖫵) BASSA VAH FULL STOP
 Removed Valid: 16E98 (𖺘) MEDEFAIDRIN FULL STOP
 Removed Valid: 1BC9F (𛲟) DUPLOYAN PUNCTUATION CHINOOK FULL STOP
 Removed Valid: 740 (◌݀) SYRIAC FEMININE DOT
+Removed Valid: A4F8 (ꓸ) LISU LETTER TONE MYA TI
+Removed Valid: A4F9 (ꓹ) LISU LETTER TONE NA PO
+Removed Valid: A4FA (ꓺ) LISU LETTER TONE MYA CYA
+Removed Valid: A4FB (ꓻ) LISU LETTER TONE MYA BO
+Removed Valid: A4FC (ꓼ) LISU LETTER TONE MYA NA
+Removed Valid: A4FD (ꓽ) LISU LETTER TONE MYA JEU
 Removed Valid: A1 (¡) INVERTED EXCLAMATION MARK
 Removed Valid: BF (¿) INVERTED QUESTION MARK
 Removed Valid: 55E (՞) ARMENIAN QUESTION MARK
@@ -10995,7 +11001,7 @@ Disallowed Script: [Sgnw] SignWriting [X]
     123 Lana       [Lana] (Restricted)
      72 Lepc       [Lepc] (Restricted)
      66 Limb       [Limb] (Restricted)
-     47 Lisu       [Lisu] (Restricted)
+     41 Lisu       [Lisu] (Restricted)
      29 Mand       [Mand] (Restricted)
      76 Mtei       [Mtei] (Restricted)
      93 Newa       [Newa] (Restricted)
@@ -11644,7 +11650,6 @@ Unresolved: [Arabic] 8F8 (◌ࣸ) ARABIC RIGHT ARROWHEAD ABOVE vs 8FF (◌ࣿ) A
 Unresolved: [Arabic] 64C (◌ٌ) ARABIC DAMMATAN vs 8E5 (◌ࣥ) ARABIC CURLY DAMMA vs 8E8 (◌ࣨ) ARABIC CURLY DAMMATAN vs 8F1 (◌ࣱ) ARABIC OPEN DAMMATAN
 Unresolved: [Arabic] 64D (◌ٍ) ARABIC KASRATAN vs 8F2 (◌ࣲ) ARABIC OPEN KASRATAN
 Unresolved: [Syrc] 73C (◌ܼ) SYRIAC HBASA-ESASA DOTTED vs 742 (◌݂) SYRIAC RUKKAKHA
-Override: 660 (٠) ARABIC-INDIC DIGIT ZERO [Arabic,Thaana,Yezi]
 Override: 2022 (•) BULLET [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common]
 Unresolved: [Cans] 1437 (ᐷ) CANADIAN SYLLABICS CARRIER HI vs 1440 (ᑀ) CANADIAN SYLLABICS PWO
 Unresolved: [Cans] 1454 (ᑔ) CANADIAN SYLLABICS CARRIER DI vs 145D (ᑝ) CANADIAN SYLLABICS TWO
@@ -14593,12 +14598,12 @@ Removed Mapping: 1F248 (🉈) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-655
 [✓] Fastpath ASCII
 [✓] Groups Names are A-Z
 ==== Find Unique Characters ====
-Valid: [33m133745[39m
-Multi: [33m98511[39m
-Unique: [33m35234[39m
+Valid: 133739
+Multi: 98511
+Unique: 35228
 [✓] Assert Whole Membership
-Confusable: 513
-Not Confusable: 120
+Confusable: 512
+Not Confusable: 119
 Non-Confusable Non-Unique: 51
 ==== Compress Wholes ====
 ==== Compress Groups ====
@@ -14608,168 +14613,168 @@ Non-Confusable Non-Unique: 51
 ==== Group Summary ====
 Ord | Valid  | Uniqu | Prima | Secon | CM  | Group     
   1 |   1269 |    47 |    73 |  1196 | [0] | Latin
-  2 |  98404 |     0 | 97184 |  1220 | [0] | Han
-  3 |   1194 |     0 |  1194 |     0 | N=0 | Common
-  4 |    395 |   372 |   394 |     1 | N=2 | Arabic
-  5 |    120 |   110 |   120 |     0 | N=2 | Devanagari
+  2 |    395 |   372 |   394 |     1 | N=2 | Arabic
+  3 |  98404 |     0 | 97184 |  1220 | [0] | Han
+  4 |    120 |   110 |   120 |     0 | N=2 | Devanagari
+  5 |  98611 |   207 |   209 | 98402 | [0] | Japanese
   6 | 109930 | 11526 | 11528 | 98402 | [0] | Korean
-  7 |  98611 |   207 |   209 | 98402 | [0] | Japanese
+  7 |   1297 |   103 |   103 |  1194 | [0] | Cyrillic
   8 |     84 |    83 |    83 |     1 | N=2 | Hebrew
-  9 |   1297 |   103 |   103 |  1194 | [0] | Cyrillic
- 10 |     86 |    85 |    85 |     1 | N=2 | Thai
- 11 |     91 |    81 |    91 |     0 | N=2 | Bengali
- 12 |  97258 |    74 |    76 | 97182 | [0] | Bopomofo
- 13 |    123 |   102 |   123 |     0 | N=1 | Tamil
- 14 |   1229 |    33 |    35 |  1194 | [0] | Greek
- 15 |    186 |   186 |   186 |     0 | N=1 | Tibetan
- 16 |     80 |    80 |    80 |     0 | N=1 | Lao
- 17 |     74 |    64 |    74 |     0 | N=2 | Gurmukhi
- 18 |     95 |    95 |    95 |     0 | N=1 | Telugu
- 19 |     43 |    43 |    43 |     0 | N=1 | Armenian
- 20 |    137 |   137 |   137 |     0 | N=1 | Khmer
- 21 |     91 |    81 |    91 |     0 | N=1 | Gujarati
- 22 |    515 |   515 |   515 |     0 | N=1 | Ethiopic
- 23 |    110 |   110 |   110 |     0 | N=1 | Malayalam
- 24 |     42 |    42 |    42 |     0 | N=1 | Georgian
- 25 |    213 |   203 |   213 |     0 | N=1 | Myanmar
- 26 |     84 |    74 |    84 |     0 | N=1 | Kannada
+  9 |     86 |    85 |    85 |     1 | N=2 | Thai
+ 10 |     91 |    81 |    91 |     0 | N=2 | Bengali
+ 11 |    123 |   102 |   123 |     0 | N=1 | Tamil
+ 12 |   1229 |    33 |    35 |  1194 | [0] | Greek
+ 13 |    186 |   186 |   186 |     0 | N=1 | Tibetan
+ 14 |     74 |    64 |    74 |     0 | N=2 | Gurmukhi
+ 15 |     80 |    80 |    80 |     0 | N=1 | Lao
+ 16 |     95 |    95 |    95 |     0 | N=1 | Telugu
+ 17 |  97258 |    74 |    76 | 97182 | [0] | Bopomofo
+ 18 |     91 |    81 |    91 |     0 | N=1 | Gujarati
+ 19 |     42 |    42 |    42 |     0 | N=1 | Georgian
+ 20 |     43 |    43 |    43 |     0 | N=1 | Armenian
+ 21 |    213 |   203 |   213 |     0 | N=1 | Myanmar
+ 22 |    110 |   110 |   110 |     0 | N=1 | Malayalam
+ 23 |    137 |   137 |   137 |     0 | N=1 | Khmer
+ 24 |    515 |   515 |   515 |     0 | N=1 | Ethiopic
+ 25 |     84 |    74 |    84 |     0 | N=1 | Kannada
+ 26 |    107 |   107 |   107 |     0 | N=1 | Sinhala
  27 |     86 |    86 |    86 |     0 | N=1 | Oriya
- 28 |    107 |   107 |   107 |     0 | N=1 | Sinhala
- 29 |     61 |    50 |    61 |     0 | N=2 | Thaana
- 30 |     52 |    52 |    52 |     0 | N=1 | Adlm
- 31 |     85 |    85 |    85 |     0 | N=1 | Bali
- 32 |    654 |   654 |   654 |     0 | N=1 | Bamu
- 33 |     56 |    56 |    56 |     0 | N=1 | Batk
- 34 |     86 |    66 |    86 |     0 | N=1 | Cakm
- 35 |    723 |   723 |   723 |     0 | N=1 | Cans
- 36 |     80 |    80 |    80 |     0 | N=1 | Cham
- 37 |     86 |    86 |    86 |     0 | N=1 | Cher
- 38 |     71 |    71 |    71 |     0 | N=1 | Hmnp
- 39 |     89 |    88 |    89 |     0 | N=1 | Java
- 40 |     46 |    46 |    46 |     0 | N=1 | Kali
- 41 |    123 |   123 |   123 |     0 | N=1 | Lana
- 42 |     72 |    72 |    72 |     0 | N=1 | Lepc
- 43 |     66 |    66 |    66 |     0 | N=1 | Limb
- 44 |     47 |    47 |    47 |     0 | N=1 | Lisu
- 45 |     29 |    29 |    29 |     0 | N=1 | Mand
- 46 |     76 |    76 |    76 |     0 | N=1 | Mtei
- 47 |     93 |    93 |    93 |     0 | N=1 | Newa
- 48 |     54 |    54 |    54 |     0 | N=1 | Nkoo
- 49 |     46 |    46 |    46 |     0 | N=1 | Olck
- 50 |     36 |    36 |    36 |     0 | N=1 | Osge
- 51 |    149 |   149 |   149 |     0 | N=1 | Plrd
- 52 |     50 |    50 |    50 |     0 | N=1 | Rohg
- 53 |     80 |    80 |    80 |     0 | N=1 | Saur
- 54 |     72 |    72 |    72 |     0 | N=1 | Sund
- 55 |     55 |    45 |    55 |     0 | N=1 | Sylo
- 56 |     86 |    75 |    86 |     0 | N=1 | Syrc
- 57 |     45 |    35 |    45 |     0 | N=1 | Tale
- 58 |     83 |    83 |    83 |     0 | N=1 | Talu
- 59 |     72 |    72 |    72 |     0 | N=1 | Tavt
- 60 |     58 |    58 |    58 |     0 | N=1 | Tfng
- 61 |    292 |   292 |   292 |     0 | N=1 | Vaii
- 62 |     59 |    59 |    59 |     0 | N=1 | Wcho
- 63 |   1221 |  1220 |  1221 |     0 | N=1 | Yiii
- 64 |     53 |    53 |    53 |     0 | N=1 | Aghb
- 65 |     62 |    62 |    62 |     0 | N=1 | Ahom
- 66 |     31 |    31 |    31 |     0 | N=1 | Armi
- 67 |     61 |    61 |    61 |     0 | N=1 | Avst
- 68 |     35 |    35 |    35 |     0 | N=1 | Bass
- 69 |     95 |    95 |    95 |     0 | N=1 | Bhks
- 70 |    113 |   113 |   113 |     0 | N=1 | Brah
- 71 |     31 |    30 |    31 |     0 | N=1 | Bugi
- 72 |     20 |    20 |    20 |     0 | N=1 | Buhd
- 73 |     49 |    49 |    49 |     0 | N=1 | Cari
- 74 |     28 |    28 |    28 |     0 | N=1 | Chrs
- 75 |     75 |    75 |    75 |     0 | N=1 | Copt
- 76 |     99 |    99 |    99 |     0 | N=1 | Cpmn
- 77 |     55 |    55 |    55 |     0 | N=1 | Cprt
- 78 |     69 |    69 |    69 |     0 | N=1 | Diak
- 79 |     70 |    60 |    70 |     0 | N=1 | Dogr
- 80 |     40 |    40 |    40 |     0 | N=1 | Dsrt
- 81 |    142 |   142 |   142 |     0 | N=1 | Dupl
- 82 |   1094 |  1094 |  1094 |     0 | N=1 | Egyp
- 83 |     40 |    40 |    40 |     0 | N=1 | Elba
- 84 |     23 |    23 |    23 |     0 | N=1 | Elym
- 85 |     86 |    86 |    86 |     0 | N=1 | Glag
- 86 |     63 |    63 |    63 |     0 | N=1 | Gong
- 87 |     75 |    75 |    75 |     0 | N=1 | Gonm
- 88 |     27 |    27 |    27 |     0 | N=1 | Goth
- 89 |    101 |    80 |   101 |     0 | N=1 | Gran
- 90 |     21 |    21 |    21 |     0 | N=1 | Hano
- 91 |     26 |    26 |    26 |     0 | N=1 | Hatr
- 92 |    583 |   583 |   583 |     0 | N=1 | Hluw
- 93 |    124 |   124 |   124 |     0 | N=1 | Hmng
- 94 |     57 |    57 |    57 |     0 | N=1 | Hung
- 95 |     39 |    39 |    39 |     0 | N=1 | Ital
- 96 |     84 |    84 |    84 |     0 | N=1 | Kawi
- 97 |     60 |    60 |    60 |     0 | N=1 | Khar
- 98 |     71 |    61 |    71 |     0 | N=1 | Khoj
- 99 |    471 |   471 |   471 |     0 | N=1 | Kits
-100 |     72 |    62 |    72 |     0 | N=1 | Kthi
-101 |     29 |    29 |    29 |     0 | N=1 | Lyci
-102 |     27 |    27 |    27 |     0 | N=1 | Lydi
-103 |     23 |    23 |    23 |     0 | N=1 | Maka
-104 |     49 |    39 |    49 |     0 | N=1 | Mahj
-105 |     51 |    50 |    51 |     0 | N=1 | Mani
-106 |     68 |    68 |    68 |     0 | N=1 | Marc
-107 |     57 |    57 |    57 |     0 | N=1 | Medf
-108 |    213 |   213 |   213 |     0 | N=1 | Mend
-109 |     90 |    90 |    90 |     0 | N=1 | Merc
-110 |     32 |    32 |    32 |     0 | N=1 | Mero
-111 |     77 |    77 |    77 |     0 | N=1 | Modi
-112 |    155 |   155 |   155 |     0 | N=1 | Mong
-113 |     41 |    41 |    41 |     0 | N=1 | Mroo
-114 |     47 |    37 |    47 |     0 | N=1 | Mult
-115 |     42 |    42 |    42 |     0 | N=1 | Nagm
-116 |     32 |    32 |    32 |     0 | N=1 | Narb
-117 |     76 |    66 |    76 |     0 | N=1 | Nand
-118 |     40 |    40 |    40 |     0 | N=1 | Nbat
-119 |    397 |   397 |   397 |     0 | N=1 | Nshu
-120 |     28 |    28 |    28 |     0 | N=1 | Ogam
-121 |     73 |    73 |    73 |     0 | N=1 | Orkh
-122 |     40 |    40 |    40 |     0 | N=1 | Osma
-123 |     23 |    22 |    23 |     0 | N=1 | Ougr
-124 |     32 |    32 |    32 |     0 | N=1 | Palm
-125 |     57 |    57 |    57 |     0 | N=1 | Pauc
-126 |     43 |    43 |    43 |     0 | N=1 | Perm
-127 |     54 |    54 |    54 |     0 | N=1 | Phag
-128 |     27 |    27 |    27 |     0 | N=1 | Phli
-129 |     29 |    29 |    29 |     0 | N=1 | Phlp
-130 |     29 |    29 |    29 |     0 | N=1 | Phnx
-131 |     30 |    30 |    30 |     0 | N=1 | Prti
-132 |     37 |    37 |    37 |     0 | N=1 | Rjng
-133 |     86 |    86 |    86 |     0 | N=1 | Runr
-134 |     57 |    57 |    57 |     0 | N=1 | Samr
-135 |     32 |    32 |    32 |     0 | N=1 | Sarb
-136 |     48 |    48 |    48 |     0 | N=1 | Shaw
-137 |     91 |    91 |    91 |     0 | N=1 | Shrd
-138 |     73 |    73 |    73 |     0 | N=1 | Sidd
-139 |     69 |    69 |    69 |     0 | N=1 | Sind
-140 |     35 |    35 |    35 |     0 | N=1 | Sora
-141 |     37 |    37 |    37 |     0 | N=1 | Sogd
-142 |     40 |    40 |    40 |     0 | N=1 | Sogo
-143 |     81 |    81 |    81 |     0 | N=1 | Soyo
-144 |     18 |    18 |    18 |     0 | N=1 | Tagb
-145 |     68 |    68 |    68 |     0 | N=1 | Takr
-146 |   6914 |  6914 |  6914 |     0 | N=1 | Tang
-147 |     23 |    23 |    23 |     0 | N=1 | Tglg
-148 |     79 |    79 |    79 |     0 | N=1 | Tirh
-149 |     89 |    89 |    89 |     0 | N=1 | Tnsa
-150 |     31 |    31 |    31 |     0 | N=1 | Toto
-151 |     31 |    31 |    31 |     0 | N=1 | Ugar
-152 |     35 |    35 |    35 |     0 | N=1 | Vith
-153 |     52 |    52 |    52 |     0 | N=1 | Wara
-154 |     50 |    50 |    50 |     0 | N=1 | Xpeo
-155 |   1234 |  1234 |  1234 |     0 | N=1 | Xsux
+ 28 |     61 |    50 |    61 |     0 | N=2 | Thaana
+ 29 |   1194 |     0 |  1194 |     0 | N=0 | Common
+ 30 |     86 |    75 |    86 |     0 | N=1 | Syrc
+ 31 |     54 |    54 |    54 |     0 | N=1 | Nkoo
+ 32 |     29 |    29 |    29 |     0 | N=1 | Phnx
+ 33 |     86 |    86 |    86 |     0 | N=1 | Cher
+ 34 |    723 |   723 |   723 |     0 | N=1 | Cans
+ 35 |     86 |    86 |    86 |     0 | N=1 | Runr
+ 36 |    155 |   155 |   155 |     0 | N=1 | Mong
+ 37 |     66 |    66 |    66 |     0 | N=1 | Limb
+ 38 |     83 |    83 |    83 |     0 | N=1 | Talu
+ 39 |   1094 |  1094 |  1094 |     0 | N=1 | Egyp
+ 40 |     41 |    41 |    41 |     0 | N=1 | Lisu
+ 41 |     80 |    80 |    80 |     0 | N=1 | Cham
+ 42 |     39 |    39 |    39 |     0 | N=1 | Ital
+ 43 |   1234 |  1234 |  1234 |     0 | N=1 | Xsux
+ 44 |     40 |    40 |    40 |     0 | N=1 | Dsrt
+ 45 |     28 |    28 |    28 |     0 | N=1 | Ogam
+ 46 |     23 |    23 |    23 |     0 | N=1 | Tglg
+ 47 |     58 |    58 |    58 |     0 | N=1 | Tfng
+ 48 |    292 |   292 |   292 |     0 | N=1 | Vaii
+ 49 |     89 |    88 |    89 |     0 | N=1 | Java
+ 50 |     75 |    75 |    75 |     0 | N=1 | Copt
+ 51 |     50 |    50 |    50 |     0 | N=1 | Xpeo
+ 52 |     52 |    52 |    52 |     0 | N=1 | Adlm
+ 53 |     85 |    85 |    85 |     0 | N=1 | Bali
+ 54 |    654 |   654 |   654 |     0 | N=1 | Bamu
+ 55 |     56 |    56 |    56 |     0 | N=1 | Batk
+ 56 |     86 |    66 |    86 |     0 | N=1 | Cakm
+ 57 |     71 |    71 |    71 |     0 | N=1 | Hmnp
+ 58 |     46 |    46 |    46 |     0 | N=1 | Kali
+ 59 |    123 |   123 |   123 |     0 | N=1 | Lana
+ 60 |     72 |    72 |    72 |     0 | N=1 | Lepc
+ 61 |     29 |    29 |    29 |     0 | N=1 | Mand
+ 62 |     76 |    76 |    76 |     0 | N=1 | Mtei
+ 63 |     93 |    93 |    93 |     0 | N=1 | Newa
+ 64 |     46 |    46 |    46 |     0 | N=1 | Olck
+ 65 |     36 |    36 |    36 |     0 | N=1 | Osge
+ 66 |    149 |   149 |   149 |     0 | N=1 | Plrd
+ 67 |     50 |    50 |    50 |     0 | N=1 | Rohg
+ 68 |     80 |    80 |    80 |     0 | N=1 | Saur
+ 69 |     72 |    72 |    72 |     0 | N=1 | Sund
+ 70 |     55 |    45 |    55 |     0 | N=1 | Sylo
+ 71 |     45 |    35 |    45 |     0 | N=1 | Tale
+ 72 |     72 |    72 |    72 |     0 | N=1 | Tavt
+ 73 |     59 |    59 |    59 |     0 | N=1 | Wcho
+ 74 |   1221 |  1220 |  1221 |     0 | N=1 | Yiii
+ 75 |     53 |    53 |    53 |     0 | N=1 | Aghb
+ 76 |     62 |    62 |    62 |     0 | N=1 | Ahom
+ 77 |     31 |    31 |    31 |     0 | N=1 | Armi
+ 78 |     61 |    61 |    61 |     0 | N=1 | Avst
+ 79 |     35 |    35 |    35 |     0 | N=1 | Bass
+ 80 |     95 |    95 |    95 |     0 | N=1 | Bhks
+ 81 |    113 |   113 |   113 |     0 | N=1 | Brah
+ 82 |     31 |    30 |    31 |     0 | N=1 | Bugi
+ 83 |     20 |    20 |    20 |     0 | N=1 | Buhd
+ 84 |     49 |    49 |    49 |     0 | N=1 | Cari
+ 85 |     28 |    28 |    28 |     0 | N=1 | Chrs
+ 86 |     99 |    99 |    99 |     0 | N=1 | Cpmn
+ 87 |     55 |    55 |    55 |     0 | N=1 | Cprt
+ 88 |     69 |    69 |    69 |     0 | N=1 | Diak
+ 89 |     70 |    60 |    70 |     0 | N=1 | Dogr
+ 90 |    142 |   142 |   142 |     0 | N=1 | Dupl
+ 91 |     40 |    40 |    40 |     0 | N=1 | Elba
+ 92 |     23 |    23 |    23 |     0 | N=1 | Elym
+ 93 |     86 |    86 |    86 |     0 | N=1 | Glag
+ 94 |     63 |    63 |    63 |     0 | N=1 | Gong
+ 95 |     75 |    75 |    75 |     0 | N=1 | Gonm
+ 96 |     27 |    27 |    27 |     0 | N=1 | Goth
+ 97 |    101 |    80 |   101 |     0 | N=1 | Gran
+ 98 |     21 |    21 |    21 |     0 | N=1 | Hano
+ 99 |     26 |    26 |    26 |     0 | N=1 | Hatr
+100 |    583 |   583 |   583 |     0 | N=1 | Hluw
+101 |    124 |   124 |   124 |     0 | N=1 | Hmng
+102 |     57 |    57 |    57 |     0 | N=1 | Hung
+103 |     84 |    84 |    84 |     0 | N=1 | Kawi
+104 |     60 |    60 |    60 |     0 | N=1 | Khar
+105 |     71 |    61 |    71 |     0 | N=1 | Khoj
+106 |    471 |   471 |   471 |     0 | N=1 | Kits
+107 |     72 |    62 |    72 |     0 | N=1 | Kthi
+108 |     29 |    29 |    29 |     0 | N=1 | Lyci
+109 |     27 |    27 |    27 |     0 | N=1 | Lydi
+110 |     23 |    23 |    23 |     0 | N=1 | Maka
+111 |     49 |    39 |    49 |     0 | N=1 | Mahj
+112 |     51 |    50 |    51 |     0 | N=1 | Mani
+113 |     68 |    68 |    68 |     0 | N=1 | Marc
+114 |     57 |    57 |    57 |     0 | N=1 | Medf
+115 |    213 |   213 |   213 |     0 | N=1 | Mend
+116 |     90 |    90 |    90 |     0 | N=1 | Merc
+117 |     32 |    32 |    32 |     0 | N=1 | Mero
+118 |     77 |    77 |    77 |     0 | N=1 | Modi
+119 |     41 |    41 |    41 |     0 | N=1 | Mroo
+120 |     47 |    37 |    47 |     0 | N=1 | Mult
+121 |     42 |    42 |    42 |     0 | N=1 | Nagm
+122 |     32 |    32 |    32 |     0 | N=1 | Narb
+123 |     76 |    66 |    76 |     0 | N=1 | Nand
+124 |     40 |    40 |    40 |     0 | N=1 | Nbat
+125 |    397 |   397 |   397 |     0 | N=1 | Nshu
+126 |     73 |    73 |    73 |     0 | N=1 | Orkh
+127 |     40 |    40 |    40 |     0 | N=1 | Osma
+128 |     23 |    22 |    23 |     0 | N=1 | Ougr
+129 |     32 |    32 |    32 |     0 | N=1 | Palm
+130 |     57 |    57 |    57 |     0 | N=1 | Pauc
+131 |     43 |    43 |    43 |     0 | N=1 | Perm
+132 |     54 |    54 |    54 |     0 | N=1 | Phag
+133 |     27 |    27 |    27 |     0 | N=1 | Phli
+134 |     29 |    29 |    29 |     0 | N=1 | Phlp
+135 |     30 |    30 |    30 |     0 | N=1 | Prti
+136 |     37 |    37 |    37 |     0 | N=1 | Rjng
+137 |     57 |    57 |    57 |     0 | N=1 | Samr
+138 |     32 |    32 |    32 |     0 | N=1 | Sarb
+139 |     48 |    48 |    48 |     0 | N=1 | Shaw
+140 |     91 |    91 |    91 |     0 | N=1 | Shrd
+141 |     73 |    73 |    73 |     0 | N=1 | Sidd
+142 |     69 |    69 |    69 |     0 | N=1 | Sind
+143 |     35 |    35 |    35 |     0 | N=1 | Sora
+144 |     37 |    37 |    37 |     0 | N=1 | Sogd
+145 |     40 |    40 |    40 |     0 | N=1 | Sogo
+146 |     81 |    81 |    81 |     0 | N=1 | Soyo
+147 |     18 |    18 |    18 |     0 | N=1 | Tagb
+148 |     68 |    68 |    68 |     0 | N=1 | Takr
+149 |   6914 |  6914 |  6914 |     0 | N=1 | Tang
+150 |     79 |    79 |    79 |     0 | N=1 | Tirh
+151 |     89 |    89 |    89 |     0 | N=1 | Tnsa
+152 |     31 |    31 |    31 |     0 | N=1 | Toto
+153 |     31 |    31 |    31 |     0 | N=1 | Ugar
+154 |     35 |    35 |    35 |     0 | N=1 | Vith
+155 |     52 |    52 |    52 |     0 | N=1 | Wara
 156 |     57 |    47 |    57 |     0 | N=1 | Yezi
 157 |     70 |    70 |    70 |     0 | N=1 | Zanb
 ==== NFC Quick Check ====
 Optimized: 2110 => 539
 ==== Write Output ====
-Wrote: spec.json [3125805]
+Wrote: spec.json [3125713]
 Wrote: nf.json [48402]
 Wrote: nf-tests.json [503302]
 Wrote: emoji-info.json [391345]
 Wrote: names.json [3334376]
-Wrote: confused.json [71979]
+Wrote: confused.json [71785]

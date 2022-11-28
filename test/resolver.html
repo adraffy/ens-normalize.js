@@ -532,7 +532,7 @@ footer {
 <button>❌a_b</button>
 
 <a href="./emoji.html"><b>Emoji:</b></a>
-<button id="random_emoji_btn">🎲 Random</button>
+<button id="random_emoji_btn">🎲 <b>Random</b></button>
 <button>©</button>
 <button>🕵</button>
 <button data-name="💩💩💩">💩<sup>3</sup></button>
@@ -624,8 +624,7 @@ Hebrew Geresh:
 <button data-name="0️⃣1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣🔟*️⃣#️⃣">*️⃣-🔟</button>
 
 <a href="https://unicode-org.github.io/cldr-staging/charts/latest/by_type/core_data.alphabetic_information.main.html">Exemplars</a> /
-<a href="https://util.unicode.org/UnicodeJsps/confusables.jsp">Confusables</a> /
-<a href="./confused.html"><b>Confused:</b></a>
+<a href="https://util.unicode.org/UnicodeJsps/confusables.jsp"><b>Confusables:</b></a>
 <button>aα.ɑ</button>
 <button>ஶ்ரீ.ஸ்ரீ</button>
 <button data-name="i.i̇.ı̇">i̇</button>
@@ -694,6 +693,7 @@ Hebrew:
 <div id="controls">
 <div id="arrows" class="hide"><div class="arrows"></div></div>
 <div class="balloon"></div>
+<button id="confused_btn">Confused</button>
 <button id="nf_btn">NFD↔NFC</button>
 <button id="escape_btn">Escape</button>
 <button id="link_btn">Copy Link</button>
@@ -717,10 +717,11 @@ Hebrew:
 <ul class="row links">
 <li><a href="./emoji.html">Find Supported Emoji</a></li>
 <li><a href="./chars.html">Browse Supported Characters</a></li>
-<li><a href="./confused.html">Confused</a>
+<li><a href="./confused.html">Confused Explainer</a>
 <li><a href="https://adraffy.github.io/punycode.js/test/demo.html">Punycode Coder</a></li>
 <li><a href="https://adraffy.github.io/keccak.js/test/demo.html">Keccak Hasher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-regs.html">Recent ENS Registrations</a></li>
+<li><a href="https://raffy.antistupid.com/eth/ens-emoji-freq.html">Emoji Frequency</a></li>
 <li><a href="https://raffy.antistupid.com/eth/emoji-pixels.html">Emoji Pixel Maker</a></li>
 </ul>
 </div>
@@ -860,6 +861,11 @@ document.querySelector('#nf_btn').addEventListener('click', () => {
 		input_field.value = s4;
 		resolve();
 	}
+});
+
+document.querySelector('#confused_btn').addEventListener('click', () => {
+	let s = input_field.value;
+	create_link(`./confused.html#${encodeURIComponent(get_dot_eth_label(s) || s.replaceAll('.', ''))}`).click();
 });
 
 document.querySelector('#escape_btn').addEventListener('click', () => {

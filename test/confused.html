@@ -24,11 +24,11 @@ h1 {
 #links {
 	display: flex;
 	flex-wrap: wrap;
+	align-items: center;
 	gap: 0.2rem 0.5rem;
 }
-#version {
-	float: right;
-	text-align: right;
+#links a.code {
+	font-family: monospace;
 }
 table {
 	border-collapse: collapse;
@@ -168,26 +168,29 @@ footer {
 	margin-top: 1rem;
 	margin-bottom: 0.5rem;
 }
+@media only screen and (max-width: 800px) { 
+	body {
+		margin: 1rem;
+	}
+}
 </style>
 </head>
 <body>
 <header>
-<span id="version">
-<a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a><br>
-<a href="https://github.com/adraffy/ensip-norm">@adraffy/ensip-norm</a>
-</span>
 <h1>Confused</h1>
-</header>
-<main>
 <div id="links">
-<a href="./resolver.html"><b>Resolver</b></a>
+<a id="resolve_a" href="./resolver.html"><b>Resolver</b></a>
+<a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a>
+<a class="code" href="https://github.com/adraffy/ens-normalize.js/blob/main/derive/rules/scripts.js">scripts.js</a>
+<a class="code" href="https://github.com/adraffy/ens-normalize.js/blob/main/derive/rules/confuse.js">confuse.js</a>
+•
 <a href="https://www.unicode.org/reports/tr39/#Whole_Script_Confusables">UAX-39</a>
 <a href="https://www.unicode.org/reports/tr24/">UAX-24</a>
 <a href="https://www.unicode.org/reports/tr31/">UAX-31</a>
-<a href="https://github.com/adraffy/ens-normalize.js/blob/main/derive/data/15.0.0/confusables.txt">confusables.txt</a>
-<a href="https://github.com/adraffy/ens-normalize.js/blob/main/derive/rules/scripts.js">Groups</a>
-<a href="https://github.com/adraffy/ens-normalize.js/blob/main/derive/rules/confuse.js">Confusables</a>
+<a class="code" href="https://github.com/adraffy/ens-normalize.js/blob/main/derive/data/15.0.0/confusables.txt">confusables.txt</a>
 </div>
+</header>
+<main>
 <div id="examples">
 <button>0х</button>
 <button>тӕ</button>
@@ -227,6 +230,7 @@ const output_div = document.querySelector('#output');
 const exploded_div = document.querySelector('#exploded');
 const norm_check = document.querySelector('#norm_check');
 const examples_div = document.querySelector('#examples');
+const resolve_a = document.querySelector('#resolve_a');
 const readme_dom = [...output_div.childNodes];
 
 let wholes;
@@ -336,6 +340,12 @@ for (let btn of examples_div.querySelectorAll('button')) {
 	});
 }
 
+resolve_a.addEventListener('pointerdown', () => {
+	let url = './resolver.html';
+	let value = input_field.value;
+	if (!value.includes(':')) url += `#${encodeURIComponent(value)}`;
+	resolve_a.href = url;
+});
 input_field.addEventListener('input', update);
 norm_check.addEventListener('input', update);
 window.addEventListener('hashchange', check_hash);

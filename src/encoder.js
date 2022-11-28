@@ -1,4 +1,4 @@
-import {compare_arrays, explode_cp} from './utils.js'; 
+import {compare_arrays} from './utils.js'; 
 
 // group list into collection
 // [1, 2, 2, 3] + odd => [odd:[1,3], even:[2,2]]
