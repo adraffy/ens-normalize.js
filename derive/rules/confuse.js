@@ -1,6 +1,10 @@
 export const CONFUSE_TYPE_ALLOW = 'allow';
 export const CONFUSE_TYPE_VALID = 'primary';
 
+// notes:
+// - arabic digit confusables are deemed valid
+// - upper/lower case ASCII confusables are merged
+
 // markup convenience
 function valid(cp) { return {cp, type: CONFUSE_TYPE_VALID}; }
 function allow(cp) { return {cp, type: CONFUSE_TYPE_ALLOW}; } 
@@ -5844,20 +5848,20 @@ export const CONFUSE_GROUPS = [
 		0x1D0F, // (ᴏ) LATIN LETTER SMALL CAPITAL O [Latn]=>[Latn]
 		0x1D11, // (ᴑ) LATIN SMALL LETTER SIDEWAYS O [Latn]=>[Latn]
 		0xAB3D, // (ꬽ) LATIN SMALL LETTER BLACKLETTER O [Latn]=>[Latn]
-		0x3BF, // (ο) GREEK SMALL LETTER OMICRON [Grek]=>[Grek]
+		allow(0x3BF), // (ο) GREEK SMALL LETTER OMICRON [Grek]=>[Grek]
 		//IDNA:0x1D6D0, // (𝛐) MATHEMATICAL BOLD SMALL OMICRON [Zyyy]=>[ALL]
 		//IDNA:0x1D70A, // (𝜊) MATHEMATICAL ITALIC SMALL OMICRON [Zyyy]=>[ALL]
 		//IDNA:0x1D744, // (𝝄) MATHEMATICAL BOLD ITALIC SMALL OMICRON [Zyyy]=>[ALL]
 		//IDNA:0x1D77E, // (𝝾) MATHEMATICAL SANS-SERIF BOLD SMALL OMICRON [Zyyy]=>[ALL]
 		//IDNA:0x1D7B8, // (𝞸) MATHEMATICAL SANS-SERIF BOLD ITALIC SMALL OMICRON [Zyyy]=>[ALL]
-		0x3C3, // (σ) GREEK SMALL LETTER SIGMA [Grek]=>[Grek]
+		allow(0x3C3), // (σ) GREEK SMALL LETTER SIGMA [Grek]=>[Grek]
 		//IDNA:0x1D6D4, // (𝛔) MATHEMATICAL BOLD SMALL SIGMA [Zyyy]=>[ALL]
 		//IDNA:0x1D70E, // (𝜎) MATHEMATICAL ITALIC SMALL SIGMA [Zyyy]=>[ALL]
 		//IDNA:0x1D748, // (𝝈) MATHEMATICAL BOLD ITALIC SMALL SIGMA [Zyyy]=>[ALL]
 		//IDNA:0x1D782, // (𝞂) MATHEMATICAL SANS-SERIF BOLD SMALL SIGMA [Zyyy]=>[ALL]
 		//IDNA:0x1D7BC, // (𝞼) MATHEMATICAL SANS-SERIF BOLD ITALIC SMALL SIGMA [Zyyy]=>[ALL]
 		0x2C9F, // (ⲟ) COPTIC SMALL LETTER O [Copt]=>[Copt]
-		0x43E, // (о) CYRILLIC SMALL LETTER O [Cyrl]=>[Cyrl]
+		allow(0x43E), // (о) CYRILLIC SMALL LETTER O [Cyrl]=>[Cyrl]
 		0x10FF, // (ჿ) GEORGIAN LETTER LABIAL SIGN [Geor]=>[Geor]
 		0x585, // (օ) ARMENIAN SMALL LETTER OH [Armn]=>[Armn]
 		0x5E1, // (ס) HEBREW LETTER SAMEKH [Hebr]=>[Hebr]
@@ -6969,7 +6973,7 @@ export const CONFUSE_GROUPS = [
 		//'56', // LATIN CAPITAL LETTER V [Latn]=>[Latn]
 		//IDNA:0x56, // (V) LATIN CAPITAL LETTER V [Latn]=>[Latn]
 		0x1D20D, // (𝈍) GREEK VOCAL NOTATION SYMBOL-14 [Grek]=>[Grek]
-		0x667, // (٧) ARABIC-INDIC DIGIT SEVEN [Arab]=>[Arab,Thaa,Yezi]
+		valid(0x667), // (٧) ARABIC-INDIC DIGIT SEVEN [Arab]=>[Arab,Thaa,Yezi]
 		0x6F7, // (۷) EXTENDED ARABIC-INDIC DIGIT SEVEN [Arab]=>[Arab]
 		//IDNA:0x2164, // (Ⅴ) ROMAN NUMERAL FIVE [Latn]=>[Latn]
 		//IDNA:0x1D415, // (𝐕) MATHEMATICAL BOLD CAPITAL V [Zyyy]=>[ALL]

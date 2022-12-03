@@ -463,7 +463,7 @@ for (let [target, ...defs0] of CONFUSE_GROUPS) {
 			default: throw new Error(`Unknown confusable type "${type}": ${PRINTER.desc_for_cp(cp)}`);
 		}
 		// find the groups that COULD contain this character
-		let groups = script_groups.filter(g => g.parts.has(cp));;		
+		let groups = script_groups.filter(g => g.parts.has(cp));
 		// filter groups that allow cms
 		// TODO: not really sure how to handle confusable-cms
 		if (UNICODE.cm.has(cp)) {
@@ -529,7 +529,7 @@ for (let [target, ...defs0] of CONFUSE_GROUPS) {
 		bucket.push(g);
 
 		// there are 2 more confusables without a decision
-		// for the same group 		
+		// for the same group
 		for (let def of confuse) {
 			if (CONFUSE_DEFAULT_ALLOW) {
 				//g.register_whole(def.cp, union);

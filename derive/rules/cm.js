@@ -62,6 +62,7 @@ export const CM_WHITELIST = [
 
 	'š', // 161 (š) LATIN SMALL LETTER S WITH CARON
 	'ś', // 15B (ś) LATIN SMALL LETTER S WITH ACUTE (20221202: added for polish)
+	'ş', // 15F (ş) LATIN SMALL LETTER S WITH CEDILLA (20221202: added for azur/kurd/)
 
 	'ù', // F9 (ù) LATIN SMALL LETTER U WITH GRAVE
 	'ú', // FA (ú) LATIN SMALL LETTER U WITH ACUTE
