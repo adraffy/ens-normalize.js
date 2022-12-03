@@ -18,7 +18,7 @@ export function print_table(cols, m, sep = ' | ') {
 			if (typeof x === 'number') {
 				return x.toString().padStart(w);
 			} else {
-				return x;
+				return x.toString().padEnd(w);
 			}
 		}).join(sep));
 	}

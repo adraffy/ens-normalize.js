@@ -94,7 +94,8 @@
 	{"name": "\u06F0\u06F1\u06F2\u06F3\u06F8\u06F9", "norm": "\u0660\u0661\u0662\u0663\u0668\u0669", "comment": "Arabic Mapping"},
 
 	{"name": "тӕ", "comment": "confuse"},
-	{"name": "ᎫᏦᎥ", "comment": "confuse"},
+	{"name": "ᎫᏦᎥ", "error": true, "comment": "confuse"},
+	{"name": "ꓖꓳꓓ", "error": true, "comment": "confuse"},
 	{"name": "0x𐱅𐰇𐰼𐰰", "error": true, "comment": "confuse"},
 	{"name": "аррӏе", "error": true, "comment": "confuse"},
 	{"name": "ଠ୦୨\u0B01", "error": true, "comment": "confuse"},

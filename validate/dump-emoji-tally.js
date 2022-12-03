@@ -1,13 +1,14 @@
 // computes snapshot for ens-emoji-freq.html
 // https://raffy.antistupid.com/eth/ens-emoji-freq.html
 
-import {writeFileSync} from 'node:fs';
+import {readFileSync, writeFileSync} from 'node:fs';
 import {read_labels} from './data.js';
 import {ens_beautify, ens_emoji, ens_normalize, ens_tokenize} from '../src/lib.js';
 import {hex_seq, explode_cp, group_by} from '../derive/utils.js';
 //import {random_sample} from '../src/utils.js';
 
-let labels = read_labels();
+//let labels = read_labels();
+let labels = JSON.parse(readFileSync(new URL('../../ens-labels/labels.json', import.meta.url)));
 let tally = new Map(ens_emoji().map(cps => {
 	let form = String.fromCodePoint(...cps);
 	return [form, {form, names: []}];

@@ -1,4 +1,4 @@
-Build Date: 2022-11-28T06:03:32.547Z
+Build Date: 2022-12-03T08:11:59.922Z
 Unicode Version: 15.0.0 (2022-10-23T06:00:57.990Z)
 CLDR Version: 42 (2022-11-04T04:55:37.180Z)
 ==== RGI Emoji ZWJ Sequences ====
@@ -11123,7 +11123,8 @@ Disallowed Script: [Sgnw] SignWriting [X]
 [101] (ā) LATIN SMALL LETTER A WITH MACRON <0> "a+◌̄" [Latin]
 [E4] (ä) LATIN SMALL LETTER A WITH DIAERESIS <0> "a+◌̈" [Latin]
 [E5] (å) LATIN SMALL LETTER A WITH RING ABOVE <0> "a+◌̊" [Latin]
-[1CE] (ǎ) LATIN SMALL LETTER A WITH CARON <0> "a+◌̌" [Latin]
+[103] (ă) LATIN SMALL LETTER A WITH BREVE <0> "a+◌̆" [Latin]
+[105] (ą) LATIN SMALL LETTER A WITH OGONEK <0> "a+◌̨" [Latin]
 [107] (ć) LATIN SMALL LETTER C WITH ACUTE <0> "c+◌́" [Latin]
 [109] (ĉ) LATIN SMALL LETTER C WITH CIRCUMFLEX <0> "c+◌̂" [Latin]
 [10D] (č) LATIN SMALL LETTER C WITH CARON <0> "c+◌̌" [Latin]
@@ -11135,6 +11136,8 @@ Disallowed Script: [Sgnw] SignWriting [X]
 [113] (ē) LATIN SMALL LETTER E WITH MACRON <0> "e+◌̄" [Latin]
 [EB] (ë) LATIN SMALL LETTER E WITH DIAERESIS <0> "e+◌̈" [Latin]
 [11B] (ě) LATIN SMALL LETTER E WITH CARON <0> "e+◌̌" [Latin]
+[119] (ę) LATIN SMALL LETTER E WITH OGONEK <0> "e+◌̨" [Latin]
+[11F] (ğ) LATIN SMALL LETTER G WITH BREVE <0> "g+◌̆" [Latin]
 [EC] (ì) LATIN SMALL LETTER I WITH GRAVE <0> "i+◌̀" [Latin]
 [ED] (í) LATIN SMALL LETTER I WITH ACUTE <0> "i+◌́" [Latin]
 [EE] (î) LATIN SMALL LETTER I WITH CIRCUMFLEX <0> "i+◌̂" [Latin]
@@ -11151,6 +11154,7 @@ Disallowed Script: [Sgnw] SignWriting [X]
 [1D2] (ǒ) LATIN SMALL LETTER O WITH CARON <0> "o+◌̌" [Latin]
 [14D] (ō) LATIN SMALL LETTER O WITH MACRON <0> "o+◌̄" [Latin]
 [161] (š) LATIN SMALL LETTER S WITH CARON <0> "s+◌̌" [Latin]
+[15B] (ś) LATIN SMALL LETTER S WITH ACUTE <0> "s+◌́" [Latin]
 [F9] (ù) LATIN SMALL LETTER U WITH GRAVE <0> "u+◌̀" [Latin]
 [FA] (ú) LATIN SMALL LETTER U WITH ACUTE <0> "u+◌́" [Latin]
 [FB] (û) LATIN SMALL LETTER U WITH CIRCUMFLEX <0> "u+◌̂" [Latin]
@@ -11158,7 +11162,10 @@ Disallowed Script: [Sgnw] SignWriting [X]
 [1D4] (ǔ) LATIN SMALL LETTER U WITH CARON <0> "u+◌̌" [Latin]
 [16B] (ū) LATIN SMALL LETTER U WITH MACRON <0> "u+◌̄" [Latin]
 [FD] (ý) LATIN SMALL LETTER Y WITH ACUTE <0> "y+◌́" [Latin]
+[1EF3] (ỳ) LATIN SMALL LETTER Y WITH GRAVE <0> "y+◌̀" [Latin]
 [17E] (ž) LATIN SMALL LETTER Z WITH CARON <0> "z+◌̌" [Latin]
+[17A] (ź) LATIN SMALL LETTER Z WITH ACUTE <0> "z+◌́" [Latin]
+[17C] (ż) LATIN SMALL LETTER Z WITH DOT ABOVE <0> "z+◌̇" [Latin]
 [3AC] (ά) GREEK SMALL LETTER ALPHA WITH TONOS <0> "α+◌́" [Greek]
 [3AD] (έ) GREEK SMALL LETTER EPSILON WITH TONOS <0> "ε+◌́" [Greek]
 [3AE] (ή) GREEK SMALL LETTER ETA WITH TONOS <0> "η+◌́" [Greek]
@@ -11239,17 +11246,13 @@ Disallowed Script: [Sgnw] SignWriting [X]
 ==== Purge CM: Japanese (2) ====
 3099 (◌゙) COMBINING KATAKANA-HIRAGANA VOICED SOUND MARK
 309A (◌゚) COMBINING KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK
-==== Purge CM: Latin (217) ====
+==== Purge CM: Latin (210) ====
 FF (ÿ) LATIN SMALL LETTER Y WITH DIAERESIS
-103 (ă) LATIN SMALL LETTER A WITH BREVE
-105 (ą) LATIN SMALL LETTER A WITH OGONEK
 10B (ċ) LATIN SMALL LETTER C WITH DOT ABOVE
 10F (ď) LATIN SMALL LETTER D WITH CARON
 115 (ĕ) LATIN SMALL LETTER E WITH BREVE
 117 (ė) LATIN SMALL LETTER E WITH DOT ABOVE
-119 (ę) LATIN SMALL LETTER E WITH OGONEK
 11D (ĝ) LATIN SMALL LETTER G WITH CIRCUMFLEX
-11F (ğ) LATIN SMALL LETTER G WITH BREVE
 121 (ġ) LATIN SMALL LETTER G WITH DOT ABOVE
 123 (ģ) LATIN SMALL LETTER G WITH CEDILLA
 125 (ĥ) LATIN SMALL LETTER H WITH CIRCUMFLEX
@@ -11269,7 +11272,6 @@ FF (ÿ) LATIN SMALL LETTER Y WITH DIAERESIS
 155 (ŕ) LATIN SMALL LETTER R WITH ACUTE
 157 (ŗ) LATIN SMALL LETTER R WITH CEDILLA
 159 (ř) LATIN SMALL LETTER R WITH CARON
-15B (ś) LATIN SMALL LETTER S WITH ACUTE
 15D (ŝ) LATIN SMALL LETTER S WITH CIRCUMFLEX
 15F (ş) LATIN SMALL LETTER S WITH CEDILLA
 163 (ţ) LATIN SMALL LETTER T WITH CEDILLA
@@ -11281,10 +11283,9 @@ FF (ÿ) LATIN SMALL LETTER Y WITH DIAERESIS
 173 (ų) LATIN SMALL LETTER U WITH OGONEK
 175 (ŵ) LATIN SMALL LETTER W WITH CIRCUMFLEX
 177 (ŷ) LATIN SMALL LETTER Y WITH CIRCUMFLEX
-17A (ź) LATIN SMALL LETTER Z WITH ACUTE
-17C (ż) LATIN SMALL LETTER Z WITH DOT ABOVE
 1A1 (ơ) LATIN SMALL LETTER O WITH HORN
 1B0 (ư) LATIN SMALL LETTER U WITH HORN
+1CE (ǎ) LATIN SMALL LETTER A WITH CARON
 1D6 (ǖ) LATIN SMALL LETTER U WITH DIAERESIS AND MACRON
 1D8 (ǘ) LATIN SMALL LETTER U WITH DIAERESIS AND ACUTE
 1DA (ǚ) LATIN SMALL LETTER U WITH DIAERESIS AND CARON
@@ -11453,7 +11454,6 @@ FF (ÿ) LATIN SMALL LETTER Y WITH DIAERESIS
 1EED (ử) LATIN SMALL LETTER U WITH HORN AND HOOK ABOVE
 1EEF (ữ) LATIN SMALL LETTER U WITH HORN AND TILDE
 1EF1 (ự) LATIN SMALL LETTER U WITH HORN AND DOT BELOW
-1EF3 (ỳ) LATIN SMALL LETTER Y WITH GRAVE
 1EF5 (ỵ) LATIN SMALL LETTER Y WITH DOT BELOW
 1EF7 (ỷ) LATIN SMALL LETTER Y WITH HOOK ABOVE
 1EF9 (ỹ) LATIN SMALL LETTER Y WITH TILDE
@@ -11682,42 +11682,50 @@ Override: 967 (१) DEVANAGARI DIGIT ONE [Devanagari,Dogr,Kthi,Mahj]
 Override: 61 (a) LATIN SMALL LETTER A [Japanese,Korean,Han,Latin]
 Override: E6 (æ) LATIN SMALL LETTER AE [Latin]
 Override: 62 (b) LATIN SMALL LETTER B [Japanese,Korean,Han,Latin]
-Unresolved: [Cans] 1472 (ᑲ) CANADIAN SYLLABICS KA vs 15AF (ᖯ) CANADIAN SYLLABICS AIVILIK B
+Unresolved: [Cher] 13CF (Ꮟ) CHEROKEE LETTER SI vs 13F4 (Ᏼ) CHEROKEE LETTER YV
+Unresolved: [Cans] 1472 (ᑲ) CANADIAN SYLLABICS KA vs 15AF (ᖯ) CANADIAN SYLLABICS AIVILIK B vs 15F7 (ᗷ) CANADIAN SYLLABICS CARRIER KHE
 Override: 63 (c) LATIN SMALL LETTER C [Japanese,Korean,Han,Latin]
 Unresolved: [Wara] 118E9 (𑣩) WARANG CITI DIGIT NINE vs 118F2 (𑣲) WARANG CITI NUMBER NINETY
 Override: E7 (ç) LATIN SMALL LETTER C WITH CEDILLA [Latin]
 Override: 64 (d) LATIN SMALL LETTER D [Japanese,Korean,Han,Latin]
-Unresolved: [Cans] 15DE (ᗞ) CANADIAN SYLLABICS CARRIER THE vs 15EA (ᗪ) CANADIAN SYLLABICS CARRIER PE
+Unresolved: [Cher] 13A0 (Ꭰ) CHEROKEE LETTER A vs 13E7 (Ꮷ) CHEROKEE LETTER TSU
+Unresolved: [Cans] 146F (ᑯ) CANADIAN SYLLABICS KO vs 15DE (ᗞ) CANADIAN SYLLABICS CARRIER THE vs 15EA (ᗪ) CANADIAN SYLLABICS CARRIER PE
+Unresolved: [Lisu] A4D2 (ꓒ) LISU LETTER PHA vs A4D3 (ꓓ) LISU LETTER DA
 Override: 65 (e) LATIN SMALL LETTER E [Japanese,Korean,Han,Latin]
 Unresolved: [Cyrillic] 435 (е) CYRILLIC SMALL LETTER IE vs 4BD (ҽ) CYRILLIC SMALL LETTER ABKHASIAN CHE
 Override: 66 (f) LATIN SMALL LETTER F [Japanese,Korean,Han,Latin]
 Override: 67 (g) LATIN SMALL LETTER G [Japanese,Korean,Han,Latin]
 Unresolved: [Cher] 13C0 (Ꮐ) CHEROKEE LETTER NAH vs 13F3 (Ᏻ) CHEROKEE LETTER YU
 Override: 68 (h) LATIN SMALL LETTER H [Japanese,Korean,Han,Latin]
+Unresolved: [Cher] 13BB (Ꮋ) CHEROKEE LETTER MI vs 13C2 (Ꮒ) CHEROKEE LETTER NI
 Unresolved: [Cyrillic] 4C8 (ӈ) CYRILLIC SMALL LETTER EN WITH HOOK vs 4CA (ӊ) CYRILLIC SMALL LETTER EN WITH TAIL
 Unresolved: [Cher] 13A8 (Ꭸ) CHEROKEE LETTER GE vs 13B0 (Ꮀ) CHEROKEE LETTER HO
 Override: 69 (i) LATIN SMALL LETTER I [Japanese,Korean,Han,Latin]
 Override: 6A (j) LATIN SMALL LETTER J [Japanese,Korean,Han,Latin]
+Override: 6B (k) LATIN SMALL LETTER K [Japanese,Korean,Han,Latin]
 Override: 6C (l) LATIN SMALL LETTER L [Japanese,Korean,Han,Latin]
 Override: 31 (1) DIGIT ONE [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common]
 Override: 661 (١) ARABIC-INDIC DIGIT ONE [Arabic,Thaana,Yezi]
 Unresolved: [Ital] 10309 (𐌉) OLD ITALIC LETTER I vs 10320 (𐌠) OLD ITALIC NUMERAL ONE
 Unresolved: [Hebrew] 5D5 (ו) HEBREW LETTER VAV vs 5DF (ן) HEBREW LETTER FINAL NUN
+Unresolved: [Lisu] A4E1 (ꓡ) LISU LETTER LA vs A4F2 (ꓲ) LISU LETTER I
+Unresolved: [Plrd] 16F16 (𖼖) MIAO LETTER LA vs 16F28 (𖼨) MIAO LETTER GHA
+Override: 6D (m) LATIN SMALL LETTER M [Japanese,Korean,Han,Latin]
 Override: 6E (n) LATIN SMALL LETTER N [Japanese,Korean,Han,Latin]
 Unresolved: [Armenian] 578 (ո) ARMENIAN SMALL LETTER VO vs 57C (ռ) ARMENIAN SMALL LETTER RA
 Auto-Override: 438 (и) CYRILLIC SMALL LETTER I [Cyrillic vs Dsrt]
 Override: 6F (o) LATIN SMALL LETTER O [Japanese,Korean,Han,Latin]
 Override: 665 (٥) ARABIC-INDIC DIGIT FIVE [Arabic,Thaana,Yezi]
 Override: 6F5 (۵) EXTENDED ARABIC-INDIC DIGIT FIVE [Arabic]
+Override: 30 (0) DIGIT ZERO [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common]
+Override: 3007 (〇) IDEOGRAPHIC NUMBER ZERO [Japanese,Korean,Han,Bopomofo]
 Unresolved: [Telugu] C02 (◌ం) TELUGU SIGN ANUSVARA vs C66 (౦) TELUGU DIGIT ZERO
 Unresolved: [Kannada] C82 (◌ಂ) KANNADA SIGN ANUSVARA vs CE6 (೦) KANNADA DIGIT ZERO
 Unresolved: [Malayalam] D02 (◌ം) MALAYALAM SIGN ANUSVARA vs D20 (ഠ) MALAYALAM LETTER TTHA vs D66 (൦) MALAYALAM DIGIT ZERO
 Unresolved: [Myanmar] 101D (ဝ) MYANMAR LETTER WA vs 1040 (၀) MYANMAR DIGIT ZERO
-Unresolved: [Greek] 3BF (ο) GREEK SMALL LETTER OMICRON vs 3C3 (σ) GREEK SMALL LETTER SIGMA
-Unresolved: [Wara] 118C8 (𑣈) WARANG CITI SMALL LETTER E vs 118D7 (𑣗) WARANG CITI SMALL LETTER BU
+Unresolved: [Cakm] 9E6 (০) BENGALI DIGIT ZERO vs 1040 (၀) MYANMAR DIGIT ZERO
+Unresolved: [Wara] 118C8 (𑣈) WARANG CITI SMALL LETTER E vs 118D7 (𑣗) WARANG CITI SMALL LETTER BU vs 118E0 (𑣠) WARANG CITI DIGIT ZERO
 Unresolved: [Talu] 199E (ᦞ) NEW TAI LUE LETTER LOW VA vs 19D0 (᧐) NEW TAI LUE DIGIT ZERO
-Override: 30 (0) DIGIT ZERO [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common]
-Override: 3007 (〇) IDEOGRAPHIC NUMBER ZERO [Japanese,Korean,Han,Bopomofo]
 Unresolved: [Oriya] B20 (ଠ) ORIYA LETTER TTHA vs B66 (୦) ORIYA DIGIT ZERO
 Auto-Override: 3B8 (θ) GREEK SMALL LETTER THETA [Greek vs Tfng,Cher]
 Unresolved: [Cher] 13BE (Ꮎ) CHEROKEE LETTER NA vs 13EB (Ꮻ) CHEROKEE LETTER WI
@@ -11727,28 +11735,29 @@ Override: 71 (q) LATIN SMALL LETTER Q [Japanese,Korean,Han,Latin]
 Unresolved: [Armenian] 563 (գ) ARMENIAN SMALL LETTER GIM vs 566 (զ) ARMENIAN SMALL LETTER ZA
 Override: 72 (r) LATIN SMALL LETTER R [Japanese,Korean,Han,Latin]
 Unresolved: [Cher] 13A1 (Ꭱ) CHEROKEE LETTER E vs 13D2 (Ꮢ) CHEROKEE LETTER SV
-Override: 6D (m) LATIN SMALL LETTER M [Japanese,Korean,Han,Latin]
 Override: 73 (s) LATIN SMALL LETTER S [Japanese,Korean,Han,Latin]
 Unresolved: [Cher] 13D5 (Ꮥ) CHEROKEE LETTER DE vs 13DA (Ꮪ) CHEROKEE LETTER DU
 Override: DF (ß) LATIN SMALL LETTER SHARP S [Latin]
 Auto-Override: 2211 (∑) N-ARY SUMMATION [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common vs Tfng]
+Override: 74 (t) LATIN SMALL LETTER T [Japanese,Korean,Han,Latin]
 Override: 75 (u) LATIN SMALL LETTER U [Japanese,Korean,Han,Latin]
-Auto-Override: 1200 (ሀ) ETHIOPIC SYLLABLE HA [Ethiopic vs Cans,Lisu,Plrd]
 Unresolved: [Cans] 162E (ᘮ) CANADIAN SYLLABICS CARRIER LHU vs 1634 (ᘴ) CANADIAN SYLLABICS CARRIER TLHU
 Override: 76 (v) LATIN SMALL LETTER V [Japanese,Korean,Han,Latin]
-Auto-Override: 667 (٧) ARABIC-INDIC DIGIT SEVEN [Arabic,Thaana,Yezi vs Tfng,Cher,Cans,Bamu,Lisu,Plrd,Elba]
 Auto-Override: 668 (٨) ARABIC-INDIC DIGIT EIGHT [Arabic,Thaana,Yezi vs Tfng,Cans,Bamu,Lisu,Plrd,Lyci]
 Override: 77 (w) LATIN SMALL LETTER W [Japanese,Korean,Han,Latin]
 Unresolved: [Ahom] 1170A (𑜊) AHOM LETTER JA vs 1170E (𑜎) AHOM LETTER LA vs 1170F (𑜏) AHOM LETTER SA
 Unresolved: [Wara] 118E6 (𑣦) WARANG CITI DIGIT SIX vs 118EF (𑣯) WARANG CITI NUMBER SIXTY
 Unresolved: [Cher] 13B3 (Ꮃ) CHEROKEE LETTER LA vs 13D4 (Ꮤ) CHEROKEE LETTER TA
 Override: 78 (x) LATIN SMALL LETTER X [Japanese,Korean,Han,Latin]
-Unresolved: [Cans] 1541 (ᕁ) CANADIAN SYLLABICS SAYISI YI vs 157D (ᕽ) CANADIAN SYLLABICS HK
+Unresolved: [Cyrillic] 445 (х) CYRILLIC SMALL LETTER HA vs 4B3 (ҳ) CYRILLIC SMALL LETTER HA WITH DESCENDER
+Unresolved: [Cans] 1541 (ᕁ) CANADIAN SYLLABICS SAYISI YI vs 157D (ᕽ) CANADIAN SYLLABICS HK vs 166D (᙭) CANADIAN SYLLABICS CHI SIGN
 Unresolved: [Ital] 10317 (𐌗) OLD ITALIC LETTER EKS vs 10322 (𐌢) OLD ITALIC NUMERAL TEN
 Override: 79 (y) LATIN SMALL LETTER Y [Japanese,Korean,Han,Latin]
+Unresolved: [Cyrillic] 443 (у) CYRILLIC SMALL LETTER U vs 4AF (ү) CYRILLIC SMALL LETTER STRAIGHT U
 Unresolved: [Cher] 13A9 (Ꭹ) CHEROKEE LETTER GI vs 13BD (Ꮍ) CHEROKEE LETTER MU
 Auto-Override: 4E1 (ӡ) CYRILLIC SMALL LETTER ABKHASIAN DZE [Cyrillic vs Copt]
 Override: 7A (z) LATIN SMALL LETTER Z [Japanese,Korean,Han,Latin]
+Unresolved: [Wara] 118C4 (𑣄) WARANG CITI SMALL LETTER YA vs 118E5 (𑣥) WARANG CITI DIGIT FIVE
 Auto-Override: 2609 (☉) SUN [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common vs Tfng]
 Auto-Override: 25B3 (△) WHITE UP-POINTING TRIANGLE [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common vs Tfng,Cans,Plrd,Lyci,Cari]
 Auto-Override: 3BB (λ) GREEK SMALL LETTER LAMDA [Greek vs Osge]
@@ -12080,15 +12089,11 @@ Unresolved: [Japanese,Korean,Han,Bopomofo] 2EEE (⻮) CJK RADICAL C-SIMPLIFIED T
 Unresolved: [Japanese,Korean,Han,Bopomofo] 2EF0 (⻰) CJK RADICAL C-SIMPLIFIED DRAGON vs 9F99 (龙) CJK Ideograph-9F99 [20890/20992]
 ==== Disallow Leftover Characters ====
 Removed Valid: FF (ÿ) LATIN SMALL LETTER Y WITH DIAERESIS
-Removed Valid: 103 (ă) LATIN SMALL LETTER A WITH BREVE
-Removed Valid: 105 (ą) LATIN SMALL LETTER A WITH OGONEK
 Removed Valid: 10B (ċ) LATIN SMALL LETTER C WITH DOT ABOVE
 Removed Valid: 10F (ď) LATIN SMALL LETTER D WITH CARON
 Removed Valid: 115 (ĕ) LATIN SMALL LETTER E WITH BREVE
 Removed Valid: 117 (ė) LATIN SMALL LETTER E WITH DOT ABOVE
-Removed Valid: 119 (ę) LATIN SMALL LETTER E WITH OGONEK
 Removed Valid: 11D (ĝ) LATIN SMALL LETTER G WITH CIRCUMFLEX
-Removed Valid: 11F (ğ) LATIN SMALL LETTER G WITH BREVE
 Removed Valid: 121 (ġ) LATIN SMALL LETTER G WITH DOT ABOVE
 Removed Valid: 123 (ģ) LATIN SMALL LETTER G WITH CEDILLA
 Removed Valid: 125 (ĥ) LATIN SMALL LETTER H WITH CIRCUMFLEX
@@ -12108,7 +12113,6 @@ Removed Valid: 151 (ő) LATIN SMALL LETTER O WITH DOUBLE ACUTE
 Removed Valid: 155 (ŕ) LATIN SMALL LETTER R WITH ACUTE
 Removed Valid: 157 (ŗ) LATIN SMALL LETTER R WITH CEDILLA
 Removed Valid: 159 (ř) LATIN SMALL LETTER R WITH CARON
-Removed Valid: 15B (ś) LATIN SMALL LETTER S WITH ACUTE
 Removed Valid: 15D (ŝ) LATIN SMALL LETTER S WITH CIRCUMFLEX
 Removed Valid: 15F (ş) LATIN SMALL LETTER S WITH CEDILLA
 Removed Valid: 163 (ţ) LATIN SMALL LETTER T WITH CEDILLA
@@ -12120,10 +12124,9 @@ Removed Valid: 171 (ű) LATIN SMALL LETTER U WITH DOUBLE ACUTE
 Removed Valid: 173 (ų) LATIN SMALL LETTER U WITH OGONEK
 Removed Valid: 175 (ŵ) LATIN SMALL LETTER W WITH CIRCUMFLEX
 Removed Valid: 177 (ŷ) LATIN SMALL LETTER Y WITH CIRCUMFLEX
-Removed Valid: 17A (ź) LATIN SMALL LETTER Z WITH ACUTE
-Removed Valid: 17C (ż) LATIN SMALL LETTER Z WITH DOT ABOVE
 Removed Valid: 1A1 (ơ) LATIN SMALL LETTER O WITH HORN
 Removed Valid: 1B0 (ư) LATIN SMALL LETTER U WITH HORN
+Removed Valid: 1CE (ǎ) LATIN SMALL LETTER A WITH CARON
 Removed Valid: 1D6 (ǖ) LATIN SMALL LETTER U WITH DIAERESIS AND MACRON
 Removed Valid: 1D8 (ǘ) LATIN SMALL LETTER U WITH DIAERESIS AND ACUTE
 Removed Valid: 1DA (ǚ) LATIN SMALL LETTER U WITH DIAERESIS AND CARON
@@ -12160,14 +12163,13 @@ Removed Valid: 22F (ȯ) LATIN SMALL LETTER O WITH DOT ABOVE
 Removed Valid: 231 (ȱ) LATIN SMALL LETTER O WITH DOT ABOVE AND MACRON
 Removed Valid: 233 (ȳ) LATIN SMALL LETTER Y WITH MACRON
 Removed Valid: 305 (◌̅) COMBINING OVERLINE
-Removed Valid: 307 (◌̇) COMBINING DOT ABOVE
 Removed Valid: 309 (◌̉) COMBINING HOOK ABOVE
 Removed Valid: 30B (◌̋) COMBINING DOUBLE ACUTE ACCENT
+Removed Valid: 3C3 (σ) GREEK SMALL LETTER SIGMA
+Removed Valid: 43E (о) CYRILLIC SMALL LETTER O
 Removed Valid: 450 (ѐ) CYRILLIC SMALL LETTER IE WITH GRAVE
 Removed Valid: 45D (ѝ) CYRILLIC SMALL LETTER I WITH GRAVE
 Removed Valid: 477 (ѷ) CYRILLIC SMALL LETTER IZHITSA WITH DOUBLE GRAVE ACCENT
-Removed Valid: 4AF (ү) CYRILLIC SMALL LETTER STRAIGHT U
-Removed Valid: 4B3 (ҳ) CYRILLIC SMALL LETTER HA WITH DESCENDER
 Removed Valid: 4C2 (ӂ) CYRILLIC SMALL LETTER ZHE WITH BREVE
 Removed Valid: 4D1 (ӑ) CYRILLIC SMALL LETTER A WITH BREVE
 Removed Valid: 4D3 (ӓ) CYRILLIC SMALL LETTER A WITH DIAERESIS
@@ -12334,7 +12336,6 @@ Removed Valid: 1EEB (ừ) LATIN SMALL LETTER U WITH HORN AND GRAVE
 Removed Valid: 1EED (ử) LATIN SMALL LETTER U WITH HORN AND HOOK ABOVE
 Removed Valid: 1EEF (ữ) LATIN SMALL LETTER U WITH HORN AND TILDE
 Removed Valid: 1EF1 (ự) LATIN SMALL LETTER U WITH HORN AND DOT BELOW
-Removed Valid: 1EF3 (ỳ) LATIN SMALL LETTER Y WITH GRAVE
 Removed Valid: 1EF5 (ỵ) LATIN SMALL LETTER Y WITH DOT BELOW
 Removed Valid: 1EF7 (ỷ) LATIN SMALL LETTER Y WITH HOOK ABOVE
 Removed Valid: 1EF9 (ỹ) LATIN SMALL LETTER Y WITH TILDE
@@ -13908,16 +13909,12 @@ Removed Valid: 1DA8B (𝪋) SIGNWRITING PARENTHESIS
 ==== Remove Invalid Mappings ====
 Removed Mapping: D0 (Ð) LATIN CAPITAL LETTER ETH => [F0] (ð) LATIN SMALL LETTER ETH
 Removed Mapping: DE (Þ) LATIN CAPITAL LETTER THORN => [FE] (þ) LATIN SMALL LETTER THORN
-Removed Mapping: 102 (Ă) LATIN CAPITAL LETTER A WITH BREVE => [103] (ă) LATIN SMALL LETTER A WITH BREVE
-Removed Mapping: 104 (Ą) LATIN CAPITAL LETTER A WITH OGONEK => [105] (ą) LATIN SMALL LETTER A WITH OGONEK
 Removed Mapping: 10A (Ċ) LATIN CAPITAL LETTER C WITH DOT ABOVE => [10B] (ċ) LATIN SMALL LETTER C WITH DOT ABOVE
 Removed Mapping: 10E (Ď) LATIN CAPITAL LETTER D WITH CARON => [10F] (ď) LATIN SMALL LETTER D WITH CARON
 Removed Mapping: 110 (Đ) LATIN CAPITAL LETTER D WITH STROKE => [111] (đ) LATIN SMALL LETTER D WITH STROKE
 Removed Mapping: 114 (Ĕ) LATIN CAPITAL LETTER E WITH BREVE => [115] (ĕ) LATIN SMALL LETTER E WITH BREVE
 Removed Mapping: 116 (Ė) LATIN CAPITAL LETTER E WITH DOT ABOVE => [117] (ė) LATIN SMALL LETTER E WITH DOT ABOVE
-Removed Mapping: 118 (Ę) LATIN CAPITAL LETTER E WITH OGONEK => [119] (ę) LATIN SMALL LETTER E WITH OGONEK
 Removed Mapping: 11C (Ĝ) LATIN CAPITAL LETTER G WITH CIRCUMFLEX => [11D] (ĝ) LATIN SMALL LETTER G WITH CIRCUMFLEX
-Removed Mapping: 11E (Ğ) LATIN CAPITAL LETTER G WITH BREVE => [11F] (ğ) LATIN SMALL LETTER G WITH BREVE
 Removed Mapping: 120 (Ġ) LATIN CAPITAL LETTER G WITH DOT ABOVE => [121] (ġ) LATIN SMALL LETTER G WITH DOT ABOVE
 Removed Mapping: 122 (Ģ) LATIN CAPITAL LETTER G WITH CEDILLA => [123] (ģ) LATIN SMALL LETTER G WITH CEDILLA
 Removed Mapping: 124 (Ĥ) LATIN CAPITAL LETTER H WITH CIRCUMFLEX => [125] (ĥ) LATIN SMALL LETTER H WITH CIRCUMFLEX
@@ -13926,7 +13923,6 @@ Removed Mapping: 128 (Ĩ) LATIN CAPITAL LETTER I WITH TILDE => [129] (ĩ) LATIN 
 Removed Mapping: 12A (Ī) LATIN CAPITAL LETTER I WITH MACRON => [12B] (ī) LATIN SMALL LETTER I WITH MACRON
 Removed Mapping: 12C (Ĭ) LATIN CAPITAL LETTER I WITH BREVE => [12D] (ĭ) LATIN SMALL LETTER I WITH BREVE
 Removed Mapping: 12E (Į) LATIN CAPITAL LETTER I WITH OGONEK => [12F] (į) LATIN SMALL LETTER I WITH OGONEK
-Removed Mapping: 130 (İ) LATIN CAPITAL LETTER I WITH DOT ABOVE => [69 307] (i̇) LATIN SMALL LETTER I + COMBINING DOT ABOVE
 Removed Mapping: 134 (Ĵ) LATIN CAPITAL LETTER J WITH CIRCUMFLEX => [135] (ĵ) LATIN SMALL LETTER J WITH CIRCUMFLEX
 Removed Mapping: 136 (Ķ) LATIN CAPITAL LETTER K WITH CEDILLA => [137] (ķ) LATIN SMALL LETTER K WITH CEDILLA
 Removed Mapping: 139 (Ĺ) LATIN CAPITAL LETTER L WITH ACUTE => [13A] (ĺ) LATIN SMALL LETTER L WITH ACUTE
@@ -13944,7 +13940,6 @@ Removed Mapping: 152 (Œ) LATIN CAPITAL LIGATURE OE => [153] (œ) LATIN SMALL LI
 Removed Mapping: 154 (Ŕ) LATIN CAPITAL LETTER R WITH ACUTE => [155] (ŕ) LATIN SMALL LETTER R WITH ACUTE
 Removed Mapping: 156 (Ŗ) LATIN CAPITAL LETTER R WITH CEDILLA => [157] (ŗ) LATIN SMALL LETTER R WITH CEDILLA
 Removed Mapping: 158 (Ř) LATIN CAPITAL LETTER R WITH CARON => [159] (ř) LATIN SMALL LETTER R WITH CARON
-Removed Mapping: 15A (Ś) LATIN CAPITAL LETTER S WITH ACUTE => [15B] (ś) LATIN SMALL LETTER S WITH ACUTE
 Removed Mapping: 15C (Ŝ) LATIN CAPITAL LETTER S WITH CIRCUMFLEX => [15D] (ŝ) LATIN SMALL LETTER S WITH CIRCUMFLEX
 Removed Mapping: 15E (Ş) LATIN CAPITAL LETTER S WITH CEDILLA => [15F] (ş) LATIN SMALL LETTER S WITH CEDILLA
 Removed Mapping: 162 (Ţ) LATIN CAPITAL LETTER T WITH CEDILLA => [163] (ţ) LATIN SMALL LETTER T WITH CEDILLA
@@ -13958,8 +13953,6 @@ Removed Mapping: 172 (Ų) LATIN CAPITAL LETTER U WITH OGONEK => [173] (ų) LATIN
 Removed Mapping: 174 (Ŵ) LATIN CAPITAL LETTER W WITH CIRCUMFLEX => [175] (ŵ) LATIN SMALL LETTER W WITH CIRCUMFLEX
 Removed Mapping: 176 (Ŷ) LATIN CAPITAL LETTER Y WITH CIRCUMFLEX => [177] (ŷ) LATIN SMALL LETTER Y WITH CIRCUMFLEX
 Removed Mapping: 178 (Ÿ) LATIN CAPITAL LETTER Y WITH DIAERESIS => [FF] (ÿ) LATIN SMALL LETTER Y WITH DIAERESIS
-Removed Mapping: 179 (Ź) LATIN CAPITAL LETTER Z WITH ACUTE => [17A] (ź) LATIN SMALL LETTER Z WITH ACUTE
-Removed Mapping: 17B (Ż) LATIN CAPITAL LETTER Z WITH DOT ABOVE => [17C] (ż) LATIN SMALL LETTER Z WITH DOT ABOVE
 Removed Mapping: 181 (Ɓ) LATIN CAPITAL LETTER B WITH HOOK => [253] (ɓ) LATIN SMALL LETTER B WITH HOOK
 Removed Mapping: 182 (Ƃ) LATIN CAPITAL LETTER B WITH TOPBAR => [183] (ƃ) LATIN SMALL LETTER B WITH TOPBAR
 Removed Mapping: 184 (Ƅ) LATIN CAPITAL LETTER TONE SIX => [185] (ƅ) LATIN SMALL LETTER TONE SIX
@@ -13996,6 +13989,7 @@ Removed Mapping: 1B5 (Ƶ) LATIN CAPITAL LETTER Z WITH STROKE => [1B6] (ƶ) LATIN
 Removed Mapping: 1B7 (Ʒ) LATIN CAPITAL LETTER EZH => [292] (ʒ) LATIN SMALL LETTER EZH
 Removed Mapping: 1B8 (Ƹ) LATIN CAPITAL LETTER EZH REVERSED => [1B9] (ƹ) LATIN SMALL LETTER EZH REVERSED
 Removed Mapping: 1BC (Ƽ) LATIN CAPITAL LETTER TONE FIVE => [1BD] (ƽ) LATIN SMALL LETTER TONE FIVE
+Removed Mapping: 1CD (Ǎ) LATIN CAPITAL LETTER A WITH CARON => [1CE] (ǎ) LATIN SMALL LETTER A WITH CARON
 Removed Mapping: 1D5 (Ǖ) LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON => [1D6] (ǖ) LATIN SMALL LETTER U WITH DIAERESIS AND MACRON
 Removed Mapping: 1D7 (Ǘ) LATIN CAPITAL LETTER U WITH DIAERESIS AND ACUTE => [1D8] (ǘ) LATIN SMALL LETTER U WITH DIAERESIS AND ACUTE
 Removed Mapping: 1D9 (Ǚ) LATIN CAPITAL LETTER U WITH DIAERESIS AND CARON => [1DA] (ǚ) LATIN SMALL LETTER U WITH DIAERESIS AND CARON
@@ -14060,19 +14054,23 @@ Removed Mapping: 372 (Ͳ) GREEK CAPITAL LETTER ARCHAIC SAMPI => [373] (ͳ) GREEK
 Removed Mapping: 376 (Ͷ) GREEK CAPITAL LETTER PAMPHYLIAN DIGAMMA => [377] (ͷ) GREEK SMALL LETTER PAMPHYLIAN DIGAMMA
 Removed Mapping: 37F (Ϳ) GREEK CAPITAL LETTER YOT => [3F3] (ϳ) GREEK LETTER YOT
 Removed Mapping: 387 (·) GREEK ANO TELEIA => [B7] (·) MIDDLE DOT
+Removed Mapping: 3A3 (Σ) GREEK CAPITAL LETTER SIGMA => [3C3] (σ) GREEK SMALL LETTER SIGMA
 Removed Mapping: 3CF (Ϗ) GREEK CAPITAL KAI SYMBOL => [3D7] (ϗ) GREEK KAI SYMBOL
 Removed Mapping: 3D8 (Ϙ) GREEK LETTER ARCHAIC KOPPA => [3D9] (ϙ) GREEK SMALL LETTER ARCHAIC KOPPA
 Removed Mapping: 3DA (Ϛ) GREEK LETTER STIGMA => [3DB] (ϛ) GREEK SMALL LETTER STIGMA
 Removed Mapping: 3DC (Ϝ) GREEK LETTER DIGAMMA => [3DD] (ϝ) GREEK SMALL LETTER DIGAMMA
 Removed Mapping: 3DE (Ϟ) GREEK LETTER KOPPA => [3DF] (ϟ) GREEK SMALL LETTER KOPPA
 Removed Mapping: 3E0 (Ϡ) GREEK LETTER SAMPI => [3E1] (ϡ) GREEK SMALL LETTER SAMPI
+Removed Mapping: 3F2 (ϲ) GREEK LUNATE SIGMA SYMBOL => [3C3] (σ) GREEK SMALL LETTER SIGMA
 Removed Mapping: 3F7 (Ϸ) GREEK CAPITAL LETTER SHO => [3F8] (ϸ) GREEK SMALL LETTER SHO
+Removed Mapping: 3F9 (Ϲ) GREEK CAPITAL LUNATE SIGMA SYMBOL => [3C3] (σ) GREEK SMALL LETTER SIGMA
 Removed Mapping: 3FA (Ϻ) GREEK CAPITAL LETTER SAN => [3FB] (ϻ) GREEK SMALL LETTER SAN
 Removed Mapping: 3FD (Ͻ) GREEK CAPITAL REVERSED LUNATE SIGMA SYMBOL => [37B] (ͻ) GREEK SMALL REVERSED LUNATE SIGMA SYMBOL
 Removed Mapping: 3FE (Ͼ) GREEK CAPITAL DOTTED LUNATE SIGMA SYMBOL => [37C] (ͼ) GREEK SMALL DOTTED LUNATE SIGMA SYMBOL
 Removed Mapping: 3FF (Ͽ) GREEK CAPITAL REVERSED DOTTED LUNATE SIGMA SYMBOL => [37D] (ͽ) GREEK SMALL REVERSED DOTTED LUNATE SIGMA SYMBOL
 Removed Mapping: 400 (Ѐ) CYRILLIC CAPITAL LETTER IE WITH GRAVE => [450] (ѐ) CYRILLIC SMALL LETTER IE WITH GRAVE
 Removed Mapping: 40D (Ѝ) CYRILLIC CAPITAL LETTER I WITH GRAVE => [45D] (ѝ) CYRILLIC SMALL LETTER I WITH GRAVE
+Removed Mapping: 41E (О) CYRILLIC CAPITAL LETTER O => [43E] (о) CYRILLIC SMALL LETTER O
 Removed Mapping: 460 (Ѡ) CYRILLIC CAPITAL LETTER OMEGA => [461] (ѡ) CYRILLIC SMALL LETTER OMEGA
 Removed Mapping: 462 (Ѣ) CYRILLIC CAPITAL LETTER YAT => [463] (ѣ) CYRILLIC SMALL LETTER YAT
 Removed Mapping: 464 (Ѥ) CYRILLIC CAPITAL LETTER IOTIFIED E => [465] (ѥ) CYRILLIC SMALL LETTER IOTIFIED E
@@ -14090,8 +14088,6 @@ Removed Mapping: 47A (Ѻ) CYRILLIC CAPITAL LETTER ROUND OMEGA => [47B] (ѻ) CYRI
 Removed Mapping: 47C (Ѽ) CYRILLIC CAPITAL LETTER OMEGA WITH TITLO => [47D] (ѽ) CYRILLIC SMALL LETTER OMEGA WITH TITLO
 Removed Mapping: 47E (Ѿ) CYRILLIC CAPITAL LETTER OT => [47F] (ѿ) CYRILLIC SMALL LETTER OT
 Removed Mapping: 480 (Ҁ) CYRILLIC CAPITAL LETTER KOPPA => [481] (ҁ) CYRILLIC SMALL LETTER KOPPA
-Removed Mapping: 4AE (Ү) CYRILLIC CAPITAL LETTER STRAIGHT U => [4AF] (ү) CYRILLIC SMALL LETTER STRAIGHT U
-Removed Mapping: 4B2 (Ҳ) CYRILLIC CAPITAL LETTER HA WITH DESCENDER => [4B3] (ҳ) CYRILLIC SMALL LETTER HA WITH DESCENDER
 Removed Mapping: 4C1 (Ӂ) CYRILLIC CAPITAL LETTER ZHE WITH BREVE => [4C2] (ӂ) CYRILLIC SMALL LETTER ZHE WITH BREVE
 Removed Mapping: 4D0 (Ӑ) CYRILLIC CAPITAL LETTER A WITH BREVE => [4D1] (ӑ) CYRILLIC SMALL LETTER A WITH BREVE
 Removed Mapping: 4D2 (Ӓ) CYRILLIC CAPITAL LETTER A WITH DIAERESIS => [4D3] (ӓ) CYRILLIC SMALL LETTER A WITH DIAERESIS
@@ -14118,6 +14114,7 @@ Removed Mapping: 50E (Ԏ) CYRILLIC CAPITAL LETTER KOMI TJE => [50F] (ԏ) CYRILLI
 Removed Mapping: 510 (Ԑ) CYRILLIC CAPITAL LETTER REVERSED ZE => [511] (ԑ) CYRILLIC SMALL LETTER REVERSED ZE
 Removed Mapping: 52A (Ԫ) CYRILLIC CAPITAL LETTER DZZHE => [52B] (ԫ) CYRILLIC SMALL LETTER DZZHE
 Removed Mapping: 52C (Ԭ) CYRILLIC CAPITAL LETTER DCHE => [52D] (ԭ) CYRILLIC SMALL LETTER DCHE
+Removed Mapping: 1C82 (ᲂ) CYRILLIC SMALL LETTER NARROW O => [43E] (о) CYRILLIC SMALL LETTER O
 Removed Mapping: 1C87 (ᲇ) CYRILLIC SMALL LETTER TALL YAT => [463] (ѣ) CYRILLIC SMALL LETTER YAT
 Removed Mapping: 1C88 (ᲈ) CYRILLIC SMALL LETTER UNBLENDED UK => [A64B] (ꙋ) CYRILLIC SMALL LETTER MONOGRAPH UK
 Removed Mapping: 1CB1 (Ჱ) GEORGIAN MTAVRULI CAPITAL LETTER HE => [10F1] (ჱ) GEORGIAN LETTER HE
@@ -14242,7 +14239,6 @@ Removed Mapping: 1EEA (Ừ) LATIN CAPITAL LETTER U WITH HORN AND GRAVE => [1EEB]
 Removed Mapping: 1EEC (Ử) LATIN CAPITAL LETTER U WITH HORN AND HOOK ABOVE => [1EED] (ử) LATIN SMALL LETTER U WITH HORN AND HOOK ABOVE
 Removed Mapping: 1EEE (Ữ) LATIN CAPITAL LETTER U WITH HORN AND TILDE => [1EEF] (ữ) LATIN SMALL LETTER U WITH HORN AND TILDE
 Removed Mapping: 1EF0 (Ự) LATIN CAPITAL LETTER U WITH HORN AND DOT BELOW => [1EF1] (ự) LATIN SMALL LETTER U WITH HORN AND DOT BELOW
-Removed Mapping: 1EF2 (Ỳ) LATIN CAPITAL LETTER Y WITH GRAVE => [1EF3] (ỳ) LATIN SMALL LETTER Y WITH GRAVE
 Removed Mapping: 1EF4 (Ỵ) LATIN CAPITAL LETTER Y WITH DOT BELOW => [1EF5] (ỵ) LATIN SMALL LETTER Y WITH DOT BELOW
 Removed Mapping: 1EF6 (Ỷ) LATIN CAPITAL LETTER Y WITH HOOK ABOVE => [1EF7] (ỷ) LATIN SMALL LETTER Y WITH HOOK ABOVE
 Removed Mapping: 1EF8 (Ỹ) LATIN CAPITAL LETTER Y WITH TILDE => [1EF9] (ỹ) LATIN SMALL LETTER Y WITH TILDE
@@ -14560,11 +14556,26 @@ Removed Mapping: FFED (￭) HALFWIDTH BLACK SQUARE => [25A0] (■) BLACK SQUARE
 Removed Mapping: FFEE (￮) HALFWIDTH WHITE CIRCLE => [25CB] (○) WHITE CIRCLE
 Removed Mapping: 1D6A4 (𝚤) MATHEMATICAL ITALIC SMALL DOTLESS I => [131] (ı) LATIN SMALL LETTER DOTLESS I
 Removed Mapping: 1D6A5 (𝚥) MATHEMATICAL ITALIC SMALL DOTLESS J => [237] (ȷ) LATIN SMALL LETTER DOTLESS J
+Removed Mapping: 1D6BA (𝚺) MATHEMATICAL BOLD CAPITAL SIGMA => [3C3] (σ) GREEK SMALL LETTER SIGMA
 Removed Mapping: 1D6C1 (𝛁) MATHEMATICAL BOLD NABLA => [2207] (∇) NABLA
+Removed Mapping: 1D6D3 (𝛓) MATHEMATICAL BOLD SMALL FINAL SIGMA => [3C3] (σ) GREEK SMALL LETTER SIGMA
+Removed Mapping: 1D6D4 (𝛔) MATHEMATICAL BOLD SMALL SIGMA => [3C3] (σ) GREEK SMALL LETTER SIGMA
+Removed Mapping: 1D6F4 (𝛴) MATHEMATICAL ITALIC CAPITAL SIGMA => [3C3] (σ) GREEK SMALL LETTER SIGMA
 Removed Mapping: 1D6FB (𝛻) MATHEMATICAL ITALIC NABLA => [2207] (∇) NABLA
+Removed Mapping: 1D70D (𝜍) MATHEMATICAL ITALIC SMALL FINAL SIGMA => [3C3] (σ) GREEK SMALL LETTER SIGMA
+Removed Mapping: 1D70E (𝜎) MATHEMATICAL ITALIC SMALL SIGMA => [3C3] (σ) GREEK SMALL LETTER SIGMA
+Removed Mapping: 1D72E (𝜮) MATHEMATICAL BOLD ITALIC CAPITAL SIGMA => [3C3] (σ) GREEK SMALL LETTER SIGMA
 Removed Mapping: 1D735 (𝜵) MATHEMATICAL BOLD ITALIC NABLA => [2207] (∇) NABLA
+Removed Mapping: 1D747 (𝝇) MATHEMATICAL BOLD ITALIC SMALL FINAL SIGMA => [3C3] (σ) GREEK SMALL LETTER SIGMA
+Removed Mapping: 1D748 (𝝈) MATHEMATICAL BOLD ITALIC SMALL SIGMA => [3C3] (σ) GREEK SMALL LETTER SIGMA
+Removed Mapping: 1D768 (𝝨) MATHEMATICAL SANS-SERIF BOLD CAPITAL SIGMA => [3C3] (σ) GREEK SMALL LETTER SIGMA
 Removed Mapping: 1D76F (𝝯) MATHEMATICAL SANS-SERIF BOLD NABLA => [2207] (∇) NABLA
+Removed Mapping: 1D781 (𝞁) MATHEMATICAL SANS-SERIF BOLD SMALL FINAL SIGMA => [3C3] (σ) GREEK SMALL LETTER SIGMA
+Removed Mapping: 1D782 (𝞂) MATHEMATICAL SANS-SERIF BOLD SMALL SIGMA => [3C3] (σ) GREEK SMALL LETTER SIGMA
+Removed Mapping: 1D7A2 (𝞢) MATHEMATICAL SANS-SERIF BOLD ITALIC CAPITAL SIGMA => [3C3] (σ) GREEK SMALL LETTER SIGMA
 Removed Mapping: 1D7A9 (𝞩) MATHEMATICAL SANS-SERIF BOLD ITALIC NABLA => [2207] (∇) NABLA
+Removed Mapping: 1D7BB (𝞻) MATHEMATICAL SANS-SERIF BOLD ITALIC SMALL FINAL SIGMA => [3C3] (σ) GREEK SMALL LETTER SIGMA
+Removed Mapping: 1D7BC (𝞼) MATHEMATICAL SANS-SERIF BOLD ITALIC SMALL SIGMA => [3C3] (σ) GREEK SMALL LETTER SIGMA
 Removed Mapping: 1D7CA (𝟊) MATHEMATICAL BOLD CAPITAL DIGAMMA => [3DD] (ϝ) GREEK SMALL LETTER DIGAMMA
 Removed Mapping: 1D7CB (𝟋) MATHEMATICAL BOLD SMALL DIGAMMA => [3DD] (ϝ) GREEK SMALL LETTER DIGAMMA
 Removed Mapping: 1EE1C (𞸜) ARABIC MATHEMATICAL DOTLESS BEH => [66E] (ٮ) ARABIC LETTER DOTLESS BEH
@@ -14598,13 +14609,13 @@ Removed Mapping: 1F248 (🉈) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-655
 [✓] Fastpath ASCII
 [✓] Groups Names are A-Z
 ==== Find Unique Characters ====
-Valid: 133739
+Valid: 133745
 Multi: 98511
-Unique: 35228
+Unique: 35234
 [✓] Assert Whole Membership
-Confusable: 512
+Confusable: 490
 Not Confusable: 119
-Non-Confusable Non-Unique: 51
+Non-Confusable Non-Unique: 50
 ==== Compress Wholes ====
 ==== Compress Groups ====
 ==== Order Groups ====
@@ -14612,169 +14623,169 @@ Non-Confusable Non-Unique: 51
 [✓] Ordered by Registration Likelihood
 ==== Group Summary ====
 Ord | Valid  | Uniqu | Prima | Secon | CM  | Group     
-  1 |   1269 |    47 |    73 |  1196 | [0] | Latin
-  2 |    395 |   372 |   394 |     1 | N=2 | Arabic
-  3 |  98404 |     0 | 97184 |  1220 | [0] | Han
+  1 |   1276 |    54 |    80 |  1196 | [0] | Latin     
+  2 |    395 |   372 |   394 |     1 | N=2 | Arabic    
+  3 |  98404 |     0 | 97184 |  1220 | [0] | Han       
   4 |    120 |   110 |   120 |     0 | N=2 | Devanagari
-  5 |  98611 |   207 |   209 | 98402 | [0] | Japanese
-  6 | 109930 | 11526 | 11528 | 98402 | [0] | Korean
-  7 |   1297 |   103 |   103 |  1194 | [0] | Cyrillic
-  8 |     84 |    83 |    83 |     1 | N=2 | Hebrew
-  9 |     86 |    85 |    85 |     1 | N=2 | Thai
- 10 |     91 |    81 |    91 |     0 | N=2 | Bengali
- 11 |    123 |   102 |   123 |     0 | N=1 | Tamil
- 12 |   1229 |    33 |    35 |  1194 | [0] | Greek
- 13 |    186 |   186 |   186 |     0 | N=1 | Tibetan
- 14 |     74 |    64 |    74 |     0 | N=2 | Gurmukhi
- 15 |     80 |    80 |    80 |     0 | N=1 | Lao
- 16 |     95 |    95 |    95 |     0 | N=1 | Telugu
- 17 |  97258 |    74 |    76 | 97182 | [0] | Bopomofo
- 18 |     91 |    81 |    91 |     0 | N=1 | Gujarati
- 19 |     42 |    42 |    42 |     0 | N=1 | Georgian
- 20 |     43 |    43 |    43 |     0 | N=1 | Armenian
- 21 |    213 |   203 |   213 |     0 | N=1 | Myanmar
- 22 |    110 |   110 |   110 |     0 | N=1 | Malayalam
- 23 |    137 |   137 |   137 |     0 | N=1 | Khmer
- 24 |    515 |   515 |   515 |     0 | N=1 | Ethiopic
- 25 |     84 |    74 |    84 |     0 | N=1 | Kannada
- 26 |    107 |   107 |   107 |     0 | N=1 | Sinhala
- 27 |     86 |    86 |    86 |     0 | N=1 | Oriya
- 28 |     61 |    50 |    61 |     0 | N=2 | Thaana
- 29 |   1194 |     0 |  1194 |     0 | N=0 | Common
- 30 |     86 |    75 |    86 |     0 | N=1 | Syrc
- 31 |     54 |    54 |    54 |     0 | N=1 | Nkoo
- 32 |     29 |    29 |    29 |     0 | N=1 | Phnx
- 33 |     86 |    86 |    86 |     0 | N=1 | Cher
- 34 |    723 |   723 |   723 |     0 | N=1 | Cans
- 35 |     86 |    86 |    86 |     0 | N=1 | Runr
- 36 |    155 |   155 |   155 |     0 | N=1 | Mong
- 37 |     66 |    66 |    66 |     0 | N=1 | Limb
- 38 |     83 |    83 |    83 |     0 | N=1 | Talu
- 39 |   1094 |  1094 |  1094 |     0 | N=1 | Egyp
- 40 |     41 |    41 |    41 |     0 | N=1 | Lisu
- 41 |     80 |    80 |    80 |     0 | N=1 | Cham
- 42 |     39 |    39 |    39 |     0 | N=1 | Ital
- 43 |   1234 |  1234 |  1234 |     0 | N=1 | Xsux
- 44 |     40 |    40 |    40 |     0 | N=1 | Dsrt
- 45 |     28 |    28 |    28 |     0 | N=1 | Ogam
- 46 |     23 |    23 |    23 |     0 | N=1 | Tglg
- 47 |     58 |    58 |    58 |     0 | N=1 | Tfng
- 48 |    292 |   292 |   292 |     0 | N=1 | Vaii
- 49 |     89 |    88 |    89 |     0 | N=1 | Java
- 50 |     75 |    75 |    75 |     0 | N=1 | Copt
- 51 |     50 |    50 |    50 |     0 | N=1 | Xpeo
- 52 |     52 |    52 |    52 |     0 | N=1 | Adlm
- 53 |     85 |    85 |    85 |     0 | N=1 | Bali
- 54 |    654 |   654 |   654 |     0 | N=1 | Bamu
- 55 |     56 |    56 |    56 |     0 | N=1 | Batk
- 56 |     86 |    66 |    86 |     0 | N=1 | Cakm
- 57 |     71 |    71 |    71 |     0 | N=1 | Hmnp
- 58 |     46 |    46 |    46 |     0 | N=1 | Kali
- 59 |    123 |   123 |   123 |     0 | N=1 | Lana
- 60 |     72 |    72 |    72 |     0 | N=1 | Lepc
- 61 |     29 |    29 |    29 |     0 | N=1 | Mand
- 62 |     76 |    76 |    76 |     0 | N=1 | Mtei
- 63 |     93 |    93 |    93 |     0 | N=1 | Newa
- 64 |     46 |    46 |    46 |     0 | N=1 | Olck
- 65 |     36 |    36 |    36 |     0 | N=1 | Osge
- 66 |    149 |   149 |   149 |     0 | N=1 | Plrd
- 67 |     50 |    50 |    50 |     0 | N=1 | Rohg
- 68 |     80 |    80 |    80 |     0 | N=1 | Saur
- 69 |     72 |    72 |    72 |     0 | N=1 | Sund
- 70 |     55 |    45 |    55 |     0 | N=1 | Sylo
- 71 |     45 |    35 |    45 |     0 | N=1 | Tale
- 72 |     72 |    72 |    72 |     0 | N=1 | Tavt
- 73 |     59 |    59 |    59 |     0 | N=1 | Wcho
- 74 |   1221 |  1220 |  1221 |     0 | N=1 | Yiii
- 75 |     53 |    53 |    53 |     0 | N=1 | Aghb
- 76 |     62 |    62 |    62 |     0 | N=1 | Ahom
- 77 |     31 |    31 |    31 |     0 | N=1 | Armi
- 78 |     61 |    61 |    61 |     0 | N=1 | Avst
- 79 |     35 |    35 |    35 |     0 | N=1 | Bass
- 80 |     95 |    95 |    95 |     0 | N=1 | Bhks
- 81 |    113 |   113 |   113 |     0 | N=1 | Brah
- 82 |     31 |    30 |    31 |     0 | N=1 | Bugi
- 83 |     20 |    20 |    20 |     0 | N=1 | Buhd
- 84 |     49 |    49 |    49 |     0 | N=1 | Cari
- 85 |     28 |    28 |    28 |     0 | N=1 | Chrs
- 86 |     99 |    99 |    99 |     0 | N=1 | Cpmn
- 87 |     55 |    55 |    55 |     0 | N=1 | Cprt
- 88 |     69 |    69 |    69 |     0 | N=1 | Diak
- 89 |     70 |    60 |    70 |     0 | N=1 | Dogr
- 90 |    142 |   142 |   142 |     0 | N=1 | Dupl
- 91 |     40 |    40 |    40 |     0 | N=1 | Elba
- 92 |     23 |    23 |    23 |     0 | N=1 | Elym
- 93 |     86 |    86 |    86 |     0 | N=1 | Glag
- 94 |     63 |    63 |    63 |     0 | N=1 | Gong
- 95 |     75 |    75 |    75 |     0 | N=1 | Gonm
- 96 |     27 |    27 |    27 |     0 | N=1 | Goth
- 97 |    101 |    80 |   101 |     0 | N=1 | Gran
- 98 |     21 |    21 |    21 |     0 | N=1 | Hano
- 99 |     26 |    26 |    26 |     0 | N=1 | Hatr
-100 |    583 |   583 |   583 |     0 | N=1 | Hluw
-101 |    124 |   124 |   124 |     0 | N=1 | Hmng
-102 |     57 |    57 |    57 |     0 | N=1 | Hung
-103 |     84 |    84 |    84 |     0 | N=1 | Kawi
-104 |     60 |    60 |    60 |     0 | N=1 | Khar
-105 |     71 |    61 |    71 |     0 | N=1 | Khoj
-106 |    471 |   471 |   471 |     0 | N=1 | Kits
-107 |     72 |    62 |    72 |     0 | N=1 | Kthi
-108 |     29 |    29 |    29 |     0 | N=1 | Lyci
-109 |     27 |    27 |    27 |     0 | N=1 | Lydi
-110 |     23 |    23 |    23 |     0 | N=1 | Maka
-111 |     49 |    39 |    49 |     0 | N=1 | Mahj
-112 |     51 |    50 |    51 |     0 | N=1 | Mani
-113 |     68 |    68 |    68 |     0 | N=1 | Marc
-114 |     57 |    57 |    57 |     0 | N=1 | Medf
-115 |    213 |   213 |   213 |     0 | N=1 | Mend
-116 |     90 |    90 |    90 |     0 | N=1 | Merc
-117 |     32 |    32 |    32 |     0 | N=1 | Mero
-118 |     77 |    77 |    77 |     0 | N=1 | Modi
-119 |     41 |    41 |    41 |     0 | N=1 | Mroo
-120 |     47 |    37 |    47 |     0 | N=1 | Mult
-121 |     42 |    42 |    42 |     0 | N=1 | Nagm
-122 |     32 |    32 |    32 |     0 | N=1 | Narb
-123 |     76 |    66 |    76 |     0 | N=1 | Nand
-124 |     40 |    40 |    40 |     0 | N=1 | Nbat
-125 |    397 |   397 |   397 |     0 | N=1 | Nshu
-126 |     73 |    73 |    73 |     0 | N=1 | Orkh
-127 |     40 |    40 |    40 |     0 | N=1 | Osma
-128 |     23 |    22 |    23 |     0 | N=1 | Ougr
-129 |     32 |    32 |    32 |     0 | N=1 | Palm
-130 |     57 |    57 |    57 |     0 | N=1 | Pauc
-131 |     43 |    43 |    43 |     0 | N=1 | Perm
-132 |     54 |    54 |    54 |     0 | N=1 | Phag
-133 |     27 |    27 |    27 |     0 | N=1 | Phli
-134 |     29 |    29 |    29 |     0 | N=1 | Phlp
-135 |     30 |    30 |    30 |     0 | N=1 | Prti
-136 |     37 |    37 |    37 |     0 | N=1 | Rjng
-137 |     57 |    57 |    57 |     0 | N=1 | Samr
-138 |     32 |    32 |    32 |     0 | N=1 | Sarb
-139 |     48 |    48 |    48 |     0 | N=1 | Shaw
-140 |     91 |    91 |    91 |     0 | N=1 | Shrd
-141 |     73 |    73 |    73 |     0 | N=1 | Sidd
-142 |     69 |    69 |    69 |     0 | N=1 | Sind
-143 |     35 |    35 |    35 |     0 | N=1 | Sora
-144 |     37 |    37 |    37 |     0 | N=1 | Sogd
-145 |     40 |    40 |    40 |     0 | N=1 | Sogo
-146 |     81 |    81 |    81 |     0 | N=1 | Soyo
-147 |     18 |    18 |    18 |     0 | N=1 | Tagb
-148 |     68 |    68 |    68 |     0 | N=1 | Takr
-149 |   6914 |  6914 |  6914 |     0 | N=1 | Tang
-150 |     79 |    79 |    79 |     0 | N=1 | Tirh
-151 |     89 |    89 |    89 |     0 | N=1 | Tnsa
-152 |     31 |    31 |    31 |     0 | N=1 | Toto
-153 |     31 |    31 |    31 |     0 | N=1 | Ugar
-154 |     35 |    35 |    35 |     0 | N=1 | Vith
-155 |     52 |    52 |    52 |     0 | N=1 | Wara
-156 |     57 |    47 |    57 |     0 | N=1 | Yezi
-157 |     70 |    70 |    70 |     0 | N=1 | Zanb
+  5 |  98611 |   207 |   209 | 98402 | [0] | Japanese  
+  6 | 109930 | 11526 | 11528 | 98402 | [0] | Korean    
+  7 |     84 |    83 |    83 |     1 | N=2 | Hebrew    
+  8 |     86 |    85 |    85 |     1 | N=2 | Thai      
+  9 |   1298 |   104 |   104 |  1194 | [0] | Cyrillic  
+ 10 |     91 |    81 |    91 |     0 | N=2 | Bengali   
+ 11 |    123 |   102 |   123 |     0 | N=1 | Tamil     
+ 12 |    186 |   186 |   186 |     0 | N=1 | Tibetan   
+ 13 |   1227 |    31 |    33 |  1194 | [0] | Greek     
+ 14 |     74 |    64 |    74 |     0 | N=2 | Gurmukhi  
+ 15 |     80 |    80 |    80 |     0 | N=1 | Lao       
+ 16 |     95 |    95 |    95 |     0 | N=1 | Telugu    
+ 17 |  97258 |    74 |    76 | 97182 | [0] | Bopomofo  
+ 18 |     91 |    81 |    91 |     0 | N=1 | Gujarati  
+ 19 |     42 |    42 |    42 |     0 | N=1 | Georgian  
+ 20 |     43 |    43 |    43 |     0 | N=1 | Armenian  
+ 21 |    213 |   203 |   213 |     0 | N=1 | Myanmar   
+ 22 |    110 |   110 |   110 |     0 | N=1 | Malayalam 
+ 23 |    137 |   137 |   137 |     0 | N=1 | Khmer     
+ 24 |    515 |   515 |   515 |     0 | N=1 | Ethiopic  
+ 25 |     84 |    74 |    84 |     0 | N=1 | Kannada   
+ 26 |    107 |   107 |   107 |     0 | N=1 | Sinhala   
+ 27 |     86 |    86 |    86 |     0 | N=1 | Oriya     
+ 28 |     61 |    50 |    61 |     0 | N=2 | Thaana    
+ 29 |   1194 |     0 |  1194 |     0 | N=0 | Common    
+ 30 |     86 |    75 |    86 |     0 | N=1 | Syrc      
+ 31 |     54 |    54 |    54 |     0 | N=1 | Nkoo      
+ 32 |     29 |    29 |    29 |     0 | N=1 | Phnx      
+ 33 |     86 |    86 |    86 |     0 | N=1 | Cher      
+ 34 |    723 |   723 |   723 |     0 | N=1 | Cans      
+ 35 |     86 |    86 |    86 |     0 | N=1 | Runr      
+ 36 |    155 |   155 |   155 |     0 | N=1 | Mong      
+ 37 |     66 |    66 |    66 |     0 | N=1 | Limb      
+ 38 |     83 |    83 |    83 |     0 | N=1 | Talu      
+ 39 |   1094 |  1094 |  1094 |     0 | N=1 | Egyp      
+ 40 |     80 |    80 |    80 |     0 | N=1 | Cham      
+ 41 |     39 |    39 |    39 |     0 | N=1 | Ital      
+ 42 |   1234 |  1234 |  1234 |     0 | N=1 | Xsux      
+ 43 |     40 |    40 |    40 |     0 | N=1 | Dsrt      
+ 44 |     28 |    28 |    28 |     0 | N=1 | Ogam      
+ 45 |     23 |    23 |    23 |     0 | N=1 | Tglg      
+ 46 |     58 |    58 |    58 |     0 | N=1 | Tfng      
+ 47 |    292 |   292 |   292 |     0 | N=1 | Vaii      
+ 48 |     89 |    88 |    89 |     0 | N=1 | Java      
+ 49 |     75 |    75 |    75 |     0 | N=1 | Copt      
+ 50 |     50 |    50 |    50 |     0 | N=1 | Xpeo      
+ 51 |     52 |    52 |    52 |     0 | N=1 | Adlm      
+ 52 |     85 |    85 |    85 |     0 | N=1 | Bali      
+ 53 |    654 |   654 |   654 |     0 | N=1 | Bamu      
+ 54 |     56 |    56 |    56 |     0 | N=1 | Batk      
+ 55 |     86 |    66 |    86 |     0 | N=1 | Cakm      
+ 56 |     71 |    71 |    71 |     0 | N=1 | Hmnp      
+ 57 |     46 |    46 |    46 |     0 | N=1 | Kali      
+ 58 |    123 |   123 |   123 |     0 | N=1 | Lana      
+ 59 |     72 |    72 |    72 |     0 | N=1 | Lepc      
+ 60 |     41 |    41 |    41 |     0 | N=1 | Lisu      
+ 61 |     29 |    29 |    29 |     0 | N=1 | Mand      
+ 62 |     76 |    76 |    76 |     0 | N=1 | Mtei      
+ 63 |     93 |    93 |    93 |     0 | N=1 | Newa      
+ 64 |     46 |    46 |    46 |     0 | N=1 | Olck      
+ 65 |     36 |    36 |    36 |     0 | N=1 | Osge      
+ 66 |    149 |   149 |   149 |     0 | N=1 | Plrd      
+ 67 |     50 |    50 |    50 |     0 | N=1 | Rohg      
+ 68 |     80 |    80 |    80 |     0 | N=1 | Saur      
+ 69 |     72 |    72 |    72 |     0 | N=1 | Sund      
+ 70 |     55 |    45 |    55 |     0 | N=1 | Sylo      
+ 71 |     45 |    35 |    45 |     0 | N=1 | Tale      
+ 72 |     72 |    72 |    72 |     0 | N=1 | Tavt      
+ 73 |     59 |    59 |    59 |     0 | N=1 | Wcho      
+ 74 |   1221 |  1220 |  1221 |     0 | N=1 | Yiii      
+ 75 |     53 |    53 |    53 |     0 | N=1 | Aghb      
+ 76 |     62 |    62 |    62 |     0 | N=1 | Ahom      
+ 77 |     31 |    31 |    31 |     0 | N=1 | Armi      
+ 78 |     61 |    61 |    61 |     0 | N=1 | Avst      
+ 79 |     35 |    35 |    35 |     0 | N=1 | Bass      
+ 80 |     95 |    95 |    95 |     0 | N=1 | Bhks      
+ 81 |    113 |   113 |   113 |     0 | N=1 | Brah      
+ 82 |     31 |    30 |    31 |     0 | N=1 | Bugi      
+ 83 |     20 |    20 |    20 |     0 | N=1 | Buhd      
+ 84 |     49 |    49 |    49 |     0 | N=1 | Cari      
+ 85 |     28 |    28 |    28 |     0 | N=1 | Chrs      
+ 86 |     99 |    99 |    99 |     0 | N=1 | Cpmn      
+ 87 |     55 |    55 |    55 |     0 | N=1 | Cprt      
+ 88 |     69 |    69 |    69 |     0 | N=1 | Diak      
+ 89 |     70 |    60 |    70 |     0 | N=1 | Dogr      
+ 90 |    142 |   142 |   142 |     0 | N=1 | Dupl      
+ 91 |     40 |    40 |    40 |     0 | N=1 | Elba      
+ 92 |     23 |    23 |    23 |     0 | N=1 | Elym      
+ 93 |     86 |    86 |    86 |     0 | N=1 | Glag      
+ 94 |     63 |    63 |    63 |     0 | N=1 | Gong      
+ 95 |     75 |    75 |    75 |     0 | N=1 | Gonm      
+ 96 |     27 |    27 |    27 |     0 | N=1 | Goth      
+ 97 |    101 |    80 |   101 |     0 | N=1 | Gran      
+ 98 |     21 |    21 |    21 |     0 | N=1 | Hano      
+ 99 |     26 |    26 |    26 |     0 | N=1 | Hatr      
+100 |    583 |   583 |   583 |     0 | N=1 | Hluw      
+101 |    124 |   124 |   124 |     0 | N=1 | Hmng      
+102 |     57 |    57 |    57 |     0 | N=1 | Hung      
+103 |     84 |    84 |    84 |     0 | N=1 | Kawi      
+104 |     60 |    60 |    60 |     0 | N=1 | Khar      
+105 |     71 |    61 |    71 |     0 | N=1 | Khoj      
+106 |    471 |   471 |   471 |     0 | N=1 | Kits      
+107 |     72 |    62 |    72 |     0 | N=1 | Kthi      
+108 |     29 |    29 |    29 |     0 | N=1 | Lyci      
+109 |     27 |    27 |    27 |     0 | N=1 | Lydi      
+110 |     23 |    23 |    23 |     0 | N=1 | Maka      
+111 |     49 |    39 |    49 |     0 | N=1 | Mahj      
+112 |     51 |    50 |    51 |     0 | N=1 | Mani      
+113 |     68 |    68 |    68 |     0 | N=1 | Marc      
+114 |     57 |    57 |    57 |     0 | N=1 | Medf      
+115 |    213 |   213 |   213 |     0 | N=1 | Mend      
+116 |     90 |    90 |    90 |     0 | N=1 | Merc      
+117 |     32 |    32 |    32 |     0 | N=1 | Mero      
+118 |     77 |    77 |    77 |     0 | N=1 | Modi      
+119 |     41 |    41 |    41 |     0 | N=1 | Mroo      
+120 |     47 |    37 |    47 |     0 | N=1 | Mult      
+121 |     42 |    42 |    42 |     0 | N=1 | Nagm      
+122 |     32 |    32 |    32 |     0 | N=1 | Narb      
+123 |     76 |    66 |    76 |     0 | N=1 | Nand      
+124 |     40 |    40 |    40 |     0 | N=1 | Nbat      
+125 |    397 |   397 |   397 |     0 | N=1 | Nshu      
+126 |     73 |    73 |    73 |     0 | N=1 | Orkh      
+127 |     40 |    40 |    40 |     0 | N=1 | Osma      
+128 |     23 |    22 |    23 |     0 | N=1 | Ougr      
+129 |     32 |    32 |    32 |     0 | N=1 | Palm      
+130 |     57 |    57 |    57 |     0 | N=1 | Pauc      
+131 |     43 |    43 |    43 |     0 | N=1 | Perm      
+132 |     54 |    54 |    54 |     0 | N=1 | Phag      
+133 |     27 |    27 |    27 |     0 | N=1 | Phli      
+134 |     29 |    29 |    29 |     0 | N=1 | Phlp      
+135 |     30 |    30 |    30 |     0 | N=1 | Prti      
+136 |     37 |    37 |    37 |     0 | N=1 | Rjng      
+137 |     57 |    57 |    57 |     0 | N=1 | Samr      
+138 |     32 |    32 |    32 |     0 | N=1 | Sarb      
+139 |     48 |    48 |    48 |     0 | N=1 | Shaw      
+140 |     91 |    91 |    91 |     0 | N=1 | Shrd      
+141 |     73 |    73 |    73 |     0 | N=1 | Sidd      
+142 |     69 |    69 |    69 |     0 | N=1 | Sind      
+143 |     35 |    35 |    35 |     0 | N=1 | Sora      
+144 |     37 |    37 |    37 |     0 | N=1 | Sogd      
+145 |     40 |    40 |    40 |     0 | N=1 | Sogo      
+146 |     81 |    81 |    81 |     0 | N=1 | Soyo      
+147 |     18 |    18 |    18 |     0 | N=1 | Tagb      
+148 |     68 |    68 |    68 |     0 | N=1 | Takr      
+149 |   6914 |  6914 |  6914 |     0 | N=1 | Tang      
+150 |     79 |    79 |    79 |     0 | N=1 | Tirh      
+151 |     89 |    89 |    89 |     0 | N=1 | Tnsa      
+152 |     31 |    31 |    31 |     0 | N=1 | Toto      
+153 |     31 |    31 |    31 |     0 | N=1 | Ugar      
+154 |     35 |    35 |    35 |     0 | N=1 | Vith      
+155 |     52 |    52 |    52 |     0 | N=1 | Wara      
+156 |     57 |    47 |    57 |     0 | N=1 | Yezi      
+157 |     70 |    70 |    70 |     0 | N=1 | Zanb      
 ==== NFC Quick Check ====
-Optimized: 2110 => 539
+Optimized: 2110 => 541
 ==== Write Output ====
-Wrote: spec.json [3125713]
+Wrote: spec.json [3124718]
 Wrote: nf.json [48402]
 Wrote: nf-tests.json [503302]
 Wrote: emoji-info.json [391345]
 Wrote: names.json [3334376]
-Wrote: confused.json [71785]
+Wrote: confused.json [70776]

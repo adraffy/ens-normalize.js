@@ -48,7 +48,7 @@ let frag1 = ens_normalize_fragment('AB--');
 let frag2 = ens_normalize_fragment('\u{303}');
 ```
 
-Instead of exposing an IDNA-like API (`is_valid()`, `get_mapped()`, etc.), this library exposes a single function which converts names to tokens:
+Input-based tokenization:
 ```Javascript
 // string -> Token[]
 // never throws
@@ -87,7 +87,7 @@ let tokens = ens_tokenize('_R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./');
 // }).join('')) === ens_normalize(name)
 ```
 
-Get label-level normalization details:
+Output-based tokenization:
 ```Javascript
 // string -> Label[]
 // never throws

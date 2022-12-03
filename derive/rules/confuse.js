@@ -3779,6 +3779,12 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0x3361, // (㍡) IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR NINE [Zyyy]=>[Hani,Hanb,Jpan,Kore]
 	],
 	[
+		// "◌ͣ" <Same>
+		'363', // COMBINING LATIN SMALL LETTER A [Zinh]=>[Latn]
+		0x363, // (◌ͣ) COMBINING LATIN SMALL LETTER A [Zinh]=>[Latn]
+		0x2DF6, // (◌ⷶ) COMBINING CYRILLIC LETTER A [Cyrl]=>[Cyrl]
+	],
+	[
 		// "a" <Same>
 		'61', // LATIN SMALL LETTER A [Latn]=>[Latn]
 		valid(0x61), // (a) LATIN SMALL LETTER A [Latn]=>[Latn]
@@ -3805,16 +3811,9 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0x1D770, // (𝝰) MATHEMATICAL SANS-SERIF BOLD SMALL ALPHA [Zyyy]=>[ALL]
 		//IDNA:0x1D7AA, // (𝞪) MATHEMATICAL SANS-SERIF BOLD ITALIC SMALL ALPHA [Zyyy]=>[ALL]
 		0x430, // (а) CYRILLIC SMALL LETTER A [Cyrl]=>[Cyrl]
-	],
-	[
-		// "◌ͣ" <Same>
-		'363', // COMBINING LATIN SMALL LETTER A [Zinh]=>[Latn]
-		0x363, // (◌ͣ) COMBINING LATIN SMALL LETTER A [Zinh]=>[Latn]
-		0x2DF6, // (◌ⷶ) COMBINING CYRILLIC LETTER A [Cyrl]=>[Cyrl]
-	],
-	[
+		// 20221202: merge case
 		// "A" <Same>
-		'41', // LATIN CAPITAL LETTER A [Latn]=>[Latn]
+		//'41', // LATIN CAPITAL LETTER A [Latn]=>[Latn]
 		//IDNA:0x41, // (A) LATIN CAPITAL LETTER A [Latn]=>[Latn]
 		//IDNA:0xFF21, // (Ａ) FULLWIDTH LATIN CAPITAL LETTER A [Latn]=>[Latn]
 		//IDNA:0x1D400, // (𝐀) MATHEMATICAL BOLD CAPITAL A [Zyyy]=>[ALL]
@@ -4000,10 +3999,9 @@ export const CONFUSE_GROUPS = [
 		0x13CF, // (Ꮟ) CHEROKEE LETTER SI [Cher]=>[Cher]
 		0x1472, // (ᑲ) CANADIAN SYLLABICS KA [Cans]=>[Cans]
 		0x15AF, // (ᖯ) CANADIAN SYLLABICS AIVILIK B [Cans]=>[Cans]
-	],
-	[
+		// 20221202: merge case
 		// "B" <Same>
-		'42', // LATIN CAPITAL LETTER B [Latn]=>[Latn]
+		//'42', // LATIN CAPITAL LETTER B [Latn]=>[Latn]
 		//IDNA:0x42, // (B) LATIN CAPITAL LETTER B [Latn]=>[Latn]
 		//IDNA:0xFF22, // (Ｂ) FULLWIDTH LATIN CAPITAL LETTER B [Latn]=>[Latn]
 		//IDNA:0x212C, // (ℬ) SCRIPT CAPITAL B [Zyyy]=>[ALL]
@@ -4088,6 +4086,12 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0x13FC, // (ᏼ) CHEROKEE SMALL LETTER YV [Cher]=>[Cher]
 	],
 	[
+		// "◌ͨ" <Same>
+		'368', // COMBINING LATIN SMALL LETTER C [Zinh]=>[Latn]
+		0x368, // (◌ͨ) COMBINING LATIN SMALL LETTER C [Zinh]=>[Latn]
+		0x2DED, // (◌ⷭ) COMBINING CYRILLIC LETTER ES [Cyrl]=>[Cyrl]
+	],
+	[
 		// "c" <Same>
 		'63', // LATIN SMALL LETTER C [Latn]=>[Latn]
 		valid(0x63), // (c) LATIN SMALL LETTER C [Latn]=>[Latn]
@@ -4112,16 +4116,9 @@ export const CONFUSE_GROUPS = [
 		0x441, // (с) CYRILLIC SMALL LETTER ES [Cyrl]=>[Cyrl]
 		//IDNA:0xABAF, // (ꮯ) CHEROKEE SMALL LETTER TLI [Cher]=>[Cher]
 		0x1043D, // (𐐽) DESERET SMALL LETTER CHEE [Dsrt]=>[Dsrt]
-	],
-	[
-		// "◌ͨ" <Same>
-		'368', // COMBINING LATIN SMALL LETTER C [Zinh]=>[Latn]
-		0x368, // (◌ͨ) COMBINING LATIN SMALL LETTER C [Zinh]=>[Latn]
-		0x2DED, // (◌ⷭ) COMBINING CYRILLIC LETTER ES [Cyrl]=>[Cyrl]
-	],
-	[
+		// 20221202: merge case
 		// "C" <Same>
-		'43', // LATIN CAPITAL LETTER C [Latn]=>[Latn]
+		//'43', // LATIN CAPITAL LETTER C [Latn]=>[Latn]
 		//IDNA:0x43, // (C) LATIN CAPITAL LETTER C [Latn]=>[Latn]
 		0x1F74C, // (🝌) ALCHEMICAL SYMBOL FOR CALX [Zyyy]=>[ALL]
 		0x118F2, // (𑣲) WARANG CITI NUMBER NINETY [Wara]=>[Wara]
@@ -4272,10 +4269,9 @@ export const CONFUSE_GROUPS = [
 		0x13E7, // (Ꮷ) CHEROKEE LETTER TSU [Cher]=>[Cher]
 		0x146F, // (ᑯ) CANADIAN SYLLABICS KO [Cans]=>[Cans]
 		0xA4D2, // (ꓒ) LISU LETTER PHA [Lisu]=>[Lisu]
-	],
-	[
+		// 20221202: merge case
 		// "D" <Same>
-		'44', // LATIN CAPITAL LETTER D [Latn]=>[Latn]
+		//'44', // LATIN CAPITAL LETTER D [Latn]=>[Latn]
 		//IDNA:0x44, // (D) LATIN CAPITAL LETTER D [Latn]=>[Latn]
 		//IDNA:0x216E, // (Ⅾ) ROMAN NUMERAL FIVE HUNDRED [Latn]=>[Latn]
 		//IDNA:0x2145, // (ⅅ) DOUBLE-STRUCK ITALIC CAPITAL D [Zyyy]=>[ALL]
@@ -4407,6 +4403,12 @@ export const CONFUSE_GROUPS = [
 		0x1577, // (ᕷ) CANADIAN SYLLABICS NUNAVIK HO [Cans]=>[Cans]
 	],
 	[
+		// "◌ͤ" <Same>
+		'364', // COMBINING LATIN SMALL LETTER E [Zinh]=>[Latn]
+		0x364, // (◌ͤ) COMBINING LATIN SMALL LETTER E [Zinh]=>[Latn]
+		0x2DF7, // (◌ⷷ) COMBINING CYRILLIC LETTER IE [Cyrl]=>[Cyrl]
+	],
+	[
 		// "e" <Same>
 		'65', // LATIN SMALL LETTER E [Latn]=>[Latn]
 		valid(0x65), // (e) LATIN SMALL LETTER E [Latn]=>[Latn]
@@ -4429,16 +4431,9 @@ export const CONFUSE_GROUPS = [
 		0xAB32, // (ꬲ) LATIN SMALL LETTER BLACKLETTER E [Latn]=>[Latn]
 		0x435, // (е) CYRILLIC SMALL LETTER IE [Cyrl]=>[Cyrl]
 		0x4BD, // (ҽ) CYRILLIC SMALL LETTER ABKHASIAN CHE [Cyrl]=>[Cyrl]
-	],
-	[
-		// "◌ͤ" <Same>
-		'364', // COMBINING LATIN SMALL LETTER E [Zinh]=>[Latn]
-		0x364, // (◌ͤ) COMBINING LATIN SMALL LETTER E [Zinh]=>[Latn]
-		0x2DF7, // (◌ⷷ) COMBINING CYRILLIC LETTER IE [Cyrl]=>[Cyrl]
-	],
-	[
+		// 20221202: merge case
 		// "E" <Same>
-		'45', // LATIN CAPITAL LETTER E [Latn]=>[Latn]
+		//'45', // LATIN CAPITAL LETTER E [Latn]=>[Latn]
 		//IDNA:0x45, // (E) LATIN CAPITAL LETTER E [Latn]=>[Latn]
 		0x22FF, // (⋿) Z NOTATION BAG MEMBERSHIP [Zyyy]=>[ALL]
 		//IDNA:0xFF25, // (Ｅ) FULLWIDTH LATIN CAPITAL LETTER E [Latn]=>[Latn]
@@ -4607,10 +4602,9 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0x17F, // (ſ) LATIN SMALL LETTER LONG S [Latn]=>[Latn]
 		0x1E9D, // (ẝ) LATIN SMALL LETTER LONG S WITH HIGH STROKE [Latn]=>[Latn]
 		0x584, // (ք) ARMENIAN SMALL LETTER KEH [Armn]=>[Armn]
-	],
-	[
+		// 20221202: merge case
 		// "F" <Same>
-		'46', // LATIN CAPITAL LETTER F [Latn]=>[Latn]
+		//'46', // LATIN CAPITAL LETTER F [Latn]=>[Latn]
 		//IDNA:0x46, // (F) LATIN CAPITAL LETTER F [Latn]=>[Latn]
 		0x1D213, // (𝈓) GREEK VOCAL NOTATION SYMBOL-20 [Grek]=>[Grek]
 		//IDNA:0x2131, // (ℱ) SCRIPT CAPITAL F [Zyyy]=>[ALL]
@@ -4723,10 +4717,9 @@ export const CONFUSE_GROUPS = [
 		0x1D83, // (ᶃ) LATIN SMALL LETTER G WITH PALATAL HOOK [Latn]=>[Latn]
 		0x18D, // (ƍ) LATIN SMALL LETTER TURNED DELTA [Latn]=>[Latn]
 		0x581, // (ց) ARMENIAN SMALL LETTER CO [Armn]=>[Armn]
-	],
-	[
+		// 20221202: merge case
 		// "G" <Same>
-		'47', // LATIN CAPITAL LETTER G [Latn]=>[Latn]
+		//'47', // LATIN CAPITAL LETTER G [Latn]=>[Latn]
 		//IDNA:0x47, // (G) LATIN CAPITAL LETTER G [Latn]=>[Latn]
 		//IDNA:0x1D406, // (𝐆) MATHEMATICAL BOLD CAPITAL G [Zyyy]=>[ALL]
 		//IDNA:0x1D43A, // (𝐺) MATHEMATICAL ITALIC CAPITAL G [Zyyy]=>[ALL]
@@ -4744,7 +4737,7 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0x50C, // (Ԍ) CYRILLIC CAPITAL LETTER KOMI SJE [Cyrl]=>[Cyrl]
 		0x13C0, // (Ꮐ) CHEROKEE LETTER NAH [Cher]=>[Cher]
 		0x13F3, // (Ᏻ) CHEROKEE LETTER YU [Cher]=>[Cher]
-		0xA4D6, // (ꓖ) LISU LETTER GA [Lisu]=>[Lisu]
+		0xA4D6, // (ꓖ) LISU LETTER GA [Lisu]=>[Lisu]		
 	],
 	[
 		// "ᵍ" <Same>
@@ -4819,10 +4812,9 @@ export const CONFUSE_GROUPS = [
 		0x4BB, // (һ) CYRILLIC SMALL LETTER SHHA [Cyrl]=>[Cyrl]
 		0x570, // (հ) ARMENIAN SMALL LETTER HO [Armn]=>[Armn]
 		0x13C2, // (Ꮒ) CHEROKEE LETTER NI [Cher]=>[Cher]
-	],
-	[
+		// 20221202: merge case
 		// "H" <Same>
-		'48', // LATIN CAPITAL LETTER H [Latn]=>[Latn]
+		//'48', // LATIN CAPITAL LETTER H [Latn]=>[Latn]
 		//IDNA:0x48, // (H) LATIN CAPITAL LETTER H [Latn]=>[Latn]
 		//IDNA:0xFF28, // (Ｈ) FULLWIDTH LATIN CAPITAL LETTER H [Latn]=>[Latn]
 		//IDNA:0x210B, // (ℋ) SCRIPT CAPITAL H [Zyyy]=>[ALL]
@@ -5051,10 +5043,9 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0x1D693, // (𝚓) MATHEMATICAL MONOSPACE SMALL J [Zyyy]=>[ALL]
 		0x3F3, // (ϳ) GREEK LETTER YOT [Grek]=>[Grek]
 		0x458, // (ј) CYRILLIC SMALL LETTER JE [Cyrl]=>[Cyrl]
-	],
-	[
+		// 20221202: merge case
 		// "J" <Same>
-		'4A', // LATIN CAPITAL LETTER J [Latn]=>[Latn]
+		//'4A', // LATIN CAPITAL LETTER J [Latn]=>[Latn]
 		//IDNA:0x4A, // (J) LATIN CAPITAL LETTER J [Latn]=>[Latn]
 		//IDNA:0xFF2A, // (Ｊ) FULLWIDTH LATIN CAPITAL LETTER J [Latn]=>[Latn]
 		//IDNA:0x1D409, // (𝐉) MATHEMATICAL BOLD CAPITAL J [Zyyy]=>[ALL]
@@ -5122,10 +5113,9 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0x1D62C, // (𝘬) MATHEMATICAL SANS-SERIF ITALIC SMALL K [Zyyy]=>[ALL]
 		//IDNA:0x1D660, // (𝙠) MATHEMATICAL SANS-SERIF BOLD ITALIC SMALL K [Zyyy]=>[ALL]
 		//IDNA:0x1D694, // (𝚔) MATHEMATICAL MONOSPACE SMALL K [Zyyy]=>[ALL]
-	],
-	[
+		// 20221202: merge case
 		// "K" <Same>
-		'4B', // LATIN CAPITAL LETTER K [Latn]=>[Latn]
+		//'4B', // LATIN CAPITAL LETTER K [Latn]=>[Latn]
 		//IDNA:0x4B, // (K) LATIN CAPITAL LETTER K [Latn]=>[Latn]
 		//IDNA:0x212A, // (K) KELVIN SIGN [Latn]=>[Latn]
 		//IDNA:0xFF2B, // (Ｋ) FULLWIDTH LATIN CAPITAL LETTER K [Latn]=>[Latn]
@@ -5257,10 +5247,9 @@ export const CONFUSE_GROUPS = [
 		0x10309, // (𐌉) OLD ITALIC LETTER I [Ital]=>[Ital]
 		// 20221119: added
 		0x10A7D, // (𐩽) OLD SOUTH ARABIAN NUMBER ONE
-	],
-	[
+		// 20221202: merge case
 		// "L" <Same>
-		'4C', // LATIN CAPITAL LETTER L [Latn]=>[Latn]
+		//'4C', // LATIN CAPITAL LETTER L [Latn]=>[Latn]
 		//IDNA:0x4C, // (L) LATIN CAPITAL LETTER L [Latn]=>[Latn]
 		0x1D22A, // (𝈪) GREEK INSTRUMENTAL NOTATION SYMBOL-23 [Grek]=>[Grek]
 		//IDNA:0x216C, // (Ⅼ) ROMAN NUMERAL FIFTY [Latn]=>[Latn]
@@ -5636,8 +5625,28 @@ export const CONFUSE_GROUPS = [
 		0x10443, // (𐑃) DESERET SMALL LETTER ETH [Dsrt]=>[Dsrt]
 	],
 	[
+		// "rn" <Same>
+		'72 6E', // LATIN SMALL LETTER R + LATIN SMALL LETTER N [Latn]=>[Latn]
+		0x118E3, // (𑣣) WARANG CITI DIGIT THREE [Wara]=>[Wara]
+		valid(0x6D), // (m) LATIN SMALL LETTER M [Latn]=>[Latn]
+		//IDNA:0x217F, // (ⅿ) SMALL ROMAN NUMERAL ONE THOUSAND [Latn]=>[Latn]
+		//IDNA:0x1D426, // (𝐦) MATHEMATICAL BOLD SMALL M [Zyyy]=>[ALL]
+		//IDNA:0x1D45A, // (𝑚) MATHEMATICAL ITALIC SMALL M [Zyyy]=>[ALL]
+		//IDNA:0x1D48E, // (𝒎) MATHEMATICAL BOLD ITALIC SMALL M [Zyyy]=>[ALL]
+		//IDNA:0x1D4C2, // (𝓂) MATHEMATICAL SCRIPT SMALL M [Zyyy]=>[ALL]
+		//IDNA:0x1D4F6, // (𝓶) MATHEMATICAL BOLD SCRIPT SMALL M [Zyyy]=>[ALL]
+		//IDNA:0x1D52A, // (𝔪) MATHEMATICAL FRAKTUR SMALL M [Zyyy]=>[ALL]
+		//IDNA:0x1D55E, // (𝕞) MATHEMATICAL DOUBLE-STRUCK SMALL M [Zyyy]=>[ALL]
+		//IDNA:0x1D592, // (𝖒) MATHEMATICAL BOLD FRAKTUR SMALL M [Zyyy]=>[ALL]
+		//IDNA:0x1D5C6, // (𝗆) MATHEMATICAL SANS-SERIF SMALL M [Zyyy]=>[ALL]
+		//IDNA:0x1D5FA, // (𝗺) MATHEMATICAL SANS-SERIF BOLD SMALL M [Zyyy]=>[ALL]
+		//IDNA:0x1D62E, // (𝘮) MATHEMATICAL SANS-SERIF ITALIC SMALL M [Zyyy]=>[ALL]
+		//IDNA:0x1D662, // (𝙢) MATHEMATICAL SANS-SERIF BOLD ITALIC SMALL M [Zyyy]=>[ALL]
+		//IDNA:0x1D696, // (𝚖) MATHEMATICAL MONOSPACE SMALL M [Zyyy]=>[ALL]
+		0x11700, // (𑜀) AHOM LETTER KA [Ahom]=>[Ahom]
+		// 20221202: merge case
 		// "M" <Same>
-		'4D', // LATIN CAPITAL LETTER M [Latn]=>[Latn]
+		//'4D', // LATIN CAPITAL LETTER M [Latn]=>[Latn]
 		//IDNA:0x4D, // (M) LATIN CAPITAL LETTER M [Latn]=>[Latn]
 		//IDNA:0xFF2D, // (Ｍ) FULLWIDTH LATIN CAPITAL LETTER M [Latn]=>[Latn]
 		//IDNA:0x216F, // (Ⅿ) ROMAN NUMERAL ONE THOUSAND [Latn]=>[Latn]
@@ -5705,10 +5714,9 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0x1D697, // (𝚗) MATHEMATICAL MONOSPACE SMALL N [Zyyy]=>[ALL]
 		0x578, // (ո) ARMENIAN SMALL LETTER VO [Armn]=>[Armn]
 		0x57C, // (ռ) ARMENIAN SMALL LETTER RA [Armn]=>[Armn]
-	],
-	[
+		// 20221202: merge case
 		// "N" <Same>
-		'4E', // LATIN CAPITAL LETTER N [Latn]=>[Latn]
+		//'4E', // LATIN CAPITAL LETTER N [Latn]=>[Latn]
 		//IDNA:0x4E, // (N) LATIN CAPITAL LETTER N [Latn]=>[Latn]
 		//IDNA:0xFF2E, // (Ｎ) FULLWIDTH LATIN CAPITAL LETTER N [Latn]=>[Latn]
 		//IDNA:0x2115, // (ℕ) DOUBLE-STRUCK CAPITAL N [Zyyy]=>[ALL]
@@ -5881,10 +5889,9 @@ export const CONFUSE_GROUPS = [
 		// 2022115: moved from '199E'
 		0x199E, // (ᦞ) NEW TAI LUE LETTER LOW VA [Talu]=>[Talu]
 		0x19D0, // (᧐) NEW TAI LUE DIGIT ZERO [Talu]=>[Talu]
-	],
-	[
+		// 20221202: merge case
 		// "O" <Same>
-		'4F', // LATIN CAPITAL LETTER O [Latn]=>[Latn]
+		//'4F', // LATIN CAPITAL LETTER O [Latn]=>[Latn]
 		//IDNA:0x4F, // (O) LATIN CAPITAL LETTER O [Latn]=>[Latn]
 		valid(0x30), // (0) DIGIT ZERO [Zyyy]=>[ALL]
 		0x7C0, // (߀) NKO DIGIT ZERO [Nkoo]=>[Nkoo]
@@ -6221,10 +6228,9 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0x1D7C8, // (𝟈) MATHEMATICAL SANS-SERIF BOLD ITALIC RHO SYMBOL [Zyyy]=>[ALL]
 		0x2CA3, // (ⲣ) COPTIC SMALL LETTER RO [Copt]=>[Copt]
 		0x440, // (р) CYRILLIC SMALL LETTER ER [Cyrl]=>[Cyrl]
-	],
-	[
+		// 20221202: merge case
 		// "P" <Same>
-		'50', // LATIN CAPITAL LETTER P [Latn]=>[Latn]
+		//'50', // LATIN CAPITAL LETTER P [Latn]=>[Latn]
 		//IDNA:0x50, // (P) LATIN CAPITAL LETTER P [Latn]=>[Latn]
 		//IDNA:0xFF30, // (Ｐ) FULLWIDTH LATIN CAPITAL LETTER P [Latn]=>[Latn]
 		//IDNA:0x2119, // (ℙ) DOUBLE-STRUCK CAPITAL P [Zyyy]=>[ALL]
@@ -6319,10 +6325,9 @@ export const CONFUSE_GROUPS = [
 		0x51B, // (ԛ) CYRILLIC SMALL LETTER QA [Cyrl]=>[Cyrl]
 		0x563, // (գ) ARMENIAN SMALL LETTER GIM [Armn]=>[Armn]
 		0x566, // (զ) ARMENIAN SMALL LETTER ZA [Armn]=>[Armn]
-	],
-	[
+		// 20221202: merge case
 		// "Q" <Same>
-		'51', // LATIN CAPITAL LETTER Q [Latn]=>[Latn]
+		//'51', // LATIN CAPITAL LETTER Q [Latn]=>[Latn]
 		//IDNA:0x51, // (Q) LATIN CAPITAL LETTER Q [Latn]=>[Latn]
 		//IDNA:0x211A, // (ℚ) DOUBLE-STRUCK CAPITAL Q [Zyyy]=>[ALL]
 		//IDNA:0x1D410, // (𝐐) MATHEMATICAL BOLD CAPITAL Q [Zyyy]=>[ALL]
@@ -6409,10 +6414,9 @@ export const CONFUSE_GROUPS = [
 		0x2C85, // (ⲅ) COPTIC SMALL LETTER GAMMA [Copt]=>[Copt]
 		0x433, // (г) CYRILLIC SMALL LETTER GHE [Cyrl]=>[Cyrl]
 		//IDNA:0xAB81, // (ꮁ) CHEROKEE SMALL LETTER HU [Cher]=>[Cher]
-	],
-	[
+		// 20221202: merge case
 		// "R" <Same>
-		'52', // LATIN CAPITAL LETTER R [Latn]=>[Latn]
+		//'52', // LATIN CAPITAL LETTER R [Latn]=>[Latn]
 		//IDNA:0x52, // (R) LATIN CAPITAL LETTER R [Latn]=>[Latn]
 		0x1D216, // (𝈖) GREEK VOCAL NOTATION SYMBOL-23 [Grek]=>[Grek]
 		//IDNA:0x211B, // (ℛ) SCRIPT CAPITAL R [Zyyy]=>[ALL]
@@ -6461,27 +6465,6 @@ export const CONFUSE_GROUPS = [
 		// "r'" <Same>
 		'72 27', // LATIN SMALL LETTER R + APOSTROPHE [Latn,Zyyy]=>[Latn]
 		0x491, // (ґ) CYRILLIC SMALL LETTER GHE WITH UPTURN [Cyrl]=>[Cyrl]
-	],
-	[
-		// "rn" <Same>
-		'72 6E', // LATIN SMALL LETTER R + LATIN SMALL LETTER N [Latn]=>[Latn]
-		0x118E3, // (𑣣) WARANG CITI DIGIT THREE [Wara]=>[Wara]
-		valid(0x6D), // (m) LATIN SMALL LETTER M [Latn]=>[Latn]
-		//IDNA:0x217F, // (ⅿ) SMALL ROMAN NUMERAL ONE THOUSAND [Latn]=>[Latn]
-		//IDNA:0x1D426, // (𝐦) MATHEMATICAL BOLD SMALL M [Zyyy]=>[ALL]
-		//IDNA:0x1D45A, // (𝑚) MATHEMATICAL ITALIC SMALL M [Zyyy]=>[ALL]
-		//IDNA:0x1D48E, // (𝒎) MATHEMATICAL BOLD ITALIC SMALL M [Zyyy]=>[ALL]
-		//IDNA:0x1D4C2, // (𝓂) MATHEMATICAL SCRIPT SMALL M [Zyyy]=>[ALL]
-		//IDNA:0x1D4F6, // (𝓶) MATHEMATICAL BOLD SCRIPT SMALL M [Zyyy]=>[ALL]
-		//IDNA:0x1D52A, // (𝔪) MATHEMATICAL FRAKTUR SMALL M [Zyyy]=>[ALL]
-		//IDNA:0x1D55E, // (𝕞) MATHEMATICAL DOUBLE-STRUCK SMALL M [Zyyy]=>[ALL]
-		//IDNA:0x1D592, // (𝖒) MATHEMATICAL BOLD FRAKTUR SMALL M [Zyyy]=>[ALL]
-		//IDNA:0x1D5C6, // (𝗆) MATHEMATICAL SANS-SERIF SMALL M [Zyyy]=>[ALL]
-		//IDNA:0x1D5FA, // (𝗺) MATHEMATICAL SANS-SERIF BOLD SMALL M [Zyyy]=>[ALL]
-		//IDNA:0x1D62E, // (𝘮) MATHEMATICAL SANS-SERIF ITALIC SMALL M [Zyyy]=>[ALL]
-		//IDNA:0x1D662, // (𝙢) MATHEMATICAL SANS-SERIF BOLD ITALIC SMALL M [Zyyy]=>[ALL]
-		//IDNA:0x1D696, // (𝚖) MATHEMATICAL MONOSPACE SMALL M [Zyyy]=>[ALL]
-		0x11700, // (𑜀) AHOM LETTER KA [Ahom]=>[Ahom]
 	],
 	[
 		// "rn̸" <Same>
@@ -6551,10 +6534,9 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0xABAA, // (ꮪ) CHEROKEE SMALL LETTER DU [Cher]=>[Cher]
 		0x118C1, // (𑣁) WARANG CITI SMALL LETTER A [Wara]=>[Wara]
 		0x10448, // (𐑈) DESERET SMALL LETTER ZHEE [Dsrt]=>[Dsrt]
-	],
-	[
+		// 20221202: merge case
 		// "S" <Same>
-		'53', // LATIN CAPITAL LETTER S [Latn]=>[Latn]
+		//'53', // LATIN CAPITAL LETTER S [Latn]=>[Latn]
 		//IDNA:0x53, // (S) LATIN CAPITAL LETTER S [Latn]=>[Latn]
 		//IDNA:0xFF33, // (Ｓ) FULLWIDTH LATIN CAPITAL LETTER S [Latn]=>[Latn]
 		//IDNA:0x1D412, // (𝐒) MATHEMATICAL BOLD CAPITAL S [Zyyy]=>[ALL]
@@ -6666,10 +6648,9 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0x1D635, // (𝘵) MATHEMATICAL SANS-SERIF ITALIC SMALL T [Zyyy]=>[ALL]
 		//IDNA:0x1D669, // (𝙩) MATHEMATICAL SANS-SERIF BOLD ITALIC SMALL T [Zyyy]=>[ALL]
 		//IDNA:0x1D69D, // (𝚝) MATHEMATICAL MONOSPACE SMALL T [Zyyy]=>[ALL]
-	],
-	[
+		// 20221202: merge case
 		// "T" <Same>
-		'54', // LATIN CAPITAL LETTER T [Latn]=>[Latn]
+		//'54', // LATIN CAPITAL LETTER T [Latn]=>[Latn]
 		//IDNA:0x54, // (T) LATIN CAPITAL LETTER T [Latn]=>[Latn]
 		0x22A4, // (⊤) DOWN TACK [Zyyy]=>[ALL]
 		0x27D9, // (⟙) LARGE DOWN TACK [Zyyy]=>[ALL]
@@ -6853,10 +6834,9 @@ export const CONFUSE_GROUPS = [
 		0x57D, // (ս) ARMENIAN SMALL LETTER SEH [Armn]=>[Armn]
 		0x104F6, // (𐓶) OSAGE SMALL LETTER U [Osge]=>[Osge]
 		0x118D8, // (𑣘) WARANG CITI SMALL LETTER PU [Wara]=>[Wara]
-	],
-	[
+		// 20221202: merge case
 		// "U" <Same>
-		'55', // LATIN CAPITAL LETTER U [Latn]=>[Latn]
+		//'55', // LATIN CAPITAL LETTER U [Latn]=>[Latn]
 		//IDNA:0x55, // (U) LATIN CAPITAL LETTER U [Latn]=>[Latn]
 		0x222A, // (∪) UNION [Zyyy]=>[ALL]
 		0x22C3, // (⋃) N-ARY UNION [Zyyy]=>[ALL]
@@ -6984,10 +6964,9 @@ export const CONFUSE_GROUPS = [
 		0x11706, // (𑜆) AHOM LETTER PA [Ahom]=>[Ahom]
 		//IDNA:0xABA9, // (ꮩ) CHEROKEE SMALL LETTER DO [Cher]=>[Cher]
 		0x118C0, // (𑣀) WARANG CITI SMALL LETTER NGAA [Wara]=>[Wara]
-	],
-	[
+		// 20221202: merge case
 		// "V" <Same>
-		'56', // LATIN CAPITAL LETTER V [Latn]=>[Latn]
+		//'56', // LATIN CAPITAL LETTER V [Latn]=>[Latn]
 		//IDNA:0x56, // (V) LATIN CAPITAL LETTER V [Latn]=>[Latn]
 		0x1D20D, // (𝈍) GREEK VOCAL NOTATION SYMBOL-14 [Grek]=>[Grek]
 		0x667, // (٧) ARABIC-INDIC DIGIT SEVEN [Arab]=>[Arab,Thaa,Yezi]
@@ -7130,10 +7109,9 @@ export const CONFUSE_GROUPS = [
 		0x1170E, // (𑜎) AHOM LETTER LA [Ahom]=>[Ahom]
 		0x1170F, // (𑜏) AHOM LETTER SA [Ahom]=>[Ahom]
 		//IDNA:0xAB83, // (ꮃ) CHEROKEE SMALL LETTER LA [Cher]=>[Cher]
-	],
-	[
+		// 20221202: merge case
 		// "W" <Same>
-		'57', // LATIN CAPITAL LETTER W [Latn]=>[Latn]
+		//'57', // LATIN CAPITAL LETTER W [Latn]=>[Latn]
 		//IDNA:0x57, // (W) LATIN CAPITAL LETTER W [Latn]=>[Latn]
 		0x118EF, // (𑣯) WARANG CITI NUMBER SIXTY [Wara]=>[Wara]
 		0x118E6, // (𑣦) WARANG CITI DIGIT SIX [Wara]=>[Wara]
@@ -7189,6 +7167,12 @@ export const CONFUSE_GROUPS = [
 		0x4CE, // (ӎ) CYRILLIC SMALL LETTER EM WITH TAIL [Cyrl]=>[Cyrl]
 	],
 	[
+		// "◌ͯ" <Same>
+		'36F', // COMBINING LATIN SMALL LETTER X [Zinh]=>[Latn]
+		0x36F, // (◌ͯ) COMBINING LATIN SMALL LETTER X [Zinh]=>[Latn]
+		0x2DEF, // (◌ⷯ) COMBINING CYRILLIC LETTER HA [Cyrl]=>[Cyrl]
+	],
+	[
 		// "x" <Same>
 		'78', // LATIN SMALL LETTER X [Latn]=>[Latn]
 		valid(0x78), // (x) LATIN SMALL LETTER X [Latn]=>[Latn]
@@ -7212,20 +7196,13 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0x1D639, // (𝘹) MATHEMATICAL SANS-SERIF ITALIC SMALL X [Zyyy]=>[ALL]
 		//IDNA:0x1D66D, // (𝙭) MATHEMATICAL SANS-SERIF BOLD ITALIC SMALL X [Zyyy]=>[ALL]
 		//IDNA:0x1D6A1, // (𝚡) MATHEMATICAL MONOSPACE SMALL X [Zyyy]=>[ALL]
-		allow(0x445), // (х) CYRILLIC SMALL LETTER HA [Cyrl]=>[Cyrl]
+		0x445, // (х) CYRILLIC SMALL LETTER HA [Cyrl]=>[Cyrl]
 		0x4B3, // (ҳ) CYRILLIC SMALL LETTER HA WITH DESCENDER (added)
 		0x1541, // (ᕁ) CANADIAN SYLLABICS SAYISI YI [Cans]=>[Cans]
 		0x157D, // (ᕽ) CANADIAN SYLLABICS HK [Cans]=>[Cans]
-	],
-	[
-		// "◌ͯ" <Same>
-		'36F', // COMBINING LATIN SMALL LETTER X [Zinh]=>[Latn]
-		0x36F, // (◌ͯ) COMBINING LATIN SMALL LETTER X [Zinh]=>[Latn]
-		0x2DEF, // (◌ⷯ) COMBINING CYRILLIC LETTER HA [Cyrl]=>[Cyrl]
-	],
-	[
+		// 20221202: merge case
 		// "X" <Same>
-		'58', // LATIN CAPITAL LETTER X [Latn]=>[Latn]
+		//'58', // LATIN CAPITAL LETTER X [Latn]=>[Latn]
 		//IDNA:0x58, // (X) LATIN CAPITAL LETTER X [Latn]=>[Latn]
 		0x166D, // (᙭) CANADIAN SYLLABICS CHI SIGN [Cans]=>[Cans]
 		0x2573, // (╳) BOX DRAWINGS LIGHT DIAGONAL CROSS [Zyyy]=>[ALL]
@@ -7329,14 +7306,13 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0x1D738, // (𝜸) MATHEMATICAL BOLD ITALIC SMALL GAMMA [Zyyy]=>[ALL]
 		//IDNA:0x1D772, // (𝝲) MATHEMATICAL SANS-SERIF BOLD SMALL GAMMA [Zyyy]=>[ALL]
 		//IDNA:0x1D7AC, // (𝞬) MATHEMATICAL SANS-SERIF BOLD ITALIC SMALL GAMMA [Zyyy]=>[ALL]
-		allow(0x443), // (у) CYRILLIC SMALL LETTER U [Cyrl]=>[Cyrl]
+		0x443, // (у) CYRILLIC SMALL LETTER U [Cyrl]=>[Cyrl]
 		0x4AF, // (ү) CYRILLIC SMALL LETTER STRAIGHT U [Cyrl]=>[Cyrl]
 		0x10E7, // (ყ) GEORGIAN LETTER QAR [Geor]=>[Geor]
 		0x118DC, // (𑣜) WARANG CITI SMALL LETTER HAR [Wara]=>[Wara]
-	],
-	[
+		// 20221202: merge case
 		// "Y" <Same>
-		'59', // LATIN CAPITAL LETTER Y [Latn]=>[Latn]
+		//'59', // LATIN CAPITAL LETTER Y [Latn]=>[Latn]
 		//IDNA:0x59, // (Y) LATIN CAPITAL LETTER Y [Latn]=>[Latn]
 		//IDNA:0xFF39, // (Ｙ) FULLWIDTH LATIN CAPITAL LETTER Y [Latn]=>[Latn]
 		//IDNA:0x1D418, // (𝐘) MATHEMATICAL BOLD CAPITAL Y [Zyyy]=>[ALL]
@@ -7417,10 +7393,9 @@ export const CONFUSE_GROUPS = [
 		0x1D22, // (ᴢ) LATIN LETTER SMALL CAPITAL Z [Latn]=>[Latn]
 		//IDNA:0xAB93, // (ꮓ) CHEROKEE SMALL LETTER NO [Cher]=>[Cher]
 		0x118C4, // (𑣄) WARANG CITI SMALL LETTER YA [Wara]=>[Wara]
-	],
-	[
+		// 20221202: merge case
 		// "Z" <Same>
-		'5A', // LATIN CAPITAL LETTER Z [Latn]=>[Latn]
+		//'5A', // LATIN CAPITAL LETTER Z [Latn]=>[Latn]
 		//IDNA:0x5A, // (Z) LATIN CAPITAL LETTER Z [Latn]=>[Latn]
 		0x102F5, // (𐋵) COPTIC EPACT NUMBER THREE HUNDRED [Zyyy]=>[Arab Copt]
 		0x118E5, // (𑣥) WARANG CITI DIGIT FIVE [Wara]=>[Wara]

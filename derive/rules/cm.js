@@ -6,6 +6,8 @@ export const CM_WHITELIST = [
 	// note: this is only a subset of the exemplars
 	// 20221104: checked English, German, French, Spanish, Portuguese, 
 	//   Irish, Danish, Croatian, Dutch, Polish, Italian
+	// 20221202: relaxed slightly, added some more variants
+	//   TODO: breve/caron equivalence mapping? "agu"
 
 	'à', // E0 (à) LATIN SMALL LETTER A WITH GRAVE
 	'á', // E1 (á) LATIN SMALL LETTER A WITH ACUTE
@@ -14,8 +16,9 @@ export const CM_WHITELIST = [
 	'ā', // 101 (ā) LATIN SMALL LETTER A WITH MACRON
 	'ä', // E4 (ä) LATIN SMALL LETTER A WITH DIAERESIS
 	'å', // E5 (å) LATIN SMALL LETTER A WITH RING ABOVE
-	'ǎ', // 1CE (ǎ) LATIN SMALL LETTER A WITH CARON
-	//'ą', // 105 (ą) LATIN SMALL LETTER A WITH OGONEK (polish)
+	'ă', // 103 (ă) LATIN SMALL LETTER A WITH BREVE
+	//'ǎ', // 1CE (ǎ) LATIN SMALL LETTER A WITH CARON (20221202: enabling breve instead)
+	'ą', // 105 (ą) LATIN SMALL LETTER A WITH OGONEK (20221202: added for polish)
 
 	'ć', // 107 (ć) LATIN SMALL LETTER C WITH ACUTE
 	'ĉ', // 109 (ĉ) LATIN SMALL LETTER C WITH CIRCUMFLEX
@@ -31,6 +34,9 @@ export const CM_WHITELIST = [
 	'ē', // 113 (ē) LATIN SMALL LETTER E WITH MACRON
 	'ë', // EB (ë) LATIN SMALL LETTER E WITH DIAERESIS
 	'ě', // 11B (ě) LATIN SMALL LETTER E WITH CARON
+	'ę', // 119 (ę) LATIN SMALL LETTER E WITH OGONEK (20221202: added for polish)
+
+	'ğ', // 11F (ğ) LATIN SMALL LETTER G WITH BREVE (20221202: added for turkish/azer)
 
 	'ì', // EC (ì) LATIN SMALL LETTER I WITH GRAVE
 	'í', // ED (í) LATIN SMALL LETTER I WITH ACUTE
@@ -55,7 +61,7 @@ export const CM_WHITELIST = [
 	//'ơ', // 1A1 (ơ) LATIN SMALL LETTER O WITH HORN (vietnamese)
 
 	'š', // 161 (š) LATIN SMALL LETTER S WITH CARON
-	//'ś', // 15B (ś) LATIN SMALL LETTER S WITH ACUTE (polish)
+	'ś', // 15B (ś) LATIN SMALL LETTER S WITH ACUTE (20221202: added for polish)
 
 	'ù', // F9 (ù) LATIN SMALL LETTER U WITH GRAVE
 	'ú', // FA (ú) LATIN SMALL LETTER U WITH ACUTE
@@ -66,9 +72,11 @@ export const CM_WHITELIST = [
 	//'ư', // 1B0 (ư) LATIN SMALL LETTER U WITH HORN (vietnamese)
 
 	'ý', // FD (ý) LATIN SMALL LETTER Y WITH ACUTE
+	'ỳ', // 1EF3 (ỳ) LATIN SMALL LETTER Y WITH GRAVE (20221202: added for welsh/viet)
 
 	'ž', // 17E (ž) LATIN SMALL LETTER Z WITH CARON
-	//'ź', // 17A (ź) LATIN SMALL LETTER Z WITH ACUTE (polish)
+	'ź', // 17A (ź) LATIN SMALL LETTER Z WITH ACUTE (20221202: added for polish)
+	'ż', // 17C (ż) LATIN SMALL LETTER Z WITH DOT ABOVE (20221202: added for polish)
 
 	// === Grek ===
 	'ά', // 3AC (ά) GREEK SMALL LETTER ALPHA WITH TONOS
