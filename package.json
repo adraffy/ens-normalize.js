@@ -38,7 +38,8 @@
     "validate": "node validate/make.js",
     "test": "node test/validate.js",
     "build": "rollup -c",
-    "rebuild": "npm run derive && npm run make && npm run validate && npm run test && npm run build"
+    "rebuild": "npm run derive && npm run make && npm run validate && npm run test && npm run build",
+	"order": "node validate/dump-group-order.js save && npm run rebuild"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.3.0",

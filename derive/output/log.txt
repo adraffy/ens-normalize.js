@@ -1,4 +1,4 @@
-Build Date: 2022-12-03T08:45:41.195Z
+Build Date: 2022-12-04T03:43:33.432Z
 Unicode Version: 15.0.0 (2022-10-23T06:00:57.990Z)
 CLDR Version: 42 (2022-11-04T04:55:37.180Z)
 ==== RGI Emoji ZWJ Sequences ====
@@ -11704,7 +11704,6 @@ Override: 69 (i) LATIN SMALL LETTER I [Japanese,Korean,Han,Latin]
 Override: 6A (j) LATIN SMALL LETTER J [Japanese,Korean,Han,Latin]
 Override: 6B (k) LATIN SMALL LETTER K [Japanese,Korean,Han,Latin]
 Override: 6C (l) LATIN SMALL LETTER L [Japanese,Korean,Han,Latin]
-Override: 31 (1) DIGIT ONE [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common]
 Override: 661 (١) ARABIC-INDIC DIGIT ONE [Arabic,Thaana,Yezi]
 Unresolved: [Ital] 10309 (𐌉) OLD ITALIC LETTER I vs 10320 (𐌠) OLD ITALIC NUMERAL ONE
 Unresolved: [Hebrew] 5D5 (ו) HEBREW LETTER VAV vs 5DF (ן) HEBREW LETTER FINAL NUN
@@ -11717,7 +11716,6 @@ Auto-Override: 438 (и) CYRILLIC SMALL LETTER I [Cyrillic vs Dsrt]
 Override: 6F (o) LATIN SMALL LETTER O [Japanese,Korean,Han,Latin]
 Override: 665 (٥) ARABIC-INDIC DIGIT FIVE [Arabic,Thaana,Yezi]
 Override: 6F5 (۵) EXTENDED ARABIC-INDIC DIGIT FIVE [Arabic]
-Override: 30 (0) DIGIT ZERO [Japanese,Korean,Han,Latin,Cyrillic,Greek,Common]
 Override: 3007 (〇) IDEOGRAPHIC NUMBER ZERO [Japanese,Korean,Han,Bopomofo]
 Unresolved: [Telugu] C02 (◌ం) TELUGU SIGN ANUSVARA vs C66 (౦) TELUGU DIGIT ZERO
 Unresolved: [Kannada] C82 (◌ಂ) KANNADA SIGN ANUSVARA vs CE6 (೦) KANNADA DIGIT ZERO
@@ -14591,7 +14589,7 @@ Multi: 98511
 Unique: 35238
 [✓] Assert Whole Membership
 Confusable: 490
-Not Confusable: 120
+Not Confusable: 118
 Non-Confusable Non-Unique: 50
 ==== Compress Wholes ====
 ==== Compress Groups ====
@@ -14760,9 +14758,9 @@ Ord | Valid  | Uniqu | Prima | Secon | CM  | Group
 ==== NFC Quick Check ====
 Optimized: 2110 => 541
 ==== Write Output ====
-Wrote: spec.json [3125051]
+Wrote: spec.json [3125045]
 Wrote: nf.json [48402]
 Wrote: nf-tests.json [503302]
 Wrote: emoji-info.json [391345]
 Wrote: names.json [3334376]
-Wrote: confused.json [70851]
+Wrote: confused.json [70737]

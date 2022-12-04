@@ -159,3 +159,4 @@ console.log(is_combining_mark(0x20E3)); // eg. COMBINING ENCLOSING KEYCAP => tru
 * `npm run test` — perform validation tests
 * `npm run build` — create `/dist/`
 * `npm run rebuild` — run all the commands above
+* `npm run order` — create optimal ordering and rebuild again

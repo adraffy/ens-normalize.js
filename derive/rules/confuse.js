@@ -5181,7 +5181,7 @@ export const CONFUSE_GROUPS = [
 		0x2223, // (∣) DIVIDES [Zyyy]=>[ALL]
 		0x23FD, // (⏽) POWER ON SYMBOL [Zyyy]=>[ALL]
 		//IDNA:0xFFE8, // (￨) HALFWIDTH FORMS LIGHT VERTICAL [Zyyy]=>[ALL]
-		valid(0x31), // (1) DIGIT ONE [Zyyy]=>[ALL]
+		// valid(0x31), // (1) DIGIT ONE [Zyyy]=>[ALL] (20221203: this links too many confusables together)
 		valid(0x661), // (١) ARABIC-INDIC DIGIT ONE [Arab]=>[Arab,Thaa,Yezi]
 		0x6F1, // (۱) EXTENDED ARABIC-INDIC DIGIT ONE [Arab]=>[Arab]
 		0x10320, // (𐌠) OLD ITALIC NUMERAL ONE [Ital]=>[Ital]
@@ -5897,7 +5897,7 @@ export const CONFUSE_GROUPS = [
 		// "O" <Same>
 		//'4F', // LATIN CAPITAL LETTER O [Latn]=>[Latn]
 		//IDNA:0x4F, // (O) LATIN CAPITAL LETTER O [Latn]=>[Latn]
-		valid(0x30), // (0) DIGIT ZERO [Zyyy]=>[ALL]
+		// valid(0x30), // (0) DIGIT ZERO [Zyyy]=>[ALL] (20221203: this links too many confusables together)
 		0x7C0, // (߀) NKO DIGIT ZERO [Nkoo]=>[Nkoo]
 		0x9E6, // (০) BENGALI DIGIT ZERO [Beng]=>[Beng,Cakm,Sylo]
 		0xB66, // (୦) ORIYA DIGIT ZERO [Orya]=>[Orya]
