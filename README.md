@@ -84,7 +84,7 @@ let tokens = ens_tokenize('_R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./');
 // note: if name is normalizable, then:
 // ens_normalize(ens_tokenize(name).map(token => {
 //     ** convert valid/mapped/nfc/stop to string **
-// }).join('')) === ens_normalize(name)
+// }).join('')) == ens_normalize(name)
 ```
 
 Output-based tokenization:
@@ -95,7 +95,8 @@ let labels = ens_split('💩Raffy.eth_');
 // [
 //   {
 //     input: [ 128169, 82, 97, 102, 102, 121 ],  
-//     offset: 0,
+//     offset: 0, // index of codepoint, not substring index!
+//                // (corresponding length can be inferred from input)
 //     tokens: [
 //       Emoji(2) [ 128169, 65039 ],   // emoji
 //       [ 114, 97, 102, 102, 121 ]    // nfc-text
@@ -113,9 +114,6 @@ let labels = ens_split('💩Raffy.eth_');
 //     error: Error('underscore only allowed at start')
 //   }
 // ]
-
-// note: offset is index of codepoint not substring
-// (corresponding length can be inferred from input)
 ```
 
 Generate a sorted array of supported emoji codepoints:

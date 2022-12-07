@@ -1,4 +1,4 @@
-Build Date: 2022-12-04T03:43:33.432Z
+Build Date: 2022-12-05T00:28:19.990Z
 Unicode Version: 15.0.0 (2022-10-23T06:00:57.990Z)
 CLDR Version: 42 (2022-11-04T04:55:37.180Z)
 ==== RGI Emoji ZWJ Sequences ====
@@ -10958,163 +10958,164 @@ Disallowed Script: [Brai] Braille
 Disallowed Script: [Lina] Linear A [X]
 Disallowed Script: [Linb] Linear B [X]
 Disallowed Script: [Sgnw] SignWriting [X]
-  98613 Japanese   [Kana,Hira] + [Hani,Zyyy] + "abcdefghijklmnopqrstuvwxyz"
- 109931 Korean     [Hang] + [Hani,Zyyy] + "abcdefghijklmnopqrstuvwxyz"
-  98404 Han        [Hani] + [Zyyy] + "abcdefghijklmnopqrstuvwxyz"
-  97258 Bopomofo   [Bopo] + [Hani]
-   1486 Latin      [Latn] + [Zyyy,Zinh] + "πμ"
-   1331 Cyrillic   [Cyrl] + [Zyyy,Zinh]
-   1319 Greek      [Grek] + [Zyyy,Zinh]
-   1194 Common     [Zyyy]
-    405 Arabic     [Arab] + "-"
-    120 Devanagari [Deva]
-     84 Hebrew     [Hebr] + "₪"
-     86 Thai       [Thai] + "฿"
-     91 Bengali    [Beng]
-    126 Tamil      [Taml]
-    186 Tibetan    [Tibt]
-     89 Oriya      [Orya]
-     61 Thaana     [Thaa]
-    111 Sinhala    [Sinh]
-     74 Gurmukhi   [Guru]
-     91 Gujarati   [Gujr]
-     96 Telugu     [Telu]
-     89 Kannada    [Knda]
-    113 Malayalam  [Mlym]
-     80 Lao        [Laoo]
-     42 Georgian   [Geor]
-    214 Myanmar    [Mymr]
-    515 Ethiopic   [Ethi]
-    137 Khmer      [Khmr]
-     43 Armenian   [Armn]
-     52 Adlm       [Adlm] (Restricted)
-     90 Bali       [Bali] (Restricted)
-    654 Bamu       [Bamu] (Restricted)
-     56 Batk       [Batk] (Restricted)
-     88 Cakm       [Cakm] (Restricted)
-    723 Cans       [Cans] (Restricted)
-     80 Cham       [Cham] (Restricted)
-     86 Cher       [Cher] (Restricted)
-     71 Hmnp       [Hmnp] (Restricted)
-     89 Java       [Java] (Restricted)
-     46 Kali       [Kali] (Restricted)
-    123 Lana       [Lana] (Restricted)
-     72 Lepc       [Lepc] (Restricted)
-     66 Limb       [Limb] (Restricted)
-     41 Lisu       [Lisu] (Restricted)
-     29 Mand       [Mand] (Restricted)
-     76 Mtei       [Mtei] (Restricted)
-     93 Newa       [Newa] (Restricted)
-     54 Nkoo       [Nkoo] (Restricted)
-     46 Olck       [Olck] (Restricted)
-     36 Osge       [Osge] (Restricted)
-    149 Plrd       [Plrd] (Restricted)
-     50 Rohg       [Rohg] (Restricted)
-     80 Saur       [Saur] (Restricted)
-     72 Sund       [Sund] (Restricted)
-     55 Sylo       [Sylo] (Restricted)
-     86 Syrc       [Syrc] (Restricted)
-     45 Tale       [Tale] (Restricted)
-     83 Talu       [Talu] (Restricted)
-     72 Tavt       [Tavt] (Restricted)
-     58 Tfng       [Tfng] (Restricted)
-    292 Vaii       [Vaii] (Restricted)
-     59 Wcho       [Wcho] (Restricted)
-   1221 Yiii       [Yiii] (Restricted)
-     53 Aghb       [Aghb] (Restricted)
-     62 Ahom       [Ahom] (Restricted)
-     31 Armi       [Armi] (Restricted)
-     61 Avst       [Avst] (Restricted)
-     35 Bass       [Bass] (Restricted)
-     95 Bhks       [Bhks] (Restricted)
-    113 Brah       [Brah] (Restricted)
-     31 Bugi       [Bugi] (Restricted)
-     20 Buhd       [Buhd] (Restricted)
-     49 Cari       [Cari] (Restricted)
-     28 Chrs       [Chrs] (Restricted)
-     75 Copt       [Copt] (Restricted)
-     99 Cpmn       [Cpmn] (Restricted)
-     55 Cprt       [Cprt] (Restricted)
-     70 Diak       [Diak] (Restricted)
-     70 Dogr       [Dogr] (Restricted)
-     40 Dsrt       [Dsrt] (Restricted)
-    142 Dupl       [Dupl] (Restricted)
-   1094 Egyp       [Egyp] (Restricted)
-     40 Elba       [Elba] (Restricted)
-     23 Elym       [Elym] (Restricted)
-     86 Glag       [Glag] (Restricted)
-     63 Gong       [Gong] (Restricted)
-     75 Gonm       [Gonm] (Restricted)
-     27 Goth       [Goth] (Restricted)
-    103 Gran       [Gran] (Restricted)
-     21 Hano       [Hano] (Restricted)
-     26 Hatr       [Hatr] (Restricted)
-    583 Hluw       [Hluw] (Restricted)
-    124 Hmng       [Hmng] (Restricted)
-     57 Hung       [Hung] (Restricted)
-     39 Ital       [Ital] (Restricted)
-     84 Kawi       [Kawi] (Restricted)
-     60 Khar       [Khar] (Restricted)
-     71 Khoj       [Khoj] (Restricted)
-    471 Kits       [Kits] (Restricted)
-     72 Kthi       [Kthi] (Restricted)
-     29 Lyci       [Lyci] (Restricted)
-     27 Lydi       [Lydi] (Restricted)
-     23 Maka       [Maka] (Restricted)
-     49 Mahj       [Mahj] (Restricted)
-     51 Mani       [Mani] (Restricted)
-     68 Marc       [Marc] (Restricted)
-     57 Medf       [Medf] (Restricted)
-    213 Mend       [Mend] (Restricted)
-     90 Merc       [Merc] (Restricted)
-     32 Mero       [Mero] (Restricted)
-     77 Modi       [Modi] (Restricted)
-    155 Mong       [Mong] (Restricted)
-     41 Mroo       [Mroo] (Restricted)
-     47 Mult       [Mult] (Restricted)
-     42 Nagm       [Nagm] (Restricted)
-     32 Narb       [Narb] (Restricted)
-     76 Nand       [Nand] (Restricted)
-     40 Nbat       [Nbat] (Restricted)
-    397 Nshu       [Nshu] (Restricted)
-     28 Ogam       [Ogam] (Restricted)
-     73 Orkh       [Orkh] (Restricted)
-     40 Osma       [Osma] (Restricted)
-     23 Ougr       [Ougr] (Restricted)
-     32 Palm       [Palm] (Restricted)
-     57 Pauc       [Pauc] (Restricted)
-     43 Perm       [Perm] (Restricted)
-     54 Phag       [Phag] (Restricted)
-     27 Phli       [Phli] (Restricted)
-     29 Phlp       [Phlp] (Restricted)
-     29 Phnx       [Phnx] (Restricted)
-     30 Prti       [Prti] (Restricted)
-     37 Rjng       [Rjng] (Restricted)
-     86 Runr       [Runr] (Restricted)
-     57 Samr       [Samr] (Restricted)
-     32 Sarb       [Sarb] (Restricted)
-     48 Shaw       [Shaw] (Restricted)
-     91 Shrd       [Shrd] (Restricted)
-     75 Sidd       [Sidd] (Restricted)
-     69 Sind       [Sind] (Restricted)
-     35 Sora       [Sora] (Restricted)
-     37 Sogd       [Sogd] (Restricted)
-     40 Sogo       [Sogo] (Restricted)
-     81 Soyo       [Soyo] (Restricted)
-     18 Tagb       [Tagb] (Restricted)
-     68 Takr       [Takr] (Restricted)
-   6914 Tang       [Tang] (Restricted)
-     23 Tglg       [Tglg] (Restricted)
-     82 Tirh       [Tirh] (Restricted)
-     89 Tnsa       [Tnsa] (Restricted)
-     31 Toto       [Toto] (Restricted)
-     31 Ugar       [Ugar] (Restricted)
-     35 Vith       [Vith] (Restricted)
-     52 Wara       [Wara] (Restricted)
-     50 Xpeo       [Xpeo] (Restricted)
-   1234 Xsux       [Xsux] (Restricted)
-     57 Yezi       [Yezi] (Restricted)
-     70 Zanb       [Zanb] (Restricted)
+Valid  | Name       | Test      | Rest      | Extra                     
+ 98613 | Japanese   | Kana+Hira | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+109931 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+ 98404 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
+ 97258 | Bopomofo   | Bopo      | Hani      |                           
+  1486 | Latin      | Latn      | Zyyy+Zinh | πμ                        
+  1331 | Cyrillic   | Cyrl      | Zyyy+Zinh |                           
+  1319 | Greek      | Grek      | Zyyy+Zinh |                           
+  1194 | Common     | Zyyy      |           |                           
+   405 | Arabic     | Arab      |           | -                         
+   120 | Devanagari | Deva      |           |                           
+    84 | Hebrew     | Hebr      |           | ₪                         
+    86 | Thai       | Thai      |           | ฿                         
+    91 | Bengali    | Beng      |           |                           
+   126 | Tamil      | Taml      |           |                           
+   186 | Tibetan    | Tibt      |           |                           
+    89 | Oriya      | Orya      |           |                           
+    61 | Thaana     | Thaa      |           |                           
+   111 | Sinhala    | Sinh      |           |                           
+    74 | Gurmukhi   | Guru      |           |                           
+    91 | Gujarati   | Gujr      |           |                           
+    96 | Telugu     | Telu      |           |                           
+    89 | Kannada    | Knda      |           |                           
+   113 | Malayalam  | Mlym      |           |                           
+    80 | Lao        | Laoo      |           |                           
+    42 | Georgian   | Geor      |           |                           
+   214 | Myanmar    | Mymr      |           |                           
+   515 | Ethiopic   | Ethi      |           |                           
+   137 | Khmer      | Khmr      |           |                           
+    43 | Armenian   | Armn      |           |                           
+    52 | Adlm [R]   | Adlm      |           |                           
+    90 | Bali [R]   | Bali      |           |                           
+   654 | Bamu [R]   | Bamu      |           |                           
+    56 | Batk [R]   | Batk      |           |                           
+    88 | Cakm [R]   | Cakm      |           |                           
+   723 | Cans [R]   | Cans      |           |                           
+    80 | Cham [R]   | Cham      |           |                           
+    86 | Cher [R]   | Cher      |           |                           
+    71 | Hmnp [R]   | Hmnp      |           |                           
+    89 | Java [R]   | Java      |           |                           
+    46 | Kali [R]   | Kali      |           |                           
+   123 | Lana [R]   | Lana      |           |                           
+    72 | Lepc [R]   | Lepc      |           |                           
+    66 | Limb [R]   | Limb      |           |                           
+    41 | Lisu [R]   | Lisu      |           |                           
+    29 | Mand [R]   | Mand      |           |                           
+    76 | Mtei [R]   | Mtei      |           |                           
+    93 | Newa [R]   | Newa      |           |                           
+    54 | Nkoo [R]   | Nkoo      |           |                           
+    46 | Olck [R]   | Olck      |           |                           
+    36 | Osge [R]   | Osge      |           |                           
+   149 | Plrd [R]   | Plrd      |           |                           
+    50 | Rohg [R]   | Rohg      |           |                           
+    80 | Saur [R]   | Saur      |           |                           
+    72 | Sund [R]   | Sund      |           |                           
+    55 | Sylo [R]   | Sylo      |           |                           
+    86 | Syrc [R]   | Syrc      |           |                           
+    45 | Tale [R]   | Tale      |           |                           
+    83 | Talu [R]   | Talu      |           |                           
+    72 | Tavt [R]   | Tavt      |           |                           
+    58 | Tfng [R]   | Tfng      |           |                           
+   292 | Vaii [R]   | Vaii      |           |                           
+    59 | Wcho [R]   | Wcho      |           |                           
+  1221 | Yiii [R]   | Yiii      |           |                           
+    53 | Aghb [R]   | Aghb      |           |                           
+    62 | Ahom [R]   | Ahom      |           |                           
+    31 | Armi [R]   | Armi      |           |                           
+    61 | Avst [R]   | Avst      |           |                           
+    35 | Bass [R]   | Bass      |           |                           
+    95 | Bhks [R]   | Bhks      |           |                           
+   113 | Brah [R]   | Brah      |           |                           
+    31 | Bugi [R]   | Bugi      |           |                           
+    20 | Buhd [R]   | Buhd      |           |                           
+    49 | Cari [R]   | Cari      |           |                           
+    28 | Chrs [R]   | Chrs      |           |                           
+    75 | Copt [R]   | Copt      |           |                           
+    99 | Cpmn [R]   | Cpmn      |           |                           
+    55 | Cprt [R]   | Cprt      |           |                           
+    70 | Diak [R]   | Diak      |           |                           
+    70 | Dogr [R]   | Dogr      |           |                           
+    40 | Dsrt [R]   | Dsrt      |           |                           
+   142 | Dupl [R]   | Dupl      |           |                           
+  1094 | Egyp [R]   | Egyp      |           |                           
+    40 | Elba [R]   | Elba      |           |                           
+    23 | Elym [R]   | Elym      |           |                           
+    86 | Glag [R]   | Glag      |           |                           
+    63 | Gong [R]   | Gong      |           |                           
+    75 | Gonm [R]   | Gonm      |           |                           
+    27 | Goth [R]   | Goth      |           |                           
+   103 | Gran [R]   | Gran      |           |                           
+    21 | Hano [R]   | Hano      |           |                           
+    26 | Hatr [R]   | Hatr      |           |                           
+   583 | Hluw [R]   | Hluw      |           |                           
+   124 | Hmng [R]   | Hmng      |           |                           
+    57 | Hung [R]   | Hung      |           |                           
+    39 | Ital [R]   | Ital      |           |                           
+    84 | Kawi [R]   | Kawi      |           |                           
+    60 | Khar [R]   | Khar      |           |                           
+    71 | Khoj [R]   | Khoj      |           |                           
+   471 | Kits [R]   | Kits      |           |                           
+    72 | Kthi [R]   | Kthi      |           |                           
+    29 | Lyci [R]   | Lyci      |           |                           
+    27 | Lydi [R]   | Lydi      |           |                           
+    23 | Maka [R]   | Maka      |           |                           
+    49 | Mahj [R]   | Mahj      |           |                           
+    51 | Mani [R]   | Mani      |           |                           
+    68 | Marc [R]   | Marc      |           |                           
+    57 | Medf [R]   | Medf      |           |                           
+   213 | Mend [R]   | Mend      |           |                           
+    90 | Merc [R]   | Merc      |           |                           
+    32 | Mero [R]   | Mero      |           |                           
+    77 | Modi [R]   | Modi      |           |                           
+   155 | Mong [R]   | Mong      |           |                           
+    41 | Mroo [R]   | Mroo      |           |                           
+    47 | Mult [R]   | Mult      |           |                           
+    42 | Nagm [R]   | Nagm      |           |                           
+    32 | Narb [R]   | Narb      |           |                           
+    76 | Nand [R]   | Nand      |           |                           
+    40 | Nbat [R]   | Nbat      |           |                           
+   397 | Nshu [R]   | Nshu      |           |                           
+    28 | Ogam [R]   | Ogam      |           |                           
+    73 | Orkh [R]   | Orkh      |           |                           
+    40 | Osma [R]   | Osma      |           |                           
+    23 | Ougr [R]   | Ougr      |           |                           
+    32 | Palm [R]   | Palm      |           |                           
+    57 | Pauc [R]   | Pauc      |           |                           
+    43 | Perm [R]   | Perm      |           |                           
+    54 | Phag [R]   | Phag      |           |                           
+    27 | Phli [R]   | Phli      |           |                           
+    29 | Phlp [R]   | Phlp      |           |                           
+    29 | Phnx [R]   | Phnx      |           |                           
+    30 | Prti [R]   | Prti      |           |                           
+    37 | Rjng [R]   | Rjng      |           |                           
+    86 | Runr [R]   | Runr      |           |                           
+    57 | Samr [R]   | Samr      |           |                           
+    32 | Sarb [R]   | Sarb      |           |                           
+    48 | Shaw [R]   | Shaw      |           |                           
+    91 | Shrd [R]   | Shrd      |           |                           
+    75 | Sidd [R]   | Sidd      |           |                           
+    69 | Sind [R]   | Sind      |           |                           
+    35 | Sora [R]   | Sora      |           |                           
+    37 | Sogd [R]   | Sogd      |           |                           
+    40 | Sogo [R]   | Sogo      |           |                           
+    81 | Soyo [R]   | Soyo      |           |                           
+    18 | Tagb [R]   | Tagb      |           |                           
+    68 | Takr [R]   | Takr      |           |                           
+  6914 | Tang [R]   | Tang      |           |                           
+    23 | Tglg [R]   | Tglg      |           |                           
+    82 | Tirh [R]   | Tirh      |           |                           
+    89 | Tnsa [R]   | Tnsa      |           |                           
+    31 | Toto [R]   | Toto      |           |                           
+    31 | Ugar [R]   | Ugar      |           |                           
+    35 | Vith [R]   | Vith      |           |                           
+    52 | Wara [R]   | Wara      |           |                           
+    50 | Xpeo [R]   | Xpeo      |           |                           
+  1234 | Xsux [R]   | Xsux      |           |                           
+    57 | Yezi [R]   | Yezi      |           |                           
+    70 | Zanb [R]   | Zanb      |           |                           
 ==== Compute CM Whitelist ====
 [E0] (à) LATIN SMALL LETTER A WITH GRAVE <0> "a+◌̀" [Latin]
 [E1] (á) LATIN SMALL LETTER A WITH ACUTE <0> "a+◌́" [Latin]
@@ -14758,9 +14759,9 @@ Ord | Valid  | Uniqu | Prima | Secon | CM  | Group
 ==== NFC Quick Check ====
 Optimized: 2110 => 541
 ==== Write Output ====
-Wrote: spec.json [3125045]
+Wrote: spec.json [3125050]
 Wrote: nf.json [48402]
 Wrote: nf-tests.json [503302]
 Wrote: emoji-info.json [391345]
 Wrote: names.json [3334376]
-Wrote: confused.json [70737]
+Wrote: confused.json [70768]

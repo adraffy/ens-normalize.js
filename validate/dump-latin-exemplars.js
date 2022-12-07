@@ -2,6 +2,8 @@ import {PRINTER} from '../derive/unicode-version.js';
 import {explode_cp, hex_cp, print_table} from '../derive/utils.js';
 import {ens_normalize, ens_tokenize, nfc} from '../src/lib.js';
 
+// https://unicode-org.github.io/cldr-staging/charts/latest/by_type/core_data.alphabetic_information.main.html
+// ALL latin exemplar characters
 let chars = [
 	'a','á','à','ă','ắ','ằ','ẵ','ẳ','â','ấ',
 	'ầ','ẫ','ẩ','ǎ','å','ä','ã','a̧','ą','ā',

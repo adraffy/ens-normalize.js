@@ -1,5 +1,5 @@
-import {mkdirSync, writeFileSync, createWriteStream, cp} from 'node:fs';
-import {compare_arrays, explode_cp, permutations, parse_cp_sequence, print_section, print_checked, print_table, group_by} from './utils.js';
+import {mkdirSync, writeFileSync, createWriteStream} from 'node:fs';
+import {compare_arrays, explode_cp, permutations, parse_cp_sequence, print_section, print_checked, print_table} from './utils.js';
 import {UNICODE, NF, IDNA, PRINTER} from './unicode-version.js';
 import CHARS_VALID from './rules/chars-valid.js';
 import CHARS_DISALLOWED from './rules/chars-disallow.js';
@@ -21,7 +21,7 @@ let out_dir = new URL('./output/', import.meta.url);
 ((stream) => {
 	let out = createWriteStream(new URL('./log.txt', out_dir).pathname);
 	let old = stream.write.bind(stream);
-	stream.write = function(...a) {
+	stream.write = (...a) => {
 		old(...a);
 		out.write(...a);
 	};
@@ -41,7 +41,9 @@ let valid = new Set(IDNA.valid);
 let mapped = new Map(IDNA.mapped);
 let valid_emoji = new Map();
 
-function disallow_char(cp) {	
+// this should be safe by construction
+// a character should only be in one of the sets
+function disallow_char(cp) {
 	let ys = mapped.get(cp);
 	if (ys) {
 		mapped.delete(cp);
@@ -221,7 +223,6 @@ for (let script of disallowed_scripts) {
 }
 */
 
-
 // these are some more primary output structures
 print_section('Create Groups');
 
@@ -315,21 +316,15 @@ for (let cp of valid) {
 		}
 	}
 }
-const MAX_GROUP_NAME_LEN = Math.max(...script_groups.map(g => g.name.length));
-for (let g of script_groups) {
-	let desc = `${g.valid_set.size.toString().padStart(7)} ${g.name.padEnd(MAX_GROUP_NAME_LEN)}`;
-	desc += ` [${[...g.test_script_set].map(s => s.abbr)}]`;
-	if (g.rest_script_set.size) {
-		desc += ` + [${[...g.rest_script_set].map(s => s.abbr)}]`;
-	}
-	if (g.extra_set.size) {
-		desc += ` + "${[...g.extra_set].map(cp => UNICODE.safe_str(cp, true)).join('')}"`;
-	}
-	if (g.restricted) {
-		desc += ' (Restricted)';
-	}
-	console.log(desc);
-}
+print_table(['Valid', 'Name', 'Test', 'Rest', 'Extra'], script_groups.map(g => {
+	return [
+		g.valid_set.size, 
+		g.name + (g.restricted ? ' [R]' : ''),
+		[...g.test_script_set].map(s => s.abbr).join('+'),
+		[...g.rest_script_set].map(s => s.abbr).join('+'),
+		[...g.extra_set].map(cp => UNICODE.safe_str(cp, true)).join(''),
+	]
+}));
 
 print_section(`Compute CM Whitelist`);
 let cm_whitelist = new Set();
@@ -502,8 +497,6 @@ for (let [target, ...defs0] of CONFUSE_GROUPS) {
 					case CONFUSE_TYPE_VALID: // char can be used freely
 						break;
 					case CONFUSE_TYPE_ALLOW: // char requires additional hints
-						//g.register_whole(cp, union);
-						//allow.push([g, def.cp]);
 						whole.add(def.cp, g);
 						break;
 					default: // char is single-script confusable
@@ -515,10 +508,7 @@ for (let [target, ...defs0] of CONFUSE_GROUPS) {
 
 		// there's only 1 for this group, ALLOW it
 		if (confuse.length == 1) {
-			//g.register_whole(confuse[0].cp, union);
-			//allow.push([g, confuse[0].cp]);
 			whole.add(confuse[0].cp, g);
-			//register_whole(target, g, confuse[0], union);
 			continue;
 		}
 
@@ -532,9 +522,6 @@ for (let [target, ...defs0] of CONFUSE_GROUPS) {
 		// for the same group
 		for (let def of confuse) {
 			if (CONFUSE_DEFAULT_ALLOW) {
-				//g.register_whole(def.cp, union);
-				//register_whole(target, g, def, union);
-				//allow.push([g, def.cp]);
 				whole.add(def.cp, g);
 			} else {
 				g.valid_set.delete(def.cp);

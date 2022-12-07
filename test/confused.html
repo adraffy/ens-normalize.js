@@ -116,12 +116,24 @@ td.name, td.script {
 main > * {
 	margin-top: 1rem;
 }
+#options {
+	display: flex;
+}
+#input {
+	display: flex;
+	align-items: stretch;
+}
 #input_field {
 	display: block;
 	padding: 0.5rem;
 	font-size: 16pt;
 	width: 100%;
 	box-sizing: border-box;
+}
+#input select {
+	margin-left: 0.5rem;
+	max-width: 50px;
+	-webkit-appearance: menulist-button;
 }
 #exploded {
 	display: flex;
@@ -208,6 +220,7 @@ footer {
 </div>
 <div id="input">
 <input id="input_field">
+<select id="input_select"></select>
 </div>
 <div id="init">Downloading data files...</div>
 <div id="exploded" class="hide"></div>
@@ -235,6 +248,7 @@ const exploded_div = document.querySelector('#exploded');
 const norm_check = document.querySelector('#norm_check');
 const examples_div = document.querySelector('#examples');
 const resolve_a = document.querySelector('#resolve_a');
+const input_select = document.querySelector('#input_select');
 const readme_dom = [...output_div.childNodes];
 
 let wholes;
@@ -306,6 +320,7 @@ let init = (async () => {
 
 		// union of groups in any def
 		w.groups = [...new Set(w.defs.flatMap(def => def.groups))].sort((a, b) => a.index - b.index);
+		
 
 		// compute extents (only for the normalized characters)
 		let recs = [];
@@ -332,6 +347,27 @@ let init = (async () => {
 
 	}
 	whole_map = new Map(wholes.flatMap(w => w.defs.map(def => [def.cp, w])));
+
+	for (let g of groups) {
+		g.confused = [...whole_map.keys()].reduce((a, cp) => a + g.valid_set.has(cp), 0);
+	}
+	for (let s of scripts) {
+		s.confused = s.cps.reduce((a, cp) => a + whole_map.has(cp), 0);
+	}
+
+	input_select.innerHTML = `
+		<option selected disabled hidden>🔍️</option>
+		<optgroup label="Groups">
+			${groups.filter(g => [...g.valid_set].some(cp => whole_map.has(cp))).map(g => {
+				return `<option value="group:${g.name}">${g.name} (${g.confused}/${g.valid_set.size})</option>`; 
+			}).join('')}
+		</optgroup>
+		<optgroup label="Scripts">
+			${scripts.filter(s => s.cps.some(cp => whole_map.has(cp))).map(s => {
+				return `<option value="script:${s.abbr}">[${s.abbr}] ${s.name} (${s.confused}/${s.cps.length})</option>`;
+			}).join('')},
+		</optgroup>
+	`;
 	document.querySelector('#init').remove();
 	init = undefined;
 })();
@@ -344,6 +380,10 @@ for (let btn of examples_div.querySelectorAll('button')) {
 	});
 }
 
+input_select.addEventListener('change', () => {
+	input_field.value = input_select.value;
+	return update();
+});
 resolve_a.addEventListener('pointerdown', () => {
 	let url = './resolver.html';
 	let value = input_field.value;
@@ -364,6 +404,7 @@ async function update() {
 	output_div.innerHTML = '';
 	output_div.classList.remove('error');
 	exploded_div.classList.add('hide');
+	input_select.selectedIndex = 0;
 	let input = replace_escapes(input_field.value);
 	window.history.replaceState(null, null, input ? `#${input}` : ' ');
 	input_field.focus();

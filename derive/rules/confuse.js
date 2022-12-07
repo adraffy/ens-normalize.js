@@ -4,12 +4,13 @@ export const CONFUSE_TYPE_VALID = 'primary';
 // notes:
 // - arabic digit confusables are deemed valid
 // - upper/lower case ASCII confusables are merged
+// - 0/1 confusables are disabled since they cause too many connections (0oO and lL1Ii)
 
 // markup convenience
 function valid(cp) { return {cp, type: CONFUSE_TYPE_VALID}; }
 function allow(cp) { return {cp, type: CONFUSE_TYPE_ALLOW}; } 
 
-// when there are 2+ confusables for a script without a decision
+// when there are 2+ confusables for a group without a decision
 export const CONFUSE_DEFAULT_ALLOW = true;
 
 // format: [hex-string, cp, cp, ...]
@@ -51,6 +52,7 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0x4E0, // (Ӡ) CYRILLIC CAPITAL LETTER ABKHASIAN DZE [Cyrl]=>[Cyrl]
 		0x16F3B, // (𖼻) MIAO LETTER ZA [Plrd]=>[Plrd]
 		0x118CA, // (𑣊) WARANG CITI SMALL LETTER ANG [Wara]=>[Wara]
+		0xC69, // (౩) TELUGU DIGIT THREE (20221204: missing)
 	],
 	[
 		// "4" <Same>

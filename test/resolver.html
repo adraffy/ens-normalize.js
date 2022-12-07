@@ -1336,7 +1336,7 @@ function add_dot_eth_links(row, name) {
 	let hash = labelhash(label);
 	add_row_tag(row, create_link(`https://opensea.io/assets/ethereum/${ENS_NFT}/${ethers.BigNumber.from(hash)}`, OPENSEA_NAME));
 	add_row_tag(row, create_link(`https://www.ens.vision/name/${encodeURIComponent(label)}`, 'ENS.Vision'));
-	add_row_tag(row, create_link(`https://predomain.eth.link/#/domain/${encodeURIComponent(label)}`, 'Predomain'));
+	add_row_tag(row, create_link(`http://predomain.eth.limo/#/domain/${encodeURIComponent(label)}`, 'Predomain'));
 	add_row_tag(row, create_link(`https://metadata.ens.domains/mainnet/${ENS_NFT}/${hash}`, 'Metadata', 'ens'));
 }
 
