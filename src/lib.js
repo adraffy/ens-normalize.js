@@ -633,7 +633,7 @@ export function ens_tokenize(name, {
 					if (compare_arrays(cps, cps0)) { // bundle into an nfc token
 						tokens.splice(start, end - start, {
 							type: TY_NFC, 
-							input: cps0, 
+							input: cps0, // there are 3 states: tokens0 ==(process)=> input ==(nfc)=> tokens/cps
 							cps, 
 							tokens0: collapse_valid_tokens(slice),
 							tokens: ens_tokenize(str_from_cps(cps), {nf: false})

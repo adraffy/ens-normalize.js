@@ -382,7 +382,6 @@ button.tags {
 }
 .tokens {
 	font-size: 16pt;
-	align-self: stretch;
 }
 .exploded > .error {
 	background-color: #f97;
@@ -1083,8 +1082,8 @@ function add_transformed_row(input) {
 	}
 }
 
-function create_dns_row(name) {
-	let row = create_row('DNS');
+function create_dns_row(name, replaced) {
+	let row = create_row(replaced ? 'Replaced DNS' : 'DNS');
 	row.classList.add('dns');
 	try {
 		const MAX_LABEL = 63;
@@ -1137,6 +1136,19 @@ function create_dns_row(name) {
 	} catch (err) {
 		row.classList.add('invalid');
 		add_row_tag(row, create_typed_tag('fail', err));
+
+		if (!replaced) {
+			let replaced = name.replaceAll('-', '‐');
+			if (replaced !== name) {
+				let btn = document.createElement('button');
+				btn.style.order = 31;
+				btn.innerText = 'Replace ASCII with Unicode';
+				btn.addEventListener('click', () => {
+					row.replaceWith(create_dns_row(replaced, true));
+				});
+				add_row_tag(row, btn);
+			}
+		}
 	}
 	return row;
 }

@@ -57,7 +57,6 @@ function isolated_safe(cps) {
 // TODO: these options are shit, fix this
 export function dom_from_tokens(tokens, {
 	before = false, 
-	///isolate = false,
 	tld_class = true,
 	components = false, 
 	emoji_url = 'https://emojipedia.org/%s',
@@ -65,6 +64,7 @@ export function dom_from_tokens(tokens, {
 } = {}) {
 	let div = document.createElement('div');
 	div.classList.add('tokens');
+	/*
 	if (before) {
 		// dont use normalized form unless its simple
 		tokens = tokens.flatMap(token => {
@@ -75,6 +75,7 @@ export function dom_from_tokens(tokens, {
 			}
 		});
 	}
+	*/
 	div.append(...tokens.map((token, i) => {
 		let el;
 		switch (token.type) {
@@ -96,28 +97,22 @@ export function dom_from_tokens(tokens, {
 			}
 			case 'nfc': {
 				el = document.createElement('div');
-				if (before) {
-					el.innerText = safe_str_from_cps(token.input);
-					el.title = format_tooltip({
-						Type: 'NFC (Unnormalized)',
-						Hex: hex_seq(token.input),
-					}, extra(token.type, token.input));
-				} else {	
-					let lhs = dom_from_tokens(token.tokens0, {components, emoji_url, extra});;
-					if (token.tokens0.every(x => x.type === 'valid')) { // trival case hack
-						lhs.querySelector('.valid').innerHTML = token.input.map(cp => safe_str_from_cps([cp])).join('<span>+</span>');
-					}
-					lhs.classList.add('before');
-					lhs.title = format_tooltip({
-						Type: 'NFC (Unnormalized)',
-						Hex: hex_seq(token.input),
-					}, extra(token.type, token.input));
+				// get the cps from the original tokens
+				let cps0 = token.tokens0.flatMap(t => t.type === 'valid' ? t.cps : t.cp); // this can only be mapped/ignored/valid
+				// break every valid token into individual characters
+				let lhs = dom_from_tokens(token.tokens0.flatMap(t => t.type === 'valid' ? t.cps.map(cp => ({type: 'valid', cps: [cp]})) : t), {components, before, emoji_url, extra});
+				lhs.title = format_tooltip({
+					Type: 'NFC (Unnormalized)',
+					Hex: hex_seq(cps0),
+				}, extra(token.type, cps0));
+				el.append(lhs);
+				if (!before) {
 					let rhs = dom_from_tokens(token.tokens, {components, emoji_url, extra});
 					rhs.title = format_tooltip({
 						Type: 'NFC (Normalized)',
 						Hex: hex_seq(token.cps),
 					}, extra(token.type, token.cps));
-					el.append(lhs, create_arrow_span(), rhs);
+					el.append(create_arrow_span(), rhs);
 				}
 				break;
 			}
@@ -293,9 +288,6 @@ export function use_default_style() {
 		background: #fd8;
 		border-radius: 5px;
 		padding: 2px;
-	}
-	.tokens .nfc .before .valid span {
-		color: rgba(0, 0, 0, 0.35);
 	}`;
 	document.body.append(style);
 }

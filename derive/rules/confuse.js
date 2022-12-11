@@ -4972,6 +4972,7 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0xAB75, // (ꭵ) CHEROKEE SMALL LETTER V [Cher]=>[Cher]
 		0x13A5, // (Ꭵ) CHEROKEE LETTER V [Cher]=>[Cher]
 		0x118C3, // (𑣃) WARANG CITI SMALL LETTER YU [Wara]=>[Wara]
+		0x16E7, // (ᛧ) RUNIC LETTER SHORT-TWIG-YR (20221210: added)
 	],
 	[
 		// "Ⓘ" <Same>
@@ -5945,6 +5946,7 @@ export const CONFUSE_GROUPS = [
 		0x102AB, // (𐊫) CARIAN LETTER O [Cari]=>[Cari]
 		//IDNA:0x10404, // (𐐄) DESERET CAPITAL LETTER LONG O [Dsrt]=>[Dsrt]
 		0x10516, // (𐔖) ELBASAN LETTER O [Elba]=>[Elba]
+		0x1030F, // (𐌏) OLD ITALIC LETTER O [Ital]=>[Ital] (20221210: added)
 	],
 	[
 		// "º" <Same>
@@ -7078,6 +7080,7 @@ export const CONFUSE_GROUPS = [
 		0xA4E5, // (ꓥ) LISU LETTER NGA [Lisu]=>[Lisu]
 		0x16F3D, // (𖼽) MIAO LETTER ZZA [Plrd]=>[Plrd]
 		0x1028D, // (𐊍) LYCIAN LETTER L [Lyci]=>[Lyci]
+		0x10321, // (𐌡) OLD ITALIC NUMERAL FIVE [Ital]=>[Ital] (20221210: added)
 	],
 	[
 		// "Ʌ̦" <Same>

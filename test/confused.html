@@ -118,6 +118,7 @@ main > * {
 }
 #options {
 	display: flex;
+	gap: 1rem;
 }
 #input {
 	display: flex;
@@ -217,6 +218,7 @@ footer {
 </div>
 <div id="options">
 <label class="control"><input id="norm_check" type="checkbox" checked>Use Normalization</label>
+<label class="control"><input id="show_all_check" type="checkbox">Show <b>Full</b> Group/Script <i>(Warning: Slow)</i></label>
 </div>
 <div id="input">
 <input id="input_field">
@@ -242,10 +244,15 @@ import {
 } from '../dist/all.min.js';
 use_default_style();
 
+function is_valid(cp) {
+	return ens_tokenize(String.fromCodePoint(cp)).every(t => t.type === 'valid');
+}
+
 const input_field = document.querySelector('#input_field');
 const output_div = document.querySelector('#output');
 const exploded_div = document.querySelector('#exploded');
 const norm_check = document.querySelector('#norm_check');
+const show_all_check = document.querySelector('#show_all_check');
 const examples_div = document.querySelector('#examples');
 const resolve_a = document.querySelector('#resolve_a');
 const input_select = document.querySelector('#input_select');
@@ -392,6 +399,7 @@ resolve_a.addEventListener('pointerdown', () => {
 });
 input_field.addEventListener('input', update);
 norm_check.addEventListener('input', update);
+show_all_check.addEventListener('input', update);
 window.addEventListener('hashchange', check_hash);
 check_hash();
 
@@ -430,7 +438,7 @@ async function create_grid(input) {
 		let query = match[1].trim();
 		let group = groups.find(g => strcmp(g.name, query) == 0);
 		if (!group) throw new Error(`Unknown group: ${query}`);
-		cps = group.primary.filter(cp => whole_map.has(cp));
+		cps = group.primary.filter(show_all_check.checked ? is_valid : cp => whole_map.has(cp));
 		let extra = [
 			`${group.primary.length} primary`,
 			`${group.secondary.length} secondary`,
@@ -441,7 +449,7 @@ async function create_grid(input) {
 		let query = match[1].trim();
 		let script = scripts.find(s => strcmp(s.name, query) == 0 || strcmp(s.abbr, query) == 0);
 		if (!script) throw new Error(`Unknown script: ${query}`);
-		cps = script.cps.filter(cp => whole_map.has(cp));;
+		cps = script.cps.filter(show_all_check.checked ? is_valid : cp => whole_map.has(cp));
 		output_div.innerHTML = `<h2><code>[${script.abbr}]</code> ${script.name} <span>(${cps.length} of ${script.cps.length})</span></h2>`;
 	} else if (match = input.match(/^range:([0-9a-f]+)\.\.([0-9a-f]+)$/i)) {
 		let lo = parseInt(match[1], 16);

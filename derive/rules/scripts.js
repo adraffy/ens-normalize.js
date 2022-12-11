@@ -15,7 +15,7 @@ export const SCRIPT_GROUPS = [
 	// Latin-like
 	{name: 'Latin', test: ['Latn'], rest: ['Zyyy', 'Zinh'], cm: -1, extra: [
 		0x3C0, // (π) GREEK SMALL LETTER PI
-		0x3BC, // (μ) GREEK SMALL LETTER MU (since Latin mu is mapped)
+		//0x3BC, // (μ) GREEK SMALL LETTER MU (since Latin mu is mapped, 20221210: bad idea, will just get abused)
 	], cm: -1},																// 1.2M
 	{name: 'Cyrillic', test: ['Cyrl'], rest: ['Zyyy', 'Zinh'], cm: -1},		// 1817
 	{name: 'Greek', test: ['Grek'], rest: ['Zyyy', 'Zinh'], cm: -1}, 		// 200 pures with 80+ spoofs

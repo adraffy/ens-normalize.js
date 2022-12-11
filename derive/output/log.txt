@@ -1,4 +1,4 @@
-Build Date: 2022-12-05T00:28:19.990Z
+Build Date: 2022-12-11T09:53:49.485Z
 Unicode Version: 15.0.0 (2022-10-23T06:00:57.990Z)
 CLDR Version: 42 (2022-11-04T04:55:37.180Z)
 ==== RGI Emoji ZWJ Sequences ====
@@ -10840,6 +10840,7 @@ Removed Valid: 1013C (𐄼) AEGEAN DRY MEASURE FIRST SUBUNIT
 Removed Valid: 1013D (𐄽) AEGEAN LIQUID MEASURE FIRST SUBUNIT
 Removed Valid: 1013E (𐄾) AEGEAN MEASURE SECOND SUBUNIT
 Removed Valid: 1013F (𐄿) AEGEAN MEASURE THIRD SUBUNIT
+Removed Valid: 141E (ᐞ) CANADIAN SYLLABICS GLOTTAL STOP
 Removed Valid: 17A3 (ឣ) KHMER INDEPENDENT VOWEL QAQ
 Removed Valid: 17A4 (ឤ) KHMER INDEPENDENT VOWEL QAA
 Removed Mapped: F77 (◌ཷ) TIBETAN VOWEL SIGN VOCALIC RR => [FB2 F71 F80] (◌ྲཱྀ) TIBETAN SUBJOINED LETTER RA + TIBETAN VOWEL SIGN AA + TIBETAN VOWEL SIGN REVERSED I
@@ -10963,7 +10964,7 @@ Valid  | Name       | Test      | Rest      | Extra
 109931 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
  98404 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
  97258 | Bopomofo   | Bopo      | Hani      |                           
-  1486 | Latin      | Latn      | Zyyy+Zinh | πμ                        
+  1485 | Latin      | Latn      | Zyyy+Zinh | π                         
   1331 | Cyrillic   | Cyrl      | Zyyy+Zinh |                           
   1319 | Greek      | Grek      | Zyyy+Zinh |                           
   1194 | Common     | Zyyy      |           |                           
@@ -10993,7 +10994,7 @@ Valid  | Name       | Test      | Rest      | Extra
    654 | Bamu [R]   | Bamu      |           |                           
     56 | Batk [R]   | Batk      |           |                           
     88 | Cakm [R]   | Cakm      |           |                           
-   723 | Cans [R]   | Cans      |           |                           
+   722 | Cans [R]   | Cans      |           |                           
     80 | Cham [R]   | Cham      |           |                           
     86 | Cher [R]   | Cher      |           |                           
     71 | Hmnp [R]   | Hmnp      |           |                           
@@ -11743,7 +11744,7 @@ Override: 75 (u) LATIN SMALL LETTER U [Japanese,Korean,Han,Latin]
 Unresolved: [Cans] 162E (ᘮ) CANADIAN SYLLABICS CARRIER LHU vs 1634 (ᘴ) CANADIAN SYLLABICS CARRIER TLHU
 Override: 76 (v) LATIN SMALL LETTER V [Japanese,Korean,Han,Latin]
 Override: 667 (٧) ARABIC-INDIC DIGIT SEVEN [Arabic,Thaana,Yezi]
-Auto-Override: 668 (٨) ARABIC-INDIC DIGIT EIGHT [Arabic,Thaana,Yezi vs Tfng,Cans,Bamu,Lisu,Plrd,Lyci]
+Auto-Override: 668 (٨) ARABIC-INDIC DIGIT EIGHT [Arabic,Thaana,Yezi vs Tfng,Cans,Bamu,Lisu,Plrd,Lyci,Ital]
 Override: 77 (w) LATIN SMALL LETTER W [Japanese,Korean,Han,Latin]
 Unresolved: [Ahom] 1170A (𑜊) AHOM LETTER JA vs 1170E (𑜎) AHOM LETTER LA vs 1170F (𑜏) AHOM LETTER SA
 Unresolved: [Wara] 118E6 (𑣦) WARANG CITI DIGIT SIX vs 118EF (𑣯) WARANG CITI NUMBER SIXTY
@@ -14585,8 +14586,8 @@ Removed Mapping: 1F248 (🉈) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-655
 [✓] Fastpath ASCII
 [✓] Groups Names are A-Z
 ==== Find Unique Characters ====
-Valid: 133749
-Multi: 98511
+Valid: 133748
+Multi: 98510
 Unique: 35238
 [✓] Assert Whole Membership
 Confusable: 490
@@ -14599,7 +14600,7 @@ Non-Confusable Non-Unique: 50
 [✓] Ordered by Registration Likelihood
 ==== Group Summary ====
 Ord | Valid  | Uniqu | Prima | Secon | CM  | Group     
-  1 |   1277 |    55 |    81 |  1196 | [0] | Latin     
+  1 |   1276 |    55 |    81 |  1195 | [0] | Latin     
   2 |    395 |   372 |   394 |     1 | N=2 | Arabic    
   3 |  98404 |     0 | 97184 |  1220 | [0] | Han       
   4 |    120 |   110 |   120 |     0 | N=2 | Devanagari
@@ -14610,7 +14611,7 @@ Ord | Valid  | Uniqu | Prima | Secon | CM  | Group
   9 |     86 |    85 |    85 |     1 | N=2 | Thai      
  10 |     91 |    81 |    91 |     0 | N=2 | Bengali   
  11 |    123 |   102 |   123 |     0 | N=1 | Tamil     
- 12 |   1229 |    33 |    35 |  1194 | [0] | Greek     
+ 12 |   1229 |    34 |    35 |  1194 | [0] | Greek     
  13 |    186 |   186 |   186 |     0 | N=1 | Tibetan   
  14 |     74 |    64 |    74 |     0 | N=2 | Gurmukhi  
  15 |     80 |    80 |    80 |     0 | N=1 | Lao       
@@ -14632,7 +14633,7 @@ Ord | Valid  | Uniqu | Prima | Secon | CM  | Group
  31 |     54 |    54 |    54 |     0 | N=1 | Nkoo      
  32 |     29 |    29 |    29 |     0 | N=1 | Phnx      
  33 |     86 |    86 |    86 |     0 | N=1 | Cher      
- 34 |    723 |   723 |   723 |     0 | N=1 | Cans      
+ 34 |    722 |   722 |   722 |     0 | N=1 | Cans      
  35 |     86 |    86 |    86 |     0 | N=1 | Runr      
  36 |    155 |   155 |   155 |     0 | N=1 | Mong      
  37 |     66 |    66 |    66 |     0 | N=1 | Limb      
@@ -14759,9 +14760,9 @@ Ord | Valid  | Uniqu | Prima | Secon | CM  | Group
 ==== NFC Quick Check ====
 Optimized: 2110 => 541
 ==== Write Output ====
-Wrote: spec.json [3125050]
+Wrote: spec.json [3125058]
 Wrote: nf.json [48402]
 Wrote: nf-tests.json [503302]
 Wrote: emoji-info.json [391345]
 Wrote: names.json [3334376]
-Wrote: confused.json [70768]
+Wrote: confused.json [70865]
