@@ -454,7 +454,7 @@ function update_search() {
 	let results;
 	let match;
 	if (input === 'is-norm') {
-		results = flat.filter(x => x.is_norm);
+		results = flat.filter(x => x.info && !is_not_emoji(x.info));
 	} else if (input === 'gets-normed') {
 		results = flat.filter(x => x.is_norm && x.form !== x.norm);
 	} else if (input === 'already-norm') {
