@@ -105,3 +105,27 @@ expect_fail(() => get_pure('💩💩💩💩')); // TypeError('not minimial')
 console.log(get_pure('💩💩💩.Eth')); // [3, "💩"]
 console.log(get_pure('🇺🇸🇺🇸.ETH')); // [2, "🇺🇸"]
 console.log(get_pure('👩🏽‍⚕️')); // [1, '👩🏽‍⚕️']
+
+// ********************************************************************************
+// is valid?
+// returns true of the codepoint is "potentially" valid
+function is_valid(cp) {
+	return ens_tokenize(String.fromCodePoint(cp))[0].type === 'valid';
+}
+
+console.log(is_valid(0x61));
+console.log(is_valid(0x20));
+
+// ********************************************************************************
+// get mapped
+// returns mapped characters for the codepoint 
+// or null if not mapped
+
+function get_mapped(cp) {
+	let [token] = ens_tokenize(String.fromCodePoint(cp));
+	return token.type === 'mapped' ? token.cps : null;
+}
+
+console.log(get_mapped(0x2167)); // Ⅷ -> [v, i, i, i]
+console.log(get_mapped(0x41)); // A -> [a]
+console.log(get_mapped(0x61)); // a -> null

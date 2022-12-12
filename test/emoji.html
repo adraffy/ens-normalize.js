@@ -269,6 +269,7 @@ let buckets = [];
 			'Blond Hair',
 			'Curly Hair',
 			'White Hair',
+			'Is Normalized|is-norm',
 			'Already Normalized|already-norm',
 			'Requires Normalization|gets-normed',
 			'Unmod(1)',
@@ -452,7 +453,9 @@ function update_search() {
 	window.history.replaceState(null, null, prefix + input);
 	let results;
 	let match;
-	if (input === 'gets-normed') {
+	if (input === 'is-norm') {
+		results = flat.filter(x => x.is_norm);
+	} else if (input === 'gets-normed') {
 		results = flat.filter(x => x.is_norm && x.form !== x.norm);
 	} else if (input === 'already-norm') {
 		results = flat.filter(x => x.is_norm && x.form === x.norm);	

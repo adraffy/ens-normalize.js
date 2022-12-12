@@ -484,8 +484,10 @@ footer {
 <b>Address:</b>
 <button data-name="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045">d8dA..6045</button>
 
-<b>Hyperlink:</b>
+<b>Preimage:</b>
+<button data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209">Token#</button>
 <button data-name="https://opensea.io/assets/ethereum/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209">OpenSea</button>
+<button data-name="https://www.gem.xyz/asset/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209">Gem</button>
 
 <a href="./chars.html"><b>Chars</b></a> / <b>Mapped:</b> 
 <button data-name="hyph{2D}{2010}{2011}{2012}{2013}{2014}{2015}{2043}{2212}{23AF}{23E4}{FE58}ens">Hyphens</button>
@@ -689,7 +691,7 @@ Hebrew:
 </div>
 <div id="input">
 <label for="input_field">Name or Address:</label>
-<input id="input_field" size="20" placeholder="Name or Address (Checksummed) or OpenSea URL">
+<input id="input_field" size="20" placeholder="Name or token:XYZ or Marketplace URL or Address (Checksummed)">
 </div>
 <div id="controls">
 <div id="arrows" class="hide"><div class="arrows"></div></div>
@@ -704,7 +706,9 @@ Hebrew:
 <ul class="row readme">
 <li>Click an <button data-name="👁️‍🗨️A{303}">Example</button> to see how it works.</li>
 <li>Use <code>{FF}</code> or <code>[255]</code> to manually include codepoints, eg. <button data-escape data-name="a{200D}b.eth">ZWJ</button></li>
-<li>Input <code>"0123 4567 89AB CDEF"</code> to interpret as hex codepoints.</li>
+<li><code>range:A..B</code> expands to a range of characters, eg. <button data-name="range:61..7A">Alphabet</button></li>
+<li><code>token:X</code> resolves to the .eth preimage (if known).</li>
+<li><code>123 456 789</code> is a shortcut for <code>{123}{456}{789}</code>.</li>
 <li><a href="#vitalik.eth"><b>Copy Link</b></a> to get a URL that resolves on page-load.</li>
 </ul>
 <ul class="row legend">
@@ -810,9 +814,10 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 	}
 	name = replace_escapes(name);
 	if (!btn.innerText || btn.innerText.includes('{')) btn.innerText = name;
-	if (!name.includes('.') && !is_checksum_address(name)) name += '.eth';
+	let meta = name.includes(':') || is_checksum_address(name);
+	if (!meta && !name.includes('.')) name += '.eth';
 	if (typeof btn.dataset.escape === 'string') name = apply_escapes(name, false);
-	if (!btn.title) btn.title = `${name}\n${explode_cp(name).map(hex_cp).join(' ')}`;
+	if (!btn.title) btn.title = meta ? name : `${name}\n${explode_cp(name).map(hex_cp).join(' ')}`;
 	btn.addEventListener('click', () => {
 		input_field.value = name;
 		if (btn.dataset.skip) skip_norm_check.checked = true;
@@ -970,7 +975,7 @@ function should_stop_resolving() {
 function schedule_resolve(delay) {
 	if (!auto_resolve_check.checked) return;
 	resolve_options = {
-		automatic: true,
+		//automatic: true,
 		skip_norm: skip_norm_check.checked
 	};
 	if (is_working()) {
@@ -1643,31 +1648,52 @@ function resolve(options) {
 	}
 	clearTimeout(resolve_timer);
 	resolve_timer = RESOLVE_MODE_IDLE;
-	let input = input_field.value;
+	// replace URL with token query
 	try {
-		let url = new URL(input);
-		if (url.hostname == 'opensea.io') {
-			let v = url.pathname.toLowerCase().split('/').filter(x => x);
-			if (v[0] === 'assets' && v[1] === 'ethereum' && v[2] === ENS_NFT.toLowerCase() && /^\d+$/.test(v[3])) {
-				resolve_btn.disabled = true;
-				primary_arrows.classList.remove('hide');
-				fetch(`https://metadata.ens.domains/mainnet/${ENS_NFT}/${v[3]}`).then(r => {
-					if (r.status !== 200) throw new Error(`HTTP Error ${r.status}`);
-					return r.json();
-				}).then(meta => {
-					let name = meta.is_normalized ? meta.name : meta.description.replace(/^.*ENS name\. \((.*\.eth).*$/, (_, x) => x); // cheap hack
-					input_field.value = name;
-					//skip_norm_check.checked = true;
-					setTimeout(resolve, 0);
-				}).catch(() => {}).finally(() => {
-					resolve_btn.disabled = false;
-				});
-				return;
-			}
+		let url = new URL(input_field.value);
+		let v = url.pathname.toLowerCase().split('/').filter(x => x);
+		// https://opensea.io/assets/ethereum/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
+		// https://www.gem.xyz/asset/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
+		// https://element.market/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
+		if (v.length >= 2 && v[v.length-2] === ENS_NFT.toLowerCase() && /^[a-f0-9]+$/i.test(v[v.length-1])) {
+			input_field.value = `token:${v[v.length-1]}`;
 		}
 	} catch (err) {
 	}
-	if (!options.automatic && /^\s*[0-9a-f]{2,}(\s+[0-9a-f]{2,})+\s*$/i.test(input)) { // input convenience
+	let input = input_field.value;
+	let match;
+	// lookup token on ens subgraph
+	if (match = input.match(/^token:((0x)?[a-f0-9]+)$/i)) {
+		let token = ethers.BigNumber.from(match[1]).toHexString();
+		resolve_btn.disabled = true;
+		return fetch('https://api.thegraph.com/subgraphs/name/ensdomains/ens', {
+			method: 'POST',
+			body: JSON.stringify({
+				query: `{domains(where:{labelhash:"${token}"}){labelName}}`
+			})
+		}).then(r => {
+			if (r.status !== 200) throw new Error(`HTTP Error ${r.status}`);
+			return r.json();
+		}).then(json => {
+			let {data: {domains: [{labelName}]}} = json;
+			input_field.value = `${labelName}.eth`;
+			setTimeout(resolve, 0);
+		}).catch(err => {
+			// how to display this error?
+		}).then(() => {
+			resolve_btn.disabled = false;
+		});
+	} 
+	// input convenience: expand range
+	if (match = input.match(/^range:([0-9a-f]+)\.\.([0-9a-f]+)$/i)) {
+		let lo = parseInt(match[1], 16);
+		let hi = parseInt(match[2], 16);
+		if (hi >= lo) {
+			input_field.value = input = String.fromCodePoint(...Array(1 + hi - lo).fill().map((_, i) => lo + i));
+		}
+	}
+	// input convenience:  HEX HEX HEX => {HEX}{HEX}
+	if (/^\s*[0-9a-f]{2,}(\s+[0-9a-f]{2,})+\s*$/i.test(input)) { 
 		input_field.value = input = input.trim().split(/\s+/).map(x => `{${x}}`).join('');	
 	}
 	let title = 'ENS Resolver';

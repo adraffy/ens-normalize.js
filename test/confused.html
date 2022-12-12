@@ -217,7 +217,7 @@ footer {
 <button>Range:<b>61..7A</b></button>
 </div>
 <div id="options">
-<label class="control"><input id="norm_check" type="checkbox" checked>Use Normalization</label>
+<!-- <label class="control"><input id="norm_check" type="checkbox" checked>Use Normalization</label> -->
 <label class="control"><input id="show_all_check" type="checkbox">Show <b>Full</b> Group/Script <i>(Warning: Slow)</i></label>
 </div>
 <div id="input">
@@ -238,7 +238,7 @@ footer {
 <footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
 <script type="module">
 import {
-	ens_split, ens_tokenize,
+	ens_split, ens_tokenize, ens_emoji,
 	explode_cp, hex_cp, safe_str_from_cps, 
 	dom_from_tokens, use_default_style
 } from '../dist/all.min.js';
@@ -248,10 +248,13 @@ function is_valid(cp) {
 	return ens_tokenize(String.fromCodePoint(cp)).every(t => t.type === 'valid');
 }
 
+// single character emoji
+const EMOJI_SET = new Set(ens_emoji().filter(cps => ens_tokenize(String.fromCodePoint(...cps))[0].cps.length == 1).map(cps => cps[0]));
+
 const input_field = document.querySelector('#input_field');
 const output_div = document.querySelector('#output');
 const exploded_div = document.querySelector('#exploded');
-const norm_check = document.querySelector('#norm_check');
+//const norm_check = document.querySelector('#norm_check');
 const show_all_check = document.querySelector('#show_all_check');
 const examples_div = document.querySelector('#examples');
 const resolve_a = document.querySelector('#resolve_a');
@@ -398,7 +401,7 @@ resolve_a.addEventListener('pointerdown', () => {
 	resolve_a.href = url;
 });
 input_field.addEventListener('input', update);
-norm_check.addEventListener('input', update);
+//norm_check.addEventListener('input', update);
 show_all_check.addEventListener('input', update);
 window.addEventListener('hashchange', check_hash);
 check_hash();
@@ -426,6 +429,7 @@ async function update() {
 	} catch (err) {
 		output_div.classList.add('error');
 		output_div.innerHTML = `⚠️ ${err.message}`;
+		console.log(err);
 	}
 }
 
@@ -454,10 +458,8 @@ async function create_grid(input) {
 	} else if (match = input.match(/^range:([0-9a-f]+)\.\.([0-9a-f]+)$/i)) {
 		let lo = parseInt(match[1], 16);
 		let hi = parseInt(match[2], 16);
-		cps = [];
-		while (lo <= hi) cps.push(lo++);
-	} else if (!norm_check.checked) {
-		cps = explode_cp(input);
+		if (hi < lo) throw new Error('Empty range');
+		cps = Array(1 + hi - lo).fill().map((_, i) => lo + i).filter(is_valid);
 	} else {
 
 		let split = ens_split(input);
@@ -484,6 +486,7 @@ async function create_grid(input) {
 		}
 		exploded_div.classList.remove('hide');
 	}
+	cps = cps.filter(cp => char_map.has(cp));
 	if (!cps.length) return;
 
 	let order = [...new Set(cps.map(cp => whole_map.get(cp) || cp))];

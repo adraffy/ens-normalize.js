@@ -62,6 +62,24 @@ span.name {
 #grid tr:nth-child(even) {
 	background: rgba(0, 0, 0, .05);
 }
+#overlay {
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	backdrop-filter: blur(3px);	
+	background-color: rgba(0, 0, 0, 0.2); 
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+#overlay input {
+	padding: 1rem;
+	font-size: 20px;
+	text-align: center;
+}
 footer {
 	text-align: center;
 	color: #666;
@@ -71,12 +89,18 @@ footer {
 </style>
 </head>
 <body>
+<div id="overlay" class="hide">
+<input placeholder="Search">
+</div>
 <table id="grid">
 <tbody></tbody>
 </table>
 <script type="module">
 import {ens_tokenize, hex_cp, dom_from_tokens, use_default_style} from '../dist/all.min.js';
 use_default_style();
+
+const overlay_div = document.querySelector('#overlay');
+const search_field = document.querySelector('#overlay input');
 
 let max_cp = 0x10FFFF; 
 const char_map = new Map();
@@ -145,6 +169,7 @@ let scrollLast;
 let scrollHeight;
 let grid_rows;
 let grid_cols;
+let max_rows;
 
 update_cols();
 window.addEventListener('resize', () => {
@@ -154,9 +179,9 @@ window.addEventListener('resize', () => {
 function update_cols() {
 	grid_rows = Math.round(window.innerHeight / ROW_HEIGHT);
 	grid_cols = Math.floor(window.innerWidth / ROW_WIDTH);
-	let max = Math.ceil((1 + max_cp) / grid_cols);
+	max_rows = Math.ceil((1 + max_cp) / grid_cols);
 	scrollLast = undefined; // dirty
-	scrollHeight = max * ROW_HEIGHT;
+	scrollHeight = max_rows * ROW_HEIGHT;
 	document.body.style.height = `${scrollHeight}px`;
 }
 
@@ -168,6 +193,21 @@ function create_index_td(i) {
 	return td;
 }
 */
+update_hash();
+window.addEventListener('hashchange', update_hash);
+function update_hash() {
+	let hash = window.location.hash.slice(1);
+	if (hash) {
+		window.history.replaceState(null, null, ' ');
+		scroll_to_cp(parseInt(hash, 16));
+	}
+}
+
+function scroll_to_cp(cp) {
+	if (cp >= 0 && cp <= max_cp) {
+		window.scrollTo(0, scrollHeight * Math.floor(cp / grid_cols) / max_rows);
+	}
+}
 
 function update_table() {
 	let cp = grid_cols * Math.round(window.scrollY/ROW_HEIGHT);
@@ -229,6 +269,41 @@ function update_table() {
 	}
 }
 
+window.addEventListener('keydown', e => {
+	if (e.metaKey && e.key === 'f') {
+		e.preventDefault();
+		show_overlay();
+	} else if (e.key === 'Escape') {
+		overlay_div.classList.add('hide');
+	} else if (e.key === 'Enter') {
+		if (overlay_div.classList.contains('hide')) {
+			show_overlay();
+		} else {
+			overlay_div.classList.add('hide');
+			let input = search_field.value.trim().toLowerCase();
+			if (/^[a-f0-9]+$/.test(input)) {
+				scroll_to_cp(parseInt(input, 16));
+			} else if (input) {
+				for (let [cp, {name}] of char_map) {
+					if (name.toLowerCase().includes(input)) {
+						return scroll_to_cp(cp);
+					}
+				}
+				scroll_to_cp(input.codePointAt(0));
+			}
+		}
+	} else if (/^[a-z0-9]$/i.test(e.key)) {
+		if (overlay_div.classList.contains('hide')) {
+			show_overlay();
+		}
+	}
+});
+
+function show_overlay() {
+	overlay_div.classList.remove('hide');
+	search_field.value = '';
+	search_field.focus();
+}
 
 check();
 function check() {

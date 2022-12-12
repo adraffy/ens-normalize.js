@@ -1,4 +1,4 @@
-Build Date: 2022-12-11T09:53:49.485Z
+Build Date: 2022-12-12T03:45:49.233Z
 Unicode Version: 15.0.0 (2022-10-23T06:00:57.990Z)
 CLDR Version: 42 (2022-11-04T04:55:37.180Z)
 ==== RGI Emoji ZWJ Sequences ====
@@ -7030,11 +7030,6 @@ Removed Valid: 10A52 (𐩒) KHAROSHTHI PUNCTUATION CIRCLE
 Removed Valid: 10A53 (𐩓) KHAROSHTHI PUNCTUATION CRESCENT BAR
 Removed Valid: 10A54 (𐩔) KHAROSHTHI PUNCTUATION MANGALAM
 Removed Valid: 10A58 (𐩘) KHAROSHTHI PUNCTUATION LINES
-Removed Valid: 204E (⁎) LOW ASTERISK
-Removed Valid: 26B9 (⚹) SEXTILE
-Removed Valid: 2051 (⁑) TWO ASTERISKS ALIGNED VERTICALLY
-Removed Valid: 2042 (⁂) ASTERISM
-Removed Valid: A673 (꙳) SLAVONIC ASTERISK
 Removed Valid: 6FD (۽) ARABIC SIGN SINDHI AMPERSAND
 Removed Valid: 214B (⅋) TURNED AMPERSAND
 Removed Valid: 1F672 (🙲) LIGATURE OPEN ET ORNAMENT
@@ -7240,6 +7235,7 @@ Removed Valid: 27CB (⟋) MATHEMATICAL RISING DIAGONAL
 Removed Valid: 27CD (⟍) MATHEMATICAL FALLING DIAGONAL
 Removed Valid: 2215 (∕) DIVISION SLASH
 Removed Valid: 2216 (∖) SET MINUS
+Removed Valid: 2580 (▀) UPPER HALF BLOCK
 Removed Valid: 2589 (▉) LEFT SEVEN EIGHTHS BLOCK
 Removed Valid: 258A (▊) LEFT THREE QUARTERS BLOCK
 Removed Valid: 258B (▋) LEFT FIVE EIGHTHS BLOCK
@@ -7248,9 +7244,8 @@ Removed Valid: 258D (▍) LEFT THREE EIGHTHS BLOCK
 Removed Valid: 258E (▎) LEFT ONE QUARTER BLOCK
 Removed Valid: 258F (▏) LEFT ONE EIGHTH BLOCK
 Removed Valid: 2590 (▐) RIGHT HALF BLOCK
-Removed Valid: 2595 (▕) RIGHT ONE EIGHTH BLOCK
 Removed Valid: 2594 (▔) UPPER ONE EIGHTH BLOCK
-Removed Valid: 2580 (▀) UPPER HALF BLOCK
+Removed Valid: 2595 (▕) RIGHT ONE EIGHTH BLOCK
 Removed Valid: 271B (✛) OPEN CENTRE CROSS
 Removed Valid: 2723 (✣) FOUR BALLOON-SPOKED ASTERISK
 Removed Valid: 2719 (✙) OUTLINED GREEK CROSS
@@ -7310,12 +7305,54 @@ Removed Valid: 2E43 (⹃) DASH WITH LEFT UPTURN
 Removed Valid: 2E0F (⸏) PARAGRAPHOS
 Removed Valid: 2E10 (⸐) FORKED PARAGRAPHOS
 Removed Valid: 2E11 (⸑) REVERSED FORKED PARAGRAPHOS
+Removed Valid: 204E (⁎) LOW ASTERISK
+Removed Valid: 26B9 (⚹) SEXTILE
+Removed Valid: 2051 (⁑) TWO ASTERISKS ALIGNED VERTICALLY
+Removed Valid: 2042 (⁂) ASTERISM
+Removed Valid: A673 (꙳) SLAVONIC ASTERISK
+Removed Valid: 273B (✻) TEARDROP-SPOKED ASTERISK
+Removed Valid: 273C (✼) OPEN CENTRE TEARDROP-SPOKED ASTERISK
+Removed Valid: 1F7AF (🞯) LIGHT FIVE SPOKED ASTERISK
+Removed Valid: 1F7B0 (🞰) MEDIUM FIVE SPOKED ASTERISK
+Removed Valid: 1F7B1 (🞱) BOLD FIVE SPOKED ASTERISK
+Removed Valid: 1F7B3 (🞳) VERY HEAVY FIVE SPOKED ASTERISK
+Removed Valid: 1F7B4 (🞴) EXTREMELY HEAVY FIVE SPOKED ASTERISK
+Removed Valid: 1F7B5 (🞵) LIGHT SIX SPOKED ASTERISK
+Removed Valid: 1F7B6 (🞶) MEDIUM SIX SPOKED ASTERISK
+Removed Valid: 1F7B7 (🞷) BOLD SIX SPOKED ASTERISK
+Removed Valid: 1F7B9 (🞹) VERY HEAVY SIX SPOKED ASTERISK
+Removed Valid: 1F7BA (🞺) EXTREMELY HEAVY SIX SPOKED ASTERISK
+Removed Valid: 274A (❊) EIGHT TEARDROP-SPOKED PROPELLER ASTERISK
+Removed Valid: 1F7BB (🞻) LIGHT EIGHT SPOKED ASTERISK
+Removed Valid: 1F7BC (🞼) MEDIUM EIGHT SPOKED ASTERISK
+Removed Valid: 1F7BD (🞽) BOLD EIGHT SPOKED ASTERISK
+Removed Valid: 1F7BF (🞿) VERY HEAVY EIGHT SPOKED ASTERISK
 Removed Valid: 2B51 (⭑) BLACK SMALL STAR
 Removed Valid: 2B52 (⭒) WHITE SMALL STAR
 Removed Valid: 2BE8 (⯨) LEFT HALF BLACK STAR
 Removed Valid: 2BE9 (⯩) RIGHT HALF BLACK STAR
 Removed Valid: 2BEA (⯪) STAR WITH LEFT HALF BLACK
 Removed Valid: 2BEB (⯫) STAR WITH RIGHT HALF BLACK
+Removed Valid: 1F7C0 (🟀) LIGHT THREE POINTED BLACK STAR
+Removed Valid: 1F7C1 (🟁) MEDIUM THREE POINTED BLACK STAR
+Removed Valid: 1F7C3 (🟃) MEDIUM THREE POINTED PINWHEEL STAR
+Removed Valid: 1F7C4 (🟄) LIGHT FOUR POINTED BLACK STAR
+Removed Valid: 1F7C5 (🟅) MEDIUM FOUR POINTED BLACK STAR
+Removed Valid: 1F7C7 (🟇) MEDIUM FOUR POINTED PINWHEEL STAR
+Removed Valid: 1F7C8 (🟈) REVERSE LIGHT FOUR POINTED PINWHEEL STAR
+Removed Valid: 272D (✭) OUTLINED BLACK STAR
+Removed Valid: 1F7C9 (🟉) LIGHT FIVE POINTED BLACK STAR
+Removed Valid: 1F7CB (🟋) MEDIUM SIX POINTED BLACK STAR
+Removed Valid: 1F7CD (🟍) SIX POINTED PINWHEEL STAR
+Removed Valid: 2735 (✵) EIGHT POINTED PINWHEEL STAR
+Removed Valid: 2737 (✷) EIGHT POINTED RECTILINEAR BLACK STAR
+Removed Valid: 1F7CE (🟎) MEDIUM EIGHT POINTED BLACK STAR
+Removed Valid: 1F7CF (🟏) HEAVY EIGHT POINTED BLACK STAR
+Removed Valid: 1F7D0 (🟐) VERY HEAVY EIGHT POINTED BLACK STAR
+Removed Valid: 1F7D1 (🟑) HEAVY EIGHT POINTED PINWHEEL STAR
+Removed Valid: 1F7D2 (🟒) LIGHT TWELVE POINTED BLACK STAR
+Removed Valid: 1F7D3 (🟓) HEAVY TWELVE POINTED BLACK STAR
+Removed Valid: 1F7D4 (🟔) HEAVY TWELVE POINTED PINWHEEL STAR
 Removed Valid: 25A0 (■) BLACK SQUARE
 Removed Valid: 25A1 (□) WHITE SQUARE
 Removed Valid: 25A2 (▢) WHITE SQUARE WITH ROUNDED CORNERS
@@ -8498,6 +8535,116 @@ Removed Valid: 2978 (⥸) GREATER-THAN ABOVE RIGHTWARDS ARROW
 Removed Valid: 2979 (⥹) SUBSET ABOVE RIGHTWARDS ARROW
 Removed Valid: 297A (⥺) LEFTWARDS ARROW THROUGH SUBSET
 Removed Valid: 297B (⥻) SUPERSET ABOVE LEFTWARDS ARROW
+Removed Valid: 1F800 (🠀) LEFTWARDS ARROW WITH SMALL TRIANGLE ARROWHEAD
+Removed Valid: 1F801 (🠁) UPWARDS ARROW WITH SMALL TRIANGLE ARROWHEAD
+Removed Valid: 1F802 (🠂) RIGHTWARDS ARROW WITH SMALL TRIANGLE ARROWHEAD
+Removed Valid: 1F803 (🠃) DOWNWARDS ARROW WITH SMALL TRIANGLE ARROWHEAD
+Removed Valid: 1F804 (🠄) LEFTWARDS ARROW WITH MEDIUM TRIANGLE ARROWHEAD
+Removed Valid: 1F805 (🠅) UPWARDS ARROW WITH MEDIUM TRIANGLE ARROWHEAD
+Removed Valid: 1F806 (🠆) RIGHTWARDS ARROW WITH MEDIUM TRIANGLE ARROWHEAD
+Removed Valid: 1F807 (🠇) DOWNWARDS ARROW WITH MEDIUM TRIANGLE ARROWHEAD
+Removed Valid: 1F808 (🠈) LEFTWARDS ARROW WITH LARGE TRIANGLE ARROWHEAD
+Removed Valid: 1F809 (🠉) UPWARDS ARROW WITH LARGE TRIANGLE ARROWHEAD
+Removed Valid: 1F80A (🠊) RIGHTWARDS ARROW WITH LARGE TRIANGLE ARROWHEAD
+Removed Valid: 1F80B (🠋) DOWNWARDS ARROW WITH LARGE TRIANGLE ARROWHEAD
+Removed Valid: 1F810 (🠐) LEFTWARDS ARROW WITH SMALL EQUILATERAL ARROWHEAD
+Removed Valid: 1F811 (🠑) UPWARDS ARROW WITH SMALL EQUILATERAL ARROWHEAD
+Removed Valid: 1F812 (🠒) RIGHTWARDS ARROW WITH SMALL EQUILATERAL ARROWHEAD
+Removed Valid: 1F813 (🠓) DOWNWARDS ARROW WITH SMALL EQUILATERAL ARROWHEAD
+Removed Valid: 1F814 (🠔) LEFTWARDS ARROW WITH EQUILATERAL ARROWHEAD
+Removed Valid: 1F815 (🠕) UPWARDS ARROW WITH EQUILATERAL ARROWHEAD
+Removed Valid: 1F816 (🠖) RIGHTWARDS ARROW WITH EQUILATERAL ARROWHEAD
+Removed Valid: 1F817 (🠗) DOWNWARDS ARROW WITH EQUILATERAL ARROWHEAD
+Removed Valid: 1F818 (🠘) HEAVY LEFTWARDS ARROW WITH EQUILATERAL ARROWHEAD
+Removed Valid: 1F819 (🠙) HEAVY UPWARDS ARROW WITH EQUILATERAL ARROWHEAD
+Removed Valid: 1F81A (🠚) HEAVY RIGHTWARDS ARROW WITH EQUILATERAL ARROWHEAD
+Removed Valid: 1F81B (🠛) HEAVY DOWNWARDS ARROW WITH EQUILATERAL ARROWHEAD
+Removed Valid: 1F81C (🠜) HEAVY LEFTWARDS ARROW WITH LARGE EQUILATERAL ARROWHEAD
+Removed Valid: 1F81D (🠝) HEAVY UPWARDS ARROW WITH LARGE EQUILATERAL ARROWHEAD
+Removed Valid: 1F81E (🠞) HEAVY RIGHTWARDS ARROW WITH LARGE EQUILATERAL ARROWHEAD
+Removed Valid: 1F81F (🠟) HEAVY DOWNWARDS ARROW WITH LARGE EQUILATERAL ARROWHEAD
+Removed Valid: 1F820 (🠠) LEFTWARDS TRIANGLE-HEADED ARROW WITH NARROW SHAFT
+Removed Valid: 1F821 (🠡) UPWARDS TRIANGLE-HEADED ARROW WITH NARROW SHAFT
+Removed Valid: 1F822 (🠢) RIGHTWARDS TRIANGLE-HEADED ARROW WITH NARROW SHAFT
+Removed Valid: 1F823 (🠣) DOWNWARDS TRIANGLE-HEADED ARROW WITH NARROW SHAFT
+Removed Valid: 1F824 (🠤) LEFTWARDS TRIANGLE-HEADED ARROW WITH MEDIUM SHAFT
+Removed Valid: 1F825 (🠥) UPWARDS TRIANGLE-HEADED ARROW WITH MEDIUM SHAFT
+Removed Valid: 1F826 (🠦) RIGHTWARDS TRIANGLE-HEADED ARROW WITH MEDIUM SHAFT
+Removed Valid: 1F827 (🠧) DOWNWARDS TRIANGLE-HEADED ARROW WITH MEDIUM SHAFT
+Removed Valid: 1F828 (🠨) LEFTWARDS TRIANGLE-HEADED ARROW WITH BOLD SHAFT
+Removed Valid: 1F829 (🠩) UPWARDS TRIANGLE-HEADED ARROW WITH BOLD SHAFT
+Removed Valid: 1F82A (🠪) RIGHTWARDS TRIANGLE-HEADED ARROW WITH BOLD SHAFT
+Removed Valid: 1F82B (🠫) DOWNWARDS TRIANGLE-HEADED ARROW WITH BOLD SHAFT
+Removed Valid: 1F82C (🠬) LEFTWARDS TRIANGLE-HEADED ARROW WITH HEAVY SHAFT
+Removed Valid: 1F82D (🠭) UPWARDS TRIANGLE-HEADED ARROW WITH HEAVY SHAFT
+Removed Valid: 1F82E (🠮) RIGHTWARDS TRIANGLE-HEADED ARROW WITH HEAVY SHAFT
+Removed Valid: 1F82F (🠯) DOWNWARDS TRIANGLE-HEADED ARROW WITH HEAVY SHAFT
+Removed Valid: 1F830 (🠰) LEFTWARDS TRIANGLE-HEADED ARROW WITH VERY HEAVY SHAFT
+Removed Valid: 1F831 (🠱) UPWARDS TRIANGLE-HEADED ARROW WITH VERY HEAVY SHAFT
+Removed Valid: 1F832 (🠲) RIGHTWARDS TRIANGLE-HEADED ARROW WITH VERY HEAVY SHAFT
+Removed Valid: 1F833 (🠳) DOWNWARDS TRIANGLE-HEADED ARROW WITH VERY HEAVY SHAFT
+Removed Valid: 1F834 (🠴) LEFTWARDS FINGER-POST ARROW
+Removed Valid: 1F835 (🠵) UPWARDS FINGER-POST ARROW
+Removed Valid: 1F836 (🠶) RIGHTWARDS FINGER-POST ARROW
+Removed Valid: 1F837 (🠷) DOWNWARDS FINGER-POST ARROW
+Removed Valid: 1F838 (🠸) LEFTWARDS SQUARED ARROW
+Removed Valid: 1F839 (🠹) UPWARDS SQUARED ARROW
+Removed Valid: 1F83A (🠺) RIGHTWARDS SQUARED ARROW
+Removed Valid: 1F83B (🠻) DOWNWARDS SQUARED ARROW
+Removed Valid: 1F83C (🠼) LEFTWARDS COMPRESSED ARROW
+Removed Valid: 1F83D (🠽) UPWARDS COMPRESSED ARROW
+Removed Valid: 1F83E (🠾) RIGHTWARDS COMPRESSED ARROW
+Removed Valid: 1F83F (🠿) DOWNWARDS COMPRESSED ARROW
+Removed Valid: 1F840 (🡀) LEFTWARDS HEAVY COMPRESSED ARROW
+Removed Valid: 1F841 (🡁) UPWARDS HEAVY COMPRESSED ARROW
+Removed Valid: 1F842 (🡂) RIGHTWARDS HEAVY COMPRESSED ARROW
+Removed Valid: 1F843 (🡃) DOWNWARDS HEAVY COMPRESSED ARROW
+Removed Valid: 1F850 (🡐) LEFTWARDS SANS-SERIF ARROW
+Removed Valid: 1F851 (🡑) UPWARDS SANS-SERIF ARROW
+Removed Valid: 1F852 (🡒) RIGHTWARDS SANS-SERIF ARROW
+Removed Valid: 1F853 (🡓) DOWNWARDS SANS-SERIF ARROW
+Removed Valid: 1F854 (🡔) NORTH WEST SANS-SERIF ARROW
+Removed Valid: 1F855 (🡕) NORTH EAST SANS-SERIF ARROW
+Removed Valid: 1F856 (🡖) SOUTH EAST SANS-SERIF ARROW
+Removed Valid: 1F857 (🡗) SOUTH WEST SANS-SERIF ARROW
+Removed Valid: 1F858 (🡘) LEFT RIGHT SANS-SERIF ARROW
+Removed Valid: 1F859 (🡙) UP DOWN SANS-SERIF ARROW
+Removed Valid: 1F860 (🡠) WIDE-HEADED LEFTWARDS LIGHT BARB ARROW
+Removed Valid: 1F861 (🡡) WIDE-HEADED UPWARDS LIGHT BARB ARROW
+Removed Valid: 1F862 (🡢) WIDE-HEADED RIGHTWARDS LIGHT BARB ARROW
+Removed Valid: 1F863 (🡣) WIDE-HEADED DOWNWARDS LIGHT BARB ARROW
+Removed Valid: 1F864 (🡤) WIDE-HEADED NORTH WEST LIGHT BARB ARROW
+Removed Valid: 1F865 (🡥) WIDE-HEADED NORTH EAST LIGHT BARB ARROW
+Removed Valid: 1F866 (🡦) WIDE-HEADED SOUTH EAST LIGHT BARB ARROW
+Removed Valid: 1F867 (🡧) WIDE-HEADED SOUTH WEST LIGHT BARB ARROW
+Removed Valid: 1F868 (🡨) WIDE-HEADED LEFTWARDS BARB ARROW
+Removed Valid: 1F869 (🡩) WIDE-HEADED UPWARDS BARB ARROW
+Removed Valid: 1F86A (🡪) WIDE-HEADED RIGHTWARDS BARB ARROW
+Removed Valid: 1F86B (🡫) WIDE-HEADED DOWNWARDS BARB ARROW
+Removed Valid: 1F86C (🡬) WIDE-HEADED NORTH WEST BARB ARROW
+Removed Valid: 1F86D (🡭) WIDE-HEADED NORTH EAST BARB ARROW
+Removed Valid: 1F86E (🡮) WIDE-HEADED SOUTH EAST BARB ARROW
+Removed Valid: 1F86F (🡯) WIDE-HEADED SOUTH WEST BARB ARROW
+Removed Valid: 1F870 (🡰) WIDE-HEADED LEFTWARDS MEDIUM BARB ARROW
+Removed Valid: 1F871 (🡱) WIDE-HEADED UPWARDS MEDIUM BARB ARROW
+Removed Valid: 1F872 (🡲) WIDE-HEADED RIGHTWARDS MEDIUM BARB ARROW
+Removed Valid: 1F873 (🡳) WIDE-HEADED DOWNWARDS MEDIUM BARB ARROW
+Removed Valid: 1F874 (🡴) WIDE-HEADED NORTH WEST MEDIUM BARB ARROW
+Removed Valid: 1F875 (🡵) WIDE-HEADED NORTH EAST MEDIUM BARB ARROW
+Removed Valid: 1F876 (🡶) WIDE-HEADED SOUTH EAST MEDIUM BARB ARROW
+Removed Valid: 1F877 (🡷) WIDE-HEADED SOUTH WEST MEDIUM BARB ARROW
+Removed Valid: 1F880 (🢀) WIDE-HEADED LEFTWARDS VERY HEAVY BARB ARROW
+Removed Valid: 1F881 (🢁) WIDE-HEADED UPWARDS VERY HEAVY BARB ARROW
+Removed Valid: 1F882 (🢂) WIDE-HEADED RIGHTWARDS VERY HEAVY BARB ARROW
+Removed Valid: 1F883 (🢃) WIDE-HEADED DOWNWARDS VERY HEAVY BARB ARROW
+Removed Valid: 1F884 (🢄) WIDE-HEADED NORTH WEST VERY HEAVY BARB ARROW
+Removed Valid: 1F885 (🢅) WIDE-HEADED NORTH EAST VERY HEAVY BARB ARROW
+Removed Valid: 1F886 (🢆) WIDE-HEADED SOUTH EAST VERY HEAVY BARB ARROW
+Removed Valid: 1F887 (🢇) WIDE-HEADED SOUTH WEST VERY HEAVY BARB ARROW
+Removed Valid: 1FBB5 (🮵) LEFTWARDS ARROW AND UPPER AND LOWER ONE EIGHTH BLOCK
+Removed Valid: 1FBB6 (🮶) RIGHTWARDS ARROW AND UPPER AND LOWER ONE EIGHTH BLOCK
+Removed Valid: 1FBB7 (🮷) DOWNWARDS ARROW AND RIGHT ONE EIGHTH BLOCK
+Removed Valid: 1FBB8 (🮸) UPWARDS ARROW AND RIGHT ONE EIGHTH BLOCK
 Removed Valid: 21BC (↼) LEFTWARDS HARPOON WITH BARB UPWARDS
 Removed Valid: 21BD (↽) LEFTWARDS HARPOON WITH BARB DOWNWARDS
 Removed Valid: 21BE (↾) UPWARDS HARPOON WITH BARB RIGHTWARDS
@@ -10960,14 +11107,14 @@ Disallowed Script: [Lina] Linear A [X]
 Disallowed Script: [Linb] Linear B [X]
 Disallowed Script: [Sgnw] SignWriting [X]
 Valid  | Name       | Test      | Rest      | Extra                     
- 98613 | Japanese   | Kana+Hira | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
-109931 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
- 98404 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
+ 98466 | Japanese   | Kana+Hira | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+109784 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+ 98257 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
  97258 | Bopomofo   | Bopo      | Hani      |                           
-  1485 | Latin      | Latn      | Zyyy+Zinh | π                         
-  1331 | Cyrillic   | Cyrl      | Zyyy+Zinh |                           
-  1319 | Greek      | Grek      | Zyyy+Zinh |                           
-  1194 | Common     | Zyyy      |           |                           
+  1338 | Latin      | Latn      | Zyyy+Zinh | π                         
+  1184 | Cyrillic   | Cyrl      | Zyyy+Zinh |                           
+  1172 | Greek      | Grek      | Zyyy+Zinh |                           
+  1047 | Common     | Zyyy      |           |                           
    405 | Arabic     | Arab      |           | -                         
    120 | Devanagari | Deva      |           |                           
     84 | Hebrew     | Hebr      |           | ₪                         
@@ -14586,8 +14733,8 @@ Removed Mapping: 1F248 (🉈) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-655
 [✓] Fastpath ASCII
 [✓] Groups Names are A-Z
 ==== Find Unique Characters ====
-Valid: 133748
-Multi: 98510
+Valid: 133601
+Multi: 98363
 Unique: 35238
 [✓] Assert Whole Membership
 Confusable: 490
@@ -14600,18 +14747,18 @@ Non-Confusable Non-Unique: 50
 [✓] Ordered by Registration Likelihood
 ==== Group Summary ====
 Ord | Valid  | Uniqu | Prima | Secon | CM  | Group     
-  1 |   1276 |    55 |    81 |  1195 | [0] | Latin     
+  1 |   1129 |    55 |    81 |  1048 | [0] | Latin     
   2 |    395 |   372 |   394 |     1 | N=2 | Arabic    
-  3 |  98404 |     0 | 97184 |  1220 | [0] | Han       
+  3 |  98257 |     0 | 97184 |  1073 | [0] | Han       
   4 |    120 |   110 |   120 |     0 | N=2 | Devanagari
-  5 |  98611 |   207 |   209 | 98402 | [0] | Japanese  
-  6 | 109930 | 11526 | 11528 | 98402 | [0] | Korean    
-  7 |   1299 |   105 |   105 |  1194 | [0] | Cyrillic  
+  5 |  98464 |   207 |   209 | 98255 | [0] | Japanese  
+  6 | 109783 | 11526 | 11528 | 98255 | [0] | Korean    
+  7 |   1152 |   105 |   105 |  1047 | [0] | Cyrillic  
   8 |     84 |    83 |    83 |     1 | N=2 | Hebrew    
   9 |     86 |    85 |    85 |     1 | N=2 | Thai      
  10 |     91 |    81 |    91 |     0 | N=2 | Bengali   
  11 |    123 |   102 |   123 |     0 | N=1 | Tamil     
- 12 |   1229 |    34 |    35 |  1194 | [0] | Greek     
+ 12 |   1082 |    34 |    35 |  1047 | [0] | Greek     
  13 |    186 |   186 |   186 |     0 | N=1 | Tibetan   
  14 |     74 |    64 |    74 |     0 | N=2 | Gurmukhi  
  15 |     80 |    80 |    80 |     0 | N=1 | Lao       
@@ -14628,7 +14775,7 @@ Ord | Valid  | Uniqu | Prima | Secon | CM  | Group
  26 |    107 |   107 |   107 |     0 | N=1 | Sinhala   
  27 |     86 |    86 |    86 |     0 | N=1 | Oriya     
  28 |     61 |    50 |    61 |     0 | N=2 | Thaana    
- 29 |   1194 |     0 |  1194 |     0 | N=0 | Common    
+ 29 |   1047 |     0 |  1047 |     0 | N=0 | Common    
  30 |     86 |    75 |    86 |     0 | N=1 | Syrc      
  31 |     54 |    54 |    54 |     0 | N=1 | Nkoo      
  32 |     29 |    29 |    29 |     0 | N=1 | Phnx      
@@ -14760,9 +14907,9 @@ Ord | Valid  | Uniqu | Prima | Secon | CM  | Group
 ==== NFC Quick Check ====
 Optimized: 2110 => 541
 ==== Write Output ====
-Wrote: spec.json [3125058]
+Wrote: spec.json [3117903]
 Wrote: nf.json [48402]
 Wrote: nf-tests.json [503302]
 Wrote: emoji-info.json [391345]
 Wrote: names.json [3334376]
-Wrote: confused.json [70865]
+Wrote: confused.json [70898]

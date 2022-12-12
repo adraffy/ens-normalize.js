@@ -7431,6 +7431,7 @@ export const CONFUSE_GROUPS = [
 		0x13C3, // (Ꮓ) CHEROKEE LETTER NO [Cher]=>[Cher]
 		0xA4DC, // (ꓜ) LISU LETTER DZA [Lisu]=>[Lisu]
 		//IDNA:0x118A9, // (𑢩) WARANG CITI CAPITAL LETTER O [Wara]=>[Wara]
+		0x104FB, // (𐓻) OSAGE SMALL LETTER ZHA [Osge]=>[osge]
 	],
 	[
 		// "z̨" <Same>
