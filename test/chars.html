@@ -69,11 +69,15 @@ span.name {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	backdrop-filter: blur(3px);	
 	background-color: rgba(0, 0, 0, 0.2); 
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+#overlay div {
+	padding: 20px;
+	border-radius: 10px;
+	background-color: rgba(255, 255, 255, 0.8);
 }
 #overlay input {
 	padding: 1rem;
@@ -90,7 +94,9 @@ footer {
 </head>
 <body>
 <div id="overlay" class="hide">
-<input placeholder="Hex or Search">
+<div>
+<input placeholder="Hex or Name">
+</div>
 </div>
 <table id="grid">
 <tbody></tbody>
@@ -270,7 +276,8 @@ function update_table() {
 }
 
 window.addEventListener('keydown', e => {
-	if (e.metaKey && e.key === 'f') {
+	if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+		console.log('wtf');
 		e.preventDefault();
 		show_overlay();
 	} else if (e.key === 'Escape') {
@@ -292,9 +299,13 @@ window.addEventListener('keydown', e => {
 				scroll_to_cp(input.codePointAt(0));
 			}
 		}
-	} else if (/^[a-z0-9]$/i.test(e.key)) {
+	} else if (!e.altKey && !e.ctrlKey && !e.metaKey && /^[a-z0-9]$/i.test(e.key)) {
 		if (overlay_div.classList.contains('hide')) {
 			show_overlay();
+			search_field.value = e.key;
+			e.preventDefault();
+		} else {
+			search_field.focus();
 		}
 	}
 });

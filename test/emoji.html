@@ -386,9 +386,9 @@ function make_rec(cps) {
 	return rec;
 }
 
-function process_hash() {
-	let anchor;
+function process_hash(e) {
 	let hash = window.location.hash.slice(1);
+	let sel;
 	if (hash) {
 		let match;
 		if (match = hash.match(/^q\=(.*)$/)) {
@@ -396,11 +396,14 @@ function process_hash() {
 			search_field.select();
 		} else if (/^\d+$/.test(hash)) {
 			search_field.value = '';
-			anchor = document.querySelector(`[name="${hash}"]`);
+			sel = `[name="${hash}"]`;
 		}
 	}
 	update_search();
-	if (anchor) anchor.scrollIntoView();
+	if (sel) {
+		let el = document.querySelector(sel);
+		if (el) requestAnimationFrame(() => el.scrollIntoView());
+	}
 }
 
 function search_soon() {
