@@ -4,6 +4,7 @@ import {UNICODE, NF, IDNA, PRINTER} from './unicode-version.js';
 import CHARS_VALID from './rules/chars-valid.js';
 import CHARS_DISALLOWED from './rules/chars-disallow.js';
 import CHARS_MAPPED from './rules/chars-mapped.js';
+import CHARS_IGNORED from './rules/chars-ignored.js';
 import CHARS_ESCAPE from './rules/chars-escape.js';
 import CHARS_FENCED from './rules/chars-fenced.js';
 import GROUP_ORDER from './rules/group-order.js';
@@ -176,14 +177,13 @@ for (let [x, ys] of CHARS_MAPPED) {
 	console.log(`Add Mapped: ${PRINTER.desc_for_mapped(x, ys)}`);
 }
 
-print_section(`Remove Disallowed Characters`);
-for (let cp of CHARS_DISALLOWED) {
-	if (!mapped.has(cp) && !ignored.has(cp) && !valid.has(cp)) {
-		console.log(`*** Already disallowed: ${PRINTER.desc_for_cp(cp)}`); // not fatal		
-	}
+print_section(`Add Ignored Characters`);
+for (let cp of CHARS_IGNORED) {
+	if (ignored.has(cp)) throw new Error(`Already ignored: ${PRINTER.desc_for_cp(cp)}`);
 	disallow_char(cp);
+	ignored.add(cp);
+	console.log(`Added Ignored: ${PRINTER.desc_for_cp(cp)}`);
 }
-disallow_char(STOP); // 20221125: this should probably be removed too
 
 print_section(`Add Valid Characters`);
 for (let cp of CHARS_VALID) {
@@ -192,6 +192,16 @@ for (let cp of CHARS_VALID) {
 	valid.add(cp);
 	console.log(`Added Valid: ${PRINTER.desc_for_cp(cp)}`);
 }
+
+// 20221213: this comes after Adds
+print_section(`Remove Disallowed Characters`);
+for (let cp of CHARS_DISALLOWED) {
+	if (!mapped.has(cp) && !ignored.has(cp) && !valid.has(cp)) {
+		console.log(`*** Already disallowed: ${PRINTER.desc_for_cp(cp)}`); // not fatal		
+	}
+	disallow_char(cp);
+}
+disallow_char(STOP); // 20221125: this should probably be removed too
 
 print_section(`Apply ScriptExt`);
 for (let [cp, abbrs] of SCRIPT_EXTENSIONS) {
@@ -397,12 +407,27 @@ for (let g of script_groups) {
 			break;
 		}
 		default: {
-			// remove any char decomposes into too many cp
+			// remove any char decomposes into too many adjacent cp
 			for (let cp of g.valid_set) {
 				let cps = NF.nfd([cp]);
+				/*
 				let cms = cps.filter(cp => UNICODE.cm.has(cp));
 				if (cms.length > g.cm) {
 					purged.push(cp);
+				}
+				*/
+				// 20221213: potential bug: [A cm B cm] is okay if CM=1
+				// the following fixes the issue, but resulted in no change
+				for (let i = 0; i < cps.length; i++) {
+					if (UNICODE.cm.has(cps[i])) {
+						let j = i+1;
+						while (j < cps.length && UNICODE.cm.has(cps[j])) j++;
+						if (j-i > g.cm) {
+							purged.push(cp);
+							break;
+						}
+						i = j;
+					}
 				}
 			}
 		}
@@ -411,7 +436,7 @@ for (let g of script_groups) {
 	print_section(`Purge CM: ${g.name} (${purged.length})`);
 	for (let cp of purged) {		
 		g.valid_set.delete(cp);
-		console.log(PRINTER.desc_for_cp(cp));
+		console.log(PRINTER.desc_for_mapped(cp, NF.nfd([cp])));
 	}
 }
 

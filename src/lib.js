@@ -220,6 +220,9 @@ export function ens_beautify(name) {
 				prev = next + 1;
 			}
 		}
+		// 20221213: fixes bidi subdomain issue, but breaks invariant (200E is disallowed)
+		// could be fixed with special case for: 2D (.) + 200E (LTR)
+		// output.splice(0, 0, 0x200E);
 	}
 	return flatten(split);
 }

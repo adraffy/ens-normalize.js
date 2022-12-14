@@ -2,19 +2,27 @@
 // https://www.unicode.org/reports/tr9/
 // https://www.w3.org/International/articles/inline-bidi-markup/uba-basics
 
-import {SCRIPTS, UNICODE} from './unicode-version.js';
-import {tally_entries} from './utils.js';
+import {UNICODE, PRINTER, IDNA} from './unicode-version.js';
+import {group_by} from './utils.js';
 
-console.log([...tally_entries(UNICODE.chars, x => x.bidi_class).entries()].map(([k, v]) => [k, v.length]));
+console.log([...group_by(UNICODE.char_map.values(), x => x.bidi_class).entries()].map(([k, v]) => [k, v.length]));
 
-let per_script = tally_entries(UNICODE.chars.filter(x => {
+let per_script = group_by([...UNICODE.char_map.values()].filter(x => {
 	switch (x.bidi_class) {
 		case 'R':
 		case 'AL': return true;
 	}
-}), x => SCRIPTS.get_script(x.cp)?.abbr);
+}), x => UNICODE.get_script(x.cp)?.abbr);
 console.log([...per_script.entries()].map(([k, v]) => [k, v.length]));
 
-for (let cp of per_script.get('Zyyy')) {
-	console.log(UNICODE.js_format(cp));
+for (let ch of per_script.get('Zyyy')) {
+	console.log(PRINTER.desc_for_cp(ch.cp));
 }
+
+/*
+// 20221213: do any ignored characters have directionality?
+// answer: no :chonkscream:
+for (let cp of IDNA.ignored) {
+	console.log(cp, UNICODE.char_map.get(cp).bidi_class);
+}
+*/

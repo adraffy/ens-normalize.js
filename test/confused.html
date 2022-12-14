@@ -583,8 +583,8 @@ async function create_grid(input) {
 		let tr = document.createElement('tr');
 		tr.classList.add('first');
 		tr.append(
-			create_th(form_header),
 			create_th(cp_header),
+			create_th(form_header),
 			create_th('Character Name', false, 'name'),
 			create_th('Script', false, 'script'),
 			...group_universe.map(g => {
@@ -643,16 +643,16 @@ function make_tag(i) {
 
 function add_td_for_cp(tr, cp) {
 
+	let td_hex = document.createElement('td');
+	td_hex.classList.add('hex');
+	td_hex.innerText = hex_cp(cp);
+	tr.append(td_hex);
+
 	let td_info = document.createElement('td');
 	td_info.classList.add('form');
 	td_info.innerText = safe_str_from_cps([cp]);
 	//td_info.append(dom_from_tokens(ens_tokenize(String.fromCodePoint(cp)), {before: true}));
 	tr.append(td_info);
-
-	let td_hex = document.createElement('td');
-	td_hex.classList.add('hex');
-	td_hex.innerText = hex_cp(cp);
-	tr.append(td_hex);
 
 	let char = char_map.get(cp);
 

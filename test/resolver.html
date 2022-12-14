@@ -15,6 +15,10 @@
 	white-space: pre-wrap !important;
 	line-break: anywhere;
 }
+.force-ltr {
+	direction: ltr;
+	unicode-bidi: bidi-override;
+}
 a, button {
 	cursor: pointer;
 }
@@ -687,6 +691,7 @@ Hebrew:
 <label><input type="checkbox" id="auto_resolve_check" checked>Resolve on Input</label>
 <label><input type="checkbox" id="show_details_check" checked>Details</label>
 <label><input type="checkbox" id="show_components_check" checked>Emoji Components</label>
+<label><input type="checkbox" id="force_ltr_check">Force RTL</label>
 <span><input type="checkbox" id="skip_norm_check"><label class="nonstd" for="skip_norm_check">Skip Normalization</label></span>
 </div>
 <div id="input">
@@ -758,6 +763,7 @@ const auto_resolve_check = document.querySelector('#auto_resolve_check');
 const show_components_check = document.querySelector('#show_components_check');
 const skip_norm_check = document.querySelector('#skip_norm_check');
 const show_details_check = document.querySelector('#show_details_check');
+const force_ltr_check = document.querySelector('#force_ltr_check');
 const options_div = document.querySelector('#options');
 const controls_div = document.querySelector('#controls');
 const output_div = document.querySelector('#output');
@@ -804,6 +810,7 @@ read_local_storage('hide_examples',   x => examples_div.classList.toggle('hide',
 read_local_storage('show_details',    x => show_details_check.checked = x);
 read_local_storage('auto_resolve',    x => auto_resolve_check.checked = x);
 read_local_storage('show_components', x => show_components_check.checked = x);
+read_local_storage('force_ltr',       x => force_ltr_check.checked = x);
 
 for (let btn of document.querySelectorAll('#examples button:not([id]), button[data-name]')) {
 	let name = btn.innerText;
@@ -834,6 +841,7 @@ for (let div of document.querySelectorAll('[data-tokenize]')) {
 	}));
 }
 
+force_ltr_check.addEventListener('click', update_force_ltr);
 resolve_btn.addEventListener('click', () => resolve());
 input_field.addEventListener('keydown', e => {
 	if (e.key === 'Enter') {
@@ -919,6 +927,7 @@ if (window.ethereum) {
 }
 
 update_examples();
+update_force_ltr();
 input_field.focus();
 apply_location_hash();
 window.addEventListener('hashchange', apply_location_hash);
@@ -957,6 +966,10 @@ function update_examples() {
 		examples_btn.innerHTML = '🙈 <b>Hide Examples</b>';
 		examples_div.prepend(examples_btn);
 	}
+}
+
+function update_force_ltr() {
+	input_field.classList.toggle('force-ltr', force_ltr_check.checked);
 }
 
 function apply_location_hash() {

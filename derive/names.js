@@ -1,7 +1,7 @@
 // dump out a list of characters with consistant formatting
 // eg. `node names.js 23 2A 30..39"
 
-import {UNICODE, PRINTER} from './unicode-version.js';
+import {UNICODE, PRINTER, IDNA} from './unicode-version.js';
 import {parse_cp_range, hex_cp} from './utils.js';
 
 let check_old;
@@ -34,6 +34,12 @@ if (args[0] === 'find') { // search by name/patt
 		if (!v) throw new Error(`unknown property: ${prop}`);
 		return v;
 	});
+} else if (args[0] === 'idna-valid') {
+	cps = IDNA.valid;
+} else if (args[0] === 'idna-ignored') {
+	cps = IDNA.ignored;
+} else if (args[0] === 'idna-mapped') {
+	cps = IDNA.mapped.map(x => x[0]);
 } else if (args[0] === 'cm') {
 	cps = [...UNICODE.cm];
 } else { 
@@ -42,6 +48,7 @@ if (args[0] === 'find') { // search by name/patt
 	cps = [...new Set(args.flatMap(parse_cp_range))].sort((a, b) => a - b);
 }
 
+// TODO: fix this
 switch (format) {
 	case 'md':
 	case 'jss':
