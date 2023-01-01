@@ -2275,7 +2275,7 @@ export default [
 
 	// other blocks
 	0x2580, // (▀) UPPER HALF BLOCK
-	//0x2581, // (▁) LOWER ONE EIGHTH BLOCK
+	//0x2581, // (▁) LOWER ONE EIGHTH BLOCK (2022122: this is potentially too much like underscore)
 	//0x2582, // (▂) LOWER ONE QUARTER BLOCK
 	//0x2583, // (▃) LOWER THREE EIGHTHS BLOCK
 	//0x2584, // (▄) LOWER HALF BLOCK

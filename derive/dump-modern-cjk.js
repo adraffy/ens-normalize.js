@@ -1,9 +1,11 @@
-import {SCRIPTS} from './unicode-version.js';
-//import {augment_script_set} from './unicode-logic.js';
+// compute augmented cjk containment
+
+import {UNICODE} from './unicode-version.js';
 import {readFileSync} from 'node:fs';
 
-// dogfood: valid
-let valid = new Set(JSON.parse(readFileSync(new URL('./output/spec.json', import.meta.url))).valid);
+const SPEC = JSON.parse(readFileSync(new URL('./output/spec.json', import.meta.url))); // note: requires spec
+
+let valid = new Set(SPEC.groups.flatMap(g => [...g.primary, ...g.secondary]));
 
 let abbrs = [
 	'Hang', // Hangul
@@ -14,13 +16,14 @@ let abbrs = [
 
 let buckets = {};
 for (let abbr0 of abbrs) {
-	let script = SCRIPTS.require(abbr0);
-	for (let cp of script.set) {
+	let script0 = UNICODE.require_script(abbr0);
+	for (let cp of script0.map.keys()) {
 		if (!valid.has(cp)) continue;
-		for (let abbr of SCRIPTS.get_augmented_script_set(cp)) {
-			let bucket = buckets[abbr];
+		for (let script of UNICODE.get_augmented_script_set(cp)) {
+			let key = script.abbr;
+			let bucket = buckets[key];
 			if (!bucket) {
-				buckets[abbr] = bucket = new Set();
+				buckets[key] = bucket = new Set();
 			}
 			bucket.add(cp);
 		}

@@ -17,6 +17,7 @@ function read_set() {
 const MAPPED = new Map(read_mapped(r)); 
 const IGNORED = read_set(); // ignored characters are not valid, so just read raw codepoints
 /*
+// direct include from payload is smaller that the decompression code
 const FENCED = new Map(read_array_while(() => {
 	let cp = r();
 	if (cp) return [cp, read_str(r())];
@@ -27,6 +28,7 @@ const ESCAPE = read_set(); // characters that should not be printed
 const NFC_CHECK = read_set();
 const CHUNKS = read_sorted_arrays(r);
 function read_chunked() {
+	// deduplicated sets + uniques
 	return new Set([read_sorted(r).map(i => CHUNKS[i]), read_sorted(r)].flat(2));
 }
 const UNRESTRICTED = r();
@@ -107,7 +109,7 @@ for (let cp of valid_union) {
 */
 const VALID = new Set([...union, ...nfd(union)]); // 30ms
 const EMOJI_SORTED = read_sorted(r);
-//const EMOJI_SOLO = new Set(read_sorted(r).map(i => EMOJI_SORTED[i]));
+//const EMOJI_SOLO = new Set(read_sorted(r).map(i => EMOJI_SORTED[i])); // not needed
 const EMOJI_ROOT = read_emoji_trie([]);
 function read_emoji_trie(cps) {
 	let B = read_array_while(() => {
@@ -222,7 +224,7 @@ export function ens_beautify(name) {
 		}
 		// 20221213: fixes bidi subdomain issue, but breaks invariant (200E is disallowed)
 		// could be fixed with special case for: 2D (.) + 200E (LTR)
-		// output.splice(0, 0, 0x200E);
+		//output.splice(0, 0, 0x200E);
 	}
 	return flatten(split);
 }
@@ -256,6 +258,7 @@ export function ens_split(name, preserve_emoji) {
 					// cant have fenced
 					// cant have cm
 					// cant have wholes
+					// see derive: assert ascii fast path
 					type = 'ASCII';
 				} else {
 					if (emoji) { // there is at least one emoji
@@ -276,16 +279,18 @@ export function ens_split(name, preserve_emoji) {
 						}
 						check_fenced(norm);
 						let unique = [...new Set(chars)];
-						let [g] = determine_group(unique);
-						check_group(g, chars);
-						check_whole(g, unique);
+						let [g] = determine_group(unique); // take the first match
+						// see derive: equivalent up to naming
+						// alternative: could form a hybrid type: Latin/Japanese/...	
+						check_group(g, chars); // need text in order
+						check_whole(g, unique); // only need unique (order would be required for multiple-char confusables)
 						type = g.N;
 					}
 				}
 			}
 			info.type = type;
 		} catch (err) {
-			info.error = err;
+			info.error = err; // use full error object
 		}
 		info.output = norm;
 		return info;

@@ -6,6 +6,12 @@ export const CONFUSE_TYPE_VALID = 'primary';
 // - upper/lower case ASCII confusables are merged
 // - 0/1 confusables are disabled since they cause too many connections (0oO and lL1Ii)
 
+// useful links:
+// https://util.unicode.org/UnicodeJsps/confusables.jsp
+// https://unicode-org.github.io/cldr-staging/charts/latest/by_type/core_data.alphabetic_information.main.html
+// https://adraffy.github.io/ens-normalize.js/test/confused.html
+// https://en.wikipedia.org/wiki/Arabic_script_in_Unicode
+
 // markup convenience
 function valid(cp) { return {cp, type: CONFUSE_TYPE_VALID}; }
 function allow(cp) { return {cp, type: CONFUSE_TYPE_ALLOW}; } 
@@ -5864,7 +5870,7 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0x1D782, // (𝞂) MATHEMATICAL SANS-SERIF BOLD SMALL SIGMA [Zyyy]=>[ALL]
 		//IDNA:0x1D7BC, // (𝞼) MATHEMATICAL SANS-SERIF BOLD ITALIC SMALL SIGMA [Zyyy]=>[ALL]
 		0x2C9F, // (ⲟ) COPTIC SMALL LETTER O [Copt]=>[Copt]
-		allow(0x43E), // (о) CYRILLIC SMALL LETTER O [Cyrl]=>[Cyrl]
+		0x43E, // (о) CYRILLIC SMALL LETTER O [Cyrl]=>[Cyrl]
 		0x10FF, // (ჿ) GEORGIAN LETTER LABIAL SIGN [Geor]=>[Geor]
 		0x585, // (օ) ARMENIAN SMALL LETTER OH [Armn]=>[Armn]
 		0x5E1, // (ס) HEBREW LETTER SAMEKH [Hebr]=>[Hebr]
@@ -5876,7 +5882,7 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0xFEEC, // (ﻬ) ARABIC LETTER HEH MEDIAL FORM [Arab]=>[Arab]
 		//IDNA:0xFEEA, // (ﻪ) ARABIC LETTER HEH FINAL FORM [Arab]=>[Arab]
 		//IDNA:0xFEE9, // (ﻩ) ARABIC LETTER HEH ISOLATED FORM [Arab]=>[Arab]
-		0x6BE, // (ھ) ARABIC LETTER HEH DOACHASHMEE [Arab]=>[Arab]
+		0x6BE, // (ھ) ARABIC LETTER HEH DOACHASHMEE [Arab]=>[Arab] // 20221215: 8 regs, has ligature form, but ە.x == ہ.x 
 		//IDNA:0xFBAC, // (ﮬ) ARABIC LETTER HEH DOACHASHMEE INITIAL FORM [Arab]=>[Arab]
 		//IDNA:0xFBAD, // (ﮭ) ARABIC LETTER HEH DOACHASHMEE MEDIAL FORM [Arab]=>[Arab]
 		//IDNA:0xFBAB, // (ﮫ) ARABIC LETTER HEH DOACHASHMEE FINAL FORM [Arab]=>[Arab]

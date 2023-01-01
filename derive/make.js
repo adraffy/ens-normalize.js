@@ -766,7 +766,20 @@ for (let g of script_groups) {
 	g.unique_set = new Set([...valid_unique].filter(cp => g.valid_set.has(cp)));
 }
 
-print_checked(`Assert Whole Membership`);
+for (let cp of valid_unique) {
+	let gs = script_groups.filter(g => g.valid_set.has(cp));
+	if (!gs.length) throw new Error('bug');
+	if (gs.length == 1) continue;
+	let {cm} = gs[0];
+	if (!gs.every(g => cm == -1 ? g.cm_map : g.cm === cm)) {
+		console.log(PRINTER.desc_for_cp(cp));
+		console.log(`Expected CM Style: ${cm}`);
+		gs.forEach(g => console.log(g.name, g.cm));
+		throw new Error(`different`);
+	}
+}
+print_checked(`Matching Groups have Same CM Style`);
+
 for (let w of wholes_list) {
 	for (let [cp, set] of w.map) {
 		for (let g of set) {
@@ -776,6 +789,7 @@ for (let w of wholes_list) {
 		}
 	}
 }
+print_checked(`Wholes are Valid`);
 
 let confused_whole = wholes_list.flatMap(w => w.map.keys());
 let confused_valid = wholes_list.flatMap(w => w.valid); 

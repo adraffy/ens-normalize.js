@@ -3,7 +3,7 @@
 import {PRINTER, UNICODE} from './unicode-version.js';
 import {version_ordinal} from './utils.js';
 
-const version0 = version_ordinal(UNICODE.unicode_version);
+const version0 = version_ordinal(UNICODE.unicode_version); // version threshold
 
 let found = new Map();
 function add(cps, info) {
@@ -18,13 +18,13 @@ function add(cps, info) {
 	rec.types.push(info.type);
 }
 
-for (let info of Object.values(UNICODE.emoji_data()).flat()) {
+for (let info of Object.values(UNICODE.read_emoji_data()).flat()) {
 	add([info.cp], info);
 }
-for (let info of Object.values(UNICODE.emoji_seqs()).flat()) {
+for (let info of Object.values(UNICODE.read_emoji_seqs()).flat()) {
 	add(info.cps, info);
 }
-for (let info of Object.values(UNICODE.emoji_zwjs()).flat()) {
+for (let info of Object.values(UNICODE.read_emoji_zwjs()).flat()) {
 	add(info.cps, info);
 }
 

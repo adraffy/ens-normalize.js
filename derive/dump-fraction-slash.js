@@ -1,3 +1,4 @@
+// dump fraction-slash idna mappings
 
 import {IDNA, PRINTER} from './unicode-version.js';
 

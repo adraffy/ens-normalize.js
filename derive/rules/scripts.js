@@ -13,13 +13,20 @@ export const SCRIPT_GROUPS = [
 	{name: 'Bopomofo', test: ['Bopo'], rest: ['Hani'], cm: -1},									// 35 pure, spoof mixed
 
 	// Latin-like
-	{name: 'Latin', test: ['Latn'], rest: ['Zyyy', 'Zinh'], cm: -1, extra: [
+	{name: 'Latin', test: ['Latn', 'Zyyy'], rest: ['Zinh'], cm: -1, extra: [
 		0x3C0, // (π) GREEK SMALL LETTER PI
 		//0x3BC, // (μ) GREEK SMALL LETTER MU (since Latin mu is mapped, 20221210: bad idea, will just get abused)
 	], cm: -1},																// 1.2M
 	{name: 'Cyrillic', test: ['Cyrl'], rest: ['Zyyy', 'Zinh'], cm: -1},		// 1817
 	{name: 'Greek', test: ['Grek'], rest: ['Zyyy', 'Zinh'], cm: -1}, 		// 200 pures with 80+ spoofs
-	{name: 'Common', test: ['Zyyy'], cm: 0},
+	
+	// 20221215: there is no need for this group 
+	// it is a proper subset of any of the groups above.
+	// selecting this group (when multiple groups match)
+	// would only effect the displayed name
+	// eg. "123" is Latin/ASCII instead of Common
+	//{name: 'Common', test: ['Zyyy'], cm: 0},
+	// this change also requires moving Latin's Zyyy from rest to test
 
 	// Pure with Many Regs
 	{name: 'Arabic', test: ['Arab'], cm: 2, extra: ['-']}, 			// 15000 pure, underscores, only 11 latin mixed (spoofs), and "0x"

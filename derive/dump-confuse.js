@@ -1,7 +1,10 @@
+// rebuild rules/confuse.js from source
+// suggestion: if unicode changed, compute this file, then diff against original
+
 import {UNICODE, NF, IDNA, PRINTER} from './unicode-version.js';
 import {compare_arrays, hex_cp} from './utils.js';
 
-let confusables = UNICODE.confusables();
+let confusables = UNICODE.read_confusables();
 let valid_set = new Set(IDNA.valid);
 
 // check that there are no duplicates
@@ -15,11 +18,14 @@ for (let [_, cps] of confusables) {
 	}
 }
 
-const MARKER = 'primary';
-
 PRINTER.js_header();
-console.log(`function ${MARKER}(cp) { return {cp, type: 'primary'}; }`);
-console.log(`function single(cp) { return {cp, type: 'single'}; }`);
+
+console.log(`export const CONFUSE_TYPE_ALLOW = 'allow';`);
+console.log(`export const CONFUSE_TYPE_VALID = 'primary';`);
+
+console.log(`function valid(cp) { return {cp, type: CONFUSE_TYPE_VALID}; }`);
+console.log(`function allow(cp) { return {cp, type: CONFUSE_TYPE_ALLOW}; }`);
+
 console.log(`export default [`);
 for (let [target, cps] of confusables) {
 	let nfc = NF.nfc(target);
@@ -44,7 +50,7 @@ for (let [target, cps] of confusables) {
 	for (let cp of cps) {
 		let desc = `0x${hex_cp(cp)}`;
 		if (ascii.length == 1 && ascii[0] === cp) {
-			desc = `${MARKER}(${desc})`;
+			desc = `valid(${desc})`;
 		}
 		desc = `${desc}, // (${UNICODE.get_display(cp)}) ${UNICODE.get_name(cp)}`;
 		if (!valid_set.has(cp)) {
@@ -58,5 +64,5 @@ for (let [target, cps] of confusables) {
 console.log(`]`);
 
 function format_set(set) {
-	return `[${[...set].join(',')}]`;
+	return `[${[...set].map(s => s.name).join(',')}]`;
 }

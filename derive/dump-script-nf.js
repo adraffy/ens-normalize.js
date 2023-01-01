@@ -1,40 +1,35 @@
-import {UNICODE, SCRIPTS, NF} from './unicode-version.js';
-import {print_section} from './utils.js';
+// dump scripts with decomposable components
+
+import {UNICODE, NF} from './unicode-version.js';
 import {SCRIPT_GROUPS, RESTRICTED_SCRIPTS} from './rules/scripts.js';
-import { AUGMENTED_ALL, read_excluded_scripts, read_limited_scripts } from './unicode-logic.js';
+import {print_section} from './utils.js';
 
 let all = ['Zyyy', 'Zinh'];
 
-let leftover = new Set(SCRIPTS.entries.map(x => x.abbr));
+let leftover = new Set(UNICODE.script_map.keys());
 all.forEach(abbr => leftover.delete(abbr));
 
-for (let ordered of SCRIPT_GROUPS) {
-	let cps = [ordered.test, ordered.rest.flatMap(x => x === AUGMENTED_ALL ? all : x)].flat().flatMap(abbr => SCRIPTS.require(abbr).set);
-	if (ordered.extra) cps.push(...ordered.extra);
-	if (cps.some(cp => NF.decomposes(cp))) {
-		console.log(ordered.name);
+for (let g of SCRIPT_GROUPS) {
+	let scripts = [...g.test, ...(g.rest ?? [])].map(abbr => UNICODE.require_script(abbr));	
+	let cps = [...scripts.flatMap(s => s.map.keys())];
+	if (g.extra) cps.push(...g.extra);
+	if (cps.some(cp => NF.is_composite(cp))) {
+		console.log(g.name);
 	}
-	ordered.test.forEach(abbr => leftover.delete(abbr));
+	g.test.forEach(abbr => leftover.delete(abbr));
 }
 
-print_section('Limited');
-for (let abbr of read_limited_scripts()) {
+print_section('Restricted');
+for (let abbr of RESTRICTED_SCRIPTS) {
 	leftover.delete(abbr);
-	if ([...SCRIPTS.require(abbr).set].some(cp => NF.decomposes(cp))) {
-		console.log(abbr);
-	}
-}
-print_section('Excluded');
-for (let abbr of read_excluded_scripts()) {
-	leftover.delete(abbr);
-	if ([...SCRIPTS.require(abbr).set].some(cp => NF.decomposes(cp))) {
+	if ([...UNICODE.require_script(abbr).map.keys()].some(cp => NF.is_composite(cp))) {
 		console.log(abbr);
 	}
 }
 
 print_section('Leftover');
 for (let abbr of leftover) {
-	if ([...SCRIPTS.require(abbr).set].some(cp => NF.decomposes(cp))) {
+	if ([...UNICODE.require_script(abbr).map.keys()].some(cp => NF.is_composite(cp))) {
 		console.log(abbr);
 	}
 }

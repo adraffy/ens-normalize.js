@@ -7,7 +7,7 @@ import {writeFile, mkdir} from 'node:fs/promises';
 
 async function fetch_regions(url, dir) {
 	// A sequence of two Regional Indicator characters, where the corresponding ASCII characters 
-	//are valid region sequences as specified by Unicode region subtags in [CLDR],
+	// are valid region sequences as specified by Unicode region subtags in [CLDR],
 	// with idStatus = “regular”, “deprecated”, or “macroregion”.
 	let res = await fetch(new URL('./common/validity/region.xml', url));
 	if (res.status != 200) throw new Error(`HTTP error ${res.status}`);

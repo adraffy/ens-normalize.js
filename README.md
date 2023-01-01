@@ -2,17 +2,28 @@
 0-dependancy Compact ES6 [Ethereum Name Service](https://ens.domains/) (ENS) Name Normalizer that works in the browser.
 
 * Follows [ENS Name Normalization Standard](https://github.com/adraffy/ensip-norm/blob/main/draft.md)
-* Passes [**100%**](https://adraffy.github.io/ens-norm-tests/test-validation/output/ens_normalize_1.6.3.html) Validation Tests
+* Passes [**100%**](https://adraffy.github.io/ens-normalize.js/test/validate.html) Validation Tests
 * Custom [`NFC`](https://unicode.org/reports/tr15/) Implementation (or use native)
 	* Passes [**100%**](https://adraffy.github.io/ens-normalize.js/test/report-nf.html) Unicode `15.0.0` [Normalization Tests](https://www.unicode.org/Public/15.0.0/ucd/NormalizationTest.txt)
 * Minified File Sizes: 
 	* [`27KB`](./dist/index-xnf.min.js) — native `NFC` via [nf-native.js](./src/nf-native.js) using `String.normalize()`
 	* [`35KB` **Default** ](./dist/index.min.js) — custom `NFC` via [nf.js](./src/nf.js)
 	* [`41KB`](./dist/all.min.js) *Everything!* — custom `NFC` + sub-libraries: [parts.js](./src/parts.js), [utils.js](./src/utils.js)
-* [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
-* [Character Viewer](https://adraffy.github.io/ens-normalize.js/test/chars.html)
-* [List of Supported Emoji](https://adraffy.github.io/ens-normalize.js/test/emoji.html)
-* [Confused Explainer](https://adraffy.github.io/ens-normalize.js/test/confused.html)
+* Included Apps:
+	* [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
+	* [Character Viewer](https://adraffy.github.io/ens-normalize.js/test/chars.html)
+	* [Supported Emoji](https://adraffy.github.io/ens-normalize.js/test/emoji.html)
+	* [Confused Explainer](https://adraffy.github.io/ens-normalize.js/test/confused.html)
+* External Apps:
+	* [Recent Registrations](https://raffy.antistupid.com/eth/ens-regs.html)
+	* [Emoji Frequency Explorer](https://raffy.antistupid.com/eth/ens-emoji-freq.html)
+* Breakdown Reports:
+	* [Disallowed Characters](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/disallowed.html)
+	* [Different Norm](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/diff.html)
+	* [Whole-script Confusables](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/wholes.html)
+	* [Illegal Placement](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/placement.html)
+	* [Illegal Mixtures](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/mixtures.html)
+	* [Excess Combining Marks](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/cm.html)
 
 ```Javascript
 import {ens_normalize} from '@adraffy/ens-normalize';
@@ -134,7 +145,7 @@ Determine if a character shouldn't be printed directly:
 console.log(should_escape(0x202E)); // eg. RIGHT-TO-LEFT OVERRIDE => true
 ```
 
-Determine if a character is a printable combining mark:
+Determine if a character is a combining mark:
 ```Javascript
 // number -> bool
 console.log(is_combining_mark(0x20E3)); // eg. COMBINING ENCLOSING KEYCAP => true

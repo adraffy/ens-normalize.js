@@ -1,3 +1,5 @@
+// print ascii characters
+
 import {PRINTER} from './unicode-version.js';
 
 for (let cp = 0; cp < 0x80; cp++) {
