@@ -2,6 +2,7 @@
 // but might be useful
 
 import {ens_normalize, ens_split, ens_tokenize} from '../src/lib.js';
+import {explode_cp, str_from_cps} from '../src/utils.js';
 
 function expect_fail(fn) {
 	try {
@@ -127,3 +128,18 @@ function get_mapped(cp) {
 console.log(get_mapped(0x2167)); // Ⅷ -> [v, i, i, i]
 console.log(get_mapped(0x41)); // A -> [a]
 console.log(get_mapped(0x61)); // a -> null
+
+// ********************************************************************************
+// replace disallowed characters with their likely-intended equivalent
+// note: this is unsafe for general use, but a nice convenience for single-name input fields
+function replace_sloppy(s) {
+	const MAP = new Map([
+		[0x2F, 0x2044], // 2F (/) SOLIDUS => 2044 (⁄) FRACTION SLASH
+		[0x3002, 0x2E], // 3002 (。) IDEOGRAPHIC FULL STOP => 2E (.) FULL STOP
+		[0xFF0E, 0x2E], // FF0E (．) FULLWIDTH FULL STOP => 2E (.) FULL STOP
+		[0xFF61, 0x2E], // FF61 (｡) HALFWIDTH IDEOGRAPHIC FULL STOP => 2E (.) FULL STOP
+	]);
+	return str_from_cps(explode_cp(s).map(x => MAP.get(x) ?? x));
+}
+
+console.log(replace_sloppy("1/4.eth")); // 1/4.eth -> 1⁄4.eth

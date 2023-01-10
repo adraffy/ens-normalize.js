@@ -780,13 +780,6 @@ const emoji_url = './emoji.html#q=%s';
 const ENS_REGISTRY = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
 const ENS_NFT = '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85';
 
-const SLOPPY_MAP = new Map([
-	[0x2F, 0x2044], 
-	[0x3002, 0x2E],
-	[0xFF0E, 0x2E],
-	[0xFF61, 0x2E],
-]);
-
 let resolve_timer = RESOLVE_MODE_IDLE;
 let resolve_options;
 let resolve_date0;
@@ -1073,7 +1066,13 @@ function parse() {
 				});
 				add_row_tag(row, strip_btn);
 			}
-
+				
+			const SLOPPY_MAP = new Map([
+				[0x2F, 0x2044], 
+				[0x3002, 0x2E],
+				[0xFF0E, 0x2E],
+				[0xFF61, 0x2E],
+			]);
 			let sloppy = str_from_cps(explode_cp(name).map(x => SLOPPY_MAP.get(x) ?? x))
 			if (sloppy !== name) {
 				let sloppy_btn = document.createElement('button');
