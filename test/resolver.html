@@ -489,9 +489,9 @@ footer {
 <button data-name="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045">d8dA..6045</button>
 
 <b>Preimage:</b>
-<button data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209">Token#</button>
-<button data-name="https://opensea.io/assets/ethereum/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209">OpenSea</button>
-<button data-name="https://www.gem.xyz/asset/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209">Gem</button>
+<button data-delay="1000" data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209">Token#</button>
+<button data-delay="1000" data-name="https://opensea.io/assets/ethereum/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209">OpenSea</button>
+<button data-delay="1000" data-name="https://www.gem.xyz/asset/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209">Gem</button>
 
 <a href="./chars.html"><b>Chars</b></a> / <b>Mapped:</b> 
 <button data-name="hyph{2D}{2010}{2011}{2012}{2013}{2014}{2015}{2043}{2212}{23AF}{23E4}{FE58}ens">Hyphens</button>
@@ -504,6 +504,8 @@ footer {
 
 <b>Disallowed:</b>
 <button data-name="{26}{3000}{E0061}{FFFFFF}">Types</button>
+<button data-name="test .te st. test">Whitespace</button>
+<button data-name="{3002}.{FF0E}.{FF61}">Stops</button>
 <button data-name="[ba967c160905ade030f84952644a963994eeaed3881a6b8a4e9c8cbe452ad7a2].eth" data-skip="1">"💩.eth"</button>
 
 <b>Deviation:</b> 
@@ -517,15 +519,6 @@ footer {
 <button data-name="{300}">Leading</button>
 <button data-name="x{300}{300}">Adjacent</button>
 <button data-name="💩{300}">Emoji</button>
-
-<b>Whitespace:</b>
-<button data-name="test .te st. test">❌Invalid</button>
-
-<b>Stops:</b>
-<button>。</button>
-<button>．</button>
-<button>｡</button>
-<button>۔</button>
 
 <a href="https://unicode.org/reports/tr46/#Validity_Criteria"><b>CheckHyphen:</b></a>
 <button>-test</button>
@@ -693,6 +686,7 @@ Hebrew:
 <label><input type="checkbox" id="show_details_check" checked>Details</label>
 <label><input type="checkbox" id="show_components_check" checked>Emoji Components</label>
 <label><input type="checkbox" id="force_ltr_check">Force LTR</label>
+<label title="Replace the following disallowed characters:"><input type="checkbox" id="sloppy_check">Sloppy</label>
 <span><input type="checkbox" id="skip_norm_check"><label class="nonstd" for="skip_norm_check">Skip Normalization</label></span>
 </div>
 <div id="input">
@@ -741,7 +735,7 @@ Hebrew:
 import { ethers } from "https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.esm.min.js";
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
-	nfc, nfd, hex_cp, explode_cp, safe_str_from_cps,
+	nfc, nfd, hex_cp, explode_cp, str_from_cps, safe_str_from_cps,
 	dom_from_tokens, use_default_style
 } from '../dist/all.min.js';
 import {puny_encoded} from '../../punycode.js/dist/index.min.js';
@@ -765,6 +759,7 @@ const show_components_check = document.querySelector('#show_components_check');
 const skip_norm_check = document.querySelector('#skip_norm_check');
 const show_details_check = document.querySelector('#show_details_check');
 const force_ltr_check = document.querySelector('#force_ltr_check');
+const sloppy_check = document.querySelector('#sloppy_check');
 const options_div = document.querySelector('#options');
 const controls_div = document.querySelector('#controls');
 const output_div = document.querySelector('#output');
@@ -786,6 +781,13 @@ const emoji_url = './emoji.html#q=%s';
 
 const ENS_REGISTRY = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
 const ENS_NFT = '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85';
+
+const SLOPPY_MAP = new Map([
+	[0x2F, 0x2044], 
+	[0x3002, 0x2E],
+	[0xFF0E, 0x2E],
+	[0xFF61, 0x2E],
+]);
 
 let resolve_timer = RESOLVE_MODE_IDLE;
 let resolve_options;
@@ -812,6 +814,7 @@ read_local_storage('show_details',    x => show_details_check.checked = x);
 read_local_storage('auto_resolve',    x => auto_resolve_check.checked = x);
 read_local_storage('show_components', x => show_components_check.checked = x);
 read_local_storage('force_ltr',       x => force_ltr_check.checked = x);
+read_local_storage('sloppy_check',    x => sloppy_check.checked = x);
 
 for (let btn of document.querySelectorAll('#examples button:not([id]), button[data-name]')) {
 	let name = btn.innerText;
@@ -832,7 +835,8 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 		if (options_div.getBoundingClientRect().top > window.innerHeight * .9) {
 			options_div.scrollIntoView(); // scuffed
 		}
-		resolve();
+		primary_arrows.classList.remove('hide');
+		setTimeout(resolve, parseInt(btn.dataset.delay)|0);
 	});
 }
 for (let div of document.querySelectorAll('[data-tokenize]')) {
@@ -859,7 +863,7 @@ input_field.addEventListener('input', () => {
 document.querySelector('#random_emoji_btn').addEventListener('click', () => {
 	let name = '';
 	while ([...name].length < 3) {
-		name += ens_normalize(String.fromCodePoint(...EMOJI[Math.random() * EMOJI.length|0]));
+		name += ens_normalize(str_from_cps(EMOJI[Math.random() * EMOJI.length|0]));
 	}
 	input_field.value = `${name}.eth`;
 	skip_norm_check.checked = false;
@@ -869,8 +873,8 @@ document.querySelector('#random_emoji_btn').addEventListener('click', () => {
 document.querySelector('#nf_btn').addEventListener('click', () => {
 	let s0 = input_field.value;
 	let s1 = replace_escapes(s0);
-	let s2 = apply_escapes(String.fromCodePoint(...nfd(explode_cp(s1))));
-	let s3 = apply_escapes(String.fromCodePoint(...nfc(explode_cp(s1))));
+	let s2 = apply_escapes(str_from_cpsnfd(explode_cp(s1)));
+	let s3 = apply_escapes(str_from_cpsnfc(explode_cp(s1)));
 	let s4 = s0 == s2 ? s3 : s2;
 	if (s0 != s4) {
 		input_field.value = s4;
@@ -919,6 +923,11 @@ examples_btn.addEventListener('click', () => {
 	window.localStorage.setItem('hide_examples', !!examples_div.classList.contains('hide'));
 	update_examples();
 });
+
+sloppy_check.addEventListener('input', resolve_if_auto);
+sloppy_check.parentElement.title += [...SLOPPY_MAP.entries()].map(([a, b]) => {
+	return `\n• "${safe_str_from_cps([a])}" ${hex_cp(a)} → "${safe_str_from_cps([b])}" ${hex_cp(b)}`
+}).join('');
 
 if (window.ethereum) {
 	window_provider = new ethers.providers.Web3Provider(window.ethereum, 'any');
@@ -1075,7 +1084,7 @@ function parse() {
 			let disallowed_btn = document.createElement('button');
 			disallowed_btn.innerHTML = 'Remove Disallowed';
 			disallowed_btn.addEventListener('click', () => {
-				input_field.value = String.fromCodePoint(...tokens.flatMap(token => {
+				input_field.value = str_from_cps(tokens.flatMap(token => {
 					switch (token.type) {
 						case 'disallowed': return [];
 						case 'valid': return token.cps;
@@ -1703,13 +1712,18 @@ function resolve(options) {
 		let lo = parseInt(match[1], 16);
 		let hi = parseInt(match[2], 16);
 		if (hi >= lo) {
-			input_field.value = input = String.fromCodePoint(...Array(1 + hi - lo).fill().map((_, i) => lo + i));
+			input = String.fromCodePoint(...Array(1 + hi - lo).fill().map((_, i) => lo + i));
 		}
 	}
-	// input convenience:  HEX HEX HEX => {HEX}{HEX}
+	// input convenience: HEX HEX HEX => {HEX}{HEX}
 	if (/^\s*[0-9a-f]{2,}(\s+[0-9a-f]{2,})+\s*$/i.test(input)) { 
-		input_field.value = input = input.trim().split(/\s+/).map(x => `{${x}}`).join('');	
+		input = input.trim().split(/\s+/).map(x => `{${x}}`).join('');	
 	}
+	// input convenience: replace sloppy
+	if (sloppy_check.checked) {
+		input = str_from_cps(explode_cp(input).map(x => SLOPPY_MAP.get(x) ?? x));
+	}
+	input_field.value = input;
 	let title = 'ENS Resolver';
 	if (!input) {
 		if (window.location.hash) {

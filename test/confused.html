@@ -30,6 +30,9 @@ h1 {
 #links a.code {
 	font-family: monospace;
 }
+#scrolled {
+	overflow-y: auto;
+}
 table {
 	border-collapse: collapse;
 	border: 2px solid #888;
@@ -569,7 +572,10 @@ async function create_grid(input) {
 			}
 		}
 	}
-	output_div.append(table);
+	let scrolled = document.createElement('div');
+	scrolled.id = 'scrolled';
+	scrolled.append(table);
+	output_div.append(scrolled);
 
 	function add_rows(n) {		
 		added += n;

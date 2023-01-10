@@ -40,11 +40,11 @@ console.log(is_ascii_name("x's")); // false
 console.log(is_ascii_name('xs')); // true
 
 // ********************************************************************************
-// is the string a emoji?
+// is the string a single emoji?
 // returns true if one emoji glyph
 function is_emoji(one_emoji) {
 	let tokens = ens_tokenize(one_emoji);
-	return tokens.length == 1 && tokens[0].type === 'emoji';
+	return tokens.length == 1 && tokens[0].emoji; // or .type === 'emoji';
 }
 
 console.log(is_emoji);
@@ -65,9 +65,8 @@ console.log(get_min_length(5)); // 1
 // make emoji minimal repeated
 // returns minimial normalized emoji string or throws
 function get_min_repeated(one_emoji) {
-	let tokens = ens_tokenize(one_emoji);
-	if (tokens.length != 1 || tokens[0].type !== 'emoji') throw new TypeError('expected emoji');
-	let {cps} = tokens[0];
+	if (!is_emoji(one_emoji)) throw new TypeError('expected emoji');
+	let [{cps}] = ens_tokenize(one_emoji);
 	return String.fromCodePoint(...cps).repeat(get_min_length(cps.length));
 }
 
@@ -120,7 +119,6 @@ console.log(is_valid(0x20));
 // get mapped
 // returns mapped characters for the codepoint 
 // or null if not mapped
-
 function get_mapped(cp) {
 	let [token] = ens_tokenize(String.fromCodePoint(cp));
 	return token.type === 'mapped' ? token.cps : null;

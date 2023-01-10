@@ -30,7 +30,7 @@ import {ens_normalize} from '@adraffy/ens-normalize';
 // npm i @adraffy/ens-normalize
 // browser: https://cdn.jsdelivr.net/npm/@adraffy/ens-normalize@latest/dist/index.min.js
 
-// *** ALL errors throw by this library are safe to print ***
+// *** ALL errors thrown by this library are safe to print ***
 
 // string -> string
 // throws on invalid names
