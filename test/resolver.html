@@ -686,7 +686,6 @@ Hebrew:
 <label><input type="checkbox" id="show_details_check" checked>Details</label>
 <label><input type="checkbox" id="show_components_check" checked>Emoji Components</label>
 <label><input type="checkbox" id="force_ltr_check">Force LTR</label>
-<label title="Replace the following disallowed characters:"><input type="checkbox" id="sloppy_check">Sloppy</label>
 <span><input type="checkbox" id="skip_norm_check"><label class="nonstd" for="skip_norm_check">Skip Normalization</label></span>
 </div>
 <div id="input">
@@ -759,7 +758,6 @@ const show_components_check = document.querySelector('#show_components_check');
 const skip_norm_check = document.querySelector('#skip_norm_check');
 const show_details_check = document.querySelector('#show_details_check');
 const force_ltr_check = document.querySelector('#force_ltr_check');
-const sloppy_check = document.querySelector('#sloppy_check');
 const options_div = document.querySelector('#options');
 const controls_div = document.querySelector('#controls');
 const output_div = document.querySelector('#output');
@@ -814,7 +812,6 @@ read_local_storage('show_details',    x => show_details_check.checked = x);
 read_local_storage('auto_resolve',    x => auto_resolve_check.checked = x);
 read_local_storage('show_components', x => show_components_check.checked = x);
 read_local_storage('force_ltr',       x => force_ltr_check.checked = x);
-read_local_storage('sloppy_check',    x => sloppy_check.checked = x);
 
 for (let btn of document.querySelectorAll('#examples button:not([id]), button[data-name]')) {
 	let name = btn.innerText;
@@ -924,10 +921,6 @@ examples_btn.addEventListener('click', () => {
 	update_examples();
 });
 
-sloppy_check.addEventListener('input', resolve_if_auto);
-sloppy_check.parentElement.title += [...SLOPPY_MAP.entries()].map(([a, b]) => {
-	return `\n• "${safe_str_from_cps([a])}" ${hex_cp(a)} → "${safe_str_from_cps([b])}" ${hex_cp(b)}`
-}).join('');
 
 if (window.ethereum) {
 	window_provider = new ethers.providers.Web3Provider(window.ethereum, 'any');
@@ -1073,7 +1066,7 @@ function parse() {
 			let stripped = name.replace(/\s+/g, '');
 			if (stripped !== name) {
 				let strip_btn = document.createElement('button');
-				strip_btn.innerHTML = 'Strip Whitespace';
+				strip_btn.innerText = 'Strip Whitespace';
 				strip_btn.addEventListener('click', () => {
 					input_field.value = stripped;
 					resolve();
@@ -1081,8 +1074,22 @@ function parse() {
 				add_row_tag(row, strip_btn);
 			}
 
+			let sloppy = str_from_cps(explode_cp(name).map(x => SLOPPY_MAP.get(x) ?? x))
+			if (sloppy !== name) {
+				let sloppy_btn = document.createElement('button');
+				sloppy_btn.innerHTML = '<b>Replace Sloppy</b>';
+				sloppy_btn.title = `Replace the following characters:` + [...SLOPPY_MAP.entries()].map(([a, b]) => {
+					return `\n• "${safe_str_from_cps([a])}" ${hex_cp(a)} → "${safe_str_from_cps([b])}" ${hex_cp(b)}`
+				}).join('');
+				sloppy_btn.addEventListener('click', () => {
+					input_field.value = sloppy;
+					resolve();
+				});
+				add_row_tag(row, sloppy_btn);
+			}
+
 			let disallowed_btn = document.createElement('button');
-			disallowed_btn.innerHTML = 'Remove Disallowed';
+			disallowed_btn.innerText = 'Remove Disallowed';
 			disallowed_btn.addEventListener('click', () => {
 				input_field.value = str_from_cps(tokens.flatMap(token => {
 					switch (token.type) {
@@ -1718,10 +1725,6 @@ function resolve(options) {
 	// input convenience: HEX HEX HEX => {HEX}{HEX}
 	if (/^\s*[0-9a-f]{2,}(\s+[0-9a-f]{2,})+\s*$/i.test(input)) { 
 		input = input.trim().split(/\s+/).map(x => `{${x}}`).join('');	
-	}
-	// input convenience: replace sloppy
-	if (sloppy_check.checked) {
-		input = str_from_cps(explode_cp(input).map(x => SLOPPY_MAP.get(x) ?? x));
 	}
 	input_field.value = input;
 	let title = 'ENS Resolver';
