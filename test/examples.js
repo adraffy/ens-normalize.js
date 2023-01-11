@@ -140,6 +140,8 @@ function replace_sloppy(s) {
 		[0xFF61, 0x2E], // FF61 (｡) HALFWIDTH IDEOGRAPHIC FULL STOP => 2E (.) FULL STOP
 	]);
 	return str_from_cps(explode_cp(s).map(x => MAP.get(x) ?? x));
+	// alternative:
+	//return s.replaceAll('/', '\u2044').replace(/(\u3002|\uFF0E|\uFF61)/gu, '.');
 }
 
 console.log(replace_sloppy("1/4.eth")); // 1/4.eth -> 1⁄4.eth

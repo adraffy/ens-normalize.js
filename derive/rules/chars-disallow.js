@@ -10,10 +10,6 @@ export default [
 	// unclear:
 	// - left-right mirrors
 
-	// TODO: 
-	// 2190..21FF
-	// 2B00..2BFF
-
 	// zero width
 	0x200C, // (‌) ZERO WIDTH NON-JOINER
 	0x200D, // (‍) ZERO WIDTH JOINER
@@ -21,10 +17,12 @@ export default [
 	// alternative stops
 	// reason: string split on "." w/o normalize, easy scan for ".eth"
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/6
+	// see: examples.js => replace_sloppy()
 	0x3002, // (。) IDEOGRAPHIC FULL STOP
 	0xFF0E, // (．) FULLWIDTH FULL STOP
 	0xFF61, // (｡) HALFWIDTH IDEOGRAPHIC FULL STOP
 
+	// scripted stops
 	0xFE52, // (﹒) SMALL FULL STOP
 	0x589, // (։) ARMENIAN FULL STOP
 	0x61D, // (؝) ARABIC END OF TEXT MARK
@@ -750,14 +748,14 @@ export default [
 	// italics
 	0xFE45, // (﹅) SESAME DOT
 	0xFE46, // (﹆) WHITE SESAME DOT
-
+				
 	// hebrew
 	//0x5BE, // (־) HEBREW PUNCTUATION MAQAF (Hyphen)
 	0x5C3, // (׃) HEBREW PUNCTUATION SOF PASUQ
 	0x5C6, // (׆) HEBREW PUNCTUATION NUN HAFUKHA
-	0x5C0, // (׀) HEBREW PUNCTUATION PASEQ                        // these could be enabled 
+	0x5C0, // (׀) HEBREW PUNCTUATION PASEQ							// these could be enabled 
 	//0x5F3, // (׳) HEBREW PUNCTUATION GERESH (Period, Number Mark) // since restricted using 
-	0x5F4, // (״) HEBREW PUNCTUATION GERSHAYIM (End of Acronym)   // apostrophe-like rule
+	0x5F4, // (״) HEBREW PUNCTUATION GERSHAYIM (End of Acronym)		// apostrophe-like rule
 
 	// greek
 	0x371, // (ͱ) GREEK SMALL LETTER HETA (Ancient)
@@ -773,7 +771,7 @@ export default [
 	0x3FB, // (ϻ) GREEK SMALL LETTER SAN (Ancient)
 	0x3FC, // (ϼ) GREEK RHO WITH STROKE SYMBOL
 	0x3D9, // (ϙ) GREEK SMALL LETTER ARCHAIC KOPPA (Ancient)
-	0x3DB, // (ϛ) GREEK SMALL LETTER STIGMA (Ancient, Ligature)
+	0x3DB, // (ϛ) GREEK SMALL LETTER STIGMA (Ancient, Ligature) (20230110: used for 6 numeral? 12345 are confused)
 	0x3DD, // (ϝ) GREEK SMALL LETTER DIGAMMA (Ancient)
 	0x3E1, // (ϡ) GREEK SMALL LETTER SAMPI	
 	0x377, // (ͷ) GREEK SMALL LETTER PAMPHYLIAN DIGAMMA
@@ -1438,7 +1436,7 @@ export default [
 	0x511, // (ԑ) CYRILLIC SMALL LETTER REVERSED ZE
 	// rest are obsolete
 
-	0x2E0E, // (⸎) EDITORIAL CORONIS
+	0x2E0E, // (⸎) EDITORIAL CORONIS (https://en.wikipedia.org/wiki/Coronis_(textual_symbol))
 	0x2E13, // (⸓) DOTTED OBELOS
 	0x2E14, // (⸔) DOWNWARDS ANCORA
 	0x2E15, // (⸕) UPWARDS ANCORA
