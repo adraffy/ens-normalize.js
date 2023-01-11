@@ -49,5 +49,4 @@
 * `node names.js 61..7A 200D` — print Unicode names for hex codepoints
 * `node names.js script Latn` — print Unicode names for `Latin`
 * `node names.js prop White_Space` — print Unicode names with property `White_Space`
-* `node names.js find abc` — find emoji by name
-* `node emoji-new.js` — print emoji added since Unicode version
+* `node names.js find abc` — find characters by name

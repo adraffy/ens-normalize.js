@@ -37,27 +37,10 @@ button {
 <body>
 <h1>🤔️</h1>
 <script type="module">
-import {ens_normalize} from '../dist/all.min.js';
+import {ens_normalize, run_tests} from '../dist/all.min.js';
 const h1 = document.querySelector('h1');
 fetch('../validate/tests.json').then(r => r.json()).then(tests => {	
-	// see: validate.js
-	let errors = [];
-	for (let test of tests) {
-		let {name, norm, error} = test;
-		if (typeof norm !== 'string') norm = name;
-		try {
-			let result = ens_normalize(name);
-			if (error) {	
-				errors.push({type: 'expected error', result, ...test});
-			} else if (result !== norm) {
-				errors.push({type: 'wrong norm', result, ...test});
-			}
-		} catch (err) {
-			if (!error) {
-				errors.push({type: 'unexpected error', result: err.message, ...test});
-			}
-		}
-	}
+	let errors = run_tests(ens_normalize, tests); // see: validate.js
 	if (errors.length) {
 		show_error(`${errors.length} tests failed`);
 		let a = document.createElement('a');

@@ -201,7 +201,8 @@ export function should_escape(cp) {
 	return ESCAPE.has(cp);
 }
 
-export function ens_normalize_fragment(frag, nf = nfc) {
+export function ens_normalize_fragment(frag, decompose) {
+	let nf = decompose ? nfd : nfc;
 	return frag.split(STOP_CH).map(label => str_from_cps(process(explode_cp(label), nf).flatMap(x => x.is_emoji ? filter_fe0f(x) : x))).join(STOP_CH);
 }
 

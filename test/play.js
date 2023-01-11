@@ -17,5 +17,3 @@ debug(ens_split('💩Raffy.eth_'));
 
 console.log(should_escape(0x202E));
 console.log(is_combining_mark(0x20E3));
-
-debug(ens_split('1️⃣Rãffy💩.eth'));

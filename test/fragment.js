@@ -1,4 +1,4 @@
-import {ens_normalize, ens_normalize_fragment, nfd} from '../src/lib.js';
+import {ens_normalize, ens_normalize_fragment} from '../src/lib.js';
 
 // naive implementation
 function name_contains_fragment(name, frag) {
@@ -10,9 +10,9 @@ function name_contains_fragment(name, frag) {
 	//   name_contains_fragment("è", "e") => true
 	//   name_contains_fragment("è", "◌̀") => true
 	// if instead, you want exact codepoint matching: 
-	//   use ens_normalize_fragment() without the nfd argument (which defaults to nfc)
+	//   use ens_normalize_fragment() without the second argument
 	try {
-		return ens_normalize_fragment(name, nfd).includes(ens_normalize_fragment(frag, nfd));
+		return ens_normalize_fragment(name, true).includes(ens_normalize_fragment(frag, true));
 	} catch (ignored) {
 	}
 }
