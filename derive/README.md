@@ -1,7 +1,7 @@
 # Derive Data Files
 
 * Independent of parent repo
-* Uses `Node 18` for `fetch()`
+* Uses built-in `fetch()`
 
 ## Data Files
 
@@ -34,12 +34,13 @@
 ## Rule Files
 
 * [chars-valid.js](./rules/chars-valid.js)
+* [chars-ignored.js](./rules/chars-ignored.js)
 * [chars-mapped.js](./rules/chars-mapped.js)
 * [chars-disallow.js](./rules/chars-disallow.js) 
 * [chars-fenced.js](./rules/chars-fenced.js) — characters that occur in the middle and can't touch
 * [chars-escape.js](./rules/chars-escape.js) — characters that should be escaped
 * [emoji.js](./rules/emoji.js) — various emoji configurations
-* [cm.js](./rules/cm.js) — combining mark whilelist
+* [cm.js](./rules/cm.js) — combining mark sequence whitelist
 * [scripts.js](./rules/scripts.js) — various script configurations
 * [confuse.js](./rules/confuse.js) — confusables groups
 * [group-order.js](./rules/group-order.js) — how groups should be sorted for matching efficiency
