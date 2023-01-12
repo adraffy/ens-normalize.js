@@ -2,9 +2,9 @@
 0-dependancy Compact ES6 [Ethereum Name Service](https://ens.domains/) (ENS) Name Normalizer that works in the browser.
 
 * Follows [ENS Name Normalization Standard](https://github.com/adraffy/ensip-norm/blob/main/draft.md)
-* Passes [**100%**](https://adraffy.github.io/ens-normalize.js/test/validate.html) Validation Tests
+* [Passes **100%**](https://adraffy.github.io/ens-normalize.js/test/validate.html) Validation Tests
 * Custom [`NFC`](https://unicode.org/reports/tr15/) Implementation (or use native)
-	* Passes [**100%**](https://adraffy.github.io/ens-normalize.js/test/report-nf.html) Unicode `15.0.0` [Normalization Tests](https://www.unicode.org/Public/15.0.0/ucd/NormalizationTest.txt)
+	* [Passes **100%**](https://adraffy.github.io/ens-normalize.js/test/report-nf.html) Unicode `15.0.0` [Normalization Tests](https://www.unicode.org/Public/15.0.0/ucd/NormalizationTest.txt)
 * Minified File Sizes: 
 	* [`27KB`](./dist/index-xnf.min.js) — native `NFC` via [nf-native.js](./src/nf-native.js) using `String.normalize()`
 	* [`35KB` **Default** ](./dist/index.min.js) — custom `NFC` via [nf.js](./src/nf.js)

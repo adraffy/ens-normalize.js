@@ -201,7 +201,17 @@ export function use_default_style() {
 		background: #58f;
 		border: none;
 	}
-	.tokens .valid.com {
+	.tokens .valid.art {
+		color: #fff;
+		background: #ff3d01;
+		border: none;
+	}
+	.tokens .valid.com,
+	.tokens .valid.net,
+	.tokens .valid.org,
+	.tokens .valid.io,
+	.tokens .valid.cash,
+	.tokens .valid.xyz {
 		color: #fff;
 		background: #0a0;
 		border: none;
