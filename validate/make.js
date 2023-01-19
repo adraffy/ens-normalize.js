@@ -1,6 +1,6 @@
-import {readFileSync, writeFileSync} from 'node:fs';
+import {cp, readFileSync, writeFileSync} from 'node:fs';
 import {UNICODE} from '../derive/unicode-version.js';
-import {parse_cp_sequence, mulberry32, print_section, print_checked} from '../derive/utils.js';
+import {parse_cp_sequence, mulberry32, print_section, print_checked, permutations} from '../derive/utils.js';
 import {ens_normalize, ens_emoji, ens_beautify} from '../src/lib.js';
 import {random_sample, run_tests} from '../src/utils.js';
 import {read_labels, read_random, read_spec, compute_spec_hash} from './data.js';
@@ -40,9 +40,17 @@ const EXPECT_IGNORED = new Set();
 
 // make tests from library
 for (let cps of ens_emoji()) {
-	let form = String.fromCodePoint(...cps);
-	REQUIRE_PASS.add(form);
+	let form = String.fromCodePoint(...cps);	
+	// qualified forms 
+	// (these should be the same)
+	REQUIRE_PASS.add(form); 
 	REQUIRE_PASS.add(ens_beautify(form));
+	// 20230119: remove every combination of FE0F's
+	// (no change in validation results)
+	cps.reduce((a, cp) => {
+		let b = a.map(v => [...v, cp]);
+		return cp == 0xFE0F ? [...a, ...b] : b;
+	}, [[]]).forEach(v => REQUIRE_PASS.add(String.fromCodePoint(...v)));
 }
 
 // make tests from rules
