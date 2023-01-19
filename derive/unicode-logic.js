@@ -526,6 +526,28 @@ export class UnicodeSpec {
 			}
 		});
 	}
+	read_emoji_test() {
+		// # group: Smileys & Emotion
+		// # subgroup: face-smiling
+		// 263A FE0F ; fully-qualified     # ☺️ E0.6 smiling face
+		// 263A ; unqualified         # ☺ E0.6 smiling face
+		return parse_semicolon_file(new URL('./emoji-test.txt', this.data_dir), {
+			root: [],			
+			row([src, type]) {
+				let cps = parse_cp_sequence(src);
+				let {group, subgroup} = this; // these needed?
+				this.root.push({cps, type, group, subgroup});
+			},
+			comment(s) {
+				let match;
+				if (match = s.match(/^group:(.*)$/)) {
+					this.group = match[1].trim();
+				} else if (match = s.match(/^subgroup:(.*)$/)) {
+					this.subgroup = match[1].trim();
+				}
+			}
+		});
+	}
 	/*
 	emoji_skin_colors() {
 		// warning: this sucks

@@ -95,7 +95,7 @@ footer {
 <body>
 <div id="overlay" class="hide">
 <div>
-<input placeholder="Hex or Name">
+<input placeholder="Hex or Name or Char">
 </div>
 </div>
 <table id="grid">
@@ -277,7 +277,6 @@ function update_table() {
 
 window.addEventListener('keydown', e => {
 	if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
-		console.log('wtf');
 		e.preventDefault();
 		show_overlay();
 	} else if (e.key === 'Escape') {
@@ -287,10 +286,13 @@ window.addEventListener('keydown', e => {
 			show_overlay();
 		} else {
 			overlay_div.classList.add('hide');
-			let input = search_field.value.trim().toLowerCase();
-			if (/^[a-f0-9]+$/.test(input)) {
+			let input = search_field.value.trim();
+			if (/^[a-f0-9]+$/i.test(input)) {
 				scroll_to_cp(parseInt(input, 16));
+			//} else if (/^(['"]).*\1$/.test(input)) {
+			//	scroll_to_cp([...input][1].codePointAt(0));
 			} else if (input) {
+				input = input.toLowerCase();
 				for (let [cp, {name}] of char_map) {
 					if (name.toLowerCase().includes(input)) {
 						return scroll_to_cp(cp);

@@ -583,6 +583,9 @@ for (let cp of valid) {
 }
 
 // this should be last so we dont need to recover toggled mappings
+// TODO: add another section like this lower in the process that
+// can account for examples like "İ" [130] => "i + ◌̇ " [69 307]
+// since both 69 and 307 are valid but not NFC
 print_section('Remove Invalid Mappings');
 for (let [x, ys] of mapped) {
 	if (!ys.every(cp => valid.has(cp))) {
