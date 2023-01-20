@@ -1055,7 +1055,7 @@ function parse() {
 		if (skip_norm_check.checked) return true;
 		make_exploded(row, name, false); // show the mapping during the error
 		stop_resolving();
-		let tokens = ens_tokenize(name).flatMap(token => token.type === 'nfc' ? token.tokens : token);
+		let tokens = ens_tokenize(name, {nf: false}); //.flatMap(token => token.type === 'nfc' ? token.tokens : token);
 		if (tokens.some(x => x.type === 'disallowed')) {
 
 			let stripped = name.replace(/\s+/g, '');
@@ -1077,16 +1077,16 @@ function parse() {
 			]);
 			let sloppy = str_from_cps(explode_cp(name).map(x => SLOPPY_MAP.get(x) ?? x))
 			if (sloppy !== name) {
-				let sloppy_btn = document.createElement('button');
-				sloppy_btn.innerHTML = '<b>Replace Unsafe</b>';
-				sloppy_btn.title = `Replace the following characters:` + [...SLOPPY_MAP.entries()].map(([a, b]) => {
+				let btn = document.createElement('button');
+				btn.innerHTML = '<b>Replace Unsafe</b>';
+				btn.title = `Replace the following characters:` + [...SLOPPY_MAP.entries()].map(([a, b]) => {
 					return `\n• "${safe_str_from_cps([a])}" ${hex_cp(a)} → "${safe_str_from_cps([b])}" ${hex_cp(b)}`
 				}).join('');
-				sloppy_btn.addEventListener('click', () => {
+				btn.addEventListener('click', () => {
 					input_field.value = sloppy;
 					resolve();
 				});
-				add_row_tag(row, sloppy_btn);
+				add_row_tag(row, btn);
 			}
 
 			let disallowed_btn = document.createElement('button');
@@ -1096,7 +1096,6 @@ function parse() {
 					switch (token.type) {
 						case 'disallowed': return [];
 						case 'valid': return token.cps;
-						case 'nfc':
 						case 'emoji': return token.input;
 						default: return token.cp;
 					}
@@ -1104,7 +1103,27 @@ function parse() {
 				resolve();
 			});
 			add_row_tag(row, disallowed_btn);
-		}		
+			
+			// try to normalize the name and put it into skip_norm mode
+			if (tokens.some(x => x.type === 'ignored' || x.type === 'mapped' || (x.type === 'emoji' && x.input.includes(0xFE0F)))) {
+				let btn = document.createElement('button');
+				btn.innerHTML = 'Force Normalize';
+				btn.addEventListener('click', () => {
+					input_field.value = str_from_cps(tokens.flatMap(token => {
+						switch (token.type) { 
+							case 'ignored': return []; // removes ignored (dangerous)
+							case 'mapped': // applies known mappings 
+							case 'emoji': // removes FE0F from known emoji
+							case 'valid': return token.cps;
+							default: return token.cp;
+						}
+					}));
+					skip_norm_check.checked = true;
+					resolve();
+				});
+				add_row_tag(row, btn);
+			}
+		}	
 	}
 }
 
