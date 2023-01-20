@@ -32,6 +32,14 @@ tbody tr:nth-child(odd) {
 .diff {
 	background: #fcc;
 }
+.input {
+	text-align: center;
+	background-color: #ffc;
+}
+.expect {
+	text-align: center;
+	background-color: #cff;
+}
 .raw {
 	font-family: monospace;
 }
@@ -62,14 +70,12 @@ import {nfc as nfc_custom, nfd as nfd_custom} from '../dist/nf.min.js';
 import {nfc as nfc_native, nfd as nfd_native} from '../src/nf-native.js';
 import {hex_cp, explode_cp} from '../src/utils.js';
 
-try {
-	main();
-} catch (err) {
+main().catch(err => {
 	let div = document.createElement('div');
 	div.innerHTML = err.message;
 	document.body.append(div);
 	console.error(err);
-}
+});
 
 function html_escape(s) {
 	return s.replace(/[\x26\x3C\x3E]/, x => `&#${x.charCodeAt(0)};`);
@@ -106,6 +112,10 @@ async function main() {
 		<tr><th colspan="2">Expected Output</th><th>Custom</th><th>Browser</th><th colspan="2">Expected Output</th><th>Custom</th><th>Browser</th></tr>
 		</tr></thead><tbody>`;
 		let errors = {};
+		const KEY_NFD_CUSTOM = 'nfd_custom';
+		const KEY_NFD_NATIVE = 'nfd_native';
+		const KEY_NFC_CUSTOM = 'nfc_custom';
+		const KEY_NFC_NATIVE = 'nfc_native';
 		function compare_cell(expect, cps, key) {
 			let result = String.fromCodePoint(...cps);
 			if (result === expect) {
@@ -120,15 +130,15 @@ async function main() {
 			let cps = explode_cp(src);
 			html += '<tr>' + [
 				`<td class="input">${html_escape(src)}</td>`,
-				`<td class="input raw">${hex_seq(src)}</td>`,
+				`<td class="raw">${hex_seq(src)}</td>`,
 				`<td class="expect">${html_escape(nfd0)}</td>`,
-				`<td class="expect raw">${hex_seq(nfd0)}</td>`,
-				compare_cell(nfd0, nfd_custom(cps), 'nfc_custom'),
-				compare_cell(nfd0, nfd_native(cps), 'nfd_default'),
+				`<td class="raw">${hex_seq(nfd0)}</td>`,
+				compare_cell(nfd0, nfd_custom(cps), KEY_NFD_CUSTOM),
+				compare_cell(nfd0, nfd_native(cps), KEY_NFD_NATIVE),
 				`<td class="expect">${html_escape(nfc0)}</td>`,
-				`<td class="expect raw">${hex_seq(nfc0)}</td>`,
-				compare_cell(nfc0, nfc_custom(cps), 'nfd_custom'),
-				compare_cell(nfc0, nfc_native(cps), 'nfc_default')
+				`<td class="raw">${hex_seq(nfc0)}</td>`,
+				compare_cell(nfc0, nfc_custom(cps), KEY_NFC_CUSTOM),
+				compare_cell(nfc0, nfc_native(cps), KEY_NFC_NATIVE)
 			].join('') + '</tr>';
 		}
 		html += '</body></table>';
@@ -150,10 +160,10 @@ async function main() {
 		tr.innerHTML = [
 			`<td class="name"><a href="#${name}">${name}</a></td>`,
 			`<td class="count">${cases.length}</td>`,
-			total_td('nfd_custom'),
-			total_td('nfc_custom'),
-			total_td('nfd_default'),
-			total_td('nfc_default'),
+			total_td(KEY_NFD_CUSTOM),
+			total_td(KEY_NFC_CUSTOM),
+			total_td(KEY_NFD_NATIVE),
+			total_td(KEY_NFC_NATIVE),
 			time_td(t0),
 		].join('');
 
