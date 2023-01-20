@@ -1684,12 +1684,23 @@ function resolve(options) {
 	if (input.includes('://')) {
 		try {	
 			let url = new URL(input);
-			let v = url.pathname.toLowerCase().split('/').filter(x => x);
-			// https://opensea.io/assets/ethereum/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
-			// https://www.gem.xyz/asset/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
-			// https://element.market/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
-			if (v.length >= 2 && v[v.length-2] === ENS_NFT.toLowerCase() && /^[a-f0-9]+$/i.test(v[v.length-1])) {
-				input_field.value = input = `token:${v[v.length-1]}`;
+			if (url.host === 'ens.vision') {
+				// https://ens.vision/name/%F0%9F%91%A9%F0%9F%8F%BC%E2%80%8D%F0%9F%A6%BC%E2%80%8D%E2%AC%85
+				let v = url.pathname.toLowerCase().split('/').filter(x => x);
+				if (v.length >= 2 && v[0] === 'name') {
+					input = decodeURIComponent(v[1]);
+					if (!input.includes('.')) input += '.eth';
+					input_field.value = input;
+				}
+			} else { 
+				// generalized handler
+				// https://opensea.io/assets/ethereum/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
+				// https://www.gem.xyz/asset/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
+				// https://element.market/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
+				let v = url.pathname.toLowerCase().split('/').filter(x => x);
+				if (v.length >= 2 && v[v.length-2] === ENS_NFT.toLowerCase() && /^[a-f0-9]+$/i.test(v[v.length-1])) {
+					input_field.value = input = `token:${v[v.length-1]}`;
+				}
 			}
 		} catch (err) {
 		}
