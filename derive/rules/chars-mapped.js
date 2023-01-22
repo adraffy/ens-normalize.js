@@ -70,6 +70,7 @@ export default [
 	
 	// negative circled => digits
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/417
+	// https://discuss.ens.domains/t/ens-name-normalization-2nd/14564/53
 	[0x24FF, [0x30]], // (⓿) NEGATIVE CIRCLED DIGIT ZERO
 	[0x24EB, [0x31, 0x31]], // (⓫) NEGATIVE CIRCLED NUMBER ELEVEN
 	[0x24EC, [0x31, 0x32]], // (⓬) NEGATIVE CIRCLED NUMBER TWELVE
@@ -160,6 +161,5 @@ export default [
 	// 0x1F171, // (🅱) NEGATIVE SQUARED LATIN CAPITAL LETTER B
 	// 0x1F17E, // (🅾) NEGATIVE SQUARED LATIN CAPITAL LETTER O
 	// 0x1F17F, // (🅿) NEGATIVE SQUARED LATIN CAPITAL LETTER P
-	// marked remainder as isolates
 
 ];

@@ -30,6 +30,9 @@ body {
 	gap: 0.7rem;
 	overflow-y: scroll;
 }
+body.testnet {
+	background: #fef;
+}
 header {
 	display: flex;
 	justify-content: space-between;
@@ -40,9 +43,6 @@ h1 {
 	align-items: baseline;
 	margin: 0;
 	gap: 0.2rem;
-}
-h1 a {
-	font-size: 24pt;
 	white-space: pre;
 }
 h2 {
@@ -53,6 +53,9 @@ h2 {
 	font-size: 11pt;
 	font-weight: normal;
 	color: #666;
+}
+#provider a {
+	font-weight: bold;
 }
 #version {
 	text-align: right;
@@ -494,7 +497,7 @@ footer {
 <button data-delay="1000" data-name="https://www.gem.xyz/asset/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209">Gem</button>
 
 <a href="./chars.html"><b>Chars</b></a> / <b>Mapped:</b> 
-<button data-name="hyph{2D}{2010}{2011}{2012}{2013}{2014}{2015}{2043}{2212}{23AF}{23E4}{FE58}ens">Hyphens</button>
+<button data-name="hyph{2D}{2010}{2011}{2012}{2013}{2014}{2015}{2043}{2212}{23AF}{23E4}{FE58}e{2E3A}n{2E3B}s">Hyphens</button>
 <button>A.™️.Ю</button>
 <button>Ⅷ</button>
 <button>⨌</button>
@@ -726,6 +729,7 @@ Hebrew:
 <li><a href="https://adraffy.github.io/keccak.js/test/demo.html">Keccak Hasher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-regs.html">Recent ENS Registrations</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-emoji-freq.html">Emoji Frequency Browser</a></li>
+<li><a href="https://raffy.antistupid.com/eth/ens-nft-matcher.html">ENS+NFT Matcher</a></li>
 <li><a href="./validate.html">Validation Test</a>
 <li><a href="./report-nf.html">Unicode NormalizationTest</a>
 <li><a href="https://raffy.antistupid.com/eth/emoji-pixels.html">Emoji Pixel Maker</a></li>
@@ -745,6 +749,8 @@ use_default_style();
 let infura_provider = new ethers.providers.WebSocketProvider('wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe');
 let active_provider = infura_provider;
 let window_provider;
+let chain_id;
+let block_explorer;
 let registry_contract;
 let eth_nft_contract;
 let price_oracle_contract;
@@ -937,15 +943,19 @@ function update_network(network) {
 	if (network && network.ensAddress) {
 		active_provider = window_provider;
 		provider_name = `window.ethereum`;
-		network_name = network.name.replace('homestead', 'mainnet');
+		network_name = network.name;
 		registry = network.ensAddress;
+		chain_id = network.chainId;
 	} else {
 		active_provider = infura_provider;
 		provider_name = 'Infura';
-		network_name = 'mainnet';
 		registry = ENS_REGISTRY;
+		chain_id = 1;
 	}
-	document.querySelector('#provider').innerHTML = `using ${provider_name} (<b>${network_name}</b>)`;
+	if (chain_id === 1) network_name = 'mainnet'; 
+	document.body.classList.toggle('testnet', chain_id !== 1);
+	block_explorer = get_block_explorer(chain_id);
+	document.querySelector('#provider').innerHTML = `using ${provider_name} (<a href="${block_explorer}/address/${registry}">${network_name}</a>)`;
 	registry_contract = new ethers.Contract(registry, [
 		`function resolver(bytes32 node) external view returns (address)`,
 		`function owner(bytes32 node) external view returns (address)`,
@@ -955,7 +965,16 @@ function update_network(network) {
 		schedule_resolve(250);
 	}
 }
-
+function get_block_explorer(i) {
+	switch (i) {
+		//case 3: return 'https://ropsten.etherscan.io';
+		//case 4: return 'https://rinkeby.etherscan.io';
+		case 5: return 'https://goerli.etherscan.io';
+		//case 139: return 'https://polygonscan.io';
+		//case 11155111: return 'https://sepolia.etherscan.io';
+		default: return 'https://etherscan.io';
+	}
+}
 function update_examples() {
 	if (examples_div.classList.contains('hide')) {
 		examples_btn.innerHTML = '👀 Show Examples';
@@ -1011,6 +1030,7 @@ function stop_resolving() {
 	primary_arrows.classList.add('hide');
 }
 
+// TODO: merge this into resolve()
 function parse() {
 	output_div.innerHTML = '';
 	let name = replace_escapes(input_field.value);
@@ -1055,40 +1075,55 @@ function parse() {
 		if (skip_norm_check.checked) return true;
 		make_exploded(row, name, false); // show the mapping during the error
 		stop_resolving();
-		let tokens = ens_tokenize(name, {nf: false}); //.flatMap(token => token.type === 'nfc' ? token.tokens : token);
+
+		// if there is a fully ignorable label
+		let collapsed = ens_split(name).filter(x => !x.tokens || x.tokens.length).map(x => str_from_cps(x.input)).join('.');
+		if (collapsed !== name) {
+			let btn = document.createElement('button');
+			btn.innerText = 'Collapse Empty Labels';
+			btn.addEventListener('click', () => {
+				input_field.value = collapsed;
+				resolve();
+			});
+			add_row_tag(row, btn);
+		}
+
+		// if there is whitespace
+		let stripped = name.replace(/\s+/g, '');
+		if (stripped !== name) {
+			let btn = document.createElement('button');
+			btn.innerText = 'Strip Whitespace';
+			btn.addEventListener('click', () => {
+				input_field.value = stripped;
+				resolve();
+			});
+			add_row_tag(row, btn);
+		}
+
+		// if there are likely unmapped mistakes
+		const SLOPPY_MAP = new Map([
+			[0x2F, 0x2044], 
+			[0x3002, 0x2E],
+			[0xFF0E, 0x2E],
+			[0xFF61, 0x2E],
+		]);
+		let sloppy = str_from_cps(explode_cp(name).map(x => SLOPPY_MAP.get(x) || x))
+		if (sloppy !== name) {
+			let btn = document.createElement('button');
+			btn.innerHTML = '<b>Replace Unsafe</b>';
+			btn.title = `Replace the following characters:` + [...SLOPPY_MAP.entries()].map(([a, b]) => {
+				return `\n• "${safe_str_from_cps([a])}" ${hex_cp(a)} → "${safe_str_from_cps([b])}" ${hex_cp(b)}`
+			}).join('');
+			btn.addEventListener('click', () => {
+				input_field.value = sloppy;
+				resolve();
+			});
+			add_row_tag(row, btn);
+		}
+
+		// if there are disallowed characters		
+		let tokens = ens_tokenize(name, {nf: false}); 
 		if (tokens.some(x => x.type === 'disallowed')) {
-
-			let stripped = name.replace(/\s+/g, '');
-			if (stripped !== name) {
-				let strip_btn = document.createElement('button');
-				strip_btn.innerText = 'Strip Whitespace';
-				strip_btn.addEventListener('click', () => {
-					input_field.value = stripped;
-					resolve();
-				});
-				add_row_tag(row, strip_btn);
-			}
-				
-			const SLOPPY_MAP = new Map([
-				[0x2F, 0x2044], 
-				[0x3002, 0x2E],
-				[0xFF0E, 0x2E],
-				[0xFF61, 0x2E],
-			]);
-			let sloppy = str_from_cps(explode_cp(name).map(x => SLOPPY_MAP.get(x) ?? x))
-			if (sloppy !== name) {
-				let btn = document.createElement('button');
-				btn.innerHTML = '<b>Replace Unsafe</b>';
-				btn.title = `Replace the following characters:` + [...SLOPPY_MAP.entries()].map(([a, b]) => {
-					return `\n• "${safe_str_from_cps([a])}" ${hex_cp(a)} → "${safe_str_from_cps([b])}" ${hex_cp(b)}`
-				}).join('');
-				btn.addEventListener('click', () => {
-					input_field.value = sloppy;
-					resolve();
-				});
-				add_row_tag(row, btn);
-			}
-
 			let disallowed_btn = document.createElement('button');
 			disallowed_btn.innerText = 'Remove Disallowed';
 			disallowed_btn.addEventListener('click', () => {
@@ -1187,7 +1222,7 @@ function create_dns_row(name, replaced) {
 		add_row_tag(row, create_link(`https://${encoded}.limo`, '.limo'));
 		add_row_tag(row, create_link(`https://${encoded}.link`, '.link'));
 		add_row_tag(row, create_link(`https://${encoded}.xyz`, '.xyz'));
-		add_row_tag(row, create_link(`https://adraffy.github.io/punycode.js/test/demo.html#${browser?'p':'u'}=${browser ?? name}`, 'Check'));
+		add_row_tag(row, create_link(`https://adraffy.github.io/punycode.js/test/demo.html#${browser?'p':'u'}=${browser || name}`, 'Check'));
 	} catch (err) {
 		row.classList.add('invalid');
 		add_row_tag(row, create_typed_tag('fail', err));
@@ -1228,7 +1263,7 @@ function replace_escapes(s) {
 function create_link(url, s, cls) {
 	let a = document.createElement('a');
 	a.href = url;
-	a.innerHTML = s ?? url;
+	a.innerHTML = s || url;
 	if (cls) a.classList.add(cls);
 	if (!url.includes('ens.domains/') && !url.includes('adraffy.github.io/') && !url.includes('etherscan.io/')) {
 		a.classList.add('third-party');
@@ -1244,7 +1279,7 @@ function create_ens_link(s, {title = 'ENS'} = {}) {
 	return create_link(`https://app.ens.domains/name/${encodeURIComponent(s)}`, title, 'ens');
 }
 function create_etherscan_address_link(addr, {title, contract} = {}) {
-	return create_link(`https://etherscan.io/address/${addr}${contract ? '#readContract' : ''}`, title ?? addr, title ? false : 'wide');
+	return create_link(`${block_explorer}/address/${addr}${contract ? '#readContract' : ''}`, title || addr, title ? false : 'wide');
 }
 
 function create_copy_btn(s, {title = 'Copy', explode} = {}) {
@@ -1263,11 +1298,11 @@ function create_copy_btn(s, {title = 'Copy', explode} = {}) {
 }
 
 function create_reverse_resolve_btn(addr) {
-	return create_resolve_btn(`${addr.slice(2).toLowerCase()}.addr.reverse`, 'Reverse Record');
+	return create_resolve_btn(`${addr.slice(2).toLowerCase()}.addr.reverse`, '↩️ Reverse Record');
 }
-function create_resolve_btn(s, title = 'Resolve') {
+function create_resolve_btn(s, html = 'Resolve') {
 	let btn = document.createElement('button');
-	btn.innerHTML = title;
+	btn.innerHTML = html;
 	btn.title = s;
 	btn.addEventListener('click', () => {
 		input_field.value = s;
@@ -1398,6 +1433,7 @@ function create_digits_row(name, digits, negative) {
 }
 
 function add_dot_eth_links(row, name) {
+	if (chain_id !== 1) return;
 	let label = get_dot_eth_label(name);
 	if (!label) return ''; // only if 2LD .eth	
 	let hash = labelhash(label);
@@ -1703,7 +1739,7 @@ function resolve(options) {
 	if (input.includes('://')) {
 		try {	
 			let url = new URL(input);
-			if (url.host === 'ens.vision') {
+			if (url.host === 'ens.vision' || url.host === 'www.ens.vision') {
 				// https://ens.vision/name/%F0%9F%91%A9%F0%9F%8F%BC%E2%80%8D%F0%9F%A6%BC%E2%80%8D%E2%AC%85
 				let v = url.pathname.toLowerCase().split('/').filter(x => x);
 				if (v.length >= 2 && v[0] === 'name') {
@@ -1894,8 +1930,11 @@ async function resolve0(input0, skip_norm) {
 		output_div.append(create_details_row(input, true));
 		add_row_tag(input_row, create_copy_btn(input));
 
+		if (/^0x[0-9a-f]{40}$/i.test(input)) {
+			add_row_tag(input_row, create_resolve_btn(ethers.utils.getAddress(input.toLowerCase()), '☑️ Fix Checksum'));
+		}
 		if (!input.includes('.')) {
-			add_row_tag(input_row, create_resolve_btn(`${input}.eth`, 'Use ".eth"'));
+			add_row_tag(input_row, create_resolve_btn(`${input}.eth`, '🔄️ Add <b>".eth"</b>'));
 		}
 
 		try {

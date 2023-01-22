@@ -1,7 +1,7 @@
 import {readFileSync, writeFileSync} from 'node:fs';
 import {UNICODE} from '../derive/unicode-version.js';
 import {parse_cp_sequence, mulberry32, print_section, print_checked} from '../derive/utils.js';
-import {ens_normalize, ens_emoji, ens_beautify} from '../src/lib.js';
+import {ens_normalize, ens_emoji, ens_beautify, ens_split} from '../src/lib.js';
 import {random_sample, run_tests} from '../src/utils.js';
 import {read_labels, read_random, read_spec, compute_spec_hash} from './data.js';
 
@@ -176,13 +176,19 @@ if (expect_fail.need_norm.length) {
 }
 let expect_ignore = [];
 for (let name of EXPECT_IGNORED) {
+	// 20220121: null labels are now invalid
+	/*
 	try {
 		let norm = ens_normalize(name);
 		if (norm.length) {
-			expect_ignore.add({name, norm});
+			expect_ignore.push({name});
 		}
 	} catch (err) {
-		expect_ignore.add(name, err);
+		expect_ignore.push(name, err);
+	}
+	*/
+	if (ens_split(name).some(x => !x.tokens || x.tokens.length)) { // failed to parse or !empty
+		expect_ignore.push({name});
 	}
 }
 if (expect_ignore.length) {

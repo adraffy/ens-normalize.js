@@ -145,3 +145,16 @@ function replace_sloppy(s) {
 }
 
 console.log(replace_sloppy("1/4.eth")); // 1/4.eth -> 1⁄4.eth
+
+
+// ********************************************************************************
+// collapse null labels
+// leaves the rest of the string unchanged
+// note: this correctly collapses ".{ignored}."
+function collapse_null_labels(s) {
+	return ens_split(s).filter(x => !x.tokens || x.tokens.length).map(x => str_from_cps(x.input)).join('.');
+}
+
+console.log(collapse_null_labels('...a...eth...')); // 'a.eth'
+console.log(collapse_null_labels('1.\uFE0F..eth')); // '1.eth'
+console.log(collapse_null_labels('....!...eth..')); // '!.eth'

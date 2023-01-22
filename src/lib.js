@@ -33,6 +33,8 @@ function read_chunked() {
 }
 const UNRESTRICTED = r();
 const GROUPS = read_array_while(i => {
+	// minifier property mangling seems unsafe
+	// so these are manually renamed to single chars
 	let N = read_array_while(r).map(x => x+0x60);
 	if (N.length) {
 		let R = i >= UNRESTRICTED; // first arent restricted
@@ -193,10 +195,10 @@ function check_fenced(cps) {
 	if (last == n) throw error_placement(`trailing ${prev}`);
 }
 
+// note: set(s) cannot be exposed because they can be modified
 export function is_combining_mark(cp) {
 	return CM.has(cp);
 }
-
 export function should_escape(cp) {
 	return ESCAPE.has(cp);
 }
@@ -214,7 +216,17 @@ export function ens_beautify(name) {
 	let split = ens_split(name, true);
 	// this is experimental
 	for (let {type, output, error} of split) {
-		if (!error && type !== 'Greek') { // ξ => Ξ if not greek
+		if (error) continue;
+		// 20220121: consider beautifing all or leading/trailing hyphen to unicode variant
+		// not exactly the same in every font, but very similar: "-" vs "‐"
+		//for (let i = 0; i < output.length; i++) if (output[i] == 0x2D) output[i] = 0x2010;
+		/*
+		// or, just first last
+		if (output[0] == 0x2D) output[0] = 0x2010;
+		let end = output.length-1;
+		if (output[end] == 0x2D) output[end] = 0x2010;
+		*/
+		if (type !== 'Greek') { // ξ => Ξ if not greek
 			let prev = 0;
 			while (true) {
 				let next = output.indexOf(0x3BE, prev);
@@ -247,8 +259,11 @@ export function ens_split(name, preserve_emoji) {
 			let token_count = tokens.length;
 			let type;
 			if (!token_count) { // the label was effectively empty (could of had ignored characters)
-				norm = [];
-				type = 'None'; // use this instead of "Common"
+				// 20220120: change to strict
+				// https://discuss.ens.domains/t/ens-name-normalization-2nd/14564/59
+				//norm = [];
+				//type = 'None'; // use this instead of next match, "ASCII"
+				throw new Error(`empty label`);
 			} else {
 				let chars = tokens[0];
 				let emoji = token_count > 1 || chars.is_emoji;
@@ -281,11 +296,15 @@ export function ens_split(name, preserve_emoji) {
 						check_fenced(norm);
 						let unique = [...new Set(chars)];
 						let [g] = determine_group(unique); // take the first match
-						// see derive: equivalent up to naming
+						// see derive: "Matching Groups have Same CM Style"
 						// alternative: could form a hybrid type: Latin/Japanese/...	
 						check_group(g, chars); // need text in order
-						check_whole(g, unique); // only need unique (order would be required for multiple-char confusables)
+						check_whole(g, unique); // only need unique text (order would be required for multiple-char confusables)
 						type = g.N;
+						// 20230121: consider exposing restricted flag
+						// it's simpler to just check for 'Restricted'
+						// or even better: type.endsWith(']')
+						//if (g.R) info.restricted = true;
 					}
 				}
 			}
