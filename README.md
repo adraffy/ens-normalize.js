@@ -54,10 +54,11 @@ let pretty = ens_beautify('1⃣2⃣.eth');
 
 Normalize name fragments for [substring search](./test/fragment.js):
 ```Javascript
-// these fragments fail ens_normalize() due to positional rules
+// these fragments fail ens_normalize() 
 // but will normalize fine as fragments
-let frag1 = ens_normalize_fragment('AB--');
-let frag2 = ens_normalize_fragment('\u{303}');
+let frag1 = ens_normalize_fragment('AB--');    // error: label ext
+let frag2 = ens_normalize_fragment('\u{303}'); // error: leading cm
+let frag3 = ens_normalize_fragment('οо');      // error: mixture
 ```
 
 Input-based tokenization:

@@ -456,7 +456,7 @@ footer {
 </head>
 <body>
 <header>
-<h1><a href="https://ens.domains/">ENS Resolver</a><span id="provider"></span></h1>
+<h1><a href="https://ens.domains/">ENS Resolver</a><span id="provider" target="_blank" title="Registry Contract"></span></h1>
 <span id="version"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a><br>
 <a href="https://github.com/adraffy/ensip-norm">@adraffy/ensip-norm</a></span>
 </header>
@@ -464,7 +464,7 @@ footer {
 <button>vitalik.eth</button>
 <button>nIcK.eTh</button>
 <button>brantly.cash</button>
-<button>..eth</button>
+<button>❌..a..eth</button>
 <button>öbb</button>
 <button>Öbb</button>
 <button data-name="◌̈bb">❌◌̈bb</button>
@@ -754,7 +754,6 @@ let block_explorer;
 let registry_contract;
 let eth_nft_contract;
 let price_oracle_contract;
-//let eth_controller_contract;
 
 const EMOJI = ens_emoji();
 
@@ -966,6 +965,7 @@ function update_network(network) {
 	}
 }
 function get_block_explorer(i) {
+	// these all use same url scheme
 	switch (i) {
 		//case 3: return 'https://ropsten.etherscan.io';
 		//case 4: return 'https://rinkeby.etherscan.io';
@@ -1080,7 +1080,7 @@ function parse() {
 		let collapsed = ens_split(name).filter(x => !x.tokens || x.tokens.length).map(x => str_from_cps(x.input)).join('.');
 		if (collapsed !== name) {
 			let btn = document.createElement('button');
-			btn.innerText = 'Collapse Empty Labels';
+			btn.innerText = '💥️ Collapse Empty Labels';
 			btn.addEventListener('click', () => {
 				input_field.value = collapsed;
 				resolve();
@@ -1092,7 +1092,7 @@ function parse() {
 		let stripped = name.replace(/\s+/g, '');
 		if (stripped !== name) {
 			let btn = document.createElement('button');
-			btn.innerText = 'Strip Whitespace';
+			btn.innerText = '✂️ Strip Whitespace';
 			btn.addEventListener('click', () => {
 				input_field.value = stripped;
 				resolve();
@@ -1110,7 +1110,7 @@ function parse() {
 		let sloppy = str_from_cps(explode_cp(name).map(x => SLOPPY_MAP.get(x) || x))
 		if (sloppy !== name) {
 			let btn = document.createElement('button');
-			btn.innerHTML = '<b>Replace Unsafe</b>';
+			btn.innerHTML = '💣️ Replace Unsafe';
 			btn.title = `Replace the following characters:` + [...SLOPPY_MAP.entries()].map(([a, b]) => {
 				return `\n• "${safe_str_from_cps([a])}" ${hex_cp(a)} → "${safe_str_from_cps([b])}" ${hex_cp(b)}`
 			}).join('');
@@ -1121,44 +1121,44 @@ function parse() {
 			add_row_tag(row, btn);
 		}
 
+		let tokens = ens_tokenize(name); 
+
 		// if there are disallowed characters		
-		let tokens = ens_tokenize(name, {nf: false}); 
 		if (tokens.some(x => x.type === 'disallowed')) {
-			let disallowed_btn = document.createElement('button');
-			disallowed_btn.innerText = 'Remove Disallowed';
-			disallowed_btn.addEventListener('click', () => {
-				input_field.value = str_from_cps(tokens.flatMap(token => {
-					switch (token.type) {
+			let btn = document.createElement('button');
+			btn.innerText = '✨️ Remove Disallowed';
+			btn.addEventListener('click', () => {
+				input_field.value = str_from_cps(tokens.flatMap(t => t.type === 'nfc' ? t.tokens0 : t).flatMap(t => {
+					switch (t.type) {
 						case 'disallowed': return [];
+						case 'valid': return t.cps;
+						case 'emoji': return t.input;
+						default: return t.cp;
+					}
+				}));
+				resolve();
+			});
+			add_row_tag(row, btn);
+		}
+
+		// if there are normalizable parts
+		if (tokens.some(x => x.type === 'nfc' || x.type === 'ignored' || x.type === 'mapped' || (x.type === 'emoji' && x.input.includes(0xFE0F)))) {
+			let btn = document.createElement('button');
+			btn.innerHTML = '💪️ Force Normalize';
+			btn.addEventListener('click', () => {
+				input_field.value = str_from_cps(tokens.flatMap(token => {
+					switch (token.type) { 
+						case 'ignored': return []; // removes ignored (dangerous)
+						case 'mapped': // applies known mappings 
+						case 'emoji': // removes FE0F from known emoji
 						case 'valid': return token.cps;
-						case 'emoji': return token.input;
 						default: return token.cp;
 					}
 				}));
 				resolve();
 			});
-			add_row_tag(row, disallowed_btn);
-			
-			// try to normalize the name and put it into skip_norm mode
-			if (tokens.some(x => x.type === 'ignored' || x.type === 'mapped' || (x.type === 'emoji' && x.input.includes(0xFE0F)))) {
-				let btn = document.createElement('button');
-				btn.innerHTML = 'Force Normalize';
-				btn.addEventListener('click', () => {
-					input_field.value = str_from_cps(tokens.flatMap(token => {
-						switch (token.type) { 
-							case 'ignored': return []; // removes ignored (dangerous)
-							case 'mapped': // applies known mappings 
-							case 'emoji': // removes FE0F from known emoji
-							case 'valid': return token.cps;
-							default: return token.cp;
-						}
-					}));
-					skip_norm_check.checked = true;
-					resolve();
-				});
-				add_row_tag(row, btn);
-			}
-		}	
+			add_row_tag(row, btn);
+		}
 	}
 }
 

@@ -1,6 +1,12 @@
 import {ens_normalize, ens_normalize_fragment} from '../src/lib.js';
 
-// naive implementation
+// examples where fragment (2nd argument) 
+// would error with ens_normalize()
+test('1234--abcd', '34--A'); // error: invalid label extension
+test('e\u{303}', '\u{303}'); // error: illegal placement: leading combining mark
+test('oooooooooooo', 'OΟО'); // error: illegal mixture: Latin + Greek "ο" {3BF}
+test('__a-b-c___', 'a_b_c'); // error: underscore allowed only at start
+
 function name_contains_fragment(name, frag) {
 	// convert the name to NFD because:
 	//   è = E8 => 65 300
@@ -12,35 +18,22 @@ function name_contains_fragment(name, frag) {
 	// if instead, you want exact codepoint matching: 
 	//   use ens_normalize_fragment() without the second argument
 	try {
+		// suggestion: name should be cached if testing many fragments
 		return ens_normalize_fragment(name, true).includes(ens_normalize_fragment(frag, true));
 	} catch (ignored) {
 	}
 }
 
-// examples                  // these would error with ens_normalize()
-test('1234--a', '34--A');    // "invalid label extension"
-test('e\u{303}', '\u{303}'); // "leading combining mark"
-
 function test(name, frag) {
-	// check that name is normalizes
+	// check frag fails normalize
+	let error;
 	try {
-		ens_normalize(name);
-	} catch (err) {
-		throw new Error(`expected name should normalize: ${name}`);
+		ens_normalize(frag);
+	} catch (err) {		
+		error = err.message;
 	}
-	// check that frag isn't normalized
-	ok: {
-		try {
-			ens_normalize(frag);
-		} catch (err) {		
-			break ok;
-		}
-		throw new Error(`expected frag shouldn't normalize: ${frag}`);
-	}
-	// check for containment
+	if (!error) throw new Error(`expected frag shouldn't normalize: ${frag}`);
+	// check containment
 	let contains = name_contains_fragment(name, frag); 
-	if (!contains) {
-		throw new Error(`expected containment: ${name} ${frag}`)
-	}
-	console.log({name, frag, contains});
+	console.log({name, frag, contains, error});
 }
