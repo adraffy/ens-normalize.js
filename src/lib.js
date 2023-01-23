@@ -10,6 +10,7 @@ const STOP = 0x2E;
 const FE0F = 0xFE0F;
 const STOP_CH = '.';
 const UNIQUE_PH = 1;
+const HYPHEN = 0x2D;
 
 function read_set() {
 	return new Set(read_sorted(r));
@@ -163,7 +164,6 @@ function quoted_cp(cp) {
 }
 
 function check_label_extension(cps) {
-	const HYPHEN = 0x2D;
 	if (cps.length >= 4 && cps[2] == HYPHEN && cps[3] == HYPHEN) {
 		throw new Error('invalid label extension');
 	}
@@ -217,16 +217,18 @@ export function ens_beautify(name) {
 	// this is experimental
 	for (let {type, output, error} of split) {
 		if (error) continue;
+
+		// replace leading/trailing hyphen
 		// 20220121: consider beautifing all or leading/trailing hyphen to unicode variant
 		// not exactly the same in every font, but very similar: "-" vs "‐"
+		const UNICODE_HYPHEN = 0x2010;
 		//for (let i = 0; i < output.length; i++) if (output[i] == 0x2D) output[i] = 0x2010;
-		/*
-		// or, just first last
-		if (output[0] == 0x2D) output[0] = 0x2010;
+		if (output[0] == HYPHEN) output[0] = UNICODE_HYPHEN;
 		let end = output.length-1;
-		if (output[end] == 0x2D) output[end] = 0x2010;
-		*/
-		if (type !== 'Greek') { // ξ => Ξ if not greek
+		if (output[end] == HYPHEN) output[end] = UNICODE_HYPHEN;
+
+		// ξ => Ξ if not greek
+		if (type !== 'Greek') { 
 			let prev = 0;
 			while (true) {
 				let next = output.indexOf(0x3BE, prev);
@@ -235,6 +237,7 @@ export function ens_beautify(name) {
 				prev = next + 1;
 			}
 		}
+
 		// 20221213: fixes bidi subdomain issue, but breaks invariant (200E is disallowed)
 		// could be fixed with special case for: 2D (.) + 200E (LTR)
 		//output.splice(0, 0, 0x200E);

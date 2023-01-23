@@ -18,12 +18,12 @@
 	* [Recent Registrations](https://raffy.antistupid.com/eth/ens-regs.html)
 	* [Emoji Frequency Explorer](https://raffy.antistupid.com/eth/ens-emoji-freq.html)
 	* [ENS+NFT Matcher](https://raffy.antistupid.com/eth/ens-nft-matcher.html)
-* Breakdown Reports:
+* [Breakdown Reports:](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/)
 	* [Disallowed Characters](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/disallowed.html)
 	* [Different Norm](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/diff.html)
+	* [Illegal Mixtures](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/mixtures.html)
 	* [Whole-script Confusables](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/wholes.html)
 	* [Illegal Placement](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/placement.html)
-	* [Illegal Mixtures](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/mixtures.html)
 	* [Excess Combining Marks](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/cm.html)
 
 ```Javascript

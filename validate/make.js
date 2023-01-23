@@ -45,7 +45,7 @@ for (let cps of ens_emoji()) {
 	// (these should be the same)
 	REQUIRE_PASS.add(form); 
 	REQUIRE_PASS.add(ens_beautify(form));
-	// 20230119: remove every combination of FE0F's
+	// 20230119: genereate every combination of FE0F's
 	// (no change in validation results)
 	cps.reduce((a, cp) => {
 		let b = a.map(v => [...v, cp]);

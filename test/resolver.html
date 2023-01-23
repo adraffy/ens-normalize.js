@@ -1151,6 +1151,7 @@ function parse() {
 						case 'ignored': return []; // removes ignored (dangerous)
 						case 'mapped': // applies known mappings 
 						case 'emoji': // removes FE0F from known emoji
+						case 'nfc':
 						case 'valid': return token.cps;
 						default: return token.cp;
 					}
@@ -1219,22 +1220,31 @@ function create_dns_row(name, replaced) {
 		} else {
 			add_row_tag(row, create_typed_tag('second', 'Punycode Compatible'));
 		}
-		add_row_tag(row, create_link(`https://${encoded}.limo`, '.limo'));
-		add_row_tag(row, create_link(`https://${encoded}.link`, '.link'));
-		add_row_tag(row, create_link(`https://${encoded}.xyz`, '.xyz'));
+		if (chain_id == 1) {
+			add_row_tag(row, create_link(`https://${encoded}.limo`, '.limo'));
+			add_row_tag(row, create_link(`https://${encoded}.link`, '.link'));
+			add_row_tag(row, create_link(`https://${encoded}.xyz`, '.xyz'));
+		}
 		add_row_tag(row, create_link(`https://adraffy.github.io/punycode.js/test/demo.html#${browser?'p':'u'}=${browser || name}`, 'Check'));
 	} catch (err) {
 		row.classList.add('invalid');
 		add_row_tag(row, create_typed_tag('fail', err));
 
 		if (!replaced) {
-			let replaced = name.replaceAll('-', '‐');
-			if (replaced !== name) {
+			let alt, title;
+			try {
+				alt = ens_beautify(name);
+				title = 'Try Beautified';
+			} catch (err) {
+				alt = name.replaceAll('-', '\u2010');
+				title = 'Replace ASCII with Equivalent Unicode';
+			}
+			if (alt !== name) {
 				let btn = document.createElement('button');
 				btn.style.order = 31;
-				btn.innerText = 'Replace ASCII with Unicode';
+				btn.innerText = title;
 				btn.addEventListener('click', () => {
-					row.replaceWith(create_dns_row(replaced, true));
+					row.replaceWith(create_dns_row(alt, true));
 				});
 				add_row_tag(row, btn);
 			}
