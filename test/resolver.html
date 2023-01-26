@@ -1040,6 +1040,7 @@ function update_title() {
 }
 
 function parse() {
+	update_title();	
 	let input = input_field.value;
 	let skip = skip_norm_check.checked;
 	/*
@@ -1852,13 +1853,10 @@ function resolve(options) {
 		input = input.trim().split(/\s+/).map(x => `{${x}}`).join('');	
 	}
 	input_field.value = input;
-	update_title();
-	/*
-	if (!presolve(input, skip, true) && !skip) {
+	if (!parse() && !skip) {
 		primary_arrows.classList.add('hide');
 		return;
 	}
-	*/
 	resolve_btn.disabled = true;
 	primary_arrows.classList.remove('hide');
 	resolve_date0 = new Date();
