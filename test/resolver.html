@@ -890,6 +890,7 @@ document.querySelector('#escape_btn').addEventListener('click', () => {
 	let set = [...new Set([s1, s2, s3])];
 	let pos = set.indexOf(s0);	
 	input_field.value = set[(pos + 1) % set.length];
+	update_title();
 });
 
 document.querySelector('#link_btn').addEventListener('click', () => {
@@ -1026,35 +1027,54 @@ function stop_resolving() {
 	primary_arrows.classList.add('hide');
 }
 
-function parse() {
-	return presolve(replace_escapes(input_field.value), skip_norm_check.checked, false);
+function update_title() {
+	let title = APP_TITLE;
+	let hash = ' '; // cannot be empty
+	let input = input_field.value;
+	if (input) {
+		title = `${title}: "${input}"`;
+		hash = '#' + encodeURIComponent(input);
+	}
+	window.history.replaceState(null, null, hash); 
+	document.title = title;
 }
-function presolve(name, skip, resolving) {
+
+function parse() {
+	let input = input_field.value;
+	let skip = skip_norm_check.checked;
+	/*
+function parse() {
+	return presolve(input_field.value, skip_norm_check.checked, false);
+}
+function presolve(input, skip, resolving) {
 	// update browser history
 	let title = APP_TITLE;
 	let hash = ' '; // cannot be empty
-	if (name) {
-		title = `${title}: "${name}"`;
-		hash = '#' + encodeURIComponent(name);
+	let input = input_field.value;
+	if (input) {
+		title = `${title}: "${input}"`;
+		hash = '#' + encodeURIComponent(input);
 	}
+	let name = replace_escapes(input);
+	let state0 = window.history.state;
+	let state = {name, resolving};
 	if (skip) {
 		title += ' (!)';
 		hash += SKIP_SUFFIX;
+		state.name += SKIP_SUFFIX;
 	}
-	let state0 = window.history.state;
-	let state = {hash, resolving};
 	// note: only push if records that differ 
 	// history API is total dogshit
 	// cannot reliably pop a duplicate
 	// eg. "A" + [space] => "A " + [del] => "A"
-	if (state0 && (resolving || state0.resolving) && state0.hash != hash) {
+	if (state0 && (resolving || state0.resolving) && state0.name != name) {
 		window.history.pushState(state, null, hash);
 	} else {
 		window.history.replaceState(state, null, hash);
 	}
-	document.title = title;
+	*/
 	// show readme if empty
-	if (!name) {
+	if (!input) {
 		stop_resolving();
 		output_div.innerHTML = '';
 		output_div.append(...readme_dom);	
@@ -1062,6 +1082,7 @@ function presolve(name, skip, resolving) {
 		return;
 	}
 	// TODO: conslidate this code with resolve()
+	let name = replace_escapes(input);
 	output_div.innerHTML = '';
 	controls_div.classList.remove('hide');
 	if (resolve_timer === RESOLVE_MODE_EMPTY) {
@@ -1764,19 +1785,19 @@ function resolve(options) {
 	}
 	clearTimeout(resolve_timer);
 	resolve_timer = RESOLVE_MODE_IDLE;
-	let name = input_field.value;
+	let input = input_field.value;
 	let skip = skip_norm_check.checked;
 	// replace marketplace URL with token:XXX
-	if (name.includes('://')) {
+	if (input.includes('://')) {
 		try {	
-			let url = new URL(name);
+			let url = new URL(input);
 			if (url.host === 'ens.vision' || url.host === 'www.ens.vision') {
 				// https://ens.vision/name/%F0%9F%91%A9%F0%9F%8F%BC%E2%80%8D%F0%9F%A6%BC%E2%80%8D%E2%AC%85
 				let v = url.pathname.toLowerCase().split('/').filter(x => x);
 				if (v.length >= 2 && v[0] === 'name') {
-					name = decodeURIComponent(v[1]);
-					if (!name.includes('.')) name += '.eth';
-					input_field.value = name;
+					input = decodeURIComponent(v[1]);
+					if (!input.includes('.')) input += '.eth';
+					input_field.value = input;
 				}
 			} else { 
 				// generalized handler
@@ -1785,7 +1806,7 @@ function resolve(options) {
 				// https://element.market/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
 				let v = url.pathname.toLowerCase().split('/').filter(x => x);
 				if (v.length >= 2 && v[v.length-2] === ENS_NFT.toLowerCase() && /^[a-f0-9]+$/i.test(v[v.length-1])) {
-					input_field.value = name = `token:${v[v.length-1]}`;
+					input_field.value = input = `token:${v[v.length-1]}`;
 				}
 			}
 		} catch (err) {
@@ -1793,7 +1814,7 @@ function resolve(options) {
 	}
 	let match;
 	// replace token:XXX with ens subgraph label (or fail)
-	if (match = name.match(/^token:((0x)?[a-f0-9]+)$/i)) {
+	if (match = input.match(/^token:((0x)?[a-f0-9]+)$/i)) {
 		let hash = ethers.BigNumber.from(match[1]).toHexString();
 		resolve_btn.disabled = true;
 		return fetch('https://api.thegraph.com/subgraphs/name/ensdomains/ens', {
@@ -1819,26 +1840,29 @@ function resolve(options) {
 		});
 	} 
 	// input convenience: expand range
-	if (match = name.match(/^range:([0-9a-f]+)\.\.([0-9a-f]+)$/i)) {
+	if (match = input.match(/^range:([0-9a-f]+)\.\.([0-9a-f]+)$/i)) {
 		let lo = parseInt(match[1], 16);
 		let hi = parseInt(match[2], 16);
 		if (hi >= lo) {
-			name = String.fromCodePoint(...Array(1 + hi - lo).fill().map((_, i) => lo + i));
+			input = String.fromCodePoint(...Array(1 + hi - lo).fill().map((_, i) => lo + i));
 		}
 	}
 	// input convenience: HEX HEX HEX => {HEX}{HEX}
-	if (/^\s*[0-9a-f]{2,}(\s+[0-9a-f]{2,})+\s*$/i.test(name)) { 
-		name = name.trim().split(/\s+/).map(x => `{${x}}`).join('');	
+	if (/^\s*[0-9a-f]{2,}(\s+[0-9a-f]{2,})+\s*$/i.test(input)) { 
+		input = input.trim().split(/\s+/).map(x => `{${x}}`).join('');	
 	}
-	input_field.value = name;	
-	if (!presolve(name, skip, true) && !skip) {
+	input_field.value = input;
+	update_title();
+	/*
+	if (!presolve(input, skip, true) && !skip) {
 		primary_arrows.classList.add('hide');
 		return;
 	}
+	*/
 	resolve_btn.disabled = true;
 	primary_arrows.classList.remove('hide');
 	resolve_date0 = new Date();
-	resolve0(name, skip).then(() => {
+	resolve0(replace_escapes(input), skip).then(() => {
 		resolve_btn.disabled = false;
 		if (resolve_timer === RESOLVE_MODE_REPEAT) {
 			setTimeout(resolve, 0);
@@ -1860,10 +1884,9 @@ function create_elapsed() {
 	return span;
 }
 
-async function resolve0(input0, skip_norm) {
+async function resolve0(input, skip_norm) {
 	output_div.innerHTML = '';
 
-	let input = replace_escapes(input0);
 	let input_is_address = is_checksum_address(input);
 	let input_row;
 	let normed_row;
