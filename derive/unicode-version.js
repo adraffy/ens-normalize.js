@@ -10,9 +10,19 @@ if (NF.run_tests().length) throw new Error('nf implementation wrong');
 NF.run_random_tests();
 
 export const IDNA = UNICODE.derive_idna_rules({
-	version: 2003, // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-137.md
+	// because 2008 makes emoji invalid
+	// question: does anything use 2008?
+	version: 2003, 
+	
+	// https://github.com/ethereum/EIPs/blob/master/EIPS/eip-137.md
 	use_STD3: true, 
-	valid_deviations: true // because 200C and 200D were allowed
+	
+	// because 200C and 200D were allowed (deviations)
+	// this is effectively "Nontransitional Processing" with a better name
+	// https://unicode.org/reports/tr46/#Deviations
+	// 20220123: this is also the WHATWG URL recommendation
+	// https://url.spec.whatwg.org/#idna
+	valid_deviations: true 
 });
 
 export const PRINTER = new UnicodePrinter(UNICODE);

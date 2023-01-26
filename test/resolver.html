@@ -707,10 +707,10 @@ Hebrew:
 <div id="output">
 <ul class="row readme">
 <li>Click an <button data-name="👁️‍🗨️A{303}">Example</button> to see how it works.</li>
-<li>Use <code>{FF}</code> or <code>[255]</code> to manually include codepoints, eg. <button data-escape data-name="a{200D}b.eth">ZWJ</button></li>
-<li><code>range:A..B</code> expands to a range of characters, eg. <button data-name="range:61..7A">Alphabet</button></li>
-<li><code>token:X</code> resolves to the .eth preimage (if known).</li>
-<li><code>123 456 789</code> is shorthand for <code>{123}{456}{789}</code>.</li>
+<li>Use <code>{FF}</code> or <code>[255]</code> to manually include codepoints <button data-escape data-name="a{200D}b.eth">ZWJ</button></li>
+<li><code>range:A..B</code> expands to a range of characters <button data-name="range:61..7A" data-delay="1000">ASCII a-z</button></li>
+<li><code>token:X</code> resolves to the .eth preimage (if known) <button data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209" data-delay="1000">token:</button></li>
+<li><code>123 456 789</code> is shorthand for <code>{123}{456}{789}</code> <button data-name="65 74 68" data-meta data-delay="1000">65 74 68</button></li>
 <li><a href="#vitalik.eth"><b>Copy Link</b></a> to get a URL that resolves on page-load.</li>
 </ul>
 <ul class="row legend">
@@ -737,7 +737,7 @@ Hebrew:
 </div>
 <footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
 <script type="module">
-import { ethers } from "https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.esm.min.js";
+import {ethers} from "https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.esm.min.js";
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
 	nfc, nfd, hex_cp, explode_cp, str_from_cps, safe_str_from_cps,
@@ -777,6 +777,7 @@ const RESOLVE_MODE_IDLE = 'idle';
 const RESOLVE_MODE_REPEAT = 'repeat';
 const RESOLVE_MODE_EMPTY = 'empty';
 
+const APP_TITLE = 'ENS Resolver';
 const INPUT_NAME = 'Input';
 const OPENSEA_NAME = 'OpenSea';
 const SKIP_SUFFIX = '_!';
@@ -788,7 +789,6 @@ const ENS_REGISTRY = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
 const ENS_NFT = '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85';
 
 let resolve_timer = RESOLVE_MODE_IDLE;
-let resolve_options;
 let resolve_date0;
 
 // TODO: add more
@@ -822,7 +822,7 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 	}
 	name = replace_escapes(name);
 	if (!btn.innerText || btn.innerText.includes('{')) btn.innerText = name;
-	let meta = name.includes(':') || is_checksum_address(name);
+	let meta = typeof btn.dataset.meta === 'string' || name.includes(':') || is_checksum_address(name);
 	if (!meta && !name.includes('.')) name += '.eth';
 	if (typeof btn.dataset.escape === 'string') name = apply_escapes(name, false);
 	if (!btn.title) btn.title = meta ? name : `${name}\n${explode_cp(name).map(hex_cp).join(' ')}`;
@@ -852,9 +852,7 @@ input_field.addEventListener('keydown', e => {
 	}
 });
 input_field.addEventListener('input', () => {
-	if (parse()) {
-		schedule_resolve(500);
-	}
+	if (parse()) schedule_resolve();
 });
 
 document.querySelector('#random_emoji_btn').addEventListener('click', () => {
@@ -870,8 +868,8 @@ document.querySelector('#random_emoji_btn').addEventListener('click', () => {
 document.querySelector('#nf_btn').addEventListener('click', () => {
 	let s0 = input_field.value;
 	let s1 = replace_escapes(s0);
-	let s2 = apply_escapes(str_from_cpsnfd(explode_cp(s1)));
-	let s3 = apply_escapes(str_from_cpsnfc(explode_cp(s1)));
+	let s2 = apply_escapes(str_from_cps(nfd(explode_cp(s1))));
+	let s3 = apply_escapes(str_from_cps(nfc(explode_cp(s1))));
 	let s4 = s0 == s2 ? s3 : s2;
 	if (s0 != s4) {
 		input_field.value = s4;
@@ -961,9 +959,10 @@ function update_network(network) {
 	], active_provider);
 	eth_nft_contract = null;
 	if (input_field.value) {
-		schedule_resolve(250);
+		schedule_resolve();
 	}
 }
+
 function get_block_explorer(i) {
 	// these all use same url scheme
 	switch (i) {
@@ -975,6 +974,7 @@ function get_block_explorer(i) {
 		default: return 'https://etherscan.io';
 	}
 }
+
 function update_examples() {
 	if (examples_div.classList.contains('hide')) {
 		examples_btn.innerHTML = '👀 Show Examples';
@@ -1002,19 +1002,15 @@ function should_stop_resolving() {
 	return resolve_timer !== RESOLVE_MODE_IDLE;
 }
 
-function schedule_resolve(delay) {
+function schedule_resolve(delay = 500) {
 	if (!auto_resolve_check.checked) return;
-	resolve_options = {
-		//automatic: true,
-		skip_norm: skip_norm_check.checked
-	};
 	if (is_working()) {
 		clearTimeout(resolve_timer);
 		resolve_timer = RESOLVE_MODE_REPEAT;
 	} else { //if (!should_stop_resolving()) {
 		primary_arrows.classList.remove('hide');
 		clearTimeout(resolve_timer);
-		resolve_timer = setTimeout(() => resolve(resolve_options), delay);
+		resolve_timer = setTimeout(resolve, delay);
 	}
 } 
 
@@ -1030,16 +1026,44 @@ function stop_resolving() {
 	primary_arrows.classList.add('hide');
 }
 
-// TODO: merge this into resolve()
 function parse() {
-	output_div.innerHTML = '';
-	let name = replace_escapes(input_field.value);
-	controls_div.classList.toggle('hide', !name);
+	return presolve(replace_escapes(input_field.value), skip_norm_check.checked, false);
+}
+function presolve(name, skip, resolving) {
+	// update browser history
+	let title = APP_TITLE;
+	let hash = ' '; // cannot be empty
+	if (name) {
+		title = `${title}: "${name}"`;
+		hash = '#' + encodeURIComponent(name);
+	}
+	if (skip) {
+		title += ' (!)';
+		hash += SKIP_SUFFIX;
+	}
+	let state0 = window.history.state;
+	let state = {hash, resolving};
+	// note: only push if records that differ 
+	// history API is total dogshit
+	// cannot reliably pop a duplicate
+	// eg. "A" + [space] => "A " + [del] => "A"
+	if (state0 && (resolving || state0.resolving) && state0.hash != hash) {
+		window.history.pushState(state, null, hash);
+	} else {
+		window.history.replaceState(state, null, hash);
+	}
+	document.title = title;
+	// show readme if empty
 	if (!name) {
 		stop_resolving();
-		output_div.append(...readme_dom);
+		output_div.innerHTML = '';
+		output_div.append(...readme_dom);	
+		controls_div.classList.add('hide');
 		return;
 	}
+	// TODO: conslidate this code with resolve()
+	output_div.innerHTML = '';
+	controls_div.classList.remove('hide');
 	if (resolve_timer === RESOLVE_MODE_EMPTY) {
 		resolve_timer = RESOLVE_MODE_IDLE;
 	}
@@ -1059,7 +1083,7 @@ function parse() {
 			make_normalized(row);
 		} else {
 			add_row_tag(row, create_typed_tag('fail', 'Normalized'));
-			if (!skip_norm_check.checked) {
+			if (!skip) {
 				add_transformed_row(name);
 				let norm_row = create_row('Normalized');
 				make_exploded(norm_row, norm, true);
@@ -1072,7 +1096,7 @@ function parse() {
 	} catch (err) {
 		row.classList.add('error');
 		add_row_tag(row, create_typed_tag('warn', err));
-		if (skip_norm_check.checked) return true;
+		if (skip) return true;
 		make_exploded(row, name, false); // show the mapping during the error
 		stop_resolving();
 
@@ -1191,8 +1215,9 @@ function create_dns_row(name, replaced) {
 				if (encoded === label) {
 					if (label.startsWith('xn--')) throw new Error('punycode literal');
 					if (label.slice(2, 4) === '--') throw new Error('invalid label extension');
-					if (label.startsWith('-')) throw new Error('leading hyphen');
-					if (label.endsWith('-')) throw new Error('trailing hyphen');
+					// 20230123: WHATWG URL uses "CheckHyphens" false
+					//if (label.startsWith('-')) throw new Error('leading hyphen');
+					//if (label.endsWith('-')) throw new Error('trailing hyphen');
 				}
 				if (encoded.length > MAX_LABEL) throw new Error(`too long: ${encoded.length} > ${MAX_LABEL}`);
 				return encoded;
@@ -1479,20 +1504,21 @@ function bytes_from_utf8(s) {
 
 function make_tokens_div(name, before) {
 	// tokenize each label separately so we can show major/minor errors
-	// flatten non-errors tokens into wrapper	
+	// flatten non-errors tokens into wrapper
 	let split = ens_split(name);
 	let wrapper = document.createElement('div');
 	wrapper.classList.add('tokens');
 	let first = true;
 	for (let i = 0; i < split.length; i++) {
 		if (i > 0) {
-			wrapper.append(...dom_from_tokens(ens_tokenize('.')).children);
+			wrapper.append(...dom_from_tokens(ens_tokenize('.')).children); 
 		}
 		let {input, error} = split[i];
 		let tokens = dom_from_tokens(ens_tokenize(String.fromCodePoint(...input)), {
 			before, 
 			emoji_url,
-			components: show_components_check.checked
+			components: show_components_check.checked,
+			tld_class: i == split.length-1
 		});
 		if (error) {
 			tokens.classList.add('error');
@@ -1732,30 +1758,25 @@ function is_working() {
 }
 
 function resolve(options) {
-	if (!options) {
-		options =  {
-			skip_norm: skip_norm_check.checked
-		};
-	}
 	if (is_working()) {
 		resolve_timer = RESOLVE_MODE_REPEAT; 
-		resolve_options = options;
 		return;
 	}
 	clearTimeout(resolve_timer);
 	resolve_timer = RESOLVE_MODE_IDLE;
-	let input = input_field.value;
+	let name = input_field.value;
+	let skip = skip_norm_check.checked;
 	// replace marketplace URL with token:XXX
-	if (input.includes('://')) {
+	if (name.includes('://')) {
 		try {	
-			let url = new URL(input);
+			let url = new URL(name);
 			if (url.host === 'ens.vision' || url.host === 'www.ens.vision') {
 				// https://ens.vision/name/%F0%9F%91%A9%F0%9F%8F%BC%E2%80%8D%F0%9F%A6%BC%E2%80%8D%E2%AC%85
 				let v = url.pathname.toLowerCase().split('/').filter(x => x);
 				if (v.length >= 2 && v[0] === 'name') {
-					input = decodeURIComponent(v[1]);
-					if (!input.includes('.')) input += '.eth';
-					input_field.value = input;
+					name = decodeURIComponent(v[1]);
+					if (!name.includes('.')) name += '.eth';
+					input_field.value = name;
 				}
 			} else { 
 				// generalized handler
@@ -1764,7 +1785,7 @@ function resolve(options) {
 				// https://element.market/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
 				let v = url.pathname.toLowerCase().split('/').filter(x => x);
 				if (v.length >= 2 && v[v.length-2] === ENS_NFT.toLowerCase() && /^[a-f0-9]+$/i.test(v[v.length-1])) {
-					input_field.value = input = `token:${v[v.length-1]}`;
+					input_field.value = name = `token:${v[v.length-1]}`;
 				}
 			}
 		} catch (err) {
@@ -1772,7 +1793,7 @@ function resolve(options) {
 	}
 	let match;
 	// replace token:XXX with ens subgraph label (or fail)
-	if (match = input.match(/^token:((0x)?[a-f0-9]+)$/i)) {
+	if (match = name.match(/^token:((0x)?[a-f0-9]+)$/i)) {
 		let hash = ethers.BigNumber.from(match[1]).toHexString();
 		resolve_btn.disabled = true;
 		return fetch('https://api.thegraph.com/subgraphs/name/ensdomains/ens', {
@@ -1798,50 +1819,29 @@ function resolve(options) {
 		});
 	} 
 	// input convenience: expand range
-	if (match = input.match(/^range:([0-9a-f]+)\.\.([0-9a-f]+)$/i)) {
+	if (match = name.match(/^range:([0-9a-f]+)\.\.([0-9a-f]+)$/i)) {
 		let lo = parseInt(match[1], 16);
 		let hi = parseInt(match[2], 16);
 		if (hi >= lo) {
-			input = String.fromCodePoint(...Array(1 + hi - lo).fill().map((_, i) => lo + i));
+			name = String.fromCodePoint(...Array(1 + hi - lo).fill().map((_, i) => lo + i));
 		}
 	}
 	// input convenience: HEX HEX HEX => {HEX}{HEX}
-	if (/^\s*[0-9a-f]{2,}(\s+[0-9a-f]{2,})+\s*$/i.test(input)) { 
-		input = input.trim().split(/\s+/).map(x => `{${x}}`).join('');	
+	if (/^\s*[0-9a-f]{2,}(\s+[0-9a-f]{2,})+\s*$/i.test(name)) { 
+		name = name.trim().split(/\s+/).map(x => `{${x}}`).join('');	
 	}
-	input_field.value = input;
-	let title = 'ENS Resolver';
-	if (!input) {
-		if (window.location.hash) {
-			window.history.pushState(null, null, ' ');
-		} else {
-			window.history.replaceState(null, null, ' ');
-		}
-		document.title = title;
-		parse();
-		return;
-	}
-	title += `: ${input}`;
-	let hash = '#' + encodeURIComponent(input);
-	if (options.skip_norm) {
-		hash += SKIP_SUFFIX;
-		title += ' (!)';
-	}
-	document.title = title;
-	if (window.location.hash != hash) {
-		window.history.pushState(null, null, hash);
-	}
-	if (!options.skip_norm && !parse()) {
+	input_field.value = name;	
+	if (!presolve(name, skip, true) && !skip) {
 		primary_arrows.classList.add('hide');
 		return;
 	}
 	resolve_btn.disabled = true;
 	primary_arrows.classList.remove('hide');
 	resolve_date0 = new Date();
-	resolve0(input, options.skip_norm).then(() => {
+	resolve0(name, skip).then(() => {
 		resolve_btn.disabled = false;
-		if (resolve_timer === RESOLVE_MODE_REPEAT) { 
-			setTimeout(resolve, 0, resolve_options);
+		if (resolve_timer === RESOLVE_MODE_REPEAT) {
+			setTimeout(resolve, 0);
 		} else {
 			primary_arrows.classList.add('hide');
 		}

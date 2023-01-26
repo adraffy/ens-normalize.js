@@ -144,8 +144,25 @@ function replace_sloppy(s) {
 	//return s.replaceAll('/', '\u2044').replace(/(\u3002|\uFF0E|\uFF61)/gu, '.');
 }
 
-console.log(replace_sloppy("1/4.eth")); // 1/4.eth -> 1⁄4.eth
+console.log(replace_sloppy("1/4.eth")); // "1/4.eth" -> "1⁄4.eth"
 
+// ********************************************************************************
+// make a best case attempt at normalizing a name
+// note: this is unsafe for general use
+function force_normalize(s) {
+	return str_from_cps(ens_tokenize(s).flatMap(token => {
+		switch (token.type) { 
+			case 'ignored': return []; // removes ignored (dangerous)
+			case 'mapped': // applies known mappings 
+			case 'emoji': // removes FE0F from known emoji
+			case 'nfc':
+			case 'valid': return token.cps;
+			default: return token.cp;
+		}
+	}));
+}
+
+console.log(force_normalize('A_B_C')); // "a_b_c"
 
 // ********************************************************************************
 // collapse null labels
@@ -155,6 +172,6 @@ function collapse_null_labels(s) {
 	return ens_split(s).filter(x => !x.tokens || x.tokens.length).map(x => str_from_cps(x.input)).join('.');
 }
 
-console.log(collapse_null_labels('...a...eth...')); // 'a.eth'
-console.log(collapse_null_labels('1.\uFE0F..eth')); // '1.eth'
-console.log(collapse_null_labels('....!...eth..')); // '!.eth'
+console.log(collapse_null_labels('...a...eth...')); // "a.eth"
+console.log(collapse_null_labels('1.\uFE0F..eth')); // "1.eth"
+console.log(collapse_null_labels('....!...eth..')); // "!.eth"

@@ -41,7 +41,10 @@ export function version_ordinal(x) {
 	return x.major + (1 - 1/(1 + x.minor + (1 - 1/(1 + x.patch)))); // use continued fraction expansion
 }
 
-// returns single reference
+// warning: returns single reference since output can be large
+// [1,2,3] => [[1,2,3],[2,1,3],[3,1,2],[1,3,2],[2,3,1],[3,2,1]]
+// good: for (let v of permutations([1,2,3]))
+//  bad: [...permutations([1,2,3])]
 export function* permutations(v) {
 	let n = v.length;
 	if (!n) return;
@@ -66,7 +69,6 @@ export function* permutations(v) {
 	}
 }
 
-
 export function group_by(iterable, fn) {
 	let map = new Map();
 	for (let x of iterable) {
@@ -84,7 +86,7 @@ export function group_by(iterable, fn) {
 export const MAX_CP = 0x10FFFF;
 
 export function require_cp(cp) {
-	if (!Number.isSafeInteger(cp) || cp < 0 || cp > MAX_CP) { // ignore upper
+	if (!Number.isSafeInteger(cp) || cp < 0 || cp > MAX_CP) {
 		throw new TypeError(`expected codepoint: ${cp}`);
 	}
 	return cp;
@@ -163,7 +165,7 @@ export function compare_arrays(a, b) {
 export function mulberry32(a) {
 	return () => {
 		let t = a = a + 0x6D2B79F5|0;
-		t = Math.imul(t ^ t >>> 15, t | 1);
+		t = Math.imul(t ^ (t >>> 15), t | 1);
 		t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
 		return ((t ^ (t >>> 14)) >>> 0) / 0x100000000;
 	};

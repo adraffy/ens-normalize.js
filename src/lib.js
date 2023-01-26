@@ -61,15 +61,18 @@ const GROUPS = read_array_while(i => {
 });
 const WHOLE_VALID = read_set();
 const WHOLE_MAP = new Map();
+// decode compressed wholes
 [...WHOLE_VALID, ...read_set()].sort((a, b) => a-b).map((cp, i, v) => {
 	let d = r(); 
 	let w = v[i] = d ? v[i-d] : {V: [], M: new Map()};
-	w.V.push(cp);
+	w.V.push(cp); // add to member set
 	if (!WHOLE_VALID.has(cp)) {
-		WHOLE_MAP.set(cp, w); 
+		WHOLE_MAP.set(cp, w);  // register with whole map
 	}
 });
+// compute confusable-extent complements
 for (let {V, M} of new Set(WHOLE_MAP.values())) {
+	// connect all groups that have each whole character
 	let recs = [];
 	for (let cp of V) {
 		let gs = GROUPS.filter(g => g.V.has(cp));
@@ -80,7 +83,8 @@ for (let {V, M} of new Set(WHOLE_MAP.values())) {
 		}
 		rec.V.push(cp);
 		gs.forEach(g => rec.G.add(g));
-	}	
+	}
+	// per character cache groups which are not a member of the extent
 	let union = recs.flatMap(({G}) => [...G]);
 	for (let {G, V} of recs) {
 		let complement = new Set(union.filter(g => !G.has(g)));
@@ -89,28 +93,22 @@ for (let {V, M} of new Set(WHOLE_MAP.values())) {
 		}
 	}
 }
-let union = new Set();
-let multi = new Set();
+let union = new Set(); // exists in 1+ groups
+let multi = new Set(); // exists in 2+ groups
 for (let g of GROUPS) {
 	for (let cp of g.V) {
 		(union.has(cp) ? multi : union).add(cp);
 	}
 }
+// dual purpose WHOLE_MAP: return placeholder if unique non-confusable
 for (let cp of union) {
 	if (!WHOLE_MAP.has(cp) && !multi.has(cp)) {
 		WHOLE_MAP.set(cp, UNIQUE_PH);
 	}
 }
-/*
-// this is too slow, 500ms+
-let valid_union = [...new Set(GROUPS.flatMap(g => [...g.V]))];
-for (let cp of valid_union) {
-	if (!WHOLE_MAP.has(cp) && GROUPS.filter(g => g.V.has(cp)).length == 1) {
-		WHOLE_MAP.set(cp, UNIQUE_PH);
-	}
-}
-*/
-const VALID = new Set([...union, ...nfd(union)]); // 30ms
+const VALID = new Set([...union, ...nfd(union)]); // possibly valid
+
+// decode emoji
 const EMOJI_SORTED = read_sorted(r);
 //const EMOJI_SOLO = new Set(read_sorted(r).map(i => EMOJI_SORTED[i])); // not needed
 const EMOJI_ROOT = read_emoji_trie([]);
@@ -219,13 +217,19 @@ export function ens_beautify(name) {
 		if (error) continue;
 
 		// replace leading/trailing hyphen
-		// 20220121: consider beautifing all or leading/trailing hyphen to unicode variant
+		// 20230121: consider beautifing all or leading/trailing hyphen to unicode variant
 		// not exactly the same in every font, but very similar: "-" vs "‐"
+		/*
 		const UNICODE_HYPHEN = 0x2010;
+		// maybe this should replace all for visual consistancy?
+		// `node tools/reg-count.js regex ^-\{2,\}` => 592
 		//for (let i = 0; i < output.length; i++) if (output[i] == 0x2D) output[i] = 0x2010;
 		if (output[0] == HYPHEN) output[0] = UNICODE_HYPHEN;
 		let end = output.length-1;
 		if (output[end] == HYPHEN) output[end] = UNICODE_HYPHEN;
+		*/
+		// 20230123: WHATWG URL uses "CheckHyphens" false
+		// https://url.spec.whatwg.org/#idna
 
 		// ξ => Ξ if not greek
 		if (type !== 'Greek') { 
@@ -262,7 +266,7 @@ export function ens_split(name, preserve_emoji) {
 			let token_count = tokens.length;
 			let type;
 			if (!token_count) { // the label was effectively empty (could of had ignored characters)
-				// 20220120: change to strict
+				// 20230120: change to strict
 				// https://discuss.ens.domains/t/ens-name-normalization-2nd/14564/59
 				//norm = [];
 				//type = 'None'; // use this instead of next match, "ASCII"
@@ -273,7 +277,9 @@ export function ens_split(name, preserve_emoji) {
 				if (!emoji && chars.every(cp => cp < 0x80)) { // special case for ascii
 					norm = chars;
 					check_leading_underscore(norm);
-					check_label_extension(norm); // only needed for ascii
+					// only needed for ascii
+					// 20230123: matches matches WHATWG, see note 3.3
+					check_label_extension(norm);
 					// cant have fenced
 					// cant have cm
 					// cant have wholes
@@ -406,18 +412,6 @@ function error_placement(where) {
 // assumption: cps[0] isn't a CM
 function check_group(g, cps) {
 	let {V, M} = g;
-	/*
-	for (let i = 0; i < cps.length; i++) {
-		let cp = cps[i];
-		if (!V.has(cp)) {
-			if (CM.has(cp)) {
-				throw new Error(`disallowed combining mark: "${str_from_cps([cps[i-1], cp])}" ${quote_cp(cp)}`);
-			} else {
-				throw error_group_member(g, cp);
-			}
-		}
-	}
-	*/
 	for (let cp of cps) {
 		if (!V.has(cp)) {
 			throw error_group_member(g, cp);

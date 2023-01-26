@@ -6,11 +6,9 @@
 // node tools/reg-count.js regex 0{445}*
 
 import {UNICODE, PRINTER, NF} from '../derive/unicode-version.js';
-//import {CHANGED_SCRIPTS} from '../derive/rules/scripts.js';
 import {parse_cp_range, explode_cp, print_section, group_by} from '../derive/utils.js';
 import {read_labels} from '../validate/data.js';
 import {ens_normalize, ens_tokenize} from '../src/lib.js';
-//import {writeFileSync} from 'node:fs';
 
 //function ens_normalize(s) { return s; }
 //function ens_tokenize() { return []; }
@@ -35,7 +33,7 @@ function main(args) {
 	});
 	if (args[0] === 'regex') {
 		let regex = args[1].replace(/\{([0-9a-f]{2,5})\}/giu, (_, x) => String.fromCodePoint(parseInt(x, 16)));
-		console.log(regex);		
+		console.log(regex);
 		try {	
 			regex = new RegExp(regex, 'u');
 		} catch (err) {		
@@ -184,51 +182,6 @@ function main(args) {
 			console.log(String(v.length).padStart(pad), UNICODE.get_display(cp),  UNICODE.get_name(cp));
 		}
 		console.log(tally.length);
-	/*} else if (args[0] === 'errors') {
-		let tally = new Map();
-		for (let label of read_labels()) {
-			let set = new Set();
-			try {
-				ens_normalize(label);
-			} catch (err) {
-
-
-				
-			}
-
-			for (let token of ens_tokenize(label, {nf: false})) {
-				switch (token.type) {
-					//case 'valid': 
-					//case 'mapped': 
-					//	token.cps.forEach(cp => union.add(cp)); break;
-					case 'disallowed':
-						set.add(token.cp);
-						break;	
-				}
-			}
-			if (set.size) {
-				for (let cp of set) {
-					let bucket = tally.get(cp);
-					if (!bucket) {
-						bucket = [];
-						tally.set(cp, bucket);
-					}
-					bucket.push(label);
-				}
-			}
-		}
-		tally = [...tally.entries()]
-			.map(([cp, v]) => ({cp, v}))
-			.filter(x => x.v.length)
-			.sort((a, b) => b.v.length - a.v.length);
-
-		for (let {cp, v} of tally) {
-			console.log(String(v.length).padStart(5), UNICODE.get_display(cp),  UNICODE.get_name(cp));
-
-		}
-		console.log(tally.length);
-		writeFileSync('./reg-stuff.json', JSON.stringify(tally));
-		*/
 	} else if (args[0] === 'tally-max-cm') {
 		let tally = {};
 		for (let label of read_labels()) {			

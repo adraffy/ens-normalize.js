@@ -33,7 +33,7 @@ export function str_from_cps(cps) {
 }
 
 export function compare_arrays(a, b) {
-	let {length: n} = a;
+	let n = a.length;
 	let c = n - b.length;
 	for (let i = 0; c == 0 && i < n; i++) c = a[i] - b[i];
 	return c;
