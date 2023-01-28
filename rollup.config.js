@@ -46,6 +46,11 @@ export default [
 				format: 'es',
 				plugins: [TERSER],
 			},
+			// 20230127: CommonJS support, suggested by Ricmoo
+			{
+				file: './dist/index-xnf.cjs',
+				format: 'cjs',
+			},
 		],
 	},
 	{
