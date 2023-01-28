@@ -21,7 +21,9 @@
     }
   },
   "main": "./dist/index.js",
-  "files": ["./dist"],
+  "files": [
+    "./dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/adraffy/ens-normalize.js.git"
@@ -43,7 +45,7 @@
     "test": "node test/validate.js",
     "build": "rollup -c",
     "rebuild": "npm run derive && npm run make && npm run validate && npm run test && npm run build",
-	"order": "node validate/dump-group-order.js save && npm run rebuild"
+    "order": "node validate/dump-group-order.js save && npm run rebuild"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.3.0",

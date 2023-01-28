@@ -6,7 +6,7 @@
 ## Data Files (not included)
 
 * `node download-labels.js` — create cache of known labels
-	* [labels.json](.//labels.json)
+	* [labels.json](./labels.json)
 	* Uses built-in `fetch()`
 * `node random-names.js` — create cache of random names
 	* [random-names.json](./random-names.json)

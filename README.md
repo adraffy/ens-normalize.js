@@ -27,7 +27,7 @@
 	* [Excess Combining Marks](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/cm.html)
 
 ```Javascript
-import {ens_normalize} from '@adraffy/ens-normalize';
+import {ens_normalize} from '@adraffy/ens-normalize'; // or require()
 // npm i @adraffy/ens-normalize
 // browser: https://cdn.jsdelivr.net/npm/@adraffy/ens-normalize@latest/dist/index.min.js
 
