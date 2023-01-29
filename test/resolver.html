@@ -2231,12 +2231,14 @@ async function resolve0(input, skip_norm) {
 		//owner = await resolver._fetch('0x7dd56411'); // ownerOf(bytes32)
 		let owner_row = create_row(available ? 'Previous Owner' : 'Owner', true);
 		let owner_err;
+		let checked_nft = false;
 		output_div.append(owner_row);
 		try {
 			owner = await registry_contract.callStatic.owner(namehash(name_norm));
 			if (should_stop_resolving()) return;
 			if (is_null_hex(owner)) owner = false;
 			if (!owner && check_nft) {
+				checked_nft = true;
 				owner = await eth_nft_contract.callStatic.ownerOf(check_nft);
 				if (is_null_hex(owner)) owner = false;
 			}
@@ -2269,24 +2271,30 @@ async function resolve0(input, skip_norm) {
 				add_row_tag(owner_row, create_resolve_btn(owner));
 			}
 
-			if (eth_label) {
-				let cont_row = create_row(`Controller`, true);
-				output_div.append(cont_row);
-				let cont;
+			if (!checked_nft && eth_label) {
+				let nft_row = create_row(`NFT Owner`, true);
+				output_div.append(nft_row);
+				let nft_owner;
 				try {
 					await ensure_eth_nft();
-					cont = await eth_nft_contract.callStatic.getApproved(labelhash(eth_label));
-					if (is_null_hex(cont)) cont = false;
+					//nft_owner = await eth_nft_contract.callStatic.getApproved(labelhash(eth_label));
+					nft_owner = await eth_nft_contract.callStatic.ownerOf(check_nft);
+					if (is_null_hex(nft_owner)) nft_owner = false;
 				} catch (err) {				
 				}
 				if (should_stop_resolving()) return;
-				if (cont) {
-					cont_row.append(create_etherscan_address_link(cont));
-					add_row_tag(cont_row, create_elapsed());
-					remove_temporary(cont_row);
-					cont_row.classList.toggle('old', !!available);
+				if (nft_owner && nft_owner !== owner) {
+					owner_row.querySelector('.row-label').innerText = 'Controller:';
+					nft_row.append(create_etherscan_address_link(nft_owner));
+					add_row_tag(nft_row, create_copy_btn(nft_owner));
+					if (owner !== input) {
+						add_row_tag(nft_row, create_resolve_btn(nft_owner));
+					}
+					add_row_tag(nft_row, create_elapsed());
+					remove_temporary(nft_row);
+					nft_row.classList.toggle('old', !!available);
 				} else {
-					cont_row.remove();
+					nft_row.remove();
 				}
 			}
 		}

@@ -33,8 +33,7 @@ const OLD_NODES = [
 });
 
 // require that the current node is using the appropriate version of unicode
-const UNICODE_VERSION = process.versions.unicode;
-if (version_ordinal(parse_version(UNICODE_VERSION)) !== version_ordinal(UNICODE.unicode_version)) {
+if (version_ordinal(parse_version(process.versions.unicode)) !== version_ordinal(UNICODE.unicode_version)) {
 	console.log('Expected:', UNICODE.unicode_version.version);
 	console.log('Process:', process.versions.unicode);
 	throw new Error('Unicode mismatch');
@@ -63,6 +62,7 @@ test_string_function(() => {
 	});
 });
 
+// fn should be pure so it can be "stringified"
 function test_string_function(fn) {	
 	let expect = new Map(fn()); // run directly
 	for (let {node, version} of OLD_NODES) {
