@@ -18,6 +18,7 @@
 	* [Recent Registrations](https://raffy.antistupid.com/eth/ens-regs.html)
 	* [Emoji Frequency Explorer](https://raffy.antistupid.com/eth/ens-emoji-freq.html)
 	* [ENS+NFT Matcher](https://raffy.antistupid.com/eth/ens-nft-matcher.html)
+	* [Batch Resolver](https://raffy.antistupid.com/eth/ens-batch-resolver.html)
 * [Breakdown Reports:](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/)
 	* [Disallowed Characters](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/disallowed.html)
 	* [Different Norm](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/diff.html)
@@ -67,8 +68,8 @@ Input-based tokenization:
 // never throws
 let tokens = ens_tokenize('_R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./');
 // [
-//     { type: 'valid', cp: 95 },     // valid
-//     {                              // (eg. no combining marks)
+//     { type: 'valid', cp: [ 95 ] }, // valid (as-is)
+//     {
 //         type: 'mapped', 
 //         cp: 82,         // input
 //         cps: [ 114 ]    // output
@@ -77,12 +78,12 @@ let tokens = ens_tokenize('_R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./');
 //         type: 'emoji',
 //         input: Emoji(2) [ 128169, 65039 ],  // input 
 //         emoji: [ 128169, 65039 ],           // fully-qualified
-//         cps: Emoji(1) [ 128169 ]            // output
+//         cps: Emoji(1) [ 128169 ]            // output (normalized)
 //     },
 //     {
 //         type: 'nfc',
 //         input: [ 97, 772 ],  // input (before nfc, only valid or mapped)
-//         cps: [ 257 ],        // output (after nfc)
+//         cps: [ 257 ],        // output (after nfc, normalized)
 //         tokens: [            // tokens (before nfc)
 //             { type: 'valid', cps: [ 97 ] },
 //             { type: 'ignored', cp: 65039 },

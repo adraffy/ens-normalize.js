@@ -730,6 +730,7 @@ Hebrew:
 <li><a href="https://raffy.antistupid.com/eth/ens-regs.html">Recent ENS Registrations</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-emoji-freq.html">Emoji Frequency Browser</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-nft-matcher.html">ENS+NFT Matcher</a></li>
+<li><a href="https://raffy.antistupid.com/eth/ens-batch-resolver.html">Batch Resolver</a></li>
 <li><a href="./validate.html">Validation Test</a>
 <li><a href="./report-nf.html">Unicode NormalizationTest</a>
 <li><a href="https://raffy.antistupid.com/eth/emoji-pixels.html">Emoji Pixel Maker</a></li>
@@ -2231,7 +2232,7 @@ async function resolve0(input, skip_norm) {
 		//owner = await resolver._fetch('0x7dd56411'); // ownerOf(bytes32)
 		let owner_row = create_row(available ? 'Previous Owner' : 'Owner', true);
 		let owner_err;
-		let checked_nft = false;
+		let checked_nft;
 		output_div.append(owner_row);
 		try {
 			owner = await registry_contract.callStatic.owner(namehash(name_norm));
