@@ -794,9 +794,17 @@ let resolve_date0;
 
 // TODO: add more
 // this might require too much extra information
+function keycap(i) {
+	return String.fromCodePoint(0x30+i, 0xFE0F, 0x20E3);
+}
+const KEYCAP_MINUS = '➖️';
+const KEYCAP_NAME = 'Keycap';
 const DIGIT_MAP = new Map();
+const DIGITS_MAP = new Map();
+for (let i = 0; i < 10; i++) DIGIT_MAP.set(keycap(i), i);
 function add_digits(name, digits, extra = {}) {
 	explode_cp(digits).forEach((cp, i) => DIGIT_MAP.set(cp, {name, i, ...extra}));
+	DIGITS_MAP.set(name, digits);
 }
 add_digits('ASCII', '0123456789');
 add_digits('Arabic', '٠١٢٣٤٥٦٧٨٩', {mixed: 1}); //, reversed: true
@@ -1442,7 +1450,6 @@ function create_ethmoji_row(tokens) {
 	let span_grade = document.createElement('span');
 	if (tokens.reduce((a, t) => a + t.cps.length, 0) < 3) {
 		add_row_tag(row, 'Too Short');
-
 	} else if (tokens.every(t => t.emoji[2] == 0x20E3)) {
 		if (tokens.length == 2) {
 			add_row_tag(row, create_typed_tag('fire', 'Shortest Keycaps'));
@@ -1466,27 +1473,38 @@ function create_ethmoji_row(tokens) {
 	return row;
 }
 
-function create_digits_row(name, digits, negative) {
-	let row = create_row(`${name} Digits`);
+function create_digits_row(name0, values, negative) {
+	//let row = create_row(`${name0} Digits`);
+	let row = create_row('Integer');
 	row.classList.add('category');
 	let main = document.createElement('span');
-	main.innerText = (negative ? '-' : '') + digits.join('');
+	let sign = negative ? '-' : '';
+	main.innerText = sign + values.join('');
 	row.append(main);
-	if (digits.length == (negative ? 2 : 3)) {
+	if (values.length == (negative ? 2 : 3)) {
 		add_row_tag(row, create_typed_tag('fire', 'Shortest'));
 	}
-	if (digits.every((x, i) => x == digits[0])) {
-		add_row_tag(row, create_typed_tag('second', `Repeated (${digits.length})`));
+	if (values.every((x, i) => x == values[0])) {
+		add_row_tag(row, create_typed_tag('second', `Repeated (${values.length})`));
 	}
-	if (digits.every((x, i) => x == digits[digits.length-1-i])) {
+	if (values.every((x, i) => x == values[values.length-1-i])) {
 		add_row_tag(row, create_palindrome_tag());
 	}
 	if (negative) {
 		add_row_tag(row, 'Negative');
 	}
-	if (digits[0] === 0) {
+	if (values[0] === 0) {
 		add_row_tag(row, '0-Pad');
 	}
+	for (let [name, digits] of DIGITS_MAP) {
+		//if (name0 === name) continue;
+		let btn = create_resolve_btn(sign + values.map(x => digits.charAt(x)).join(''), name);
+		btn.disabled = name0 === name;
+		add_row_tag(row, btn);
+	}
+	let btn = create_resolve_btn((negative ? KEYCAP_MINUS : '') + values.map(keycap).join(''), KEYCAP_NAME);
+	btn.disabled = name0 === KEYCAP_NAME;
+	add_row_tag(row, btn);
 	return row;
 }
 
@@ -2005,12 +2023,18 @@ async function resolve0(input, skip_norm) {
 	}
 
 	let eth_label = get_dot_eth_label(name_norm);
-	if (eth_label) {
-		let tokens = ens_tokenize(eth_label);
+	let number = name_norm.includes('.') ? eth_label : name_norm;
+	if (number) {
+		let tokens = ens_tokenize(number);
 		if (tokens.every(t => t.type === 'emoji')) {
 			output_div.append(create_ethmoji_row(tokens));
+			let negative = String.fromCodePoint(...tokens[0].emoji) == KEYCAP_MINUS;
+			if (negative) tokens = tokens.slice(1);
+			let values = tokens.map(x => x.emoji[0] - 0x30);
+			if (values.every(x => x >= 0 && x < 10)) {
+				output_div.append(create_digits_row(KEYCAP_NAME, values, negative));
+			}
 		} else {
-			let number = eth_label;
 			let negative = number.startsWith('-');
 			if (negative) number = number.slice(1);
 			if (number) {
