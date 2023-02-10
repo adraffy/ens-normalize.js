@@ -665,6 +665,7 @@ Hebrew Geresh:
 <button>Ξ.≡.☰</button>
 <button>♢⟠⧫</button>
 <button data-name="_▁▂▃▄▅▆▇█">▃▅▇</button>
+<button data-name="{2713}{2714}{FE0E}{2714}{FE0F}">Checks</button>
 
 <button data-name="ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘꞯʀꜱᴛᴜᴠᴡxʏᴢ">❌ꜱᴍᴀʟʟ ᴄᴀᴘꜱ</button>
 <button data-name="zʎxʍʌnʇsɹbdouɯꞁʞſ̣ᴉɥᵷɟǝpↄqɐ">❌pǝuɹnʇ</button>
@@ -1494,7 +1495,9 @@ function create_digits_row(name0, values, negative) {
 		add_row_tag(row, 'Negative');
 	}
 	if (values[0] === 0) {
-		add_row_tag(row, '0-Pad');
+		let n = 1;
+		while (values[n] === 0) n++;
+		add_row_tag(row, `Zero Pad (${n})`);
 	}
 	for (let [name, digits] of DIGITS_MAP) {
 		//if (name0 === name) continue;
@@ -2486,9 +2489,17 @@ async function ensure_eth_nft() {
 	let controller_address = await resolver_contract.callStatic.interfaceImplementer(namehash(resolver.name), '0x018fac06');
 	// https://etherscan.io/address/0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5#code
 	let price_oracle_address = await active_provider.getStorageAt(controller_address, 2);
-	price_oracle_contract = new ethers.Contract('0x' + price_oracle_address.slice(-40), [
+	price_oracle_address = '0x' + price_oracle_address.slice(-40);
+	price_oracle_contract = new ethers.Contract(price_oracle_address, [
 		'function premium(string calldata name, uint256 expires, uint256 duration) external view returns (uint256)',
 	], active_provider);
+	/*
+	totalDays = 21; // FromDigits["15"]
+	price0 = 10^(8 + 18) // FromDigits["52b7d2dcc80cd2e4000000", 16]
+	price1 = BitShiftRight[price0, totalDays]
+	dur = 1814400;  // t /. First@Solve[price0*(1/2)^(t/86400) == price1, t, Reals]
+	*/
+	price_oracle_contract.premium_period = 1814400; // 21*86400;
 }
 
 function is_checksum_address(s) {

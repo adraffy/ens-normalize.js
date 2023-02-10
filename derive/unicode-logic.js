@@ -521,7 +521,10 @@ export class UnicodeSpec {
 			row([src, type], comment) {
 				let version = parse_version_from_comment(comment);
 				for (let cp of parse_cp_range(src)) {
-					this.get_bucket(type).push({cp, type, name: self.get_name(cp, true), version});
+					let name = self.get_name(cp, true);
+					let name0 = self.get_name(cp, false);
+					if (name === name0) name0 = undefined;
+					this.get_bucket(type).push({cp, type, name, name0, version});
 				}
 			}
 		});
@@ -942,7 +945,10 @@ export class UnicodePrinter {
 		let cps = Array.isArray(info.cps) ? info.cps : [info.cp];
 		// we can safely print emoji
 		// most emoji should have a name
-		return `${hex_seq(cps)} (${String.fromCodePoint(...cps)}) ${info.name ?? this.names(cps)}`; 
+		let {name, name0} = info;
+		if (!name) name = this.names(cps);
+		if (name0) name = `${name} / ${name0}`;
+		return `${hex_seq(cps)} (${String.fromCodePoint(...cps)}) ${name}`; 
 	}
 }
 

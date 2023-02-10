@@ -16,6 +16,9 @@
 	* [scripts-limited-use.json](./data/scripts-limited-use.json) — [src](https://www.unicode.org/reports/tr31/#Table_Limited_Use_Scripts)
 * [Unicode Technical Standard #39: Security Mechanisms](https://www.unicode.org/reports/tr39/)
 	* [unicode-logic.js/`get_augmented_script_set()`](./unicode-logic.js) — [src](https://www.unicode.org/reports/tr39/#Mixed_Script_Detection)
+* [RFC-3492: Punycode](https://datatracker.ietf.org/doc/html/rfc3492)
+* [RFC-5891: IDNA: Protocol](https://datatracker.ietf.org/doc/html/rfc5891) 
+* [RFC-5892: The Unicode Code Points and IDNA](https://datatracker.ietf.org/doc/html/rfc5892)
 * [WHATWG URL: IDNA](https://url.spec.whatwg.org/#idna)
 * [Unicode data files](https://www.unicode.org/Public/)
 	* Download Latest: `node download.js` 

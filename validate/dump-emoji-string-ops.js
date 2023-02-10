@@ -1,5 +1,5 @@
 // these properties dont necessarily need to hold
-// as system/platform unicode can vary (or might not exist: browser)
+// as system/platform unicode can vary (or might not be known: browser)
 // however they are nice to have when the version is known
 
 import {hex_seq} from '../derive/utils.js';
