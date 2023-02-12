@@ -51,19 +51,20 @@ h1 {
 	min-width: 300px;
 	text-align: center;
 }
-h2 {
+.heading {
 	display: flex;
 	align-items: center;
 }
-h2 .left {
+h2 {
 	flex: 1 0 auto;
 }
-h2 a.right {
-	font-size: 70%;
-	font-weight: normal;
+h2 span {
+	color: #800;
+}
+.right a {
 	text-decoration: none;
 }
-h2 .right button {
+.right button {
 	font-size: 16pt;
 	margin-left: 0.5rem;
 }
@@ -116,6 +117,9 @@ td.info {
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 5px;
+}
+.cells .name0 {
+	color: #666;
 }
 .cells .version {
 	color: #999;
@@ -172,10 +176,13 @@ footer {
 	#search {
 		margin: 0 1rem;
 	}
-	h2 {
-		font-size: 16pt;
+	.heading {
 		padding: 8px 1rem 4px;
 		background: #ddd;
+	}
+	.heading h2 {
+		margin: 0;
+		font-size: 16pt;
 	}
 }
 </style>
@@ -197,10 +204,10 @@ footer {
 </div>
 </header>
 <div id="search">
-<input placeholder="Search: Name or {FFF} or v15 or UnicodeProperty">
-<select class="hide" placeholder="A">
-<option selected disabled hidden>🔍️</option>
-</select>
+	<input placeholder="Search: Name or {FFF} or v15 or UnicodeProperty">
+	<select class="hide" placeholder="A">
+		<option selected disabled hidden>🔍️</option>
+	</select>
 </div>
 <ul id="toc"></ul>
 <div id="hover" class="hide"></div>
@@ -248,8 +255,18 @@ let buckets = [];
 	for (let x of info_map.values()) {
 		type_map.set(x.type.toLowerCase(), x.type);
 		versions.add(parseInt(x.version)|0);
-		x.query = searchize(x.name);
+		let {name, name0} = x;
+		if (name0) {
+			name0 = name0.toLowerCase(); 
+			if (name0 === name) {
+				delete x.name0;
+			} else {
+				x.name0 = name0;
+			}
+		}
+		x.query = searchize(name0 ? `${name} ${name0}` : name);
 	}
+
 	let keywords = [
 		[...type_map.values()].sort(), 
 		[
@@ -313,7 +330,13 @@ let buckets = [];
 
 	search_field.addEventListener('input', search_soon);
 
+	// hide on intersection
 	hover_div.addEventListener('mousemove', e => {
+		hover_div.classList.add('hide');
+	});
+
+	// hide on exit	
+	window.addEventListener('mouseout', () => {
 		hover_div.classList.add('hide');
 	});
 
@@ -322,17 +345,17 @@ let buckets = [];
 		update_search();
 	});
 
+
 	document.addEventListener('mousemove', e => {
-		let node = e.target;
-		while (node && !node.dataset.name) {
-			node = node.parentElement;
-		}
-		hover_div.classList.toggle('hide', !node);
-		if (!node) return;
-		let {name} = node.dataset;
+		let {target} = e;
+		if (!(target instanceof Element)) return;
+		let tr = target.closest('[data-name]');
+		hover_div.classList.toggle('hide', !tr);
+		if (!tr) return;
+		let {name} = tr.dataset;
 		if (name == last_hover) return;
 		last_hover = name;
-		let r = node.getBoundingClientRect();
+		let r = tr.getBoundingClientRect();
 		let y = r.top + window.scrollY;
 		let gap = 0.5;
 		if (r.top < window.innerHeight * .5) {		
@@ -346,23 +369,9 @@ let buckets = [];
 		hover_div.innerHTML = name;
 	});
 
-	// avoid inserting extra dom
-	document.body.addEventListener('pointerover', e => {
-		let {target} = e;
-		let {copy} = target.dataset;
-		if (copy) {
-			if (target.classList.contains('index')) {
-				target.title = `Fully-Qualified Form\n(Click to Copy)`;
-			} else if (target.classList.contains('norm')) {
-				target.title = 'Normalized Form\n(Click to Copy)';
-			} else {
-				target.title = 'Click to Copy';
-			}
-		}
-	});
-
 	document.body.addEventListener('pointerdown', e => {
-		let {copy} = e.target.dataset;
+		let {copy, alt} = e.target.dataset;
+		if (alt && e.altKey) copy = alt;
 		if (copy) {
 			navigator.clipboard.writeText(copy);
 		}
@@ -434,20 +443,26 @@ function update_search() {
 				let li = document.createElement('li');
 				li.innerHTML = `<a href="#${n}">${title}</a>`;
 				toc_ul.append(li);
-				let section = document.createElement('section');
-				section.innerHTML = `<h2><a class="left" name="${n}">${title}</a></h2>`;
-				// add jump
-				let a = document.createElement('a');
-				a.classList.add('right');
-				a.innerHTML = 'Top ⬆';
-				a.href = '#';
-				a.addEventListener('click', e => {
+
+				let h2 = document.createElement('h2');
+				h2.innerHTML = `<a name="${n}">${title}</a>`;
+
+				let a_jump = document.createElement('a');
+				a_jump.classList.add('right');
+				a_jump.innerHTML = 'Top ⬆';
+				a_jump.href = '#';
+				a_jump.addEventListener('click', e => {
 					e.preventDefault();
 					window.history.replaceState(null, null, ' ');
 					window.scrollTo(0, 0);
 				});
-				section.querySelector('h2').append(a);
-				section.append(create_table(bucket));
+
+				let heading_div = document.createElement('div');
+				heading_div.classList.add('heading');
+				heading_div.append(h2, a_jump);
+
+				let section = document.createElement('section');
+				section.append(heading_div, create_table(bucket));
 				main.append(section);
 			}
 		}
@@ -477,7 +492,7 @@ function update_search() {
 		]);
 		let dups = new Map();
 		for (let rec of flat) {
-			if (!(rec.n >= 3)) continue;						
+			if (!(rec.n >= 3)) continue;
 			let key = String.fromCodePoint(...rec.cps.filter(cp => !ignored.has(cp)));
 			let bucket = dups.get(key);
 			if (!bucket) {
@@ -531,14 +546,20 @@ function update_search() {
 		});
 	}
 	let valid = results.reduce((a, x) => a + (x.info && is_not_emoji(x.info)?0:1), 0);
-	let title = `${valid} result${valid==1?'':'s'} (${(100*valid/emoji_seqs.length).toFixed(2)}%)`;
+
+
+
+	let h2 = document.createElement('h2');
+	h2.innerText = `${valid} result${valid==1?'':'s'} (${(100*valid/emoji_seqs.length).toFixed(2)}%)`;
 	if (valid < results.length) {
-		title += ` +${results.length - valid} disabled`;
+		let span = document.createElement('span');
+		span.innerText = ` +${results.length - valid} disabled`;
+		h2.append(span);
 	}
 
-	results_section.innerHTML = `
-		<h2><span class="left">${title}</span><span class="right"></span</h2>
-	`;
+	let heading_div = document.createElement('div');
+	heading_div.classList.add('heading');	
+	heading_div.append(h2);
 
 	if (results.length) {
 		let csv_btn = document.createElement('button');
@@ -560,11 +581,13 @@ function update_search() {
 		let repeated_btn = document.createElement('button');
 		repeated_btn.innerText = 'Copy Min Repeated';
 		repeated_btn.addEventListener('click', () => navigator.clipboard.writeText(results.map(x => repeated(x.norm)).join('\n')));
-		results_section.querySelector('.right').append(repeated_btn, csv_btn);
 
+		let right_div = document.createElement('div');
+		right_div.classList.add('right');
+		right_div.append(repeated_btn, csv_btn);
 	}
-
-	results_section.append(create_table(results, true));
+	results_section.innerHTML = '';
+	results_section.append(heading_div, create_table(results, true));
 	hover_div.classList.add('hide');
 }
 
@@ -575,7 +598,7 @@ function create_table(bucket, search) {
 		<thead>
 		<tr>
 		<th class="index">${search ? 'n<sub>ch</sub>' : '#'}</th>
-		<th class="form">Form</th>
+		<th class="form">💖️</th>
 		<th class="info">Name, Version, Codepoints (Fully-Qualified), Components &rarr; Normalized</th>
 		</tr>
 		</thead>
@@ -586,44 +609,85 @@ function create_table(bucket, search) {
 	return table;
 }
 
-function create_tr({cps, form, norm, info}, first) {
-	let tr = document.createElement('tr');
-	let cells = [];
-	if (info) {
-		let {name, name0, version, type} = info;
-		if (name0) name = `${name} (${name0.toLowerCase()})`;
-		let title = `<a href="https://emojipedia.org/${form}">${name}</a>`;
-		if (version) title += ` <span class="version">v${version}</span>`;
-		if (type === 'Whitelisted') {
-			title += ` <span class="version">whitelisted</span>`;
-			tr.classList.add('whitelisted');
-		}
-		if (is_not_emoji(info)) tr.classList.add('error');
-		cells.push(`<div>${title}</div>`);
-	}
+function create_hex_code(cps) {
 	let hex = cps.map(hex_cp).join(' ');
-	cells.push(`<code data-copy="${hex}">${hex}</code>`);
-	cells.push(`<div class="exploded"></div>`);
+	let code = document.createElement('code');
+	code.title = 'Click to Copy';
+	code.dataset.copy = hex;
+	code.innerText = hex;
+	return code;
+}
 
-	tr.dataset.name = form;
-	tr.innerHTML = `
-		<td class="index" data-copy="${form}">${first}</td>
-		<td class="form"><a title="Resolve" href="./resolver.html#${repeated(norm)}.eth">${form}</a></td>
-		<td class="info"><div class="cells">${cells.join('')}</div></td>
-	`;
-	let emoji_url = false;
-	let exploded = tr.querySelector('.exploded');
-	exploded.append(dom_from_tokens(ens_tokenize(form), {components: true, before: true, emoji_url}));
+function create_exploded_div(form, norm) {
+	let div = document.createElement('div');
+	div.classList.add('exploded');
+	div.append(dom_from_tokens(ens_tokenize(form), {components: true, before: true, emoji_url: false}));
 	if (form !== norm) {
 		let span_arrow = document.createElement('span');
 		span_arrow.innerText = '➔';
 		span_arrow.classList.add('arrow');
 		let span_norm = document.createElement('span');
-		span_norm.dataset.copy = norm;
 		span_norm.classList.add('norm')
 		span_norm.innerText = norm;
-		exploded.append(span_arrow, span_norm);
+		span_norm.dataset.copy = norm;
+		span_norm.title = 'Normalized Form\n(Click to Copy)';
+		div.append(span_arrow, span_norm);
 	}
+	return div;
+}
+
+function create_tr({cps, form, norm, info}, first) {
+	let tr = document.createElement('tr');
+
+	let td_index = document.createElement('td');
+	td_index.classList.add('index');
+	td_index.innerHTML = first;
+	td_index.title = `Fully-Qualified Form\n(Click to Copy)`;
+	td_index.dataset.copy = form;
+	if (form.includes('\uFE0F') && !form.includes('\u200D')) {
+		td_index.dataset.alt = form.replaceAll('\uFE0F', '\uFE0E');
+		td_index.title += `\n[ALT] Text-styled Form`;
+	}
+
+	let td_form = document.createElement('td');
+	td_form.classList.add('form');
+	let a_resolve = document.createElement('a');
+	a_resolve.href = `./resolver.html#${repeated(norm)}.eth`;
+	a_resolve.innerHTML = form;
+	a_resolve.title = 'Resolve in Demo\n(Minimal Repeated)';
+	td_form.append(a_resolve);
+
+	let td_cells = document.createElement('td');
+	td_cells.classList.add('info');
+	
+	let cells_div = document.createElement('div');
+	cells_div.classList.add('cells');
+	if (info) {
+		let {name, name0, version, type} = info;
+		let a_name = document.createElement('a');
+		a_name.innerText = name;
+		a_name.href = `https://emojipedia.org/${form}`;
+		cells_div.append(a_name);
+		if (name0) {
+			let span = document.createElement('i');
+			span.classList.add('name0');
+			span.innerText = name0;
+			cells_div.append(span);
+		}
+		if (version) {
+			let span = document.createElement('span');
+			span.classList.add('version');
+			span.innerText = `v${version}`;
+			cells_div.append(span);
+		}
+		if (type === 'Whitelisted') tr.classList.add('whitelisted');
+		if (is_not_emoji(info)) tr.classList.add('error');
+	}	
+	cells_div.append(create_hex_code(cps), create_exploded_div(form, norm));
+	td_cells.append(cells_div);
+
+	tr.dataset.name = form;
+	tr.append(td_index, td_form, td_cells);
 	return tr;
 }
 
@@ -640,6 +704,7 @@ async function fetch_json(url) {
 function is_not_emoji(x) {
 	return x.type === 'Disabled'; // matches /derive/make.js -> emoji-info.json
 }
+
 function searchize(s) {
 	return s.toLowerCase()
 		.replace(/^\s+/, '') // leading whitespace
@@ -655,8 +720,6 @@ function replace_escapes(s) {
 		}
 	});
 }
-
-
 </script>
 </body>
 </html>

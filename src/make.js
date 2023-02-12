@@ -4,7 +4,7 @@ import {explode_cp} from './utils.js';
 import {compute_spec_hash} from './make-utils.js';
 
 /*
-// this appears to be bugged in node 18.12.1
+// import ... assert {type: 'json'} appears to be bugged in node 18.12.1
 // randomly fails on keys
 import {mapped, ignored, emoji,  fenced, escape, wholes, groups, nfc_check} from '../derive/output/spec.json' assert {type: 'json'};
 import {ranks, decomp, exclusions, qc} from '../derive/output/nf.json' assert {type: 'json'};
@@ -228,7 +228,7 @@ enc.write_mapped([
 enc.write_member(ignored);
 enc.write_member(cm);
 enc.write_member(escape); 
-enc.write_member(nfc_check); // for ens_tokenize (can probably derived)
+enc.write_member(nfc_check); // for ens_tokenize (can probably be derived)
 let chunks = find_shared_chunks(groups.flatMap(g => [g.primary, g.secondary]), {min_overlap: 0.9, min_size: 256});
 chunks.forEach(v => enc.write_member(v));
 enc.write_member([]);
@@ -275,6 +275,16 @@ for (let g of groups) {
 }
 enc.unsigned(0);
 
+// wholes a Nx2xRagged array:
+// eg. [[valid, ...], [confused, ...]]
+// to compress:
+// encode the union of valid (first column)
+// encode the union of confused (second column)
+// encode the ragged array as back-refs
+//   use back-refs to find char
+//      0  => new whole
+//      1+ => add to previous whole
+//   use sets to determine if valid/confused
 let flat_wholes = wholes.flatMap(w => {
 	return [
 		w.valid.map(cp => ({cp, w, valid: true})),
@@ -306,7 +316,8 @@ write('include-ens', {
 	FENCED: new Map(fenced)
 });
 
-// just nf 
+// just nf
+// this is kept separate so we can have independent nf.js
 enc = new Encoder();
 for (let v of ranks) enc.write_member(v);
 enc.write_member([]);
