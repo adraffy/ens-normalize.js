@@ -1,7 +1,6 @@
-import {UNICODE, PRINTER, IDNA} from '../derive/unicode-version.js';
-import {print_section, compare_arrays, parse_version, version_ordinal} from '../derive/utils.js';
+import {UNICODE} from '../derive/unicode-version.js';
+import {print_section, parse_version, version_ordinal} from '../derive/utils.js';
 import {execSync} from 'node:child_process';
-
 
 function wrap_function(fn) {
 	return `(${fn})()`;

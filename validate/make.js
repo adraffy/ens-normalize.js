@@ -3,10 +3,14 @@ import {UNICODE} from '../derive/unicode-version.js';
 import {parse_cp_sequence, mulberry32, print_section, print_checked} from '../derive/utils.js';
 import {ens_normalize, ens_emoji, ens_beautify, ens_split} from '../src/lib.js';
 import {random_sample, run_tests} from '../src/utils.js';
-import {read_labels, read_random, read_spec, compute_spec_hash} from './data.js';
+import {read_labels, read_random, read_spec} from './data.js';
+import * as versions from '../src/include-versions.js';
 
 // get custom tests
 const CUSTOM_TESTS = JSON.parse(readFileSync(new URL('./custom-tests.json', import.meta.url)));
+
+// get spec
+const SPEC = read_spec();
 
 // assert no failures
 let custom_errors = run_tests(ens_normalize, CUSTOM_TESTS);
@@ -18,7 +22,7 @@ if (custom_errors.length) {
 console.log(`PASS custom`);
 
 // check that every emoji exists
-let emoji_map = new Map(read_spec().emoji.map(v => [String.fromCodePoint(...v), v]));
+let emoji_map = new Map(SPEC.emoji.map(v => [String.fromCodePoint(...v), v]));
 for (let cps of ens_emoji()) {
 	let form = String.fromCodePoint(...cps);
 	if (!emoji_map.delete(form)) {
@@ -202,18 +206,14 @@ for (let [k, v] of Object.entries(registered)) {
 	console.log(`  ${k}: ${v.length}`);
 }
 
-
-print_section(`Write Output`);
-
-let spec_hash = compute_spec_hash();
-console.log(`Hash: ${spec_hash}`);
-
 // use seeded rng so git diff is useful
 let rng = mulberry32(0x2EC4373F); 
 
-let sample = 2048; // arbitrary, target: ~2MB
+// number of tests to generate (arbitrary)
+// 20230211: changed from 2048 (target 2MB)
+let sample = 5000; 
 let tests = [
-	{name: 'version', created: new Date(), spec_hash},
+	{name: 'version', validated: new Date(), ...versions},
 	CUSTOM_TESTS,
 	Object.values(require_pass), 
 	Object.values(require_fail), 
@@ -223,6 +223,6 @@ let tests = [
 	Object.values(process(RANDOM_NAMES)).map(x => random_sample(x, sample, rng)),
 ].flat(Infinity);
 
-console.log(`Tests: ${tests.length}`);
-
+print_section(`Write Output`);
 writeFileSync(new URL('./tests.json', import.meta.url), JSON.stringify(tests, null, '\t'));
+console.log(`Tests: ${tests.length}`);

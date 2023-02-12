@@ -6,7 +6,7 @@
 // eg. "a.b".eth is invalid but results in ["a", "b"] fragments
 
 import {writeFileSync} from 'node:fs';
-import {read_labels} from './data.js';
+import {read_labels} from '../validate/data.js';
 import {ens_emoji, ens_normalize, ens_tokenize} from '../src/lib.js';
 import {hex_seq, explode_cp} from '../derive/utils.js';
 //import {random_sample} from '../src/utils.js';

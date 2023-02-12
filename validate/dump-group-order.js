@@ -4,8 +4,9 @@
 // 4. npm run rebuild (run again to bake ordering into spec)
 
 import {writeFileSync} from 'node:fs';
-import {read_labels, compute_spec_hash} from '../validate/data.js';
+import {read_labels} from '../validate/data.js';
 import {ens_split} from '../src/lib.js';
+import {spec_hash} from '../src/include-versions.js';
 
 let labels = read_labels();
 
@@ -38,7 +39,7 @@ let args = process.argv.slice(2);
 if (args[0] === 'save') {	
 	writeFileSync(new URL('../derive/rules/group-order.js', import.meta.url), [
 		`// Computed: ${new Date().toJSON()}`,
-		`// Spec: ${compute_spec_hash()}`,
+		`// Spec: ${spec_hash}`,
 		`// Total: ${labels.length}`,
 		'export default [',
 		...sorted.map(({group, count, restricted}) => {

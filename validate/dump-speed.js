@@ -1,10 +1,10 @@
 import {read_labels} from './data.js';
 import {ens_normalize} from '../src/lib.js';
 
-let labels = read_labels();
+const LABELS = read_labels();
 
 let t = performance.now();
-for (let label of labels) {
+for (let label of LABELS) {
 	try {
 		ens_normalize(label);
 	} catch (err) {
@@ -12,6 +12,7 @@ for (let label of labels) {
 }
 t = performance.now() - t;
 
-console.log(`${((t * 1000) / labels.length).toFixed(1)} μs/label`);
+console.log(`${((t * 1000) / LABELS.length).toFixed(1)} μs/label`);
 
 // 20221125: 5.6 μs/label
+// 20230111: 4.9 μs/label

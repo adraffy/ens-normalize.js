@@ -1,4 +1,4 @@
-Build Date: 2023-01-26T08:54:30.113Z
+Build Date: 2023-02-12T04:15:05.494Z
 Unicode Version: 15.0.0 (2022-10-23T06:00:57.990Z)
 CLDR Version: 42 (2022-11-04T04:55:37.180Z)
 ==== RGI Emoji ZWJ Sequences ====
@@ -2285,26 +2285,26 @@ Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FF 1F1E6] (🇿🇦) flag: South A
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FF 1F1F2] (🇿🇲) flag: Zambia
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1FF 1F1FC] (🇿🇼) flag: Zimbabwe
 ==== Demote Emoji to Characters ====
-Demoted Emoji: [2122] (™) trade mark
-Demoted Emoji: [2139] (ℹ) information
-Demoted Emoji: [24C2] (Ⓜ) circled M
-Demoted Emoji: [3297] (㊗) Japanese “congratulations” button
-Demoted Emoji: [3299] (㊙) Japanese “secret” button
-Demoted Emoji: [1F201] (🈁) Japanese “here” button
-Demoted Emoji: [1F202] (🈂) Japanese “service charge” button
-Demoted Emoji: [1F21A] (🈚) Japanese “free of charge” button
-Demoted Emoji: [1F22F] (🈯) Japanese “reserved” button
-Demoted Emoji: [1F232] (🈲) Japanese “prohibited” button
-Demoted Emoji: [1F233] (🈳) Japanese “vacancy” button
-Demoted Emoji: [1F234] (🈴) Japanese “passing grade” button
-Demoted Emoji: [1F235] (🈵) Japanese “no vacancy” button
-Demoted Emoji: [1F236] (🈶) Japanese “not free of charge” button
-Demoted Emoji: [1F237] (🈷) Japanese “monthly amount” button
-Demoted Emoji: [1F238] (🈸) Japanese “application” button
-Demoted Emoji: [1F239] (🈹) Japanese “discount” button
-Demoted Emoji: [1F23A] (🈺) Japanese “open for business” button
-Demoted Emoji: [1F250] (🉐) Japanese “bargain” button
-Demoted Emoji: [1F251] (🉑) Japanese “acceptable” button
+Demoted Emoji: [2122] (™) trade mark / TRADE MARK SIGN
+Demoted Emoji: [2139] (ℹ) information / INFORMATION SOURCE
+Demoted Emoji: [24C2] (Ⓜ) circled M / CIRCLED LATIN CAPITAL LETTER M
+Demoted Emoji: [3297] (㊗) Japanese “congratulations” button / CIRCLED IDEOGRAPH CONGRATULATION
+Demoted Emoji: [3299] (㊙) Japanese “secret” button / CIRCLED IDEOGRAPH SECRET
+Demoted Emoji: [1F201] (🈁) Japanese “here” button / SQUARED KATAKANA KOKO
+Demoted Emoji: [1F202] (🈂) Japanese “service charge” button / SQUARED KATAKANA SA
+Demoted Emoji: [1F21A] (🈚) Japanese “free of charge” button / SQUARED CJK UNIFIED IDEOGRAPH-7121
+Demoted Emoji: [1F22F] (🈯) Japanese “reserved” button / SQUARED CJK UNIFIED IDEOGRAPH-6307
+Demoted Emoji: [1F232] (🈲) Japanese “prohibited” button / SQUARED CJK UNIFIED IDEOGRAPH-7981
+Demoted Emoji: [1F233] (🈳) Japanese “vacancy” button / SQUARED CJK UNIFIED IDEOGRAPH-7A7A
+Demoted Emoji: [1F234] (🈴) Japanese “passing grade” button / SQUARED CJK UNIFIED IDEOGRAPH-5408
+Demoted Emoji: [1F235] (🈵) Japanese “no vacancy” button / SQUARED CJK UNIFIED IDEOGRAPH-6E80
+Demoted Emoji: [1F236] (🈶) Japanese “not free of charge” button / SQUARED CJK UNIFIED IDEOGRAPH-6709
+Demoted Emoji: [1F237] (🈷) Japanese “monthly amount” button / SQUARED CJK UNIFIED IDEOGRAPH-6708
+Demoted Emoji: [1F238] (🈸) Japanese “application” button / SQUARED CJK UNIFIED IDEOGRAPH-7533
+Demoted Emoji: [1F239] (🈹) Japanese “discount” button / SQUARED CJK UNIFIED IDEOGRAPH-5272
+Demoted Emoji: [1F23A] (🈺) Japanese “open for business” button / SQUARED CJK UNIFIED IDEOGRAPH-55B6
+Demoted Emoji: [1F250] (🉐) Japanese “bargain” button / CIRCLED IDEOGRAPH ADVANTAGE
+Demoted Emoji: [1F251] (🉑) Japanese “acceptable” button / CIRCLED IDEOGRAPH ACCEPT
 Demoted Emoji: [30] (0) DIGIT ZERO
 Demoted Emoji: [31] (1) DIGIT ONE
 Demoted Emoji: [32] (2) DIGIT TWO
@@ -2315,8 +2315,8 @@ Demoted Emoji: [36] (6) DIGIT SIX
 Demoted Emoji: [37] (7) DIGIT SEVEN
 Demoted Emoji: [38] (8) DIGIT EIGHT
 Demoted Emoji: [39] (9) DIGIT NINE
-Demoted Emoji: [23] (#) hash sign
-Demoted Emoji: [2A] (*) asterisk
+Demoted Emoji: [23] (#) hash sign / NUMBER SIGN
+Demoted Emoji: [2A] (*) asterisk / ASTERISK
 ==== Disable Emoji (and Characters) ====
 Removed Valid: 1F3FB (🏻) EMOJI MODIFIER FITZPATRICK TYPE-1-2
 Removed Valid: 1F3FC (🏼) EMOJI MODIFIER FITZPATRICK TYPE-3
@@ -3909,1167 +3909,1167 @@ Register Emoji [Basic_Emoji]: [1F6E9 FE0F] (🛩️) small airplane
 Register Emoji [Basic_Emoji]: [1F6F0 FE0F] (🛰️) satellite
 Register Emoji [Basic_Emoji]: [1F6F3 FE0F] (🛳️) passenger ship
 ==== Register Default Emoji-Presentation Emoji ====
-Register Emoji [Emoji_Presentation]: [231A FE0F] (⌚️) watch
-Register Emoji [Emoji_Presentation]: [231B FE0F] (⌛️) hourglass done
-Register Emoji [Emoji_Presentation]: [23E9 FE0F] (⏩️) fast-forward button
-Register Emoji [Emoji_Presentation]: [23EA FE0F] (⏪️) fast reverse button
-Register Emoji [Emoji_Presentation]: [23EB FE0F] (⏫️) fast up button
-Register Emoji [Emoji_Presentation]: [23EC FE0F] (⏬️) fast down button
-Register Emoji [Emoji_Presentation]: [23F0 FE0F] (⏰️) alarm clock
-Register Emoji [Emoji_Presentation]: [23F3 FE0F] (⏳️) hourglass not done
-Register Emoji [Emoji_Presentation]: [25FD FE0F] (◽️) white medium-small square
-Register Emoji [Emoji_Presentation]: [25FE FE0F] (◾️) black medium-small square
-Register Emoji [Emoji_Presentation]: [2614 FE0F] (☔️) umbrella with rain drops
-Register Emoji [Emoji_Presentation]: [2615 FE0F] (☕️) hot beverage
-Register Emoji [Emoji_Presentation]: [2648 FE0F] (♈️) Aries
-Register Emoji [Emoji_Presentation]: [2649 FE0F] (♉️) Taurus
-Register Emoji [Emoji_Presentation]: [264A FE0F] (♊️) Gemini
-Register Emoji [Emoji_Presentation]: [264B FE0F] (♋️) Cancer
-Register Emoji [Emoji_Presentation]: [264C FE0F] (♌️) Leo
-Register Emoji [Emoji_Presentation]: [264D FE0F] (♍️) Virgo
-Register Emoji [Emoji_Presentation]: [264E FE0F] (♎️) Libra
-Register Emoji [Emoji_Presentation]: [264F FE0F] (♏️) Scorpio
-Register Emoji [Emoji_Presentation]: [2650 FE0F] (♐️) Sagittarius
-Register Emoji [Emoji_Presentation]: [2651 FE0F] (♑️) Capricorn
-Register Emoji [Emoji_Presentation]: [2652 FE0F] (♒️) Aquarius
-Register Emoji [Emoji_Presentation]: [2653 FE0F] (♓️) Pisces
-Register Emoji [Emoji_Presentation]: [267F FE0F] (♿️) wheelchair symbol
-Register Emoji [Emoji_Presentation]: [2693 FE0F] (⚓️) anchor
-Register Emoji [Emoji_Presentation]: [26A1 FE0F] (⚡️) high voltage
-Register Emoji [Emoji_Presentation]: [26AA FE0F] (⚪️) white circle
-Register Emoji [Emoji_Presentation]: [26AB FE0F] (⚫️) black circle
-Register Emoji [Emoji_Presentation]: [26BD FE0F] (⚽️) soccer ball
-Register Emoji [Emoji_Presentation]: [26BE FE0F] (⚾️) baseball
-Register Emoji [Emoji_Presentation]: [26C4 FE0F] (⛄️) snowman without snow
-Register Emoji [Emoji_Presentation]: [26C5 FE0F] (⛅️) sun behind cloud
-Register Emoji [Emoji_Presentation]: [26CE FE0F] (⛎️) Ophiuchus
-Register Emoji [Emoji_Presentation]: [26D4 FE0F] (⛔️) no entry
-Register Emoji [Emoji_Presentation]: [26EA FE0F] (⛪️) church
-Register Emoji [Emoji_Presentation]: [26F2 FE0F] (⛲️) fountain
-Register Emoji [Emoji_Presentation]: [26F3 FE0F] (⛳️) flag in hole
-Register Emoji [Emoji_Presentation]: [26F5 FE0F] (⛵️) sailboat
-Register Emoji [Emoji_Presentation]: [26FA FE0F] (⛺️) tent
-Register Emoji [Emoji_Presentation]: [26FD FE0F] (⛽️) fuel pump
-Register Emoji [Emoji_Presentation]: [2705 FE0F] (✅️) check mark button
-Register Emoji [Emoji_Presentation]: [270A FE0F] (✊️) raised fist
-Register Emoji [Emoji_Presentation]: [270B FE0F] (✋️) raised hand
-Register Emoji [Emoji_Presentation]: [2728 FE0F] (✨️) sparkles
-Register Emoji [Emoji_Presentation]: [274C FE0F] (❌️) cross mark
-Register Emoji [Emoji_Presentation]: [274E FE0F] (❎️) cross mark button
-Register Emoji [Emoji_Presentation]: [2753 FE0F] (❓️) red question mark
-Register Emoji [Emoji_Presentation]: [2754 FE0F] (❔️) white question mark
-Register Emoji [Emoji_Presentation]: [2755 FE0F] (❕️) white exclamation mark
-Register Emoji [Emoji_Presentation]: [2757 FE0F] (❗️) red exclamation mark
-Register Emoji [Emoji_Presentation]: [2795 FE0F] (➕️) plus
-Register Emoji [Emoji_Presentation]: [2796 FE0F] (➖️) minus
-Register Emoji [Emoji_Presentation]: [2797 FE0F] (➗️) divide
-Register Emoji [Emoji_Presentation]: [27B0 FE0F] (➰️) curly loop
-Register Emoji [Emoji_Presentation]: [27BF FE0F] (➿️) double curly loop
-Register Emoji [Emoji_Presentation]: [2B1B FE0F] (⬛️) black large square
-Register Emoji [Emoji_Presentation]: [2B1C FE0F] (⬜️) white large square
-Register Emoji [Emoji_Presentation]: [2B50 FE0F] (⭐️) star
-Register Emoji [Emoji_Presentation]: [2B55 FE0F] (⭕️) hollow red circle
-Register Emoji [Emoji_Presentation]: [1F004 FE0F] (🀄️) mahjong red dragon
-Register Emoji [Emoji_Presentation]: [1F0CF FE0F] (🃏️) joker
-Register Emoji [Emoji_Presentation]: [1F18E FE0F] (🆎️) AB button (blood type)
-Register Emoji [Emoji_Presentation]: [1F191 FE0F] (🆑️) CL button
-Register Emoji [Emoji_Presentation]: [1F192 FE0F] (🆒️) COOL button
-Register Emoji [Emoji_Presentation]: [1F193 FE0F] (🆓️) FREE button
-Register Emoji [Emoji_Presentation]: [1F194 FE0F] (🆔️) ID button
-Register Emoji [Emoji_Presentation]: [1F195 FE0F] (🆕️) NEW button
-Register Emoji [Emoji_Presentation]: [1F196 FE0F] (🆖️) NG button
-Register Emoji [Emoji_Presentation]: [1F197 FE0F] (🆗️) OK button
-Register Emoji [Emoji_Presentation]: [1F198 FE0F] (🆘️) SOS button
-Register Emoji [Emoji_Presentation]: [1F199 FE0F] (🆙️) UP! button
-Register Emoji [Emoji_Presentation]: [1F19A FE0F] (🆚️) VS button
-Register Emoji [Emoji_Presentation]: [1F300 FE0F] (🌀️) cyclone
-Register Emoji [Emoji_Presentation]: [1F301 FE0F] (🌁️) foggy
-Register Emoji [Emoji_Presentation]: [1F302 FE0F] (🌂️) closed umbrella
-Register Emoji [Emoji_Presentation]: [1F303 FE0F] (🌃️) night with stars
-Register Emoji [Emoji_Presentation]: [1F304 FE0F] (🌄️) sunrise over mountains
-Register Emoji [Emoji_Presentation]: [1F305 FE0F] (🌅️) sunrise
-Register Emoji [Emoji_Presentation]: [1F306 FE0F] (🌆️) cityscape at dusk
-Register Emoji [Emoji_Presentation]: [1F307 FE0F] (🌇️) sunset
-Register Emoji [Emoji_Presentation]: [1F308 FE0F] (🌈️) rainbow
-Register Emoji [Emoji_Presentation]: [1F309 FE0F] (🌉️) bridge at night
-Register Emoji [Emoji_Presentation]: [1F30A FE0F] (🌊️) water wave
-Register Emoji [Emoji_Presentation]: [1F30B FE0F] (🌋️) volcano
-Register Emoji [Emoji_Presentation]: [1F30C FE0F] (🌌️) milky way
-Register Emoji [Emoji_Presentation]: [1F30D FE0F] (🌍️) globe showing Europe-Africa
-Register Emoji [Emoji_Presentation]: [1F30E FE0F] (🌎️) globe showing Americas
-Register Emoji [Emoji_Presentation]: [1F30F FE0F] (🌏️) globe showing Asia-Australia
-Register Emoji [Emoji_Presentation]: [1F310 FE0F] (🌐️) globe with meridians
-Register Emoji [Emoji_Presentation]: [1F311 FE0F] (🌑️) new moon
-Register Emoji [Emoji_Presentation]: [1F312 FE0F] (🌒️) waxing crescent moon
-Register Emoji [Emoji_Presentation]: [1F313 FE0F] (🌓️) first quarter moon
-Register Emoji [Emoji_Presentation]: [1F314 FE0F] (🌔️) waxing gibbous moon
-Register Emoji [Emoji_Presentation]: [1F315 FE0F] (🌕️) full moon
-Register Emoji [Emoji_Presentation]: [1F316 FE0F] (🌖️) waning gibbous moon
-Register Emoji [Emoji_Presentation]: [1F317 FE0F] (🌗️) last quarter moon
-Register Emoji [Emoji_Presentation]: [1F318 FE0F] (🌘️) waning crescent moon
-Register Emoji [Emoji_Presentation]: [1F319 FE0F] (🌙️) crescent moon
-Register Emoji [Emoji_Presentation]: [1F31A FE0F] (🌚️) new moon face
-Register Emoji [Emoji_Presentation]: [1F31B FE0F] (🌛️) first quarter moon face
-Register Emoji [Emoji_Presentation]: [1F31C FE0F] (🌜️) last quarter moon face
-Register Emoji [Emoji_Presentation]: [1F31D FE0F] (🌝️) full moon face
-Register Emoji [Emoji_Presentation]: [1F31E FE0F] (🌞️) sun with face
-Register Emoji [Emoji_Presentation]: [1F31F FE0F] (🌟️) glowing star
-Register Emoji [Emoji_Presentation]: [1F320 FE0F] (🌠️) shooting star
-Register Emoji [Emoji_Presentation]: [1F32D FE0F] (🌭️) hot dog
-Register Emoji [Emoji_Presentation]: [1F32E FE0F] (🌮️) taco
-Register Emoji [Emoji_Presentation]: [1F32F FE0F] (🌯️) burrito
-Register Emoji [Emoji_Presentation]: [1F330 FE0F] (🌰️) chestnut
-Register Emoji [Emoji_Presentation]: [1F331 FE0F] (🌱️) seedling
-Register Emoji [Emoji_Presentation]: [1F332 FE0F] (🌲️) evergreen tree
-Register Emoji [Emoji_Presentation]: [1F333 FE0F] (🌳️) deciduous tree
-Register Emoji [Emoji_Presentation]: [1F334 FE0F] (🌴️) palm tree
-Register Emoji [Emoji_Presentation]: [1F335 FE0F] (🌵️) cactus
-Register Emoji [Emoji_Presentation]: [1F337 FE0F] (🌷️) tulip
-Register Emoji [Emoji_Presentation]: [1F338 FE0F] (🌸️) cherry blossom
-Register Emoji [Emoji_Presentation]: [1F339 FE0F] (🌹️) rose
-Register Emoji [Emoji_Presentation]: [1F33A FE0F] (🌺️) hibiscus
-Register Emoji [Emoji_Presentation]: [1F33B FE0F] (🌻️) sunflower
-Register Emoji [Emoji_Presentation]: [1F33C FE0F] (🌼️) blossom
-Register Emoji [Emoji_Presentation]: [1F33D FE0F] (🌽️) ear of corn
-Register Emoji [Emoji_Presentation]: [1F33E FE0F] (🌾️) sheaf of rice
-Register Emoji [Emoji_Presentation]: [1F33F FE0F] (🌿️) herb
-Register Emoji [Emoji_Presentation]: [1F340 FE0F] (🍀️) four leaf clover
-Register Emoji [Emoji_Presentation]: [1F341 FE0F] (🍁️) maple leaf
-Register Emoji [Emoji_Presentation]: [1F342 FE0F] (🍂️) fallen leaf
-Register Emoji [Emoji_Presentation]: [1F343 FE0F] (🍃️) leaf fluttering in wind
-Register Emoji [Emoji_Presentation]: [1F344 FE0F] (🍄️) mushroom
-Register Emoji [Emoji_Presentation]: [1F345 FE0F] (🍅️) tomato
-Register Emoji [Emoji_Presentation]: [1F346 FE0F] (🍆️) eggplant
-Register Emoji [Emoji_Presentation]: [1F347 FE0F] (🍇️) grapes
-Register Emoji [Emoji_Presentation]: [1F348 FE0F] (🍈️) melon
-Register Emoji [Emoji_Presentation]: [1F349 FE0F] (🍉️) watermelon
-Register Emoji [Emoji_Presentation]: [1F34A FE0F] (🍊️) tangerine
-Register Emoji [Emoji_Presentation]: [1F34B FE0F] (🍋️) lemon
-Register Emoji [Emoji_Presentation]: [1F34C FE0F] (🍌️) banana
-Register Emoji [Emoji_Presentation]: [1F34D FE0F] (🍍️) pineapple
-Register Emoji [Emoji_Presentation]: [1F34E FE0F] (🍎️) red apple
-Register Emoji [Emoji_Presentation]: [1F34F FE0F] (🍏️) green apple
-Register Emoji [Emoji_Presentation]: [1F350 FE0F] (🍐️) pear
-Register Emoji [Emoji_Presentation]: [1F351 FE0F] (🍑️) peach
-Register Emoji [Emoji_Presentation]: [1F352 FE0F] (🍒️) cherries
-Register Emoji [Emoji_Presentation]: [1F353 FE0F] (🍓️) strawberry
-Register Emoji [Emoji_Presentation]: [1F354 FE0F] (🍔️) hamburger
-Register Emoji [Emoji_Presentation]: [1F355 FE0F] (🍕️) pizza
-Register Emoji [Emoji_Presentation]: [1F356 FE0F] (🍖️) meat on bone
-Register Emoji [Emoji_Presentation]: [1F357 FE0F] (🍗️) poultry leg
-Register Emoji [Emoji_Presentation]: [1F358 FE0F] (🍘️) rice cracker
-Register Emoji [Emoji_Presentation]: [1F359 FE0F] (🍙️) rice ball
-Register Emoji [Emoji_Presentation]: [1F35A FE0F] (🍚️) cooked rice
-Register Emoji [Emoji_Presentation]: [1F35B FE0F] (🍛️) curry rice
-Register Emoji [Emoji_Presentation]: [1F35C FE0F] (🍜️) steaming bowl
-Register Emoji [Emoji_Presentation]: [1F35D FE0F] (🍝️) spaghetti
-Register Emoji [Emoji_Presentation]: [1F35E FE0F] (🍞️) bread
-Register Emoji [Emoji_Presentation]: [1F35F FE0F] (🍟️) french fries
-Register Emoji [Emoji_Presentation]: [1F360 FE0F] (🍠️) roasted sweet potato
-Register Emoji [Emoji_Presentation]: [1F361 FE0F] (🍡️) dango
-Register Emoji [Emoji_Presentation]: [1F362 FE0F] (🍢️) oden
-Register Emoji [Emoji_Presentation]: [1F363 FE0F] (🍣️) sushi
-Register Emoji [Emoji_Presentation]: [1F364 FE0F] (🍤️) fried shrimp
-Register Emoji [Emoji_Presentation]: [1F365 FE0F] (🍥️) fish cake with swirl
-Register Emoji [Emoji_Presentation]: [1F366 FE0F] (🍦️) soft ice cream
-Register Emoji [Emoji_Presentation]: [1F367 FE0F] (🍧️) shaved ice
-Register Emoji [Emoji_Presentation]: [1F368 FE0F] (🍨️) ice cream
-Register Emoji [Emoji_Presentation]: [1F369 FE0F] (🍩️) doughnut
-Register Emoji [Emoji_Presentation]: [1F36A FE0F] (🍪️) cookie
-Register Emoji [Emoji_Presentation]: [1F36B FE0F] (🍫️) chocolate bar
-Register Emoji [Emoji_Presentation]: [1F36C FE0F] (🍬️) candy
-Register Emoji [Emoji_Presentation]: [1F36D FE0F] (🍭️) lollipop
-Register Emoji [Emoji_Presentation]: [1F36E FE0F] (🍮️) custard
-Register Emoji [Emoji_Presentation]: [1F36F FE0F] (🍯️) honey pot
-Register Emoji [Emoji_Presentation]: [1F370 FE0F] (🍰️) shortcake
-Register Emoji [Emoji_Presentation]: [1F371 FE0F] (🍱️) bento box
-Register Emoji [Emoji_Presentation]: [1F372 FE0F] (🍲️) pot of food
-Register Emoji [Emoji_Presentation]: [1F373 FE0F] (🍳️) cooking
-Register Emoji [Emoji_Presentation]: [1F374 FE0F] (🍴️) fork and knife
-Register Emoji [Emoji_Presentation]: [1F375 FE0F] (🍵️) teacup without handle
-Register Emoji [Emoji_Presentation]: [1F376 FE0F] (🍶️) sake
-Register Emoji [Emoji_Presentation]: [1F377 FE0F] (🍷️) wine glass
-Register Emoji [Emoji_Presentation]: [1F378 FE0F] (🍸️) cocktail glass
-Register Emoji [Emoji_Presentation]: [1F379 FE0F] (🍹️) tropical drink
-Register Emoji [Emoji_Presentation]: [1F37A FE0F] (🍺️) beer mug
-Register Emoji [Emoji_Presentation]: [1F37B FE0F] (🍻️) clinking beer mugs
-Register Emoji [Emoji_Presentation]: [1F37C FE0F] (🍼️) baby bottle
-Register Emoji [Emoji_Presentation]: [1F37E FE0F] (🍾️) bottle with popping cork
-Register Emoji [Emoji_Presentation]: [1F37F FE0F] (🍿️) popcorn
-Register Emoji [Emoji_Presentation]: [1F380 FE0F] (🎀️) ribbon
-Register Emoji [Emoji_Presentation]: [1F381 FE0F] (🎁️) wrapped gift
-Register Emoji [Emoji_Presentation]: [1F382 FE0F] (🎂️) birthday cake
-Register Emoji [Emoji_Presentation]: [1F383 FE0F] (🎃️) jack-o-lantern
-Register Emoji [Emoji_Presentation]: [1F384 FE0F] (🎄️) Christmas tree
-Register Emoji [Emoji_Presentation]: [1F385 FE0F] (🎅️) Santa Claus
-Register Emoji [Emoji_Presentation]: [1F386 FE0F] (🎆️) fireworks
-Register Emoji [Emoji_Presentation]: [1F387 FE0F] (🎇️) sparkler
-Register Emoji [Emoji_Presentation]: [1F388 FE0F] (🎈️) balloon
-Register Emoji [Emoji_Presentation]: [1F389 FE0F] (🎉️) party popper
-Register Emoji [Emoji_Presentation]: [1F38A FE0F] (🎊️) confetti ball
-Register Emoji [Emoji_Presentation]: [1F38B FE0F] (🎋️) tanabata tree
-Register Emoji [Emoji_Presentation]: [1F38C FE0F] (🎌️) crossed flags
-Register Emoji [Emoji_Presentation]: [1F38D FE0F] (🎍️) pine decoration
-Register Emoji [Emoji_Presentation]: [1F38E FE0F] (🎎️) Japanese dolls
-Register Emoji [Emoji_Presentation]: [1F38F FE0F] (🎏️) carp streamer
-Register Emoji [Emoji_Presentation]: [1F390 FE0F] (🎐️) wind chime
-Register Emoji [Emoji_Presentation]: [1F391 FE0F] (🎑️) moon viewing ceremony
-Register Emoji [Emoji_Presentation]: [1F392 FE0F] (🎒️) backpack
-Register Emoji [Emoji_Presentation]: [1F393 FE0F] (🎓️) graduation cap
-Register Emoji [Emoji_Presentation]: [1F3A0 FE0F] (🎠️) carousel horse
-Register Emoji [Emoji_Presentation]: [1F3A1 FE0F] (🎡️) ferris wheel
-Register Emoji [Emoji_Presentation]: [1F3A2 FE0F] (🎢️) roller coaster
-Register Emoji [Emoji_Presentation]: [1F3A3 FE0F] (🎣️) fishing pole
-Register Emoji [Emoji_Presentation]: [1F3A4 FE0F] (🎤️) microphone
-Register Emoji [Emoji_Presentation]: [1F3A5 FE0F] (🎥️) movie camera
-Register Emoji [Emoji_Presentation]: [1F3A6 FE0F] (🎦️) cinema
-Register Emoji [Emoji_Presentation]: [1F3A7 FE0F] (🎧️) headphone
-Register Emoji [Emoji_Presentation]: [1F3A8 FE0F] (🎨️) artist palette
-Register Emoji [Emoji_Presentation]: [1F3A9 FE0F] (🎩️) top hat
-Register Emoji [Emoji_Presentation]: [1F3AA FE0F] (🎪️) circus tent
-Register Emoji [Emoji_Presentation]: [1F3AB FE0F] (🎫️) ticket
-Register Emoji [Emoji_Presentation]: [1F3AC FE0F] (🎬️) clapper board
-Register Emoji [Emoji_Presentation]: [1F3AD FE0F] (🎭️) performing arts
-Register Emoji [Emoji_Presentation]: [1F3AE FE0F] (🎮️) video game
-Register Emoji [Emoji_Presentation]: [1F3AF FE0F] (🎯️) bullseye
-Register Emoji [Emoji_Presentation]: [1F3B0 FE0F] (🎰️) slot machine
-Register Emoji [Emoji_Presentation]: [1F3B1 FE0F] (🎱️) pool 8 ball
-Register Emoji [Emoji_Presentation]: [1F3B2 FE0F] (🎲️) game die
-Register Emoji [Emoji_Presentation]: [1F3B3 FE0F] (🎳️) bowling
-Register Emoji [Emoji_Presentation]: [1F3B4 FE0F] (🎴️) flower playing cards
-Register Emoji [Emoji_Presentation]: [1F3B5 FE0F] (🎵️) musical note
-Register Emoji [Emoji_Presentation]: [1F3B6 FE0F] (🎶️) musical notes
-Register Emoji [Emoji_Presentation]: [1F3B7 FE0F] (🎷️) saxophone
-Register Emoji [Emoji_Presentation]: [1F3B8 FE0F] (🎸️) guitar
-Register Emoji [Emoji_Presentation]: [1F3B9 FE0F] (🎹️) musical keyboard
-Register Emoji [Emoji_Presentation]: [1F3BA FE0F] (🎺️) trumpet
-Register Emoji [Emoji_Presentation]: [1F3BB FE0F] (🎻️) violin
-Register Emoji [Emoji_Presentation]: [1F3BC FE0F] (🎼️) musical score
-Register Emoji [Emoji_Presentation]: [1F3BD FE0F] (🎽️) running shirt
-Register Emoji [Emoji_Presentation]: [1F3BE FE0F] (🎾️) tennis
-Register Emoji [Emoji_Presentation]: [1F3BF FE0F] (🎿️) skis
-Register Emoji [Emoji_Presentation]: [1F3C0 FE0F] (🏀️) basketball
-Register Emoji [Emoji_Presentation]: [1F3C1 FE0F] (🏁️) chequered flag
-Register Emoji [Emoji_Presentation]: [1F3C2 FE0F] (🏂️) snowboarder
-Register Emoji [Emoji_Presentation]: [1F3C3 FE0F] (🏃️) person running
-Register Emoji [Emoji_Presentation]: [1F3C4 FE0F] (🏄️) person surfing
-Register Emoji [Emoji_Presentation]: [1F3C5 FE0F] (🏅️) sports medal
-Register Emoji [Emoji_Presentation]: [1F3C6 FE0F] (🏆️) trophy
-Register Emoji [Emoji_Presentation]: [1F3C7 FE0F] (🏇️) horse racing
-Register Emoji [Emoji_Presentation]: [1F3C8 FE0F] (🏈️) american football
-Register Emoji [Emoji_Presentation]: [1F3C9 FE0F] (🏉️) rugby football
-Register Emoji [Emoji_Presentation]: [1F3CA FE0F] (🏊️) person swimming
-Register Emoji [Emoji_Presentation]: [1F3CF FE0F] (🏏️) cricket game
-Register Emoji [Emoji_Presentation]: [1F3D0 FE0F] (🏐️) volleyball
-Register Emoji [Emoji_Presentation]: [1F3D1 FE0F] (🏑️) field hockey
-Register Emoji [Emoji_Presentation]: [1F3D2 FE0F] (🏒️) ice hockey
-Register Emoji [Emoji_Presentation]: [1F3D3 FE0F] (🏓️) ping pong
-Register Emoji [Emoji_Presentation]: [1F3E0 FE0F] (🏠️) house
-Register Emoji [Emoji_Presentation]: [1F3E1 FE0F] (🏡️) house with garden
-Register Emoji [Emoji_Presentation]: [1F3E2 FE0F] (🏢️) office building
-Register Emoji [Emoji_Presentation]: [1F3E3 FE0F] (🏣️) Japanese post office
-Register Emoji [Emoji_Presentation]: [1F3E4 FE0F] (🏤️) post office
-Register Emoji [Emoji_Presentation]: [1F3E5 FE0F] (🏥️) hospital
-Register Emoji [Emoji_Presentation]: [1F3E6 FE0F] (🏦️) bank
-Register Emoji [Emoji_Presentation]: [1F3E7 FE0F] (🏧️) ATM sign
-Register Emoji [Emoji_Presentation]: [1F3E8 FE0F] (🏨️) hotel
-Register Emoji [Emoji_Presentation]: [1F3E9 FE0F] (🏩️) love hotel
-Register Emoji [Emoji_Presentation]: [1F3EA FE0F] (🏪️) convenience store
-Register Emoji [Emoji_Presentation]: [1F3EB FE0F] (🏫️) school
-Register Emoji [Emoji_Presentation]: [1F3EC FE0F] (🏬️) department store
-Register Emoji [Emoji_Presentation]: [1F3ED FE0F] (🏭️) factory
-Register Emoji [Emoji_Presentation]: [1F3EE FE0F] (🏮️) red paper lantern
-Register Emoji [Emoji_Presentation]: [1F3EF FE0F] (🏯️) Japanese castle
-Register Emoji [Emoji_Presentation]: [1F3F0 FE0F] (🏰️) castle
-Register Emoji [Emoji_Presentation]: [1F3F4 FE0F] (🏴️) black flag
-Register Emoji [Emoji_Presentation]: [1F3F8 FE0F] (🏸️) badminton
-Register Emoji [Emoji_Presentation]: [1F3F9 FE0F] (🏹️) bow and arrow
-Register Emoji [Emoji_Presentation]: [1F3FA FE0F] (🏺️) amphora
-Register Emoji [Emoji_Presentation]: [1F400 FE0F] (🐀️) rat
-Register Emoji [Emoji_Presentation]: [1F401 FE0F] (🐁️) mouse
-Register Emoji [Emoji_Presentation]: [1F402 FE0F] (🐂️) ox
-Register Emoji [Emoji_Presentation]: [1F403 FE0F] (🐃️) water buffalo
-Register Emoji [Emoji_Presentation]: [1F404 FE0F] (🐄️) cow
-Register Emoji [Emoji_Presentation]: [1F405 FE0F] (🐅️) tiger
-Register Emoji [Emoji_Presentation]: [1F406 FE0F] (🐆️) leopard
-Register Emoji [Emoji_Presentation]: [1F407 FE0F] (🐇️) rabbit
-Register Emoji [Emoji_Presentation]: [1F408 FE0F] (🐈️) cat
-Register Emoji [Emoji_Presentation]: [1F409 FE0F] (🐉️) dragon
-Register Emoji [Emoji_Presentation]: [1F40A FE0F] (🐊️) crocodile
-Register Emoji [Emoji_Presentation]: [1F40B FE0F] (🐋️) whale
-Register Emoji [Emoji_Presentation]: [1F40C FE0F] (🐌️) snail
-Register Emoji [Emoji_Presentation]: [1F40D FE0F] (🐍️) snake
-Register Emoji [Emoji_Presentation]: [1F40E FE0F] (🐎️) horse
-Register Emoji [Emoji_Presentation]: [1F40F FE0F] (🐏️) ram
-Register Emoji [Emoji_Presentation]: [1F410 FE0F] (🐐️) goat
-Register Emoji [Emoji_Presentation]: [1F411 FE0F] (🐑️) ewe
-Register Emoji [Emoji_Presentation]: [1F412 FE0F] (🐒️) monkey
-Register Emoji [Emoji_Presentation]: [1F413 FE0F] (🐓️) rooster
-Register Emoji [Emoji_Presentation]: [1F414 FE0F] (🐔️) chicken
-Register Emoji [Emoji_Presentation]: [1F415 FE0F] (🐕️) dog
-Register Emoji [Emoji_Presentation]: [1F416 FE0F] (🐖️) pig
-Register Emoji [Emoji_Presentation]: [1F417 FE0F] (🐗️) boar
-Register Emoji [Emoji_Presentation]: [1F418 FE0F] (🐘️) elephant
-Register Emoji [Emoji_Presentation]: [1F419 FE0F] (🐙️) octopus
-Register Emoji [Emoji_Presentation]: [1F41A FE0F] (🐚️) spiral shell
-Register Emoji [Emoji_Presentation]: [1F41B FE0F] (🐛️) bug
-Register Emoji [Emoji_Presentation]: [1F41C FE0F] (🐜️) ant
-Register Emoji [Emoji_Presentation]: [1F41D FE0F] (🐝️) honeybee
-Register Emoji [Emoji_Presentation]: [1F41E FE0F] (🐞️) lady beetle
-Register Emoji [Emoji_Presentation]: [1F41F FE0F] (🐟️) fish
-Register Emoji [Emoji_Presentation]: [1F420 FE0F] (🐠️) tropical fish
-Register Emoji [Emoji_Presentation]: [1F421 FE0F] (🐡️) blowfish
-Register Emoji [Emoji_Presentation]: [1F422 FE0F] (🐢️) turtle
-Register Emoji [Emoji_Presentation]: [1F423 FE0F] (🐣️) hatching chick
-Register Emoji [Emoji_Presentation]: [1F424 FE0F] (🐤️) baby chick
-Register Emoji [Emoji_Presentation]: [1F425 FE0F] (🐥️) front-facing baby chick
-Register Emoji [Emoji_Presentation]: [1F426 FE0F] (🐦️) bird
-Register Emoji [Emoji_Presentation]: [1F427 FE0F] (🐧️) penguin
-Register Emoji [Emoji_Presentation]: [1F428 FE0F] (🐨️) koala
-Register Emoji [Emoji_Presentation]: [1F429 FE0F] (🐩️) poodle
-Register Emoji [Emoji_Presentation]: [1F42A FE0F] (🐪️) camel
-Register Emoji [Emoji_Presentation]: [1F42B FE0F] (🐫️) two-hump camel
-Register Emoji [Emoji_Presentation]: [1F42C FE0F] (🐬️) dolphin
-Register Emoji [Emoji_Presentation]: [1F42D FE0F] (🐭️) mouse face
-Register Emoji [Emoji_Presentation]: [1F42E FE0F] (🐮️) cow face
-Register Emoji [Emoji_Presentation]: [1F42F FE0F] (🐯️) tiger face
-Register Emoji [Emoji_Presentation]: [1F430 FE0F] (🐰️) rabbit face
-Register Emoji [Emoji_Presentation]: [1F431 FE0F] (🐱️) cat face
-Register Emoji [Emoji_Presentation]: [1F432 FE0F] (🐲️) dragon face
-Register Emoji [Emoji_Presentation]: [1F433 FE0F] (🐳️) spouting whale
-Register Emoji [Emoji_Presentation]: [1F434 FE0F] (🐴️) horse face
-Register Emoji [Emoji_Presentation]: [1F435 FE0F] (🐵️) monkey face
-Register Emoji [Emoji_Presentation]: [1F436 FE0F] (🐶️) dog face
-Register Emoji [Emoji_Presentation]: [1F437 FE0F] (🐷️) pig face
-Register Emoji [Emoji_Presentation]: [1F438 FE0F] (🐸️) frog
-Register Emoji [Emoji_Presentation]: [1F439 FE0F] (🐹️) hamster
-Register Emoji [Emoji_Presentation]: [1F43A FE0F] (🐺️) wolf
-Register Emoji [Emoji_Presentation]: [1F43B FE0F] (🐻️) bear
-Register Emoji [Emoji_Presentation]: [1F43C FE0F] (🐼️) panda
-Register Emoji [Emoji_Presentation]: [1F43D FE0F] (🐽️) pig nose
-Register Emoji [Emoji_Presentation]: [1F43E FE0F] (🐾️) paw prints
-Register Emoji [Emoji_Presentation]: [1F440 FE0F] (👀️) eyes
-Register Emoji [Emoji_Presentation]: [1F442 FE0F] (👂️) ear
-Register Emoji [Emoji_Presentation]: [1F443 FE0F] (👃️) nose
-Register Emoji [Emoji_Presentation]: [1F444 FE0F] (👄️) mouth
-Register Emoji [Emoji_Presentation]: [1F445 FE0F] (👅️) tongue
-Register Emoji [Emoji_Presentation]: [1F446 FE0F] (👆️) backhand index pointing up
-Register Emoji [Emoji_Presentation]: [1F447 FE0F] (👇️) backhand index pointing down
-Register Emoji [Emoji_Presentation]: [1F448 FE0F] (👈️) backhand index pointing left
-Register Emoji [Emoji_Presentation]: [1F449 FE0F] (👉️) backhand index pointing right
-Register Emoji [Emoji_Presentation]: [1F44A FE0F] (👊️) oncoming fist
-Register Emoji [Emoji_Presentation]: [1F44B FE0F] (👋️) waving hand
-Register Emoji [Emoji_Presentation]: [1F44C FE0F] (👌️) OK hand
-Register Emoji [Emoji_Presentation]: [1F44D FE0F] (👍️) thumbs up
-Register Emoji [Emoji_Presentation]: [1F44E FE0F] (👎️) thumbs down
-Register Emoji [Emoji_Presentation]: [1F44F FE0F] (👏️) clapping hands
-Register Emoji [Emoji_Presentation]: [1F450 FE0F] (👐️) open hands
-Register Emoji [Emoji_Presentation]: [1F451 FE0F] (👑️) crown
-Register Emoji [Emoji_Presentation]: [1F452 FE0F] (👒️) woman’s hat
-Register Emoji [Emoji_Presentation]: [1F453 FE0F] (👓️) glasses
-Register Emoji [Emoji_Presentation]: [1F454 FE0F] (👔️) necktie
-Register Emoji [Emoji_Presentation]: [1F455 FE0F] (👕️) t-shirt
-Register Emoji [Emoji_Presentation]: [1F456 FE0F] (👖️) jeans
-Register Emoji [Emoji_Presentation]: [1F457 FE0F] (👗️) dress
-Register Emoji [Emoji_Presentation]: [1F458 FE0F] (👘️) kimono
-Register Emoji [Emoji_Presentation]: [1F459 FE0F] (👙️) bikini
-Register Emoji [Emoji_Presentation]: [1F45A FE0F] (👚️) woman’s clothes
-Register Emoji [Emoji_Presentation]: [1F45B FE0F] (👛️) purse
-Register Emoji [Emoji_Presentation]: [1F45C FE0F] (👜️) handbag
-Register Emoji [Emoji_Presentation]: [1F45D FE0F] (👝️) clutch bag
-Register Emoji [Emoji_Presentation]: [1F45E FE0F] (👞️) man’s shoe
-Register Emoji [Emoji_Presentation]: [1F45F FE0F] (👟️) running shoe
-Register Emoji [Emoji_Presentation]: [1F460 FE0F] (👠️) high-heeled shoe
-Register Emoji [Emoji_Presentation]: [1F461 FE0F] (👡️) woman’s sandal
-Register Emoji [Emoji_Presentation]: [1F462 FE0F] (👢️) woman’s boot
-Register Emoji [Emoji_Presentation]: [1F463 FE0F] (👣️) footprints
-Register Emoji [Emoji_Presentation]: [1F464 FE0F] (👤️) bust in silhouette
-Register Emoji [Emoji_Presentation]: [1F465 FE0F] (👥️) busts in silhouette
-Register Emoji [Emoji_Presentation]: [1F466 FE0F] (👦️) boy
-Register Emoji [Emoji_Presentation]: [1F467 FE0F] (👧️) girl
-Register Emoji [Emoji_Presentation]: [1F468 FE0F] (👨️) man
-Register Emoji [Emoji_Presentation]: [1F469 FE0F] (👩️) woman
-Register Emoji [Emoji_Presentation]: [1F46A FE0F] (👪️) family
-Register Emoji [Emoji_Presentation]: [1F46B FE0F] (👫️) woman and man holding hands
-Register Emoji [Emoji_Presentation]: [1F46C FE0F] (👬️) men holding hands
-Register Emoji [Emoji_Presentation]: [1F46D FE0F] (👭️) women holding hands
-Register Emoji [Emoji_Presentation]: [1F46E FE0F] (👮️) police officer
-Register Emoji [Emoji_Presentation]: [1F46F FE0F] (👯️) people with bunny ears
-Register Emoji [Emoji_Presentation]: [1F470 FE0F] (👰️) person with veil
-Register Emoji [Emoji_Presentation]: [1F471 FE0F] (👱️) person: blond hair
-Register Emoji [Emoji_Presentation]: [1F472 FE0F] (👲️) person with skullcap
-Register Emoji [Emoji_Presentation]: [1F473 FE0F] (👳️) person wearing turban
-Register Emoji [Emoji_Presentation]: [1F474 FE0F] (👴️) old man
-Register Emoji [Emoji_Presentation]: [1F475 FE0F] (👵️) old woman
-Register Emoji [Emoji_Presentation]: [1F476 FE0F] (👶️) baby
-Register Emoji [Emoji_Presentation]: [1F477 FE0F] (👷️) construction worker
-Register Emoji [Emoji_Presentation]: [1F478 FE0F] (👸️) princess
-Register Emoji [Emoji_Presentation]: [1F479 FE0F] (👹️) ogre
-Register Emoji [Emoji_Presentation]: [1F47A FE0F] (👺️) goblin
-Register Emoji [Emoji_Presentation]: [1F47B FE0F] (👻️) ghost
-Register Emoji [Emoji_Presentation]: [1F47C FE0F] (👼️) baby angel
-Register Emoji [Emoji_Presentation]: [1F47D FE0F] (👽️) alien
-Register Emoji [Emoji_Presentation]: [1F47E FE0F] (👾️) alien monster
-Register Emoji [Emoji_Presentation]: [1F47F FE0F] (👿️) angry face with horns
-Register Emoji [Emoji_Presentation]: [1F480 FE0F] (💀️) skull
-Register Emoji [Emoji_Presentation]: [1F481 FE0F] (💁️) person tipping hand
-Register Emoji [Emoji_Presentation]: [1F482 FE0F] (💂️) guard
-Register Emoji [Emoji_Presentation]: [1F483 FE0F] (💃️) woman dancing
-Register Emoji [Emoji_Presentation]: [1F484 FE0F] (💄️) lipstick
-Register Emoji [Emoji_Presentation]: [1F485 FE0F] (💅️) nail polish
-Register Emoji [Emoji_Presentation]: [1F486 FE0F] (💆️) person getting massage
-Register Emoji [Emoji_Presentation]: [1F487 FE0F] (💇️) person getting haircut
-Register Emoji [Emoji_Presentation]: [1F488 FE0F] (💈️) barber pole
-Register Emoji [Emoji_Presentation]: [1F489 FE0F] (💉️) syringe
-Register Emoji [Emoji_Presentation]: [1F48A FE0F] (💊️) pill
-Register Emoji [Emoji_Presentation]: [1F48B FE0F] (💋️) kiss mark
-Register Emoji [Emoji_Presentation]: [1F48C FE0F] (💌️) love letter
-Register Emoji [Emoji_Presentation]: [1F48D FE0F] (💍️) ring
-Register Emoji [Emoji_Presentation]: [1F48E FE0F] (💎️) gem stone
-Register Emoji [Emoji_Presentation]: [1F48F FE0F] (💏️) kiss
-Register Emoji [Emoji_Presentation]: [1F490 FE0F] (💐️) bouquet
-Register Emoji [Emoji_Presentation]: [1F491 FE0F] (💑️) couple with heart
-Register Emoji [Emoji_Presentation]: [1F492 FE0F] (💒️) wedding
-Register Emoji [Emoji_Presentation]: [1F493 FE0F] (💓️) beating heart
-Register Emoji [Emoji_Presentation]: [1F494 FE0F] (💔️) broken heart
-Register Emoji [Emoji_Presentation]: [1F495 FE0F] (💕️) two hearts
-Register Emoji [Emoji_Presentation]: [1F496 FE0F] (💖️) sparkling heart
-Register Emoji [Emoji_Presentation]: [1F497 FE0F] (💗️) growing heart
-Register Emoji [Emoji_Presentation]: [1F498 FE0F] (💘️) heart with arrow
-Register Emoji [Emoji_Presentation]: [1F499 FE0F] (💙️) blue heart
-Register Emoji [Emoji_Presentation]: [1F49A FE0F] (💚️) green heart
-Register Emoji [Emoji_Presentation]: [1F49B FE0F] (💛️) yellow heart
-Register Emoji [Emoji_Presentation]: [1F49C FE0F] (💜️) purple heart
-Register Emoji [Emoji_Presentation]: [1F49D FE0F] (💝️) heart with ribbon
-Register Emoji [Emoji_Presentation]: [1F49E FE0F] (💞️) revolving hearts
-Register Emoji [Emoji_Presentation]: [1F49F FE0F] (💟️) heart decoration
-Register Emoji [Emoji_Presentation]: [1F4A0 FE0F] (💠️) diamond with a dot
-Register Emoji [Emoji_Presentation]: [1F4A1 FE0F] (💡️) light bulb
-Register Emoji [Emoji_Presentation]: [1F4A2 FE0F] (💢️) anger symbol
-Register Emoji [Emoji_Presentation]: [1F4A3 FE0F] (💣️) bomb
-Register Emoji [Emoji_Presentation]: [1F4A4 FE0F] (💤️) ZZZ
-Register Emoji [Emoji_Presentation]: [1F4A5 FE0F] (💥️) collision
-Register Emoji [Emoji_Presentation]: [1F4A6 FE0F] (💦️) sweat droplets
-Register Emoji [Emoji_Presentation]: [1F4A7 FE0F] (💧️) droplet
-Register Emoji [Emoji_Presentation]: [1F4A8 FE0F] (💨️) dashing away
-Register Emoji [Emoji_Presentation]: [1F4A9 FE0F] (💩️) pile of poo
-Register Emoji [Emoji_Presentation]: [1F4AA FE0F] (💪️) flexed biceps
-Register Emoji [Emoji_Presentation]: [1F4AB FE0F] (💫️) dizzy
-Register Emoji [Emoji_Presentation]: [1F4AC FE0F] (💬️) speech balloon
-Register Emoji [Emoji_Presentation]: [1F4AD FE0F] (💭️) thought balloon
-Register Emoji [Emoji_Presentation]: [1F4AE FE0F] (💮️) white flower
-Register Emoji [Emoji_Presentation]: [1F4AF FE0F] (💯️) hundred points
-Register Emoji [Emoji_Presentation]: [1F4B0 FE0F] (💰️) money bag
-Register Emoji [Emoji_Presentation]: [1F4B1 FE0F] (💱️) currency exchange
-Register Emoji [Emoji_Presentation]: [1F4B2 FE0F] (💲️) heavy dollar sign
-Register Emoji [Emoji_Presentation]: [1F4B3 FE0F] (💳️) credit card
-Register Emoji [Emoji_Presentation]: [1F4B4 FE0F] (💴️) yen banknote
-Register Emoji [Emoji_Presentation]: [1F4B5 FE0F] (💵️) dollar banknote
-Register Emoji [Emoji_Presentation]: [1F4B6 FE0F] (💶️) euro banknote
-Register Emoji [Emoji_Presentation]: [1F4B7 FE0F] (💷️) pound banknote
-Register Emoji [Emoji_Presentation]: [1F4B8 FE0F] (💸️) money with wings
-Register Emoji [Emoji_Presentation]: [1F4B9 FE0F] (💹️) chart increasing with yen
-Register Emoji [Emoji_Presentation]: [1F4BA FE0F] (💺️) seat
-Register Emoji [Emoji_Presentation]: [1F4BB FE0F] (💻️) laptop
-Register Emoji [Emoji_Presentation]: [1F4BC FE0F] (💼️) briefcase
-Register Emoji [Emoji_Presentation]: [1F4BD FE0F] (💽️) computer disk
-Register Emoji [Emoji_Presentation]: [1F4BE FE0F] (💾️) floppy disk
-Register Emoji [Emoji_Presentation]: [1F4BF FE0F] (💿️) optical disk
-Register Emoji [Emoji_Presentation]: [1F4C0 FE0F] (📀️) dvd
-Register Emoji [Emoji_Presentation]: [1F4C1 FE0F] (📁️) file folder
-Register Emoji [Emoji_Presentation]: [1F4C2 FE0F] (📂️) open file folder
-Register Emoji [Emoji_Presentation]: [1F4C3 FE0F] (📃️) page with curl
-Register Emoji [Emoji_Presentation]: [1F4C4 FE0F] (📄️) page facing up
-Register Emoji [Emoji_Presentation]: [1F4C5 FE0F] (📅️) calendar
-Register Emoji [Emoji_Presentation]: [1F4C6 FE0F] (📆️) tear-off calendar
-Register Emoji [Emoji_Presentation]: [1F4C7 FE0F] (📇️) card index
-Register Emoji [Emoji_Presentation]: [1F4C8 FE0F] (📈️) chart increasing
-Register Emoji [Emoji_Presentation]: [1F4C9 FE0F] (📉️) chart decreasing
-Register Emoji [Emoji_Presentation]: [1F4CA FE0F] (📊️) bar chart
-Register Emoji [Emoji_Presentation]: [1F4CB FE0F] (📋️) clipboard
-Register Emoji [Emoji_Presentation]: [1F4CC FE0F] (📌️) pushpin
-Register Emoji [Emoji_Presentation]: [1F4CD FE0F] (📍️) round pushpin
-Register Emoji [Emoji_Presentation]: [1F4CE FE0F] (📎️) paperclip
-Register Emoji [Emoji_Presentation]: [1F4CF FE0F] (📏️) straight ruler
-Register Emoji [Emoji_Presentation]: [1F4D0 FE0F] (📐️) triangular ruler
-Register Emoji [Emoji_Presentation]: [1F4D1 FE0F] (📑️) bookmark tabs
-Register Emoji [Emoji_Presentation]: [1F4D2 FE0F] (📒️) ledger
-Register Emoji [Emoji_Presentation]: [1F4D3 FE0F] (📓️) notebook
-Register Emoji [Emoji_Presentation]: [1F4D4 FE0F] (📔️) notebook with decorative cover
-Register Emoji [Emoji_Presentation]: [1F4D5 FE0F] (📕️) closed book
-Register Emoji [Emoji_Presentation]: [1F4D6 FE0F] (📖️) open book
-Register Emoji [Emoji_Presentation]: [1F4D7 FE0F] (📗️) green book
-Register Emoji [Emoji_Presentation]: [1F4D8 FE0F] (📘️) blue book
-Register Emoji [Emoji_Presentation]: [1F4D9 FE0F] (📙️) orange book
-Register Emoji [Emoji_Presentation]: [1F4DA FE0F] (📚️) books
-Register Emoji [Emoji_Presentation]: [1F4DB FE0F] (📛️) name badge
-Register Emoji [Emoji_Presentation]: [1F4DC FE0F] (📜️) scroll
-Register Emoji [Emoji_Presentation]: [1F4DD FE0F] (📝️) memo
-Register Emoji [Emoji_Presentation]: [1F4DE FE0F] (📞️) telephone receiver
-Register Emoji [Emoji_Presentation]: [1F4DF FE0F] (📟️) pager
-Register Emoji [Emoji_Presentation]: [1F4E0 FE0F] (📠️) fax machine
-Register Emoji [Emoji_Presentation]: [1F4E1 FE0F] (📡️) satellite antenna
-Register Emoji [Emoji_Presentation]: [1F4E2 FE0F] (📢️) loudspeaker
-Register Emoji [Emoji_Presentation]: [1F4E3 FE0F] (📣️) megaphone
-Register Emoji [Emoji_Presentation]: [1F4E4 FE0F] (📤️) outbox tray
-Register Emoji [Emoji_Presentation]: [1F4E5 FE0F] (📥️) inbox tray
-Register Emoji [Emoji_Presentation]: [1F4E6 FE0F] (📦️) package
-Register Emoji [Emoji_Presentation]: [1F4E7 FE0F] (📧️) e-mail
-Register Emoji [Emoji_Presentation]: [1F4E8 FE0F] (📨️) incoming envelope
-Register Emoji [Emoji_Presentation]: [1F4E9 FE0F] (📩️) envelope with arrow
-Register Emoji [Emoji_Presentation]: [1F4EA FE0F] (📪️) closed mailbox with lowered flag
-Register Emoji [Emoji_Presentation]: [1F4EB FE0F] (📫️) closed mailbox with raised flag
-Register Emoji [Emoji_Presentation]: [1F4EC FE0F] (📬️) open mailbox with raised flag
-Register Emoji [Emoji_Presentation]: [1F4ED FE0F] (📭️) open mailbox with lowered flag
-Register Emoji [Emoji_Presentation]: [1F4EE FE0F] (📮️) postbox
-Register Emoji [Emoji_Presentation]: [1F4EF FE0F] (📯️) postal horn
-Register Emoji [Emoji_Presentation]: [1F4F0 FE0F] (📰️) newspaper
-Register Emoji [Emoji_Presentation]: [1F4F1 FE0F] (📱️) mobile phone
-Register Emoji [Emoji_Presentation]: [1F4F2 FE0F] (📲️) mobile phone with arrow
-Register Emoji [Emoji_Presentation]: [1F4F3 FE0F] (📳️) vibration mode
-Register Emoji [Emoji_Presentation]: [1F4F4 FE0F] (📴️) mobile phone off
-Register Emoji [Emoji_Presentation]: [1F4F5 FE0F] (📵️) no mobile phones
-Register Emoji [Emoji_Presentation]: [1F4F6 FE0F] (📶️) antenna bars
-Register Emoji [Emoji_Presentation]: [1F4F7 FE0F] (📷️) camera
-Register Emoji [Emoji_Presentation]: [1F4F8 FE0F] (📸️) camera with flash
-Register Emoji [Emoji_Presentation]: [1F4F9 FE0F] (📹️) video camera
-Register Emoji [Emoji_Presentation]: [1F4FA FE0F] (📺️) television
-Register Emoji [Emoji_Presentation]: [1F4FB FE0F] (📻️) radio
-Register Emoji [Emoji_Presentation]: [1F4FC FE0F] (📼️) videocassette
-Register Emoji [Emoji_Presentation]: [1F4FF FE0F] (📿️) prayer beads
-Register Emoji [Emoji_Presentation]: [1F500 FE0F] (🔀️) shuffle tracks button
-Register Emoji [Emoji_Presentation]: [1F501 FE0F] (🔁️) repeat button
-Register Emoji [Emoji_Presentation]: [1F502 FE0F] (🔂️) repeat single button
-Register Emoji [Emoji_Presentation]: [1F503 FE0F] (🔃️) clockwise vertical arrows
-Register Emoji [Emoji_Presentation]: [1F504 FE0F] (🔄️) counterclockwise arrows button
-Register Emoji [Emoji_Presentation]: [1F505 FE0F] (🔅️) dim button
-Register Emoji [Emoji_Presentation]: [1F506 FE0F] (🔆️) bright button
-Register Emoji [Emoji_Presentation]: [1F507 FE0F] (🔇️) muted speaker
-Register Emoji [Emoji_Presentation]: [1F508 FE0F] (🔈️) speaker low volume
-Register Emoji [Emoji_Presentation]: [1F509 FE0F] (🔉️) speaker medium volume
-Register Emoji [Emoji_Presentation]: [1F50A FE0F] (🔊️) speaker high volume
-Register Emoji [Emoji_Presentation]: [1F50B FE0F] (🔋️) battery
-Register Emoji [Emoji_Presentation]: [1F50C FE0F] (🔌️) electric plug
-Register Emoji [Emoji_Presentation]: [1F50D FE0F] (🔍️) magnifying glass tilted left
-Register Emoji [Emoji_Presentation]: [1F50E FE0F] (🔎️) magnifying glass tilted right
-Register Emoji [Emoji_Presentation]: [1F50F FE0F] (🔏️) locked with pen
-Register Emoji [Emoji_Presentation]: [1F510 FE0F] (🔐️) locked with key
-Register Emoji [Emoji_Presentation]: [1F511 FE0F] (🔑️) key
-Register Emoji [Emoji_Presentation]: [1F512 FE0F] (🔒️) locked
-Register Emoji [Emoji_Presentation]: [1F513 FE0F] (🔓️) unlocked
-Register Emoji [Emoji_Presentation]: [1F514 FE0F] (🔔️) bell
-Register Emoji [Emoji_Presentation]: [1F515 FE0F] (🔕️) bell with slash
-Register Emoji [Emoji_Presentation]: [1F516 FE0F] (🔖️) bookmark
-Register Emoji [Emoji_Presentation]: [1F517 FE0F] (🔗️) link
-Register Emoji [Emoji_Presentation]: [1F518 FE0F] (🔘️) radio button
-Register Emoji [Emoji_Presentation]: [1F519 FE0F] (🔙️) BACK arrow
-Register Emoji [Emoji_Presentation]: [1F51A FE0F] (🔚️) END arrow
-Register Emoji [Emoji_Presentation]: [1F51B FE0F] (🔛️) ON! arrow
-Register Emoji [Emoji_Presentation]: [1F51C FE0F] (🔜️) SOON arrow
-Register Emoji [Emoji_Presentation]: [1F51D FE0F] (🔝️) TOP arrow
-Register Emoji [Emoji_Presentation]: [1F51E FE0F] (🔞️) no one under eighteen
+Register Emoji [Emoji_Presentation]: [231A FE0F] (⌚️) watch / WATCH
+Register Emoji [Emoji_Presentation]: [231B FE0F] (⌛️) hourglass done / HOURGLASS
+Register Emoji [Emoji_Presentation]: [23E9 FE0F] (⏩️) fast-forward button / BLACK RIGHT-POINTING DOUBLE TRIANGLE
+Register Emoji [Emoji_Presentation]: [23EA FE0F] (⏪️) fast reverse button / BLACK LEFT-POINTING DOUBLE TRIANGLE
+Register Emoji [Emoji_Presentation]: [23EB FE0F] (⏫️) fast up button / BLACK UP-POINTING DOUBLE TRIANGLE
+Register Emoji [Emoji_Presentation]: [23EC FE0F] (⏬️) fast down button / BLACK DOWN-POINTING DOUBLE TRIANGLE
+Register Emoji [Emoji_Presentation]: [23F0 FE0F] (⏰️) alarm clock / ALARM CLOCK
+Register Emoji [Emoji_Presentation]: [23F3 FE0F] (⏳️) hourglass not done / HOURGLASS WITH FLOWING SAND
+Register Emoji [Emoji_Presentation]: [25FD FE0F] (◽️) white medium-small square / WHITE MEDIUM SMALL SQUARE
+Register Emoji [Emoji_Presentation]: [25FE FE0F] (◾️) black medium-small square / BLACK MEDIUM SMALL SQUARE
+Register Emoji [Emoji_Presentation]: [2614 FE0F] (☔️) umbrella with rain drops / UMBRELLA WITH RAIN DROPS
+Register Emoji [Emoji_Presentation]: [2615 FE0F] (☕️) hot beverage / HOT BEVERAGE
+Register Emoji [Emoji_Presentation]: [2648 FE0F] (♈️) Aries / ARIES
+Register Emoji [Emoji_Presentation]: [2649 FE0F] (♉️) Taurus / TAURUS
+Register Emoji [Emoji_Presentation]: [264A FE0F] (♊️) Gemini / GEMINI
+Register Emoji [Emoji_Presentation]: [264B FE0F] (♋️) Cancer / CANCER
+Register Emoji [Emoji_Presentation]: [264C FE0F] (♌️) Leo / LEO
+Register Emoji [Emoji_Presentation]: [264D FE0F] (♍️) Virgo / VIRGO
+Register Emoji [Emoji_Presentation]: [264E FE0F] (♎️) Libra / LIBRA
+Register Emoji [Emoji_Presentation]: [264F FE0F] (♏️) Scorpio / SCORPIUS
+Register Emoji [Emoji_Presentation]: [2650 FE0F] (♐️) Sagittarius / SAGITTARIUS
+Register Emoji [Emoji_Presentation]: [2651 FE0F] (♑️) Capricorn / CAPRICORN
+Register Emoji [Emoji_Presentation]: [2652 FE0F] (♒️) Aquarius / AQUARIUS
+Register Emoji [Emoji_Presentation]: [2653 FE0F] (♓️) Pisces / PISCES
+Register Emoji [Emoji_Presentation]: [267F FE0F] (♿️) wheelchair symbol / WHEELCHAIR SYMBOL
+Register Emoji [Emoji_Presentation]: [2693 FE0F] (⚓️) anchor / ANCHOR
+Register Emoji [Emoji_Presentation]: [26A1 FE0F] (⚡️) high voltage / HIGH VOLTAGE SIGN
+Register Emoji [Emoji_Presentation]: [26AA FE0F] (⚪️) white circle / MEDIUM WHITE CIRCLE
+Register Emoji [Emoji_Presentation]: [26AB FE0F] (⚫️) black circle / MEDIUM BLACK CIRCLE
+Register Emoji [Emoji_Presentation]: [26BD FE0F] (⚽️) soccer ball / SOCCER BALL
+Register Emoji [Emoji_Presentation]: [26BE FE0F] (⚾️) baseball / BASEBALL
+Register Emoji [Emoji_Presentation]: [26C4 FE0F] (⛄️) snowman without snow / SNOWMAN WITHOUT SNOW
+Register Emoji [Emoji_Presentation]: [26C5 FE0F] (⛅️) sun behind cloud / SUN BEHIND CLOUD
+Register Emoji [Emoji_Presentation]: [26CE FE0F] (⛎️) Ophiuchus / OPHIUCHUS
+Register Emoji [Emoji_Presentation]: [26D4 FE0F] (⛔️) no entry / NO ENTRY
+Register Emoji [Emoji_Presentation]: [26EA FE0F] (⛪️) church / CHURCH
+Register Emoji [Emoji_Presentation]: [26F2 FE0F] (⛲️) fountain / FOUNTAIN
+Register Emoji [Emoji_Presentation]: [26F3 FE0F] (⛳️) flag in hole / FLAG IN HOLE
+Register Emoji [Emoji_Presentation]: [26F5 FE0F] (⛵️) sailboat / SAILBOAT
+Register Emoji [Emoji_Presentation]: [26FA FE0F] (⛺️) tent / TENT
+Register Emoji [Emoji_Presentation]: [26FD FE0F] (⛽️) fuel pump / FUEL PUMP
+Register Emoji [Emoji_Presentation]: [2705 FE0F] (✅️) check mark button / WHITE HEAVY CHECK MARK
+Register Emoji [Emoji_Presentation]: [270A FE0F] (✊️) raised fist / RAISED FIST
+Register Emoji [Emoji_Presentation]: [270B FE0F] (✋️) raised hand / RAISED HAND
+Register Emoji [Emoji_Presentation]: [2728 FE0F] (✨️) sparkles / SPARKLES
+Register Emoji [Emoji_Presentation]: [274C FE0F] (❌️) cross mark / CROSS MARK
+Register Emoji [Emoji_Presentation]: [274E FE0F] (❎️) cross mark button / NEGATIVE SQUARED CROSS MARK
+Register Emoji [Emoji_Presentation]: [2753 FE0F] (❓️) red question mark / BLACK QUESTION MARK ORNAMENT
+Register Emoji [Emoji_Presentation]: [2754 FE0F] (❔️) white question mark / WHITE QUESTION MARK ORNAMENT
+Register Emoji [Emoji_Presentation]: [2755 FE0F] (❕️) white exclamation mark / WHITE EXCLAMATION MARK ORNAMENT
+Register Emoji [Emoji_Presentation]: [2757 FE0F] (❗️) red exclamation mark / HEAVY EXCLAMATION MARK SYMBOL
+Register Emoji [Emoji_Presentation]: [2795 FE0F] (➕️) plus / HEAVY PLUS SIGN
+Register Emoji [Emoji_Presentation]: [2796 FE0F] (➖️) minus / HEAVY MINUS SIGN
+Register Emoji [Emoji_Presentation]: [2797 FE0F] (➗️) divide / HEAVY DIVISION SIGN
+Register Emoji [Emoji_Presentation]: [27B0 FE0F] (➰️) curly loop / CURLY LOOP
+Register Emoji [Emoji_Presentation]: [27BF FE0F] (➿️) double curly loop / DOUBLE CURLY LOOP
+Register Emoji [Emoji_Presentation]: [2B1B FE0F] (⬛️) black large square / BLACK LARGE SQUARE
+Register Emoji [Emoji_Presentation]: [2B1C FE0F] (⬜️) white large square / WHITE LARGE SQUARE
+Register Emoji [Emoji_Presentation]: [2B50 FE0F] (⭐️) star / WHITE MEDIUM STAR
+Register Emoji [Emoji_Presentation]: [2B55 FE0F] (⭕️) hollow red circle / HEAVY LARGE CIRCLE
+Register Emoji [Emoji_Presentation]: [1F004 FE0F] (🀄️) mahjong red dragon / MAHJONG TILE RED DRAGON
+Register Emoji [Emoji_Presentation]: [1F0CF FE0F] (🃏️) joker / PLAYING CARD BLACK JOKER
+Register Emoji [Emoji_Presentation]: [1F18E FE0F] (🆎️) AB button (blood type) / NEGATIVE SQUARED AB
+Register Emoji [Emoji_Presentation]: [1F191 FE0F] (🆑️) CL button / SQUARED CL
+Register Emoji [Emoji_Presentation]: [1F192 FE0F] (🆒️) COOL button / SQUARED COOL
+Register Emoji [Emoji_Presentation]: [1F193 FE0F] (🆓️) FREE button / SQUARED FREE
+Register Emoji [Emoji_Presentation]: [1F194 FE0F] (🆔️) ID button / SQUARED ID
+Register Emoji [Emoji_Presentation]: [1F195 FE0F] (🆕️) NEW button / SQUARED NEW
+Register Emoji [Emoji_Presentation]: [1F196 FE0F] (🆖️) NG button / SQUARED NG
+Register Emoji [Emoji_Presentation]: [1F197 FE0F] (🆗️) OK button / SQUARED OK
+Register Emoji [Emoji_Presentation]: [1F198 FE0F] (🆘️) SOS button / SQUARED SOS
+Register Emoji [Emoji_Presentation]: [1F199 FE0F] (🆙️) UP! button / SQUARED UP WITH EXCLAMATION MARK
+Register Emoji [Emoji_Presentation]: [1F19A FE0F] (🆚️) VS button / SQUARED VS
+Register Emoji [Emoji_Presentation]: [1F300 FE0F] (🌀️) cyclone / CYCLONE
+Register Emoji [Emoji_Presentation]: [1F301 FE0F] (🌁️) foggy / FOGGY
+Register Emoji [Emoji_Presentation]: [1F302 FE0F] (🌂️) closed umbrella / CLOSED UMBRELLA
+Register Emoji [Emoji_Presentation]: [1F303 FE0F] (🌃️) night with stars / NIGHT WITH STARS
+Register Emoji [Emoji_Presentation]: [1F304 FE0F] (🌄️) sunrise over mountains / SUNRISE OVER MOUNTAINS
+Register Emoji [Emoji_Presentation]: [1F305 FE0F] (🌅️) sunrise / SUNRISE
+Register Emoji [Emoji_Presentation]: [1F306 FE0F] (🌆️) cityscape at dusk / CITYSCAPE AT DUSK
+Register Emoji [Emoji_Presentation]: [1F307 FE0F] (🌇️) sunset / SUNSET OVER BUILDINGS
+Register Emoji [Emoji_Presentation]: [1F308 FE0F] (🌈️) rainbow / RAINBOW
+Register Emoji [Emoji_Presentation]: [1F309 FE0F] (🌉️) bridge at night / BRIDGE AT NIGHT
+Register Emoji [Emoji_Presentation]: [1F30A FE0F] (🌊️) water wave / WATER WAVE
+Register Emoji [Emoji_Presentation]: [1F30B FE0F] (🌋️) volcano / VOLCANO
+Register Emoji [Emoji_Presentation]: [1F30C FE0F] (🌌️) milky way / MILKY WAY
+Register Emoji [Emoji_Presentation]: [1F30D FE0F] (🌍️) globe showing Europe-Africa / EARTH GLOBE EUROPE-AFRICA
+Register Emoji [Emoji_Presentation]: [1F30E FE0F] (🌎️) globe showing Americas / EARTH GLOBE AMERICAS
+Register Emoji [Emoji_Presentation]: [1F30F FE0F] (🌏️) globe showing Asia-Australia / EARTH GLOBE ASIA-AUSTRALIA
+Register Emoji [Emoji_Presentation]: [1F310 FE0F] (🌐️) globe with meridians / GLOBE WITH MERIDIANS
+Register Emoji [Emoji_Presentation]: [1F311 FE0F] (🌑️) new moon / NEW MOON SYMBOL
+Register Emoji [Emoji_Presentation]: [1F312 FE0F] (🌒️) waxing crescent moon / WAXING CRESCENT MOON SYMBOL
+Register Emoji [Emoji_Presentation]: [1F313 FE0F] (🌓️) first quarter moon / FIRST QUARTER MOON SYMBOL
+Register Emoji [Emoji_Presentation]: [1F314 FE0F] (🌔️) waxing gibbous moon / WAXING GIBBOUS MOON SYMBOL
+Register Emoji [Emoji_Presentation]: [1F315 FE0F] (🌕️) full moon / FULL MOON SYMBOL
+Register Emoji [Emoji_Presentation]: [1F316 FE0F] (🌖️) waning gibbous moon / WANING GIBBOUS MOON SYMBOL
+Register Emoji [Emoji_Presentation]: [1F317 FE0F] (🌗️) last quarter moon / LAST QUARTER MOON SYMBOL
+Register Emoji [Emoji_Presentation]: [1F318 FE0F] (🌘️) waning crescent moon / WANING CRESCENT MOON SYMBOL
+Register Emoji [Emoji_Presentation]: [1F319 FE0F] (🌙️) crescent moon / CRESCENT MOON
+Register Emoji [Emoji_Presentation]: [1F31A FE0F] (🌚️) new moon face / NEW MOON WITH FACE
+Register Emoji [Emoji_Presentation]: [1F31B FE0F] (🌛️) first quarter moon face / FIRST QUARTER MOON WITH FACE
+Register Emoji [Emoji_Presentation]: [1F31C FE0F] (🌜️) last quarter moon face / LAST QUARTER MOON WITH FACE
+Register Emoji [Emoji_Presentation]: [1F31D FE0F] (🌝️) full moon face / FULL MOON WITH FACE
+Register Emoji [Emoji_Presentation]: [1F31E FE0F] (🌞️) sun with face / SUN WITH FACE
+Register Emoji [Emoji_Presentation]: [1F31F FE0F] (🌟️) glowing star / GLOWING STAR
+Register Emoji [Emoji_Presentation]: [1F320 FE0F] (🌠️) shooting star / SHOOTING STAR
+Register Emoji [Emoji_Presentation]: [1F32D FE0F] (🌭️) hot dog / HOT DOG
+Register Emoji [Emoji_Presentation]: [1F32E FE0F] (🌮️) taco / TACO
+Register Emoji [Emoji_Presentation]: [1F32F FE0F] (🌯️) burrito / BURRITO
+Register Emoji [Emoji_Presentation]: [1F330 FE0F] (🌰️) chestnut / CHESTNUT
+Register Emoji [Emoji_Presentation]: [1F331 FE0F] (🌱️) seedling / SEEDLING
+Register Emoji [Emoji_Presentation]: [1F332 FE0F] (🌲️) evergreen tree / EVERGREEN TREE
+Register Emoji [Emoji_Presentation]: [1F333 FE0F] (🌳️) deciduous tree / DECIDUOUS TREE
+Register Emoji [Emoji_Presentation]: [1F334 FE0F] (🌴️) palm tree / PALM TREE
+Register Emoji [Emoji_Presentation]: [1F335 FE0F] (🌵️) cactus / CACTUS
+Register Emoji [Emoji_Presentation]: [1F337 FE0F] (🌷️) tulip / TULIP
+Register Emoji [Emoji_Presentation]: [1F338 FE0F] (🌸️) cherry blossom / CHERRY BLOSSOM
+Register Emoji [Emoji_Presentation]: [1F339 FE0F] (🌹️) rose / ROSE
+Register Emoji [Emoji_Presentation]: [1F33A FE0F] (🌺️) hibiscus / HIBISCUS
+Register Emoji [Emoji_Presentation]: [1F33B FE0F] (🌻️) sunflower / SUNFLOWER
+Register Emoji [Emoji_Presentation]: [1F33C FE0F] (🌼️) blossom / BLOSSOM
+Register Emoji [Emoji_Presentation]: [1F33D FE0F] (🌽️) ear of corn / EAR OF MAIZE
+Register Emoji [Emoji_Presentation]: [1F33E FE0F] (🌾️) sheaf of rice / EAR OF RICE
+Register Emoji [Emoji_Presentation]: [1F33F FE0F] (🌿️) herb / HERB
+Register Emoji [Emoji_Presentation]: [1F340 FE0F] (🍀️) four leaf clover / FOUR LEAF CLOVER
+Register Emoji [Emoji_Presentation]: [1F341 FE0F] (🍁️) maple leaf / MAPLE LEAF
+Register Emoji [Emoji_Presentation]: [1F342 FE0F] (🍂️) fallen leaf / FALLEN LEAF
+Register Emoji [Emoji_Presentation]: [1F343 FE0F] (🍃️) leaf fluttering in wind / LEAF FLUTTERING IN WIND
+Register Emoji [Emoji_Presentation]: [1F344 FE0F] (🍄️) mushroom / MUSHROOM
+Register Emoji [Emoji_Presentation]: [1F345 FE0F] (🍅️) tomato / TOMATO
+Register Emoji [Emoji_Presentation]: [1F346 FE0F] (🍆️) eggplant / AUBERGINE
+Register Emoji [Emoji_Presentation]: [1F347 FE0F] (🍇️) grapes / GRAPES
+Register Emoji [Emoji_Presentation]: [1F348 FE0F] (🍈️) melon / MELON
+Register Emoji [Emoji_Presentation]: [1F349 FE0F] (🍉️) watermelon / WATERMELON
+Register Emoji [Emoji_Presentation]: [1F34A FE0F] (🍊️) tangerine / TANGERINE
+Register Emoji [Emoji_Presentation]: [1F34B FE0F] (🍋️) lemon / LEMON
+Register Emoji [Emoji_Presentation]: [1F34C FE0F] (🍌️) banana / BANANA
+Register Emoji [Emoji_Presentation]: [1F34D FE0F] (🍍️) pineapple / PINEAPPLE
+Register Emoji [Emoji_Presentation]: [1F34E FE0F] (🍎️) red apple / RED APPLE
+Register Emoji [Emoji_Presentation]: [1F34F FE0F] (🍏️) green apple / GREEN APPLE
+Register Emoji [Emoji_Presentation]: [1F350 FE0F] (🍐️) pear / PEAR
+Register Emoji [Emoji_Presentation]: [1F351 FE0F] (🍑️) peach / PEACH
+Register Emoji [Emoji_Presentation]: [1F352 FE0F] (🍒️) cherries / CHERRIES
+Register Emoji [Emoji_Presentation]: [1F353 FE0F] (🍓️) strawberry / STRAWBERRY
+Register Emoji [Emoji_Presentation]: [1F354 FE0F] (🍔️) hamburger / HAMBURGER
+Register Emoji [Emoji_Presentation]: [1F355 FE0F] (🍕️) pizza / SLICE OF PIZZA
+Register Emoji [Emoji_Presentation]: [1F356 FE0F] (🍖️) meat on bone / MEAT ON BONE
+Register Emoji [Emoji_Presentation]: [1F357 FE0F] (🍗️) poultry leg / POULTRY LEG
+Register Emoji [Emoji_Presentation]: [1F358 FE0F] (🍘️) rice cracker / RICE CRACKER
+Register Emoji [Emoji_Presentation]: [1F359 FE0F] (🍙️) rice ball / RICE BALL
+Register Emoji [Emoji_Presentation]: [1F35A FE0F] (🍚️) cooked rice / COOKED RICE
+Register Emoji [Emoji_Presentation]: [1F35B FE0F] (🍛️) curry rice / CURRY AND RICE
+Register Emoji [Emoji_Presentation]: [1F35C FE0F] (🍜️) steaming bowl / STEAMING BOWL
+Register Emoji [Emoji_Presentation]: [1F35D FE0F] (🍝️) spaghetti / SPAGHETTI
+Register Emoji [Emoji_Presentation]: [1F35E FE0F] (🍞️) bread / BREAD
+Register Emoji [Emoji_Presentation]: [1F35F FE0F] (🍟️) french fries / FRENCH FRIES
+Register Emoji [Emoji_Presentation]: [1F360 FE0F] (🍠️) roasted sweet potato / ROASTED SWEET POTATO
+Register Emoji [Emoji_Presentation]: [1F361 FE0F] (🍡️) dango / DANGO
+Register Emoji [Emoji_Presentation]: [1F362 FE0F] (🍢️) oden / ODEN
+Register Emoji [Emoji_Presentation]: [1F363 FE0F] (🍣️) sushi / SUSHI
+Register Emoji [Emoji_Presentation]: [1F364 FE0F] (🍤️) fried shrimp / FRIED SHRIMP
+Register Emoji [Emoji_Presentation]: [1F365 FE0F] (🍥️) fish cake with swirl / FISH CAKE WITH SWIRL DESIGN
+Register Emoji [Emoji_Presentation]: [1F366 FE0F] (🍦️) soft ice cream / SOFT ICE CREAM
+Register Emoji [Emoji_Presentation]: [1F367 FE0F] (🍧️) shaved ice / SHAVED ICE
+Register Emoji [Emoji_Presentation]: [1F368 FE0F] (🍨️) ice cream / ICE CREAM
+Register Emoji [Emoji_Presentation]: [1F369 FE0F] (🍩️) doughnut / DOUGHNUT
+Register Emoji [Emoji_Presentation]: [1F36A FE0F] (🍪️) cookie / COOKIE
+Register Emoji [Emoji_Presentation]: [1F36B FE0F] (🍫️) chocolate bar / CHOCOLATE BAR
+Register Emoji [Emoji_Presentation]: [1F36C FE0F] (🍬️) candy / CANDY
+Register Emoji [Emoji_Presentation]: [1F36D FE0F] (🍭️) lollipop / LOLLIPOP
+Register Emoji [Emoji_Presentation]: [1F36E FE0F] (🍮️) custard / CUSTARD
+Register Emoji [Emoji_Presentation]: [1F36F FE0F] (🍯️) honey pot / HONEY POT
+Register Emoji [Emoji_Presentation]: [1F370 FE0F] (🍰️) shortcake / SHORTCAKE
+Register Emoji [Emoji_Presentation]: [1F371 FE0F] (🍱️) bento box / BENTO BOX
+Register Emoji [Emoji_Presentation]: [1F372 FE0F] (🍲️) pot of food / POT OF FOOD
+Register Emoji [Emoji_Presentation]: [1F373 FE0F] (🍳️) cooking / COOKING
+Register Emoji [Emoji_Presentation]: [1F374 FE0F] (🍴️) fork and knife / FORK AND KNIFE
+Register Emoji [Emoji_Presentation]: [1F375 FE0F] (🍵️) teacup without handle / TEACUP WITHOUT HANDLE
+Register Emoji [Emoji_Presentation]: [1F376 FE0F] (🍶️) sake / SAKE BOTTLE AND CUP
+Register Emoji [Emoji_Presentation]: [1F377 FE0F] (🍷️) wine glass / WINE GLASS
+Register Emoji [Emoji_Presentation]: [1F378 FE0F] (🍸️) cocktail glass / COCKTAIL GLASS
+Register Emoji [Emoji_Presentation]: [1F379 FE0F] (🍹️) tropical drink / TROPICAL DRINK
+Register Emoji [Emoji_Presentation]: [1F37A FE0F] (🍺️) beer mug / BEER MUG
+Register Emoji [Emoji_Presentation]: [1F37B FE0F] (🍻️) clinking beer mugs / CLINKING BEER MUGS
+Register Emoji [Emoji_Presentation]: [1F37C FE0F] (🍼️) baby bottle / BABY BOTTLE
+Register Emoji [Emoji_Presentation]: [1F37E FE0F] (🍾️) bottle with popping cork / BOTTLE WITH POPPING CORK
+Register Emoji [Emoji_Presentation]: [1F37F FE0F] (🍿️) popcorn / POPCORN
+Register Emoji [Emoji_Presentation]: [1F380 FE0F] (🎀️) ribbon / RIBBON
+Register Emoji [Emoji_Presentation]: [1F381 FE0F] (🎁️) wrapped gift / WRAPPED PRESENT
+Register Emoji [Emoji_Presentation]: [1F382 FE0F] (🎂️) birthday cake / BIRTHDAY CAKE
+Register Emoji [Emoji_Presentation]: [1F383 FE0F] (🎃️) jack-o-lantern / JACK-O-LANTERN
+Register Emoji [Emoji_Presentation]: [1F384 FE0F] (🎄️) Christmas tree / CHRISTMAS TREE
+Register Emoji [Emoji_Presentation]: [1F385 FE0F] (🎅️) Santa Claus / FATHER CHRISTMAS
+Register Emoji [Emoji_Presentation]: [1F386 FE0F] (🎆️) fireworks / FIREWORKS
+Register Emoji [Emoji_Presentation]: [1F387 FE0F] (🎇️) sparkler / FIREWORK SPARKLER
+Register Emoji [Emoji_Presentation]: [1F388 FE0F] (🎈️) balloon / BALLOON
+Register Emoji [Emoji_Presentation]: [1F389 FE0F] (🎉️) party popper / PARTY POPPER
+Register Emoji [Emoji_Presentation]: [1F38A FE0F] (🎊️) confetti ball / CONFETTI BALL
+Register Emoji [Emoji_Presentation]: [1F38B FE0F] (🎋️) tanabata tree / TANABATA TREE
+Register Emoji [Emoji_Presentation]: [1F38C FE0F] (🎌️) crossed flags / CROSSED FLAGS
+Register Emoji [Emoji_Presentation]: [1F38D FE0F] (🎍️) pine decoration / PINE DECORATION
+Register Emoji [Emoji_Presentation]: [1F38E FE0F] (🎎️) Japanese dolls / JAPANESE DOLLS
+Register Emoji [Emoji_Presentation]: [1F38F FE0F] (🎏️) carp streamer / CARP STREAMER
+Register Emoji [Emoji_Presentation]: [1F390 FE0F] (🎐️) wind chime / WIND CHIME
+Register Emoji [Emoji_Presentation]: [1F391 FE0F] (🎑️) moon viewing ceremony / MOON VIEWING CEREMONY
+Register Emoji [Emoji_Presentation]: [1F392 FE0F] (🎒️) backpack / SCHOOL SATCHEL
+Register Emoji [Emoji_Presentation]: [1F393 FE0F] (🎓️) graduation cap / GRADUATION CAP
+Register Emoji [Emoji_Presentation]: [1F3A0 FE0F] (🎠️) carousel horse / CAROUSEL HORSE
+Register Emoji [Emoji_Presentation]: [1F3A1 FE0F] (🎡️) ferris wheel / FERRIS WHEEL
+Register Emoji [Emoji_Presentation]: [1F3A2 FE0F] (🎢️) roller coaster / ROLLER COASTER
+Register Emoji [Emoji_Presentation]: [1F3A3 FE0F] (🎣️) fishing pole / FISHING POLE AND FISH
+Register Emoji [Emoji_Presentation]: [1F3A4 FE0F] (🎤️) microphone / MICROPHONE
+Register Emoji [Emoji_Presentation]: [1F3A5 FE0F] (🎥️) movie camera / MOVIE CAMERA
+Register Emoji [Emoji_Presentation]: [1F3A6 FE0F] (🎦️) cinema / CINEMA
+Register Emoji [Emoji_Presentation]: [1F3A7 FE0F] (🎧️) headphone / HEADPHONE
+Register Emoji [Emoji_Presentation]: [1F3A8 FE0F] (🎨️) artist palette / ARTIST PALETTE
+Register Emoji [Emoji_Presentation]: [1F3A9 FE0F] (🎩️) top hat / TOP HAT
+Register Emoji [Emoji_Presentation]: [1F3AA FE0F] (🎪️) circus tent / CIRCUS TENT
+Register Emoji [Emoji_Presentation]: [1F3AB FE0F] (🎫️) ticket / TICKET
+Register Emoji [Emoji_Presentation]: [1F3AC FE0F] (🎬️) clapper board / CLAPPER BOARD
+Register Emoji [Emoji_Presentation]: [1F3AD FE0F] (🎭️) performing arts / PERFORMING ARTS
+Register Emoji [Emoji_Presentation]: [1F3AE FE0F] (🎮️) video game / VIDEO GAME
+Register Emoji [Emoji_Presentation]: [1F3AF FE0F] (🎯️) bullseye / DIRECT HIT
+Register Emoji [Emoji_Presentation]: [1F3B0 FE0F] (🎰️) slot machine / SLOT MACHINE
+Register Emoji [Emoji_Presentation]: [1F3B1 FE0F] (🎱️) pool 8 ball / BILLIARDS
+Register Emoji [Emoji_Presentation]: [1F3B2 FE0F] (🎲️) game die / GAME DIE
+Register Emoji [Emoji_Presentation]: [1F3B3 FE0F] (🎳️) bowling / BOWLING
+Register Emoji [Emoji_Presentation]: [1F3B4 FE0F] (🎴️) flower playing cards / FLOWER PLAYING CARDS
+Register Emoji [Emoji_Presentation]: [1F3B5 FE0F] (🎵️) musical note / MUSICAL NOTE
+Register Emoji [Emoji_Presentation]: [1F3B6 FE0F] (🎶️) musical notes / MULTIPLE MUSICAL NOTES
+Register Emoji [Emoji_Presentation]: [1F3B7 FE0F] (🎷️) saxophone / SAXOPHONE
+Register Emoji [Emoji_Presentation]: [1F3B8 FE0F] (🎸️) guitar / GUITAR
+Register Emoji [Emoji_Presentation]: [1F3B9 FE0F] (🎹️) musical keyboard / MUSICAL KEYBOARD
+Register Emoji [Emoji_Presentation]: [1F3BA FE0F] (🎺️) trumpet / TRUMPET
+Register Emoji [Emoji_Presentation]: [1F3BB FE0F] (🎻️) violin / VIOLIN
+Register Emoji [Emoji_Presentation]: [1F3BC FE0F] (🎼️) musical score / MUSICAL SCORE
+Register Emoji [Emoji_Presentation]: [1F3BD FE0F] (🎽️) running shirt / RUNNING SHIRT WITH SASH
+Register Emoji [Emoji_Presentation]: [1F3BE FE0F] (🎾️) tennis / TENNIS RACQUET AND BALL
+Register Emoji [Emoji_Presentation]: [1F3BF FE0F] (🎿️) skis / SKI AND SKI BOOT
+Register Emoji [Emoji_Presentation]: [1F3C0 FE0F] (🏀️) basketball / BASKETBALL AND HOOP
+Register Emoji [Emoji_Presentation]: [1F3C1 FE0F] (🏁️) chequered flag / CHEQUERED FLAG
+Register Emoji [Emoji_Presentation]: [1F3C2 FE0F] (🏂️) snowboarder / SNOWBOARDER
+Register Emoji [Emoji_Presentation]: [1F3C3 FE0F] (🏃️) person running / RUNNER
+Register Emoji [Emoji_Presentation]: [1F3C4 FE0F] (🏄️) person surfing / SURFER
+Register Emoji [Emoji_Presentation]: [1F3C5 FE0F] (🏅️) sports medal / SPORTS MEDAL
+Register Emoji [Emoji_Presentation]: [1F3C6 FE0F] (🏆️) trophy / TROPHY
+Register Emoji [Emoji_Presentation]: [1F3C7 FE0F] (🏇️) horse racing / HORSE RACING
+Register Emoji [Emoji_Presentation]: [1F3C8 FE0F] (🏈️) american football / AMERICAN FOOTBALL
+Register Emoji [Emoji_Presentation]: [1F3C9 FE0F] (🏉️) rugby football / RUGBY FOOTBALL
+Register Emoji [Emoji_Presentation]: [1F3CA FE0F] (🏊️) person swimming / SWIMMER
+Register Emoji [Emoji_Presentation]: [1F3CF FE0F] (🏏️) cricket game / CRICKET BAT AND BALL
+Register Emoji [Emoji_Presentation]: [1F3D0 FE0F] (🏐️) volleyball / VOLLEYBALL
+Register Emoji [Emoji_Presentation]: [1F3D1 FE0F] (🏑️) field hockey / FIELD HOCKEY STICK AND BALL
+Register Emoji [Emoji_Presentation]: [1F3D2 FE0F] (🏒️) ice hockey / ICE HOCKEY STICK AND PUCK
+Register Emoji [Emoji_Presentation]: [1F3D3 FE0F] (🏓️) ping pong / TABLE TENNIS PADDLE AND BALL
+Register Emoji [Emoji_Presentation]: [1F3E0 FE0F] (🏠️) house / HOUSE BUILDING
+Register Emoji [Emoji_Presentation]: [1F3E1 FE0F] (🏡️) house with garden / HOUSE WITH GARDEN
+Register Emoji [Emoji_Presentation]: [1F3E2 FE0F] (🏢️) office building / OFFICE BUILDING
+Register Emoji [Emoji_Presentation]: [1F3E3 FE0F] (🏣️) Japanese post office / JAPANESE POST OFFICE
+Register Emoji [Emoji_Presentation]: [1F3E4 FE0F] (🏤️) post office / EUROPEAN POST OFFICE
+Register Emoji [Emoji_Presentation]: [1F3E5 FE0F] (🏥️) hospital / HOSPITAL
+Register Emoji [Emoji_Presentation]: [1F3E6 FE0F] (🏦️) bank / BANK
+Register Emoji [Emoji_Presentation]: [1F3E7 FE0F] (🏧️) ATM sign / AUTOMATED TELLER MACHINE
+Register Emoji [Emoji_Presentation]: [1F3E8 FE0F] (🏨️) hotel / HOTEL
+Register Emoji [Emoji_Presentation]: [1F3E9 FE0F] (🏩️) love hotel / LOVE HOTEL
+Register Emoji [Emoji_Presentation]: [1F3EA FE0F] (🏪️) convenience store / CONVENIENCE STORE
+Register Emoji [Emoji_Presentation]: [1F3EB FE0F] (🏫️) school / SCHOOL
+Register Emoji [Emoji_Presentation]: [1F3EC FE0F] (🏬️) department store / DEPARTMENT STORE
+Register Emoji [Emoji_Presentation]: [1F3ED FE0F] (🏭️) factory / FACTORY
+Register Emoji [Emoji_Presentation]: [1F3EE FE0F] (🏮️) red paper lantern / IZAKAYA LANTERN
+Register Emoji [Emoji_Presentation]: [1F3EF FE0F] (🏯️) Japanese castle / JAPANESE CASTLE
+Register Emoji [Emoji_Presentation]: [1F3F0 FE0F] (🏰️) castle / EUROPEAN CASTLE
+Register Emoji [Emoji_Presentation]: [1F3F4 FE0F] (🏴️) black flag / WAVING BLACK FLAG
+Register Emoji [Emoji_Presentation]: [1F3F8 FE0F] (🏸️) badminton / BADMINTON RACQUET AND SHUTTLECOCK
+Register Emoji [Emoji_Presentation]: [1F3F9 FE0F] (🏹️) bow and arrow / BOW AND ARROW
+Register Emoji [Emoji_Presentation]: [1F3FA FE0F] (🏺️) amphora / AMPHORA
+Register Emoji [Emoji_Presentation]: [1F400 FE0F] (🐀️) rat / RAT
+Register Emoji [Emoji_Presentation]: [1F401 FE0F] (🐁️) mouse / MOUSE
+Register Emoji [Emoji_Presentation]: [1F402 FE0F] (🐂️) ox / OX
+Register Emoji [Emoji_Presentation]: [1F403 FE0F] (🐃️) water buffalo / WATER BUFFALO
+Register Emoji [Emoji_Presentation]: [1F404 FE0F] (🐄️) cow / COW
+Register Emoji [Emoji_Presentation]: [1F405 FE0F] (🐅️) tiger / TIGER
+Register Emoji [Emoji_Presentation]: [1F406 FE0F] (🐆️) leopard / LEOPARD
+Register Emoji [Emoji_Presentation]: [1F407 FE0F] (🐇️) rabbit / RABBIT
+Register Emoji [Emoji_Presentation]: [1F408 FE0F] (🐈️) cat / CAT
+Register Emoji [Emoji_Presentation]: [1F409 FE0F] (🐉️) dragon / DRAGON
+Register Emoji [Emoji_Presentation]: [1F40A FE0F] (🐊️) crocodile / CROCODILE
+Register Emoji [Emoji_Presentation]: [1F40B FE0F] (🐋️) whale / WHALE
+Register Emoji [Emoji_Presentation]: [1F40C FE0F] (🐌️) snail / SNAIL
+Register Emoji [Emoji_Presentation]: [1F40D FE0F] (🐍️) snake / SNAKE
+Register Emoji [Emoji_Presentation]: [1F40E FE0F] (🐎️) horse / HORSE
+Register Emoji [Emoji_Presentation]: [1F40F FE0F] (🐏️) ram / RAM
+Register Emoji [Emoji_Presentation]: [1F410 FE0F] (🐐️) goat / GOAT
+Register Emoji [Emoji_Presentation]: [1F411 FE0F] (🐑️) ewe / SHEEP
+Register Emoji [Emoji_Presentation]: [1F412 FE0F] (🐒️) monkey / MONKEY
+Register Emoji [Emoji_Presentation]: [1F413 FE0F] (🐓️) rooster / ROOSTER
+Register Emoji [Emoji_Presentation]: [1F414 FE0F] (🐔️) chicken / CHICKEN
+Register Emoji [Emoji_Presentation]: [1F415 FE0F] (🐕️) dog / DOG
+Register Emoji [Emoji_Presentation]: [1F416 FE0F] (🐖️) pig / PIG
+Register Emoji [Emoji_Presentation]: [1F417 FE0F] (🐗️) boar / BOAR
+Register Emoji [Emoji_Presentation]: [1F418 FE0F] (🐘️) elephant / ELEPHANT
+Register Emoji [Emoji_Presentation]: [1F419 FE0F] (🐙️) octopus / OCTOPUS
+Register Emoji [Emoji_Presentation]: [1F41A FE0F] (🐚️) spiral shell / SPIRAL SHELL
+Register Emoji [Emoji_Presentation]: [1F41B FE0F] (🐛️) bug / BUG
+Register Emoji [Emoji_Presentation]: [1F41C FE0F] (🐜️) ant / ANT
+Register Emoji [Emoji_Presentation]: [1F41D FE0F] (🐝️) honeybee / HONEYBEE
+Register Emoji [Emoji_Presentation]: [1F41E FE0F] (🐞️) lady beetle / LADY BEETLE
+Register Emoji [Emoji_Presentation]: [1F41F FE0F] (🐟️) fish / FISH
+Register Emoji [Emoji_Presentation]: [1F420 FE0F] (🐠️) tropical fish / TROPICAL FISH
+Register Emoji [Emoji_Presentation]: [1F421 FE0F] (🐡️) blowfish / BLOWFISH
+Register Emoji [Emoji_Presentation]: [1F422 FE0F] (🐢️) turtle / TURTLE
+Register Emoji [Emoji_Presentation]: [1F423 FE0F] (🐣️) hatching chick / HATCHING CHICK
+Register Emoji [Emoji_Presentation]: [1F424 FE0F] (🐤️) baby chick / BABY CHICK
+Register Emoji [Emoji_Presentation]: [1F425 FE0F] (🐥️) front-facing baby chick / FRONT-FACING BABY CHICK
+Register Emoji [Emoji_Presentation]: [1F426 FE0F] (🐦️) bird / BIRD
+Register Emoji [Emoji_Presentation]: [1F427 FE0F] (🐧️) penguin / PENGUIN
+Register Emoji [Emoji_Presentation]: [1F428 FE0F] (🐨️) koala / KOALA
+Register Emoji [Emoji_Presentation]: [1F429 FE0F] (🐩️) poodle / POODLE
+Register Emoji [Emoji_Presentation]: [1F42A FE0F] (🐪️) camel / DROMEDARY CAMEL
+Register Emoji [Emoji_Presentation]: [1F42B FE0F] (🐫️) two-hump camel / BACTRIAN CAMEL
+Register Emoji [Emoji_Presentation]: [1F42C FE0F] (🐬️) dolphin / DOLPHIN
+Register Emoji [Emoji_Presentation]: [1F42D FE0F] (🐭️) mouse face / MOUSE FACE
+Register Emoji [Emoji_Presentation]: [1F42E FE0F] (🐮️) cow face / COW FACE
+Register Emoji [Emoji_Presentation]: [1F42F FE0F] (🐯️) tiger face / TIGER FACE
+Register Emoji [Emoji_Presentation]: [1F430 FE0F] (🐰️) rabbit face / RABBIT FACE
+Register Emoji [Emoji_Presentation]: [1F431 FE0F] (🐱️) cat face / CAT FACE
+Register Emoji [Emoji_Presentation]: [1F432 FE0F] (🐲️) dragon face / DRAGON FACE
+Register Emoji [Emoji_Presentation]: [1F433 FE0F] (🐳️) spouting whale / SPOUTING WHALE
+Register Emoji [Emoji_Presentation]: [1F434 FE0F] (🐴️) horse face / HORSE FACE
+Register Emoji [Emoji_Presentation]: [1F435 FE0F] (🐵️) monkey face / MONKEY FACE
+Register Emoji [Emoji_Presentation]: [1F436 FE0F] (🐶️) dog face / DOG FACE
+Register Emoji [Emoji_Presentation]: [1F437 FE0F] (🐷️) pig face / PIG FACE
+Register Emoji [Emoji_Presentation]: [1F438 FE0F] (🐸️) frog / FROG FACE
+Register Emoji [Emoji_Presentation]: [1F439 FE0F] (🐹️) hamster / HAMSTER FACE
+Register Emoji [Emoji_Presentation]: [1F43A FE0F] (🐺️) wolf / WOLF FACE
+Register Emoji [Emoji_Presentation]: [1F43B FE0F] (🐻️) bear / BEAR FACE
+Register Emoji [Emoji_Presentation]: [1F43C FE0F] (🐼️) panda / PANDA FACE
+Register Emoji [Emoji_Presentation]: [1F43D FE0F] (🐽️) pig nose / PIG NOSE
+Register Emoji [Emoji_Presentation]: [1F43E FE0F] (🐾️) paw prints / PAW PRINTS
+Register Emoji [Emoji_Presentation]: [1F440 FE0F] (👀️) eyes / EYES
+Register Emoji [Emoji_Presentation]: [1F442 FE0F] (👂️) ear / EAR
+Register Emoji [Emoji_Presentation]: [1F443 FE0F] (👃️) nose / NOSE
+Register Emoji [Emoji_Presentation]: [1F444 FE0F] (👄️) mouth / MOUTH
+Register Emoji [Emoji_Presentation]: [1F445 FE0F] (👅️) tongue / TONGUE
+Register Emoji [Emoji_Presentation]: [1F446 FE0F] (👆️) backhand index pointing up / WHITE UP POINTING BACKHAND INDEX
+Register Emoji [Emoji_Presentation]: [1F447 FE0F] (👇️) backhand index pointing down / WHITE DOWN POINTING BACKHAND INDEX
+Register Emoji [Emoji_Presentation]: [1F448 FE0F] (👈️) backhand index pointing left / WHITE LEFT POINTING BACKHAND INDEX
+Register Emoji [Emoji_Presentation]: [1F449 FE0F] (👉️) backhand index pointing right / WHITE RIGHT POINTING BACKHAND INDEX
+Register Emoji [Emoji_Presentation]: [1F44A FE0F] (👊️) oncoming fist / FISTED HAND SIGN
+Register Emoji [Emoji_Presentation]: [1F44B FE0F] (👋️) waving hand / WAVING HAND SIGN
+Register Emoji [Emoji_Presentation]: [1F44C FE0F] (👌️) OK hand / OK HAND SIGN
+Register Emoji [Emoji_Presentation]: [1F44D FE0F] (👍️) thumbs up / THUMBS UP SIGN
+Register Emoji [Emoji_Presentation]: [1F44E FE0F] (👎️) thumbs down / THUMBS DOWN SIGN
+Register Emoji [Emoji_Presentation]: [1F44F FE0F] (👏️) clapping hands / CLAPPING HANDS SIGN
+Register Emoji [Emoji_Presentation]: [1F450 FE0F] (👐️) open hands / OPEN HANDS SIGN
+Register Emoji [Emoji_Presentation]: [1F451 FE0F] (👑️) crown / CROWN
+Register Emoji [Emoji_Presentation]: [1F452 FE0F] (👒️) woman’s hat / WOMANS HAT
+Register Emoji [Emoji_Presentation]: [1F453 FE0F] (👓️) glasses / EYEGLASSES
+Register Emoji [Emoji_Presentation]: [1F454 FE0F] (👔️) necktie / NECKTIE
+Register Emoji [Emoji_Presentation]: [1F455 FE0F] (👕️) t-shirt / T-SHIRT
+Register Emoji [Emoji_Presentation]: [1F456 FE0F] (👖️) jeans / JEANS
+Register Emoji [Emoji_Presentation]: [1F457 FE0F] (👗️) dress / DRESS
+Register Emoji [Emoji_Presentation]: [1F458 FE0F] (👘️) kimono / KIMONO
+Register Emoji [Emoji_Presentation]: [1F459 FE0F] (👙️) bikini / BIKINI
+Register Emoji [Emoji_Presentation]: [1F45A FE0F] (👚️) woman’s clothes / WOMANS CLOTHES
+Register Emoji [Emoji_Presentation]: [1F45B FE0F] (👛️) purse / PURSE
+Register Emoji [Emoji_Presentation]: [1F45C FE0F] (👜️) handbag / HANDBAG
+Register Emoji [Emoji_Presentation]: [1F45D FE0F] (👝️) clutch bag / POUCH
+Register Emoji [Emoji_Presentation]: [1F45E FE0F] (👞️) man’s shoe / MANS SHOE
+Register Emoji [Emoji_Presentation]: [1F45F FE0F] (👟️) running shoe / ATHLETIC SHOE
+Register Emoji [Emoji_Presentation]: [1F460 FE0F] (👠️) high-heeled shoe / HIGH-HEELED SHOE
+Register Emoji [Emoji_Presentation]: [1F461 FE0F] (👡️) woman’s sandal / WOMANS SANDAL
+Register Emoji [Emoji_Presentation]: [1F462 FE0F] (👢️) woman’s boot / WOMANS BOOTS
+Register Emoji [Emoji_Presentation]: [1F463 FE0F] (👣️) footprints / FOOTPRINTS
+Register Emoji [Emoji_Presentation]: [1F464 FE0F] (👤️) bust in silhouette / BUST IN SILHOUETTE
+Register Emoji [Emoji_Presentation]: [1F465 FE0F] (👥️) busts in silhouette / BUSTS IN SILHOUETTE
+Register Emoji [Emoji_Presentation]: [1F466 FE0F] (👦️) boy / BOY
+Register Emoji [Emoji_Presentation]: [1F467 FE0F] (👧️) girl / GIRL
+Register Emoji [Emoji_Presentation]: [1F468 FE0F] (👨️) man / MAN
+Register Emoji [Emoji_Presentation]: [1F469 FE0F] (👩️) woman / WOMAN
+Register Emoji [Emoji_Presentation]: [1F46A FE0F] (👪️) family / FAMILY
+Register Emoji [Emoji_Presentation]: [1F46B FE0F] (👫️) woman and man holding hands / MAN AND WOMAN HOLDING HANDS
+Register Emoji [Emoji_Presentation]: [1F46C FE0F] (👬️) men holding hands / TWO MEN HOLDING HANDS
+Register Emoji [Emoji_Presentation]: [1F46D FE0F] (👭️) women holding hands / TWO WOMEN HOLDING HANDS
+Register Emoji [Emoji_Presentation]: [1F46E FE0F] (👮️) police officer / POLICE OFFICER
+Register Emoji [Emoji_Presentation]: [1F46F FE0F] (👯️) people with bunny ears / WOMAN WITH BUNNY EARS
+Register Emoji [Emoji_Presentation]: [1F470 FE0F] (👰️) person with veil / BRIDE WITH VEIL
+Register Emoji [Emoji_Presentation]: [1F471 FE0F] (👱️) person: blond hair / PERSON WITH BLOND HAIR
+Register Emoji [Emoji_Presentation]: [1F472 FE0F] (👲️) person with skullcap / MAN WITH GUA PI MAO
+Register Emoji [Emoji_Presentation]: [1F473 FE0F] (👳️) person wearing turban / MAN WITH TURBAN
+Register Emoji [Emoji_Presentation]: [1F474 FE0F] (👴️) old man / OLDER MAN
+Register Emoji [Emoji_Presentation]: [1F475 FE0F] (👵️) old woman / OLDER WOMAN
+Register Emoji [Emoji_Presentation]: [1F476 FE0F] (👶️) baby / BABY
+Register Emoji [Emoji_Presentation]: [1F477 FE0F] (👷️) construction worker / CONSTRUCTION WORKER
+Register Emoji [Emoji_Presentation]: [1F478 FE0F] (👸️) princess / PRINCESS
+Register Emoji [Emoji_Presentation]: [1F479 FE0F] (👹️) ogre / JAPANESE OGRE
+Register Emoji [Emoji_Presentation]: [1F47A FE0F] (👺️) goblin / JAPANESE GOBLIN
+Register Emoji [Emoji_Presentation]: [1F47B FE0F] (👻️) ghost / GHOST
+Register Emoji [Emoji_Presentation]: [1F47C FE0F] (👼️) baby angel / BABY ANGEL
+Register Emoji [Emoji_Presentation]: [1F47D FE0F] (👽️) alien / EXTRATERRESTRIAL ALIEN
+Register Emoji [Emoji_Presentation]: [1F47E FE0F] (👾️) alien monster / ALIEN MONSTER
+Register Emoji [Emoji_Presentation]: [1F47F FE0F] (👿️) angry face with horns / IMP
+Register Emoji [Emoji_Presentation]: [1F480 FE0F] (💀️) skull / SKULL
+Register Emoji [Emoji_Presentation]: [1F481 FE0F] (💁️) person tipping hand / INFORMATION DESK PERSON
+Register Emoji [Emoji_Presentation]: [1F482 FE0F] (💂️) guard / GUARDSMAN
+Register Emoji [Emoji_Presentation]: [1F483 FE0F] (💃️) woman dancing / DANCER
+Register Emoji [Emoji_Presentation]: [1F484 FE0F] (💄️) lipstick / LIPSTICK
+Register Emoji [Emoji_Presentation]: [1F485 FE0F] (💅️) nail polish / NAIL POLISH
+Register Emoji [Emoji_Presentation]: [1F486 FE0F] (💆️) person getting massage / FACE MASSAGE
+Register Emoji [Emoji_Presentation]: [1F487 FE0F] (💇️) person getting haircut / HAIRCUT
+Register Emoji [Emoji_Presentation]: [1F488 FE0F] (💈️) barber pole / BARBER POLE
+Register Emoji [Emoji_Presentation]: [1F489 FE0F] (💉️) syringe / SYRINGE
+Register Emoji [Emoji_Presentation]: [1F48A FE0F] (💊️) pill / PILL
+Register Emoji [Emoji_Presentation]: [1F48B FE0F] (💋️) kiss mark / KISS MARK
+Register Emoji [Emoji_Presentation]: [1F48C FE0F] (💌️) love letter / LOVE LETTER
+Register Emoji [Emoji_Presentation]: [1F48D FE0F] (💍️) ring / RING
+Register Emoji [Emoji_Presentation]: [1F48E FE0F] (💎️) gem stone / GEM STONE
+Register Emoji [Emoji_Presentation]: [1F48F FE0F] (💏️) kiss / KISS
+Register Emoji [Emoji_Presentation]: [1F490 FE0F] (💐️) bouquet / BOUQUET
+Register Emoji [Emoji_Presentation]: [1F491 FE0F] (💑️) couple with heart / COUPLE WITH HEART
+Register Emoji [Emoji_Presentation]: [1F492 FE0F] (💒️) wedding / WEDDING
+Register Emoji [Emoji_Presentation]: [1F493 FE0F] (💓️) beating heart / BEATING HEART
+Register Emoji [Emoji_Presentation]: [1F494 FE0F] (💔️) broken heart / BROKEN HEART
+Register Emoji [Emoji_Presentation]: [1F495 FE0F] (💕️) two hearts / TWO HEARTS
+Register Emoji [Emoji_Presentation]: [1F496 FE0F] (💖️) sparkling heart / SPARKLING HEART
+Register Emoji [Emoji_Presentation]: [1F497 FE0F] (💗️) growing heart / GROWING HEART
+Register Emoji [Emoji_Presentation]: [1F498 FE0F] (💘️) heart with arrow / HEART WITH ARROW
+Register Emoji [Emoji_Presentation]: [1F499 FE0F] (💙️) blue heart / BLUE HEART
+Register Emoji [Emoji_Presentation]: [1F49A FE0F] (💚️) green heart / GREEN HEART
+Register Emoji [Emoji_Presentation]: [1F49B FE0F] (💛️) yellow heart / YELLOW HEART
+Register Emoji [Emoji_Presentation]: [1F49C FE0F] (💜️) purple heart / PURPLE HEART
+Register Emoji [Emoji_Presentation]: [1F49D FE0F] (💝️) heart with ribbon / HEART WITH RIBBON
+Register Emoji [Emoji_Presentation]: [1F49E FE0F] (💞️) revolving hearts / REVOLVING HEARTS
+Register Emoji [Emoji_Presentation]: [1F49F FE0F] (💟️) heart decoration / HEART DECORATION
+Register Emoji [Emoji_Presentation]: [1F4A0 FE0F] (💠️) diamond with a dot / DIAMOND SHAPE WITH A DOT INSIDE
+Register Emoji [Emoji_Presentation]: [1F4A1 FE0F] (💡️) light bulb / ELECTRIC LIGHT BULB
+Register Emoji [Emoji_Presentation]: [1F4A2 FE0F] (💢️) anger symbol / ANGER SYMBOL
+Register Emoji [Emoji_Presentation]: [1F4A3 FE0F] (💣️) bomb / BOMB
+Register Emoji [Emoji_Presentation]: [1F4A4 FE0F] (💤️) ZZZ / SLEEPING SYMBOL
+Register Emoji [Emoji_Presentation]: [1F4A5 FE0F] (💥️) collision / COLLISION SYMBOL
+Register Emoji [Emoji_Presentation]: [1F4A6 FE0F] (💦️) sweat droplets / SPLASHING SWEAT SYMBOL
+Register Emoji [Emoji_Presentation]: [1F4A7 FE0F] (💧️) droplet / DROPLET
+Register Emoji [Emoji_Presentation]: [1F4A8 FE0F] (💨️) dashing away / DASH SYMBOL
+Register Emoji [Emoji_Presentation]: [1F4A9 FE0F] (💩️) pile of poo / PILE OF POO
+Register Emoji [Emoji_Presentation]: [1F4AA FE0F] (💪️) flexed biceps / FLEXED BICEPS
+Register Emoji [Emoji_Presentation]: [1F4AB FE0F] (💫️) dizzy / DIZZY SYMBOL
+Register Emoji [Emoji_Presentation]: [1F4AC FE0F] (💬️) speech balloon / SPEECH BALLOON
+Register Emoji [Emoji_Presentation]: [1F4AD FE0F] (💭️) thought balloon / THOUGHT BALLOON
+Register Emoji [Emoji_Presentation]: [1F4AE FE0F] (💮️) white flower / WHITE FLOWER
+Register Emoji [Emoji_Presentation]: [1F4AF FE0F] (💯️) hundred points / HUNDRED POINTS SYMBOL
+Register Emoji [Emoji_Presentation]: [1F4B0 FE0F] (💰️) money bag / MONEY BAG
+Register Emoji [Emoji_Presentation]: [1F4B1 FE0F] (💱️) currency exchange / CURRENCY EXCHANGE
+Register Emoji [Emoji_Presentation]: [1F4B2 FE0F] (💲️) heavy dollar sign / HEAVY DOLLAR SIGN
+Register Emoji [Emoji_Presentation]: [1F4B3 FE0F] (💳️) credit card / CREDIT CARD
+Register Emoji [Emoji_Presentation]: [1F4B4 FE0F] (💴️) yen banknote / BANKNOTE WITH YEN SIGN
+Register Emoji [Emoji_Presentation]: [1F4B5 FE0F] (💵️) dollar banknote / BANKNOTE WITH DOLLAR SIGN
+Register Emoji [Emoji_Presentation]: [1F4B6 FE0F] (💶️) euro banknote / BANKNOTE WITH EURO SIGN
+Register Emoji [Emoji_Presentation]: [1F4B7 FE0F] (💷️) pound banknote / BANKNOTE WITH POUND SIGN
+Register Emoji [Emoji_Presentation]: [1F4B8 FE0F] (💸️) money with wings / MONEY WITH WINGS
+Register Emoji [Emoji_Presentation]: [1F4B9 FE0F] (💹️) chart increasing with yen / CHART WITH UPWARDS TREND AND YEN SIGN
+Register Emoji [Emoji_Presentation]: [1F4BA FE0F] (💺️) seat / SEAT
+Register Emoji [Emoji_Presentation]: [1F4BB FE0F] (💻️) laptop / PERSONAL COMPUTER
+Register Emoji [Emoji_Presentation]: [1F4BC FE0F] (💼️) briefcase / BRIEFCASE
+Register Emoji [Emoji_Presentation]: [1F4BD FE0F] (💽️) computer disk / MINIDISC
+Register Emoji [Emoji_Presentation]: [1F4BE FE0F] (💾️) floppy disk / FLOPPY DISK
+Register Emoji [Emoji_Presentation]: [1F4BF FE0F] (💿️) optical disk / OPTICAL DISC
+Register Emoji [Emoji_Presentation]: [1F4C0 FE0F] (📀️) dvd / DVD
+Register Emoji [Emoji_Presentation]: [1F4C1 FE0F] (📁️) file folder / FILE FOLDER
+Register Emoji [Emoji_Presentation]: [1F4C2 FE0F] (📂️) open file folder / OPEN FILE FOLDER
+Register Emoji [Emoji_Presentation]: [1F4C3 FE0F] (📃️) page with curl / PAGE WITH CURL
+Register Emoji [Emoji_Presentation]: [1F4C4 FE0F] (📄️) page facing up / PAGE FACING UP
+Register Emoji [Emoji_Presentation]: [1F4C5 FE0F] (📅️) calendar / CALENDAR
+Register Emoji [Emoji_Presentation]: [1F4C6 FE0F] (📆️) tear-off calendar / TEAR-OFF CALENDAR
+Register Emoji [Emoji_Presentation]: [1F4C7 FE0F] (📇️) card index / CARD INDEX
+Register Emoji [Emoji_Presentation]: [1F4C8 FE0F] (📈️) chart increasing / CHART WITH UPWARDS TREND
+Register Emoji [Emoji_Presentation]: [1F4C9 FE0F] (📉️) chart decreasing / CHART WITH DOWNWARDS TREND
+Register Emoji [Emoji_Presentation]: [1F4CA FE0F] (📊️) bar chart / BAR CHART
+Register Emoji [Emoji_Presentation]: [1F4CB FE0F] (📋️) clipboard / CLIPBOARD
+Register Emoji [Emoji_Presentation]: [1F4CC FE0F] (📌️) pushpin / PUSHPIN
+Register Emoji [Emoji_Presentation]: [1F4CD FE0F] (📍️) round pushpin / ROUND PUSHPIN
+Register Emoji [Emoji_Presentation]: [1F4CE FE0F] (📎️) paperclip / PAPERCLIP
+Register Emoji [Emoji_Presentation]: [1F4CF FE0F] (📏️) straight ruler / STRAIGHT RULER
+Register Emoji [Emoji_Presentation]: [1F4D0 FE0F] (📐️) triangular ruler / TRIANGULAR RULER
+Register Emoji [Emoji_Presentation]: [1F4D1 FE0F] (📑️) bookmark tabs / BOOKMARK TABS
+Register Emoji [Emoji_Presentation]: [1F4D2 FE0F] (📒️) ledger / LEDGER
+Register Emoji [Emoji_Presentation]: [1F4D3 FE0F] (📓️) notebook / NOTEBOOK
+Register Emoji [Emoji_Presentation]: [1F4D4 FE0F] (📔️) notebook with decorative cover / NOTEBOOK WITH DECORATIVE COVER
+Register Emoji [Emoji_Presentation]: [1F4D5 FE0F] (📕️) closed book / CLOSED BOOK
+Register Emoji [Emoji_Presentation]: [1F4D6 FE0F] (📖️) open book / OPEN BOOK
+Register Emoji [Emoji_Presentation]: [1F4D7 FE0F] (📗️) green book / GREEN BOOK
+Register Emoji [Emoji_Presentation]: [1F4D8 FE0F] (📘️) blue book / BLUE BOOK
+Register Emoji [Emoji_Presentation]: [1F4D9 FE0F] (📙️) orange book / ORANGE BOOK
+Register Emoji [Emoji_Presentation]: [1F4DA FE0F] (📚️) books / BOOKS
+Register Emoji [Emoji_Presentation]: [1F4DB FE0F] (📛️) name badge / NAME BADGE
+Register Emoji [Emoji_Presentation]: [1F4DC FE0F] (📜️) scroll / SCROLL
+Register Emoji [Emoji_Presentation]: [1F4DD FE0F] (📝️) memo / MEMO
+Register Emoji [Emoji_Presentation]: [1F4DE FE0F] (📞️) telephone receiver / TELEPHONE RECEIVER
+Register Emoji [Emoji_Presentation]: [1F4DF FE0F] (📟️) pager / PAGER
+Register Emoji [Emoji_Presentation]: [1F4E0 FE0F] (📠️) fax machine / FAX MACHINE
+Register Emoji [Emoji_Presentation]: [1F4E1 FE0F] (📡️) satellite antenna / SATELLITE ANTENNA
+Register Emoji [Emoji_Presentation]: [1F4E2 FE0F] (📢️) loudspeaker / PUBLIC ADDRESS LOUDSPEAKER
+Register Emoji [Emoji_Presentation]: [1F4E3 FE0F] (📣️) megaphone / CHEERING MEGAPHONE
+Register Emoji [Emoji_Presentation]: [1F4E4 FE0F] (📤️) outbox tray / OUTBOX TRAY
+Register Emoji [Emoji_Presentation]: [1F4E5 FE0F] (📥️) inbox tray / INBOX TRAY
+Register Emoji [Emoji_Presentation]: [1F4E6 FE0F] (📦️) package / PACKAGE
+Register Emoji [Emoji_Presentation]: [1F4E7 FE0F] (📧️) e-mail / E-MAIL SYMBOL
+Register Emoji [Emoji_Presentation]: [1F4E8 FE0F] (📨️) incoming envelope / INCOMING ENVELOPE
+Register Emoji [Emoji_Presentation]: [1F4E9 FE0F] (📩️) envelope with arrow / ENVELOPE WITH DOWNWARDS ARROW ABOVE
+Register Emoji [Emoji_Presentation]: [1F4EA FE0F] (📪️) closed mailbox with lowered flag / CLOSED MAILBOX WITH LOWERED FLAG
+Register Emoji [Emoji_Presentation]: [1F4EB FE0F] (📫️) closed mailbox with raised flag / CLOSED MAILBOX WITH RAISED FLAG
+Register Emoji [Emoji_Presentation]: [1F4EC FE0F] (📬️) open mailbox with raised flag / OPEN MAILBOX WITH RAISED FLAG
+Register Emoji [Emoji_Presentation]: [1F4ED FE0F] (📭️) open mailbox with lowered flag / OPEN MAILBOX WITH LOWERED FLAG
+Register Emoji [Emoji_Presentation]: [1F4EE FE0F] (📮️) postbox / POSTBOX
+Register Emoji [Emoji_Presentation]: [1F4EF FE0F] (📯️) postal horn / POSTAL HORN
+Register Emoji [Emoji_Presentation]: [1F4F0 FE0F] (📰️) newspaper / NEWSPAPER
+Register Emoji [Emoji_Presentation]: [1F4F1 FE0F] (📱️) mobile phone / MOBILE PHONE
+Register Emoji [Emoji_Presentation]: [1F4F2 FE0F] (📲️) mobile phone with arrow / MOBILE PHONE WITH RIGHTWARDS ARROW AT LEFT
+Register Emoji [Emoji_Presentation]: [1F4F3 FE0F] (📳️) vibration mode / VIBRATION MODE
+Register Emoji [Emoji_Presentation]: [1F4F4 FE0F] (📴️) mobile phone off / MOBILE PHONE OFF
+Register Emoji [Emoji_Presentation]: [1F4F5 FE0F] (📵️) no mobile phones / NO MOBILE PHONES
+Register Emoji [Emoji_Presentation]: [1F4F6 FE0F] (📶️) antenna bars / ANTENNA WITH BARS
+Register Emoji [Emoji_Presentation]: [1F4F7 FE0F] (📷️) camera / CAMERA
+Register Emoji [Emoji_Presentation]: [1F4F8 FE0F] (📸️) camera with flash / CAMERA WITH FLASH
+Register Emoji [Emoji_Presentation]: [1F4F9 FE0F] (📹️) video camera / VIDEO CAMERA
+Register Emoji [Emoji_Presentation]: [1F4FA FE0F] (📺️) television / TELEVISION
+Register Emoji [Emoji_Presentation]: [1F4FB FE0F] (📻️) radio / RADIO
+Register Emoji [Emoji_Presentation]: [1F4FC FE0F] (📼️) videocassette / VIDEOCASSETTE
+Register Emoji [Emoji_Presentation]: [1F4FF FE0F] (📿️) prayer beads / PRAYER BEADS
+Register Emoji [Emoji_Presentation]: [1F500 FE0F] (🔀️) shuffle tracks button / TWISTED RIGHTWARDS ARROWS
+Register Emoji [Emoji_Presentation]: [1F501 FE0F] (🔁️) repeat button / CLOCKWISE RIGHTWARDS AND LEFTWARDS OPEN CIRCLE ARROWS
+Register Emoji [Emoji_Presentation]: [1F502 FE0F] (🔂️) repeat single button / CLOCKWISE RIGHTWARDS AND LEFTWARDS OPEN CIRCLE ARROWS WITH CIRCLED ONE OVERLAY
+Register Emoji [Emoji_Presentation]: [1F503 FE0F] (🔃️) clockwise vertical arrows / CLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS
+Register Emoji [Emoji_Presentation]: [1F504 FE0F] (🔄️) counterclockwise arrows button / ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS
+Register Emoji [Emoji_Presentation]: [1F505 FE0F] (🔅️) dim button / LOW BRIGHTNESS SYMBOL
+Register Emoji [Emoji_Presentation]: [1F506 FE0F] (🔆️) bright button / HIGH BRIGHTNESS SYMBOL
+Register Emoji [Emoji_Presentation]: [1F507 FE0F] (🔇️) muted speaker / SPEAKER WITH CANCELLATION STROKE
+Register Emoji [Emoji_Presentation]: [1F508 FE0F] (🔈️) speaker low volume / SPEAKER
+Register Emoji [Emoji_Presentation]: [1F509 FE0F] (🔉️) speaker medium volume / SPEAKER WITH ONE SOUND WAVE
+Register Emoji [Emoji_Presentation]: [1F50A FE0F] (🔊️) speaker high volume / SPEAKER WITH THREE SOUND WAVES
+Register Emoji [Emoji_Presentation]: [1F50B FE0F] (🔋️) battery / BATTERY
+Register Emoji [Emoji_Presentation]: [1F50C FE0F] (🔌️) electric plug / ELECTRIC PLUG
+Register Emoji [Emoji_Presentation]: [1F50D FE0F] (🔍️) magnifying glass tilted left / LEFT-POINTING MAGNIFYING GLASS
+Register Emoji [Emoji_Presentation]: [1F50E FE0F] (🔎️) magnifying glass tilted right / RIGHT-POINTING MAGNIFYING GLASS
+Register Emoji [Emoji_Presentation]: [1F50F FE0F] (🔏️) locked with pen / LOCK WITH INK PEN
+Register Emoji [Emoji_Presentation]: [1F510 FE0F] (🔐️) locked with key / CLOSED LOCK WITH KEY
+Register Emoji [Emoji_Presentation]: [1F511 FE0F] (🔑️) key / KEY
+Register Emoji [Emoji_Presentation]: [1F512 FE0F] (🔒️) locked / LOCK
+Register Emoji [Emoji_Presentation]: [1F513 FE0F] (🔓️) unlocked / OPEN LOCK
+Register Emoji [Emoji_Presentation]: [1F514 FE0F] (🔔️) bell / BELL
+Register Emoji [Emoji_Presentation]: [1F515 FE0F] (🔕️) bell with slash / BELL WITH CANCELLATION STROKE
+Register Emoji [Emoji_Presentation]: [1F516 FE0F] (🔖️) bookmark / BOOKMARK
+Register Emoji [Emoji_Presentation]: [1F517 FE0F] (🔗️) link / LINK SYMBOL
+Register Emoji [Emoji_Presentation]: [1F518 FE0F] (🔘️) radio button / RADIO BUTTON
+Register Emoji [Emoji_Presentation]: [1F519 FE0F] (🔙️) BACK arrow / BACK WITH LEFTWARDS ARROW ABOVE
+Register Emoji [Emoji_Presentation]: [1F51A FE0F] (🔚️) END arrow / END WITH LEFTWARDS ARROW ABOVE
+Register Emoji [Emoji_Presentation]: [1F51B FE0F] (🔛️) ON! arrow / ON WITH EXCLAMATION MARK WITH LEFT RIGHT ARROW ABOVE
+Register Emoji [Emoji_Presentation]: [1F51C FE0F] (🔜️) SOON arrow / SOON WITH RIGHTWARDS ARROW ABOVE
+Register Emoji [Emoji_Presentation]: [1F51D FE0F] (🔝️) TOP arrow / TOP WITH UPWARDS ARROW ABOVE
+Register Emoji [Emoji_Presentation]: [1F51E FE0F] (🔞️) no one under eighteen / NO ONE UNDER EIGHTEEN SYMBOL
 Register Emoji [Emoji_Presentation]: [1F51F FE0F] (🔟️) KEYCAP TEN
-Register Emoji [Emoji_Presentation]: [1F520 FE0F] (🔠️) input latin uppercase
-Register Emoji [Emoji_Presentation]: [1F521 FE0F] (🔡️) input latin lowercase
-Register Emoji [Emoji_Presentation]: [1F522 FE0F] (🔢️) input numbers
-Register Emoji [Emoji_Presentation]: [1F523 FE0F] (🔣️) input symbols
-Register Emoji [Emoji_Presentation]: [1F524 FE0F] (🔤️) input latin letters
-Register Emoji [Emoji_Presentation]: [1F525 FE0F] (🔥️) fire
-Register Emoji [Emoji_Presentation]: [1F526 FE0F] (🔦️) flashlight
-Register Emoji [Emoji_Presentation]: [1F527 FE0F] (🔧️) wrench
-Register Emoji [Emoji_Presentation]: [1F528 FE0F] (🔨️) hammer
-Register Emoji [Emoji_Presentation]: [1F529 FE0F] (🔩️) nut and bolt
-Register Emoji [Emoji_Presentation]: [1F52A FE0F] (🔪️) kitchen knife
-Register Emoji [Emoji_Presentation]: [1F52B FE0F] (🔫️) water pistol
-Register Emoji [Emoji_Presentation]: [1F52C FE0F] (🔬️) microscope
-Register Emoji [Emoji_Presentation]: [1F52D FE0F] (🔭️) telescope
-Register Emoji [Emoji_Presentation]: [1F52E FE0F] (🔮️) crystal ball
-Register Emoji [Emoji_Presentation]: [1F52F FE0F] (🔯️) dotted six-pointed star
-Register Emoji [Emoji_Presentation]: [1F530 FE0F] (🔰️) Japanese symbol for beginner
-Register Emoji [Emoji_Presentation]: [1F531 FE0F] (🔱️) trident emblem
-Register Emoji [Emoji_Presentation]: [1F532 FE0F] (🔲️) black square button
-Register Emoji [Emoji_Presentation]: [1F533 FE0F] (🔳️) white square button
-Register Emoji [Emoji_Presentation]: [1F534 FE0F] (🔴️) red circle
-Register Emoji [Emoji_Presentation]: [1F535 FE0F] (🔵️) blue circle
-Register Emoji [Emoji_Presentation]: [1F536 FE0F] (🔶️) large orange diamond
-Register Emoji [Emoji_Presentation]: [1F537 FE0F] (🔷️) large blue diamond
-Register Emoji [Emoji_Presentation]: [1F538 FE0F] (🔸️) small orange diamond
-Register Emoji [Emoji_Presentation]: [1F539 FE0F] (🔹️) small blue diamond
-Register Emoji [Emoji_Presentation]: [1F53A FE0F] (🔺️) red triangle pointed up
-Register Emoji [Emoji_Presentation]: [1F53B FE0F] (🔻️) red triangle pointed down
-Register Emoji [Emoji_Presentation]: [1F53C FE0F] (🔼️) upwards button
-Register Emoji [Emoji_Presentation]: [1F53D FE0F] (🔽️) downwards button
-Register Emoji [Emoji_Presentation]: [1F54B FE0F] (🕋️) kaaba
-Register Emoji [Emoji_Presentation]: [1F54C FE0F] (🕌️) mosque
-Register Emoji [Emoji_Presentation]: [1F54D FE0F] (🕍️) synagogue
-Register Emoji [Emoji_Presentation]: [1F54E FE0F] (🕎️) menorah
-Register Emoji [Emoji_Presentation]: [1F550 FE0F] (🕐️) one o’clock
-Register Emoji [Emoji_Presentation]: [1F551 FE0F] (🕑️) two o’clock
-Register Emoji [Emoji_Presentation]: [1F552 FE0F] (🕒️) three o’clock
-Register Emoji [Emoji_Presentation]: [1F553 FE0F] (🕓️) four o’clock
-Register Emoji [Emoji_Presentation]: [1F554 FE0F] (🕔️) five o’clock
-Register Emoji [Emoji_Presentation]: [1F555 FE0F] (🕕️) six o’clock
-Register Emoji [Emoji_Presentation]: [1F556 FE0F] (🕖️) seven o’clock
-Register Emoji [Emoji_Presentation]: [1F557 FE0F] (🕗️) eight o’clock
-Register Emoji [Emoji_Presentation]: [1F558 FE0F] (🕘️) nine o’clock
-Register Emoji [Emoji_Presentation]: [1F559 FE0F] (🕙️) ten o’clock
-Register Emoji [Emoji_Presentation]: [1F55A FE0F] (🕚️) eleven o’clock
-Register Emoji [Emoji_Presentation]: [1F55B FE0F] (🕛️) twelve o’clock
-Register Emoji [Emoji_Presentation]: [1F55C FE0F] (🕜️) one-thirty
-Register Emoji [Emoji_Presentation]: [1F55D FE0F] (🕝️) two-thirty
-Register Emoji [Emoji_Presentation]: [1F55E FE0F] (🕞️) three-thirty
-Register Emoji [Emoji_Presentation]: [1F55F FE0F] (🕟️) four-thirty
-Register Emoji [Emoji_Presentation]: [1F560 FE0F] (🕠️) five-thirty
-Register Emoji [Emoji_Presentation]: [1F561 FE0F] (🕡️) six-thirty
-Register Emoji [Emoji_Presentation]: [1F562 FE0F] (🕢️) seven-thirty
-Register Emoji [Emoji_Presentation]: [1F563 FE0F] (🕣️) eight-thirty
-Register Emoji [Emoji_Presentation]: [1F564 FE0F] (🕤️) nine-thirty
-Register Emoji [Emoji_Presentation]: [1F565 FE0F] (🕥️) ten-thirty
-Register Emoji [Emoji_Presentation]: [1F566 FE0F] (🕦️) eleven-thirty
-Register Emoji [Emoji_Presentation]: [1F567 FE0F] (🕧️) twelve-thirty
-Register Emoji [Emoji_Presentation]: [1F57A FE0F] (🕺️) man dancing
-Register Emoji [Emoji_Presentation]: [1F595 FE0F] (🖕️) middle finger
-Register Emoji [Emoji_Presentation]: [1F596 FE0F] (🖖️) vulcan salute
-Register Emoji [Emoji_Presentation]: [1F5A4 FE0F] (🖤️) black heart
-Register Emoji [Emoji_Presentation]: [1F5FB FE0F] (🗻️) mount fuji
-Register Emoji [Emoji_Presentation]: [1F5FC FE0F] (🗼️) Tokyo tower
-Register Emoji [Emoji_Presentation]: [1F5FD FE0F] (🗽️) Statue of Liberty
-Register Emoji [Emoji_Presentation]: [1F5FE FE0F] (🗾️) map of Japan
-Register Emoji [Emoji_Presentation]: [1F5FF FE0F] (🗿️) moai
-Register Emoji [Emoji_Presentation]: [1F600 FE0F] (😀️) grinning face
-Register Emoji [Emoji_Presentation]: [1F601 FE0F] (😁️) beaming face with smiling eyes
-Register Emoji [Emoji_Presentation]: [1F602 FE0F] (😂️) face with tears of joy
-Register Emoji [Emoji_Presentation]: [1F603 FE0F] (😃️) grinning face with big eyes
-Register Emoji [Emoji_Presentation]: [1F604 FE0F] (😄️) grinning face with smiling eyes
-Register Emoji [Emoji_Presentation]: [1F605 FE0F] (😅️) grinning face with sweat
-Register Emoji [Emoji_Presentation]: [1F606 FE0F] (😆️) grinning squinting face
-Register Emoji [Emoji_Presentation]: [1F607 FE0F] (😇️) smiling face with halo
-Register Emoji [Emoji_Presentation]: [1F608 FE0F] (😈️) smiling face with horns
-Register Emoji [Emoji_Presentation]: [1F609 FE0F] (😉️) winking face
-Register Emoji [Emoji_Presentation]: [1F60A FE0F] (😊️) smiling face with smiling eyes
-Register Emoji [Emoji_Presentation]: [1F60B FE0F] (😋️) face savoring food
-Register Emoji [Emoji_Presentation]: [1F60C FE0F] (😌️) relieved face
-Register Emoji [Emoji_Presentation]: [1F60D FE0F] (😍️) smiling face with heart-eyes
-Register Emoji [Emoji_Presentation]: [1F60E FE0F] (😎️) smiling face with sunglasses
-Register Emoji [Emoji_Presentation]: [1F60F FE0F] (😏️) smirking face
-Register Emoji [Emoji_Presentation]: [1F610 FE0F] (😐️) neutral face
-Register Emoji [Emoji_Presentation]: [1F611 FE0F] (😑️) expressionless face
-Register Emoji [Emoji_Presentation]: [1F612 FE0F] (😒️) unamused face
-Register Emoji [Emoji_Presentation]: [1F613 FE0F] (😓️) downcast face with sweat
-Register Emoji [Emoji_Presentation]: [1F614 FE0F] (😔️) pensive face
-Register Emoji [Emoji_Presentation]: [1F615 FE0F] (😕️) confused face
-Register Emoji [Emoji_Presentation]: [1F616 FE0F] (😖️) confounded face
-Register Emoji [Emoji_Presentation]: [1F617 FE0F] (😗️) kissing face
-Register Emoji [Emoji_Presentation]: [1F618 FE0F] (😘️) face blowing a kiss
-Register Emoji [Emoji_Presentation]: [1F619 FE0F] (😙️) kissing face with smiling eyes
-Register Emoji [Emoji_Presentation]: [1F61A FE0F] (😚️) kissing face with closed eyes
-Register Emoji [Emoji_Presentation]: [1F61B FE0F] (😛️) face with tongue
-Register Emoji [Emoji_Presentation]: [1F61C FE0F] (😜️) winking face with tongue
-Register Emoji [Emoji_Presentation]: [1F61D FE0F] (😝️) squinting face with tongue
-Register Emoji [Emoji_Presentation]: [1F61E FE0F] (😞️) disappointed face
-Register Emoji [Emoji_Presentation]: [1F61F FE0F] (😟️) worried face
-Register Emoji [Emoji_Presentation]: [1F620 FE0F] (😠️) angry face
-Register Emoji [Emoji_Presentation]: [1F621 FE0F] (😡️) enraged face
-Register Emoji [Emoji_Presentation]: [1F622 FE0F] (😢️) crying face
-Register Emoji [Emoji_Presentation]: [1F623 FE0F] (😣️) persevering face
-Register Emoji [Emoji_Presentation]: [1F624 FE0F] (😤️) face with steam from nose
-Register Emoji [Emoji_Presentation]: [1F625 FE0F] (😥️) sad but relieved face
-Register Emoji [Emoji_Presentation]: [1F626 FE0F] (😦️) frowning face with open mouth
-Register Emoji [Emoji_Presentation]: [1F627 FE0F] (😧️) anguished face
-Register Emoji [Emoji_Presentation]: [1F628 FE0F] (😨️) fearful face
-Register Emoji [Emoji_Presentation]: [1F629 FE0F] (😩️) weary face
-Register Emoji [Emoji_Presentation]: [1F62A FE0F] (😪️) sleepy face
-Register Emoji [Emoji_Presentation]: [1F62B FE0F] (😫️) tired face
-Register Emoji [Emoji_Presentation]: [1F62C FE0F] (😬️) grimacing face
-Register Emoji [Emoji_Presentation]: [1F62D FE0F] (😭️) loudly crying face
-Register Emoji [Emoji_Presentation]: [1F62E FE0F] (😮️) face with open mouth
-Register Emoji [Emoji_Presentation]: [1F62F FE0F] (😯️) hushed face
-Register Emoji [Emoji_Presentation]: [1F630 FE0F] (😰️) anxious face with sweat
-Register Emoji [Emoji_Presentation]: [1F631 FE0F] (😱️) face screaming in fear
-Register Emoji [Emoji_Presentation]: [1F632 FE0F] (😲️) astonished face
-Register Emoji [Emoji_Presentation]: [1F633 FE0F] (😳️) flushed face
-Register Emoji [Emoji_Presentation]: [1F634 FE0F] (😴️) sleeping face
-Register Emoji [Emoji_Presentation]: [1F635 FE0F] (😵️) face with crossed-out eyes
-Register Emoji [Emoji_Presentation]: [1F636 FE0F] (😶️) face without mouth
-Register Emoji [Emoji_Presentation]: [1F637 FE0F] (😷️) face with medical mask
-Register Emoji [Emoji_Presentation]: [1F638 FE0F] (😸️) grinning cat with smiling eyes
-Register Emoji [Emoji_Presentation]: [1F639 FE0F] (😹️) cat with tears of joy
-Register Emoji [Emoji_Presentation]: [1F63A FE0F] (😺️) grinning cat
-Register Emoji [Emoji_Presentation]: [1F63B FE0F] (😻️) smiling cat with heart-eyes
-Register Emoji [Emoji_Presentation]: [1F63C FE0F] (😼️) cat with wry smile
-Register Emoji [Emoji_Presentation]: [1F63D FE0F] (😽️) kissing cat
-Register Emoji [Emoji_Presentation]: [1F63E FE0F] (😾️) pouting cat
-Register Emoji [Emoji_Presentation]: [1F63F FE0F] (😿️) crying cat
-Register Emoji [Emoji_Presentation]: [1F640 FE0F] (🙀️) weary cat
-Register Emoji [Emoji_Presentation]: [1F641 FE0F] (🙁️) slightly frowning face
-Register Emoji [Emoji_Presentation]: [1F642 FE0F] (🙂️) slightly smiling face
-Register Emoji [Emoji_Presentation]: [1F643 FE0F] (🙃️) upside-down face
-Register Emoji [Emoji_Presentation]: [1F644 FE0F] (🙄️) face with rolling eyes
-Register Emoji [Emoji_Presentation]: [1F645 FE0F] (🙅️) person gesturing NO
-Register Emoji [Emoji_Presentation]: [1F646 FE0F] (🙆️) person gesturing OK
-Register Emoji [Emoji_Presentation]: [1F647 FE0F] (🙇️) person bowing
-Register Emoji [Emoji_Presentation]: [1F648 FE0F] (🙈️) see-no-evil monkey
-Register Emoji [Emoji_Presentation]: [1F649 FE0F] (🙉️) hear-no-evil monkey
-Register Emoji [Emoji_Presentation]: [1F64A FE0F] (🙊️) speak-no-evil monkey
-Register Emoji [Emoji_Presentation]: [1F64B FE0F] (🙋️) person raising hand
-Register Emoji [Emoji_Presentation]: [1F64C FE0F] (🙌️) raising hands
-Register Emoji [Emoji_Presentation]: [1F64D FE0F] (🙍️) person frowning
-Register Emoji [Emoji_Presentation]: [1F64E FE0F] (🙎️) person pouting
-Register Emoji [Emoji_Presentation]: [1F64F FE0F] (🙏️) folded hands
-Register Emoji [Emoji_Presentation]: [1F680 FE0F] (🚀️) rocket
-Register Emoji [Emoji_Presentation]: [1F681 FE0F] (🚁️) helicopter
-Register Emoji [Emoji_Presentation]: [1F682 FE0F] (🚂️) locomotive
-Register Emoji [Emoji_Presentation]: [1F683 FE0F] (🚃️) railway car
-Register Emoji [Emoji_Presentation]: [1F684 FE0F] (🚄️) high-speed train
-Register Emoji [Emoji_Presentation]: [1F685 FE0F] (🚅️) bullet train
-Register Emoji [Emoji_Presentation]: [1F686 FE0F] (🚆️) train
-Register Emoji [Emoji_Presentation]: [1F687 FE0F] (🚇️) metro
-Register Emoji [Emoji_Presentation]: [1F688 FE0F] (🚈️) light rail
-Register Emoji [Emoji_Presentation]: [1F689 FE0F] (🚉️) station
-Register Emoji [Emoji_Presentation]: [1F68A FE0F] (🚊️) tram
-Register Emoji [Emoji_Presentation]: [1F68B FE0F] (🚋️) tram car
-Register Emoji [Emoji_Presentation]: [1F68C FE0F] (🚌️) bus
-Register Emoji [Emoji_Presentation]: [1F68D FE0F] (🚍️) oncoming bus
-Register Emoji [Emoji_Presentation]: [1F68E FE0F] (🚎️) trolleybus
-Register Emoji [Emoji_Presentation]: [1F68F FE0F] (🚏️) bus stop
-Register Emoji [Emoji_Presentation]: [1F690 FE0F] (🚐️) minibus
-Register Emoji [Emoji_Presentation]: [1F691 FE0F] (🚑️) ambulance
-Register Emoji [Emoji_Presentation]: [1F692 FE0F] (🚒️) fire engine
-Register Emoji [Emoji_Presentation]: [1F693 FE0F] (🚓️) police car
-Register Emoji [Emoji_Presentation]: [1F694 FE0F] (🚔️) oncoming police car
-Register Emoji [Emoji_Presentation]: [1F695 FE0F] (🚕️) taxi
-Register Emoji [Emoji_Presentation]: [1F696 FE0F] (🚖️) oncoming taxi
-Register Emoji [Emoji_Presentation]: [1F697 FE0F] (🚗️) automobile
-Register Emoji [Emoji_Presentation]: [1F698 FE0F] (🚘️) oncoming automobile
-Register Emoji [Emoji_Presentation]: [1F699 FE0F] (🚙️) sport utility vehicle
-Register Emoji [Emoji_Presentation]: [1F69A FE0F] (🚚️) delivery truck
-Register Emoji [Emoji_Presentation]: [1F69B FE0F] (🚛️) articulated lorry
-Register Emoji [Emoji_Presentation]: [1F69C FE0F] (🚜️) tractor
-Register Emoji [Emoji_Presentation]: [1F69D FE0F] (🚝️) monorail
-Register Emoji [Emoji_Presentation]: [1F69E FE0F] (🚞️) mountain railway
-Register Emoji [Emoji_Presentation]: [1F69F FE0F] (🚟️) suspension railway
-Register Emoji [Emoji_Presentation]: [1F6A0 FE0F] (🚠️) mountain cableway
-Register Emoji [Emoji_Presentation]: [1F6A1 FE0F] (🚡️) aerial tramway
-Register Emoji [Emoji_Presentation]: [1F6A2 FE0F] (🚢️) ship
-Register Emoji [Emoji_Presentation]: [1F6A3 FE0F] (🚣️) person rowing boat
-Register Emoji [Emoji_Presentation]: [1F6A4 FE0F] (🚤️) speedboat
-Register Emoji [Emoji_Presentation]: [1F6A5 FE0F] (🚥️) horizontal traffic light
-Register Emoji [Emoji_Presentation]: [1F6A6 FE0F] (🚦️) vertical traffic light
-Register Emoji [Emoji_Presentation]: [1F6A7 FE0F] (🚧️) construction
-Register Emoji [Emoji_Presentation]: [1F6A8 FE0F] (🚨️) police car light
-Register Emoji [Emoji_Presentation]: [1F6A9 FE0F] (🚩️) triangular flag
-Register Emoji [Emoji_Presentation]: [1F6AA FE0F] (🚪️) door
-Register Emoji [Emoji_Presentation]: [1F6AB FE0F] (🚫️) prohibited
-Register Emoji [Emoji_Presentation]: [1F6AC FE0F] (🚬️) cigarette
-Register Emoji [Emoji_Presentation]: [1F6AD FE0F] (🚭️) no smoking
-Register Emoji [Emoji_Presentation]: [1F6AE FE0F] (🚮️) litter in bin sign
-Register Emoji [Emoji_Presentation]: [1F6AF FE0F] (🚯️) no littering
-Register Emoji [Emoji_Presentation]: [1F6B0 FE0F] (🚰️) potable water
-Register Emoji [Emoji_Presentation]: [1F6B1 FE0F] (🚱️) non-potable water
-Register Emoji [Emoji_Presentation]: [1F6B2 FE0F] (🚲️) bicycle
-Register Emoji [Emoji_Presentation]: [1F6B3 FE0F] (🚳️) no bicycles
-Register Emoji [Emoji_Presentation]: [1F6B4 FE0F] (🚴️) person biking
-Register Emoji [Emoji_Presentation]: [1F6B5 FE0F] (🚵️) person mountain biking
-Register Emoji [Emoji_Presentation]: [1F6B6 FE0F] (🚶️) person walking
-Register Emoji [Emoji_Presentation]: [1F6B7 FE0F] (🚷️) no pedestrians
-Register Emoji [Emoji_Presentation]: [1F6B8 FE0F] (🚸️) children crossing
-Register Emoji [Emoji_Presentation]: [1F6B9 FE0F] (🚹️) men’s room
-Register Emoji [Emoji_Presentation]: [1F6BA FE0F] (🚺️) women’s room
-Register Emoji [Emoji_Presentation]: [1F6BB FE0F] (🚻️) restroom
-Register Emoji [Emoji_Presentation]: [1F6BC FE0F] (🚼️) baby symbol
-Register Emoji [Emoji_Presentation]: [1F6BD FE0F] (🚽️) toilet
-Register Emoji [Emoji_Presentation]: [1F6BE FE0F] (🚾️) water closet
-Register Emoji [Emoji_Presentation]: [1F6BF FE0F] (🚿️) shower
-Register Emoji [Emoji_Presentation]: [1F6C0 FE0F] (🛀️) person taking bath
-Register Emoji [Emoji_Presentation]: [1F6C1 FE0F] (🛁️) bathtub
-Register Emoji [Emoji_Presentation]: [1F6C2 FE0F] (🛂️) passport control
-Register Emoji [Emoji_Presentation]: [1F6C3 FE0F] (🛃️) customs
-Register Emoji [Emoji_Presentation]: [1F6C4 FE0F] (🛄️) baggage claim
-Register Emoji [Emoji_Presentation]: [1F6C5 FE0F] (🛅️) left luggage
-Register Emoji [Emoji_Presentation]: [1F6CC FE0F] (🛌️) person in bed
-Register Emoji [Emoji_Presentation]: [1F6D0 FE0F] (🛐️) place of worship
-Register Emoji [Emoji_Presentation]: [1F6D1 FE0F] (🛑️) stop sign
-Register Emoji [Emoji_Presentation]: [1F6D2 FE0F] (🛒️) shopping cart
-Register Emoji [Emoji_Presentation]: [1F6D5 FE0F] (🛕️) hindu temple
-Register Emoji [Emoji_Presentation]: [1F6D6 FE0F] (🛖️) hut
-Register Emoji [Emoji_Presentation]: [1F6D7 FE0F] (🛗️) elevator
-Register Emoji [Emoji_Presentation]: [1F6DC FE0F] (🛜️) wireless
-Register Emoji [Emoji_Presentation]: [1F6DD FE0F] (🛝️) playground slide
-Register Emoji [Emoji_Presentation]: [1F6DE FE0F] (🛞️) wheel
-Register Emoji [Emoji_Presentation]: [1F6DF FE0F] (🛟️) ring buoy
-Register Emoji [Emoji_Presentation]: [1F6EB FE0F] (🛫️) airplane departure
-Register Emoji [Emoji_Presentation]: [1F6EC FE0F] (🛬️) airplane arrival
-Register Emoji [Emoji_Presentation]: [1F6F4 FE0F] (🛴️) kick scooter
-Register Emoji [Emoji_Presentation]: [1F6F5 FE0F] (🛵️) motor scooter
-Register Emoji [Emoji_Presentation]: [1F6F6 FE0F] (🛶️) canoe
-Register Emoji [Emoji_Presentation]: [1F6F7 FE0F] (🛷️) sled
-Register Emoji [Emoji_Presentation]: [1F6F8 FE0F] (🛸️) flying saucer
-Register Emoji [Emoji_Presentation]: [1F6F9 FE0F] (🛹️) skateboard
-Register Emoji [Emoji_Presentation]: [1F6FA FE0F] (🛺️) auto rickshaw
-Register Emoji [Emoji_Presentation]: [1F6FB FE0F] (🛻️) pickup truck
-Register Emoji [Emoji_Presentation]: [1F6FC FE0F] (🛼️) roller skate
-Register Emoji [Emoji_Presentation]: [1F7E0 FE0F] (🟠️) orange circle
-Register Emoji [Emoji_Presentation]: [1F7E1 FE0F] (🟡️) yellow circle
-Register Emoji [Emoji_Presentation]: [1F7E2 FE0F] (🟢️) green circle
-Register Emoji [Emoji_Presentation]: [1F7E3 FE0F] (🟣️) purple circle
-Register Emoji [Emoji_Presentation]: [1F7E4 FE0F] (🟤️) brown circle
-Register Emoji [Emoji_Presentation]: [1F7E5 FE0F] (🟥️) red square
-Register Emoji [Emoji_Presentation]: [1F7E6 FE0F] (🟦️) blue square
-Register Emoji [Emoji_Presentation]: [1F7E7 FE0F] (🟧️) orange square
-Register Emoji [Emoji_Presentation]: [1F7E8 FE0F] (🟨️) yellow square
-Register Emoji [Emoji_Presentation]: [1F7E9 FE0F] (🟩️) green square
-Register Emoji [Emoji_Presentation]: [1F7EA FE0F] (🟪️) purple square
-Register Emoji [Emoji_Presentation]: [1F7EB FE0F] (🟫️) brown square
-Register Emoji [Emoji_Presentation]: [1F7F0 FE0F] (🟰️) heavy equals sign
-Register Emoji [Emoji_Presentation]: [1F90C FE0F] (🤌️) pinched fingers
-Register Emoji [Emoji_Presentation]: [1F90D FE0F] (🤍️) white heart
-Register Emoji [Emoji_Presentation]: [1F90E FE0F] (🤎️) brown heart
-Register Emoji [Emoji_Presentation]: [1F90F FE0F] (🤏️) pinching hand
-Register Emoji [Emoji_Presentation]: [1F910 FE0F] (🤐️) zipper-mouth face
-Register Emoji [Emoji_Presentation]: [1F911 FE0F] (🤑️) money-mouth face
-Register Emoji [Emoji_Presentation]: [1F912 FE0F] (🤒️) face with thermometer
-Register Emoji [Emoji_Presentation]: [1F913 FE0F] (🤓️) nerd face
-Register Emoji [Emoji_Presentation]: [1F914 FE0F] (🤔️) thinking face
-Register Emoji [Emoji_Presentation]: [1F915 FE0F] (🤕️) face with head-bandage
-Register Emoji [Emoji_Presentation]: [1F916 FE0F] (🤖️) robot
-Register Emoji [Emoji_Presentation]: [1F917 FE0F] (🤗️) smiling face with open hands
-Register Emoji [Emoji_Presentation]: [1F918 FE0F] (🤘️) sign of the horns
-Register Emoji [Emoji_Presentation]: [1F919 FE0F] (🤙️) call me hand
-Register Emoji [Emoji_Presentation]: [1F91A FE0F] (🤚️) raised back of hand
-Register Emoji [Emoji_Presentation]: [1F91B FE0F] (🤛️) left-facing fist
-Register Emoji [Emoji_Presentation]: [1F91C FE0F] (🤜️) right-facing fist
-Register Emoji [Emoji_Presentation]: [1F91D FE0F] (🤝️) handshake
-Register Emoji [Emoji_Presentation]: [1F91E FE0F] (🤞️) crossed fingers
-Register Emoji [Emoji_Presentation]: [1F91F FE0F] (🤟️) love-you gesture
-Register Emoji [Emoji_Presentation]: [1F920 FE0F] (🤠️) cowboy hat face
-Register Emoji [Emoji_Presentation]: [1F921 FE0F] (🤡️) clown face
-Register Emoji [Emoji_Presentation]: [1F922 FE0F] (🤢️) nauseated face
-Register Emoji [Emoji_Presentation]: [1F923 FE0F] (🤣️) rolling on the floor laughing
-Register Emoji [Emoji_Presentation]: [1F924 FE0F] (🤤️) drooling face
-Register Emoji [Emoji_Presentation]: [1F925 FE0F] (🤥️) lying face
-Register Emoji [Emoji_Presentation]: [1F926 FE0F] (🤦️) person facepalming
-Register Emoji [Emoji_Presentation]: [1F927 FE0F] (🤧️) sneezing face
-Register Emoji [Emoji_Presentation]: [1F928 FE0F] (🤨️) face with raised eyebrow
-Register Emoji [Emoji_Presentation]: [1F929 FE0F] (🤩️) star-struck
-Register Emoji [Emoji_Presentation]: [1F92A FE0F] (🤪️) zany face
-Register Emoji [Emoji_Presentation]: [1F92B FE0F] (🤫️) shushing face
-Register Emoji [Emoji_Presentation]: [1F92C FE0F] (🤬️) face with symbols on mouth
-Register Emoji [Emoji_Presentation]: [1F92D FE0F] (🤭️) face with hand over mouth
-Register Emoji [Emoji_Presentation]: [1F92E FE0F] (🤮️) face vomiting
-Register Emoji [Emoji_Presentation]: [1F92F FE0F] (🤯️) exploding head
-Register Emoji [Emoji_Presentation]: [1F930 FE0F] (🤰️) pregnant woman
-Register Emoji [Emoji_Presentation]: [1F931 FE0F] (🤱️) breast-feeding
-Register Emoji [Emoji_Presentation]: [1F932 FE0F] (🤲️) palms up together
-Register Emoji [Emoji_Presentation]: [1F933 FE0F] (🤳️) selfie
-Register Emoji [Emoji_Presentation]: [1F934 FE0F] (🤴️) prince
-Register Emoji [Emoji_Presentation]: [1F935 FE0F] (🤵️) person in tuxedo
-Register Emoji [Emoji_Presentation]: [1F936 FE0F] (🤶️) Mrs. Claus
-Register Emoji [Emoji_Presentation]: [1F937 FE0F] (🤷️) person shrugging
-Register Emoji [Emoji_Presentation]: [1F938 FE0F] (🤸️) person cartwheeling
-Register Emoji [Emoji_Presentation]: [1F939 FE0F] (🤹️) person juggling
-Register Emoji [Emoji_Presentation]: [1F93A FE0F] (🤺️) person fencing
-Register Emoji [Emoji_Presentation]: [1F93C FE0F] (🤼️) people wrestling
-Register Emoji [Emoji_Presentation]: [1F93D FE0F] (🤽️) person playing water polo
-Register Emoji [Emoji_Presentation]: [1F93E FE0F] (🤾️) person playing handball
-Register Emoji [Emoji_Presentation]: [1F93F FE0F] (🤿️) diving mask
-Register Emoji [Emoji_Presentation]: [1F940 FE0F] (🥀️) wilted flower
-Register Emoji [Emoji_Presentation]: [1F941 FE0F] (🥁️) drum
-Register Emoji [Emoji_Presentation]: [1F942 FE0F] (🥂️) clinking glasses
-Register Emoji [Emoji_Presentation]: [1F943 FE0F] (🥃️) tumbler glass
-Register Emoji [Emoji_Presentation]: [1F944 FE0F] (🥄️) spoon
-Register Emoji [Emoji_Presentation]: [1F945 FE0F] (🥅️) goal net
-Register Emoji [Emoji_Presentation]: [1F947 FE0F] (🥇️) 1st place medal
-Register Emoji [Emoji_Presentation]: [1F948 FE0F] (🥈️) 2nd place medal
-Register Emoji [Emoji_Presentation]: [1F949 FE0F] (🥉️) 3rd place medal
-Register Emoji [Emoji_Presentation]: [1F94A FE0F] (🥊️) boxing glove
-Register Emoji [Emoji_Presentation]: [1F94B FE0F] (🥋️) martial arts uniform
-Register Emoji [Emoji_Presentation]: [1F94C FE0F] (🥌️) curling stone
-Register Emoji [Emoji_Presentation]: [1F94D FE0F] (🥍️) lacrosse
-Register Emoji [Emoji_Presentation]: [1F94E FE0F] (🥎️) softball
-Register Emoji [Emoji_Presentation]: [1F94F FE0F] (🥏️) flying disc
-Register Emoji [Emoji_Presentation]: [1F950 FE0F] (🥐️) croissant
-Register Emoji [Emoji_Presentation]: [1F951 FE0F] (🥑️) avocado
-Register Emoji [Emoji_Presentation]: [1F952 FE0F] (🥒️) cucumber
-Register Emoji [Emoji_Presentation]: [1F953 FE0F] (🥓️) bacon
-Register Emoji [Emoji_Presentation]: [1F954 FE0F] (🥔️) potato
-Register Emoji [Emoji_Presentation]: [1F955 FE0F] (🥕️) carrot
-Register Emoji [Emoji_Presentation]: [1F956 FE0F] (🥖️) baguette bread
-Register Emoji [Emoji_Presentation]: [1F957 FE0F] (🥗️) green salad
-Register Emoji [Emoji_Presentation]: [1F958 FE0F] (🥘️) shallow pan of food
-Register Emoji [Emoji_Presentation]: [1F959 FE0F] (🥙️) stuffed flatbread
-Register Emoji [Emoji_Presentation]: [1F95A FE0F] (🥚️) egg
-Register Emoji [Emoji_Presentation]: [1F95B FE0F] (🥛️) glass of milk
-Register Emoji [Emoji_Presentation]: [1F95C FE0F] (🥜️) peanuts
-Register Emoji [Emoji_Presentation]: [1F95D FE0F] (🥝️) kiwi fruit
-Register Emoji [Emoji_Presentation]: [1F95E FE0F] (🥞️) pancakes
-Register Emoji [Emoji_Presentation]: [1F95F FE0F] (🥟️) dumpling
-Register Emoji [Emoji_Presentation]: [1F960 FE0F] (🥠️) fortune cookie
-Register Emoji [Emoji_Presentation]: [1F961 FE0F] (🥡️) takeout box
-Register Emoji [Emoji_Presentation]: [1F962 FE0F] (🥢️) chopsticks
-Register Emoji [Emoji_Presentation]: [1F963 FE0F] (🥣️) bowl with spoon
-Register Emoji [Emoji_Presentation]: [1F964 FE0F] (🥤️) cup with straw
-Register Emoji [Emoji_Presentation]: [1F965 FE0F] (🥥️) coconut
-Register Emoji [Emoji_Presentation]: [1F966 FE0F] (🥦️) broccoli
-Register Emoji [Emoji_Presentation]: [1F967 FE0F] (🥧️) pie
-Register Emoji [Emoji_Presentation]: [1F968 FE0F] (🥨️) pretzel
-Register Emoji [Emoji_Presentation]: [1F969 FE0F] (🥩️) cut of meat
-Register Emoji [Emoji_Presentation]: [1F96A FE0F] (🥪️) sandwich
-Register Emoji [Emoji_Presentation]: [1F96B FE0F] (🥫️) canned food
-Register Emoji [Emoji_Presentation]: [1F96C FE0F] (🥬️) leafy green
-Register Emoji [Emoji_Presentation]: [1F96D FE0F] (🥭️) mango
-Register Emoji [Emoji_Presentation]: [1F96E FE0F] (🥮️) moon cake
-Register Emoji [Emoji_Presentation]: [1F96F FE0F] (🥯️) bagel
-Register Emoji [Emoji_Presentation]: [1F970 FE0F] (🥰️) smiling face with hearts
-Register Emoji [Emoji_Presentation]: [1F971 FE0F] (🥱️) yawning face
-Register Emoji [Emoji_Presentation]: [1F972 FE0F] (🥲️) smiling face with tear
-Register Emoji [Emoji_Presentation]: [1F973 FE0F] (🥳️) partying face
-Register Emoji [Emoji_Presentation]: [1F974 FE0F] (🥴️) woozy face
-Register Emoji [Emoji_Presentation]: [1F975 FE0F] (🥵️) hot face
-Register Emoji [Emoji_Presentation]: [1F976 FE0F] (🥶️) cold face
-Register Emoji [Emoji_Presentation]: [1F977 FE0F] (🥷️) ninja
-Register Emoji [Emoji_Presentation]: [1F978 FE0F] (🥸️) disguised face
-Register Emoji [Emoji_Presentation]: [1F979 FE0F] (🥹️) face holding back tears
-Register Emoji [Emoji_Presentation]: [1F97A FE0F] (🥺️) pleading face
-Register Emoji [Emoji_Presentation]: [1F97B FE0F] (🥻️) sari
-Register Emoji [Emoji_Presentation]: [1F97C FE0F] (🥼️) lab coat
-Register Emoji [Emoji_Presentation]: [1F97D FE0F] (🥽️) goggles
-Register Emoji [Emoji_Presentation]: [1F97E FE0F] (🥾️) hiking boot
-Register Emoji [Emoji_Presentation]: [1F97F FE0F] (🥿️) flat shoe
-Register Emoji [Emoji_Presentation]: [1F980 FE0F] (🦀️) crab
-Register Emoji [Emoji_Presentation]: [1F981 FE0F] (🦁️) lion
-Register Emoji [Emoji_Presentation]: [1F982 FE0F] (🦂️) scorpion
-Register Emoji [Emoji_Presentation]: [1F983 FE0F] (🦃️) turkey
-Register Emoji [Emoji_Presentation]: [1F984 FE0F] (🦄️) unicorn
-Register Emoji [Emoji_Presentation]: [1F985 FE0F] (🦅️) eagle
-Register Emoji [Emoji_Presentation]: [1F986 FE0F] (🦆️) duck
-Register Emoji [Emoji_Presentation]: [1F987 FE0F] (🦇️) bat
-Register Emoji [Emoji_Presentation]: [1F988 FE0F] (🦈️) shark
-Register Emoji [Emoji_Presentation]: [1F989 FE0F] (🦉️) owl
-Register Emoji [Emoji_Presentation]: [1F98A FE0F] (🦊️) fox
-Register Emoji [Emoji_Presentation]: [1F98B FE0F] (🦋️) butterfly
-Register Emoji [Emoji_Presentation]: [1F98C FE0F] (🦌️) deer
-Register Emoji [Emoji_Presentation]: [1F98D FE0F] (🦍️) gorilla
-Register Emoji [Emoji_Presentation]: [1F98E FE0F] (🦎️) lizard
-Register Emoji [Emoji_Presentation]: [1F98F FE0F] (🦏️) rhinoceros
-Register Emoji [Emoji_Presentation]: [1F990 FE0F] (🦐️) shrimp
-Register Emoji [Emoji_Presentation]: [1F991 FE0F] (🦑️) squid
-Register Emoji [Emoji_Presentation]: [1F992 FE0F] (🦒️) giraffe
-Register Emoji [Emoji_Presentation]: [1F993 FE0F] (🦓️) zebra
-Register Emoji [Emoji_Presentation]: [1F994 FE0F] (🦔️) hedgehog
-Register Emoji [Emoji_Presentation]: [1F995 FE0F] (🦕️) sauropod
-Register Emoji [Emoji_Presentation]: [1F996 FE0F] (🦖️) T-Rex
-Register Emoji [Emoji_Presentation]: [1F997 FE0F] (🦗️) cricket
-Register Emoji [Emoji_Presentation]: [1F998 FE0F] (🦘️) kangaroo
-Register Emoji [Emoji_Presentation]: [1F999 FE0F] (🦙️) llama
-Register Emoji [Emoji_Presentation]: [1F99A FE0F] (🦚️) peacock
-Register Emoji [Emoji_Presentation]: [1F99B FE0F] (🦛️) hippopotamus
-Register Emoji [Emoji_Presentation]: [1F99C FE0F] (🦜️) parrot
-Register Emoji [Emoji_Presentation]: [1F99D FE0F] (🦝️) raccoon
-Register Emoji [Emoji_Presentation]: [1F99E FE0F] (🦞️) lobster
-Register Emoji [Emoji_Presentation]: [1F99F FE0F] (🦟️) mosquito
-Register Emoji [Emoji_Presentation]: [1F9A0 FE0F] (🦠️) microbe
-Register Emoji [Emoji_Presentation]: [1F9A1 FE0F] (🦡️) badger
-Register Emoji [Emoji_Presentation]: [1F9A2 FE0F] (🦢️) swan
-Register Emoji [Emoji_Presentation]: [1F9A3 FE0F] (🦣️) mammoth
-Register Emoji [Emoji_Presentation]: [1F9A4 FE0F] (🦤️) dodo
-Register Emoji [Emoji_Presentation]: [1F9A5 FE0F] (🦥️) sloth
-Register Emoji [Emoji_Presentation]: [1F9A6 FE0F] (🦦️) otter
-Register Emoji [Emoji_Presentation]: [1F9A7 FE0F] (🦧️) orangutan
-Register Emoji [Emoji_Presentation]: [1F9A8 FE0F] (🦨️) skunk
-Register Emoji [Emoji_Presentation]: [1F9A9 FE0F] (🦩️) flamingo
-Register Emoji [Emoji_Presentation]: [1F9AA FE0F] (🦪️) oyster
-Register Emoji [Emoji_Presentation]: [1F9AB FE0F] (🦫️) beaver
-Register Emoji [Emoji_Presentation]: [1F9AC FE0F] (🦬️) bison
-Register Emoji [Emoji_Presentation]: [1F9AD FE0F] (🦭️) seal
-Register Emoji [Emoji_Presentation]: [1F9AE FE0F] (🦮️) guide dog
-Register Emoji [Emoji_Presentation]: [1F9AF FE0F] (🦯️) white cane
-Register Emoji [Emoji_Presentation]: [1F9B0 FE0F] (🦰️) red hair
-Register Emoji [Emoji_Presentation]: [1F9B1 FE0F] (🦱️) curly hair
-Register Emoji [Emoji_Presentation]: [1F9B2 FE0F] (🦲️) bald
-Register Emoji [Emoji_Presentation]: [1F9B3 FE0F] (🦳️) white hair
-Register Emoji [Emoji_Presentation]: [1F9B4 FE0F] (🦴️) bone
-Register Emoji [Emoji_Presentation]: [1F9B5 FE0F] (🦵️) leg
-Register Emoji [Emoji_Presentation]: [1F9B6 FE0F] (🦶️) foot
-Register Emoji [Emoji_Presentation]: [1F9B7 FE0F] (🦷️) tooth
-Register Emoji [Emoji_Presentation]: [1F9B8 FE0F] (🦸️) superhero
-Register Emoji [Emoji_Presentation]: [1F9B9 FE0F] (🦹️) supervillain
-Register Emoji [Emoji_Presentation]: [1F9BA FE0F] (🦺️) safety vest
-Register Emoji [Emoji_Presentation]: [1F9BB FE0F] (🦻️) ear with hearing aid
-Register Emoji [Emoji_Presentation]: [1F9BC FE0F] (🦼️) motorized wheelchair
-Register Emoji [Emoji_Presentation]: [1F9BD FE0F] (🦽️) manual wheelchair
-Register Emoji [Emoji_Presentation]: [1F9BE FE0F] (🦾️) mechanical arm
-Register Emoji [Emoji_Presentation]: [1F9BF FE0F] (🦿️) mechanical leg
-Register Emoji [Emoji_Presentation]: [1F9C0 FE0F] (🧀️) cheese wedge
-Register Emoji [Emoji_Presentation]: [1F9C1 FE0F] (🧁️) cupcake
-Register Emoji [Emoji_Presentation]: [1F9C2 FE0F] (🧂️) salt
-Register Emoji [Emoji_Presentation]: [1F9C3 FE0F] (🧃️) beverage box
-Register Emoji [Emoji_Presentation]: [1F9C4 FE0F] (🧄️) garlic
-Register Emoji [Emoji_Presentation]: [1F9C5 FE0F] (🧅️) onion
-Register Emoji [Emoji_Presentation]: [1F9C6 FE0F] (🧆️) falafel
-Register Emoji [Emoji_Presentation]: [1F9C7 FE0F] (🧇️) waffle
-Register Emoji [Emoji_Presentation]: [1F9C8 FE0F] (🧈️) butter
-Register Emoji [Emoji_Presentation]: [1F9C9 FE0F] (🧉️) mate
-Register Emoji [Emoji_Presentation]: [1F9CA FE0F] (🧊️) ice
-Register Emoji [Emoji_Presentation]: [1F9CB FE0F] (🧋️) bubble tea
-Register Emoji [Emoji_Presentation]: [1F9CC FE0F] (🧌️) troll
-Register Emoji [Emoji_Presentation]: [1F9CD FE0F] (🧍️) person standing
-Register Emoji [Emoji_Presentation]: [1F9CE FE0F] (🧎️) person kneeling
-Register Emoji [Emoji_Presentation]: [1F9CF FE0F] (🧏️) deaf person
-Register Emoji [Emoji_Presentation]: [1F9D0 FE0F] (🧐️) face with monocle
-Register Emoji [Emoji_Presentation]: [1F9D1 FE0F] (🧑️) person
-Register Emoji [Emoji_Presentation]: [1F9D2 FE0F] (🧒️) child
-Register Emoji [Emoji_Presentation]: [1F9D3 FE0F] (🧓️) older person
-Register Emoji [Emoji_Presentation]: [1F9D4 FE0F] (🧔️) person: beard
-Register Emoji [Emoji_Presentation]: [1F9D5 FE0F] (🧕️) woman with headscarf
-Register Emoji [Emoji_Presentation]: [1F9D6 FE0F] (🧖️) person in steamy room
-Register Emoji [Emoji_Presentation]: [1F9D7 FE0F] (🧗️) person climbing
-Register Emoji [Emoji_Presentation]: [1F9D8 FE0F] (🧘️) person in lotus position
-Register Emoji [Emoji_Presentation]: [1F9D9 FE0F] (🧙️) mage
-Register Emoji [Emoji_Presentation]: [1F9DA FE0F] (🧚️) fairy
-Register Emoji [Emoji_Presentation]: [1F9DB FE0F] (🧛️) vampire
-Register Emoji [Emoji_Presentation]: [1F9DC FE0F] (🧜️) merperson
-Register Emoji [Emoji_Presentation]: [1F9DD FE0F] (🧝️) elf
-Register Emoji [Emoji_Presentation]: [1F9DE FE0F] (🧞️) genie
-Register Emoji [Emoji_Presentation]: [1F9DF FE0F] (🧟️) zombie
-Register Emoji [Emoji_Presentation]: [1F9E0 FE0F] (🧠️) brain
-Register Emoji [Emoji_Presentation]: [1F9E1 FE0F] (🧡️) orange heart
-Register Emoji [Emoji_Presentation]: [1F9E2 FE0F] (🧢️) billed cap
-Register Emoji [Emoji_Presentation]: [1F9E3 FE0F] (🧣️) scarf
-Register Emoji [Emoji_Presentation]: [1F9E4 FE0F] (🧤️) gloves
-Register Emoji [Emoji_Presentation]: [1F9E5 FE0F] (🧥️) coat
-Register Emoji [Emoji_Presentation]: [1F9E6 FE0F] (🧦️) socks
-Register Emoji [Emoji_Presentation]: [1F9E7 FE0F] (🧧️) red envelope
-Register Emoji [Emoji_Presentation]: [1F9E8 FE0F] (🧨️) firecracker
-Register Emoji [Emoji_Presentation]: [1F9E9 FE0F] (🧩️) puzzle piece
-Register Emoji [Emoji_Presentation]: [1F9EA FE0F] (🧪️) test tube
-Register Emoji [Emoji_Presentation]: [1F9EB FE0F] (🧫️) petri dish
-Register Emoji [Emoji_Presentation]: [1F9EC FE0F] (🧬️) dna
-Register Emoji [Emoji_Presentation]: [1F9ED FE0F] (🧭️) compass
-Register Emoji [Emoji_Presentation]: [1F9EE FE0F] (🧮️) abacus
-Register Emoji [Emoji_Presentation]: [1F9EF FE0F] (🧯️) fire extinguisher
-Register Emoji [Emoji_Presentation]: [1F9F0 FE0F] (🧰️) toolbox
-Register Emoji [Emoji_Presentation]: [1F9F1 FE0F] (🧱️) brick
-Register Emoji [Emoji_Presentation]: [1F9F2 FE0F] (🧲️) magnet
-Register Emoji [Emoji_Presentation]: [1F9F3 FE0F] (🧳️) luggage
-Register Emoji [Emoji_Presentation]: [1F9F4 FE0F] (🧴️) lotion bottle
-Register Emoji [Emoji_Presentation]: [1F9F5 FE0F] (🧵️) thread
-Register Emoji [Emoji_Presentation]: [1F9F6 FE0F] (🧶️) yarn
-Register Emoji [Emoji_Presentation]: [1F9F7 FE0F] (🧷️) safety pin
-Register Emoji [Emoji_Presentation]: [1F9F8 FE0F] (🧸️) teddy bear
-Register Emoji [Emoji_Presentation]: [1F9F9 FE0F] (🧹️) broom
-Register Emoji [Emoji_Presentation]: [1F9FA FE0F] (🧺️) basket
-Register Emoji [Emoji_Presentation]: [1F9FB FE0F] (🧻️) roll of paper
-Register Emoji [Emoji_Presentation]: [1F9FC FE0F] (🧼️) soap
-Register Emoji [Emoji_Presentation]: [1F9FD FE0F] (🧽️) sponge
-Register Emoji [Emoji_Presentation]: [1F9FE FE0F] (🧾️) receipt
-Register Emoji [Emoji_Presentation]: [1F9FF FE0F] (🧿️) nazar amulet
-Register Emoji [Emoji_Presentation]: [1FA70 FE0F] (🩰️) ballet shoes
-Register Emoji [Emoji_Presentation]: [1FA71 FE0F] (🩱️) one-piece swimsuit
-Register Emoji [Emoji_Presentation]: [1FA72 FE0F] (🩲️) briefs
-Register Emoji [Emoji_Presentation]: [1FA73 FE0F] (🩳️) shorts
-Register Emoji [Emoji_Presentation]: [1FA74 FE0F] (🩴️) thong sandal
-Register Emoji [Emoji_Presentation]: [1FA75 FE0F] (🩵️) light blue heart
-Register Emoji [Emoji_Presentation]: [1FA76 FE0F] (🩶️) grey heart
-Register Emoji [Emoji_Presentation]: [1FA77 FE0F] (🩷️) pink heart
-Register Emoji [Emoji_Presentation]: [1FA78 FE0F] (🩸️) drop of blood
-Register Emoji [Emoji_Presentation]: [1FA79 FE0F] (🩹️) adhesive bandage
-Register Emoji [Emoji_Presentation]: [1FA7A FE0F] (🩺️) stethoscope
-Register Emoji [Emoji_Presentation]: [1FA7B FE0F] (🩻️) x-ray
-Register Emoji [Emoji_Presentation]: [1FA7C FE0F] (🩼️) crutch
-Register Emoji [Emoji_Presentation]: [1FA80 FE0F] (🪀️) yo-yo
-Register Emoji [Emoji_Presentation]: [1FA81 FE0F] (🪁️) kite
-Register Emoji [Emoji_Presentation]: [1FA82 FE0F] (🪂️) parachute
-Register Emoji [Emoji_Presentation]: [1FA83 FE0F] (🪃️) boomerang
-Register Emoji [Emoji_Presentation]: [1FA84 FE0F] (🪄️) magic wand
-Register Emoji [Emoji_Presentation]: [1FA85 FE0F] (🪅️) piñata
-Register Emoji [Emoji_Presentation]: [1FA86 FE0F] (🪆️) nesting dolls
-Register Emoji [Emoji_Presentation]: [1FA87 FE0F] (🪇️) maracas
-Register Emoji [Emoji_Presentation]: [1FA88 FE0F] (🪈️) flute
-Register Emoji [Emoji_Presentation]: [1FA90 FE0F] (🪐️) ringed planet
-Register Emoji [Emoji_Presentation]: [1FA91 FE0F] (🪑️) chair
-Register Emoji [Emoji_Presentation]: [1FA92 FE0F] (🪒️) razor
-Register Emoji [Emoji_Presentation]: [1FA93 FE0F] (🪓️) axe
-Register Emoji [Emoji_Presentation]: [1FA94 FE0F] (🪔️) diya lamp
-Register Emoji [Emoji_Presentation]: [1FA95 FE0F] (🪕️) banjo
-Register Emoji [Emoji_Presentation]: [1FA96 FE0F] (🪖️) military helmet
-Register Emoji [Emoji_Presentation]: [1FA97 FE0F] (🪗️) accordion
-Register Emoji [Emoji_Presentation]: [1FA98 FE0F] (🪘️) long drum
-Register Emoji [Emoji_Presentation]: [1FA99 FE0F] (🪙️) coin
-Register Emoji [Emoji_Presentation]: [1FA9A FE0F] (🪚️) carpentry saw
-Register Emoji [Emoji_Presentation]: [1FA9B FE0F] (🪛️) screwdriver
-Register Emoji [Emoji_Presentation]: [1FA9C FE0F] (🪜️) ladder
-Register Emoji [Emoji_Presentation]: [1FA9D FE0F] (🪝️) hook
-Register Emoji [Emoji_Presentation]: [1FA9E FE0F] (🪞️) mirror
-Register Emoji [Emoji_Presentation]: [1FA9F FE0F] (🪟️) window
-Register Emoji [Emoji_Presentation]: [1FAA0 FE0F] (🪠️) plunger
-Register Emoji [Emoji_Presentation]: [1FAA1 FE0F] (🪡️) sewing needle
-Register Emoji [Emoji_Presentation]: [1FAA2 FE0F] (🪢️) knot
-Register Emoji [Emoji_Presentation]: [1FAA3 FE0F] (🪣️) bucket
-Register Emoji [Emoji_Presentation]: [1FAA4 FE0F] (🪤️) mouse trap
-Register Emoji [Emoji_Presentation]: [1FAA5 FE0F] (🪥️) toothbrush
-Register Emoji [Emoji_Presentation]: [1FAA6 FE0F] (🪦️) headstone
-Register Emoji [Emoji_Presentation]: [1FAA7 FE0F] (🪧️) placard
-Register Emoji [Emoji_Presentation]: [1FAA8 FE0F] (🪨️) rock
-Register Emoji [Emoji_Presentation]: [1FAA9 FE0F] (🪩️) mirror ball
-Register Emoji [Emoji_Presentation]: [1FAAA FE0F] (🪪️) identification card
-Register Emoji [Emoji_Presentation]: [1FAAB FE0F] (🪫️) low battery
-Register Emoji [Emoji_Presentation]: [1FAAC FE0F] (🪬️) hamsa
-Register Emoji [Emoji_Presentation]: [1FAAD FE0F] (🪭️) folding hand fan
-Register Emoji [Emoji_Presentation]: [1FAAE FE0F] (🪮️) hair pick
-Register Emoji [Emoji_Presentation]: [1FAAF FE0F] (🪯️) khanda
-Register Emoji [Emoji_Presentation]: [1FAB0 FE0F] (🪰️) fly
-Register Emoji [Emoji_Presentation]: [1FAB1 FE0F] (🪱️) worm
-Register Emoji [Emoji_Presentation]: [1FAB2 FE0F] (🪲️) beetle
-Register Emoji [Emoji_Presentation]: [1FAB3 FE0F] (🪳️) cockroach
-Register Emoji [Emoji_Presentation]: [1FAB4 FE0F] (🪴️) potted plant
-Register Emoji [Emoji_Presentation]: [1FAB5 FE0F] (🪵️) wood
-Register Emoji [Emoji_Presentation]: [1FAB6 FE0F] (🪶️) feather
-Register Emoji [Emoji_Presentation]: [1FAB7 FE0F] (🪷️) lotus
-Register Emoji [Emoji_Presentation]: [1FAB8 FE0F] (🪸️) coral
-Register Emoji [Emoji_Presentation]: [1FAB9 FE0F] (🪹️) empty nest
-Register Emoji [Emoji_Presentation]: [1FABA FE0F] (🪺️) nest with eggs
-Register Emoji [Emoji_Presentation]: [1FABB FE0F] (🪻️) hyacinth
-Register Emoji [Emoji_Presentation]: [1FABC FE0F] (🪼️) jellyfish
-Register Emoji [Emoji_Presentation]: [1FABD FE0F] (🪽️) wing
-Register Emoji [Emoji_Presentation]: [1FABF FE0F] (🪿️) goose
-Register Emoji [Emoji_Presentation]: [1FAC0 FE0F] (🫀️) anatomical heart
-Register Emoji [Emoji_Presentation]: [1FAC1 FE0F] (🫁️) lungs
-Register Emoji [Emoji_Presentation]: [1FAC2 FE0F] (🫂️) people hugging
-Register Emoji [Emoji_Presentation]: [1FAC3 FE0F] (🫃️) pregnant man
-Register Emoji [Emoji_Presentation]: [1FAC4 FE0F] (🫄️) pregnant person
-Register Emoji [Emoji_Presentation]: [1FAC5 FE0F] (🫅️) person with crown
-Register Emoji [Emoji_Presentation]: [1FACE FE0F] (🫎️) moose
-Register Emoji [Emoji_Presentation]: [1FACF FE0F] (🫏️) donkey
-Register Emoji [Emoji_Presentation]: [1FAD0 FE0F] (🫐️) blueberries
-Register Emoji [Emoji_Presentation]: [1FAD1 FE0F] (🫑️) bell pepper
-Register Emoji [Emoji_Presentation]: [1FAD2 FE0F] (🫒️) olive
-Register Emoji [Emoji_Presentation]: [1FAD3 FE0F] (🫓️) flatbread
-Register Emoji [Emoji_Presentation]: [1FAD4 FE0F] (🫔️) tamale
-Register Emoji [Emoji_Presentation]: [1FAD5 FE0F] (🫕️) fondue
-Register Emoji [Emoji_Presentation]: [1FAD6 FE0F] (🫖️) teapot
-Register Emoji [Emoji_Presentation]: [1FAD7 FE0F] (🫗️) pouring liquid
-Register Emoji [Emoji_Presentation]: [1FAD8 FE0F] (🫘️) beans
-Register Emoji [Emoji_Presentation]: [1FAD9 FE0F] (🫙️) jar
-Register Emoji [Emoji_Presentation]: [1FADA FE0F] (🫚️) ginger root
-Register Emoji [Emoji_Presentation]: [1FADB FE0F] (🫛️) pea pod
-Register Emoji [Emoji_Presentation]: [1FAE0 FE0F] (🫠️) melting face
-Register Emoji [Emoji_Presentation]: [1FAE1 FE0F] (🫡️) saluting face
-Register Emoji [Emoji_Presentation]: [1FAE2 FE0F] (🫢️) face with open eyes and hand over mouth
-Register Emoji [Emoji_Presentation]: [1FAE3 FE0F] (🫣️) face with peeking eye
-Register Emoji [Emoji_Presentation]: [1FAE4 FE0F] (🫤️) face with diagonal mouth
-Register Emoji [Emoji_Presentation]: [1FAE5 FE0F] (🫥️) dotted line face
-Register Emoji [Emoji_Presentation]: [1FAE6 FE0F] (🫦️) biting lip
-Register Emoji [Emoji_Presentation]: [1FAE7 FE0F] (🫧️) bubbles
-Register Emoji [Emoji_Presentation]: [1FAE8 FE0F] (🫨️) shaking face
-Register Emoji [Emoji_Presentation]: [1FAF0 FE0F] (🫰️) hand with index finger and thumb crossed
-Register Emoji [Emoji_Presentation]: [1FAF1 FE0F] (🫱️) rightwards hand
-Register Emoji [Emoji_Presentation]: [1FAF2 FE0F] (🫲️) leftwards hand
-Register Emoji [Emoji_Presentation]: [1FAF3 FE0F] (🫳️) palm down hand
-Register Emoji [Emoji_Presentation]: [1FAF4 FE0F] (🫴️) palm up hand
-Register Emoji [Emoji_Presentation]: [1FAF5 FE0F] (🫵️) index pointing at the viewer
-Register Emoji [Emoji_Presentation]: [1FAF6 FE0F] (🫶️) heart hands
-Register Emoji [Emoji_Presentation]: [1FAF7 FE0F] (🫷️) leftwards pushing hand
-Register Emoji [Emoji_Presentation]: [1FAF8 FE0F] (🫸️) rightwards pushing hand
+Register Emoji [Emoji_Presentation]: [1F520 FE0F] (🔠️) input latin uppercase / INPUT SYMBOL FOR LATIN CAPITAL LETTERS
+Register Emoji [Emoji_Presentation]: [1F521 FE0F] (🔡️) input latin lowercase / INPUT SYMBOL FOR LATIN SMALL LETTERS
+Register Emoji [Emoji_Presentation]: [1F522 FE0F] (🔢️) input numbers / INPUT SYMBOL FOR NUMBERS
+Register Emoji [Emoji_Presentation]: [1F523 FE0F] (🔣️) input symbols / INPUT SYMBOL FOR SYMBOLS
+Register Emoji [Emoji_Presentation]: [1F524 FE0F] (🔤️) input latin letters / INPUT SYMBOL FOR LATIN LETTERS
+Register Emoji [Emoji_Presentation]: [1F525 FE0F] (🔥️) fire / FIRE
+Register Emoji [Emoji_Presentation]: [1F526 FE0F] (🔦️) flashlight / ELECTRIC TORCH
+Register Emoji [Emoji_Presentation]: [1F527 FE0F] (🔧️) wrench / WRENCH
+Register Emoji [Emoji_Presentation]: [1F528 FE0F] (🔨️) hammer / HAMMER
+Register Emoji [Emoji_Presentation]: [1F529 FE0F] (🔩️) nut and bolt / NUT AND BOLT
+Register Emoji [Emoji_Presentation]: [1F52A FE0F] (🔪️) kitchen knife / HOCHO
+Register Emoji [Emoji_Presentation]: [1F52B FE0F] (🔫️) water pistol / PISTOL
+Register Emoji [Emoji_Presentation]: [1F52C FE0F] (🔬️) microscope / MICROSCOPE
+Register Emoji [Emoji_Presentation]: [1F52D FE0F] (🔭️) telescope / TELESCOPE
+Register Emoji [Emoji_Presentation]: [1F52E FE0F] (🔮️) crystal ball / CRYSTAL BALL
+Register Emoji [Emoji_Presentation]: [1F52F FE0F] (🔯️) dotted six-pointed star / SIX POINTED STAR WITH MIDDLE DOT
+Register Emoji [Emoji_Presentation]: [1F530 FE0F] (🔰️) Japanese symbol for beginner / JAPANESE SYMBOL FOR BEGINNER
+Register Emoji [Emoji_Presentation]: [1F531 FE0F] (🔱️) trident emblem / TRIDENT EMBLEM
+Register Emoji [Emoji_Presentation]: [1F532 FE0F] (🔲️) black square button / BLACK SQUARE BUTTON
+Register Emoji [Emoji_Presentation]: [1F533 FE0F] (🔳️) white square button / WHITE SQUARE BUTTON
+Register Emoji [Emoji_Presentation]: [1F534 FE0F] (🔴️) red circle / LARGE RED CIRCLE
+Register Emoji [Emoji_Presentation]: [1F535 FE0F] (🔵️) blue circle / LARGE BLUE CIRCLE
+Register Emoji [Emoji_Presentation]: [1F536 FE0F] (🔶️) large orange diamond / LARGE ORANGE DIAMOND
+Register Emoji [Emoji_Presentation]: [1F537 FE0F] (🔷️) large blue diamond / LARGE BLUE DIAMOND
+Register Emoji [Emoji_Presentation]: [1F538 FE0F] (🔸️) small orange diamond / SMALL ORANGE DIAMOND
+Register Emoji [Emoji_Presentation]: [1F539 FE0F] (🔹️) small blue diamond / SMALL BLUE DIAMOND
+Register Emoji [Emoji_Presentation]: [1F53A FE0F] (🔺️) red triangle pointed up / UP-POINTING RED TRIANGLE
+Register Emoji [Emoji_Presentation]: [1F53B FE0F] (🔻️) red triangle pointed down / DOWN-POINTING RED TRIANGLE
+Register Emoji [Emoji_Presentation]: [1F53C FE0F] (🔼️) upwards button / UP-POINTING SMALL RED TRIANGLE
+Register Emoji [Emoji_Presentation]: [1F53D FE0F] (🔽️) downwards button / DOWN-POINTING SMALL RED TRIANGLE
+Register Emoji [Emoji_Presentation]: [1F54B FE0F] (🕋️) kaaba / KAABA
+Register Emoji [Emoji_Presentation]: [1F54C FE0F] (🕌️) mosque / MOSQUE
+Register Emoji [Emoji_Presentation]: [1F54D FE0F] (🕍️) synagogue / SYNAGOGUE
+Register Emoji [Emoji_Presentation]: [1F54E FE0F] (🕎️) menorah / MENORAH WITH NINE BRANCHES
+Register Emoji [Emoji_Presentation]: [1F550 FE0F] (🕐️) one o’clock / CLOCK FACE ONE OCLOCK
+Register Emoji [Emoji_Presentation]: [1F551 FE0F] (🕑️) two o’clock / CLOCK FACE TWO OCLOCK
+Register Emoji [Emoji_Presentation]: [1F552 FE0F] (🕒️) three o’clock / CLOCK FACE THREE OCLOCK
+Register Emoji [Emoji_Presentation]: [1F553 FE0F] (🕓️) four o’clock / CLOCK FACE FOUR OCLOCK
+Register Emoji [Emoji_Presentation]: [1F554 FE0F] (🕔️) five o’clock / CLOCK FACE FIVE OCLOCK
+Register Emoji [Emoji_Presentation]: [1F555 FE0F] (🕕️) six o’clock / CLOCK FACE SIX OCLOCK
+Register Emoji [Emoji_Presentation]: [1F556 FE0F] (🕖️) seven o’clock / CLOCK FACE SEVEN OCLOCK
+Register Emoji [Emoji_Presentation]: [1F557 FE0F] (🕗️) eight o’clock / CLOCK FACE EIGHT OCLOCK
+Register Emoji [Emoji_Presentation]: [1F558 FE0F] (🕘️) nine o’clock / CLOCK FACE NINE OCLOCK
+Register Emoji [Emoji_Presentation]: [1F559 FE0F] (🕙️) ten o’clock / CLOCK FACE TEN OCLOCK
+Register Emoji [Emoji_Presentation]: [1F55A FE0F] (🕚️) eleven o’clock / CLOCK FACE ELEVEN OCLOCK
+Register Emoji [Emoji_Presentation]: [1F55B FE0F] (🕛️) twelve o’clock / CLOCK FACE TWELVE OCLOCK
+Register Emoji [Emoji_Presentation]: [1F55C FE0F] (🕜️) one-thirty / CLOCK FACE ONE-THIRTY
+Register Emoji [Emoji_Presentation]: [1F55D FE0F] (🕝️) two-thirty / CLOCK FACE TWO-THIRTY
+Register Emoji [Emoji_Presentation]: [1F55E FE0F] (🕞️) three-thirty / CLOCK FACE THREE-THIRTY
+Register Emoji [Emoji_Presentation]: [1F55F FE0F] (🕟️) four-thirty / CLOCK FACE FOUR-THIRTY
+Register Emoji [Emoji_Presentation]: [1F560 FE0F] (🕠️) five-thirty / CLOCK FACE FIVE-THIRTY
+Register Emoji [Emoji_Presentation]: [1F561 FE0F] (🕡️) six-thirty / CLOCK FACE SIX-THIRTY
+Register Emoji [Emoji_Presentation]: [1F562 FE0F] (🕢️) seven-thirty / CLOCK FACE SEVEN-THIRTY
+Register Emoji [Emoji_Presentation]: [1F563 FE0F] (🕣️) eight-thirty / CLOCK FACE EIGHT-THIRTY
+Register Emoji [Emoji_Presentation]: [1F564 FE0F] (🕤️) nine-thirty / CLOCK FACE NINE-THIRTY
+Register Emoji [Emoji_Presentation]: [1F565 FE0F] (🕥️) ten-thirty / CLOCK FACE TEN-THIRTY
+Register Emoji [Emoji_Presentation]: [1F566 FE0F] (🕦️) eleven-thirty / CLOCK FACE ELEVEN-THIRTY
+Register Emoji [Emoji_Presentation]: [1F567 FE0F] (🕧️) twelve-thirty / CLOCK FACE TWELVE-THIRTY
+Register Emoji [Emoji_Presentation]: [1F57A FE0F] (🕺️) man dancing / MAN DANCING
+Register Emoji [Emoji_Presentation]: [1F595 FE0F] (🖕️) middle finger / REVERSED HAND WITH MIDDLE FINGER EXTENDED
+Register Emoji [Emoji_Presentation]: [1F596 FE0F] (🖖️) vulcan salute / RAISED HAND WITH PART BETWEEN MIDDLE AND RING FINGERS
+Register Emoji [Emoji_Presentation]: [1F5A4 FE0F] (🖤️) black heart / BLACK HEART
+Register Emoji [Emoji_Presentation]: [1F5FB FE0F] (🗻️) mount fuji / MOUNT FUJI
+Register Emoji [Emoji_Presentation]: [1F5FC FE0F] (🗼️) Tokyo tower / TOKYO TOWER
+Register Emoji [Emoji_Presentation]: [1F5FD FE0F] (🗽️) Statue of Liberty / STATUE OF LIBERTY
+Register Emoji [Emoji_Presentation]: [1F5FE FE0F] (🗾️) map of Japan / SILHOUETTE OF JAPAN
+Register Emoji [Emoji_Presentation]: [1F5FF FE0F] (🗿️) moai / MOYAI
+Register Emoji [Emoji_Presentation]: [1F600 FE0F] (😀️) grinning face / GRINNING FACE
+Register Emoji [Emoji_Presentation]: [1F601 FE0F] (😁️) beaming face with smiling eyes / GRINNING FACE WITH SMILING EYES
+Register Emoji [Emoji_Presentation]: [1F602 FE0F] (😂️) face with tears of joy / FACE WITH TEARS OF JOY
+Register Emoji [Emoji_Presentation]: [1F603 FE0F] (😃️) grinning face with big eyes / SMILING FACE WITH OPEN MOUTH
+Register Emoji [Emoji_Presentation]: [1F604 FE0F] (😄️) grinning face with smiling eyes / SMILING FACE WITH OPEN MOUTH AND SMILING EYES
+Register Emoji [Emoji_Presentation]: [1F605 FE0F] (😅️) grinning face with sweat / SMILING FACE WITH OPEN MOUTH AND COLD SWEAT
+Register Emoji [Emoji_Presentation]: [1F606 FE0F] (😆️) grinning squinting face / SMILING FACE WITH OPEN MOUTH AND TIGHTLY-CLOSED EYES
+Register Emoji [Emoji_Presentation]: [1F607 FE0F] (😇️) smiling face with halo / SMILING FACE WITH HALO
+Register Emoji [Emoji_Presentation]: [1F608 FE0F] (😈️) smiling face with horns / SMILING FACE WITH HORNS
+Register Emoji [Emoji_Presentation]: [1F609 FE0F] (😉️) winking face / WINKING FACE
+Register Emoji [Emoji_Presentation]: [1F60A FE0F] (😊️) smiling face with smiling eyes / SMILING FACE WITH SMILING EYES
+Register Emoji [Emoji_Presentation]: [1F60B FE0F] (😋️) face savoring food / FACE SAVOURING DELICIOUS FOOD
+Register Emoji [Emoji_Presentation]: [1F60C FE0F] (😌️) relieved face / RELIEVED FACE
+Register Emoji [Emoji_Presentation]: [1F60D FE0F] (😍️) smiling face with heart-eyes / SMILING FACE WITH HEART-SHAPED EYES
+Register Emoji [Emoji_Presentation]: [1F60E FE0F] (😎️) smiling face with sunglasses / SMILING FACE WITH SUNGLASSES
+Register Emoji [Emoji_Presentation]: [1F60F FE0F] (😏️) smirking face / SMIRKING FACE
+Register Emoji [Emoji_Presentation]: [1F610 FE0F] (😐️) neutral face / NEUTRAL FACE
+Register Emoji [Emoji_Presentation]: [1F611 FE0F] (😑️) expressionless face / EXPRESSIONLESS FACE
+Register Emoji [Emoji_Presentation]: [1F612 FE0F] (😒️) unamused face / UNAMUSED FACE
+Register Emoji [Emoji_Presentation]: [1F613 FE0F] (😓️) downcast face with sweat / FACE WITH COLD SWEAT
+Register Emoji [Emoji_Presentation]: [1F614 FE0F] (😔️) pensive face / PENSIVE FACE
+Register Emoji [Emoji_Presentation]: [1F615 FE0F] (😕️) confused face / CONFUSED FACE
+Register Emoji [Emoji_Presentation]: [1F616 FE0F] (😖️) confounded face / CONFOUNDED FACE
+Register Emoji [Emoji_Presentation]: [1F617 FE0F] (😗️) kissing face / KISSING FACE
+Register Emoji [Emoji_Presentation]: [1F618 FE0F] (😘️) face blowing a kiss / FACE THROWING A KISS
+Register Emoji [Emoji_Presentation]: [1F619 FE0F] (😙️) kissing face with smiling eyes / KISSING FACE WITH SMILING EYES
+Register Emoji [Emoji_Presentation]: [1F61A FE0F] (😚️) kissing face with closed eyes / KISSING FACE WITH CLOSED EYES
+Register Emoji [Emoji_Presentation]: [1F61B FE0F] (😛️) face with tongue / FACE WITH STUCK-OUT TONGUE
+Register Emoji [Emoji_Presentation]: [1F61C FE0F] (😜️) winking face with tongue / FACE WITH STUCK-OUT TONGUE AND WINKING EYE
+Register Emoji [Emoji_Presentation]: [1F61D FE0F] (😝️) squinting face with tongue / FACE WITH STUCK-OUT TONGUE AND TIGHTLY-CLOSED EYES
+Register Emoji [Emoji_Presentation]: [1F61E FE0F] (😞️) disappointed face / DISAPPOINTED FACE
+Register Emoji [Emoji_Presentation]: [1F61F FE0F] (😟️) worried face / WORRIED FACE
+Register Emoji [Emoji_Presentation]: [1F620 FE0F] (😠️) angry face / ANGRY FACE
+Register Emoji [Emoji_Presentation]: [1F621 FE0F] (😡️) enraged face / POUTING FACE
+Register Emoji [Emoji_Presentation]: [1F622 FE0F] (😢️) crying face / CRYING FACE
+Register Emoji [Emoji_Presentation]: [1F623 FE0F] (😣️) persevering face / PERSEVERING FACE
+Register Emoji [Emoji_Presentation]: [1F624 FE0F] (😤️) face with steam from nose / FACE WITH LOOK OF TRIUMPH
+Register Emoji [Emoji_Presentation]: [1F625 FE0F] (😥️) sad but relieved face / DISAPPOINTED BUT RELIEVED FACE
+Register Emoji [Emoji_Presentation]: [1F626 FE0F] (😦️) frowning face with open mouth / FROWNING FACE WITH OPEN MOUTH
+Register Emoji [Emoji_Presentation]: [1F627 FE0F] (😧️) anguished face / ANGUISHED FACE
+Register Emoji [Emoji_Presentation]: [1F628 FE0F] (😨️) fearful face / FEARFUL FACE
+Register Emoji [Emoji_Presentation]: [1F629 FE0F] (😩️) weary face / WEARY FACE
+Register Emoji [Emoji_Presentation]: [1F62A FE0F] (😪️) sleepy face / SLEEPY FACE
+Register Emoji [Emoji_Presentation]: [1F62B FE0F] (😫️) tired face / TIRED FACE
+Register Emoji [Emoji_Presentation]: [1F62C FE0F] (😬️) grimacing face / GRIMACING FACE
+Register Emoji [Emoji_Presentation]: [1F62D FE0F] (😭️) loudly crying face / LOUDLY CRYING FACE
+Register Emoji [Emoji_Presentation]: [1F62E FE0F] (😮️) face with open mouth / FACE WITH OPEN MOUTH
+Register Emoji [Emoji_Presentation]: [1F62F FE0F] (😯️) hushed face / HUSHED FACE
+Register Emoji [Emoji_Presentation]: [1F630 FE0F] (😰️) anxious face with sweat / FACE WITH OPEN MOUTH AND COLD SWEAT
+Register Emoji [Emoji_Presentation]: [1F631 FE0F] (😱️) face screaming in fear / FACE SCREAMING IN FEAR
+Register Emoji [Emoji_Presentation]: [1F632 FE0F] (😲️) astonished face / ASTONISHED FACE
+Register Emoji [Emoji_Presentation]: [1F633 FE0F] (😳️) flushed face / FLUSHED FACE
+Register Emoji [Emoji_Presentation]: [1F634 FE0F] (😴️) sleeping face / SLEEPING FACE
+Register Emoji [Emoji_Presentation]: [1F635 FE0F] (😵️) face with crossed-out eyes / DIZZY FACE
+Register Emoji [Emoji_Presentation]: [1F636 FE0F] (😶️) face without mouth / FACE WITHOUT MOUTH
+Register Emoji [Emoji_Presentation]: [1F637 FE0F] (😷️) face with medical mask / FACE WITH MEDICAL MASK
+Register Emoji [Emoji_Presentation]: [1F638 FE0F] (😸️) grinning cat with smiling eyes / GRINNING CAT FACE WITH SMILING EYES
+Register Emoji [Emoji_Presentation]: [1F639 FE0F] (😹️) cat with tears of joy / CAT FACE WITH TEARS OF JOY
+Register Emoji [Emoji_Presentation]: [1F63A FE0F] (😺️) grinning cat / SMILING CAT FACE WITH OPEN MOUTH
+Register Emoji [Emoji_Presentation]: [1F63B FE0F] (😻️) smiling cat with heart-eyes / SMILING CAT FACE WITH HEART-SHAPED EYES
+Register Emoji [Emoji_Presentation]: [1F63C FE0F] (😼️) cat with wry smile / CAT FACE WITH WRY SMILE
+Register Emoji [Emoji_Presentation]: [1F63D FE0F] (😽️) kissing cat / KISSING CAT FACE WITH CLOSED EYES
+Register Emoji [Emoji_Presentation]: [1F63E FE0F] (😾️) pouting cat / POUTING CAT FACE
+Register Emoji [Emoji_Presentation]: [1F63F FE0F] (😿️) crying cat / CRYING CAT FACE
+Register Emoji [Emoji_Presentation]: [1F640 FE0F] (🙀️) weary cat / WEARY CAT FACE
+Register Emoji [Emoji_Presentation]: [1F641 FE0F] (🙁️) slightly frowning face / SLIGHTLY FROWNING FACE
+Register Emoji [Emoji_Presentation]: [1F642 FE0F] (🙂️) slightly smiling face / SLIGHTLY SMILING FACE
+Register Emoji [Emoji_Presentation]: [1F643 FE0F] (🙃️) upside-down face / UPSIDE-DOWN FACE
+Register Emoji [Emoji_Presentation]: [1F644 FE0F] (🙄️) face with rolling eyes / FACE WITH ROLLING EYES
+Register Emoji [Emoji_Presentation]: [1F645 FE0F] (🙅️) person gesturing NO / FACE WITH NO GOOD GESTURE
+Register Emoji [Emoji_Presentation]: [1F646 FE0F] (🙆️) person gesturing OK / FACE WITH OK GESTURE
+Register Emoji [Emoji_Presentation]: [1F647 FE0F] (🙇️) person bowing / PERSON BOWING DEEPLY
+Register Emoji [Emoji_Presentation]: [1F648 FE0F] (🙈️) see-no-evil monkey / SEE-NO-EVIL MONKEY
+Register Emoji [Emoji_Presentation]: [1F649 FE0F] (🙉️) hear-no-evil monkey / HEAR-NO-EVIL MONKEY
+Register Emoji [Emoji_Presentation]: [1F64A FE0F] (🙊️) speak-no-evil monkey / SPEAK-NO-EVIL MONKEY
+Register Emoji [Emoji_Presentation]: [1F64B FE0F] (🙋️) person raising hand / HAPPY PERSON RAISING ONE HAND
+Register Emoji [Emoji_Presentation]: [1F64C FE0F] (🙌️) raising hands / PERSON RAISING BOTH HANDS IN CELEBRATION
+Register Emoji [Emoji_Presentation]: [1F64D FE0F] (🙍️) person frowning / PERSON FROWNING
+Register Emoji [Emoji_Presentation]: [1F64E FE0F] (🙎️) person pouting / PERSON WITH POUTING FACE
+Register Emoji [Emoji_Presentation]: [1F64F FE0F] (🙏️) folded hands / PERSON WITH FOLDED HANDS
+Register Emoji [Emoji_Presentation]: [1F680 FE0F] (🚀️) rocket / ROCKET
+Register Emoji [Emoji_Presentation]: [1F681 FE0F] (🚁️) helicopter / HELICOPTER
+Register Emoji [Emoji_Presentation]: [1F682 FE0F] (🚂️) locomotive / STEAM LOCOMOTIVE
+Register Emoji [Emoji_Presentation]: [1F683 FE0F] (🚃️) railway car / RAILWAY CAR
+Register Emoji [Emoji_Presentation]: [1F684 FE0F] (🚄️) high-speed train / HIGH-SPEED TRAIN
+Register Emoji [Emoji_Presentation]: [1F685 FE0F] (🚅️) bullet train / HIGH-SPEED TRAIN WITH BULLET NOSE
+Register Emoji [Emoji_Presentation]: [1F686 FE0F] (🚆️) train / TRAIN
+Register Emoji [Emoji_Presentation]: [1F687 FE0F] (🚇️) metro / METRO
+Register Emoji [Emoji_Presentation]: [1F688 FE0F] (🚈️) light rail / LIGHT RAIL
+Register Emoji [Emoji_Presentation]: [1F689 FE0F] (🚉️) station / STATION
+Register Emoji [Emoji_Presentation]: [1F68A FE0F] (🚊️) tram / TRAM
+Register Emoji [Emoji_Presentation]: [1F68B FE0F] (🚋️) tram car / TRAM CAR
+Register Emoji [Emoji_Presentation]: [1F68C FE0F] (🚌️) bus / BUS
+Register Emoji [Emoji_Presentation]: [1F68D FE0F] (🚍️) oncoming bus / ONCOMING BUS
+Register Emoji [Emoji_Presentation]: [1F68E FE0F] (🚎️) trolleybus / TROLLEYBUS
+Register Emoji [Emoji_Presentation]: [1F68F FE0F] (🚏️) bus stop / BUS STOP
+Register Emoji [Emoji_Presentation]: [1F690 FE0F] (🚐️) minibus / MINIBUS
+Register Emoji [Emoji_Presentation]: [1F691 FE0F] (🚑️) ambulance / AMBULANCE
+Register Emoji [Emoji_Presentation]: [1F692 FE0F] (🚒️) fire engine / FIRE ENGINE
+Register Emoji [Emoji_Presentation]: [1F693 FE0F] (🚓️) police car / POLICE CAR
+Register Emoji [Emoji_Presentation]: [1F694 FE0F] (🚔️) oncoming police car / ONCOMING POLICE CAR
+Register Emoji [Emoji_Presentation]: [1F695 FE0F] (🚕️) taxi / TAXI
+Register Emoji [Emoji_Presentation]: [1F696 FE0F] (🚖️) oncoming taxi / ONCOMING TAXI
+Register Emoji [Emoji_Presentation]: [1F697 FE0F] (🚗️) automobile / AUTOMOBILE
+Register Emoji [Emoji_Presentation]: [1F698 FE0F] (🚘️) oncoming automobile / ONCOMING AUTOMOBILE
+Register Emoji [Emoji_Presentation]: [1F699 FE0F] (🚙️) sport utility vehicle / RECREATIONAL VEHICLE
+Register Emoji [Emoji_Presentation]: [1F69A FE0F] (🚚️) delivery truck / DELIVERY TRUCK
+Register Emoji [Emoji_Presentation]: [1F69B FE0F] (🚛️) articulated lorry / ARTICULATED LORRY
+Register Emoji [Emoji_Presentation]: [1F69C FE0F] (🚜️) tractor / TRACTOR
+Register Emoji [Emoji_Presentation]: [1F69D FE0F] (🚝️) monorail / MONORAIL
+Register Emoji [Emoji_Presentation]: [1F69E FE0F] (🚞️) mountain railway / MOUNTAIN RAILWAY
+Register Emoji [Emoji_Presentation]: [1F69F FE0F] (🚟️) suspension railway / SUSPENSION RAILWAY
+Register Emoji [Emoji_Presentation]: [1F6A0 FE0F] (🚠️) mountain cableway / MOUNTAIN CABLEWAY
+Register Emoji [Emoji_Presentation]: [1F6A1 FE0F] (🚡️) aerial tramway / AERIAL TRAMWAY
+Register Emoji [Emoji_Presentation]: [1F6A2 FE0F] (🚢️) ship / SHIP
+Register Emoji [Emoji_Presentation]: [1F6A3 FE0F] (🚣️) person rowing boat / ROWBOAT
+Register Emoji [Emoji_Presentation]: [1F6A4 FE0F] (🚤️) speedboat / SPEEDBOAT
+Register Emoji [Emoji_Presentation]: [1F6A5 FE0F] (🚥️) horizontal traffic light / HORIZONTAL TRAFFIC LIGHT
+Register Emoji [Emoji_Presentation]: [1F6A6 FE0F] (🚦️) vertical traffic light / VERTICAL TRAFFIC LIGHT
+Register Emoji [Emoji_Presentation]: [1F6A7 FE0F] (🚧️) construction / CONSTRUCTION SIGN
+Register Emoji [Emoji_Presentation]: [1F6A8 FE0F] (🚨️) police car light / POLICE CARS REVOLVING LIGHT
+Register Emoji [Emoji_Presentation]: [1F6A9 FE0F] (🚩️) triangular flag / TRIANGULAR FLAG ON POST
+Register Emoji [Emoji_Presentation]: [1F6AA FE0F] (🚪️) door / DOOR
+Register Emoji [Emoji_Presentation]: [1F6AB FE0F] (🚫️) prohibited / NO ENTRY SIGN
+Register Emoji [Emoji_Presentation]: [1F6AC FE0F] (🚬️) cigarette / SMOKING SYMBOL
+Register Emoji [Emoji_Presentation]: [1F6AD FE0F] (🚭️) no smoking / NO SMOKING SYMBOL
+Register Emoji [Emoji_Presentation]: [1F6AE FE0F] (🚮️) litter in bin sign / PUT LITTER IN ITS PLACE SYMBOL
+Register Emoji [Emoji_Presentation]: [1F6AF FE0F] (🚯️) no littering / DO NOT LITTER SYMBOL
+Register Emoji [Emoji_Presentation]: [1F6B0 FE0F] (🚰️) potable water / POTABLE WATER SYMBOL
+Register Emoji [Emoji_Presentation]: [1F6B1 FE0F] (🚱️) non-potable water / NON-POTABLE WATER SYMBOL
+Register Emoji [Emoji_Presentation]: [1F6B2 FE0F] (🚲️) bicycle / BICYCLE
+Register Emoji [Emoji_Presentation]: [1F6B3 FE0F] (🚳️) no bicycles / NO BICYCLES
+Register Emoji [Emoji_Presentation]: [1F6B4 FE0F] (🚴️) person biking / BICYCLIST
+Register Emoji [Emoji_Presentation]: [1F6B5 FE0F] (🚵️) person mountain biking / MOUNTAIN BICYCLIST
+Register Emoji [Emoji_Presentation]: [1F6B6 FE0F] (🚶️) person walking / PEDESTRIAN
+Register Emoji [Emoji_Presentation]: [1F6B7 FE0F] (🚷️) no pedestrians / NO PEDESTRIANS
+Register Emoji [Emoji_Presentation]: [1F6B8 FE0F] (🚸️) children crossing / CHILDREN CROSSING
+Register Emoji [Emoji_Presentation]: [1F6B9 FE0F] (🚹️) men’s room / MENS SYMBOL
+Register Emoji [Emoji_Presentation]: [1F6BA FE0F] (🚺️) women’s room / WOMENS SYMBOL
+Register Emoji [Emoji_Presentation]: [1F6BB FE0F] (🚻️) restroom / RESTROOM
+Register Emoji [Emoji_Presentation]: [1F6BC FE0F] (🚼️) baby symbol / BABY SYMBOL
+Register Emoji [Emoji_Presentation]: [1F6BD FE0F] (🚽️) toilet / TOILET
+Register Emoji [Emoji_Presentation]: [1F6BE FE0F] (🚾️) water closet / WATER CLOSET
+Register Emoji [Emoji_Presentation]: [1F6BF FE0F] (🚿️) shower / SHOWER
+Register Emoji [Emoji_Presentation]: [1F6C0 FE0F] (🛀️) person taking bath / BATH
+Register Emoji [Emoji_Presentation]: [1F6C1 FE0F] (🛁️) bathtub / BATHTUB
+Register Emoji [Emoji_Presentation]: [1F6C2 FE0F] (🛂️) passport control / PASSPORT CONTROL
+Register Emoji [Emoji_Presentation]: [1F6C3 FE0F] (🛃️) customs / CUSTOMS
+Register Emoji [Emoji_Presentation]: [1F6C4 FE0F] (🛄️) baggage claim / BAGGAGE CLAIM
+Register Emoji [Emoji_Presentation]: [1F6C5 FE0F] (🛅️) left luggage / LEFT LUGGAGE
+Register Emoji [Emoji_Presentation]: [1F6CC FE0F] (🛌️) person in bed / SLEEPING ACCOMMODATION
+Register Emoji [Emoji_Presentation]: [1F6D0 FE0F] (🛐️) place of worship / PLACE OF WORSHIP
+Register Emoji [Emoji_Presentation]: [1F6D1 FE0F] (🛑️) stop sign / OCTAGONAL SIGN
+Register Emoji [Emoji_Presentation]: [1F6D2 FE0F] (🛒️) shopping cart / SHOPPING TROLLEY
+Register Emoji [Emoji_Presentation]: [1F6D5 FE0F] (🛕️) hindu temple / HINDU TEMPLE
+Register Emoji [Emoji_Presentation]: [1F6D6 FE0F] (🛖️) hut / HUT
+Register Emoji [Emoji_Presentation]: [1F6D7 FE0F] (🛗️) elevator / ELEVATOR
+Register Emoji [Emoji_Presentation]: [1F6DC FE0F] (🛜️) wireless / WIRELESS
+Register Emoji [Emoji_Presentation]: [1F6DD FE0F] (🛝️) playground slide / PLAYGROUND SLIDE
+Register Emoji [Emoji_Presentation]: [1F6DE FE0F] (🛞️) wheel / WHEEL
+Register Emoji [Emoji_Presentation]: [1F6DF FE0F] (🛟️) ring buoy / RING BUOY
+Register Emoji [Emoji_Presentation]: [1F6EB FE0F] (🛫️) airplane departure / AIRPLANE DEPARTURE
+Register Emoji [Emoji_Presentation]: [1F6EC FE0F] (🛬️) airplane arrival / AIRPLANE ARRIVING
+Register Emoji [Emoji_Presentation]: [1F6F4 FE0F] (🛴️) kick scooter / SCOOTER
+Register Emoji [Emoji_Presentation]: [1F6F5 FE0F] (🛵️) motor scooter / MOTOR SCOOTER
+Register Emoji [Emoji_Presentation]: [1F6F6 FE0F] (🛶️) canoe / CANOE
+Register Emoji [Emoji_Presentation]: [1F6F7 FE0F] (🛷️) sled / SLED
+Register Emoji [Emoji_Presentation]: [1F6F8 FE0F] (🛸️) flying saucer / FLYING SAUCER
+Register Emoji [Emoji_Presentation]: [1F6F9 FE0F] (🛹️) skateboard / SKATEBOARD
+Register Emoji [Emoji_Presentation]: [1F6FA FE0F] (🛺️) auto rickshaw / AUTO RICKSHAW
+Register Emoji [Emoji_Presentation]: [1F6FB FE0F] (🛻️) pickup truck / PICKUP TRUCK
+Register Emoji [Emoji_Presentation]: [1F6FC FE0F] (🛼️) roller skate / ROLLER SKATE
+Register Emoji [Emoji_Presentation]: [1F7E0 FE0F] (🟠️) orange circle / LARGE ORANGE CIRCLE
+Register Emoji [Emoji_Presentation]: [1F7E1 FE0F] (🟡️) yellow circle / LARGE YELLOW CIRCLE
+Register Emoji [Emoji_Presentation]: [1F7E2 FE0F] (🟢️) green circle / LARGE GREEN CIRCLE
+Register Emoji [Emoji_Presentation]: [1F7E3 FE0F] (🟣️) purple circle / LARGE PURPLE CIRCLE
+Register Emoji [Emoji_Presentation]: [1F7E4 FE0F] (🟤️) brown circle / LARGE BROWN CIRCLE
+Register Emoji [Emoji_Presentation]: [1F7E5 FE0F] (🟥️) red square / LARGE RED SQUARE
+Register Emoji [Emoji_Presentation]: [1F7E6 FE0F] (🟦️) blue square / LARGE BLUE SQUARE
+Register Emoji [Emoji_Presentation]: [1F7E7 FE0F] (🟧️) orange square / LARGE ORANGE SQUARE
+Register Emoji [Emoji_Presentation]: [1F7E8 FE0F] (🟨️) yellow square / LARGE YELLOW SQUARE
+Register Emoji [Emoji_Presentation]: [1F7E9 FE0F] (🟩️) green square / LARGE GREEN SQUARE
+Register Emoji [Emoji_Presentation]: [1F7EA FE0F] (🟪️) purple square / LARGE PURPLE SQUARE
+Register Emoji [Emoji_Presentation]: [1F7EB FE0F] (🟫️) brown square / LARGE BROWN SQUARE
+Register Emoji [Emoji_Presentation]: [1F7F0 FE0F] (🟰️) heavy equals sign / HEAVY EQUALS SIGN
+Register Emoji [Emoji_Presentation]: [1F90C FE0F] (🤌️) pinched fingers / PINCHED FINGERS
+Register Emoji [Emoji_Presentation]: [1F90D FE0F] (🤍️) white heart / WHITE HEART
+Register Emoji [Emoji_Presentation]: [1F90E FE0F] (🤎️) brown heart / BROWN HEART
+Register Emoji [Emoji_Presentation]: [1F90F FE0F] (🤏️) pinching hand / PINCHING HAND
+Register Emoji [Emoji_Presentation]: [1F910 FE0F] (🤐️) zipper-mouth face / ZIPPER-MOUTH FACE
+Register Emoji [Emoji_Presentation]: [1F911 FE0F] (🤑️) money-mouth face / MONEY-MOUTH FACE
+Register Emoji [Emoji_Presentation]: [1F912 FE0F] (🤒️) face with thermometer / FACE WITH THERMOMETER
+Register Emoji [Emoji_Presentation]: [1F913 FE0F] (🤓️) nerd face / NERD FACE
+Register Emoji [Emoji_Presentation]: [1F914 FE0F] (🤔️) thinking face / THINKING FACE
+Register Emoji [Emoji_Presentation]: [1F915 FE0F] (🤕️) face with head-bandage / FACE WITH HEAD-BANDAGE
+Register Emoji [Emoji_Presentation]: [1F916 FE0F] (🤖️) robot / ROBOT FACE
+Register Emoji [Emoji_Presentation]: [1F917 FE0F] (🤗️) smiling face with open hands / HUGGING FACE
+Register Emoji [Emoji_Presentation]: [1F918 FE0F] (🤘️) sign of the horns / SIGN OF THE HORNS
+Register Emoji [Emoji_Presentation]: [1F919 FE0F] (🤙️) call me hand / CALL ME HAND
+Register Emoji [Emoji_Presentation]: [1F91A FE0F] (🤚️) raised back of hand / RAISED BACK OF HAND
+Register Emoji [Emoji_Presentation]: [1F91B FE0F] (🤛️) left-facing fist / LEFT-FACING FIST
+Register Emoji [Emoji_Presentation]: [1F91C FE0F] (🤜️) right-facing fist / RIGHT-FACING FIST
+Register Emoji [Emoji_Presentation]: [1F91D FE0F] (🤝️) handshake / HANDSHAKE
+Register Emoji [Emoji_Presentation]: [1F91E FE0F] (🤞️) crossed fingers / HAND WITH INDEX AND MIDDLE FINGERS CROSSED
+Register Emoji [Emoji_Presentation]: [1F91F FE0F] (🤟️) love-you gesture / I LOVE YOU HAND SIGN
+Register Emoji [Emoji_Presentation]: [1F920 FE0F] (🤠️) cowboy hat face / FACE WITH COWBOY HAT
+Register Emoji [Emoji_Presentation]: [1F921 FE0F] (🤡️) clown face / CLOWN FACE
+Register Emoji [Emoji_Presentation]: [1F922 FE0F] (🤢️) nauseated face / NAUSEATED FACE
+Register Emoji [Emoji_Presentation]: [1F923 FE0F] (🤣️) rolling on the floor laughing / ROLLING ON THE FLOOR LAUGHING
+Register Emoji [Emoji_Presentation]: [1F924 FE0F] (🤤️) drooling face / DROOLING FACE
+Register Emoji [Emoji_Presentation]: [1F925 FE0F] (🤥️) lying face / LYING FACE
+Register Emoji [Emoji_Presentation]: [1F926 FE0F] (🤦️) person facepalming / FACE PALM
+Register Emoji [Emoji_Presentation]: [1F927 FE0F] (🤧️) sneezing face / SNEEZING FACE
+Register Emoji [Emoji_Presentation]: [1F928 FE0F] (🤨️) face with raised eyebrow / FACE WITH ONE EYEBROW RAISED
+Register Emoji [Emoji_Presentation]: [1F929 FE0F] (🤩️) star-struck / GRINNING FACE WITH STAR EYES
+Register Emoji [Emoji_Presentation]: [1F92A FE0F] (🤪️) zany face / GRINNING FACE WITH ONE LARGE AND ONE SMALL EYE
+Register Emoji [Emoji_Presentation]: [1F92B FE0F] (🤫️) shushing face / FACE WITH FINGER COVERING CLOSED LIPS
+Register Emoji [Emoji_Presentation]: [1F92C FE0F] (🤬️) face with symbols on mouth / SERIOUS FACE WITH SYMBOLS COVERING MOUTH
+Register Emoji [Emoji_Presentation]: [1F92D FE0F] (🤭️) face with hand over mouth / SMILING FACE WITH SMILING EYES AND HAND COVERING MOUTH
+Register Emoji [Emoji_Presentation]: [1F92E FE0F] (🤮️) face vomiting / FACE WITH OPEN MOUTH VOMITING
+Register Emoji [Emoji_Presentation]: [1F92F FE0F] (🤯️) exploding head / SHOCKED FACE WITH EXPLODING HEAD
+Register Emoji [Emoji_Presentation]: [1F930 FE0F] (🤰️) pregnant woman / PREGNANT WOMAN
+Register Emoji [Emoji_Presentation]: [1F931 FE0F] (🤱️) breast-feeding / BREAST-FEEDING
+Register Emoji [Emoji_Presentation]: [1F932 FE0F] (🤲️) palms up together / PALMS UP TOGETHER
+Register Emoji [Emoji_Presentation]: [1F933 FE0F] (🤳️) selfie / SELFIE
+Register Emoji [Emoji_Presentation]: [1F934 FE0F] (🤴️) prince / PRINCE
+Register Emoji [Emoji_Presentation]: [1F935 FE0F] (🤵️) person in tuxedo / MAN IN TUXEDO
+Register Emoji [Emoji_Presentation]: [1F936 FE0F] (🤶️) Mrs. Claus / MOTHER CHRISTMAS
+Register Emoji [Emoji_Presentation]: [1F937 FE0F] (🤷️) person shrugging / SHRUG
+Register Emoji [Emoji_Presentation]: [1F938 FE0F] (🤸️) person cartwheeling / PERSON DOING CARTWHEEL
+Register Emoji [Emoji_Presentation]: [1F939 FE0F] (🤹️) person juggling / JUGGLING
+Register Emoji [Emoji_Presentation]: [1F93A FE0F] (🤺️) person fencing / FENCER
+Register Emoji [Emoji_Presentation]: [1F93C FE0F] (🤼️) people wrestling / WRESTLERS
+Register Emoji [Emoji_Presentation]: [1F93D FE0F] (🤽️) person playing water polo / WATER POLO
+Register Emoji [Emoji_Presentation]: [1F93E FE0F] (🤾️) person playing handball / HANDBALL
+Register Emoji [Emoji_Presentation]: [1F93F FE0F] (🤿️) diving mask / DIVING MASK
+Register Emoji [Emoji_Presentation]: [1F940 FE0F] (🥀️) wilted flower / WILTED FLOWER
+Register Emoji [Emoji_Presentation]: [1F941 FE0F] (🥁️) drum / DRUM WITH DRUMSTICKS
+Register Emoji [Emoji_Presentation]: [1F942 FE0F] (🥂️) clinking glasses / CLINKING GLASSES
+Register Emoji [Emoji_Presentation]: [1F943 FE0F] (🥃️) tumbler glass / TUMBLER GLASS
+Register Emoji [Emoji_Presentation]: [1F944 FE0F] (🥄️) spoon / SPOON
+Register Emoji [Emoji_Presentation]: [1F945 FE0F] (🥅️) goal net / GOAL NET
+Register Emoji [Emoji_Presentation]: [1F947 FE0F] (🥇️) 1st place medal / FIRST PLACE MEDAL
+Register Emoji [Emoji_Presentation]: [1F948 FE0F] (🥈️) 2nd place medal / SECOND PLACE MEDAL
+Register Emoji [Emoji_Presentation]: [1F949 FE0F] (🥉️) 3rd place medal / THIRD PLACE MEDAL
+Register Emoji [Emoji_Presentation]: [1F94A FE0F] (🥊️) boxing glove / BOXING GLOVE
+Register Emoji [Emoji_Presentation]: [1F94B FE0F] (🥋️) martial arts uniform / MARTIAL ARTS UNIFORM
+Register Emoji [Emoji_Presentation]: [1F94C FE0F] (🥌️) curling stone / CURLING STONE
+Register Emoji [Emoji_Presentation]: [1F94D FE0F] (🥍️) lacrosse / LACROSSE STICK AND BALL
+Register Emoji [Emoji_Presentation]: [1F94E FE0F] (🥎️) softball / SOFTBALL
+Register Emoji [Emoji_Presentation]: [1F94F FE0F] (🥏️) flying disc / FLYING DISC
+Register Emoji [Emoji_Presentation]: [1F950 FE0F] (🥐️) croissant / CROISSANT
+Register Emoji [Emoji_Presentation]: [1F951 FE0F] (🥑️) avocado / AVOCADO
+Register Emoji [Emoji_Presentation]: [1F952 FE0F] (🥒️) cucumber / CUCUMBER
+Register Emoji [Emoji_Presentation]: [1F953 FE0F] (🥓️) bacon / BACON
+Register Emoji [Emoji_Presentation]: [1F954 FE0F] (🥔️) potato / POTATO
+Register Emoji [Emoji_Presentation]: [1F955 FE0F] (🥕️) carrot / CARROT
+Register Emoji [Emoji_Presentation]: [1F956 FE0F] (🥖️) baguette bread / BAGUETTE BREAD
+Register Emoji [Emoji_Presentation]: [1F957 FE0F] (🥗️) green salad / GREEN SALAD
+Register Emoji [Emoji_Presentation]: [1F958 FE0F] (🥘️) shallow pan of food / SHALLOW PAN OF FOOD
+Register Emoji [Emoji_Presentation]: [1F959 FE0F] (🥙️) stuffed flatbread / STUFFED FLATBREAD
+Register Emoji [Emoji_Presentation]: [1F95A FE0F] (🥚️) egg / EGG
+Register Emoji [Emoji_Presentation]: [1F95B FE0F] (🥛️) glass of milk / GLASS OF MILK
+Register Emoji [Emoji_Presentation]: [1F95C FE0F] (🥜️) peanuts / PEANUTS
+Register Emoji [Emoji_Presentation]: [1F95D FE0F] (🥝️) kiwi fruit / KIWIFRUIT
+Register Emoji [Emoji_Presentation]: [1F95E FE0F] (🥞️) pancakes / PANCAKES
+Register Emoji [Emoji_Presentation]: [1F95F FE0F] (🥟️) dumpling / DUMPLING
+Register Emoji [Emoji_Presentation]: [1F960 FE0F] (🥠️) fortune cookie / FORTUNE COOKIE
+Register Emoji [Emoji_Presentation]: [1F961 FE0F] (🥡️) takeout box / TAKEOUT BOX
+Register Emoji [Emoji_Presentation]: [1F962 FE0F] (🥢️) chopsticks / CHOPSTICKS
+Register Emoji [Emoji_Presentation]: [1F963 FE0F] (🥣️) bowl with spoon / BOWL WITH SPOON
+Register Emoji [Emoji_Presentation]: [1F964 FE0F] (🥤️) cup with straw / CUP WITH STRAW
+Register Emoji [Emoji_Presentation]: [1F965 FE0F] (🥥️) coconut / COCONUT
+Register Emoji [Emoji_Presentation]: [1F966 FE0F] (🥦️) broccoli / BROCCOLI
+Register Emoji [Emoji_Presentation]: [1F967 FE0F] (🥧️) pie / PIE
+Register Emoji [Emoji_Presentation]: [1F968 FE0F] (🥨️) pretzel / PRETZEL
+Register Emoji [Emoji_Presentation]: [1F969 FE0F] (🥩️) cut of meat / CUT OF MEAT
+Register Emoji [Emoji_Presentation]: [1F96A FE0F] (🥪️) sandwich / SANDWICH
+Register Emoji [Emoji_Presentation]: [1F96B FE0F] (🥫️) canned food / CANNED FOOD
+Register Emoji [Emoji_Presentation]: [1F96C FE0F] (🥬️) leafy green / LEAFY GREEN
+Register Emoji [Emoji_Presentation]: [1F96D FE0F] (🥭️) mango / MANGO
+Register Emoji [Emoji_Presentation]: [1F96E FE0F] (🥮️) moon cake / MOON CAKE
+Register Emoji [Emoji_Presentation]: [1F96F FE0F] (🥯️) bagel / BAGEL
+Register Emoji [Emoji_Presentation]: [1F970 FE0F] (🥰️) smiling face with hearts / SMILING FACE WITH SMILING EYES AND THREE HEARTS
+Register Emoji [Emoji_Presentation]: [1F971 FE0F] (🥱️) yawning face / YAWNING FACE
+Register Emoji [Emoji_Presentation]: [1F972 FE0F] (🥲️) smiling face with tear / SMILING FACE WITH TEAR
+Register Emoji [Emoji_Presentation]: [1F973 FE0F] (🥳️) partying face / FACE WITH PARTY HORN AND PARTY HAT
+Register Emoji [Emoji_Presentation]: [1F974 FE0F] (🥴️) woozy face / FACE WITH UNEVEN EYES AND WAVY MOUTH
+Register Emoji [Emoji_Presentation]: [1F975 FE0F] (🥵️) hot face / OVERHEATED FACE
+Register Emoji [Emoji_Presentation]: [1F976 FE0F] (🥶️) cold face / FREEZING FACE
+Register Emoji [Emoji_Presentation]: [1F977 FE0F] (🥷️) ninja / NINJA
+Register Emoji [Emoji_Presentation]: [1F978 FE0F] (🥸️) disguised face / DISGUISED FACE
+Register Emoji [Emoji_Presentation]: [1F979 FE0F] (🥹️) face holding back tears / FACE HOLDING BACK TEARS
+Register Emoji [Emoji_Presentation]: [1F97A FE0F] (🥺️) pleading face / FACE WITH PLEADING EYES
+Register Emoji [Emoji_Presentation]: [1F97B FE0F] (🥻️) sari / SARI
+Register Emoji [Emoji_Presentation]: [1F97C FE0F] (🥼️) lab coat / LAB COAT
+Register Emoji [Emoji_Presentation]: [1F97D FE0F] (🥽️) goggles / GOGGLES
+Register Emoji [Emoji_Presentation]: [1F97E FE0F] (🥾️) hiking boot / HIKING BOOT
+Register Emoji [Emoji_Presentation]: [1F97F FE0F] (🥿️) flat shoe / FLAT SHOE
+Register Emoji [Emoji_Presentation]: [1F980 FE0F] (🦀️) crab / CRAB
+Register Emoji [Emoji_Presentation]: [1F981 FE0F] (🦁️) lion / LION FACE
+Register Emoji [Emoji_Presentation]: [1F982 FE0F] (🦂️) scorpion / SCORPION
+Register Emoji [Emoji_Presentation]: [1F983 FE0F] (🦃️) turkey / TURKEY
+Register Emoji [Emoji_Presentation]: [1F984 FE0F] (🦄️) unicorn / UNICORN FACE
+Register Emoji [Emoji_Presentation]: [1F985 FE0F] (🦅️) eagle / EAGLE
+Register Emoji [Emoji_Presentation]: [1F986 FE0F] (🦆️) duck / DUCK
+Register Emoji [Emoji_Presentation]: [1F987 FE0F] (🦇️) bat / BAT
+Register Emoji [Emoji_Presentation]: [1F988 FE0F] (🦈️) shark / SHARK
+Register Emoji [Emoji_Presentation]: [1F989 FE0F] (🦉️) owl / OWL
+Register Emoji [Emoji_Presentation]: [1F98A FE0F] (🦊️) fox / FOX FACE
+Register Emoji [Emoji_Presentation]: [1F98B FE0F] (🦋️) butterfly / BUTTERFLY
+Register Emoji [Emoji_Presentation]: [1F98C FE0F] (🦌️) deer / DEER
+Register Emoji [Emoji_Presentation]: [1F98D FE0F] (🦍️) gorilla / GORILLA
+Register Emoji [Emoji_Presentation]: [1F98E FE0F] (🦎️) lizard / LIZARD
+Register Emoji [Emoji_Presentation]: [1F98F FE0F] (🦏️) rhinoceros / RHINOCEROS
+Register Emoji [Emoji_Presentation]: [1F990 FE0F] (🦐️) shrimp / SHRIMP
+Register Emoji [Emoji_Presentation]: [1F991 FE0F] (🦑️) squid / SQUID
+Register Emoji [Emoji_Presentation]: [1F992 FE0F] (🦒️) giraffe / GIRAFFE FACE
+Register Emoji [Emoji_Presentation]: [1F993 FE0F] (🦓️) zebra / ZEBRA FACE
+Register Emoji [Emoji_Presentation]: [1F994 FE0F] (🦔️) hedgehog / HEDGEHOG
+Register Emoji [Emoji_Presentation]: [1F995 FE0F] (🦕️) sauropod / SAUROPOD
+Register Emoji [Emoji_Presentation]: [1F996 FE0F] (🦖️) T-Rex / T-REX
+Register Emoji [Emoji_Presentation]: [1F997 FE0F] (🦗️) cricket / CRICKET
+Register Emoji [Emoji_Presentation]: [1F998 FE0F] (🦘️) kangaroo / KANGAROO
+Register Emoji [Emoji_Presentation]: [1F999 FE0F] (🦙️) llama / LLAMA
+Register Emoji [Emoji_Presentation]: [1F99A FE0F] (🦚️) peacock / PEACOCK
+Register Emoji [Emoji_Presentation]: [1F99B FE0F] (🦛️) hippopotamus / HIPPOPOTAMUS
+Register Emoji [Emoji_Presentation]: [1F99C FE0F] (🦜️) parrot / PARROT
+Register Emoji [Emoji_Presentation]: [1F99D FE0F] (🦝️) raccoon / RACCOON
+Register Emoji [Emoji_Presentation]: [1F99E FE0F] (🦞️) lobster / LOBSTER
+Register Emoji [Emoji_Presentation]: [1F99F FE0F] (🦟️) mosquito / MOSQUITO
+Register Emoji [Emoji_Presentation]: [1F9A0 FE0F] (🦠️) microbe / MICROBE
+Register Emoji [Emoji_Presentation]: [1F9A1 FE0F] (🦡️) badger / BADGER
+Register Emoji [Emoji_Presentation]: [1F9A2 FE0F] (🦢️) swan / SWAN
+Register Emoji [Emoji_Presentation]: [1F9A3 FE0F] (🦣️) mammoth / MAMMOTH
+Register Emoji [Emoji_Presentation]: [1F9A4 FE0F] (🦤️) dodo / DODO
+Register Emoji [Emoji_Presentation]: [1F9A5 FE0F] (🦥️) sloth / SLOTH
+Register Emoji [Emoji_Presentation]: [1F9A6 FE0F] (🦦️) otter / OTTER
+Register Emoji [Emoji_Presentation]: [1F9A7 FE0F] (🦧️) orangutan / ORANGUTAN
+Register Emoji [Emoji_Presentation]: [1F9A8 FE0F] (🦨️) skunk / SKUNK
+Register Emoji [Emoji_Presentation]: [1F9A9 FE0F] (🦩️) flamingo / FLAMINGO
+Register Emoji [Emoji_Presentation]: [1F9AA FE0F] (🦪️) oyster / OYSTER
+Register Emoji [Emoji_Presentation]: [1F9AB FE0F] (🦫️) beaver / BEAVER
+Register Emoji [Emoji_Presentation]: [1F9AC FE0F] (🦬️) bison / BISON
+Register Emoji [Emoji_Presentation]: [1F9AD FE0F] (🦭️) seal / SEAL
+Register Emoji [Emoji_Presentation]: [1F9AE FE0F] (🦮️) guide dog / GUIDE DOG
+Register Emoji [Emoji_Presentation]: [1F9AF FE0F] (🦯️) white cane / PROBING CANE
+Register Emoji [Emoji_Presentation]: [1F9B0 FE0F] (🦰️) red hair / EMOJI COMPONENT RED HAIR
+Register Emoji [Emoji_Presentation]: [1F9B1 FE0F] (🦱️) curly hair / EMOJI COMPONENT CURLY HAIR
+Register Emoji [Emoji_Presentation]: [1F9B2 FE0F] (🦲️) bald / EMOJI COMPONENT BALD
+Register Emoji [Emoji_Presentation]: [1F9B3 FE0F] (🦳️) white hair / EMOJI COMPONENT WHITE HAIR
+Register Emoji [Emoji_Presentation]: [1F9B4 FE0F] (🦴️) bone / BONE
+Register Emoji [Emoji_Presentation]: [1F9B5 FE0F] (🦵️) leg / LEG
+Register Emoji [Emoji_Presentation]: [1F9B6 FE0F] (🦶️) foot / FOOT
+Register Emoji [Emoji_Presentation]: [1F9B7 FE0F] (🦷️) tooth / TOOTH
+Register Emoji [Emoji_Presentation]: [1F9B8 FE0F] (🦸️) superhero / SUPERHERO
+Register Emoji [Emoji_Presentation]: [1F9B9 FE0F] (🦹️) supervillain / SUPERVILLAIN
+Register Emoji [Emoji_Presentation]: [1F9BA FE0F] (🦺️) safety vest / SAFETY VEST
+Register Emoji [Emoji_Presentation]: [1F9BB FE0F] (🦻️) ear with hearing aid / EAR WITH HEARING AID
+Register Emoji [Emoji_Presentation]: [1F9BC FE0F] (🦼️) motorized wheelchair / MOTORIZED WHEELCHAIR
+Register Emoji [Emoji_Presentation]: [1F9BD FE0F] (🦽️) manual wheelchair / MANUAL WHEELCHAIR
+Register Emoji [Emoji_Presentation]: [1F9BE FE0F] (🦾️) mechanical arm / MECHANICAL ARM
+Register Emoji [Emoji_Presentation]: [1F9BF FE0F] (🦿️) mechanical leg / MECHANICAL LEG
+Register Emoji [Emoji_Presentation]: [1F9C0 FE0F] (🧀️) cheese wedge / CHEESE WEDGE
+Register Emoji [Emoji_Presentation]: [1F9C1 FE0F] (🧁️) cupcake / CUPCAKE
+Register Emoji [Emoji_Presentation]: [1F9C2 FE0F] (🧂️) salt / SALT SHAKER
+Register Emoji [Emoji_Presentation]: [1F9C3 FE0F] (🧃️) beverage box / BEVERAGE BOX
+Register Emoji [Emoji_Presentation]: [1F9C4 FE0F] (🧄️) garlic / GARLIC
+Register Emoji [Emoji_Presentation]: [1F9C5 FE0F] (🧅️) onion / ONION
+Register Emoji [Emoji_Presentation]: [1F9C6 FE0F] (🧆️) falafel / FALAFEL
+Register Emoji [Emoji_Presentation]: [1F9C7 FE0F] (🧇️) waffle / WAFFLE
+Register Emoji [Emoji_Presentation]: [1F9C8 FE0F] (🧈️) butter / BUTTER
+Register Emoji [Emoji_Presentation]: [1F9C9 FE0F] (🧉️) mate / MATE DRINK
+Register Emoji [Emoji_Presentation]: [1F9CA FE0F] (🧊️) ice / ICE CUBE
+Register Emoji [Emoji_Presentation]: [1F9CB FE0F] (🧋️) bubble tea / BUBBLE TEA
+Register Emoji [Emoji_Presentation]: [1F9CC FE0F] (🧌️) troll / TROLL
+Register Emoji [Emoji_Presentation]: [1F9CD FE0F] (🧍️) person standing / STANDING PERSON
+Register Emoji [Emoji_Presentation]: [1F9CE FE0F] (🧎️) person kneeling / KNEELING PERSON
+Register Emoji [Emoji_Presentation]: [1F9CF FE0F] (🧏️) deaf person / DEAF PERSON
+Register Emoji [Emoji_Presentation]: [1F9D0 FE0F] (🧐️) face with monocle / FACE WITH MONOCLE
+Register Emoji [Emoji_Presentation]: [1F9D1 FE0F] (🧑️) person / ADULT
+Register Emoji [Emoji_Presentation]: [1F9D2 FE0F] (🧒️) child / CHILD
+Register Emoji [Emoji_Presentation]: [1F9D3 FE0F] (🧓️) older person / OLDER ADULT
+Register Emoji [Emoji_Presentation]: [1F9D4 FE0F] (🧔️) person: beard / BEARDED PERSON
+Register Emoji [Emoji_Presentation]: [1F9D5 FE0F] (🧕️) woman with headscarf / PERSON WITH HEADSCARF
+Register Emoji [Emoji_Presentation]: [1F9D6 FE0F] (🧖️) person in steamy room / PERSON IN STEAMY ROOM
+Register Emoji [Emoji_Presentation]: [1F9D7 FE0F] (🧗️) person climbing / PERSON CLIMBING
+Register Emoji [Emoji_Presentation]: [1F9D8 FE0F] (🧘️) person in lotus position / PERSON IN LOTUS POSITION
+Register Emoji [Emoji_Presentation]: [1F9D9 FE0F] (🧙️) mage / MAGE
+Register Emoji [Emoji_Presentation]: [1F9DA FE0F] (🧚️) fairy / FAIRY
+Register Emoji [Emoji_Presentation]: [1F9DB FE0F] (🧛️) vampire / VAMPIRE
+Register Emoji [Emoji_Presentation]: [1F9DC FE0F] (🧜️) merperson / MERPERSON
+Register Emoji [Emoji_Presentation]: [1F9DD FE0F] (🧝️) elf / ELF
+Register Emoji [Emoji_Presentation]: [1F9DE FE0F] (🧞️) genie / GENIE
+Register Emoji [Emoji_Presentation]: [1F9DF FE0F] (🧟️) zombie / ZOMBIE
+Register Emoji [Emoji_Presentation]: [1F9E0 FE0F] (🧠️) brain / BRAIN
+Register Emoji [Emoji_Presentation]: [1F9E1 FE0F] (🧡️) orange heart / ORANGE HEART
+Register Emoji [Emoji_Presentation]: [1F9E2 FE0F] (🧢️) billed cap / BILLED CAP
+Register Emoji [Emoji_Presentation]: [1F9E3 FE0F] (🧣️) scarf / SCARF
+Register Emoji [Emoji_Presentation]: [1F9E4 FE0F] (🧤️) gloves / GLOVES
+Register Emoji [Emoji_Presentation]: [1F9E5 FE0F] (🧥️) coat / COAT
+Register Emoji [Emoji_Presentation]: [1F9E6 FE0F] (🧦️) socks / SOCKS
+Register Emoji [Emoji_Presentation]: [1F9E7 FE0F] (🧧️) red envelope / RED GIFT ENVELOPE
+Register Emoji [Emoji_Presentation]: [1F9E8 FE0F] (🧨️) firecracker / FIRECRACKER
+Register Emoji [Emoji_Presentation]: [1F9E9 FE0F] (🧩️) puzzle piece / JIGSAW PUZZLE PIECE
+Register Emoji [Emoji_Presentation]: [1F9EA FE0F] (🧪️) test tube / TEST TUBE
+Register Emoji [Emoji_Presentation]: [1F9EB FE0F] (🧫️) petri dish / PETRI DISH
+Register Emoji [Emoji_Presentation]: [1F9EC FE0F] (🧬️) dna / DNA DOUBLE HELIX
+Register Emoji [Emoji_Presentation]: [1F9ED FE0F] (🧭️) compass / COMPASS
+Register Emoji [Emoji_Presentation]: [1F9EE FE0F] (🧮️) abacus / ABACUS
+Register Emoji [Emoji_Presentation]: [1F9EF FE0F] (🧯️) fire extinguisher / FIRE EXTINGUISHER
+Register Emoji [Emoji_Presentation]: [1F9F0 FE0F] (🧰️) toolbox / TOOLBOX
+Register Emoji [Emoji_Presentation]: [1F9F1 FE0F] (🧱️) brick / BRICK
+Register Emoji [Emoji_Presentation]: [1F9F2 FE0F] (🧲️) magnet / MAGNET
+Register Emoji [Emoji_Presentation]: [1F9F3 FE0F] (🧳️) luggage / LUGGAGE
+Register Emoji [Emoji_Presentation]: [1F9F4 FE0F] (🧴️) lotion bottle / LOTION BOTTLE
+Register Emoji [Emoji_Presentation]: [1F9F5 FE0F] (🧵️) thread / SPOOL OF THREAD
+Register Emoji [Emoji_Presentation]: [1F9F6 FE0F] (🧶️) yarn / BALL OF YARN
+Register Emoji [Emoji_Presentation]: [1F9F7 FE0F] (🧷️) safety pin / SAFETY PIN
+Register Emoji [Emoji_Presentation]: [1F9F8 FE0F] (🧸️) teddy bear / TEDDY BEAR
+Register Emoji [Emoji_Presentation]: [1F9F9 FE0F] (🧹️) broom / BROOM
+Register Emoji [Emoji_Presentation]: [1F9FA FE0F] (🧺️) basket / BASKET
+Register Emoji [Emoji_Presentation]: [1F9FB FE0F] (🧻️) roll of paper / ROLL OF PAPER
+Register Emoji [Emoji_Presentation]: [1F9FC FE0F] (🧼️) soap / BAR OF SOAP
+Register Emoji [Emoji_Presentation]: [1F9FD FE0F] (🧽️) sponge / SPONGE
+Register Emoji [Emoji_Presentation]: [1F9FE FE0F] (🧾️) receipt / RECEIPT
+Register Emoji [Emoji_Presentation]: [1F9FF FE0F] (🧿️) nazar amulet / NAZAR AMULET
+Register Emoji [Emoji_Presentation]: [1FA70 FE0F] (🩰️) ballet shoes / BALLET SHOES
+Register Emoji [Emoji_Presentation]: [1FA71 FE0F] (🩱️) one-piece swimsuit / ONE-PIECE SWIMSUIT
+Register Emoji [Emoji_Presentation]: [1FA72 FE0F] (🩲️) briefs / BRIEFS
+Register Emoji [Emoji_Presentation]: [1FA73 FE0F] (🩳️) shorts / SHORTS
+Register Emoji [Emoji_Presentation]: [1FA74 FE0F] (🩴️) thong sandal / THONG SANDAL
+Register Emoji [Emoji_Presentation]: [1FA75 FE0F] (🩵️) light blue heart / LIGHT BLUE HEART
+Register Emoji [Emoji_Presentation]: [1FA76 FE0F] (🩶️) grey heart / GREY HEART
+Register Emoji [Emoji_Presentation]: [1FA77 FE0F] (🩷️) pink heart / PINK HEART
+Register Emoji [Emoji_Presentation]: [1FA78 FE0F] (🩸️) drop of blood / DROP OF BLOOD
+Register Emoji [Emoji_Presentation]: [1FA79 FE0F] (🩹️) adhesive bandage / ADHESIVE BANDAGE
+Register Emoji [Emoji_Presentation]: [1FA7A FE0F] (🩺️) stethoscope / STETHOSCOPE
+Register Emoji [Emoji_Presentation]: [1FA7B FE0F] (🩻️) x-ray / X-RAY
+Register Emoji [Emoji_Presentation]: [1FA7C FE0F] (🩼️) crutch / CRUTCH
+Register Emoji [Emoji_Presentation]: [1FA80 FE0F] (🪀️) yo-yo / YO-YO
+Register Emoji [Emoji_Presentation]: [1FA81 FE0F] (🪁️) kite / KITE
+Register Emoji [Emoji_Presentation]: [1FA82 FE0F] (🪂️) parachute / PARACHUTE
+Register Emoji [Emoji_Presentation]: [1FA83 FE0F] (🪃️) boomerang / BOOMERANG
+Register Emoji [Emoji_Presentation]: [1FA84 FE0F] (🪄️) magic wand / MAGIC WAND
+Register Emoji [Emoji_Presentation]: [1FA85 FE0F] (🪅️) piñata / PINATA
+Register Emoji [Emoji_Presentation]: [1FA86 FE0F] (🪆️) nesting dolls / NESTING DOLLS
+Register Emoji [Emoji_Presentation]: [1FA87 FE0F] (🪇️) maracas / MARACAS
+Register Emoji [Emoji_Presentation]: [1FA88 FE0F] (🪈️) flute / FLUTE
+Register Emoji [Emoji_Presentation]: [1FA90 FE0F] (🪐️) ringed planet / RINGED PLANET
+Register Emoji [Emoji_Presentation]: [1FA91 FE0F] (🪑️) chair / CHAIR
+Register Emoji [Emoji_Presentation]: [1FA92 FE0F] (🪒️) razor / RAZOR
+Register Emoji [Emoji_Presentation]: [1FA93 FE0F] (🪓️) axe / AXE
+Register Emoji [Emoji_Presentation]: [1FA94 FE0F] (🪔️) diya lamp / DIYA LAMP
+Register Emoji [Emoji_Presentation]: [1FA95 FE0F] (🪕️) banjo / BANJO
+Register Emoji [Emoji_Presentation]: [1FA96 FE0F] (🪖️) military helmet / MILITARY HELMET
+Register Emoji [Emoji_Presentation]: [1FA97 FE0F] (🪗️) accordion / ACCORDION
+Register Emoji [Emoji_Presentation]: [1FA98 FE0F] (🪘️) long drum / LONG DRUM
+Register Emoji [Emoji_Presentation]: [1FA99 FE0F] (🪙️) coin / COIN
+Register Emoji [Emoji_Presentation]: [1FA9A FE0F] (🪚️) carpentry saw / CARPENTRY SAW
+Register Emoji [Emoji_Presentation]: [1FA9B FE0F] (🪛️) screwdriver / SCREWDRIVER
+Register Emoji [Emoji_Presentation]: [1FA9C FE0F] (🪜️) ladder / LADDER
+Register Emoji [Emoji_Presentation]: [1FA9D FE0F] (🪝️) hook / HOOK
+Register Emoji [Emoji_Presentation]: [1FA9E FE0F] (🪞️) mirror / MIRROR
+Register Emoji [Emoji_Presentation]: [1FA9F FE0F] (🪟️) window / WINDOW
+Register Emoji [Emoji_Presentation]: [1FAA0 FE0F] (🪠️) plunger / PLUNGER
+Register Emoji [Emoji_Presentation]: [1FAA1 FE0F] (🪡️) sewing needle / SEWING NEEDLE
+Register Emoji [Emoji_Presentation]: [1FAA2 FE0F] (🪢️) knot / KNOT
+Register Emoji [Emoji_Presentation]: [1FAA3 FE0F] (🪣️) bucket / BUCKET
+Register Emoji [Emoji_Presentation]: [1FAA4 FE0F] (🪤️) mouse trap / MOUSE TRAP
+Register Emoji [Emoji_Presentation]: [1FAA5 FE0F] (🪥️) toothbrush / TOOTHBRUSH
+Register Emoji [Emoji_Presentation]: [1FAA6 FE0F] (🪦️) headstone / HEADSTONE
+Register Emoji [Emoji_Presentation]: [1FAA7 FE0F] (🪧️) placard / PLACARD
+Register Emoji [Emoji_Presentation]: [1FAA8 FE0F] (🪨️) rock / ROCK
+Register Emoji [Emoji_Presentation]: [1FAA9 FE0F] (🪩️) mirror ball / MIRROR BALL
+Register Emoji [Emoji_Presentation]: [1FAAA FE0F] (🪪️) identification card / IDENTIFICATION CARD
+Register Emoji [Emoji_Presentation]: [1FAAB FE0F] (🪫️) low battery / LOW BATTERY
+Register Emoji [Emoji_Presentation]: [1FAAC FE0F] (🪬️) hamsa / HAMSA
+Register Emoji [Emoji_Presentation]: [1FAAD FE0F] (🪭️) folding hand fan / FOLDING HAND FAN
+Register Emoji [Emoji_Presentation]: [1FAAE FE0F] (🪮️) hair pick / HAIR PICK
+Register Emoji [Emoji_Presentation]: [1FAAF FE0F] (🪯️) khanda / KHANDA
+Register Emoji [Emoji_Presentation]: [1FAB0 FE0F] (🪰️) fly / FLY
+Register Emoji [Emoji_Presentation]: [1FAB1 FE0F] (🪱️) worm / WORM
+Register Emoji [Emoji_Presentation]: [1FAB2 FE0F] (🪲️) beetle / BEETLE
+Register Emoji [Emoji_Presentation]: [1FAB3 FE0F] (🪳️) cockroach / COCKROACH
+Register Emoji [Emoji_Presentation]: [1FAB4 FE0F] (🪴️) potted plant / POTTED PLANT
+Register Emoji [Emoji_Presentation]: [1FAB5 FE0F] (🪵️) wood / WOOD
+Register Emoji [Emoji_Presentation]: [1FAB6 FE0F] (🪶️) feather / FEATHER
+Register Emoji [Emoji_Presentation]: [1FAB7 FE0F] (🪷️) lotus / LOTUS
+Register Emoji [Emoji_Presentation]: [1FAB8 FE0F] (🪸️) coral / CORAL
+Register Emoji [Emoji_Presentation]: [1FAB9 FE0F] (🪹️) empty nest / EMPTY NEST
+Register Emoji [Emoji_Presentation]: [1FABA FE0F] (🪺️) nest with eggs / NEST WITH EGGS
+Register Emoji [Emoji_Presentation]: [1FABB FE0F] (🪻️) hyacinth / HYACINTH
+Register Emoji [Emoji_Presentation]: [1FABC FE0F] (🪼️) jellyfish / JELLYFISH
+Register Emoji [Emoji_Presentation]: [1FABD FE0F] (🪽️) wing / WING
+Register Emoji [Emoji_Presentation]: [1FABF FE0F] (🪿️) goose / GOOSE
+Register Emoji [Emoji_Presentation]: [1FAC0 FE0F] (🫀️) anatomical heart / ANATOMICAL HEART
+Register Emoji [Emoji_Presentation]: [1FAC1 FE0F] (🫁️) lungs / LUNGS
+Register Emoji [Emoji_Presentation]: [1FAC2 FE0F] (🫂️) people hugging / PEOPLE HUGGING
+Register Emoji [Emoji_Presentation]: [1FAC3 FE0F] (🫃️) pregnant man / PREGNANT MAN
+Register Emoji [Emoji_Presentation]: [1FAC4 FE0F] (🫄️) pregnant person / PREGNANT PERSON
+Register Emoji [Emoji_Presentation]: [1FAC5 FE0F] (🫅️) person with crown / PERSON WITH CROWN
+Register Emoji [Emoji_Presentation]: [1FACE FE0F] (🫎️) moose / MOOSE
+Register Emoji [Emoji_Presentation]: [1FACF FE0F] (🫏️) donkey / DONKEY
+Register Emoji [Emoji_Presentation]: [1FAD0 FE0F] (🫐️) blueberries / BLUEBERRIES
+Register Emoji [Emoji_Presentation]: [1FAD1 FE0F] (🫑️) bell pepper / BELL PEPPER
+Register Emoji [Emoji_Presentation]: [1FAD2 FE0F] (🫒️) olive / OLIVE
+Register Emoji [Emoji_Presentation]: [1FAD3 FE0F] (🫓️) flatbread / FLATBREAD
+Register Emoji [Emoji_Presentation]: [1FAD4 FE0F] (🫔️) tamale / TAMALE
+Register Emoji [Emoji_Presentation]: [1FAD5 FE0F] (🫕️) fondue / FONDUE
+Register Emoji [Emoji_Presentation]: [1FAD6 FE0F] (🫖️) teapot / TEAPOT
+Register Emoji [Emoji_Presentation]: [1FAD7 FE0F] (🫗️) pouring liquid / POURING LIQUID
+Register Emoji [Emoji_Presentation]: [1FAD8 FE0F] (🫘️) beans / BEANS
+Register Emoji [Emoji_Presentation]: [1FAD9 FE0F] (🫙️) jar / JAR
+Register Emoji [Emoji_Presentation]: [1FADA FE0F] (🫚️) ginger root / GINGER ROOT
+Register Emoji [Emoji_Presentation]: [1FADB FE0F] (🫛️) pea pod / PEA POD
+Register Emoji [Emoji_Presentation]: [1FAE0 FE0F] (🫠️) melting face / MELTING FACE
+Register Emoji [Emoji_Presentation]: [1FAE1 FE0F] (🫡️) saluting face / SALUTING FACE
+Register Emoji [Emoji_Presentation]: [1FAE2 FE0F] (🫢️) face with open eyes and hand over mouth / FACE WITH OPEN EYES AND HAND OVER MOUTH
+Register Emoji [Emoji_Presentation]: [1FAE3 FE0F] (🫣️) face with peeking eye / FACE WITH PEEKING EYE
+Register Emoji [Emoji_Presentation]: [1FAE4 FE0F] (🫤️) face with diagonal mouth / FACE WITH DIAGONAL MOUTH
+Register Emoji [Emoji_Presentation]: [1FAE5 FE0F] (🫥️) dotted line face / DOTTED LINE FACE
+Register Emoji [Emoji_Presentation]: [1FAE6 FE0F] (🫦️) biting lip / BITING LIP
+Register Emoji [Emoji_Presentation]: [1FAE7 FE0F] (🫧️) bubbles / BUBBLES
+Register Emoji [Emoji_Presentation]: [1FAE8 FE0F] (🫨️) shaking face / SHAKING FACE
+Register Emoji [Emoji_Presentation]: [1FAF0 FE0F] (🫰️) hand with index finger and thumb crossed / HAND WITH INDEX FINGER AND THUMB CROSSED
+Register Emoji [Emoji_Presentation]: [1FAF1 FE0F] (🫱️) rightwards hand / RIGHTWARDS HAND
+Register Emoji [Emoji_Presentation]: [1FAF2 FE0F] (🫲️) leftwards hand / LEFTWARDS HAND
+Register Emoji [Emoji_Presentation]: [1FAF3 FE0F] (🫳️) palm down hand / PALM DOWN HAND
+Register Emoji [Emoji_Presentation]: [1FAF4 FE0F] (🫴️) palm up hand / PALM UP HAND
+Register Emoji [Emoji_Presentation]: [1FAF5 FE0F] (🫵️) index pointing at the viewer / INDEX POINTING AT THE VIEWER
+Register Emoji [Emoji_Presentation]: [1FAF6 FE0F] (🫶️) heart hands / HEART HANDS
+Register Emoji [Emoji_Presentation]: [1FAF7 FE0F] (🫷️) leftwards pushing hand / LEFTWARDS PUSHING HAND
+Register Emoji [Emoji_Presentation]: [1FAF8 FE0F] (🫸️) rightwards pushing hand / RIGHTWARDS PUSHING HAND
 ==== Register Leftover Emoji ====
 ==== Whitelist Emoji ====
 ==== Blacklist Emoji ====
@@ -14769,8 +14769,8 @@ Ord | Valid  | Uniqu | Prima | Secon | CM  | Group
  19 |     42 |    42 |    42 |     0 | N=1 | Georgian  
  20 |     43 |    43 |    43 |     0 | N=1 | Armenian  
  21 |    213 |   203 |   213 |     0 | N=1 | Myanmar   
- 22 |    110 |   110 |   110 |     0 | N=1 | Malayalam 
- 23 |    137 |   137 |   137 |     0 | N=1 | Khmer     
+ 22 |    137 |   137 |   137 |     0 | N=1 | Khmer     
+ 23 |    110 |   110 |   110 |     0 | N=1 | Malayalam 
  24 |    515 |   515 |   515 |     0 | N=1 | Ethiopic  
  25 |     84 |    74 |    84 |     0 | N=1 | Kannada   
  26 |    107 |   107 |   107 |     0 | N=1 | Sinhala   
@@ -14910,6 +14910,6 @@ Optimized: 2110 => 541
 Wrote: spec.json [3111325]
 Wrote: nf.json [48402]
 Wrote: nf-tests.json [503302]
-Wrote: emoji-info.json [391345]
+Wrote: emoji-info.json [421154]
 Wrote: names.json [3334376]
 Wrote: confused.json [70820]

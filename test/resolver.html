@@ -57,12 +57,12 @@ h2 {
 #provider a {
 	font-weight: bold;
 }
-#version {
+#github {
 	text-align: right;
 	box-sizing: border-box;
 	width: min-content;
 }
-#version a {	
+#github a {	
 	white-space: pre;
 }
 .arrows {
@@ -457,8 +457,8 @@ footer {
 <body>
 <header>
 <h1><a href="https://ens.domains/">ENS Resolver</a><span id="provider" target="_blank" title="Registry Contract"></span></h1>
-<span id="version"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a><br>
-<a href="https://github.com/adraffy/ensip-norm">@adraffy/ensip-norm</a></span>
+<div id="github"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a><br>
+<a href="https://github.com/adraffy/ensip-norm">@adraffy/ensip-norm</a></div>
 </header>
 <div id="examples">
 <button>vitalik.eth</button>
@@ -522,6 +522,10 @@ footer {
 <button data-name="{300}">Leading</button>
 <button data-name="x{300}{300}">Adjacent</button>
 <button data-name="💩{300}">Emoji</button>
+Too Many:
+<button>{929}{900}{900}</button>
+<button>{622}{64D}{64D}</button>
+
 
 <a href="https://unicode.org/reports/tr46/#Validity_Criteria"><b>CheckHyphen:</b></a>
 <button>-test</button>
@@ -701,7 +705,7 @@ Hebrew:
 <div class="balloon"></div>
 <button id="confused_btn">Confused</button>
 <button id="nf_btn">NFD↔NFC</button>
-<button id="escape_btn">Escape</button>
+<button id="escape_btn" title="[ALT] Unicode Escaped">Escape</button>
 <button id="link_btn">Copy Link</button>
 <button id="resolve_btn">Resolve</button>
 </div>
@@ -743,7 +747,7 @@ import {ethers} from "https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
 	nfc, nfd, hex_cp, explode_cp, str_from_cps, safe_str_from_cps,
-	dom_from_tokens, use_default_style
+	dom_from_tokens, use_default_style, versions
 } from '../dist/all.min.js';
 import {puny_encoded} from '../../punycode.js/dist/index.min.js';
 use_default_style();
@@ -790,11 +794,15 @@ const emoji_url = './emoji.html#q=%s';
 const ENS_REGISTRY = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
 const ENS_NFT = '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85';
 
+const entity_span = document.createElement('span');
+
 let resolve_timer = RESOLVE_MODE_IDLE;
 let resolve_date0;
 
-// TODO: add more
-// this might require too much extra information
+console.log(versions);
+document.querySelector('footer').innerHTML += ` — v${versions.version} (${versions.spec_hash.slice(0, 8)})`;
+
+// TODO: add more 
 function keycap(i) {
 	return String.fromCodePoint(0x30+i, 0xFE0F, 0x20E3);
 }
@@ -814,8 +822,9 @@ add_digits('Arabic', '٠١٢٣٤٥٦٧٨٩', {mixed: 1}); //, reversed: true
 });
 add_digits('Simplified CJK', '〇一二三四五六七八九');
 add_digits('Devangari', '०१२३४५६७८९');
-//add_digits('Thai', '๐๑๒๓๔๕๖๗๘๙');
-//add_digits('Myanmar', '႐႑႒႓႔႕႖႗႘႙');
+add_digits('Thai', '๐๑๒๓๔๕๖๗๘๙');
+add_digits('Bengali', '০১২৩৪৫৬৭৮৯');
+add_digits('Tamil', '௦௧௨௩௪௫௬௭௮௯'); 
 
 read_local_storage('hide_examples',   x => examples_div.classList.toggle('hide', x));
 read_local_storage('show_details',    x => show_details_check.checked = x);
@@ -892,11 +901,11 @@ document.querySelector('#confused_btn').addEventListener('click', () => {
 	create_link(`./confused.html#${encodeURIComponent(get_dot_eth_label(s) || s.replaceAll('.', ''))}`).click();
 });
 
-document.querySelector('#escape_btn').addEventListener('click', () => {
+document.querySelector('#escape_btn').addEventListener('click', e => {
 	let s0 = input_field.value;
 	let s1 = replace_escapes(s0);
-	let s2 = apply_escapes(s1);
-	let s3 = apply_escapes(s1, true);
+	let s2 = apply_escapes(s1, false, e.altKey);
+	let s3 = apply_escapes(s1, true, e.altKey);
 	let set = [...new Set([s1, s2, s3])];
 	let pos = set.indexOf(s0);	
 	input_field.value = set[(pos + 1) % set.length];
@@ -1182,7 +1191,7 @@ function presolve(input, skip, resolving) {
 		// if there are disallowed characters		
 		if (tokens.some(x => x.type === 'disallowed')) {
 			let btn = document.createElement('button');
-			btn.innerText = '✨️ Remove Disallowed';
+			btn.innerText = '❌ Remove Disallowed';
 			btn.addEventListener('click', () => {
 				input_field.value = str_from_cps(tokens.flatMap(t => t.type === 'nfc' ? t.tokens0 : t).flatMap(t => {
 					switch (t.type) {
@@ -1230,7 +1239,8 @@ function add_transformed_row(input) {
 }
 
 function create_dns_row(name, replaced) {
-	let row = create_row(replaced ? 'Replaced DNS' : 'DNS');
+	let row = create_row(replaced ? 'Alternative DNS' : 'DNS');
+	let try_replace = false;
 	row.classList.add('dns');
 	try {
 		const MAX_LABEL = 63;
@@ -1274,6 +1284,9 @@ function create_dns_row(name, replaced) {
 			if (browser) {
 				add_row_tag(row, create_copy_btn(browser, {title: 'Copy Mangled'}));
 			}
+			if (!replaced) {
+				add_alternative_btn(row, name);
+			}
 		} else {
 			add_row_tag(row, create_typed_tag('second', 'Punycode Compatible'));
 		}
@@ -1286,41 +1299,61 @@ function create_dns_row(name, replaced) {
 	} catch (err) {
 		row.classList.add('invalid');
 		add_row_tag(row, create_typed_tag('fail', err));
-
 		if (!replaced) {
-			let alt, title;
-			try {
-				alt = ens_beautify(name);
-				title = 'Try Beautified';
-			} catch (err) {
-				alt = name.replaceAll('-', '\u2010');
-				title = 'Replace ASCII with Equivalent Unicode';
-			}
-			if (alt !== name) {
-				let btn = document.createElement('button');
-				btn.style.order = 31;
-				btn.innerText = title;
-				btn.addEventListener('click', () => {
-					row.replaceWith(create_dns_row(alt, true));
-				});
-				add_row_tag(row, btn);
-			}
+			add_alternative_btn(row, name);
 		}
-	}
+	}	
 	return row;
+	
 }
 
+// try some transformations
+function add_alternative_btn(row, name) {
+	let alt = name;
+	try {
+		alt = ens_beautify(alt);
+	} catch (err) {
+	}
+	alt = str_from_cps(explode_cp(name).map(cp => {
+		if (cp >= 0x660 && cp <= 0x669) {
+			return cp + 0x90; // try other arabic digits
+		} else {
+			return cp;
+		}
+	}));
+	if (alt !== name) {
+		let btn = document.createElement('button');
+		btn.innerText = '🥈️ Try Alternative';
+		btn.addEventListener('click', () => {
+			row.replaceWith(create_dns_row(alt, true));
+		});
+		add_row_tag(row, btn);
+	}
+}
+
+function unicode_escape_cp(cp) {
+	let hex = hex_cp(cp);
+	return hex.length > 4 ? `\\u{${hex}}` : `\\u${hex.padStart(4, '0')}`; // be nice
+}
+function unicode_escape(s) {
+	return explode_cp(s).map(unicode_escape_cp).join('');
+}
+function entity_escape(s) {
+	return explode_cp(s).map(cp => `&#x${hex_cp(cp)};`).join('');
+}
 // if forced, replaced everything
 // otherwise, replace non-ascii
-function apply_escapes(s, forced) {
-	return [...s].map(x => !forced && /^[\x21-\x7E]+$/gu.test(x) ? x : `{${hex_cp(x.codePointAt(0))}}`).join('');
+function apply_escapes(s, forced, unicode) {
+	return explode_cp(s).map(cp => {
+		if (!forced && (cp >= 0x21 && cp <= 0x7E)) return String.fromCodePoint(cp);
+		return unicode ? unicode_escape_cp(cp) : `{${hex_cp(cp)}}`;
+	}).join('');
 }
-
 function replace_escapes(s) {
-	// match: {HEX}, [0xHEX], [DEC]
-	return s.replace(/(?:(?:\{([0-9a-f]+)\})|(?:\[((?:0x[0-9a-f]+)|[0-9]+)\]))/uig, (_, a, b, c) => {
+	// match: \u{HEX}, {HEX}, \uXXXX, [0xHEX], [DEC]
+	return s.replace(/(?:(?:(?:\\u)?\{([0-9a-f]+)\}|\\u([0-9a-f]{4}))|(?:\[((?:0x[0-9a-f]+)|[0-9]+)\]))/uig, (_, hex1, hex2, num) => {		
 		try {
-			return String.fromCodePoint(a ? parseInt(a, 16) : parseInt(b)); 
+			return String.fromCodePoint(num ? parseInt(num) : parseInt(hex1 || hex2, 16)); 
 		} catch (err) {
 			return '�';
 		}
@@ -1351,7 +1384,15 @@ function create_etherscan_address_link(addr, {title, contract} = {}) {
 
 function create_copy_btn(s, {title = 'Copy', explode} = {}) {
 	let btn = document.createElement('button');
-	btn.addEventListener('click', () => navigator.clipboard.writeText(s));
+	btn.addEventListener('click', e => {
+		let copy = s;
+		if (e.altKey) {
+			copy = unicode_escape(copy);
+		} else if (e.ctrlKey) {
+			copy = entity_escape(copy);
+		} 
+		navigator.clipboard.writeText(copy);
+	});
 	btn.classList.add('copy');
 	btn.innerHTML = title;
 	btn.title = s;
@@ -1361,6 +1402,7 @@ function create_copy_btn(s, {title = 'Copy', explode} = {}) {
 	if (explode) {
 		btn.title += '\n' + explode_cp(s).map(hex_cp).join(' ');
 	}
+	btn.title += `\n[ALT] Unicode Escaped\n[CTRL] Entity Escaped`;
 	return btn;
 }
 
@@ -1494,20 +1536,20 @@ function create_digits_row(name0, values, negative) {
 	if (negative) {
 		add_row_tag(row, 'Negative');
 	}
-	if (values[0] === 0) {
-		let n = 1;
-		while (values[n] === 0) n++;
-		add_row_tag(row, `Zero Pad (${n})`);
+	let pad = 0;
+	while (values[pad] === 0) pad++;
+	if (pad) {
+		add_row_tag(row, `Zero Pad (${pad})`);
 	}
+	let btn = create_resolve_btn((negative ? KEYCAP_MINUS : '') + values.map(keycap).join(''), KEYCAP_NAME);
+	btn.disabled = name0 === KEYCAP_NAME;
+	add_row_tag(row, btn);
 	for (let [name, digits] of DIGITS_MAP) {
 		//if (name0 === name) continue;
 		let btn = create_resolve_btn(sign + values.map(x => digits.charAt(x)).join(''), name);
 		btn.disabled = name0 === name;
 		add_row_tag(row, btn);
 	}
-	let btn = create_resolve_btn((negative ? KEYCAP_MINUS : '') + values.map(keycap).join(''), KEYCAP_NAME);
-	btn.disabled = name0 === KEYCAP_NAME;
-	add_row_tag(row, btn);
 	return row;
 }
 
@@ -1874,6 +1916,11 @@ function resolve(options) {
 	if (/^\s*[0-9a-f]{2,}(\s+[0-9a-f]{2,})+\s*$/i.test(input)) { 
 		input = input.trim().split(/\s+/).map(x => `{${x}}`).join('');	
 	}
+	// input convenience: entities
+	input = input.replace(/&#?[0-9a-z]+;/gui, x => {
+		entity_span.innerHTML = x;
+		return apply_escapes(entity_span.innerText);
+	});
 	input_field.value = input;
 	if (!parse() && !skip) {
 		primary_arrows.classList.add('hide');
@@ -1983,7 +2030,7 @@ async function resolve0(input, skip_norm) {
 		add_row_tag(input_row, create_copy_btn(input));
 
 		if (/^0x[0-9a-f]{40}$/i.test(input)) {
-			add_row_tag(input_row, create_resolve_btn(ethers.utils.getAddress(input.toLowerCase()), '☑️ Fix Checksum'));
+			add_row_tag(input_row, create_resolve_btn(ethers.utils.getAddress(input.toLowerCase()), '🛠️ Fix Checksum'));
 		}
 		if (!input.includes('.')) {
 			add_row_tag(input_row, create_resolve_btn(`${input}.eth`, '🔄️ Add <b>".eth"</b>'));

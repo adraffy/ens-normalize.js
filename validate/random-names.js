@@ -1,89 +1,114 @@
 // generate names using a distribution with custom weights
-// depends on acess to /derive/ outputs
 
-import {readFileSync, writeFileSync} from 'node:fs';
-import {ens_normalize} from '../src/lib.js';
-import {random_choice} from '../src/utils.js';
+import {writeFileSync} from 'node:fs';
+import {ens_normalize, nfd, is_combining_mark} from '../src/lib.js';
+import {explode_cp, random_choice, random_sample} from '../src/utils.js';
+import {read_spec} from './data.js';
 
-let {valid, mapped, ignored, cm, emoji} = JSON.parse(readFileSync(new URL('../derive/output/spec.json', import.meta.url)));
+const SPEC = read_spec();
 
-let distrib = [
-	[2, valid],
-	[3, mapped],
-	[1, ignored],
-	[2, cm],
-	[4, emoji],
-];
+//let all_valid = [...new Set(SPEC.groups.flatMap(g => [...g.primary, ...g.secondary]))];
+//let all_parts = [...new Set(all_valid.flatMap(cp => [cp, ...nfd([cp])]))];
 
-// norm and sort by prob
-// coerce samples to sequences
-let weight_sum = distrib.reduce((a, x) => a + x[0], 0);
-distrib = distrib.map(([w, v]) => [w / weight_sum, v.map(x => [x].flat(Infinity))]).sort((a, b) => b[0] - a[0]); 
+let all_emoji = SPEC.emoji.flatMap(cps => {
+	return [cps, explode_cp(ens_normalize(String.fromCodePoint(...cps)))];
+});
 
-// choose from weighted distribution
-function random_seq() {
-	let r0 = Math.random();
-	let r = r0;
-	let i = 0;
-	for (let e = distrib.length-1; i < e; i++) {
-		r -= distrib[i][0];
-		if (r < 0) break;
+let reverse_map = new Map(SPEC.mapped.flatMap(([x, ys]) => {
+	return ys.map(y => [y, x]);
+}));
+
+let inject_samples = SPEC.groups.map(g => {
+	return random_sample([...g.primary, ...g.secondary], 100);
+});	
+inject_samples.push([0]); // illegal char
+inject_samples.push()
+
+const PER = 100;
+
+let pass = SPEC.groups.flatMap(g => {
+	console.log(g.name);
+	const t0 = performance.now();
+	let cps = [...g.primary, ...g.secondary];
+	let mapped = [...new Set(cps.flatMap(cp => reverse_map.get(cp) ?? []))];
+	let cm = cps.filter(cp => is_combining_mark(cp));
+	let valid = cps.filter(cp => !is_combining_mark(cp));
+	let names =  make_random_names([
+		[10, valid],
+		[3, cm],
+		[3, mapped],
+		[2, SPEC.ignored],
+		[1, all_emoji],
+	], PER, name => {
+		try {
+			return name !== ens_normalize(name);
+		} catch (err) {
+		}
+	});
+	return names;
+});
+
+let fail = pass.map(name0 => {
+	let cps = explode_cp(name0);
+	let pos = Math.random() * cps.length|0;	
+	let L = String.fromCodePoint(...cps.slice(0, pos));
+	let R = String.fromCodePoint(...cps.slice(pos));
+	let name;
+	while (true) {
+		name = L + String.fromCodePoint(random_choice(random_choice(inject_samples))) + R;
+		try {
+			ens_normalize(name);
+		} catch (err) {
+			break;
+		}
 	}
-	return random_choice(distrib[i][1]); 
+	return name;
+});
+
+writeFileSync(new URL('./random-names2.json', import.meta.url), JSON.stringify([...pass, ...fail], null, '\t'));
+
+
+function make_random_names(dist, per, test, max_len = 40) {
+	dist = dist.filter(([w, v]) => v.length > 0);
+	let sum = dist.reduce((a, [w]) => a + w, 0);
+	dist = dist.map(([w, v]) => [w / sum, v]).sort((a, b) => b[0] - a[0]); 
+	let names = [];
+	for (let a = 3, b = 2; a <= max_len; [a,b] = [a+b,a]) {
+		names.push(...generate_random(per, dist, a, test));
+	}
+	return names;
 }
 
-for (let i = 0; i < 100; i++) {
-	let v = random_seq();
-	if (!Array.isArray(v)) {
-		console.log(v, i);
-		throw new Error('wtf');
+function generate_random(samples, dist, len, test) {
+	let set = new Set();
+	while (set.size < samples) {
+		let name = random_name(dist, len);
+		if (test(name)) set.add(name);
 	}
+	return [...set];
 }
 
-function random_name(n) {
+function random_name(dist, len) {
 	let v = [];
-	while (v.length < n) {
-		v.push(...random_seq());
+	while (v.length < len) {
+		let x = weighted_sample(dist);
+		if (Array.isArray(x)) {
+			v.push(...x);
+		} else {
+			v.push(x);
+		}
 	}
 	return String.fromCodePoint(...v);
 }
 
-function generate_random(samples, len, fn) {
-	let ret = [];
-	let set = new Set();
-	while (ret.length < samples) {
-		let name = random_name(len);
-		let test = fn(name);
-		if (test && set.add(name)) ret.push(test);
+// choose from weighted distribution
+function weighted_sample(dist) {
+	let r0 = Math.random();
+	let r = r0;
+	let i = 0;
+	for (let e = dist.length-1; i < e; i++) {
+		r -= dist[i][0];
+		if (r < 0) break;
 	}
-	return ret;
+	return random_choice(dist[i][1]); 
 }
-
-function needs_norm(name) {
-	try {
-		let norm = ens_normalize(name);
-		if (name != norm) {
-			return name;
-		}
-	} catch (err) {		
-	}
-}
-function norm_fails(name) {
-	try {
-		ens_normalize(name);
-	} catch (err) {		
-		return name;
-	}
-}
-
-
-let names = [];
-for (let fn of [needs_norm, norm_fails]) {
-	for (let b = 3, a = 5; a < 40; [a,b] = [a+b,a]) {
-		names.push(...generate_random(2000, a, fn));
-	}
-}
-
-console.log(`Names: ${names.length}`);
-
-writeFileSync(new URL('./random-names.json', import.meta.url), JSON.stringify(names, null, '\t'));

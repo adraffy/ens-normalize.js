@@ -1,6 +1,8 @@
 import {Encoder, unsafe_btoa} from './encoder.js';
 import {readFileSync, writeFileSync} from 'node:fs';
 import {explode_cp} from './utils.js';
+import {compute_spec_hash} from './make-utils.js';
+
 /*
 // this appears to be bugged in node 18.12.1
 // randomly fails on keys
@@ -9,8 +11,12 @@ import {ranks, decomp, exclusions, qc} from '../derive/output/nf.json' assert {t
 */
 
 let data_dir = new URL('../derive/output/', import.meta.url);
-let {mapped, ignored, emoji, cm, fenced, escape, wholes, groups, nfc_check} = JSON.parse(readFileSync(new URL('./spec.json', data_dir)));
-let {ranks, decomp, exclusions, qc} = JSON.parse(readFileSync(new URL('./nf.json', data_dir)));
+let spec_file = new URL('./spec.json', data_dir);
+let nf_file = new URL('./nf.json', data_dir);
+
+let {mapped, ignored, emoji, cm, wholes, groups, fenced, escape, nfc_check, ...spec} = JSON.parse(readFileSync(spec_file));
+let {ranks, decomp, exclusions, qc} = JSON.parse(readFileSync(nf_file));
+let {version} = JSON.parse(readFileSync(new URL('../package.json', import.meta.url)));
 
 let emoji_solo = emoji.filter(v => v.length == 1).map(v => v[0]);
 let emoji_seqs = emoji.filter(v => v.length >= 2);
@@ -293,6 +299,8 @@ enc.write_member(sorted_emoji);
 //enc.write_member(emoji_solo.map(cp => sorted_emoji_map.get(cp))); 
 encode_emoji(enc, root, sorted_emoji_map);
 
+const built = new Date().toJSON();
+
 //write('include-only'); // only saves 300 bytes
 write('include-ens', {
 	FENCED: new Map(fenced)
@@ -310,11 +318,25 @@ enc.write_mapped([
 enc.write_member(qc);
 write('include-nf');
 
+// write version info
+const versions = {
+	derived: spec.created,
+	unicode: spec.unicode,
+	cldr: spec.cldr,
+	spec_hash: compute_spec_hash(spec_file),
+	built,
+	version
+};
+console.log(versions);
+writeFileSync(new URL('./include-versions.js', import.meta.url), Object.entries(versions).map(([k, v]) => {
+	return `export const ${k} = ${JSON.stringify(v)};`;
+}).join('\n'));
+
 function write(name, vars = {}) {
 	let {data, symbols} = enc.compressed();
 	let encoded = unsafe_btoa(data);
 	let buf = Buffer.from([
-		`// created ${new Date().toJSON()}`,
+		`// created ${built}`,
 		`import {read_compressed_payload} from './decoder.js';`,
 		`export default read_compressed_payload('${encoded}');`,
 		...Object.entries(vars).map(([k, v]) => {

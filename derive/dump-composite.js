@@ -10,6 +10,6 @@ for (let cp = 0; cp <= 0x10FFFF; cp++) {
 }
 
 for (let cp of found) {
-	console.log(PRINTER.desc_for_cp(cp));
+	console.log(`${PRINTER.desc_for_cp(cp)} [${PRINTER.scripts(cp)}]`);
 }
 console.log(found.length);

@@ -180,9 +180,12 @@ export function create_nf(unicode) {
 			let cps = this.nfc([cp]);
 			return cps.length === 1 && cps[0] === cp;
 		},
-		is_composite(cp) {
+		is_decomposed(cp) {
 			let cps = this.nfd([cp]);
-			return cps.length !== 1 || cps[0] !== cp;
+			return cps.length == 1 && cps[0] == cp; 
+		},
+		is_composite(cp) {
+			return this.nfd([cp]).length > 1;
 		},
 		run_tests() {
 			let errors = [];

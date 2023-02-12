@@ -6,7 +6,8 @@ let tally = group_by([...UNICODE.char_map.values()].filter(x => x.is_cm), x => x
 for (let [script, bucket] of tally) {
 	print_section(`${script.description} (${bucket.length})`);
 	for (let char of bucket) {
-		console.log(PRINTER.js(char.cp));
+		//console.log(PRINTER.js(char.cp));
+		console.log(`${PRINTER.desc_for_cp(char.cp)} [${PRINTER.scripts(char.cp)}]`);
 	}
 }
 

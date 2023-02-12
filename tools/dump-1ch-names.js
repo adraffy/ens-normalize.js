@@ -1,7 +1,7 @@
 // find all valid cp+cm+cm names
 
 import {ens_normalize} from '../src/lib.js';
-import {read_spec} from './data.js';
+import {read_spec} from '../validate/data.js';
 import {writeFileSync} from 'node:fs';
 
 let {cm, groups} = read_spec();

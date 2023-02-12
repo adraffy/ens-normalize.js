@@ -722,7 +722,7 @@ for (let cp = 0; cp < 0x80; cp++) {
 	try {
 		let char = UNICODE.require_char(cp);
 		if (!char.script) throw new Error(`Missing script`);
-		if (NF.is_composite(cp)) throw new Error(`Decomposes`); // wont happen
+		if (!NF.is_decomposed(cp)) throw new Error(`Decomposes`); // wont happen
 		if (char.is_cm) throw new Error('CM'); // wont happen
 		if (fenced_map.has(cp)) throw new Error('Fenced');	
 		if (wholes_list.some(w => w.map.has(cp))) throw new Error('Whole');
@@ -920,8 +920,8 @@ for (let info of emoji_disabled) { // make every disabled emoji a solo-sequence
 	info.type = 'Disabled';
 }
 write_json('emoji-info.json', [...valid_emoji.values(), ...emoji_disabled].map(info => {
-	let {cps, name, version, type} = info;
-	return {form: String.fromCodePoint(...cps), name, version, type};
+	let {cps, name, name0, version, type} = info;
+	return {form: String.fromCodePoint(...cps), name, name0, version, type};
 }));
 
 // for chars.html

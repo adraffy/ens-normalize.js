@@ -1,5 +1,7 @@
+// convenience stuff 
+// since these files are all optional and/or build dependent
+
 import {readFileSync} from 'node:fs';
-import {createHash} from 'node:crypto';
 
 export function read_labels(quiet) {
 	try {
@@ -22,17 +24,11 @@ export function read_random() {
 	} 
 }
 
-export const SPEC_FILE = new URL('../derive/output/spec.json', import.meta.url);
-
 export function read_spec() {
 	try {
-		return JSON.parse(readFileSync(SPEC_FILE));
+		return JSON.parse(readFileSync(new URL('../derive/output/spec.json', import.meta.url)));
 	} catch (err) {
 		console.log('Missing "spec.json".  Try running `npm run derive`');
 		throw new Error('spec');
 	} 
-}
-
-export function compute_spec_hash() {
-	return createHash('sha256').update(readFileSync(SPEC_FILE)).digest('hex');
 }

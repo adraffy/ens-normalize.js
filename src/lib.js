@@ -158,7 +158,15 @@ export function safe_str_from_cps(cps, quoter = quote_cp) {
 // if escaped: {HEX}
 //       else: "x" {HEX}
 function quoted_cp(cp) {
-	return (should_escape(cp) ? '' : `"${safe_str_from_cps([cp])}" `) + quote_cp(cp);
+	return (should_escape(cp) ? '' : `${bidi_qq(safe_str_from_cps([cp]))} `) + quote_cp(cp);
+}
+
+// 20230211: some messages can be mixed-directional and result in spillover
+// use 200E after a quoted string to force the remainder of a string from 
+// acquring the direction of the quote
+// https://www.w3.org/International/questions/qa-bidi-unicode-controls#exceptions
+function bidi_qq(s) {
+	return `"${s}"\u200E`; // strong LTR
 }
 
 function check_label_extension(cps) {
@@ -241,7 +249,6 @@ export function ens_beautify(name) {
 				prev = next + 1;
 			}
 		}
-
 		// 20221213: fixes bidi subdomain issue, but breaks invariant (200E is disallowed)
 		// could be fixed with special case for: 2D (.) + 200E (LTR)
 		//output.splice(0, 0, 0x200E);
@@ -299,7 +306,8 @@ export function ens_split(name, preserve_emoji) {
 						for (let i = 1; i < token_count; i++) { // we've already checked the first token
 							let cps = tokens[i];
 							if (!cps.is_emoji && CM.has(cps[0])) { // every text token has emoji neighbors, eg. EtEEEtEt...
-								throw error_placement(`emoji + combining mark: "${str_from_cps(tokens[i-1])} + ${safe_str_from_cps([cps[0]])}"`);
+								// bidi_qq() not needed since emoji is LTR and cps is a CM
+								throw error_placement(`emoji + combining mark: "${str_from_cps(tokens[i-1])} + ${safe_str_from_cps([cps[0]])}"`); 
 							}
 						}
 						check_fenced(norm);
@@ -385,12 +393,12 @@ function flatten(split) {
 		if (error) {
 			// don't print label again if just a single label
 			let msg = error.message;
-			throw new Error(split.length == 1 ? msg : `Invalid label "${safe_str_from_cps(input)}": ${msg}`);
+			// bidi_qq() only necessary if msg is digits
+			throw new Error(split.length == 1 ? msg : `Invalid label ${bidi_qq(safe_str_from_cps(input))}: ${msg}`); 
 		}
 		return str_from_cps(output);
 	}).join(STOP_CH);
 }
-
 
 function error_disallowed(cp) {
 	// TODO: add cp to error?
@@ -410,23 +418,33 @@ function error_placement(where) {
 
 // assumption: cps.length > 0
 // assumption: cps[0] isn't a CM
+// assumption: the previous character isn't an emoji
 function check_group(g, cps) {
 	let {V, M} = g;
 	for (let cp of cps) {
 		if (!V.has(cp)) {
+			// for whitelisted scripts, this will throw illegal mixture on invalid cm, eg. "e{300}{300}"
+			// at the moment, it's unnecessary to introduce an extra error type
+			// until there exists a whitelisted multi-character
+			//   eg. if (M < 0 && is_combining_mark(cp)) { ... }
+			// there are 3 cases:
+			//   1. illegal cm for wrong group => mixture error
+			//   2. illegal cm for same group => cm error
+			//       requires set of whitelist cm per group: 
+			//        eg. new Set([...g.V].flatMap(nfc).filter(cp => CM.has(cp)))
+			//   3. wrong group => mixture error
 			throw error_group_member(g, cp);
 		}
 	}
-	if (M >= 0) {
-		// we know it can't be cm leading
-		// we know the previous character isn't an emoji
+	if (M >= 0) { // we have a known fixed cm count
 		let decomposed = nfd(cps);
-		for (let i = 1, e = decomposed.length; i < e; i++) {
-			if (CM.has(cps[i])) {
+		for (let i = 1, e = decomposed.length; i < e; i++) { // see: assumption
+			// 20230210: bugfix: using cps instead of decomposed h/t Carbon225
+			if (CM.has(decomposed[i])) {
 				let j = i + 1;
-				while (j < e && CM.has(cps[j])) j++;
+				while (j < e && CM.has(decomposed[j])) j++;
 				if (j - i > M) {
-					throw new Error(`too many combining marks: ${g.N} "${str_from_cps(cps.slice(i-1, j))}" (${j-i}/${M})`);
+					throw new Error(`too many combining marks: ${g.N} ${bidi_qq(str_from_cps(decomposed.slice(i-1, j)))} (${j-i}/${M})`);
 				}
 				i = j;
 			}
@@ -467,11 +485,11 @@ function check_group(g, cps) {
 	if (!cm_whitelist) {
 		let decomposed = nfd(cps);
 		for (let i = 1, e = decomposed.length; i < e; i++) { // we know it can't be cm leading
-			if (CM.has(cps[i])) {
+			if (CM.has(decomposed[i])) {
 				let j = i + 1;
-				while (j < e && CM.has(cps[j])) j++;
+				while (j < e && CM.has(decomposed[j])) j++;
 				if (j - i > M) {
-					throw new Error(`too many combining marks: "${str_from_cps(cps.slice(i-1, j))}" (${j-i}/${M})`);
+					throw new Error(`too many combining marks: "${str_from_cps(decomposed.slice(i-1, j))}" (${j-i}/${M})`);
 				}
 				i = j;
 			}
