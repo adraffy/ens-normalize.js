@@ -19,14 +19,16 @@ const FE0F = 0xFE0F;
 let out_dir = new URL('./output/', import.meta.url);
 
 // quick hack to capture log
-((stream) => {
-	let out = createWriteStream(new URL('./log.txt', out_dir).pathname);
-	let old = stream.write.bind(stream);
-	stream.write = (...a) => {
-		old(...a);
-		out.write(...a);
-	};
-})(process.stdout);
+if (true) {
+	((stream) => {
+		let out = createWriteStream(new URL('./log.txt', out_dir).pathname);
+		let old = stream.write.bind(stream);
+		stream.write = (...a) => {
+			old(...a);
+			out.write(...a);
+		};
+	})(process.stdout);
+}
 
 function version_str(obj) {
 	return `${obj.version} (${obj.date})`;

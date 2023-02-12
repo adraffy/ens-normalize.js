@@ -590,7 +590,8 @@ function create_tr({cps, form, norm, info}, first) {
 	let tr = document.createElement('tr');
 	let cells = [];
 	if (info) {
-		let {name, version, type} = info;
+		let {name, name0, version, type} = info;
+		if (name0) name = `${name} (${name0.toLowerCase()})`;
 		let title = `<a href="https://emojipedia.org/${form}">${name}</a>`;
 		if (version) title += ` <span class="version">v${version}</span>`;
 		if (type === 'Whitelisted') {

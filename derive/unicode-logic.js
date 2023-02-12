@@ -491,17 +491,11 @@ export class UnicodeSpec {
 		return parse_semicolon_file(new URL('./emoji-sequences.txt', this.data_dir), {
 			row([src, type, name], comment) {
 				let version = parse_version_from_comment(comment);
+				name = unescape_unicode_str(name); // fix \x{}
 				if (src.includes('..')) {
 					let range = parse_cp_range(src).map(cp => {
 						return {cps: [cp], type, name: self.get_name(cp, true), version};
 					});
-					/*
-					// use provide name if possible
-					// TODO: can we get the unfucked names somewhere?
-					let [first, last] = name.split('..').map(unescape_unicode_str); 
-					range[0].name = first.trim();
-					range[range.length-1].name = last.trim();
-					*/
 					this.get_bucket(type).push(...range);
 				} else {
 					let cps = parse_cp_sequence(src);
