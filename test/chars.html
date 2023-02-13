@@ -137,7 +137,7 @@ fetch('../derive/output/names.json').then(r => r.json()).then(({chars, ranges, s
 		}
 	}
 	scrollLast = undefined; // dirty
-	max_cp = Math.max(...char_map.keys()); // meh	
+	//max_cp = Math.max(...char_map.keys());
 	for (let s of scripts) {
 		s.avg = s.cps.reduce((a, x) => a + x) / s.cps.length;
 	}
@@ -177,7 +177,7 @@ const ROW_WIDTH = 128;
 const ROW_HEIGHT = 80;
 
 let scrollLast;
-let scrollHeight;
+let scrollHeight = 100000;
 let grid_rows;
 let grid_cols;
 let max_rows;
@@ -190,12 +190,14 @@ window.addEventListener('resize', () => {
 });
 
 function update_cols() {
-	grid_rows = Math.round(window.innerHeight / ROW_HEIGHT);
-	grid_cols = Math.floor(window.innerWidth / ROW_WIDTH);
+	let h = window.innerHeight;
+	grid_rows = Math.round(h / ROW_HEIGHT);
+	grid_cols = Math.max(1, Math.floor(window.innerWidth / ROW_WIDTH));
 	max_rows = Math.ceil((1 + max_cp) / grid_cols);
 	scrollLast = undefined; // dirty
-	scrollHeight = max_rows * ROW_HEIGHT;
-	document.body.style.height = `${scrollHeight}px`;
+	const H = max_cp; // using actual pixels is fucked
+	scrollHeight = Math.max(1, H - h); // prevent div/0
+	document.body.style.height = `${Math.max(H, h)}px`;
 }
 
 /*
@@ -226,7 +228,9 @@ function scroll_to_cp(cp) {
 			mark_active(td);
 		} else {
 			mark_cp = cp;
-			window.scrollTo(0, scrollHeight * Math.floor(cp / grid_cols) / max_rows);
+			let row = Math.floor(cp / grid_cols - grid_rows / 2);
+			let frac = Math.max(0, Math.min(row /max_rows, 1));
+			window.scrollTo(0, scrollHeight * frac);
 		}
 	}
 }
@@ -238,7 +242,7 @@ function mark_active(td) {
 }
 
 function update_table() {
-	let cp = grid_cols * Math.round(window.scrollY/ROW_HEIGHT);
+	let cp = grid_cols * Math.round((max_rows - grid_rows) * window.scrollY/scrollHeight);
 	let tr_header = document.createElement('tr');
 	/*
 	tr_header.innerHTML = '<td class="index"></td>';
