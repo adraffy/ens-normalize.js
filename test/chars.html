@@ -35,7 +35,12 @@ body {
 #grid td {
 	position: relative;
 	border: 1px solid #ccc;
-	
+	outline-color: #0060df00;
+}
+#grid td.active {
+	outline: 8px solid #0060df;
+	border-color: #fff;
+	z-index: 1;
 }
 span.corner {
 	color: #666;
@@ -176,6 +181,8 @@ let scrollHeight;
 let grid_rows;
 let grid_cols;
 let max_rows;
+let mark_cp;
+let mark_timer;
 
 update_cols();
 window.addEventListener('resize', () => {
@@ -211,8 +218,23 @@ function update_hash() {
 
 function scroll_to_cp(cp) {
 	if (cp >= 0 && cp <= max_cp) {
-		window.scrollTo(0, scrollHeight * Math.floor(cp / grid_cols) / max_rows);
+		let td = document.querySelector(`[data-cp="${cp}"]`);
+		clearTimeout(mark_timer);
+		if (td) {
+			let old = document.querySelector('.active');
+			if (old) old.classList.remove('active');
+			mark_active(td);
+		} else {
+			mark_cp = cp;
+			window.scrollTo(0, scrollHeight * Math.floor(cp / grid_cols) / max_rows);
+		}
 	}
+}
+
+function mark_active(td) {
+	td.classList.add('active');
+	mark_cp = undefined;
+	mark_timer = setTimeout(() => td.classList.remove('active'), 5000);
 }
 
 function update_table() {
@@ -231,6 +253,10 @@ function update_table() {
 		//tr.append(create_index_td(cp));
 		for (let c = 0; c < grid_cols && cp <= max_cp; c++, cp++) {
 			let td = document.createElement('td');
+			td.dataset.cp = cp;
+			if (cp === mark_cp) {
+				mark_active(td);
+			}
 			
 			let hex_span = document.createElement('span');
 			hex_span.classList.add('corner', 'code');

@@ -400,7 +400,9 @@ let buckets = [];
 	});
 
 	document.body.addEventListener('pointerdown', e => {
-		let {copy, alt} = e.target.dataset;
+		let node = e.target.closest(`[data-copy]`);
+		if (!node) return;
+		let {copy, alt} = node.dataset;
 		if (alt && e.altKey) copy = alt;
 		if (copy) {
 			navigator.clipboard.writeText(copy);
