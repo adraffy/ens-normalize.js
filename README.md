@@ -19,6 +19,7 @@
 	* [Emoji Frequency Explorer](https://raffy.antistupid.com/eth/ens-emoji-freq.html)
 	* [ENS+NFT Matcher](https://raffy.antistupid.com/eth/ens-nft-matcher.html)
 	* [Batch Resolver](https://raffy.antistupid.com/eth/ens-batch-resolver.html)
+	* [Punycode Coder](https://adraffy.github.io/punycode.js/test/demo.html)
 * [Breakdown Reports:](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/)
 	* [Disallowed Characters](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/disallowed.html)
 	* [Different Norm](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/diff.html)
@@ -33,7 +34,7 @@ import {ens_normalize} from '@adraffy/ens-normalize'; // or require()
 // browser: https://cdn.jsdelivr.net/npm/@adraffy/ens-normalize@latest/dist/index.min.js
 
 // *** ALL errors thrown by this library are safe to print ***
-// - characters are only shown as {HEX} if should_escape()
+// - characters are shown as {HEX} if should_escape()
 // - potentially different bidi directions inside "quotes"
 // - 200E is used near "quotes" to prevent spillover
 // - an "error type" can be extracted by slicing up to the first (:)
