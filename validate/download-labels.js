@@ -14,4 +14,3 @@ try {
 console.log(`New: ${labels.length} (+${labels.length - before})`);
 
 writeFileSync(file, JSON.stringify(labels));
-

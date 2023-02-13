@@ -24,12 +24,13 @@ for (let label of LABELS) {
 tally = Object.values(tally).sort((a, b) => b.count - a.count);
 let total = tally.reduce((a, x) => a + x.count, 0);
 
-let perc = 6;
+let perc = 4;
 let count_pad = total.toString().length;
 console.log(new Date().toJSON());
 for (let {count, error} of tally) {
 	console.log(
-		(100 * count / LABELS.length).toFixed(perc).padStart(perc+4)+'%',
+		(100 * count / LABELS.length).toFixed(perc).padStart(perc+4)+'%', // perc of all names
+		(100 * count / total).toFixed(perc).padStart(perc+4)+'%', 
 		count.toString().padStart(count_pad), 
 		error
 	);
@@ -49,15 +50,15 @@ Loaded 2350342 labels in 2.0s
 */
 
 /*
-Loaded 2479142 labels in 2.1s
-2023-02-12T04:23:02.645Z
-  0.618480% 15333 disallowed character
-  0.359358%  8909 diff norm
-  0.052155%  1293 illegal mixture
-  0.038481%   954 underscore allowed only at start
-  0.015933%   395 whole-script confusable
-  0.008188%   203 invalid label extension
-  0.006535%   162 illegal placement
-  0.001573%    39 too many combining marks
-  0.000081%     2 empty label
+Loaded 2479142 labels in 2.2s
+2023-02-12T23:59:21.302Z
+  0.6185%  56.1854% 15333 disallowed character
+  0.3594%  32.6457%  8909 diff norm
+  0.0522%   4.7380%  1293 illegal mixture
+  0.0385%   3.4958%   954 underscore allowed only at start
+  0.0159%   1.4474%   395 whole-script confusable
+  0.0082%   0.7439%   203 invalid label extension
+  0.0065%   0.5936%   162 illegal placement
+  0.0016%   0.1429%    39 too many combining marks
+  0.0001%   0.0073%     2 empty label
 */

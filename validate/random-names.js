@@ -65,8 +65,7 @@ let fail = pass.map(name0 => {
 	return name;
 });
 
-writeFileSync(new URL('./random-names2.json', import.meta.url), JSON.stringify([...pass, ...fail], null, '\t'));
-
+writeFileSync(new URL('./random-names.json', import.meta.url), JSON.stringify([...pass, ...fail], null, '\t'));
 
 function make_random_names(dist, per, test, max_len = 40) {
 	dist = dist.filter(([w, v]) => v.length > 0);
