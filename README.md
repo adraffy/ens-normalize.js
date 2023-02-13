@@ -33,6 +33,10 @@ import {ens_normalize} from '@adraffy/ens-normalize'; // or require()
 // browser: https://cdn.jsdelivr.net/npm/@adraffy/ens-normalize@latest/dist/index.min.js
 
 // *** ALL errors thrown by this library are safe to print ***
+// - characters are only shown as {HEX} if should_escape()
+// - potentially different bidi directions inside "quotes"
+// - 200E is used near "quotes" to prevent spillover
+// - an "error type" can be extracted by slicing up to the first (:)
 
 // string -> string
 // throws on invalid names
@@ -42,9 +46,10 @@ let normalized = ens_normalize('RaFFY🚴‍♂️.eTh');
 
 // note: does not enforce .eth TLD 3-character minimum
 ```
+
 Format names with fully-qualified emoji:
 ```Javascript
-// works like ens_normalize
+// works like ens_normalize()
 // output ready for display
 let pretty = ens_beautify('1⃣2⃣.eth'); 
 // => "1️⃣2️⃣.eth"
