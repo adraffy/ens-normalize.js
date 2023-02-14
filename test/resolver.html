@@ -740,7 +740,7 @@ Hebrew:
 <li><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a></li>
 <li><a href="./validate.html">Validation Test</a>
 <li><a href="./report-nf.html">Unicode NormalizationTest</a>
-<li><a href="../../ens-norm-tests/test-breakdown/output/">Breakdown Reports</a></li>
+<li><a href="https://adraffy.github.io/ens-norm-tests/test-breakdown/output/">Breakdown Reports</a></li>
 <li><a href="https://raffy.antistupid.com/eth/emoji-pixels.html">Emoji Pixel Maker</a></li>
 </ul>
 </div>
@@ -796,6 +796,11 @@ const emoji_url = './emoji.html#q=%s';
 
 const ENS_REGISTRY = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
 const ENS_NFT = '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85';
+
+const KNOWN_RESOLVERS = {
+	'0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41': 'Public Resolver',
+	'0xA2C122BE93b0074270ebeE7f6b7292C7deB45047': 'Reverse Resolver',
+};
 
 const entity_span = document.createElement('span');
 
@@ -1408,9 +1413,11 @@ function create_copy_btn(s, {title = 'Copy', explode} = {}) {
 	btn.title += `\n[ALT] Unicode Escaped\n[CTRL] Entity Escaped`;
 	return btn;
 }
-
+function reverse_name(addr) {
+	return `${addr.slice(2).toLowerCase()}.addr.reverse`;
+}
 function create_reverse_resolve_btn(addr) {
-	return create_resolve_btn(`${addr.slice(2).toLowerCase()}.addr.reverse`, '↩️ Reverse Record');
+	return create_resolve_btn(reverse_name(addr), '↩️ Reverse Record');
 }
 function create_resolve_btn(s, html = 'Resolve') {
 	let btn = document.createElement('button');
@@ -1692,9 +1699,7 @@ function create_typed_tag(type, desc) {
 	return span;
 }
 
-function create_details_row(name, before) {
-	let eth_label = get_dot_eth_label(name);
-
+function create_namehash_row(name) {
 	let row = create_row();
 	row.classList.add('details', 'detailed');
 	row.classList.toggle('hide', !show_details_check.checked);
@@ -1703,6 +1708,14 @@ function create_details_row(name, before) {
 	hash_span.classList.add('wide');
 	hash_span.innerHTML = `<a class="namehash" href="https://adraffy.github.io/keccak.js/test/demo.html#algo=namehash&s=${encodeURIComponent(name)}">Namehash:</a> <code>${namehash(name)}</code>`;
 	row.append(hash_span);
+
+	return row;
+}
+
+function create_details_row(name, before) {
+	let eth_label = get_dot_eth_label(name);
+
+	let row = create_namehash_row(name);
 
 	let split = ens_split(name);
 	for (let info of split) {
@@ -1843,7 +1856,7 @@ function format_dur(t) {
 }
 
 function is_working() {
-	return resolve_btn.disabled;
+	return resolve_btn.disabled || !registry_contract;
 }
 
 function resolve(options) {
@@ -1968,26 +1981,64 @@ async function resolve0(input, skip_norm) {
 		input_row.append(create_etherscan_address_link(input));
 		add_row_tag(input_row, create_copy_btn(input));
 		add_row_tag(input_row, create_reverse_resolve_btn(input));
-		output_div.append(input_row);
+
+		// doesn't give enough information
+		// primary = await active_provider.lookupAddress(input);
+
+		let rev_name = reverse_name(input);
+		let rev_node = namehash(rev_name);
+
+		let rev_details = create_namehash_row(rev_name);
+		let rev_name_span = document.createElement('span');
+		rev_name_span.classList.add('wide');
+		rev_name_span.innerHTML = `<b>Reverse Record:</b> ${rev_name}`;
+		rev_details.prepend(rev_name_span);
+
+		output_div.append(input_row, rev_details);
+
+		let resolver_row = create_row('Reverse Resolver', true); // ↺ 
+		output_div.append(resolver_row);
 		
+		let resolver, last_err;
+		try {
+			resolver = await registry_contract.callStatic.resolver(rev_node);
+		} catch (err) {	
+			last_err = err;
+		} 
+		if (should_stop_resolving()) return;
+		remove_temporary(resolver_row);
+		add_row_tag(resolver_row, create_elapsed());
+
+		if (last_err) {
+			resolver_row.classList.add('error');
+			add_row_tag(resolver_row, create_typed_tag('warn', last_err));
+			return;
+		} else if (!resolver || is_null_hex(resolver)) {
+			add_row_tag(resolver_row, create_typed_tag('stop', 'Primary Not Set'));
+			return;
+		}
+
+		resolver_row.append(create_etherscan_address_link(resolver, {contract: true}));
+		add_row_tag(resolver_row, create_copy_btn(resolver));
+
 		reverse_row = normed_row = create_row('Reverse', true);
 		output_div.append(reverse_row);
-		let primary, primary_err;
+			
+		let primary;
 		try {
-			primary = await active_provider.lookupAddress(input);
+			let contract = new ethers.Contract(resolver, [
+				`function name(bytes32 node) view returns (string)`
+			], active_provider);
+			primary = await contract.callStatic.name(rev_node);
 		} catch (err) {	
-			primary_err = err;		
+			last_err = err;
 		} 
-		remove_temporary(reverse_row);
 		if (should_stop_resolving()) return;
+		remove_temporary(reverse_row);
 		add_row_tag(reverse_row, create_elapsed());
-
-		if (primary_err) {
+		if (last_err) {
 			reverse_row.classList.add('error');
-			add_row_tag(reverse_row, create_typed_tag('warn', primary_err));
-			return;
-		} else if (!primary) {
-			add_row_tag(reverse_row, create_typed_tag('stop', 'Primary Not Set'));
+			add_row_tag(reverse_row, create_typed_tag('warn', last_err));
 			return;
 		}
 
@@ -2191,10 +2242,13 @@ async function resolve0(input, skip_norm) {
 			} else {
 				add_row_tag(resolver_row, create_typed_tag('warn', 'Unknown Parent'));
 			}
-		} else if (resolver.address === '0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41') {
-			add_row_tag(resolver_row, create_typed_tag('good', 'Public Resolver'));
 		} else {
-			add_row_tag(resolver_row, create_typed_tag('second', 'Custom'));
+			let name = KNOWN_RESOLVERS[resolver.address];
+			if (name) {
+				add_row_tag(resolver_row, create_typed_tag('good', name));
+			} else {
+				add_row_tag(resolver_row, create_typed_tag('second', 'Custom'));
+			}
 		}
 		add_row_tag(resolver_row, create_copy_btn(resolver.address));
 	} else {

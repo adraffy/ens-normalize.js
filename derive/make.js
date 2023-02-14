@@ -38,6 +38,10 @@ console.log(`Build Date: ${new Date().toJSON()}`);
 console.log(`Unicode Version: ${version_str(UNICODE.unicode_version)}`);
 console.log(`CLDR Version: ${version_str(UNICODE.cldr_version)}`);
 
+// 20230214: moved from unicode-version.js
+if (NF.run_tests().length) throw new Error('nf implementation wrong');
+NF.run_random_tests(); 
+
 // these are our primary output structures
 let ignored = new Set(IDNA.ignored);
 let valid = new Set(IDNA.valid);

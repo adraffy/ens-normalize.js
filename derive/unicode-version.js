@@ -6,12 +6,10 @@ export const UNICODE = new UnicodeSpec(
 	new URL('./data/CLDR-42/', import.meta.url));
 
 export const NF = create_nf(UNICODE);
-if (NF.run_tests().length) throw new Error('nf implementation wrong');
-NF.run_random_tests();
 
 export const IDNA = UNICODE.derive_idna_rules({
 	// because 2008 makes emoji invalid
-	// question: does anything use 2008?
+	// question: does anyone use 2008?
 	version: 2003, 
 	
 	// https://github.com/ethereum/EIPs/blob/master/EIPS/eip-137.md

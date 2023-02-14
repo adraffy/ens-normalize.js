@@ -1,58 +1,76 @@
 const $AZ = 'abcdefghijklmnopqrstuvwxyz'; // a-z for romanization
+const CM_WL = -1;
 
 // note: order doesn't matter
-// gets re-ordered by rules/group-order.js
-// which is derived from tools/group-order.js
+// gets re-ordered by rules/group-order.js (source of frequency snapshot)
+// which is derived from /validate/dump-group-order.js
 
 export const SCRIPT_GROUPS = [
 
 	// CJK
-	{name: 'Japanese', test: ['Kana', 'Hira'], rest: ['Hani', 'Zyyy'], extra: [$AZ], cm: -1},	// 2241
-	{name: 'Korean', test: ['Hang'], rest: ['Hani', 'Zyyy'], extra: [$AZ], cm: -1},				// 2060
-	{name: 'Han', test: ['Hani'], rest: ['Zyyy'], extra: [$AZ], cm: -1},						// 20K+
-	{name: 'Bopomofo', test: ['Bopo'], rest: ['Hani'], cm: -1},									// 35 pure, spoof mixed
+	{name: 'Japanese', test: ['Kana', 'Hira'], rest: ['Hani', 'Zyyy'], extra: [$AZ], cm: CM_WL},
+	{name: 'Korean', test: ['Hang'], rest: ['Hani', 'Zyyy'], extra: [$AZ], cm: CM_WL},
+	{name: 'Han', test: ['Hani'], rest: ['Zyyy'], extra: [$AZ], cm: CM_WL},
+	{name: 'Bopomofo', test: ['Bopo'], rest: ['Hani'], cm: CM_WL},
 
 	// Latin-like
-	{name: 'Latin', test: ['Latn', 'Zyyy'], rest: ['Zinh'], cm: -1, extra: [
+	{name: 'Latin', test: ['Latn', 'Zyyy'], rest: ['Zinh'], cm: CM_WL, extra: [
 		0x3C0, // (π) GREEK SMALL LETTER PI
-		//0x3BC, // (μ) GREEK SMALL LETTER MU (since Latin mu is mapped, 20221210: bad idea, will just get abused)
-	], cm: -1},																// 1.2M
-	{name: 'Cyrillic', test: ['Cyrl'], rest: ['Zyyy', 'Zinh'], cm: -1},		// 1817
-	{name: 'Greek', test: ['Grek'], rest: ['Zyyy', 'Zinh'], cm: -1}, 		// 200 pures with 80+ spoofs
+
+		// 20221210: after looking at illegal mixtures,
+		// i think this is bad idea, it will just get abused, eg. mμsk
+		//0x3BC, // (μ) GREEK SMALL LETTER MU (since Latin mu is mapped)
+	]}, 
+	{name: 'Cyrillic', test: ['Cyrl'], rest: ['Zyyy', 'Zinh'], cm: CM_WL},
+	{name: 'Greek', test: ['Grek'], rest: ['Zyyy', 'Zinh'], cm: CM_WL},
 	
-	// 20221215: there is no need for this group 
-	// it is a proper subset of any of the groups above.
+	// 20221215: there is no need for "common" group 
+	// it is a proper subset of any of the groups above
 	// selecting this group (when multiple groups match)
-	// would only effect the displayed name
+	// inclusion would only improve the displayed name
+	// in the case of pure-common non-emoji
 	// eg. "123" is Latin/ASCII instead of Common
 	//{name: 'Common', test: ['Zyyy'], cm: 0},
 	// this change also requires moving Latin's Zyyy from rest to test
 
-	// Pure with Many Regs
-	{name: 'Arabic', test: ['Arab'], cm: 2, extra: ['-']}, 			// 15000 pure, underscores, only 11 latin mixed (spoofs), and "0x"
-	{name: 'Devanagari', test: ['Deva'], cm: 2}, 					// 2700 pure but 4
-	{name: 'Hebrew', test: ['Hebr'], cm: 2, extra: ['₪']},			// 1466 pure, 17 spoofs with Latin
-	{name: 'Thai', test: ['Thai'], cm: 2,  extra: ['฿']},			// 1000+ pure, spoof mixed
-	{name: 'Bengali', test: ['Beng'], cm: 2},	// pure(827)
-	{name: 'Tamil', test: ['Taml']},			// pure(428)
-	{name: 'Tibetan', test: ['Tibt']},			// pure(175) + mixed are faces	
-	//{name: 'Braille', test: ['Brai]},			// pure(540), 70 ascii/spacer-spoofs
+	// 20230213: consider bumping all CM to max of 3
+	// https://discuss.ens.domains/t/ens-name-normalization-2nd/14564/66
+	// https://www.unicode.org/reports/tr39/#Optional_Detection
+	// CM by type (see: /derive/dump-cm.js)
+	//  1985 Mn Nonspacing_Mark
+	//   452 Mc Spacing_Mark
+	//    13 Me Enclosing_Mark
+	// a. Forbid sequences of the same nonspacing mark.
+	// b. Forbid sequences of more than 4 nonspacing marks (gc=Mn or gc=Me).
+	// c. Forbid sequences of base character + nonspacing mark that look the same as or confusingly similar
+	//    => somewhat handled by CM restrictions
+	//    => somewhat handled by confusables
+	//    => handled by whitelist for Latin-like/CJK
 
-	// Pure
-	{name: 'Oriya', test: ['Orya']},			// no legit non-pure registrations
-	{name: 'Thaana', test: ['Thaa'], cm: 2},	// pure(1)
-	{name: 'Sinhala', test: ['Sinh']},			// all junk
-	{name: 'Gurmukhi', test: ['Guru'], cm: 2},	// pure(73) not(1)
-	{name: 'Gujarati', test: ['Gujr']},			// pure(47) 
-	{name: 'Telugu', test: ['Telu']},			// pure(52) not(3), faces/memes
-	{name: 'Kannada', test: ['Knda']},			// few digits + eye balls (50)
-	{name: 'Malayalam', test: ['Mlym']}, 		// pure(22) 
-	{name: 'Lao', test: ['Laoo']},				// pure(56) not(6) 
-	{name: 'Georgian', test: ['Geor']},			// pure(14) not(1)
-	{name: 'Myanmar', test: ['Mymr']},			// pure(22) 
-	{name: 'Ethiopic', test: ['Ethi']},			// pure(15) 
-	{name: 'Khmer', test: ['Khmr']}, 			// pure(20) 
-	{name: 'Armenian', test: ['Armn']},			// pure(20) spoof(6)
+	// cm: 2
+	{name: 'Arabic', test: ['Arab'], cm: 2, extra: ['-']}, // 15000 pure, underscores, only 11 latin mixed (spoofs), and "0x"
+	{name: 'Devanagari', test: ['Deva'], cm: 2},           // 2700 pure but 4
+	{name: 'Hebrew', test: ['Hebr'], cm: 2, extra: ['₪']}, // 1466 pure, 17 spoofs with Latin
+	{name: 'Thai', test: ['Thai'], cm: 2,  extra: ['฿']},  // 1000+ pure, spoof mixed
+	{name: 'Bengali', test: ['Beng'], cm: 2},              // pure(827)
+	{name: 'Thaana', test: ['Thaa'], cm: 2},               // pure(1)
+	{name: 'Gurmukhi', test: ['Guru'], cm: 2},             // pure(73) not(1)
+
+	// cm: 1
+	{name: 'Tamil', test: ['Taml']},     // pure(428)
+	{name: 'Tibetan', test: ['Tibt']},   // pure(175) + mixed are faces	
+	{name: 'Oriya', test: ['Orya']},     // no legit non-pure registrations
+	{name: 'Sinhala', test: ['Sinh']},   // all junk
+	{name: 'Gujarati', test: ['Gujr']},  // pure(47) 
+	{name: 'Telugu', test: ['Telu']},    // pure(52) not(3), faces/memes
+	{name: 'Kannada', test: ['Knda']},   // few digits + eye balls (50)
+	{name: 'Malayalam', test: ['Mlym']}, // pure(22) 
+	{name: 'Lao', test: ['Laoo']},       // pure(56) not(6) 
+	{name: 'Georgian', test: ['Geor']},  // pure(14) not(1)
+	{name: 'Myanmar', test: ['Mymr']},   // pure(22) 
+	{name: 'Ethiopic', test: ['Ethi']},  // pure(15) 
+	{name: 'Khmer', test: ['Khmr']},     // pure(20) 
+	{name: 'Armenian', test: ['Armn']},  // pure(20) spoof(6)
 ];
 
 export const SCRIPT_EXTENSIONS = [
@@ -67,6 +85,7 @@ export const DISALLOWED_SCRIPTS = [
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/203
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/418 
 	// (we can fix this later, requires massive whole-script confusables on .:'s)
+	//{name: 'Braille', test: ['Brai]}, // pure(540), 70 ascii/spacer-spoofs
 	'Brai', // Braille
 	// https://en.wikipedia.org/wiki/Linear_A
 	// 20221031: disabled
