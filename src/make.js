@@ -14,7 +14,7 @@ let data_dir = new URL('../derive/output/', import.meta.url);
 let spec_file = new URL('./spec.json', data_dir);
 let nf_file = new URL('./nf.json', data_dir);
 
-let {mapped, ignored, emoji, cm, wholes, groups, fenced, escape, nfc_check, ...spec} = JSON.parse(readFileSync(spec_file));
+let {mapped, ignored, emoji, cm, nsm, nsm_max, wholes, groups, fenced, escape, nfc_check, ...spec} = JSON.parse(readFileSync(spec_file));
 let {ranks, decomp, exclusions, qc} = JSON.parse(readFileSync(nf_file));
 let {version} = JSON.parse(readFileSync(new URL('../package.json', import.meta.url)));
 
@@ -26,6 +26,7 @@ if (emoji_solo.length) {
 	throw new Error(`Assumption wrong: there are solo emoji!`)
 }
 if (groups.some(g => Array.isArray(g.cm) && g.cm.length)) {
+	// the code for this is currently commented out
 	throw new Error(`Assumption wrong: there are complex CM sequences!`);	
 }
 /*
@@ -227,7 +228,8 @@ enc.write_mapped([
 ], mapped); 
 enc.write_member(ignored);
 enc.write_member(cm);
-enc.write_member(escape); 
+enc.write_member(nsm.map(x => cm.indexOf(x))); // saves 300 bytes
+enc.write_member(escape);
 enc.write_member(nfc_check); // for ens_tokenize (can probably be derived)
 let chunks = find_shared_chunks(groups.flatMap(g => [g.primary, g.secondary]), {min_overlap: 0.9, min_size: 256});
 chunks.forEach(v => enc.write_member(v));
@@ -252,8 +254,8 @@ for (let g of groups) {
 		enc.write_member(parts);
 		enc.write_member(set);
 	}
-	//let map = index_map([g.primary, g.secondary].flat().sort((a, b) => a-b));
-	enc.unsigned(Array.isArray(g.cm) ? 0 : g.cm+1);
+	// if we have an CM array, we are whitelisted
+	enc.unsigned(Array.isArray(g.cm)|0);
 	// *** this code isn't needed based on current assumptions ***
 	/*
 	let map = index_map([g.primary, g.secondary].flat().sort((a, b) => a-b));
@@ -313,7 +315,8 @@ const built = new Date().toJSON();
 
 //write('include-only'); // only saves 300 bytes
 write('include-ens', {
-	FENCED: new Map(fenced)
+	FENCED: new Map(fenced),
+	NSM_MAX: nsm_max,
 });
 
 // just nf
@@ -363,7 +366,6 @@ function write(name, vars = {}) {
 		}),
 	].join('\n'));
 	console.log(`${name} [${data.length} bytes, ${symbols} symbols, ${encoded.length} base64] => ${buf.length} bytes`);
-
 	writeFileSync(new URL(`./${name}.js`, import.meta.url), buf);
 	//writeFileSync(new URL(`./${name}.json`, import.meta.url), JSON.stringify(enc.values.slice()));
 }

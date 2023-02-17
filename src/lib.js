@@ -1,5 +1,5 @@
 //const t0 = performance.now();
-import r, {FENCED} from './include-ens.js';
+import r, {FENCED, NSM_MAX} from './include-ens.js';
 import {read_sorted, read_sorted_arrays, read_mapped, read_array_while} from './decoder.js';
 import {explode_cp, str_from_cps, quote_cp, compare_arrays} from './utils.js';
 import {nfc, nfd} from './nf.js';
@@ -24,7 +24,15 @@ const FENCED = new Map(read_array_while(() => {
 	if (cp) return [cp, read_str(r())];
 }));
 */
+// 20230217: we still need all CM for proper error formatting
+// but norm only needs NSM subset that are potentially-valid
 const CM = read_set();
+const NSM = new Set(read_sorted(r).map(function(i) { return this[i]; }, [...CM]));
+/*
+const CM_SORTED = read_sorted(r);
+const NSM = new Set(read_sorted(r).map(i => CM_SORTED[i]));
+const CM = new Set(CM_SORTED);
+*/
 const ESCAPE = read_set(); // characters that should not be printed
 const NFC_CHECK = read_set();
 const CHUNKS = read_sorted_arrays(r);
@@ -45,7 +53,8 @@ const GROUPS = read_array_while(i => {
 		let P = read_chunked(r); // primary
 		let Q = read_chunked(r); // secondary
 		let V = [...P, ...Q].sort((a, b) => a-b); // derive: sorted valid
-		let M = r()-1; // combining mark
+		//let M = r()-1; // combining mark
+		let M = !r(); // not-whitelisted, check for NSM
 		// code currently isn't needed
 		/*if (M < 0) { // whitelisted
 			M = new Map(read_array_while(() => {
@@ -109,7 +118,7 @@ for (let cp of union) {
 const VALID = new Set([...union, ...nfd(union)]); // possibly valid
 
 // decode emoji
-const EMOJI_SORTED = read_sorted(r);
+const EMOJI_SORTED = read_sorted(r); // temporary
 //const EMOJI_SOLO = new Set(read_sorted(r).map(i => EMOJI_SORTED[i])); // not needed
 const EMOJI_ROOT = read_emoji_trie([]);
 function read_emoji_trie(cps) {
@@ -436,16 +445,41 @@ function check_group(g, cps) {
 			throw error_group_member(g, cp);
 		}
 	}
-	if (M >= 0) { // we have a known fixed cm count
+	//if (M >= 0) { // we have a known fixed cm count
+	if (M) { // we need to check for NSM
 		let decomposed = nfd(cps);
 		for (let i = 1, e = decomposed.length; i < e; i++) { // see: assumption
 			// 20230210: bugfix: using cps instead of decomposed h/t Carbon225
+			/*
 			if (CM.has(decomposed[i])) {
 				let j = i + 1;
 				while (j < e && CM.has(decomposed[j])) j++;
 				if (j - i > M) {
 					throw new Error(`too many combining marks: ${g.N} ${bidi_qq(str_from_cps(decomposed.slice(i-1, j)))} (${j-i}/${M})`);
 				}
+				i = j;
+			}
+			*/
+			// 20230217: switch to NSM counting
+			// https://www.unicode.org/reports/tr39/#Optional_Detection
+			// a. Forbid sequences of the same nonspacing mark.
+			// b. Forbid sequences of more than 4 nonspacing marks (gc=Mn or gc=Me).
+			if (NSM.has(decomposed[i])) {
+				let j = i + 1;
+				let cp;
+				while (j < e && NSM.has(cp = decomposed[j])) {
+					// check unique
+					for (let k = i; k < j; k++) {
+						if (decomposed[k] == cp) {
+							throw new Error(`repeated non-spacing mark: ${quoted_cp(cp)}`);
+						}
+					}
+					j++;
+					if (j - i > NSM_MAX) {
+						// note: this slice starts with a base char or spacing-mark cm
+						throw new Error(`too many non-spacing marks: ${bidi_qq(safe_str_from_cps(decomposed.slice(i-1, j)))} (${j-i}/${NSM_MAX})`);
+					}
+				}				
 				i = j;
 			}
 		}

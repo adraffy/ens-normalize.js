@@ -113,6 +113,12 @@ export class UnicodeChar {
 	get is_cm() {
 		return this.gc.startsWith('M');
 	}
+	get is_nsm() {
+		switch (this.gc) {
+			case 'Mn':
+			case 'Me': return true;
+		}
+	}
 	get_name(use_short) {
 		let {name, range, short, old_name} = this;
 		if (use_short && short) return short;

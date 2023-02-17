@@ -1,28 +1,31 @@
 const $AZ = 'abcdefghijklmnopqrstuvwxyz'; // a-z for romanization
-const CM_WL = -1;
 
 // note: order doesn't matter
 // gets re-ordered by rules/group-order.js (source of frequency snapshot)
 // which is derived from /validate/dump-group-order.js
 
+// https://www.unicode.org/reports/tr39/#Optional_Detection
+// b. Forbid sequences of more than 4 nonspacing marks (gc=Mn or gc=Me).
+export const NSM_MAX = 4;
+
 export const SCRIPT_GROUPS = [
 
 	// CJK
-	{name: 'Japanese', test: ['Kana', 'Hira'], rest: ['Hani', 'Zyyy'], extra: [$AZ], cm: CM_WL},
-	{name: 'Korean', test: ['Hang'], rest: ['Hani', 'Zyyy'], extra: [$AZ], cm: CM_WL},
-	{name: 'Han', test: ['Hani'], rest: ['Zyyy'], extra: [$AZ], cm: CM_WL},
-	{name: 'Bopomofo', test: ['Bopo'], rest: ['Hani'], cm: CM_WL},
+	{name: 'Japanese', test: ['Kana', 'Hira'], rest: ['Hani', 'Zyyy'], extra: [$AZ], cm: true},
+	{name: 'Korean', test: ['Hang'], rest: ['Hani', 'Zyyy'], extra: [$AZ], cm: true},
+	{name: 'Han', test: ['Hani'], rest: ['Zyyy'], extra: [$AZ], cm: true},
+	{name: 'Bopomofo', test: ['Bopo'], rest: ['Hani'], cm: true},
 
 	// Latin-like
-	{name: 'Latin', test: ['Latn', 'Zyyy'], rest: ['Zinh'], cm: CM_WL, extra: [
+	{name: 'Latin', test: ['Latn', 'Zyyy'], rest: ['Zinh'], cm: true, extra: [
 		0x3C0, // (π) GREEK SMALL LETTER PI
 
 		// 20221210: after looking at illegal mixtures,
 		// i think this is bad idea, it will just get abused, eg. mμsk
 		//0x3BC, // (μ) GREEK SMALL LETTER MU (since Latin mu is mapped)
 	]}, 
-	{name: 'Cyrillic', test: ['Cyrl'], rest: ['Zyyy', 'Zinh'], cm: CM_WL},
-	{name: 'Greek', test: ['Grek'], rest: ['Zyyy', 'Zinh'], cm: CM_WL},
+	{name: 'Cyrillic', test: ['Cyrl'], rest: ['Zyyy', 'Zinh'], cm: true},
+	{name: 'Greek', test: ['Grek'], rest: ['Zyyy', 'Zinh'], cm: true},
 	
 	// 20221215: there is no need for "common" group 
 	// it is a proper subset of any of the groups above
@@ -47,16 +50,16 @@ export const SCRIPT_GROUPS = [
 	//    => somewhat handled by confusables
 	//    => handled by whitelist for Latin-like/CJK
 
-	// cm: 2
-	{name: 'Arabic', test: ['Arab'], cm: 2, extra: ['-']}, // 15000 pure, underscores, only 11 latin mixed (spoofs), and "0x"
-	{name: 'Devanagari', test: ['Deva'], cm: 2},           // 2700 pure but 4
-	{name: 'Hebrew', test: ['Hebr'], cm: 2, extra: ['₪']}, // 1466 pure, 17 spoofs with Latin
-	{name: 'Thai', test: ['Thai'], cm: 2,  extra: ['฿']},  // 1000+ pure, spoof mixed
-	{name: 'Bengali', test: ['Beng'], cm: 2},              // pure(827)
-	{name: 'Thaana', test: ['Thaa'], cm: 2},               // pure(1)
-	{name: 'Gurmukhi', test: ['Guru'], cm: 2},             // pure(73) not(1)
+	// was cm: 2
+	{name: 'Arabic', test: ['Arab'], extra: ['-']}, // 15000 pure, underscores, only 11 latin mixed (spoofs), and "0x"
+	{name: 'Devanagari', test: ['Deva']},           // 2700 pure but 4
+	{name: 'Hebrew', test: ['Hebr'], extra: ['₪']}, // 1466 pure, 17 spoofs with Latin
+	{name: 'Thai', test: ['Thai'],  extra: ['฿']},  // 1000+ pure, spoof mixed
+	{name: 'Bengali', test: ['Beng']},              // pure(827)
+	{name: 'Thaana', test: ['Thaa']},               // pure(1)
+	{name: 'Gurmukhi', test: ['Guru']},             // pure(73) not(1)
 
-	// cm: 1
+	// was cm: 1
 	{name: 'Tamil', test: ['Taml']},     // pure(428)
 	{name: 'Tibetan', test: ['Tibt']},   // pure(175) + mixed are faces	
 	{name: 'Oriya', test: ['Orya']},     // no legit non-pure registrations

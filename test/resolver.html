@@ -411,6 +411,9 @@ footer {
 	margin-top: 1rem;
 	margin-bottom: 0.5rem;
 }
+footer span {
+	cursor: help;
+}
 @media only screen and (max-width: 800px) { 
 	body {
 		margin: 0;
@@ -519,13 +522,14 @@ footer {
 <button data-name="_1{FE0F}E{FE0E}{303}{AD}{1F4A9}{24C2}{FE0E}{2E3B}a{301}"></button>
 
 <b>Combining Marks:</b>
-<button data-name="{300}">Leading</button>
-<button data-name="x{300}{300}">Adjacent</button>
-<button data-name="💩{300}">Emoji</button>
-Too Many:
-<button>{929}{900}{900}</button>
-<button>{622}{64D}{64D}</button>
+<button data-name="{300}">❌Leading</button>
+<button data-name="💩{300}">❌Emoji</button>
+<button data-name="x{300}{300}">❌Whitelisted</button>
+<button data-name="{622}{64D}{64E}.{929}{901}{902}">NFD w/CM</button>
 
+<b>NSM:</b>
+<button data-name="{625}{610}{610}">❌Repeated</button>
+<button data-name="{625}{610}{611}{612}{613}{614}">❌Too Many</button>
 
 <a href="https://unicode.org/reports/tr46/#Validity_Criteria"><b>CheckHyphen:</b></a>
 <button>-test</button>
@@ -808,7 +812,10 @@ let resolve_timer = RESOLVE_MODE_IDLE;
 let resolve_date0;
 
 console.log(versions);
-document.querySelector('footer').innerHTML += ` — v${versions.version} (${versions.spec_hash.slice(0, 8)})`;
+document.querySelector('footer').innerHTML += ` — <span>v${versions.version} (${versions.spec_hash.slice(0, 8)})</span>`;
+document.querySelector('footer span').addEventListener('click', () => {
+	window.alert(JSON.stringify(versions, null, ' '));
+});
 
 // TODO: add more 
 function keycap(i) {
@@ -1396,7 +1403,7 @@ function create_copy_btn(s, {title = 'Copy', explode} = {}) {
 		let copy = s;
 		if (e.altKey) {
 			copy = unicode_escape(copy);
-		} else if (e.ctrlKey) {
+		} else if (e.shiftKey) {
 			copy = entity_escape(copy);
 		} 
 		navigator.clipboard.writeText(copy);
@@ -1410,7 +1417,7 @@ function create_copy_btn(s, {title = 'Copy', explode} = {}) {
 	if (explode) {
 		btn.title += '\n' + explode_cp(s).map(hex_cp).join(' ');
 	}
-	btn.title += `\n[ALT] Unicode Escaped\n[CTRL] Entity Escaped`;
+	btn.title += `\n[ALT] Unicode Escaped\n[SHIFT] Entity Escaped`;
 	return btn;
 }
 function reverse_name(addr) {
@@ -1991,7 +1998,7 @@ async function resolve0(input, skip_norm) {
 		let rev_details = create_namehash_row(rev_name);
 		let rev_name_span = document.createElement('span');
 		rev_name_span.classList.add('wide');
-		rev_name_span.innerHTML = `<b>Reverse Record:</b> ${rev_name}`;
+		rev_name_span.innerHTML = `<b>Reverse Name:</b> ${rev_name}`;
 		rev_details.prepend(rev_name_span);
 
 		output_div.append(input_row, rev_details);

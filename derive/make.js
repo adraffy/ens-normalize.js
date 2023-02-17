@@ -11,7 +11,10 @@ import GROUP_ORDER from './rules/group-order.js';
 import {CONFUSE_GROUPS, CONFUSE_DEFAULT_ALLOW, CONFUSE_TYPE_VALID, CONFUSE_TYPE_ALLOW} from './rules/confuse.js';
 import {EMOJI_DEMOTED, EMOJI_DISABLED, EMOJI_SEQ_WHITELIST, EMOJI_SEQ_BLACKLIST} from './rules/emoji.js';
 import {CM_WHITELIST} from './rules/cm.js';
-import {SCRIPT_GROUPS, RESTRICTED_SCRIPTS, SCRIPT_EXTENSIONS, DISALLOWED_SCRIPTS} from './rules/scripts.js';
+import {NSM_MAX, SCRIPT_GROUPS, RESTRICTED_SCRIPTS, SCRIPT_EXTENSIONS, DISALLOWED_SCRIPTS} from './rules/scripts.js';
+
+// TODO: maybe this should be part of UnicodeSpec
+const NSM = new Set([...UNICODE.char_map.values()].filter(x => x.is_nsm).map(x => x.cp));
 
 const STOP = 0x2E; // label separator
 const FE0F = 0xFE0F;
@@ -248,7 +251,7 @@ class ScriptGroup {
 		this.test_script_set = test;
 		this.rest_script_set = rest;
 		this.extra_set = extra;
-		this.cm = cm;
+		this.cm_whitelisted = cm;
 		this.valid_set = new Set();
 		this.cm_map = new Map();
 	}
@@ -269,7 +272,7 @@ untested_set.delete(UNICODE.require_script('Zinh')); // should not be testable
 untested_set.delete(UNICODE.require_script('Zzzz')); // should not be used
 let script_groups = [];
 for (let config of SCRIPT_GROUPS) {
-	let {name, test, rest = [], extra = [], cm = 1} = config;
+	let {name, test, rest = [], extra = [], cm = false} = config;
 	try {
 		if (!name) throw new Error(`Expected name`);
 		if (!Array.isArray(test) || test.length == 0) throw new Error(`Expected test`);
@@ -315,7 +318,7 @@ for (let abbr of RESTRICTED_SCRIPTS) {
 	if (!untested_set.delete(script)) {
 		throw new Error(`Missing restricted script: ${script.description}`);
 	}
-	let group = new ScriptGroup(/*script.name*/script.abbr, new Set([script]), new Set(), new Set(), 1);
+	let group = new ScriptGroup(/*script.name*/script.abbr, new Set([script]), new Set(), new Set(), false);
 	group.restricted = true;
 	script_groups.push(group);
 }
@@ -390,51 +393,27 @@ for (let form of CM_WHITELIST) {
 
 for (let g of script_groups) {
 	let purged = [];
-	switch (g.cm) {
-		case -1: { 
-			// allow only whitelisted cm
-			// remove unreachable
-			let cm = new Set([...g.cm_map.values()].flat(Infinity)); 
-			for (let cp of g.valid_set) {
-				if (g.cm_map.has(cp)) continue; // whitelisted
-				if (UNICODE.cm.has(cp) && cm.has(cp)) continue; // necessary
-				if (NF.nfd([cp]).every(cp => !UNICODE.cm.has(cp) || cm.has(cp))) continue;	
+	if (g.cm_whitelisted) {
+		// allow only whitelisted cm
+		// remove unreachable
+		let cm = new Set([...g.cm_map.values()].flat(Infinity)); 
+		for (let cp of g.valid_set) {
+			if (g.cm_map.has(cp)) continue; // whitelisted
+			if (UNICODE.cm.has(cp) && cm.has(cp)) continue; // necessary
+			if (NF.nfd([cp]).every(cp => !UNICODE.cm.has(cp) || cm.has(cp))) continue;	
+			purged.push(cp);
+		}
+	} else {
+		// remove any char decomposes into duplicate nsm
+		for (let cp of g.valid_set) {
+			let cps = NF.nfd([cp]);
+			let nsm = cps.filter(x => NSM.has(x));
+			if (nsm.length > 1 && new Set(nsm).size < nsm.length) { 
 				purged.push(cp);
 			}
-			break;
-		}
-		case 0: {
-			// remove all cm
-			for (let cp of g.valid_set) {
-				if (UNICODE.cm.has(cp)) {
-					purged.push(cp);
-				}
-			}
-			break;
-		}
-		default: {
-			// remove any char decomposes into too many adjacent cp
-			for (let cp of g.valid_set) {
-				let cps = NF.nfd([cp]);
-				/*
-				let cms = cps.filter(cp => UNICODE.cm.has(cp));
-				if (cms.length > g.cm) {
-					purged.push(cp);
-				}
-				*/
-				// 20221213: potential bug: [A cm B cm] is okay if CM=1
-				// the following fixes the issue, but resulted in no change
-				for (let i = 0; i < cps.length; i++) {
-					if (UNICODE.cm.has(cps[i])) {
-						let j = i+1;
-						while (j < cps.length && UNICODE.cm.has(cps[j])) j++;
-						if (j-i > g.cm) {
-							purged.push(cp);
-							break;
-						}
-						i = j;
-					}
-				}
+			if (nsm.length > NSM_MAX) {
+				// note: no need to remove these if none exist
+				throw new Error('missing optimization');
 			}
 		}
 	}
@@ -490,10 +469,9 @@ for (let [target, ...defs0] of CONFUSE_GROUPS) {
 		}
 		// find the groups that COULD contain this character
 		let groups = script_groups.filter(g => g.parts.has(cp));
-		// filter groups that allow cms
 		// TODO: not really sure how to handle confusable-cms
 		if (UNICODE.cm.has(cp)) {
-			groups = groups.filter(g => g.cm > 0);
+			groups = groups.filter(g => !g.cm_whitelisted); // already handled via whitelist
 		}
 		if (!groups.length) continue;
 		def.groups = new Set(groups);
@@ -779,11 +757,11 @@ for (let cp of valid_unique) {
 	let gs = script_groups.filter(g => g.valid_set.has(cp));
 	if (!gs.length) throw new Error('bug');
 	if (gs.length == 1) continue;
-	let {cm} = gs[0];
-	if (!gs.every(g => cm == -1 ? g.cm_map : g.cm === cm)) {
+	let wl = gs[0].cm_whitelisted;
+	if (gs.some(g => g.cm_whitelisted !== wl)) {
 		console.log(PRINTER.desc_for_cp(cp));
-		console.log(`Expected CM Style: ${cm}`);
-		gs.forEach(g => console.log(g.name, g.cm));
+		console.log(`Expected: ${wl}`);
+		gs.forEach(g => console.log(g.name, g.cm_whitelisted));
 		throw new Error(`different`);
 	}
 }
@@ -793,6 +771,7 @@ for (let w of wholes_list) {
 	for (let [cp, set] of w.map) {
 		for (let g of set) {
 			if (!g.valid_set.has(cp)) {
+				console.log(g.name, cp);
 				throw new Error('bug');
 			}
 		}
@@ -825,10 +804,11 @@ for (let w of wholes_list) {
 
 print_section('Compress Groups');
 for (let g of script_groups) {
-	let {name, test_script_set, valid_set, cm, cm_map, restricted} = g;
-	if (cm == -1) {
+	let {name, test_script_set, valid_set, restricted} = g;
+	let cm;
+	if (g.cm_whitelisted) {
 		cm = [];
-		for (let [cp, seqs] of cm_map) {
+		for (let [cp, seqs] of g.cm_map) {
 			if (seqs.length == 1 && seqs[0].length == 0) continue; // just a valid char
 			seqs.sort(compare_arrays);
 			cm.push({cp, seqs});
@@ -844,7 +824,7 @@ for (let g of script_groups) {
 			secondary.push(cp);
 		}
 	}
-	g.spec = {name, restricted, primary, secondary, cm}; // , confused: sorted(confuse_set)};
+	g.spec = {name, restricted, primary, secondary, cm};
 }
 
 print_section('Order Groups');
@@ -868,7 +848,7 @@ print_table(['Order', 'Valid', 'Unique', 'Primary', 'Secondary', 'CM', 'Group'],
 	g.unique_set.size,
 	g.spec.primary.length,
 	g.spec.secondary.length,
-	g.cm == -1 ? `[${g.spec.cm.length}]` : `N=${g.cm}`,
+	g.cm_whitelisted ? `${g.spec.cm.length}/${g.cm_map.size}` : '',
 	//g.spec.confused.length,
 	g.name
 ]));
@@ -881,6 +861,9 @@ let nfc_check0 = [...new Set([ranks, nfc_qc].flat(Infinity))];
 let nfc_check = nfc_check0.filter(cp => parts_union.has(cp));
 console.log(`Optimized: ${nfc_check0.length} => ${nfc_check.length}`);
 
+print_section('Compute NSM from Groups w/o CM Whitelist');
+let nsm = new Set(script_groups.filter(g => !g.cm_whitelisted).flatMap(g => [...g.compute_parts()].filter(cp => NSM.has(cp))));
+console.log(`CM(${UNICODE.cm.size}) => NSM(${NSM.size}) => ${nsm.size}`);
 
 print_section('Write Output');
 
@@ -903,6 +886,8 @@ write_json('spec.json', {
 	fenced: [...fenced_map].sort((a, b) => a[0] - b[0]),
 	wholes,
 	cm: sorted(UNICODE.cm),
+	nsm: sorted(nsm),
+	nsm_max: NSM_MAX,
 	escape: sorted(escaped),
 	groups: script_groups.map(g => g.spec),
 	nfc_check: sorted(nfc_check)
