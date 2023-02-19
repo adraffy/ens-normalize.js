@@ -502,7 +502,7 @@ footer span:hover {
 <div id="github"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a><br>
 <a href="https://github.com/adraffy/ensip-norm">@adraffy/ensip-norm</a></div>
 </header>
-<div id="examples">
+<div id="examples" class="hide">
 <button>vitalik.eth</button>
 <button>nIcK.eTh</button>
 <button>brantly.cash</button>
@@ -792,10 +792,6 @@ Hebrew:
 </div>
 <footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
 <script type="module">
-
-const STORAGE_HIDE_EXAMPLES = 'hide_examples';
-read_local_storage(STORAGE_HIDE_EXAMPLES, x => examples_div.classList.toggle('hide', x));
-
 import {ethers} from "https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.esm.min.js";
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
@@ -843,6 +839,7 @@ const STORAGE_AUTO_RESOLVE = 'auto_resolve';
 const STORAGE_SHOW_DETAILS = 'show_details';
 const STORAGE_SHOW_COMPONENTS = 'show_components';
 const STORAGE_FORCE_LTR = 'force_ltr';
+const STORAGE_HIDE_EXAMPLES = 'hide_examples';
 
 const APP_TITLE = 'ENS Resolver';
 const INPUT_NAME = 'Input';
@@ -896,6 +893,7 @@ add_digits('Thai', '๐๑๒๓๔๕๖๗๘๙');
 add_digits('Bengali', '০১২৩৪৫৬৭৮৯');
 add_digits('Tamil', '௦௧௨௩௪௫௬௭௮௯'); 
 
+read_local_storage(STORAGE_HIDE_EXAMPLES, x => examples_div.classList.toggle('hide', x), false);
 read_local_storage(STORAGE_SHOW_DETAILS, x => show_details_check.checked = x);
 read_local_storage(STORAGE_AUTO_RESOLVE, x => auto_resolve_check.checked = x);
 read_local_storage(STORAGE_SHOW_COMPONENTS, x => show_components_check.checked = x);
@@ -997,8 +995,8 @@ function add_recent(name, save = true) {
 			return; // already exists
 		}
 	}
-	while (recent_select.childElementCount >= 25) { // max
-		recent_select.lastChild.remove();
+	while (recent_optgroup.childElementCount >= 25) { // max
+		recent_optgroup.lastChild.remove();
 	}
 	let option = new Option();
 	option.value = name;
@@ -1013,6 +1011,7 @@ function add_recent(name, save = true) {
 		}
 	}
 	recent_optgroup.prepend(option);
+	//recent_optgroup.label = `Recent Names (${recent_optgroup.childElementCount})`;
 	recent_select.selectedIndex = -1;
 	recent_select.classList.remove('hide');
 	if (save) {
@@ -1058,13 +1057,13 @@ show_components_check.addEventListener('input', () => {
 });
 force_ltr_check.addEventListener('click', () => {
 	window.localStorage.setItem(STORAGE_FORCE_LTR, !!force_ltr_check.checked);
-	update_force_ltr();
+	sync_force_ltr();
 });
 examples_btn.addEventListener('click', () => {
 	let b = !examples_div.classList.contains('hide');
 	examples_div.classList.toggle('hide', b);
-	window.localStorage.setItem(STORAGE_HIDE_EXAMPLES, b);
-	update_examples();
+	window.localStorage.setItem(STORAGE_HIDE_EXAMPLES, !!examples_div.classList.contains('hide'));
+	sync_examples();
 });
 skip_norm_check.addEventListener('input', resolve_if_auto); // not saved
 
@@ -1077,8 +1076,8 @@ if (window.ethereum) {
 	update_network();
 }
 
-update_examples();
-update_force_ltr();
+sync_examples();
+sync_force_ltr();
 input_field.focus();
 apply_location_hash();
 window.addEventListener('hashchange', apply_location_hash);
@@ -1125,7 +1124,7 @@ function get_block_explorer(i) {
 	}
 }
 
-function update_examples() {
+function sync_examples() {
 	if (examples_div.classList.contains('hide')) {
 		examples_btn.innerText = '👀 Show Examples';
 		options_div.prepend(examples_btn);
@@ -1135,7 +1134,7 @@ function update_examples() {
 	}
 }
 
-function update_force_ltr() {
+function sync_force_ltr() {
 	input_field.classList.toggle('force-ltr', force_ltr_check.checked);
 }
 
@@ -2798,12 +2797,17 @@ function namehash(s) {
 	return hash.slice(0, 66);
 }
 
-function read_local_storage(key, fn) {
+function read_local_storage(key, fn, def) {
 	let stored = window.localStorage.getItem(key);
-	if (stored === null) return;
-	try {
-		fn(JSON.parse(stored));
-	} catch (err) {
+	if (stored !== null) {
+		try {
+			fn(JSON.parse(stored));
+			return;
+		} catch (err) {
+		}
+	}
+	if (def !== undefined) {
+		fn(def);
 	}
 }
 </script>
