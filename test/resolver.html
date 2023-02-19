@@ -19,7 +19,7 @@
 	direction: ltr;
 	unicode-bidi: bidi-override;
 }
-a, button {
+a, button, select {
 	cursor: pointer;
 }
 body { 
@@ -332,6 +332,7 @@ button.tags {
 	font-size: 14pt;
 	display: flex;
 	text-align: center;
+	background: linear-gradient(90deg, #cfc8, #0000);
 }
 .details .label br {
 	display: none;
@@ -340,7 +341,10 @@ button.tags {
 	flex: 1;
 }
 .details .label.error {
-	background: linear-gradient(90deg, #fcc, #eee);
+	background: linear-gradient(90deg, #fcc, #0000);
+}
+.details .label.mapped {
+	background: linear-gradient(90deg, #ccf8, #0000);
 }
 .details code {
 	font-size: 90%;
@@ -350,16 +354,28 @@ button.tags {
 	max-height: 10rem;
 	overflow-y: auto;
 }
-.details .script {
-	color: #666; /*#83b;*/
-	font-style: italic;
-	padding-right: 5px;
-	font-size: 85%;
-	flex: 0 0 80px;
+.details .group {
+	color: #666;
 	text-align: left;
+	font-style: italic;
+	padding-right: 10px;
+	font-size: 85%;
+}
+.details .restricted {
+	display: flex;
+	align-items: center;
+	background: #ffc;
+	border: 1px solid #ddd;
+	padding: 1px 3px;
+	text-decoration: none;
+	font-size: 85%;
+	color: #000;
+}
+.details .restricted:hover {
+	background-color: #cff;
 }
 .details .disabled {
-	color: #999;
+	opacity: 0.5;
 	user-select: none;
 }
 .details .wide {
@@ -379,13 +395,15 @@ button.tags {
 	font-size: 90%;
 	color: #666;
 	padding: 0.2rem 0;
-	border-top: 1px dotted #aaa;
 }
 .details .footer .error {
 	color: #d00;
 	font-size: 11pt;
 	font-weight: bold;	
-	background: #fee;;
+	background: #fee;
+}
+.details .footer.sep {	
+	border-top: 1px dotted #aaa;
 }
 .tokens {
 	font-size: 16pt;
@@ -402,8 +420,20 @@ button.tags {
 	background: #fcc;
 	outline: 3px dashed #d00;
 }
+.row.contract:not(.error) {
+	background-color: #ffc;
+	outline: 3px dashed #cc0;
+}
 .transform {
 	background: #fffaf0;
+}
+#recent_select {
+	width: 28px;
+	font-size: 1rem;
+	align-self: stretch;
+}
+#recent_select:empty {
+	display: none;
 }
 footer {
 	text-align: center;
@@ -413,6 +443,9 @@ footer {
 }
 footer span {
 	cursor: help;
+}
+footer span:hover {	
+	color: #000;
 }
 @media only screen and (max-width: 800px) { 
 	body {
@@ -442,13 +475,16 @@ footer span {
 	}
 	.row.details .label {
 		flex-direction: column-reverse;
+		align-items: center;
 		margin-left: 5px;
 	}
-	.row.details .script {
+	.row.details .group {
 		text-align: center;
-		margin-left: 0;
-		font-size: 80%;
-		flex: initial;
+		padding-right: 0;
+	}
+	.row.details .restricted {
+		flex-direction: row-reverse;
+		font-size: 75%;
 	}
 	#examples_btn {
 		display: block;
@@ -674,7 +710,7 @@ Hebrew Geresh:
 <button>Ξ.≡.☰</button>
 <button>♢⟠⧫</button>
 <button data-name="_▁▂▃▄▅▆▇█">▃▅▇</button>
-<button data-name="{2713}{2714}{FE0E}{2714}{FE0F}">Checks</button>
+<button data-name="✓.✔︎.✔️.✅️.☑️">Checks</button>
 
 <button data-name="ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘꞯʀꜱᴛᴜᴠᴡxʏᴢ">❌ꜱᴍᴀʟʟ ᴄᴀᴘꜱ</button>
 <button data-name="zʎxʍʌnʇsɹbdouɯꞁʞſ̣ᴉɥᵷɟǝpↄqɐ">❌pǝuɹnʇ</button>
@@ -713,6 +749,7 @@ Hebrew:
 <button id="escape_btn" title="[ALT] Unicode Escaped">Escape</button>
 <button id="link_btn">Copy Link</button>
 <button id="resolve_btn">Resolve</button>
+<select id="recent_select" title="Recent Names&#10;[ALT] Clear History"></select>
 </div>
 <div id="output">
 <ul class="row readme">
@@ -754,7 +791,7 @@ import {ethers} from "https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
 	nfc, nfd, hex_cp, explode_cp, str_from_cps, safe_str_from_cps,
-	dom_from_tokens, use_default_style, versions
+	dom_from_tokens, use_default_style, versions, compare_arrays
 } from '../dist/all.min.js';
 import {puny_encoded} from '../../punycode.js/dist/index.min.js';
 use_default_style();
@@ -778,6 +815,7 @@ const show_components_check = document.querySelector('#show_components_check');
 const skip_norm_check = document.querySelector('#skip_norm_check');
 const show_details_check = document.querySelector('#show_details_check');
 const force_ltr_check = document.querySelector('#force_ltr_check');
+const recent_select = document.querySelector('#recent_select');
 const options_div = document.querySelector('#options');
 const controls_div = document.querySelector('#controls');
 const output_div = document.querySelector('#output');
@@ -793,6 +831,7 @@ const RESOLVE_MODE_EMPTY = 'empty';
 const APP_TITLE = 'ENS Resolver';
 const INPUT_NAME = 'Input';
 const OPENSEA_NAME = 'OpenSea';
+const VISION_NAME = 'ENS.Vision';
 const SKIP_SUFFIX = '_!';
 const PRETTY_NAME = '💖️'; // 🌷️ 🌺️
 
@@ -846,6 +885,7 @@ read_local_storage('show_details',    x => show_details_check.checked = x);
 read_local_storage('auto_resolve',    x => auto_resolve_check.checked = x);
 read_local_storage('show_components', x => show_components_check.checked = x);
 read_local_storage('force_ltr',       x => force_ltr_check.checked = x);
+read_local_storage('recent',          v => [...new Set(v)].forEach(x => remember_name(x, false)));
 
 for (let btn of document.querySelectorAll('#examples button:not([id]), button[data-name]')) {
 	let name = btn.innerText;
@@ -910,6 +950,46 @@ document.querySelector('#nf_btn').addEventListener('click', () => {
 		resolve();
 	}
 });
+recent_select.addEventListener('pointerdown', e => {
+	if (e.altKey) {
+		recent_select.innerHTML = '';
+		window.localStorage.setItem('recent', '[]');
+	}
+});
+recent_select.addEventListener('change', () => {
+	input_field.value = recent_select.selectedOptions[0].dataset.name;
+	recent_select.selectedIndex = -1;
+	resolve();
+});
+function remember_name(name, save = true) {
+	for (let x of recent_select.options) {
+		if (x.dataset.name === name) {
+			return;
+		}
+	}
+	while (recent_select.childElementCount >= 25) {
+		recent_select.lastChild.remove();
+	}
+	let emoji;
+	if (is_checksum_address(name)) {
+		emoji = '🏠️';
+	} else {
+		try {
+			let norm = ens_normalize(name);
+			emoji = norm === name ? '✅️' : '☑️';
+		} catch (err) {
+			emoji = '❌️';
+		}
+	}
+	let option = document.createElement('option');
+	option.dataset.name = name;
+	option.innerHTML = `${emoji} ${name}`; 
+	recent_select.prepend(option);
+	recent_select.selectedIndex = -1;
+	if (save) {
+		window.localStorage.setItem('recent', JSON.stringify([...recent_select.options].map(x => x.dataset.name)));
+	} 
+}
 
 document.querySelector('#confused_btn').addEventListener('click', () => {
 	let s = input_field.value;
@@ -1151,7 +1231,7 @@ function presolve(input, skip, resolving) {
 		return true;
 	} catch (err) {
 		row.classList.add('error');
-		add_row_tag(row, create_typed_tag('warn', err));
+		add_row_tag(row, create_typed_tag('norm', err));
 		if (skip) return true;
 		make_exploded(row, name, false); // show the mapping during the error
 		stop_resolving();
@@ -1437,11 +1517,10 @@ function create_resolve_btn(s, html = 'Resolve') {
 	return btn;
 }
 
-function create_length_span(n, unit = 'ch') {
-	let span = document.createElement('span');
-	span.classList.add('length');
-	span.innerHTML = `${n}<sub>${unit}</sub>`;
-	return span;
+function set_length(el, n, unit = 'ch') {
+	el.classList.add('length');
+	el.innerHTML = `${n}<sub>${unit}</sub>`;
+	return el;
 }
 
 function create_main_span(text) {
@@ -1473,6 +1552,12 @@ function make_normalized(row) {
 	span.innerHTML = '✅️'; 
 	span.title = 'Normalized Form';
 	add_row_tag(row, span);
+}
+
+function make_contract(row) {
+	row.classList.add('contract');
+	let span = row.querySelector('.row-label');
+	span.innerHTML = span.innerHTML.replace('Address', 'Contract'); // meh
 }
 
 function create_palindrome_tag() {
@@ -1576,7 +1661,7 @@ function add_dot_eth_links(row, name) {
 	if (!label) return ''; // only if 2LD .eth	
 	let hash = labelhash(label);
 	add_row_tag(row, create_link(`https://opensea.io/assets/ethereum/${ENS_NFT}/${ethers.BigNumber.from(hash)}`, OPENSEA_NAME));
-	add_row_tag(row, create_link(`https://www.ens.vision/name/${encodeURIComponent(label)}`, 'ENS.Vision'));
+	add_row_tag(row, create_link(`https://www.ens.vision/name/${encodeURIComponent(label)}`, VISION_NAME));
 	add_row_tag(row, create_link(`http://predomain.eth.limo/#/domain/${encodeURIComponent(label)}`, 'Predomain'));
 	add_row_tag(row, create_link(`https://metadata.ens.domains/mainnet/${ENS_NFT}/${hash}`, 'Metadata', 'ens'));
 }
@@ -1682,6 +1767,10 @@ function create_typed_tag(type, desc) {
 		case 'second': 
 			desc = `⭐️ ${desc}`;
 			break;
+		case 'norm':
+			//desc = `❌ ${desc}`;
+			type = 'warn';
+			//break;
 		case 'warn': 
 			desc = `⚠️ ${desc}`;
 			break;
@@ -1693,11 +1782,11 @@ function create_typed_tag(type, desc) {
 		case 'special':
 			break;
 		case 'fail': 
-			desc = `❌ ${desc}`;
+			desc = `❌️ ${desc}`;
 			break;
 		case 'stop':
 			type = 'fail';
-			desc = `🛑 ${desc}`;
+			desc = `🛑️ ${desc}`;
 			break;
 		//default: throw new TypeError(`unknown grade: ${type}`);
 	}
@@ -1729,66 +1818,88 @@ function create_details_row(name, before) {
 
 		let cps = before || !info.output ? info.input : info.output;
 		let label = String.fromCodePoint(...cps);
-		let bytes = bytes_from_utf8(label);
 		let hash = labelhash(label);
 
-		let label_div = document.createElement('span');
-		label_div.classList.add('label');
-		if (info.error) {
-			label_div.classList.add('error');
-		}
-		label_div.innerHTML = `<span class="script">${info.type || ''}</span>`;
-		let span_label = document.createElement('span');
-		span_label.classList.add('text', 'long');
-		label_div.append(span_label);
+		let footer_span = document.createElement('span');
+		footer_span.classList.add('wide', 'footer');
 
-		let code = document.createElement('code');
 		if (cps.length) {
-			span_label.innerText = label; // this will <br> CR LF, disabled with css
-			let swap_btn = document.createElement('button');
-			swap_btn.innerText = `⇄`;
-			swap_btn.title = `Swap Codepoints/Bytes`;
-			swap_btn.addEventListener('click', update_code);
-			function update_code() {
+
+			let label_div = document.createElement('span');
+			label_div.classList.add('label');
+
+			if (info.error) {
+				label_div.classList.add('error');
+			} else if (compare_arrays(info.input, info.output)) { 
+				label_div.classList.add('mapped');
+			} else {
+				let type = info.type;
+				if (type.includes('Restricted[')) {
+					let script = type.slice(11, -1);
+					let a = document.createElement('a');
+					a.classList.add('restricted');
+					a.innerHTML = `<span>${script}</span>⚠️`;
+					a.href = `https://www.compart.com/en/unicode/scripts/${script}`;
+					label_div.append(a);
+				} else {
+					let span = document.createElement('span');
+					span.classList.add('group');
+					span.innerHTML = type;
+					label_div.append(span);
+				}
+			}
+
+			let label_span = document.createElement('span');
+			label_span.classList.add('text', 'long');
+			label_span.innerText = label; // this will <br> CR LF, disabled with css
+			label_div.append(label_span);
+
+			let code = document.createElement('code');
+			let len_span = document.createElement('span');
+
+			const update_code = () => {
 				let {mode} = code.dataset;
 				let text;
 				if (code.dataset.mode !== 'cp') {
 					code.dataset.mode = 'cp';
 					code.title = 'Unicode Codepoints';
 					text = cps.map(hex_cp).join(' ');
+					set_length(len_span, cps.length);
 				} else {
 					code.dataset.mode = 'byte';
 					code.title = 'Encoded UTF-8 Bytes';
+					let bytes = bytes_from_utf8(label);
 					text = [...bytes].map(hex_cp).join(' ');
+					set_length(len_span, bytes.length, 'bytes');
 				}
 				code.innerText = text + ' ';
 				code.append(swap_btn);
-			}
+			};
+
+			let swap_btn = document.createElement('button');
+			swap_btn.innerText = `⇄`;
+			swap_btn.title = `Swap Codepoints/Bytes`;
+			swap_btn.addEventListener('click', update_code);
+
 			update_code();
 			if (cps.every(cp => cp < 0x80)) {
 				swap_btn.remove();
 			}
-		} else {
-			span_label.innerText = '«null»';
-			span_label.classList.add('disabled');
+
+			row.append(label_div, len_span, code);
+		
+			footer_span.classList.add('sep');
 		}
 
 		let footer = [`<b>Labelhash:</b> <code>${hash}</code>`];
 		if (label === eth_label) {
 			footer.push(`<b>Token:</b> <code>${ethers.BigNumber.from(labelhash(eth_label))}</code>`);
 		}
-		//if (info.script) {
-		//	footer.unshift(`<span class="script">${info.script}</span>`);
-		//}
 		if (info.error) { 
-			footer.unshift(`<span class="error">⚠️ ${info.error}</span>`);
+			footer.unshift(`<span class="error">❌️ ${info.error}</span>`);
 		}
-
-		let footer_span = document.createElement('span');
-		footer_span.classList.add('wide', 'footer');
 		footer_span.innerHTML = footer.join('<br>');
-
-		row.append(label_div, create_length_span(cps.length), code, footer_span);
+		row.append(footer_span);
 	}
 	return row;
 }
@@ -1945,6 +2056,8 @@ function resolve(options) {
 		return apply_escapes(entity_span.innerText);
 	});
 	input_field.value = input;
+	let name = replace_escapes(input);
+	remember_name(name);
 	if (!parse() && !skip) {
 		primary_arrows.classList.add('hide');
 		return;
@@ -1952,7 +2065,7 @@ function resolve(options) {
 	resolve_btn.disabled = true;
 	primary_arrows.classList.remove('hide');
 	resolve_date0 = new Date();
-	resolve0(replace_escapes(input), skip).then(() => {
+	resolve0(name, skip).then(() => {
 		resolve_btn.disabled = false;
 		if (resolve_timer === RESOLVE_MODE_REPEAT) {
 			setTimeout(resolve, 0);
@@ -2005,7 +2118,15 @@ async function resolve0(input, skip_norm) {
 
 		let resolver_row = create_row('Reverse Resolver', true); // ↺ 
 		output_div.append(resolver_row);
-		
+
+		try {
+			if (!is_null_hex(await active_provider.getCode(input))) {
+				make_contract(input_row);
+			}
+		} catch (err) {
+		}
+		if (should_stop_resolving()) return;
+
 		let resolver, last_err;
 		try {
 			resolver = await registry_contract.callStatic.resolver(rev_node);
@@ -2059,7 +2180,7 @@ async function resolve0(input, skip_norm) {
 			name_norm = ens_normalize(primary);
 		} catch (err) {
 			reverse_row.classList.add('error');
-			add_row_tag(reverse_row, create_typed_tag('warn', err));
+			add_row_tag(reverse_row, create_typed_tag('norm', err));
 			if (!skip_norm) return;
 			name_norm = primary;
 			norm_err = err;
@@ -2101,7 +2222,7 @@ async function resolve0(input, skip_norm) {
 			name_norm = ens_normalize(input);
 		} catch (err) {
 			input_row.classList.add('error');
-			add_row_tag(input_row, create_typed_tag('warn', err));
+			add_row_tag(input_row, create_typed_tag('norm', err));
 			if (!skip_norm) return; // i think this is always true
 			name_norm = input;
 			norm_err = err;
@@ -2290,7 +2411,7 @@ async function resolve0(input, skip_norm) {
 		remove_temporary(avail_row);
 		if (should_stop_resolving()) return;
 		add_row_tag(avail_row, create_elapsed()); 
-		add_row_tag(avail_row, create_length_span(len));
+		add_row_tag(avail_row, set_length(document.createElement('span'), len));
 
 		if (avail_err) {
 			avail_row.classList.add('error');
@@ -2452,8 +2573,17 @@ async function resolve0(input, skip_norm) {
 		} catch (err) {
 			address_err = err;
 		}
-		remove_temporary(address_row);
+		if (address) {
+			try {
+				if (should_stop_resolving()) return;
+				if (!is_null_hex(await active_provider.getCode(address))) {
+					make_contract(address_row);
+				}
+			} catch (err) {
+			}			
+		} 
 		if (should_stop_resolving()) return;
+		remove_temporary(address_row);
 		if (address_err) {
 			address_row.classList.add('error');
 			add_row_tag(address_row, create_typed_tag('warn', address_err));
@@ -2482,6 +2612,7 @@ async function resolve0(input, skip_norm) {
 					}
 				}
 				add_row_tag(address_row, create_link(`https://opensea.io/${address}?tab=collected`, OPENSEA_NAME));
+				add_row_tag(address_row, create_link(`https://ens.vision/0x/${address}`, VISION_NAME));	
 				add_row_tag(address_row, create_link(`https://rainbow.me/${address}`, 'Rainbow'));	
 			}
 		}
@@ -2527,7 +2658,7 @@ async function resolve0(input, skip_norm) {
 		primary_norm = ens_normalize(primary);
 	} catch (err) {
 		primary_row.classList.add('error');
-		add_row_tag(primary_row, create_typed_tag('warn', err));
+		add_row_tag(primary_row, create_typed_tag('norm', err));
 	}
 
 	if (primary === input) {
@@ -2636,7 +2767,7 @@ function read_local_storage(key, fn) {
 	if (stored === null) return;
 	try {
 		fn(JSON.parse(stored));
-	} catch (err) {	
+	} catch (err) {
 	}
 }
 </script>

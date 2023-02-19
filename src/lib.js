@@ -462,24 +462,22 @@ function check_group(g, cps) {
 			*/
 			// 20230217: switch to NSM counting
 			// https://www.unicode.org/reports/tr39/#Optional_Detection
-			// a. Forbid sequences of the same nonspacing mark.
-			// b. Forbid sequences of more than 4 nonspacing marks (gc=Mn or gc=Me).
 			if (NSM.has(decomposed[i])) {
 				let j = i + 1;
-				let cp;
-				while (j < e && NSM.has(cp = decomposed[j])) {
-					// check unique
-					for (let k = i; k < j; k++) {
+				for (let cp; j < e && NSM.has(cp = decomposed[j]); j++) {
+					// a. Forbid sequences of the same nonspacing mark.
+					for (let k = i; k < j; k++) { // O(n^2) but n < 100
 						if (decomposed[k] == cp) {
-							throw new Error(`repeated non-spacing mark: ${quoted_cp(cp)}`);
+							throw new Error(`non-spacing marks: repeated ${quoted_cp(cp)}`);
 						}
 					}
-					j++;
-					if (j - i > NSM_MAX) {
-						// note: this slice starts with a base char or spacing-mark cm
-						throw new Error(`too many non-spacing marks: ${bidi_qq(safe_str_from_cps(decomposed.slice(i-1, j)))} (${j-i}/${NSM_MAX})`);
-					}
-				}				
+				}
+				// parse to end so we have full nsm count
+				// b. Forbid sequences of more than 4 nonspacing marks (gc=Mn or gc=Me).
+				if (j - i > NSM_MAX) {
+					// note: this slice starts with a base char or spacing-mark cm
+					throw new Error(`non-spacing marks: too many ${bidi_qq(safe_str_from_cps(decomposed.slice(i-1, j)))} (${j-i}/${NSM_MAX})`);
+				}
 				i = j;
 			}
 		}

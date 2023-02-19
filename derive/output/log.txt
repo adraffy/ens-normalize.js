@@ -1,4 +1,4 @@
-Build Date: 2023-02-17T12:09:11.224Z
+Build Date: 2023-02-19T06:16:15.171Z
 Unicode Version: 15.0.0 (2022-10-23T06:00:57.990Z)
 CLDR Version: 42 (2022-11-04T04:55:37.180Z)
 ==== RGI Emoji ZWJ Sequences ====
@@ -14685,16 +14685,16 @@ Ord | Valid  | Uniqu | Prima | Secon | CM   | Group
  13 |    186 |   186 |   186 |     0 |      | Tibetan   
  14 |     74 |    64 |    74 |     0 |      | Gurmukhi  
  15 |     80 |    80 |    80 |     0 |      | Lao       
- 16 |  97258 |    74 |    76 | 97182 | 0/0  | Bopomofo  
+ 16 |     91 |    81 |    91 |     0 |      | Gujarati  
  17 |     96 |    96 |    96 |     0 |      | Telugu    
- 18 |     91 |    81 |    91 |     0 |      | Gujarati  
- 19 |     42 |    42 |    42 |     0 |      | Georgian  
- 20 |     43 |    43 |    43 |     0 |      | Armenian  
- 21 |    213 |   203 |   213 |     0 |      | Myanmar   
- 22 |    137 |   137 |   137 |     0 |      | Khmer     
- 23 |    113 |   113 |   113 |     0 |      | Malayalam 
- 24 |    515 |   515 |   515 |     0 |      | Ethiopic  
- 25 |     89 |    79 |    89 |     0 |      | Kannada   
+ 18 |  97258 |    74 |    76 | 97182 | 0/0  | Bopomofo  
+ 19 |    213 |   203 |   213 |     0 |      | Myanmar   
+ 20 |     42 |    42 |    42 |     0 |      | Georgian  
+ 21 |     43 |    43 |    43 |     0 |      | Armenian  
+ 22 |    113 |   113 |   113 |     0 |      | Malayalam 
+ 23 |    137 |   137 |   137 |     0 |      | Khmer     
+ 24 |     89 |    79 |    89 |     0 |      | Kannada   
+ 25 |    515 |   515 |   515 |     0 |      | Ethiopic  
  26 |    111 |   111 |   111 |     0 |      | Sinhala   
  27 |     89 |    89 |    89 |     0 |      | Oriya     
  28 |     61 |    50 |    61 |     0 |      | Thaana    
@@ -14830,6 +14830,7 @@ Ord | Valid  | Uniqu | Prima | Secon | CM   | Group
 Optimized: 2110 => 541
 ==== Compute NSM from Groups w/o CM Whitelist ====
 CM(2450) => NSM(1998) => 1050
+Per Group Max: 61
 ==== Write Output ====
 Wrote: spec.json [3116432]
 Wrote: nf.json [48402]

@@ -63,7 +63,6 @@
 
 	{"name": "\u0303", "error": true, "comment": "Leading CM"},
 	{"name": ".\u0303.", "error": true, "comment": "Leading CM"},
-	{"name": "a\u0303\u0303", "error": true, "comment": "CM + CM"},
 	{"name": "💩\u0303", "error": true, "comment": "Emoji + CM"},
 
 	{"name": "àáâãāäåăąćĉčçèéêẽēëěęğìíîïǐǹńñòóôõöǒōšśşùúûüǔūýỳžźż", "comment": "exemplars: Latn"},
@@ -72,12 +71,16 @@
 	{"name": "ガギグゲゴザジズゼゾダヂヅデドバパビピブプベペボポヴヷヸヹヺヾ", "comment": "exemplars: Kata"},
 	{"name": "がぎぐげござじずぜぞだぢづでどばぱびぴぶぷべぺぼぽゔゞ", "comment": "exemplars: Hira"},
 
-	{"name": "àáâãāäåăǖ", "error": true, "comment": "cm: whitelisted (disallowed char)"},
-	{"name": "àáâãa\u0303\u0303āäåă", "error": true, "comment": "cm: whitelisted (illegal mixture)"},
-	{"name": "\u0622\u064D", "comment": "cm: Arabic (2/2)"},
-	{"name": "\u0622\u064D\u064D", "error": true, "comment": "cm: Arabic: (3/2)"},
-	{"name": "\u0622\u064D\u064D\u064D", "error": true, "comment": "cm: Arabic: (4/2)"},
-	{"name": "\u0929\u0900\u0900", "error": true, "comment": "cm: Devanagari (3/2)"},
+	{"name": "àáâãāäåăǖ", "error": true, "comment": "cm whitelisted (disallowed char)"},
+	{"name": "àáâãa\u0303\u0303āäåă", "error": true, "comment": "cm whitelisted (illegal mixture)"},
+
+	{"name": "\u0622\u064D\u064D", "error": true, "comment": "nsm: repeated w/NFD expansion"},
+	{"name": "\u0622\u064D\u064D\u064D", "error": true, "comment": "nsm: repeated w/NFD expansion"},
+	{"name": "\u0929\u0900\u0900", "error": true, "comment": "nsm: repeated w/NFD expansion"},
+
+	{"name": "\u0625\u0610\u0611\u0612", "comment": "nsm: at max"},
+	{"name": "\u0625\u0610\u0611\u0612\u0613", "error": true, "comment": "nsm: too many (5/4)"},
+	{"name": "\u0625\u0610\u0611\u0612\u0613\u0614", "error": true, "comment": "nsm: too many (6/4)"},
 	
 	{"name": "🇦", "error": "true", "comment": "Single regional indicator"},
 	{"name": "🇦🇦", "error": "true", "comment": "Double regional indicator: invalid flag sequence"},

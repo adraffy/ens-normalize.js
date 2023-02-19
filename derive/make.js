@@ -13,11 +13,12 @@ import {EMOJI_DEMOTED, EMOJI_DISABLED, EMOJI_SEQ_WHITELIST, EMOJI_SEQ_BLACKLIST}
 import {CM_WHITELIST} from './rules/cm.js';
 import {NSM_MAX, SCRIPT_GROUPS, RESTRICTED_SCRIPTS, SCRIPT_EXTENSIONS, DISALLOWED_SCRIPTS} from './rules/scripts.js';
 
+const CM = UNICODE.cm;
 // TODO: maybe this should be part of UnicodeSpec
 const NSM = new Set([...UNICODE.char_map.values()].filter(x => x.is_nsm).map(x => x.cp));
 
 const STOP = 0x2E; // label separator
-const FE0F = 0xFE0F;
+const FE0F = 0xFE0F; // emoji style
 
 let out_dir = new URL('./output/', import.meta.url);
 
@@ -399,8 +400,8 @@ for (let g of script_groups) {
 		let cm = new Set([...g.cm_map.values()].flat(Infinity)); 
 		for (let cp of g.valid_set) {
 			if (g.cm_map.has(cp)) continue; // whitelisted
-			if (UNICODE.cm.has(cp) && cm.has(cp)) continue; // necessary
-			if (NF.nfd([cp]).every(cp => !UNICODE.cm.has(cp) || cm.has(cp))) continue;	
+			if (CM.has(cp) && cm.has(cp)) continue; // necessary
+			if (NF.nfd([cp]).every(cp => !CM.has(cp) || cm.has(cp))) continue;	
 			purged.push(cp);
 		}
 	} else {
@@ -470,7 +471,7 @@ for (let [target, ...defs0] of CONFUSE_GROUPS) {
 		// find the groups that COULD contain this character
 		let groups = script_groups.filter(g => g.parts.has(cp));
 		// TODO: not really sure how to handle confusable-cms
-		if (UNICODE.cm.has(cp)) {
+		if (CM.has(cp)) {
 			groups = groups.filter(g => !g.cm_whitelisted); // already handled via whitelist
 		}
 		if (!groups.length) continue;
@@ -554,8 +555,7 @@ for (let [target, ...defs0] of CONFUSE_GROUPS) {
 		console.log(`Unresolved: [${gs.map(g => g.name)}] ${cps.map(x => PRINTER.desc_for_cp(x)).join(' vs ')}`);
 	}
 }
-script_groups.forEach(g => delete g.parts); // remove cache
-
+script_groups.forEach(g => delete g.parts); // remove cache (since not lively)
 
 // find characters that can never be part of a name or its construction
 print_section('Disallow Leftover Characters');
@@ -805,6 +805,7 @@ for (let w of wholes_list) {
 print_section('Compress Groups');
 for (let g of script_groups) {
 	let {name, test_script_set, valid_set, restricted} = g;
+	//g.parts = g.compute_parts(); // cache again
 	let cm;
 	if (g.cm_whitelisted) {
 		cm = [];
@@ -862,8 +863,10 @@ let nfc_check = nfc_check0.filter(cp => parts_union.has(cp));
 console.log(`Optimized: ${nfc_check0.length} => ${nfc_check.length}`);
 
 print_section('Compute NSM from Groups w/o CM Whitelist');
-let nsm = new Set(script_groups.filter(g => !g.cm_whitelisted).flatMap(g => [...g.compute_parts()].filter(cp => NSM.has(cp))));
-console.log(`CM(${UNICODE.cm.size}) => NSM(${NSM.size}) => ${nsm.size}`);
+let nsms = script_groups.filter(g => !g.cm_whitelisted).map(g => [...g.compute_parts()].filter(cp => NSM.has(cp)));
+let nsm = new Set(nsms.flat());
+console.log(`CM(${CM.size}) => NSM(${NSM.size}) => ${nsm.size}`);
+console.log(`Per Group Max: ${Math.max(...nsms.map(v => v.length))}`);
 
 print_section('Write Output');
 
@@ -885,7 +888,7 @@ write_json('spec.json', {
 	mapped: [...mapped].sort((a, b) => a[0] - b[0]),
 	fenced: [...fenced_map].sort((a, b) => a[0] - b[0]),
 	wholes,
-	cm: sorted(UNICODE.cm),
+	cm: sorted(CM),
 	nsm: sorted(nsm),
 	nsm_max: NSM_MAX,
 	escape: sorted(escaped),
