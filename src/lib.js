@@ -145,6 +145,8 @@ class Emoji extends Array {
 // create a safe to print string 
 // invisibles are escaped
 // leading cm uses placeholder
+// quoter(cp) => string, eg. 3000 => "{3000}"
+// note: in html, you'd call this function then replace [<>&] with entities
 export function safe_str_from_cps(cps, quoter = quote_cp) {
 	//if (Number.isInteger(cps)) cps = [cps];
 	//if (!Array.isArray(cps)) throw new TypeError(`expected codepoints`);

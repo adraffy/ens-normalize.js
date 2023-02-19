@@ -215,6 +215,15 @@ function index_map(v) {
 	return new Map(v.map((x, i) => [x, i]));
 }
 
+/*
+let prev = 0;
+function log_bytes(name) {
+	let next = enc.compressed().data.length;
+	console.log(name, next-prev);
+	prev = next;
+}
+*/
+
 let enc = new Encoder();
 enc.write_mapped([
 	[1, 1, 0], // adjacent that map to a constant
@@ -225,14 +234,15 @@ enc.write_mapped([
 //	[1, 3, 3],
 //	[3, 1, 0],
 //	[4, 1, 0],
-], mapped); 
-enc.write_member(ignored);
-enc.write_member(cm);
+], mapped); // ~7KB
+
+enc.write_member(ignored); // ~30B
+enc.write_member(cm); // ~600B
 enc.write_member(nsm.map(x => cm.indexOf(x))); // saves 300 bytes
-enc.write_member(escape);
-enc.write_member(nfc_check); // for ens_tokenize (can probably be derived)
+enc.write_member(escape); // ~60B
+enc.write_member(nfc_check); // ~320B for ens_tokenize (can probably be derived)
 let chunks = find_shared_chunks(groups.flatMap(g => [g.primary, g.secondary]), {min_overlap: 0.9, min_size: 256});
-chunks.forEach(v => enc.write_member(v));
+chunks.forEach(v => enc.write_member(v)); // 400B
 enc.write_member([]);
 enc.unsigned(groups.filter(g => !g.restricted).length); 
 for (let g of groups) {
@@ -302,14 +312,14 @@ flat_wholes.forEach((f, i) => {
 		enc.unsigned(i - f.w.last);
 	}
 	f.w.last = i;
-});
+}); // ~2KB
 
 let sorted_emoji = unique_sorted([emoji_solo, emoji_seqs].flat(Infinity));
 let sorted_emoji_map = index_map(sorted_emoji);
 enc.write_member(sorted_emoji);
 // *** this code isn't needed based on current assumptions ***
 //enc.write_member(emoji_solo.map(cp => sorted_emoji_map.get(cp))); 
-encode_emoji(enc, root, sorted_emoji_map);
+encode_emoji(enc, root, sorted_emoji_map); // ~2KB
 
 const built = new Date().toJSON();
 

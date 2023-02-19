@@ -87,6 +87,9 @@ h2 {
 #examples a {
 	background-color: #ffc;
 }
+#examples_btn {
+	font-weight: bold;
+}
 #input label {
 	display: none;
 }
@@ -432,9 +435,6 @@ button.tags {
 	font-size: 1rem;
 	align-self: stretch;
 }
-#recent_select:empty {
-	display: none;
-}
 footer {
 	text-align: center;
 	color: #666;
@@ -488,7 +488,10 @@ footer span:hover {
 	}
 	#examples_btn {
 		display: block;
+		width: 100%;
+		margin-bottom: 0.5rem;
 		font-size: 150%;
+		padding: 0.1rem 0.4rem;
 	}
 }
 </style>
@@ -568,8 +571,7 @@ footer span:hover {
 <button data-name="{625}{610}{611}{612}{613}{614}">❌Too Many</button>
 
 <a href="https://unicode.org/reports/tr46/#Validity_Criteria"><b>CheckHyphen:</b></a>
-<button>-test</button>
-<button>test-</button>
+<button>-test.test-.t-e--s---t</button>
 <button>❌te--st</button>
 
 <b>Underscore:</b>
@@ -749,7 +751,10 @@ Hebrew:
 <button id="escape_btn" title="[ALT] Unicode Escaped">Escape</button>
 <button id="link_btn">Copy Link</button>
 <button id="resolve_btn">Resolve</button>
-<select id="recent_select" title="Recent Names&#10;[ALT] Clear History"></select>
+<select id="recent_select" title="Recent Names" class="hide">
+<option value="reset">🗑️ Clear History</option>
+<optgroup label="Recent Names"></optgroup>
+</select>
 </div>
 <div id="output">
 <ul class="row readme">
@@ -787,11 +792,15 @@ Hebrew:
 </div>
 <footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
 <script type="module">
+
+const STORAGE_HIDE_EXAMPLES = 'hide_examples';
+read_local_storage(STORAGE_HIDE_EXAMPLES, x => examples_div.classList.toggle('hide', x));
+
 import {ethers} from "https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.esm.min.js";
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
 	nfc, nfd, hex_cp, explode_cp, str_from_cps, safe_str_from_cps,
-	dom_from_tokens, use_default_style, versions, compare_arrays
+	dom_from_tokens, use_default_style, versions, compare_arrays, should_escape,
 } from '../dist/all.min.js';
 import {puny_encoded} from '../../punycode.js/dist/index.min.js';
 use_default_style();
@@ -816,6 +825,7 @@ const skip_norm_check = document.querySelector('#skip_norm_check');
 const show_details_check = document.querySelector('#show_details_check');
 const force_ltr_check = document.querySelector('#force_ltr_check');
 const recent_select = document.querySelector('#recent_select');
+const recent_optgroup = document.querySelector('#recent_select optgroup');
 const options_div = document.querySelector('#options');
 const controls_div = document.querySelector('#controls');
 const output_div = document.querySelector('#output');
@@ -827,6 +837,12 @@ examples_btn.id = 'examples_btn';
 const RESOLVE_MODE_IDLE = 'idle';
 const RESOLVE_MODE_REPEAT = 'repeat';
 const RESOLVE_MODE_EMPTY = 'empty';
+
+const STORAGE_RECENT = 'recent';
+const STORAGE_AUTO_RESOLVE = 'auto_resolve';
+const STORAGE_SHOW_DETAILS = 'show_details';
+const STORAGE_SHOW_COMPONENTS = 'show_components';
+const STORAGE_FORCE_LTR = 'force_ltr';
 
 const APP_TITLE = 'ENS Resolver';
 const INPUT_NAME = 'Input';
@@ -880,12 +896,12 @@ add_digits('Thai', '๐๑๒๓๔๕๖๗๘๙');
 add_digits('Bengali', '০১২৩৪৫৬৭৮৯');
 add_digits('Tamil', '௦௧௨௩௪௫௬௭௮௯'); 
 
-read_local_storage('hide_examples',   x => examples_div.classList.toggle('hide', x));
-read_local_storage('show_details',    x => show_details_check.checked = x);
-read_local_storage('auto_resolve',    x => auto_resolve_check.checked = x);
-read_local_storage('show_components', x => show_components_check.checked = x);
-read_local_storage('force_ltr',       x => force_ltr_check.checked = x);
-read_local_storage('recent',          v => [...new Set(v)].forEach(x => remember_name(x, false)));
+read_local_storage(STORAGE_SHOW_DETAILS, x => show_details_check.checked = x);
+read_local_storage(STORAGE_AUTO_RESOLVE, x => auto_resolve_check.checked = x);
+read_local_storage(STORAGE_SHOW_COMPONENTS, x => show_components_check.checked = x);
+read_local_storage(STORAGE_FORCE_LTR, x => force_ltr_check.checked = x);
+
+sync_recent(window.localStorage.getItem('recent'));
 
 for (let btn of document.querySelectorAll('#examples button:not([id]), button[data-name]')) {
 	let name = btn.innerText;
@@ -898,7 +914,7 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 	if (!btn.innerText || btn.innerText.includes('{')) btn.innerText = name;
 	let meta = typeof btn.dataset.meta === 'string' || name.includes(':') || is_checksum_address(name);
 	if (!meta && !name.includes('.')) name += '.eth';
-	if (typeof btn.dataset.escape === 'string') name = apply_escapes(name, false);
+	if (typeof btn.dataset.escape === 'string') name = apply_escapes(name);
 	if (!btn.title) btn.title = meta ? name : `${name}\n${explode_cp(name).map(hex_cp).join(' ')}`;
 	btn.addEventListener('click', () => {
 		input_field.value = name;
@@ -917,7 +933,6 @@ for (let div of document.querySelectorAll('[data-tokenize]')) {
 	}));
 }
 
-force_ltr_check.addEventListener('click', update_force_ltr);
 resolve_btn.addEventListener('click', () => resolve());
 input_field.addEventListener('keydown', e => {
 	if (e.key === 'Enter') {
@@ -950,44 +965,58 @@ document.querySelector('#nf_btn').addEventListener('click', () => {
 		resolve();
 	}
 });
-recent_select.addEventListener('pointerdown', e => {
-	if (e.altKey) {
-		recent_select.innerHTML = '';
-		window.localStorage.setItem('recent', '[]');
+
+window.addEventListener('storage', e => {
+	if (e.type === 'storage' && e.key === STORAGE_RECENT) {
+		sync_recent(e.newValue);
 	}
 });
+function sync_recent(saved) {
+	recent_optgroup.innerHTML = '';
+	try {
+		JSON.parse(saved).reverse().forEach(x => add_recent(x, false));
+	} catch (err) {	
+	}
+}
 recent_select.addEventListener('change', () => {
-	input_field.value = recent_select.selectedOptions[0].dataset.name;
+	let option = recent_select.selectedOptions[0];
 	recent_select.selectedIndex = -1;
-	resolve();
+	if (!option) return;
+	if (recent_optgroup.contains(option)) {
+		input_field.value = option.value;
+		resolve();
+	} else if (option.value === 'reset') {
+		recent_select.classList.add('hide');
+		recent_optgroup.innerHTML = '';
+		window.localStorage.setItem(STORAGE_RECENT, '[]');
+	}
 });
-function remember_name(name, save = true) {
-	for (let x of recent_select.options) {
-		if (x.dataset.name === name) {
-			return;
+function add_recent(name, save = true) {
+	for (let x of recent_optgroup.children) {
+		if (x.value === name) {
+			return; // already exists
 		}
 	}
-	while (recent_select.childElementCount >= 25) {
+	while (recent_select.childElementCount >= 25) { // max
 		recent_select.lastChild.remove();
 	}
-	let emoji;
+	let option = new Option();
+	option.value = name;
 	if (is_checksum_address(name)) {
-		emoji = '🏠️';
+		option.innerHTML = `🏠️ ${name}`; 
 	} else {
 		try {
 			let norm = ens_normalize(name);
-			emoji = norm === name ? '✅️' : '☑️';
+			option.innerHTML = `${norm === name ? '✅️' : '☑️'} ${name}`;
 		} catch (err) {
-			emoji = '❌️';
+			option.innerHTML = `❌️ ${apply_escapes(name, cp => should_escape(cp) || cp == 0x20)}`;
 		}
 	}
-	let option = document.createElement('option');
-	option.dataset.name = name;
-	option.innerHTML = `${emoji} ${name}`; 
-	recent_select.prepend(option);
+	recent_optgroup.prepend(option);
 	recent_select.selectedIndex = -1;
+	recent_select.classList.remove('hide');
 	if (save) {
-		window.localStorage.setItem('recent', JSON.stringify([...recent_select.options].map(x => x.dataset.name)));
+		window.localStorage.setItem(STORAGE_RECENT, JSON.stringify([...recent_optgroup.children].map(x => x.value)));
 	} 
 }
 
@@ -999,8 +1028,8 @@ document.querySelector('#confused_btn').addEventListener('click', () => {
 document.querySelector('#escape_btn').addEventListener('click', e => {
 	let s0 = input_field.value;
 	let s1 = replace_escapes(s0);
-	let s2 = apply_escapes(s1, false, e.altKey);
-	let s3 = apply_escapes(s1, true, e.altKey);
+	let s2 = apply_escapes(s1, undefined, e.altKey);
+	let s3 = apply_escapes(s1, () => true, e.altKey);
 	let set = [...new Set([s1, s2, s3])];
 	let pos = set.indexOf(s0);	
 	input_field.value = set[(pos + 1) % set.length];
@@ -1014,29 +1043,35 @@ document.querySelector('#link_btn').addEventListener('click', () => {
 });
 
 auto_resolve_check.addEventListener('input', () => {
-	window.localStorage.setItem('auto_resolve', !!auto_resolve_check.checked);	
+	window.localStorage.setItem(STORAGE_AUTO_RESOLVE, !!auto_resolve_check.checked);	
 	resolve_if_auto();
 });
 show_details_check.addEventListener('input', () => {	
-	window.localStorage.setItem('show_details', !!show_details_check.checked);	
+	window.localStorage.setItem(STORAGE_SHOW_DETAILS, !!show_details_check.checked);	
 	for (let el of document.querySelectorAll('.detailed')) {
 		el.classList.toggle('hide', !show_details_check.checked);
 	}
 });
 show_components_check.addEventListener('input', () => {
-	window.localStorage.setItem('show_components', !!show_details_check.checked);
+	window.localStorage.setItem(STORAGE_SHOW_COMPONENTS, !!show_details_check.checked);
 	update_exploded();
 });
-skip_norm_check.addEventListener('input', resolve_if_auto);
+force_ltr_check.addEventListener('click', () => {
+	window.localStorage.setItem(STORAGE_FORCE_LTR, !!force_ltr_check.checked);
+	update_force_ltr();
+});
 examples_btn.addEventListener('click', () => {
-	examples_div.classList.toggle('hide');
-	window.localStorage.setItem('hide_examples', !!examples_div.classList.contains('hide'));
+	let b = !examples_div.classList.contains('hide');
+	examples_div.classList.toggle('hide', b);
+	window.localStorage.setItem(STORAGE_HIDE_EXAMPLES, b);
 	update_examples();
 });
-
+skip_norm_check.addEventListener('input', resolve_if_auto); // not saved
 
 if (window.ethereum) {
-	window_provider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+	let p = ethereum;;
+	if (Array.isArray(ethereum.providers)) p = ethereum.providers[0]; // fix scuffed multi-provider
+	window_provider = new ethers.providers.Web3Provider(p, 'any');
 	window_provider.on('network', update_network);
 } else {
 	update_network();
@@ -1092,10 +1127,10 @@ function get_block_explorer(i) {
 
 function update_examples() {
 	if (examples_div.classList.contains('hide')) {
-		examples_btn.innerHTML = '👀 Show Examples';
+		examples_btn.innerText = '👀 Show Examples';
 		options_div.prepend(examples_btn);
 	} else {
-		examples_btn.innerHTML = '🙈 <b>Hide Examples</b>';
+		examples_btn.innerText = '🙈 Hide Examples';
 		examples_div.prepend(examples_btn);
 	}
 }
@@ -1436,12 +1471,12 @@ function unicode_escape(s) {
 function entity_escape(s) {
 	return explode_cp(s).map(cp => `&#x${hex_cp(cp)};`).join('');
 }
-// if forced, replaced everything
-// otherwise, replace non-ascii
-function apply_escapes(s, forced, unicode) {
+// escape where escape_fn is true (default: non-ascii)
+// unicode: use \u-format
+function apply_escapes(s, escape_fn, unicode) {
+	if (!escape_fn) escape_fn = cp => !(cp >= 0x21 && cp <= 0x7E); // not ascii
 	return explode_cp(s).map(cp => {
-		if (!forced && (cp >= 0x21 && cp <= 0x7E)) return String.fromCodePoint(cp);
-		return unicode ? unicode_escape_cp(cp) : `{${hex_cp(cp)}}`;
+		return escape_fn(cp) ? unicode ? unicode_escape_cp(cp) : `{${hex_cp(cp)}}` : String.fromCodePoint(cp);
 	}).join('');
 }
 function replace_escapes(s) {
@@ -2057,7 +2092,7 @@ function resolve(options) {
 	});
 	input_field.value = input;
 	let name = replace_escapes(input);
-	remember_name(name);
+	add_recent(name);
 	if (!parse() && !skip) {
 		primary_arrows.classList.add('hide');
 		return;
@@ -2504,6 +2539,7 @@ async function resolve0(input, skip_norm) {
 			}
 		} catch (err) {
 			owner_err = err;
+			console.log(err);
 		}
 		remove_temporary(owner_row);
 		if (should_stop_resolving()) return;
