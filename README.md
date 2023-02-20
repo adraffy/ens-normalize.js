@@ -88,12 +88,15 @@ let tokens = ens_tokenize('_R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./');
 //     },
 //     {
 //         type: 'nfc',
-//         input: [ 97, 772 ],  // input (before nfc, only valid or mapped)
-//         cps: [ 257 ],        // output (after nfc, normalized)
-//         tokens: [            // tokens (before nfc)
+//         input: [ 97, 772 ],  // input  (before nfc)
+//         tokens0: [           // tokens (before nfc)
 //             { type: 'valid', cps: [ 97 ] },
 //             { type: 'ignored', cp: 65039 },
 //             { type: 'valid', cps: [ 772 ] }
+//         ],
+//         cps: [ 257 ],        // output (after nfc)
+//         tokens: [            // tokens (after nfc)
+//             { type: 'valid', cps: [ 257 ] }
 //         ]
 //     },
 //     { type: 'ignored', cp: 173 },
@@ -130,8 +133,7 @@ let labels = ens_split('💩Raffy.eth_');
 //     offset: 7,
 //     tokens: [ [ 101, 116, 104, 95 ] ],
 //     output: [ 101, 116, 104, 95 ],
-//     emoji: false,
-//     error: Error('underscore only allowed at start')
+//     error: Error('underscore allowed only at start')
 //   }
 // ]
 ```

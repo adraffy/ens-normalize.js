@@ -548,9 +548,9 @@ footer span:hover {
 <button data-name="{FE0E}{FE0F}">Emoji Style</button>
 
 <b>Disallowed:</b>
-<button data-name="{26}{3000}{E0061}{FFFFFF}">Types</button>
+<button data-name="{26}{3000}{E0061}{FFFFFF}{200D}">Types</button>
 <button data-name="test .te st. test">Whitespace</button>
-<button data-name="{3002}.{FF0E}.{FF61}">Stops</button>
+<button data-name="{3002}.{FF0E}.{FF61}">Alt Stops</button>
 <button data-name="[ba967c160905ade030f84952644a963994eeaed3881a6b8a4e9c8cbe452ad7a2].eth" data-skip="1">"💩.eth"</button>
 
 <b>Deviation:</b> 
@@ -579,7 +579,7 @@ footer span:hover {
 <button>❌a_b</button>
 
 <a href="./emoji.html"><b>Emoji:</b></a>
-<button id="random_emoji_btn">🎲 <b>Random</b></button>
+<button id="random_emoji_btn" title="[ALT] Just Singles">🎲 <b>Random</b></button>
 <button>©</button>
 <button>🕵</button>
 <button>🧙‍♂</button>
@@ -759,7 +759,7 @@ Hebrew:
 <div id="output">
 <ul class="row readme">
 <li>Click an <button data-name="👁️‍🗨️A{303}">Example</button> to see how it works.</li>
-<li>Use <code>{FF}</code> or <code>[255]</code> to manually include codepoints <button data-escape data-name="a{200D}b.eth">ZWJ</button></li>
+<li>Use <code>{FF}</code> or <code>[255]</code> or <code>\u200D</code> to manually include codepoints <button data-raw data-name="{200D}a[8205]b\u200D.eth">ZWJ</button></li>
 <li><code>range:A..B</code> expands to a range of characters <button data-name="range:61..7A" data-delay="1000">ASCII a-z</button></li>
 <li><code>token:X</code> resolves to the .eth preimage (if known) <button data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209" data-delay="1000">token:</button></li>
 <li><code>123 456 789</code> is shorthand for <code>{123}{456}{789}</code> <button data-name="65 74 68" data-meta data-delay="1000">65 74 68</button></li>
@@ -783,7 +783,6 @@ Hebrew:
 <li><a href="https://raffy.antistupid.com/eth/ens-emoji-freq.html">Emoji Frequency Browser</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-nft-matcher.html">ENS+NFT Matcher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-batch-resolver.html">Batch Resolver</a></li>
-<li><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a></li>
 <li><a href="./validate.html">Validation Test</a>
 <li><a href="./report-nf.html">Unicode NormalizationTest</a>
 <li><a href="https://adraffy.github.io/ens-norm-tests/test-breakdown/output/">Breakdown Reports</a></li>
@@ -908,7 +907,7 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 	} else if (name.startsWith('❌')) {
 		name = [...name].slice(1).join('');
 	}
-	name = replace_escapes(name);
+	if (typeof btn.dataset.raw !== 'string') name = replace_escapes(name);
 	if (!btn.innerText || btn.innerText.includes('{')) btn.innerText = name;
 	let meta = typeof btn.dataset.meta === 'string' || name.includes(':') || is_checksum_address(name);
 	if (!meta && !name.includes('.')) name += '.eth';
@@ -920,8 +919,12 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 		if (options_div.getBoundingClientRect().top > window.innerHeight * .9) {
 			options_div.scrollIntoView(); // scuffed
 		}
-		primary_arrows.classList.remove('hide');
-		setTimeout(resolve, parseInt(btn.dataset.delay)|0);
+		let delay = parseInt(btn.dataset.delay)|0;
+		if (delay > 0) {
+			schedule_resolve(delay);
+		} else {
+			resolve();
+		}
 	});
 }
 for (let div of document.querySelectorAll('[data-tokenize]')) {
@@ -942,10 +945,11 @@ input_field.addEventListener('input', () => {
 	if (parse()) schedule_resolve();
 });
 
-document.querySelector('#random_emoji_btn').addEventListener('click', () => {
+document.querySelector('#random_emoji_btn').addEventListener('click', e => {
 	let name = '';
+	let pool = e.altKey ? EMOJI.filter(cps => cps.length == 1 || (cps.length == 2 && cps[1] === 0xFE0F)) : EMOJI;
 	while ([...name].length < 3) {
-		name += ens_normalize(str_from_cps(EMOJI[Math.random() * EMOJI.length|0]));
+		name += ens_normalize(str_from_cps(pool[Math.random() * pool.length|0]));
 	}
 	input_field.value = `${name}.eth`;
 	skip_norm_check.checked = false;
@@ -1158,6 +1162,7 @@ function schedule_resolve(delay = 500) {
 		resolve_timer = RESOLVE_MODE_REPEAT;
 	} else { //if (!should_stop_resolving()) {
 		primary_arrows.classList.remove('hide');
+		controls_div.classList.remove('hide');
 		clearTimeout(resolve_timer);
 		resolve_timer = setTimeout(resolve, delay);
 	}
@@ -2011,7 +2016,7 @@ function is_working() {
 	return resolve_btn.disabled || !registry_contract;
 }
 
-function resolve(options) {
+function resolve() {
 	if (is_working()) {
 		resolve_timer = RESOLVE_MODE_REPEAT; 
 		return;
@@ -2409,7 +2414,7 @@ async function resolve0(input, skip_norm) {
 			if (name) {
 				add_row_tag(resolver_row, create_typed_tag('good', name));
 			} else {
-				add_row_tag(resolver_row, create_typed_tag('second', 'Custom'));
+				//add_row_tag(resolver_row, create_typed_tag('second', 'Custom'));
 			}
 		}
 		add_row_tag(resolver_row, create_copy_btn(resolver.address));
@@ -2799,7 +2804,7 @@ function namehash(s) {
 
 function read_local_storage(key, fn, def) {
 	let stored = window.localStorage.getItem(key);
-	if (stored !== null) {
+	if (typeof stored === 'string') {
 		try {
 			fn(JSON.parse(stored));
 			return;

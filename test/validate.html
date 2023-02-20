@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Validation Test</title>
 <style>
+.hide {
+	display: none !important;
+}
 body {
 	position: absolute;
 	top: 0;
@@ -16,6 +19,10 @@ body {
 	align-items: center;
 	justify-content: center;
 	background-color: #ffc;
+	gap: 0.5rem;
+}
+body > :empty {
+	display: none;
 }
 body.pass {
 	background: #cfc;
@@ -27,42 +34,69 @@ h1 {
 	font-size: 128pt;
 	margin: 0;
 }
-button {
+#hash {
+	font-family: monospace;
+	background-color: #fff;
+	padding: 0.2rem;
+	text-decoration: none;
+}
+#hash:hover {
+	text-decoration: underline;
+}
+#version {
+	font-weight: bold;
+	font-size: 2rem;
+}
+#error {
+	background: #c00;
+	color: #fff;
+	font-size: 1.5rem;
+	border-radius: 0.2rem;
+	padding: 0.5rem 1rem;
+}
+#download button {
 	padding: 0.5rem;
-	font-size: 16pt;
+	font-size: 1rem;
 	cursor: pointer;
 }
 </style>
 </head>
 <body>
-<h1>🤔️</h1>
+<h1 id="state">🤔️</h1>
+<span id="version"></span>
+<span id="time"></span>
+<a id="hash" href="../derive/output/spec.json"></a>
+<span id="built"></span>
+<div id="error"></div>
+<a id="download" class="hide" download="errors.json"><button>errors.json</button></a>
 <script type="module">
-import {ens_normalize, run_tests} from '../dist/all.min.js';
-const h1 = document.querySelector('h1');
-fetch('../validate/tests.json').then(r => r.json()).then(tests => {	
+import {ens_normalize, run_tests, versions} from '../dist/all.min.js';
+const state = document.querySelector('#state');
+document.querySelector('#version').innerText = `v${versions.version}`;
+document.querySelector('#hash').innerText = versions.spec_hash;
+document.querySelector('#built').innerText = `Built on ${new Date(versions.built).toLocaleString()}`;
+fetch('../validate/tests.json').then(r => r.json()).then(tests => {
+	const t0 = performance.now();
 	let errors = run_tests(ens_normalize, tests); // see: validate.js
-	if (errors.length) {
-		show_error(`${errors.length} tests failed`);
-		let a = document.createElement('a');
-		a.download = 'errors.json';
-		a.innerHTML = `<button>${a.download}</button>`;
-		a.href = URL.createObjectURL(new Blob([JSON.stringify(errors, null, '\t')], {
+	document.querySelector('#time').innerHTML = `<b>${tests.length}</b> tests in <b>${performance.now() - t0}ms</b>`;
+	if (errors.length || window.location.hash === '#debug') {
+		show_error(`${errors.length} tests failed!`);
+		let a = document.querySelector('#download');
+		a.href = URL.createObjectURL(new Blob([JSON.stringify({errors, versions, ua: navigator.userAgent}, null, '\t')], {
 			type: 'application/json',
 		}));
-		document.body.append(a);
+		a.classList.remove('hide');
 	} else {
 		document.body.classList.add('pass');
-		h1.innerText = '✅';
+		state.innerText = '✅';
 	}
 }).catch(err => {
 	show_error(err.message);
 });
 function show_error(s) {
 	document.body.classList.add('fail');
-	h1.innerHTML = `❌️`;
-	let reason = document.createElement('h2');
-	reason.innerText = s;
-	document.body.append(reason);
+	state.innerHTML = `❌️`;
+	document.querySelector('#error').innerText = s;
 }
 </script>
 </body>

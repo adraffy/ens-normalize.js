@@ -199,11 +199,12 @@ function check_fenced(cps) {
 	let prev = FENCED.get(cp);
 	if (prev) throw error_placement(`leading ${prev}`);
 	let n = cps.length;
-	let last = -1;
+	let last = -1; // prevents trailing from throwing
 	for (let i = 1; i < n; i++) {
 		cp = cps[i];
 		let match = FENCED.get(cp);
 		if (match) {
+			// since cps[0] isn't fenced, cps[1] cannot throw
 			if (last == i) throw error_placement(`${prev} + ${match}`);
 			last = i + 1;
 			prev = match;
@@ -250,6 +251,7 @@ export function ens_beautify(name) {
 		// 20230123: WHATWG URL uses "CheckHyphens" false
 		// https://url.spec.whatwg.org/#idna
 
+		// update ethereum symbol
 		// ξ => Ξ if not greek
 		if (type !== 'Greek') { 
 			let prev = 0;
@@ -260,6 +262,7 @@ export function ens_beautify(name) {
 				prev = next + 1;
 			}
 		}
+
 		// 20221213: fixes bidi subdomain issue, but breaks invariant (200E is disallowed)
 		// could be fixed with special case for: 2D (.) + 200E (LTR)
 		//output.splice(0, 0, 0x200E);
@@ -269,8 +272,8 @@ export function ens_beautify(name) {
 
 export function ens_split(name, preserve_emoji) {
 	let offset = 0;
-	// https://unicode.org/reports/tr46/#Validity_Criteria 4.1 Rule 4
-	// "The label must not contain a U+002E ( . ) FULL STOP."
+	// https://unicode.org/reports/tr46/#Validity_Criteria
+	// 4.) "The label must not contain a U+002E ( . ) FULL STOP."
 	return name.split(STOP_CH).map(label => {
 		let input = explode_cp(label);
 		let info = {
@@ -280,6 +283,7 @@ export function ens_split(name, preserve_emoji) {
 		offset += input.length + 1; // + stop
 		let norm;
 		try {
+			// 1.) "The label must be in Unicode Normalization Form NFC"
 			let tokens = info.tokens = process(input, nfc); // if we parse, we get [norm and mapped]
 			let token_count = tokens.length;
 			let type;
@@ -301,7 +305,7 @@ export function ens_split(name, preserve_emoji) {
 					// cant have fenced
 					// cant have cm
 					// cant have wholes
-					// see derive: assert ascii fast path
+					// see derive: "Fastpath ASCII"
 					type = 'ASCII';
 				} else {
 					if (emoji) { // there is at least one emoji
@@ -313,6 +317,7 @@ export function ens_split(name, preserve_emoji) {
 					if (!chars.length) { // theres no text, just emoji
 						type = 'Emoji';
 					} else {
+						// 5. "The label must not begin with a combining mark, that is: General_Category=Mark."
 						if (CM.has(norm[0])) throw error_placement('leading combining mark');
 						for (let i = 1; i < token_count; i++) { // we've already checked the first token
 							let cps = tokens[i];

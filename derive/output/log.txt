@@ -1,4 +1,4 @@
-Build Date: 2023-02-19T06:16:15.171Z
+Build Date: 2023-02-20T06:40:17.108Z
 Unicode Version: 15.0.0 (2022-10-23T06:00:57.990Z)
 CLDR Version: 42 (2022-11-04T04:55:37.180Z)
 ==== RGI Emoji ZWJ Sequences ====
@@ -14649,9 +14649,10 @@ Removed Mapping: 1F248 (🉈) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-655
 [✓] Valid is Closed (via Brute-force)
 [✓] No Valid Escaped
 [✓] No Valid Non-Characters
+[✓] No Valid Surrogates
 [✓] Fenced are Valid
 [✓] Emoji Boundaries
-[✓] Emoji are NFC
+[✓] Emoji are NF-Safe
 [✓] Fastpath ASCII
 [✓] Groups Names are A-Z
 ==== Find Unique Characters ====

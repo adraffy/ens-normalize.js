@@ -23,20 +23,13 @@ let emoji_seqs = emoji.filter(v => v.length >= 2);
 
 // check assumptions
 if (emoji_solo.length) {
+	// all emoji have been force emoji-styled to prevent any shenanigans 
 	throw new Error(`Assumption wrong: there are solo emoji!`)
 }
 if (groups.some(g => Array.isArray(g.cm) && g.cm.length)) {
 	// the code for this is currently commented out
 	throw new Error(`Assumption wrong: there are complex CM sequences!`);	
 }
-/*
-if (emoji_solo.length == 0) {
-	console.log(`*** There are 0 solo-emoji!`);
-}
-if (groups.some(g => !Number.isInteger(g.cm) || !g.cm.length)) {
-	console.log(`*** There are 0 complex CM sequences!`);
-}
-*/
 
 class Node {
 	constructor() {
@@ -127,7 +120,7 @@ root.scan((node, path) => {
 });
 
 // check every emoji sequence for non-standard FE0F handling
-// emoji in zwj dont obey emoji presentation rules
+// emoji with ZWJ dont obey emoji presentation rules
 // this should only happen with the second character of the first emoji
 // eg. "A FE0F" vs. "A ZWJ B"
 for (let cps of emoji_seqs) {

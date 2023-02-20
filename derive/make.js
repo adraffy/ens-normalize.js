@@ -673,6 +673,13 @@ for (let cp of UNICODE.get_noncharacter_cps()) {
 }
 print_checked('No Valid Non-Characters');
 
+for (let cp = 0xD800; cp <= 0xDFFF; cp++) {
+	if (valid.has(cp)) {
+		throw new Error(`Surrogate is valid: ${PRINTER.desc_for_cp(cp)}`);
+	}
+}
+print_checked(`No Valid Surrogates`);
+
 let fenced_map = new Map();
 for (let [cp, name] of CHARS_FENCED) {
 	if (!valid.has(cp)) {
@@ -697,8 +704,11 @@ for (let info of valid_emoji.values()) {
 	if (compare_arrays(cps, NF.nfc(cps))) {
 		throw new Error(`Emoji doesn't survive NFC: ${PRINTER.desc_for_emoji(info)}`);
 	}
+	if (compare_arrays(cps, NF.nfd(cps))) {
+		throw new Error(`Emoji doesn't survive NFD: ${PRINTER.desc_for_emoji(info)}`);
+	}
 }
-print_checked('Emoji are NFC');
+print_checked('Emoji are NF-Safe');
 
 // check that ASCII can be fast-pathed
 for (let cp = 0; cp < 0x80; cp++) {
