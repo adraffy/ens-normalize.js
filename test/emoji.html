@@ -134,8 +134,8 @@ td.info {
 	font-size: 120%;
 	padding: 2px 4px;
 }
-.whitelisted .cells code {
-	background: #fca;
+.cells code.mapped {
+	background: #fff;
 }
 .exploded {
 	display: flex;
@@ -641,31 +641,13 @@ function create_table(bucket, search) {
 	return table;
 }
 
-function create_hex_code(cps) {
+function create_hex_code(name, cps) {
 	let hex = cps.map(hex_cp).join(' ');
 	let code = document.createElement('code');
-	code.title = 'Click to Copy';
+	code.title = `${name}\n(Click to Copy)`;
 	code.dataset.copy = hex;
 	code.innerText = hex;
 	return code;
-}
-
-function create_exploded_div(form, norm) {
-	let div = document.createElement('div');
-	div.classList.add('exploded');
-	div.append(dom_from_tokens(ens_tokenize(form), {components: true, before: true, emoji_url: false}));
-	if (form !== norm) {
-		let span_arrow = document.createElement('span');
-		span_arrow.innerText = '➔';
-		span_arrow.classList.add('arrow');
-		let span_norm = document.createElement('span');
-		span_norm.classList.add('norm')
-		span_norm.innerText = norm;
-		span_norm.dataset.copy = norm;
-		span_norm.title = 'Normalized Form\n(Click to Copy)';
-		div.append(span_arrow, span_norm);
-	}
-	return div;
 }
 
 function create_tr({cps, form, norm, info}, first) {
@@ -712,10 +694,37 @@ function create_tr({cps, form, norm, info}, first) {
 			span.innerText = `v${version}`;
 			cells_div.append(span);
 		}
-		if (type === 'Whitelisted') tr.classList.add('whitelisted');
+		//if (type === 'Whitelisted') tr.classList.add('whitelisted');
 		if (is_not_emoji(info)) tr.classList.add('error');
 	}	
-	cells_div.append(create_hex_code(cps), create_exploded_div(form, norm));
+	cells_div.append(create_hex_code('Fully-Qualified', cps));
+	
+	let tokens = ens_tokenize(form);
+
+	let exploded_div = document.createElement('div');
+	exploded_div.classList.add('exploded');
+	exploded_div.append(dom_from_tokens(tokens, {components: true, before: true, emoji_url: false}));
+	cells_div.append(exploded_div);
+	if (form !== norm) {
+		let span_arrow = document.createElement('span');
+		span_arrow.innerText = '➔';
+		span_arrow.classList.add('arrow');
+
+		let span_norm = document.createElement('span');
+		span_norm.classList.add('norm')
+		span_norm.innerText = norm;
+		span_norm.dataset.copy = norm;
+		span_norm.title = 'Normalized Form\n(Click to Copy)';
+
+		exploded_div.append(span_arrow, span_norm);
+		
+		if (tokens.some(t => t.type === 'mapped')) {
+			let span = create_hex_code('Normalized (Mapped)', explode_cp(norm));
+			span.classList.add('mapped');
+			cells_div.append(span);
+		}
+	}	
+
 	td_cells.append(cells_div);
 
 	tr.dataset.name = form;
