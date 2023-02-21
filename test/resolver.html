@@ -898,7 +898,7 @@ read_local_storage(STORAGE_AUTO_RESOLVE, x => auto_resolve_check.checked = x);
 read_local_storage(STORAGE_SHOW_COMPONENTS, x => show_components_check.checked = x);
 read_local_storage(STORAGE_FORCE_LTR, x => force_ltr_check.checked = x);
 
-sync_recent(window.localStorage.getItem('recent'));
+sync_recent(window.localStorage.getItem(STORAGE_RECENT));
 
 for (let btn of document.querySelectorAll('#examples button:not([id]), button[data-name]')) {
 	let name = btn.innerText;
