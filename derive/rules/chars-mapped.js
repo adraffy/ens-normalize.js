@@ -68,9 +68,15 @@ export default [
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/403
 	[0x27, [0x2019]], // 27 (') APOSTROPHE => 2019 (’) RIGHT SINGLE QUOTATION MARK
 	
-	// negative circled => digits
+
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/417
 	// https://discuss.ens.domains/t/ens-name-normalization-2nd/14564/53
+	// 20230220: according to breakdown reports, there are very few of these
+	// since i couldn't get much feedback regarding this change
+	// i will disallow so a decision can be made later
+	// (these numbers might be useful for sports)
+	/*
+	// negative circled => digits
 	[0x24FF, [0x30]], // (⓿) NEGATIVE CIRCLED DIGIT ZERO
 	[0x24EB, [0x31, 0x31]], // (⓫) NEGATIVE CIRCLED NUMBER ELEVEN
 	[0x24EC, [0x31, 0x32]], // (⓬) NEGATIVE CIRCLED NUMBER TWELVE
@@ -155,6 +161,8 @@ export default [
 	[0x1F167, [0x78]], // (🅧) NEGATIVE CIRCLED LATIN CAPITAL LETTER X
 	[0x1F168, [0x79]], // (🅨) NEGATIVE CIRCLED LATIN CAPITAL LETTER Y
 	[0x1F169, [0x7A]], // (🅩) NEGATIVE CIRCLED LATIN CAPITAL LETTER Z
+	*/
+
 	// negative squared => a-z
 	// these contain some emoji
 	// 0x1F170, // (🅰) NEGATIVE SQUARED LATIN CAPITAL LETTER A

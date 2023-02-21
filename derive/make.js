@@ -1,4 +1,5 @@
-import {mkdirSync, writeFileSync, createWriteStream} from 'node:fs';
+import {mkdirSync, writeFileSync, createWriteStream, readFileSync} from 'node:fs';
+import {deepStrictEqual} from 'node:assert';
 import {compare_arrays, explode_cp, permutations, parse_cp_sequence, print_section, print_checked, print_table} from './utils.js';
 import {UNICODE, NF, IDNA, PRINTER} from './unicode-version.js';
 import CHARS_VALID from './rules/chars-valid.js';
@@ -880,11 +881,24 @@ console.log(`Per Group Max: ${Math.max(...nsms.map(v => v.length))}`);
 
 print_section('Write Output');
 
-const created = new Date();
-mkdirSync(out_dir, {recursive: true});
+const created = new Date().toJSON();
+mkdirSync(out_dir, {recursive: true});	
 function write_json(name, json) {
 	let file = new URL(name, out_dir);
-	let buf = Buffer.from(JSON.stringify(json));
+	let str = JSON.stringify(json);
+	try {
+		// 20230220: dont bump the file if nothing has changed
+		deepStrictEqual(...[readFileSync(file), str].map(x => {
+			let json = JSON.parse(x);
+			if (Array.isArray(json)) return json;
+			let {created, ...rest} = json; // remove dated keys
+			return rest;
+		}));
+		console.log(`Unchanged: ${name}`);
+		return;
+	} catch (err) {
+	}
+	let buf = Buffer.from(str);
 	writeFileSync(file, buf);
 	console.log(`Wrote: ${name} [${buf.length}]`);
 }
@@ -917,7 +931,8 @@ write_json('nf.json', {
 });
 write_json('nf-tests.json', UNICODE.read_nf_tests());
 
-// conveniences files (not critical)
+// the remaining files are not critical
+
 // for emoji.html
 for (let info of emoji_disabled) { // make every disabled emoji a solo-sequence 
 	if (!info.cps) info.cps = [info.cp];
@@ -929,8 +944,6 @@ write_json('emoji-info.json', [...valid_emoji.values(), ...emoji_disabled].map(i
 }));
 
 // for chars.html
-// TODO: collapse this more
-// TODO: include more information
 write_json('names.json', {
 	chars: [...UNICODE.char_map.values()].filter(x => !x.range).map(x => [x.cp, x.get_name(true)]),
 	ranges: [...new Set([...UNICODE.char_map.values()].map(x => x.range).filter(x => x))].map(x => [x.cp0, x.cp1, x.prefix]),

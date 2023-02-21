@@ -28,12 +28,14 @@
 
 	{"name": "Ⓜ", "norm": "m", "comment": "Mapping: circled"},
 	{"name": "Ⓜ️", "norm": "m", "comment": "Mapping: demoji"},
-	{"name": "⓫⓬⓭⓮⓯⓰⓱⓲⓳⓴⓿", "norm": "111213141516171819200", "comment": "negative circled"},
-	{"name": "⓵⓶⓷⓸⓹⓺⓻⓼⓽⓾", "norm": "12345678910", "comment": "double circled"},
-	{"name": "➊➋➌➍➎➏➐➑➒➓", "norm": "12345678910", "comment": "negative circled san-serif"},
-	{"name": "❶❷❸❹❺❻❼❽❾❿", "norm": "12345678910", "comment": "negative circled"},
-	{"name": "🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩", "norm": "abcdefghijklmnopqrstuvwxyz", "comment": "negative circled san-serif"},
-	{"name": "🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉", "comment": "negative squared"},
+	{"name": "⓫⓬⓭⓮⓯⓰⓱⓲⓳⓴⓿", "error": true, "comment": "negative circled (11-20,0)"},
+	{"name": "⓵⓶⓷⓸⓹⓺⓻⓼⓽⓾", "error": true, "comment": "double circled (1-10)"},
+	{"name": "➊➋➌➍➎➏➐➑➒➓", "error": true, "comment": "negative circled san-serif (1-10)"},
+	{"name": "❶❷❸❹❺❻❼❽❾❿", "error": true, "comment": "negative circled (1-10)"},
+	{"name": "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ", "norm": "abcdefghijklmnopqrstuvwxyz", "comment": "circled (A-Z)"},
+	{"name": "ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ", "norm": "abcdefghijklmnopqrstuvwxyz", "comment": "circled (a-z)"},
+	{"name": "🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩", "error": true, "comment": "negative circled san-serif (A-Z)"},
+	{"name": "🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉", "comment": "negative squared (A-Z)"},
 
 	{"name": " ", "error": true, "comment": "Whitespace"},
 	{"name": "te st", "error": true, "comment": "Whitespace: inner"},
@@ -47,7 +49,7 @@
 	{"name": "a'’a", "error": true, "comment": "Apostrophe: adjacent"},
 	{"name": "a'a’a", "norm": "a’a’a", "comment": "Apostrophe"},
 
-	{"name": "l·l", "error": true, "comment": "ContextO: valid middle dot"},
+	{"name": "l·l", "error": true, "comment": "ContextO: middle dot"},
 	{"name": "a·b", "error": true, "comment": "ContextO: invalid middle dot"},
 
 	{"name": "\uFE0E\uFE0Fa", "norm": "a", "comment": "Ignored: emoji-styling"},
@@ -58,29 +60,29 @@
 	{"name": "_a", "comment": "Leading Underscore"},
 	{"name": "_____a", "comment": "Leading Underscore"},
 	{"name": "a_b", "error": true, "comment": "Non-leading Underscore"},
-	{"name": "hyphens\u002D\u2010\u2011\u2012\u2013\u2014\u2015\u2043\u2212\u23AF\u23E4\uFE58", "norm": "hyphens------------", "comment": "Hyphens"},
-	{"name": "$¢£¤¥€₿", "comment": "Currency symbols"},
 
+	{"name": "$¢£¤¥₡₦₩₪₫€₭₮₱₲₴₵₸₹₺₼₽₾⃀₿ξ.؋", "comment": "Currency symbols"},
+	
 	{"name": "\u0303", "error": true, "comment": "Leading CM"},
 	{"name": ".\u0303.", "error": true, "comment": "Leading CM"},
 	{"name": "💩\u0303", "error": true, "comment": "Emoji + CM"},
 
-	{"name": "àáâãāäåăąćĉčçèéêẽēëěęğìíîïǐǹńñòóôõöǒōšśşùúûüǔūýỳžźż", "comment": "exemplars: Latn"},
-	{"name": "άέήίϊΐϋόύΰώ", "comment": "exemplars: Grek"},
-	{"name": "ѓёӣйїќўӯ", "comment": "exemplars: Cyrl"},
-	{"name": "ガギグゲゴザジズゼゾダヂヅデドバパビピブプベペボポヴヷヸヹヺヾ", "comment": "exemplars: Kata"},
-	{"name": "がぎぐげござじずぜぞだぢづでどばぱびぴぶぷべぺぼぽゔゞ", "comment": "exemplars: Hira"},
+	{"name": "àáâãāäåăąćĉčçèéêẽēëěęğìíîïǐǹńñòóôõöǒōšśşùúûüǔūýỳžźż", "comment": "Exemplars: Latn"},
+	{"name": "άέήίϊΐϋόύΰώ", "comment": "Exemplars: Grek"},
+	{"name": "ѓёӣйїќўӯ", "comment": "Exemplars: Cyrl"},
+	{"name": "ガギグゲゴザジズゼゾダヂヅデドバパビピブプベペボポヴヷヸヹヺヾ", "comment": "Exemplars: Kata"},
+	{"name": "がぎぐげござじずぜぞだぢづでどばぱびぴぶぷべぺぼぽゔゞ", "comment": "Exemplars: Hira"},
 
-	{"name": "àáâãāäåăǖ", "error": true, "comment": "cm whitelisted (disallowed char)"},
-	{"name": "àáâãa\u0303\u0303āäåă", "error": true, "comment": "cm whitelisted (illegal mixture)"},
+	{"name": "àáâãāäåăǖ", "error": true, "comment": "Whitelisted CM: disallowed char"},
+	{"name": "àáâãa\u0303\u0303āäåă", "error": true, "comment": "Whitelisted CM: illegal mixture"},
 
-	{"name": "\u0622\u064D\u064D", "error": true, "comment": "nsm: repeated w/NFD expansion"},
-	{"name": "\u0622\u064D\u064D\u064D", "error": true, "comment": "nsm: repeated w/NFD expansion"},
-	{"name": "\u0929\u0900\u0900", "error": true, "comment": "nsm: repeated w/NFD expansion"},
+	{"name": "\u0622\u064D\u064D", "error": true, "comment": "NSM: repeated w/NFD expansion"},
+	{"name": "\u0622\u064D\u064D\u064D", "error": true, "comment": "NSM: repeated w/NFD expansion"},
+	{"name": "\u0929\u0900\u0900", "error": true, "comment": "NSM: repeated w/NFD expansion"},
 
-	{"name": "\u0625\u0610\u0611\u0612", "comment": "nsm: at max"},
-	{"name": "\u0625\u0610\u0611\u0612\u0613", "error": true, "comment": "nsm: too many (5/4)"},
-	{"name": "\u0625\u0610\u0611\u0612\u0613\u0614", "error": true, "comment": "nsm: too many (6/4)"},
+	{"name": "\u0625\u0610\u0611\u0612", "comment": "NSM: at max"},
+	{"name": "\u0625\u0610\u0611\u0612\u0613", "error": true, "comment": "NSM: too many (5/4)"},
+	{"name": "\u0625\u0610\u0611\u0612\u0613\u0614", "error": true, "comment": "NSM: too many (6/4)"},
 	
 	{"name": "🇦", "error": "true", "comment": "Single regional indicator"},
 	{"name": "🇦🇦", "error": "true", "comment": "Double regional indicator: invalid flag sequence"},
@@ -91,6 +93,8 @@
 	{"name": "xn--💩", "comment": "CheckHyphens, Section 4.1 Rule #2 (Unicode)"},
 	{"name": "test-",  "comment": "CheckHyphens, Section 4.1 Rule #3A (Ignored)"},
 	{"name": "-test",  "comment": "CheckHyphens, Section 4.1 Rule #3B (Ignored)"},
+	{"name": "t-e--s---t", "comment": "Hyphen: multiple"},
+	{"name": "hyphens\u002D\u2010\u2011\u2012\u2013\u2014\u2015\u2043\u2212\u23AF\u23E4\uFE58", "norm": "hyphens------------", "comment": "Hyphens"},
 
 	{"name": "💩", "comment": "Emoji: unstyled"},
 	{"name": "💩️", "norm": "💩", "comment": "Emoji: emoji-styled"},
