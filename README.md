@@ -26,7 +26,7 @@
 	* [Illegal Mixtures](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/mixtures.html)
 	* [Whole-script Confusables](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/wholes.html)
 	* [Illegal Placement](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/placement.html)
-	* [Excess Combining Marks](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/cm.html)
+	* [Non-spacing Marks](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/nsm.html)
 
 ```Javascript
 import {ens_normalize} from '@adraffy/ens-normalize'; // or require()
