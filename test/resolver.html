@@ -626,10 +626,10 @@ footer span:hover {
 <button>i{2139}{2139}{FE0F}🛈</button>
 <button data-name="ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ">Ⓐ-Ⓩ</button>
 <button data-name="ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ">ⓐ-ⓩ</button>
-<button data-name="⓪①②③④⑤⑥⑦⑧⑨⑩">⓪-⑩</button>
+<button data-name="⓪①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳㉑㉒㉓㉔㉕㉖㉗㉘㉙㉚㉛㉜㉝㉞㉟">⓪-㉟</button>
 <button data-name="🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉">🅰-🆉</button>
 <button data-name="🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩">❌️🅐-🅩</button>
-<button data-name="⓿❶❷❸❹❺❻❼❽❾❿">❌️⓿-❿</button>
+<button data-name="⓿❶❷❸❹❺❻❼❽❾❿⓫⓬⓭⓮⓯⓰⓱⓲⓳⓴">❌️⓿-❿</button>
 <button data-name="🄌➊➋➌➍➎➏➐➑➒➓">❌️🄌-➓</button>
 <button data-name="㉈㉉㉊㉋㉌㉍㉎㉏">㉈-㉏</button>
 
@@ -994,27 +994,32 @@ recent_select.addEventListener('change', () => {
 	}
 });
 function add_recent(name, save = true) {
+	let found;
 	for (let x of recent_optgroup.children) {
 		if (x.value === name) {
-			return; // already exists
+			recent_optgroup.prepend(x); // move to top
+			found = true;
+			break;
 		}
 	}
-	while (recent_optgroup.childElementCount >= 25) { // max
-		recent_optgroup.lastChild.remove();
-	}
-	let option = new Option();
-	option.value = name;
-	if (is_checksum_address(name)) {
-		option.innerHTML = `🏠️ ${name}`; 
-	} else {
-		try {
-			let norm = ens_normalize(name);
-			option.innerHTML = `${norm === name ? '✅️' : '☑️'} ${name}`;
-		} catch (err) {
-			option.innerHTML = `❌️ ${apply_escapes(name, cp => should_escape(cp) || cp == 0x20)}`;
+	if (!found) {
+		while (recent_optgroup.childElementCount >= 25) { // max
+			recent_optgroup.lastChild.remove();
 		}
+		let option = new Option();
+		option.value = name;
+		if (is_checksum_address(name)) {
+			option.innerHTML = `🏠️ ${name}`; 
+		} else {
+			try {
+				let norm = ens_normalize(name);
+				option.innerHTML = `${norm === name ? '✅️' : '☑️'} ${name}`;
+			} catch (err) {
+				option.innerHTML = `❌️ ${apply_escapes(name, cp => should_escape(cp) || cp == 0x20)}`;
+			}
+		}
+		recent_optgroup.prepend(option);
 	}
-	recent_optgroup.prepend(option);
 	//recent_optgroup.label = `Recent Names (${recent_optgroup.childElementCount})`;
 	recent_select.selectedIndex = -1;
 	recent_select.classList.remove('hide');
@@ -1806,6 +1811,11 @@ function create_typed_tag(type, desc) {
 		case 'second': 
 			desc = `⭐️ ${desc}`;
 			break;
+		case 'fresh': {
+			type = 'second';
+			desc = `🌻️ ${desc}`;
+			break;
+		}
 		case 'norm':
 			//desc = `❌ ${desc}`;
 			type = 'warn';
@@ -1829,7 +1839,7 @@ function create_typed_tag(type, desc) {
 			break;
 		//default: throw new TypeError(`unknown grade: ${type}`);
 	}
-	span.innerText = desc;
+	span.innerHTML = desc;
 	span.classList.add(type);
 	return span;
 }
@@ -2553,7 +2563,11 @@ async function resolve0(input, skip_norm) {
 			owner_row.classList.add('error');
 			owner_row.append(create_typed_tag('warn', owner_err));
 		} else if (!owner) {
-			add_row_tag(owner_row, create_typed_tag('good', 'None'));
+			if (available) {
+				add_row_tag(owner_row, create_typed_tag('fresh', '<i>None</i>'));
+			} else {
+				add_row_tag(owner_row, 'Not Set');
+			}
 		} else {
 			
 			owner_row.classList.add(available ? 'old' : 'owner');

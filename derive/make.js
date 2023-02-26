@@ -1,6 +1,6 @@
 import {mkdirSync, writeFileSync, createWriteStream, readFileSync} from 'node:fs';
 import {deepStrictEqual} from 'node:assert';
-import {compare_arrays, explode_cp, permutations, parse_cp_sequence, print_section, print_checked, print_table} from './utils.js';
+import {compare_arrays, explode_cp, parse_cp_sequence, print_section, print_checked, print_table} from './utils.js';
 import {UNICODE, NF, IDNA, PRINTER} from './unicode-version.js';
 import CHARS_VALID from './rules/chars-valid.js';
 import CHARS_DISALLOWED from './rules/chars-disallow.js';
@@ -638,22 +638,9 @@ print_checked(`Valid are NFC`);
 
 // this prevents us from disabling a non-trivial intermediate part
 for (let cp0 of valid) {
-	let cps0 = NF.nfd([cp0]);
-	let [base_cp, ...extra] = cps0;
-	if (!extra.length) continue;
-	for (let perm of permutations(extra)) {
-		for (let n = 1; n <= perm.length; n++) {
-			// rearrange it and see if it comes back together
-			// this is safer than reimplementing NF reodering 
-			let cps_part = NF.nfc([base_cp, ...perm.slice(0, n)]);
-			let cps_rest = NF.nfc([...cps_part, ...perm.slice(n)]);
-			if (cps_rest.length === 1 && cps_rest[0] === cp0) {
-				for (let cp of cps_part) {
-					if (!valid.has(cp)) {
-						throw new Error(`Not Closed: ${PRINTER.desc_for_cp(cp0)} w/part ${PRINTER.desc_for_cp(cp)}`);
-					}
-				}
-			}
+	for (let cp of NF.inner_parts(cp0)) {
+		if (!valid.has(cp)) {
+			throw new Error(`Not Closed: ${PRINTER.desc_for_cp(cp0)} w/part ${PRINTER.desc_for_cp(cp)}`);
 		}
 	}
 }

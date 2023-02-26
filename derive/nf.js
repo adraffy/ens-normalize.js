@@ -1,4 +1,4 @@
-import {compare_arrays, explode_cp} from './utils.js';
+import {compare_arrays, explode_cp, permutations} from './utils.js';
 
 // algorithmic hangul
 // https://www.unicode.org/versions/Unicode10.0.0/ch03.pdf (page 149) 
@@ -217,6 +217,29 @@ export function create_nf(unicode) {
 					throw new Error('random nfd');
 				}
 			}
+		},
+		// cp that are between NFC and NFD in composition graph
+		// note: you can obviously compute this efficiently using
+		// internal NF knowledge, however this avoids thinking
+		inner_parts(cp0) {
+			let cps0 = this.nfd([cp0]);
+			let [base_cp, ...extra] = cps0;
+			if (!extra.length) return [];
+			let found = new Set();
+			for (let perm of permutations(extra)) {
+				for (let n = 1; n <= perm.length; n++) {
+					let cps_part = this.nfc([base_cp, ...perm.slice(0, n)]);
+					let cps_rest = this.nfc([...cps_part, ...perm.slice(n)]);
+					if (cps_rest.length === 1 && cps_rest[0] === cp0) {
+						for (let cp of cps_part) {
+							if (cp !== cp0 && cp !== base_cp && !extra.includes(cp)) {
+								found.add(cp);
+							}
+						}
+					}
+				}
+			}
+			return [...found];
 		}
 	};
 };
