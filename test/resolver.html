@@ -311,12 +311,12 @@ button.tags {
 	box-sizing: border-box;
 	margin-top: -0.2rem;
 }
-.details a.namehash {
+.details a.hashproof {
 	color: #000;
 	font-weight: bold;
 	text-decoration: none;
 }
-.details a.namehash:hover {
+.details a.hashproof:hover {
 	text-decoration: underline;
 }
 .details button {
@@ -799,7 +799,7 @@ import {
 	nfc, nfd, hex_cp, explode_cp, str_from_cps, safe_str_from_cps,
 	dom_from_tokens, use_default_style, versions, compare_arrays, should_escape,
 } from '../dist/all.min.js';
-import {puny_encoded} from '../../punycode.js/dist/index.min.js';
+import {puny_encoded, is_surrogate} from '../../punycode.js/dist/index.min.js';
 use_default_style();
 
 let infura_provider = new ethers.providers.WebSocketProvider('wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe');
@@ -1032,7 +1032,7 @@ function add_recent(name, save = true) {
 
 document.querySelector('#confused_btn').addEventListener('click', () => {
 	let s = input_field.value;
-	create_link(`./confused.html#${encodeURIComponent(get_dot_eth_label(s) || s.replaceAll('.', ''))}`).click();
+	create_link(`./confused.html#${encode_uri_component_surrogate_escaped(get_dot_eth_label(s) || s.replaceAll('.', ''))}`).click();
 });
 
 document.querySelector('#escape_btn').addEventListener('click', e => {
@@ -1047,9 +1047,9 @@ document.querySelector('#escape_btn').addEventListener('click', e => {
 });
 
 document.querySelector('#link_btn').addEventListener('click', () => {
-	let hash = '#' + encodeURIComponent(input_field.value);
-	if (skip_norm_check.checked) hash += SKIP_SUFFIX;
-	navigator.clipboard.writeText(window.location.href.split('#')[0] + hash);
+	//let hash = '#' + encodeURIComponent(input_field.value);
+	//if (skip_norm_check.checked) hash += SKIP_SUFFIX;
+	navigator.clipboard.writeText(window.location.href);
 });
 
 auto_resolve_check.addEventListener('input', () => {
@@ -1193,7 +1193,11 @@ function update_title() {
 	let input = input_field.value;
 	if (input) {
 		title = `${title}: "${input}"`;
-		hash = '#' + encodeURIComponent(input);
+		hash = '#' + encode_uri_component_surrogate_escaped(input);
+		if (skip_norm_check.checked) {
+			title += ' (!)';
+			hash += SKIP_SUFFIX;
+		}
 	}
 	window.history.replaceState(null, null, hash); 
 	document.title = title;
@@ -1500,6 +1504,28 @@ function replace_escapes(s) {
 		}
 	});
 }
+function encode_uri_component_ens_escaped(s) {
+	return s.split('.').map(x => {
+		try {
+			return encodeURIComponent(x);
+		} catch (err) {
+			return `[${labelhash(x).slice(2)}]`; // support unlinkable stuff
+		}
+	}).join('.');
+}
+function encode_uri_component_surrogate_escaped(s) {
+	return encodeURIComponent(apply_escapes(s, is_surrogate));
+}
+function encode_uri_component_byte_escaped(s) {
+	try {
+		return encodeURIComponent(s);
+	} catch (err) {
+		return bytes_from_utf8(s).map(cp => {
+			let ch = String.fromCharCode(cp);
+			return /[a-zA-Z0-9]/.test(ch) ? ch : hex_cp(cp);
+		}).join('');
+	}
+}
 
 function create_link(url, s, cls) {
 	let a = document.createElement('a');
@@ -1516,8 +1542,8 @@ function create_link(url, s, cls) {
 	}
 	return a;
 }
-function create_ens_link(s, {title = 'ENS'} = {}) {
-	return create_link(`https://app.ens.domains/name/${encodeURIComponent(s)}`, title, 'ens');
+function create_ens_link(name, {title = 'ENS'} = {}) {		
+	return create_link(`https://app.ens.domains/name/${encode_uri_component_ens_escaped(name)}`, title, 'ens');
 }
 function create_etherscan_address_link(addr, {title, contract} = {}) {
 	return create_link(`${block_explorer}/address/${addr}${contract ? '#readContract' : ''}`, title || addr, title ? false : 'wide');
@@ -1707,8 +1733,12 @@ function add_dot_eth_links(row, name) {
 	if (!label) return ''; // only if 2LD .eth	
 	let hash = labelhash(label);
 	add_row_tag(row, create_link(`https://opensea.io/assets/ethereum/${ENS_NFT}/${ethers.BigNumber.from(hash)}`, OPENSEA_NAME));
-	add_row_tag(row, create_link(`https://www.ens.vision/name/${encodeURIComponent(label)}`, VISION_NAME));
-	add_row_tag(row, create_link(`http://predomain.eth.limo/#/domain/${encodeURIComponent(label)}`, 'Predomain'));
+	try {
+		let encoded = encodeURIComponent(label); 
+		add_row_tag(row, create_link(`https://www.ens.vision/name/${encoded}`, VISION_NAME));
+		add_row_tag(row, create_link(`http://predomain.eth.limo/#/domain/${encoded}`, 'Predomain'));
+	} catch (err) {
+	}
 	add_row_tag(row, create_link(`https://metadata.ens.domains/mainnet/${ENS_NFT}/${hash}`, 'Metadata', 'ens'));
 }
 
@@ -1850,12 +1880,10 @@ function create_namehash_row(name) {
 	let row = create_row();
 	row.classList.add('details', 'detailed');
 	row.classList.toggle('hide', !show_details_check.checked);
-
 	let hash_span = document.createElement('span');
 	hash_span.classList.add('wide');
-	hash_span.innerHTML = `<a class="namehash" href="https://adraffy.github.io/keccak.js/test/demo.html#algo=namehash&s=${encodeURIComponent(name)}">Namehash:</a> <code>${namehash(name)}</code>`;
+	hash_span.innerHTML = `<a class="hashproof" href="https://adraffy.github.io/keccak.js/test/demo.html#algo=namehash&s=${encode_uri_component_byte_escaped(name)}">Namehash:</a> <code>${namehash(name)}</code>`;
 	row.append(hash_span);
-
 	return row;
 }
 
@@ -1942,7 +1970,7 @@ function create_details_row(name, before) {
 			footer_span.classList.add('sep');
 		}
 
-		let footer = [`<b>Labelhash:</b> <code>${hash}</code>`];
+		let footer = [`<a class="hashproof" href="https://adraffy.github.io/keccak.js/test/demo.html#algo=keccak-256&s=${encode_uri_component_byte_escaped(name)}">Labelhash:</a> <code>${hash}</code>`];
 		if (label === eth_label) {
 			footer.push(`<b>Token:</b> <code>${ethers.BigNumber.from(labelhash(eth_label))}</code>`);
 		}
@@ -2815,11 +2843,12 @@ function is_null_hex(s) {
 	return /^0x0*$/.test(s);
 }
 function labelhash(s) {
-	return ethers.utils.id(s);
+	//return ethers.utils.id(s);
+	return ethers.utils.keccak256(bytes_from_utf8(s));
 }
 function namehash(s) {
 	let hash = '0x0000000000000000000000000000000000000000000000000000000000000000';
-	if (s) hash = s.split('.').reduceRight((h, x) => ethers.utils.keccak256(h + ethers.utils.id(x).slice(2)), hash);
+	if (s) hash = s.split('.').reduceRight((h, x) => ethers.utils.keccak256(h + labelhash(x).slice(2)), hash);
 	return hash.slice(0, 66);
 }
 
