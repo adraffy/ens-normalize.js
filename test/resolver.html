@@ -1970,7 +1970,7 @@ function create_details_row(name, before) {
 			footer_span.classList.add('sep');
 		}
 
-		let footer = [`<a class="hashproof" href="https://adraffy.github.io/keccak.js/test/demo.html#algo=keccak-256&s=${encode_uri_component_byte_escaped(name)}">Labelhash:</a> <code>${hash}</code>`];
+		let footer = [`<a class="hashproof" href="https://adraffy.github.io/keccak.js/test/demo.html#algo=keccak-256&s=${encode_uri_component_byte_escaped(label)}">Labelhash:</a> <code>${hash}</code>`];
 		if (label === eth_label) {
 			footer.push(`<b>Token:</b> <code>${ethers.BigNumber.from(labelhash(eth_label))}</code>`);
 		}
