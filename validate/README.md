@@ -2,6 +2,7 @@
 
 * Depends on `/derive/`
 * Depends on [current implementation](../) of `ens_normalize()`
+* Depends on [@adraffy/ens-labels](https://github.com/adraffy/ens-labels)
 
 ## Data Files (not included)
 

@@ -506,6 +506,7 @@ footer span:hover {
 <button>vitalik.eth</button>
 <button>nIcK.eTh</button>
 <button>brantly.cash</button>
+<button>🏴‍☠.art</button>
 <button>❌..a..eth</button>
 <button>öbb</button>
 <button>Öbb</button>
@@ -783,6 +784,7 @@ Hebrew:
 <li><a href="https://raffy.antistupid.com/eth/ens-emoji-freq.html">Emoji Frequency Browser</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-nft-matcher.html">ENS+NFT Matcher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-batch-resolver.html">Batch Resolver</a></li>
+<li><a href="https://github.com/adraffy/ens-labels/">Label Database</a>
 <li><a href="./validate.html">Validation Test</a>
 <li><a href="./report-nf.html">Unicode NormalizationTest</a>
 <li><a href="https://adraffy.github.io/ens-norm-tests/test-breakdown/output/">Breakdown Reports</a></li>
@@ -2532,7 +2534,7 @@ async function resolve0(input, skip_norm) {
 
 	
 	// get the owner
-	let owner;
+	let owner, nft_owner;
 	if (!is_wildcard) {
 		// there doesn't seem to be an "owner"
 		//owner = await resolver._fetch('0x02571be3'); // owner(bytes32)
@@ -2588,7 +2590,6 @@ async function resolve0(input, skip_norm) {
 			if (!checked_nft && eth_label) {
 				let nft_row = create_row(`NFT Owner`, true);
 				output_div.append(nft_row);
-				let nft_owner;
 				try {
 					await ensure_eth_nft();
 					//nft_owner = await eth_nft_contract.callStatic.getApproved(labelhash(eth_label));
@@ -2656,7 +2657,13 @@ async function resolve0(input, skip_norm) {
 				}
 			} else {
 				if (owner === address) {
-					add_row_tag(address_row, create_typed_tag('good', 'Same as Owner'));	
+					if (eth_label && nft_owner !== address) {
+						add_row_tag(address_row, create_typed_tag('good', 'Same as Controller'));	
+					} else {
+						add_row_tag(address_row, create_typed_tag('good', 'Same as Owner'));
+					}
+				} else if (nft_owner === address) {
+					add_row_tag(address_row, create_typed_tag('good', 'Same as NFT Owner'));
 				} else {
 					add_row_tag(address_row, create_copy_btn(address));
 					add_row_tag(address_row, create_resolve_btn(address));
