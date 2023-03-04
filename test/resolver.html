@@ -1705,12 +1705,11 @@ function create_digits_row(name0, values, negative) {
 	if (values.every((x, i) => x == values[0])) {
 		add_row_tag(row, create_typed_tag('second', `Repeated (${values.length})`));
 	}
-	if (values.every((x, i) => x == values[values.length-1-i])) {
-		add_row_tag(row, create_palindrome_tag());
-	}
 	if (negative) {
 		add_row_tag(row, 'Negative');
-	}
+	} else if (values.every((x, i) => x == values[values.length-1-i])) {
+		add_row_tag(row, create_palindrome_tag());
+	}	
 	let pad = 0;
 	while (values[pad] === 0) pad++;
 	if (pad) {
