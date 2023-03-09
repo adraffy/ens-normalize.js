@@ -1,7 +1,3 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
 function decode_arithmetic(bytes) {
 	let pos = 0;
 	function u16() { return (bytes[pos++] << 8) | bytes[pos++]; }
@@ -1178,14 +1174,4 @@ function collapse_valid_tokens(tokens) {
 	return tokens;
 }
 
-exports.ens_beautify = ens_beautify;
-exports.ens_emoji = ens_emoji;
-exports.ens_normalize = ens_normalize;
-exports.ens_normalize_fragment = ens_normalize_fragment;
-exports.ens_split = ens_split;
-exports.ens_tokenize = ens_tokenize;
-exports.is_combining_mark = is_combining_mark;
-exports.nfc = nfc;
-exports.nfd = nfd;
-exports.safe_str_from_cps = safe_str_from_cps;
-exports.should_escape = should_escape;
+export { ens_beautify, ens_emoji, ens_normalize, ens_normalize_fragment, ens_split, ens_tokenize, is_combining_mark, nfc, nfd, safe_str_from_cps, should_escape };

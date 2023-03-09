@@ -1,5 +1,5 @@
-import {terser} from 'rollup-plugin-terser';
-import {nodeResolve} from '@rollup/plugin-node-resolve';
+import { nodeResolve } from '@rollup/plugin-node-resolve'
+import { terser } from 'rollup-plugin-terser'
 
 const TERSER = terser({
 	compress: {
@@ -18,17 +18,17 @@ export default [
 		input: './src/lib.js',
 		output: [
 			{
-				file: './dist/index.js',
+				file: './dist/index.mjs',
 				format: 'es',
 			},
 			{
-				file: './dist/index.min.js',
+				file: './dist/index.min.mjs',
 				format: 'es',
 				plugins: [TERSER],
 			},
 			// 20230126: CommonJS support, suggested by Ricmoo
 			{
-				file: './dist/index.cjs',
+				file: './dist/index.js',
 				format: 'cjs',
 			},
 		],
@@ -38,17 +38,17 @@ export default [
 		plugins: [NATIVE_NF],
 		output: [
 			{
-				file: './dist/index-xnf.js',
+				file: './dist/xnf.mjs',
 				format: 'es',
 			},
 			{
-				file: './dist/index-xnf.min.js',
+				file: './dist/xnf.min.mjs',
 				format: 'es',
 				plugins: [TERSER],
 			},
 			// 20230127: CommonJS support, suggested by Ricmoo
 			{
-				file: './dist/index-xnf.cjs',
+				file: './dist/xnf.js',
 				format: 'cjs',
 			},
 		],
@@ -66,11 +66,11 @@ export default [
 		plugins: [NODE],
 		output: [
 			{
-				file: './dist/all.js',
+				file: './dist/all.mjs',
 				format: 'es',
 			},
 			{
-				file: './dist/all.min.js',
+				file: './dist/all.min.mjs',
 				format: 'es',
 				plugins: [TERSER],
 			}
