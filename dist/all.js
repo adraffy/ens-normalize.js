@@ -1415,7 +1415,7 @@ function use_default_style() {
 	}
 	.tokens .valid.art {
 		color: #fff;
-		background: #f63; /*#ff3d01;*/
+		background: #333; /*#f63;*/
 		border: none;
 	}
 	.tokens .valid.com,
@@ -1523,11 +1523,11 @@ const version = "1.9.0";
 
 var includeVersions = /*#__PURE__*/Object.freeze({
 	__proto__: null,
-	derived: derived,
-	unicode: unicode,
-	cldr: cldr,
-	spec_hash: spec_hash,
 	built: built,
+	cldr: cldr,
+	derived: derived,
+	spec_hash: spec_hash,
+	unicode: unicode,
 	version: version
 });
 

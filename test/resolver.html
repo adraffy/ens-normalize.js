@@ -797,7 +797,7 @@ Hebrew:
 import {ethers} from "https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.esm.min.js";
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
-	nfc, nfd, hex_cp, explode_cp, str_from_cps, safe_str_from_cps,
+	nfc, nfd, hex_cp, quote_cp, explode_cp, str_from_cps, safe_str_from_cps,
 	dom_from_tokens, use_default_style, versions, compare_arrays, should_escape,
 } from '../dist/all.min.js';
 import {puny_encoded, is_surrogate} from '../../punycode.js/dist/index.min.js';
@@ -1492,7 +1492,7 @@ function entity_escape(s) {
 function apply_escapes(s, escape_fn, unicode) {
 	if (!escape_fn) escape_fn = cp => !(cp >= 0x21 && cp <= 0x7E); // not ascii
 	return explode_cp(s).map(cp => {
-		return escape_fn(cp) ? unicode ? unicode_escape_cp(cp) : `{${hex_cp(cp)}}` : String.fromCodePoint(cp);
+		return escape_fn(cp) ? unicode ? unicode_escape_cp(cp) : quote_cp(cp) : String.fromCodePoint(cp);
 	}).join('');
 }
 function replace_escapes(s) {
@@ -1517,17 +1517,6 @@ function encode_uri_component_ens_escaped(s) {
 function encode_uri_component_surrogate_escaped(s) {
 	return encodeURIComponent(apply_escapes(s, is_surrogate));
 }
-function encode_uri_component_byte_escaped(s) {
-	try {
-		return encodeURIComponent(s);
-	} catch (err) {
-		return bytes_from_utf8(s).map(cp => {
-			let ch = String.fromCharCode(cp);
-			return /[a-zA-Z0-9]/.test(ch) ? ch : hex_cp(cp);
-		}).join('');
-	}
-}
-
 function create_link(url, s, cls) {
 	let a = document.createElement('a');
 	a.href = url;
@@ -1882,7 +1871,7 @@ function create_namehash_row(name) {
 	row.classList.toggle('hide', !show_details_check.checked);
 	let hash_span = document.createElement('span');
 	hash_span.classList.add('wide');
-	hash_span.innerHTML = `<a class="hashproof" href="https://adraffy.github.io/keccak.js/test/demo.html#algo=namehash&s=${encode_uri_component_byte_escaped(name)}">Namehash:</a> <code>${namehash(name)}</code>`;
+	hash_span.innerHTML = `<a class="hashproof" href="https://adraffy.github.io/keccak.js/test/demo.html#algo=namehash&s=${encode_uri_component_surrogate_escaped(name)}&escape=1" target="_blank">Namehash:</a> <code>${namehash(name)}</code>`;
 	row.append(hash_span);
 	return row;
 }
@@ -1970,7 +1959,7 @@ function create_details_row(name, before) {
 			footer_span.classList.add('sep');
 		}
 
-		let footer = [`<a class="hashproof" href="https://adraffy.github.io/keccak.js/test/demo.html#algo=keccak-256&s=${encode_uri_component_byte_escaped(label)}">Labelhash:</a> <code>${hash}</code>`];
+		let footer = [`<a class="hashproof" href="https://adraffy.github.io/keccak.js/test/demo.html#algo=keccak-256&s=${encode_uri_component_surrogate_escaped(label)}&escape=1" target="_blank">Labelhash:</a> <code>${hash}</code>`];
 		if (label === eth_label) {
 			footer.push(`<b>Token:</b> <code>${ethers.BigNumber.from(labelhash(eth_label))}</code>`);
 		}

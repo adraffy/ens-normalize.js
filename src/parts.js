@@ -203,7 +203,7 @@ export function use_default_style() {
 	}
 	.tokens .valid.art {
 		color: #fff;
-		background: #f63; /*#ff3d01;*/
+		background: #333; /*#f63;*/
 		border: none;
 	}
 	.tokens .valid.com,
