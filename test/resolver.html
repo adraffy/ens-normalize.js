@@ -251,9 +251,13 @@ button.tags {
 	align-self: stretch;
 }
 .tags.long { order: 30; }
-.tags.ens { order: 8; }
-.tags.metadata { order: 9; }
-.tags.third-party { order: 10; font-size: 80%; }
+.tags.old {
+	background-color: #df8;
+	order: 8;
+}
+.tags.ens { order: 9; }
+.tags.metadata { order: 10; }
+.tags.third-party { order: 11; font-size: 80%; }
 .tags.invalid { color: #f00; }
 .tags.elapsed {
 	background: #cff;
@@ -733,6 +737,11 @@ Hebrew:
 <button data-name="a𓀂">❌Mixed</button>
 <button>❌ᏎᏮᏂᎥ.eth</button>
 
+<a href="https://adraffy.github.io/ens-norm-tests/test-compare/output/ens_normalize.git_1.9.0_vs_eth-ens-namehash_2.0.15.html#diff-norm"><b>Different Norm:</b></a>
+
+<button data-name="888">Remapped Hyphen</button>
+<button data-name="۰۱۲۳۷۸۹">Mapped Arabic</button>
+
 </div>
 <div id="options">
 <label><input type="checkbox" id="auto_resolve_check" checked>Resolve on Input</label>
@@ -794,13 +803,14 @@ Hebrew:
 </div>
 <footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
 <script type="module">
-import {ethers} from "https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.esm.min.js";
+import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.esm.min.js';
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
 	nfc, nfd, hex_cp, quote_cp, explode_cp, str_from_cps, safe_str_from_cps,
 	dom_from_tokens, use_default_style, versions, compare_arrays, should_escape,
 } from '../dist/all.min.js';
 import {puny_encoded, is_surrogate} from '../../punycode.js/dist/index.min.js';
+import eth_ens_namehash from './eth-ens-namehash@2.0.18.min.js';
 use_default_style();
 
 let infura_provider = new ethers.providers.WebSocketProvider('wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe');
@@ -1275,15 +1285,18 @@ function presolve(input, skip, resolving) {
 				let norm_row = create_row('Normalized');
 				make_exploded(norm_row, norm, true);
 				make_normalized(norm_row);
+				add_old_tag(norm_row, name, true);
 				output_div.append(norm_row, create_details_row(norm));
 			}
-		}
+		}		
+		add_old_tag(row, name);
 		//output_div.append(create_dns_row(norm));
 		return true;
 	} catch (err) {
 		row.classList.add('error');
 		add_row_tag(row, create_typed_tag('norm', err));
 		if (skip) return true;
+		add_old_tag(row, name);
 		make_exploded(row, name, false); // show the mapping during the error
 		stop_resolving();
 
@@ -1680,7 +1693,7 @@ function create_ethmoji_row(tokens) {
 	return row;
 }
 
-function create_digits_row(name0, values, negative) {
+function create_digits_row(name0, values, negative, suffix) {
 	//let row = create_row(`${name0} Digits`);
 	let row = create_row('Integer');
 	row.classList.add('category');
@@ -1704,16 +1717,41 @@ function create_digits_row(name0, values, negative) {
 	if (pad) {
 		add_row_tag(row, `Zero Pad (${pad})`);
 	}
-	let btn = create_resolve_btn((negative ? KEYCAP_MINUS : '') + values.map(keycap).join(''), KEYCAP_NAME);
+	let btn = create_resolve_btn((negative ? KEYCAP_MINUS : '') + values.map(keycap).join('') + suffix, KEYCAP_NAME);
 	btn.disabled = name0 === KEYCAP_NAME;
 	add_row_tag(row, btn);
 	for (let [name, digits] of DIGITS_MAP) {
 		//if (name0 === name) continue;
-		let btn = create_resolve_btn(sign + values.map(x => digits.charAt(x)).join(''), name);
+		let btn = create_resolve_btn(sign + values.map(x => digits.charAt(x)).join('') + suffix, name);
 		btn.disabled = name0 === name;
 		add_row_tag(row, btn);
 	}
 	return row;
+}
+
+function add_old_tag(row, name, is_norm) {
+	const OLD_NAME = 'ENSIP-1';
+	let span = document.createElement('span');
+	span.classList.add('tags', 'old');
+	try {
+		let norm0 = eth_ens_namehash.normalize(name);
+		if (norm0 === name) {
+			span.innerHTML = `✅️ ${OLD_NAME}`;
+		} else {
+			let norm;
+			try {
+				norm = ens_normalize(name);
+			} catch (err) {				
+			}
+			if (norm === norm0) throw new Error('not normalized');
+			add_row_tag(row, create_resolve_btn(norm0, `❌️ ${OLD_NAME} is Different`));
+			return;
+		}
+	} catch (err) {
+		span.innerHTML = `❌️ ${OLD_NAME}`;
+		span.title = err.message;
+	}
+	add_row_tag(row, span);
 }
 
 function add_dot_eth_links(row, name) {
@@ -2295,7 +2333,7 @@ async function resolve0(input, skip_norm) {
 			name_norm = input;
 			norm_err = err;
 		}	
-		
+
 		if (norm_err) {
 			add_dot_eth_links(input_row, input);
 		} else {
@@ -2315,45 +2353,49 @@ async function resolve0(input, skip_norm) {
 					add_row_tag(row, create_resolve_btn(name_norm));
 					add_row_tag(row, create_ens_link(name_norm));
 					add_dot_eth_links(row, name_norm);
+					add_old_tag(row, name_norm, true);
 					output_div.append(row);
 					output_div.append(create_details_row(name_norm));
 				}
 			}
 		}
+		add_old_tag(input_row, input);
 	}
 
-	let eth_label = get_dot_eth_label(name_norm);
-	let number = name_norm.includes('.') ? eth_label : name_norm;
-	if (number) {
-		let tokens = ens_tokenize(number);
+	let sep_pos = name_norm.indexOf('.');
+	if (sep_pos == -1) sep_pos = name_norm.length;
+	if (sep_pos > 0) {
+		let prefix = name_norm.slice(0, sep_pos);
+		let suffix = name_norm.slice(sep_pos); 
+		let tokens = ens_tokenize(prefix);
 		if (tokens.every(t => t.type === 'emoji')) {
 			output_div.append(create_ethmoji_row(tokens));
 			let negative = String.fromCodePoint(...tokens[0].emoji) == KEYCAP_MINUS;
 			if (negative) tokens = tokens.slice(1);
 			let values = tokens.map(x => x.emoji[0] - 0x30);
 			if (values.every(x => x >= 0 && x < 10)) {
-				output_div.append(create_digits_row(KEYCAP_NAME, values, negative));
+				output_div.append(create_digits_row(KEYCAP_NAME, values, negative, suffix));
 			}
 		} else {
-			let negative = number.startsWith('-');
-			if (negative) number = number.slice(1);
-			if (number) {
-				let cps = explode_cp(number);
+			let negative = prefix.startsWith('-');
+			if (negative) prefix = prefix.slice(1);
+			if (prefix) {
+				let cps = explode_cp(prefix);
 				let digits = cps.map(cp => DIGIT_MAP.get(cp));
 				if (digits.every(x => x)) {
 					let values = digits.map(x => x.i);
 					let name0 = digits[0].name;
 					if (digits.every(x => x.name === name0)) {
 						//if (digits[0].reversed) values.reverse(); // LTR
-						output_div.append(create_digits_row(name0, values, negative));
+						output_div.append(create_digits_row(name0, values, negative, suffix));
 					} else {
 						let first = digits[0].mixed;
 						if (first && digits.every(x => x.mixed == first)) {
-							let row = create_digits_row('Arabic', values, negative); //values.reverse()); // LTR
+							let row = create_digits_row('Arabic', values, negative, suffix); //values.reverse()); // LTR
 							add_row_tag(row, create_typed_tag('warn', 'Mixed Digits'));
 							output_div.append(row);
 						} else {
-							let row = create_digits_row('Numeric', values, negative);
+							let row = create_digits_row('Numeric', values, negative, suffix);
 							add_row_tag(row, create_typed_tag('warn', 'Multiple Scripts'));
 							output_div.append(row);
 						}
@@ -2363,7 +2405,7 @@ async function resolve0(input, skip_norm) {
 		}
 	}
 
-	if (!norm_err) {
+	if (!skip_norm && !norm_err) {
 		let pretty = ens_beautify(name_norm);
 		let row = create_row(`Beautified`);
 		row.classList.add('pretty');
@@ -2380,6 +2422,7 @@ async function resolve0(input, skip_norm) {
 			add_row_tag(normed_row, create_pretty_tag());
 			add_row_tag(row, create_typed_tag('good', 'Same as Norm'));
 		}
+		add_old_tag(row, pretty);
 		output_div.append(row);
 	}
 
@@ -2451,6 +2494,7 @@ async function resolve0(input, skip_norm) {
 		add_row_tag(resolver_row, create_typed_tag('warn', `Name Not Found`));	
 	}
 	// check if *.eth	
+	let eth_label = get_dot_eth_label(name_norm);
 	let available;	
 	let check_nft;
 	if (eth_label) {
@@ -2572,7 +2616,6 @@ async function resolve0(input, skip_norm) {
 			}
 		} catch (err) {
 			owner_err = err;
-			console.log(err);
 		}
 		remove_temporary(owner_row);
 		if (should_stop_resolving()) return;
@@ -2714,7 +2757,6 @@ async function resolve0(input, skip_norm) {
 	
 	primary_row.classList.toggle('old', !!available);
 	
-
 	if (primary_err) {
 		primary_row.classList.add('error');
 		add_row_tag(primary_row, create_typed_tag('warn', primary_err));
@@ -2749,8 +2791,8 @@ async function resolve0(input, skip_norm) {
 		details_row.classList.toggle('old', !!available);
 		output_div.append(details_row);
 	}
+	add_old_tag(primary_row, primary);
 
-	
 	// primary was normalized
 	if (primary === primary_norm) {
 		make_normalized(primary_row);
@@ -2769,6 +2811,7 @@ async function resolve0(input, skip_norm) {
 		row.classList.toggle('old', !!available);
 		make_exploded(row, primary_norm, true);
 		make_normalized(row);
+		add_old_tag(primary_row, primary_norm, true);
 		add_row_tag(row, create_copy_btn(primary_norm));
 		add_row_tag(row, create_ens_link(primary_norm));
 		add_dot_eth_links(row, primary_norm);
