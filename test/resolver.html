@@ -1734,16 +1734,20 @@ function add_old_tag(row, name, is_norm) {
 	span.classList.add('tags', 'old');
 	try {
 		let norm0 = eth_ens_namehash.normalize(name);
+		let norm;
+		try {
+			norm = ens_normalize(name);
+		} catch (err) {				
+		}
+		let html = OLD_NAME;
+		if (!is_norm && norm0 !== norm) { // diff-norm
+			html += ` ⚠️<b>Diff Norm</b>`;
+		}
 		if (norm0 === name) {
-			span.innerHTML = `✅️ ${OLD_NAME}`;
+			span.innerHTML = `✅️ ${html}`;
 		} else {
-			let norm;
-			try {
-				norm = ens_normalize(name);
-			} catch (err) {				
-			}
 			if (norm === norm0) throw new Error('not normalized');
-			add_row_tag(row, create_resolve_btn(norm0, `❌️ ${OLD_NAME} is Different`));
+			add_row_tag(row, create_resolve_btn(norm0, `❌️ ${html}`));
 			return;
 		}
 	} catch (err) {
@@ -1751,6 +1755,9 @@ function add_old_tag(row, name, is_norm) {
 		span.title = err.message;
 	}
 	add_row_tag(row, span);
+
+	
+
 }
 
 function add_dot_eth_links(row, name) {
