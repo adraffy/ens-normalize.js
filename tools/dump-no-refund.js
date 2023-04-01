@@ -6,7 +6,7 @@ import eth_ens_namehash from '../test/eth-ens-namehash@2.0.15.min.js';
 
 // from examples.js
 function filter_emoji(s) {
-	return str_from_cps(ens_tokenize(s).flatMap(token => {
+	let cps = ens_tokenize(s).flatMap(token => {
 		switch (token.type) { 
 			case 'emoji': return []; // ignore
 			case 'nfc': return token.input; // pre-nfc
@@ -14,14 +14,24 @@ function filter_emoji(s) {
 			case 'valid': return token.cps;
 			default: return token.cp;
 		}
-	}));
+	});
+	// account for single regionals
+	for (let pos = cps.length - 2; pos >= 0; pos--) {
+		let cp = cps[pos];
+		if (cp >= 0x1F1E6 && cp <= 0x1F1FF) {
+			let len = 1;
+			if (cps[pos+1] == 0xFE0F) len++;
+			cps.splice(pos, len);
+		}
+	}
+	return str_from_cps(cps);
 }
 
 let found = 0;
 let spoof_invis = [];
 
 for (let label of read_labels()) {
-	if (!label) continue;
+	if ([...label].length < 3) continue; // too short
 	try {
 		if (label !== eth_ens_namehash.normalize(label)) continue; // not norm0
 	} catch (err) {
