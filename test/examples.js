@@ -45,7 +45,7 @@ console.log(is_ascii_name('xs')); // true
 // returns true if one emoji glyph
 function is_emoji(one_emoji) {
 	let tokens = ens_tokenize(one_emoji);
-	return tokens.length == 1 && tokens[0].emoji; // or .type === 'emoji';
+	return tokens.length == 1 && !!tokens[0].emoji; // or .type === 'emoji';
 }
 
 console.log(is_emoji);
@@ -58,6 +58,7 @@ function get_min_length(ncp, len = 3) {
 	return 1 + Math.max(0, len - ncp);
 }
 
+console.log(get_min_length);
 console.log(get_min_length(1)); // 3
 console.log(get_min_length(2)); // 2
 console.log(get_min_length(5)); // 1
@@ -71,6 +72,7 @@ function get_min_repeated(one_emoji) {
 	return String.fromCodePoint(...cps).repeat(get_min_length(cps.length));
 }
 
+console.log(get_min_repeated);
 expect_fail(() => get_min_repeated('abc')); // not emoji
 console.log(get_min_repeated('💩')); // "💩💩💩"
 console.log(get_min_repeated('🇺🇸')); // "🇺🇸🇺🇸"
@@ -99,6 +101,7 @@ function get_pure(name) {
 	return [tokens.length, String.fromCodePoint(...tokens[0].emoji)];
 }
 
+console.log(get_pure);
 expect_fail(() => get_pure('abc💩'));// TypeError('not ethmoji')
 expect_fail(() => get_pure('a.b.c')); // TypeError('not 2LD')
 expect_fail(() => get_pure('💩💩💩💩')); // TypeError('not minimial')
@@ -113,6 +116,7 @@ function is_valid(cp) {
 	return ens_tokenize(String.fromCodePoint(cp))[0].type === 'valid';
 }
 
+console.log(is_valid);
 console.log(is_valid(0x61));
 console.log(is_valid(0x20));
 
@@ -125,6 +129,7 @@ function get_mapped(cp) {
 	return token.type === 'mapped' ? token.cps : null;
 }
 
+console.log(get_mapped);
 console.log(get_mapped(0x2167)); // Ⅷ -> [v, i, i, i]
 console.log(get_mapped(0x41)); // A -> [a]
 console.log(get_mapped(0x61)); // a -> null
@@ -144,6 +149,7 @@ function replace_sloppy(s) {
 	//return s.replaceAll('/', '\u2044').replace(/(\u3002|\uFF0E|\uFF61)/gu, '.');
 }
 
+console.log(replace_sloppy);
 console.log(replace_sloppy("1/4.eth")); // "1/4.eth" -> "1⁄4.eth"
 
 // ********************************************************************************
@@ -162,6 +168,7 @@ function force_normalize(s) {
 	}));
 }
 
+console.log(force_normalize);
 console.log(force_normalize('A_B_C')); // "a_b_c"
 
 // ********************************************************************************
@@ -172,6 +179,27 @@ function collapse_null_labels(s) {
 	return ens_split(s).filter(x => !x.tokens || x.tokens.length).map(x => str_from_cps(x.input)).join('.');
 }
 
+console.log(collapse_null_labels);
 console.log(collapse_null_labels('...a...eth...')); // "a.eth"
 console.log(collapse_null_labels('1.\uFE0F..eth')); // "1.eth"
 console.log(collapse_null_labels('....!...eth..')); // "!.eth"
+
+// ********************************************************************************
+// filter emoji (optional FE0F)
+// tokenize, filter emoji, reassemble
+function filter_emoji(s) {
+	return str_from_cps(ens_tokenize(s).flatMap(token => {
+		switch (token.type) { 
+			case 'emoji': return []; // ignore
+			case 'nfc': return token.input; // pre-nfc
+			case 'mapped':
+			case 'valid': return token.cps;
+			default: return token.cp;
+		}
+	}));
+}
+
+console.log(filter_emoji);
+console.log(filter_emoji('\u{1F4A9}') == ''); // true
+console.log(filter_emoji('\u{1F4A9}\uFE0F') == ''); // true
+console.log(filter_emoji('\u{1F4A9}\uFE0F\uFE0F') == '\uFE0F'); // true

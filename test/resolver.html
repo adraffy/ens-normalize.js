@@ -1741,7 +1741,7 @@ function add_old_tag(row, name, is_norm) {
 		}
 		let html = OLD_NAME;
 		if (!is_norm && norm0 !== norm) { // diff-norm
-			html += ` ⚠️<b>Diff Norm</b>`;
+			html += `: ⚠️<b>Diff Norm</b>`;
 		}
 		if (norm0 === name) {
 			span.innerHTML = `✅️ ${html}`;
@@ -1755,12 +1755,11 @@ function add_old_tag(row, name, is_norm) {
 		span.title = err.message;
 	}
 	add_row_tag(row, span);
-
-	
-
 }
 
 function add_dot_eth_links(row, name) {
+	// TODO: add .art support
+	// TODO: adjust based on chain_id
 	if (chain_id !== 1) return;
 	let label = get_dot_eth_label(name);
 	if (!label) return ''; // only if 2LD .eth	
