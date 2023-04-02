@@ -114,12 +114,22 @@ input[type=checkbox], label {
 	user-select: none;
 	cursor: pointer;
 }
-input[type=checkbox]:checked + label.nonstd {
+input[type=checkbox]:checked + label.nonstd.info {
+	background: #cff;
+	outline: 2px solid #0aa;
+	padding: 2px 4px;
+	margin: -2px -4px;
+	border-radius: 2px;
+}
+input[type=checkbox]:checked + label.nonstd.warn {
 	background: #f00;
 	color: #fff;
 	outline: 2px solid #f00;
-	border-radius: 5px;
+	padding: 2px 4px;
+	margin: -2px -4px;
+	border-radius: 2px;
 }
+
 #controls .balloon {
 	flex-grow: 1;
 }
@@ -745,9 +755,15 @@ Hebrew:
 <div id="options">
 <label><input type="checkbox" id="auto_resolve_check" checked>Resolve on Input</label>
 <label><input type="checkbox" id="show_details_check" checked>Details</label>
-<label><input type="checkbox" id="show_components_check" checked>Emoji Components</label>
+<span>
+	<input type="checkbox" id="show_components_check" checked>
+	<label class="nonstd info" for="show_components_check">Emoji Components</label>
+</span>
 <label><input type="checkbox" id="force_ltr_check">Force LTR</label>
-<span><input type="checkbox" id="skip_norm_check"><label class="nonstd" for="skip_norm_check">Skip Normalization</label></span>
+<span>
+	<input type="checkbox" id="skip_norm_check">
+	<label class="nonstd warn" for="skip_norm_check">Skip Normalization</label>
+</span>
 </div>
 <div id="input">
 <label for="input_field">Name or Address:</label>
