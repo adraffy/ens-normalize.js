@@ -20,12 +20,12 @@ for (let emoji of [
 	'🤼🏻‍♂','🤼🏼‍♂','🤼🏽‍♂','🤼🏾‍♂','🤼🏿‍♂', 
 	// woman wrestler
 	'🤼🏻‍♀','🤼🏼‍♀','🤼🏽‍♀','🤼🏾‍♀','🤼🏿‍♀', 
-]) non_rgi.push(`${[...emoji].map(x => escape_cp(x.codePointAt(0)))}\uFE0F?`);
+]) non_rgi.push(`${[...emoji].map(x => escape_cp(x.codePointAt(0))).join('')}\uFE0F?`);
 const non_rgi_regex = new RegExp(`(${non_rgi.join('|')})`, 'ug');
 console.log(non_rgi_regex);
 
 /*
-/(\u{1f1e6}|\u{1f1e7}|\u{1f1e8}|\u{1f1e9}|\u{1f1ea}|\u{1f1eb}|\u{1f1ec}|\u{1f1ed}|\u{1f1ee}|\u{1f1ef}|\u{1f1f0}|\u{1f1f1}|\u{1f1f2}|\u{1f1f3}|\u{1f1f4}|\u{1f1f5}|\u{1f1f6}|\u{1f1f7}|\u{1f1f8}|\u{1f1f9}|\u{1f1fa}|\u{1f1fb}|\u{1f1fc}|\u{1f1fd}|\u{1f1fe}|\u{1f1ff}|\u{1f3fb}|\u{1f3fc}|\u{1f3fd}|\u{1f3fe}|\u{1f3ff}|\u{1f431},\u{200d},\u{1f409}️?|\u{1f431},\u{200d},\u{1f4bb}️?|\u{1f431},\u{200d},\u{1f680}️?|\u{1f431},\u{200d},\u{1f464}️?|\u{1f431},\u{200d},\u{1f3cd}️?|\u{1f431},\u{200d},\u{1f453}️?|\u{1f93c},\u{1f3fb},\u{200d},\u{2642}️?|\u{1f93c},\u{1f3fc},\u{200d},\u{2642}️?|\u{1f93c},\u{1f3fd},\u{200d},\u{2642}️?|\u{1f93c},\u{1f3fe},\u{200d},\u{2642}️?|\u{1f93c},\u{1f3ff},\u{200d},\u{2642}️?|\u{1f93c},\u{1f3fb},\u{200d},\u{2640}️?|\u{1f93c},\u{1f3fc},\u{200d},\u{2640}️?|\u{1f93c},\u{1f3fd},\u{200d},\u{2640}️?|\u{1f93c},\u{1f3fe},\u{200d},\u{2640}️?|\u{1f93c},\u{1f3ff},\u{200d},\u{2640}️?)/gu
+/(\u{1f1e6}|\u{1f1e7}|\u{1f1e8}|\u{1f1e9}|\u{1f1ea}|\u{1f1eb}|\u{1f1ec}|\u{1f1ed}|\u{1f1ee}|\u{1f1ef}|\u{1f1f0}|\u{1f1f1}|\u{1f1f2}|\u{1f1f3}|\u{1f1f4}|\u{1f1f5}|\u{1f1f6}|\u{1f1f7}|\u{1f1f8}|\u{1f1f9}|\u{1f1fa}|\u{1f1fb}|\u{1f1fc}|\u{1f1fd}|\u{1f1fe}|\u{1f1ff}|\u{1f3fb}|\u{1f3fc}|\u{1f3fd}|\u{1f3fe}|\u{1f3ff}|\u{1f431}\u{200d}\u{1f409}️?|\u{1f431}\u{200d}\u{1f4bb}️?|\u{1f431}\u{200d}\u{1f680}️?|\u{1f431}\u{200d}\u{1f464}️?|\u{1f431}\u{200d}\u{1f3cd}️?|\u{1f431}\u{200d}\u{1f453}️?|\u{1f93c}\u{1f3fb}\u{200d}\u{2642}️?|\u{1f93c}\u{1f3fc}\u{200d}\u{2642}️?|\u{1f93c}\u{1f3fd}\u{200d}\u{2642}️?|\u{1f93c}\u{1f3fe}\u{200d}\u{2642}️?|\u{1f93c}\u{1f3ff}\u{200d}\u{2642}️?|\u{1f93c}\u{1f3fb}\u{200d}\u{2640}️?|\u{1f93c}\u{1f3fc}\u{200d}\u{2640}️?|\u{1f93c}\u{1f3fd}\u{200d}\u{2640}️?|\u{1f93c}\u{1f3fe}\u{200d}\u{2640}️?|\u{1f93c}\u{1f3ff}\u{200d}\u{2640}️?)/gu
 */
 
 // remove real emoji and non-rgi emoji with FE0F allowance
