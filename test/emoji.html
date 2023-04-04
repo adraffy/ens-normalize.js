@@ -617,6 +617,7 @@ function update_search() {
 		let right_div = document.createElement('div');
 		right_div.classList.add('right');
 		right_div.append(repeated_btn, csv_btn);
+		heading_div.append(right_div);
 	}
 	results_section.innerHTML = '';
 	results_section.append(heading_div, create_table(results, true));

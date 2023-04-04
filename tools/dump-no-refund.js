@@ -1,4 +1,4 @@
-import {writeFileSync} from 'node:fs';
+import {readFileSync, writeFileSync} from 'node:fs';
 import {read_labels} from '../validate/data.js';
 import {ens_normalize, ens_tokenize} from '../src/lib.js';
 import eth_ens_namehash from '../test/eth-ens-namehash@2.0.15.min.js';
@@ -49,7 +49,12 @@ function is_invis_spoof(s) {
 let found = 0;
 let spoof_invis = [];
 
-for (let label of read_labels()) {
+let labels = read_labels();
+//let labels = JSON.parse(readFileSync(new URL('../../ens-registered/20230322.json', import.meta.url))).map(v => v[0]);
+//let labels = readFileSync(new URL('./refund_names.csv', import.meta.url), {encoding: 'utf8'});
+//labels = labels.split('\n');
+
+for (let label of labels) {
 	if ([...label].length < 3) continue; // too short
 	try {
 		if (label !== eth_ens_namehash.normalize(label)) continue; // not norm0
@@ -68,11 +73,26 @@ for (let label of read_labels()) {
 	}
 }
 console.log({
+	count: labels.length,
 	found,
 	invis: spoof_invis.length,
 });
-
 writeFileSync(new URL('./no-refund.json', import.meta.url), JSON.stringify({
+	count: labels.length,
 	found,
 	spoof_invis
 }, null, '\t'));
+
+// double-check matoken
+let matoken = 0;
+for (let label of readFileSync(new URL('./refund_names.csv', import.meta.url), {encoding: 'utf8'}).split('\n')) {
+	try {
+		ens_normalize(label);		
+		continue;
+	} catch (err) {	
+	}
+	if (is_invis_spoof(label)) {
+		matoken++;
+	}
+}
+console.log({matoken});
