@@ -90,8 +90,9 @@ h2 {
 #examples_btn {
 	font-weight: bold;
 }
-#input label {
-	display: none;
+#input {
+	display: flex;
+	gap: 0.5rem;
 }
 #input input {
 	box-sizing: border-box;
@@ -532,6 +533,10 @@ footer span:hover {
 <button>xn--💩</button>
 <button>💷pound.eth</button>
 
+<a href="https://github.com/ensdomains/ens-contracts/tree/master/contracts/wrapper#namewrapper-docs"><b>Wrapped:</b></a>
+<button>firstwrappedname.eth</button>
+<button>dessert3.menu.bestsushi7.eth</button>
+
 <b>Subdomain:</b>
 <button data-name="nowzad.loopring.eth">loopring</button>
 <button data-name="239.chonksociety.eth">Chonk #239</button>
@@ -767,21 +772,20 @@ Hebrew:
 </span>
 </div>
 <div id="input">
-<label for="input_field">Name or Address:</label>
-<input id="input_field" size="20" placeholder="Name or token:XYZ or Marketplace URL or Address (Checksummed)">
+	<input id="input_field" size="20" placeholder="Name or token:XYZ or Marketplace URL or Address (Checksummed)">
+	<select id="recent_select" title="Recent Names" class="hide">
+		<option value="reset">🗑️ Clear History</option>
+		<optgroup label="Recent Names"></optgroup>
+	</select>
 </div>
 <div id="controls">
-<div id="arrows" class="hide"><div class="arrows"></div></div>
-<div class="balloon"></div>
-<button id="confused_btn">Confused</button>
-<button id="nf_btn">NFD↔NFC</button>
-<button id="escape_btn" title="[ALT] Unicode Escaped">Escape</button>
-<button id="link_btn">Copy Link</button>
-<button id="resolve_btn">Resolve</button>
-<select id="recent_select" title="Recent Names" class="hide">
-<option value="reset">🗑️ Clear History</option>
-<optgroup label="Recent Names"></optgroup>
-</select>
+	<div id="arrows" class="hide"><div class="arrows"></div></div>
+	<div class="balloon"></div>
+	<button id="confused_btn">Confused</button>
+	<button id="nf_btn">NFD↔NFC</button>
+	<button id="escape_btn" title="[ALT] Unicode Escaped">Escape</button>
+	<button id="link_btn">Copy Link</button>
+	<button id="resolve_btn">Resolve</button>
 </div>
 <div id="output">
 <ul class="row readme">
@@ -789,6 +793,7 @@ Hebrew:
 <li>Use <code>{FF}</code> or <code>[255]</code> or <code>\u200D</code> to manually include codepoints <button data-raw data-name="{200D}a[8205]b\u200D.eth">ZWJ</button></li>
 <li><code>range:A..B</code> expands to a range of characters <button data-name="range:61..7A" data-delay="1000">ASCII a-z</button></li>
 <li><code>token:X</code> resolves to the .eth preimage (if known) <button data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209" data-delay="1000">token:</button></li>
+<li><code>wrapped:X</code> resolves to the name (if wrapped) <button data-name="wrapped:0xc44eec7fb870ae46d4ef4392d33fbbbdc164e7817a86289a1fe30e5f4d98ae85" data-delay="1000">wrapped:</button></li>
 <li><code>123 456 789</code> is shorthand for <code>{123}{456}{789}</code> <button data-name="65 74 68" data-meta data-delay="1000">65 74 68</button></li>
 <li><a href="#vitalik.eth"><button>Copy Link</button></a> to get a URL that resolves on page-load.</li>
 <li>Many elements have tooltips with additional information.</li>
@@ -836,7 +841,9 @@ let window_provider;
 let chain_id;
 let block_explorer;
 let registry_contract;
+let eth_resolver_contract;
 let eth_nft_contract;
+let wrapper_contract;
 let price_oracle_contract;
 
 const EMOJI = ens_emoji();
@@ -881,9 +888,12 @@ const emoji_url = './emoji.html#q=%s';
 
 const ENS_REGISTRY = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
 const ENS_NFT = '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85';
+const ENS_WRAPPER = '0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401';
 
 const KNOWN_RESOLVERS = {
-	'0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41': 'Public Resolver',
+	'0x1da022710dF5002339274AaDEe8D58218e9D6AB5': 'Public Resolver (v1)',
+	'0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41': 'Public Resolver (v2)',
+	'0x231b0Ee14048e9dCcD1d247744d114a4EB5E8E63': 'Public Resolver (v3)',
 	'0xA2C122BE93b0074270ebeE7f6b7292C7deB45047': 'Reverse Resolver',
 };
 
@@ -1142,10 +1152,12 @@ function update_network(network) {
 	block_explorer = get_block_explorer(chain_id);
 	document.querySelector('#provider').innerHTML = `using ${provider_name} (<a href="${block_explorer}/address/${registry}">${network_name}</a>)`;
 	registry_contract = new ethers.Contract(registry, [
-		`function resolver(bytes32 node) external view returns (address)`,
-		`function owner(bytes32 node) external view returns (address)`,
+		'function resolver(bytes32 node) external view returns (address)',
+		'function owner(bytes32 node) external view returns (address)',
 	], active_provider);
+	eth_resolver_contract = null;
 	eth_nft_contract = null;
+	wrapper_contract = null;
 	if (input_field.value) {
 		schedule_resolve();
 	}
@@ -1815,6 +1827,39 @@ function bytes_from_utf8(s) {
 	}
 	return Uint8Array.from(v);
 }
+function utf8_from_bytes(v) {
+	let cps = [];
+	for (let i = 0, n = v.length; i < n; ) {
+		let x = v[i++];
+		if (x < 0x80) {
+			cps.push(x);
+		} else if (x < 0xE0) {
+			cps.push(((x & 0x1F) << 6) | req_utf8_cont(v, i++));
+		} else if (x < 0xF0) {
+			cps.push(((x & 0x0F) << 12) | (req_utf8_cont(v, i++) << 6) | req_utf8_cont(v, i++));
+		} else {
+			cps.push(((x & 0x07) << 18) | (req_utf8_cont(v, i++) << 12) | (req_utf8_cont(v, i++) << 6) | req_utf8_cont(v, i++));
+		}
+	}
+	return String.fromCodePoint(...cps);
+}
+function req_utf8_cont(v, i) {
+	let x = v[i];
+	if ((x & 0xC0) != 0x80) throw new Error(`malformed utf8 at ${i}: expected continuation`);
+	return x & 0x3F;
+}
+
+function name_from_wrapper_bytes(v) {
+	if (v.length < 1 || v[v.length-1] != 0) {
+		throw new Error('expected null terminator');
+	}
+	let labels = [];
+	for (let pos = 0, end = v.length-1; pos < end; ) {
+		let n = v[pos++];
+		labels.push(utf8_from_bytes(v.slice(pos, pos += n)));
+	}
+	return labels.join('.');
+}
 
 function make_tokens_div(name, before) {
 	// tokenize each label separately so we can show major/minor errors
@@ -2129,12 +2174,17 @@ function resolve() {
 				}
 			} else { 
 				// generalized handler
+				// https://opensea.io/assets/ethereum/0xd4416b13d2b3a9abae7acd5d6c2bbdbe25686401/65925476150180752387929572463320899353544457962160224303512375154243473029563
 				// https://opensea.io/assets/ethereum/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
 				// https://www.gem.xyz/asset/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
 				// https://element.market/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
 				let v = url.pathname.toLowerCase().split('/').filter(x => x);
-				if (v.length >= 2 && v[v.length-2] === ENS_NFT.toLowerCase() && /^[a-f0-9]+$/i.test(v[v.length-1])) {
-					input_field.value = input = `token:${v[v.length-1]}`;
+				if (v.length >= 2 && /^[a-f0-9]+$/i.test(v[v.length-1])) {
+					if (v[v.length-2] === ENS_NFT.toLowerCase()) {
+						input_field.value = input = `token:${v[v.length-1]}`;
+					} else if (v[v.length-2] === ENS_WRAPPER.toLowerCase()) {
+						input_field.value = input = `wrapped:${v[v.length-1]}`;
+					}
 				}
 			}
 		} catch (err) {
@@ -2166,7 +2216,20 @@ function resolve() {
 		}).then(() => {
 			resolve_btn.disabled = false;
 		});
-	} 
+	} else if (match = input.match(/^wrapped:(0x[a-f0-9]+|[0-9]+)$/i)) {
+		resolve_btn.disabled = true;
+		return (async () => {
+			try {
+				await ensure_wrapper();
+				let bytes = await wrapper_contract.callStatic.names(ethers.BigNumber.from(match[1]));
+				input_field.value = name_from_wrapper_bytes(ethers.utils.arrayify(bytes));
+				setTimeout(resolve, 0);
+			} catch (err) {
+				window.alert(err.message);
+			}
+			resolve_btn.disabled = false;
+		})();
+	}
 	// input convenience: expand range
 	if (match = input.match(/^range:([0-9a-f]+)\.\.([0-9a-f]+)$/i)) {
 		let lo = parseInt(match[1], 16);
@@ -2618,8 +2681,33 @@ async function resolve0(input, skip_norm) {
 
 	
 	// get the owner
-	let owner, nft_owner;
+	let is_wrapped, owner, nft_owner;
 	if (!is_wildcard) {
+		let node = namehash(name_norm);
+		let wrapped_err;
+		let wrapped_row = create_row('Wrapper', true);
+		output_div.append(wrapped_row);
+		try {
+			await ensure_wrapper();
+			if (should_stop_resolving()) return;
+			is_wrapped = await wrapper_contract.callStatic.isWrapped(node);
+		} catch (err) {
+			wrapped_err = err;
+		}
+		remove_temporary(wrapped_row);
+		if (should_stop_resolving()) return;
+		add_row_tag(wrapped_row, create_elapsed());
+		if (wrapped_err) {
+			wrapped_row.classList.add('error');
+			wrapped_row.append(create_typed_tag('warn', err));
+		} else {
+			add_row_tag(wrapped_row, is_wrapped ? create_typed_tag('special', 'Wrapped') : 'Unwrapped');
+		}
+		if (is_wrapped) {
+			add_row_tag(wrapped_row, create_link(`https://opensea.io/assets/ethereum/${wrapper_contract.address}/${ethers.BigNumber.from(node)}`, OPENSEA_NAME));
+			add_row_tag(wrapped_row, create_link(`https://metadata.ens.domains/mainnet/${wrapper_contract.address}/${node}`, 'Metadata', 'ens'));
+		}
+
 		// there doesn't seem to be an "owner"
 		//owner = await resolver._fetch('0x02571be3'); // owner(bytes32)
 		//owner = await resolver._fetch('0x38a699a4'); // exists(bytes32)
@@ -2629,13 +2717,29 @@ async function resolve0(input, skip_norm) {
 		let checked_nft;
 		output_div.append(owner_row);
 		try {
-			owner = await registry_contract.callStatic.owner(namehash(name_norm));
-			if (should_stop_resolving()) return;
-			if (is_null_hex(owner)) owner = false;
-			if (!owner && check_nft) {
-				checked_nft = true;
-				owner = await eth_nft_contract.callStatic.ownerOf(check_nft);
+			if (is_wrapped) {
+				let data = await wrapper_contract.callStatic.getData(node);
+				owner = data.owner;
+				let {fuses} = data;
+				if (fuses == 0) add_row_tag(wrapped_row, '👊️ Can Do Everything');
+				if (fuses & 0x00001) add_row_tag(wrapped_row, '🚫️ Unwrap');
+				if (fuses & 0x00002) add_row_tag(wrapped_row, '🚫️ Burn Fuses');
+				if (fuses & 0x00004) add_row_tag(wrapped_row, '🚫️ Transfer');
+				if (fuses & 0x00008) add_row_tag(wrapped_row, '🚫️ Set Resolver');
+				if (fuses & 0x00010) add_row_tag(wrapped_row, '🚫️ Set TTL');
+				if (fuses & 0x00020) add_row_tag(wrapped_row, '🚫️ Subdomains');
+				if (fuses & 0x00040) add_row_tag(wrapped_row, '🚫️ Approve');
+				if (fuses & 0x10000) add_row_tag(wrapped_row, '⛔️ Parent Control');
+				if (fuses & 0x40000) add_row_tag(wrapped_row, '☑️ Extend Expiry');
+			} else {
+				owner = await registry_contract.callStatic.owner(node);
+				if (should_stop_resolving()) return;
 				if (is_null_hex(owner)) owner = false;
+				if (!owner && check_nft) {
+					checked_nft = true;
+					owner = await eth_nft_contract.callStatic.ownerOf(check_nft);
+					if (is_null_hex(owner)) owner = false;
+				}
 			}
 		} catch (err) {
 			owner_err = err;
@@ -2856,15 +2960,38 @@ async function resolve0(input, skip_norm) {
 	}
 }
 
-async function ensure_eth_nft() {
-	if (eth_nft_contract) return;
-	// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar
+// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar	
+async function ensure_eth_resolver() {
+	if (eth_resolver_contract === false) throw new Error(`No "eth" resolver`);	
+	if (eth_resolver_contract) return;
 	let resolver = await active_provider.getResolver('eth');
-	if (!resolver) throw new Error(`No .eth resolver`);
-	let resolver_contract = new ethers.Contract(resolver.address, [
+	if (!resolver) {
+		eth_resolver_contract = false;
+		await ensure_eth_resolver();
+	}
+	eth_resolver_contract = new ethers.Contract(resolver.address, [
 		'function interfaceImplementer(bytes32 node, bytes4 interfaceID) external view returns (address)'
 	], active_provider);
-	eth_nft_contract = new ethers.Contract(await resolver.getAddress(), [
+	let node = namehash(resolver.name);
+	eth_resolver_contract.get_interface = hash => eth_resolver_contract.callStatic.interfaceImplementer(node, hash);
+}
+
+async function ensure_wrapper() {
+	if (wrapper_contract) return;
+	await ensure_eth_resolver();
+	let wrapper_address = await eth_resolver_contract.get_interface('0x019a38fe');
+	wrapper_contract = new ethers.Contract(wrapper_address, [
+		'function isWrapped(bytes32 node) public view returns (bool)',
+		'function getData(uint256 id) external view returns (address owner, uint32 fuses, uint64 expiry)',
+		'function names(bytes32 node) public view returns (bytes)',	
+	], active_provider);
+}
+
+async function ensure_eth_nft() {
+	if (eth_nft_contract) return;
+	await ensure_eth_resolver();
+	let nft_address = await eth_resolver_contract.get_interface('0x80ac58cd'); // 0x6ccb2df4
+	eth_nft_contract = new ethers.Contract(nft_address, [
 		'function available(uint256 id) external view returns(bool)',
 		'function nameExpires(uint256 id) external view returns(uint256)',
 		'function ownerOf(uint256 id) external view returns (address)',
@@ -2872,7 +2999,7 @@ async function ensure_eth_nft() {
 		'function GRACE_PERIOD() external view returns (uint256)',
 	], active_provider);
 	eth_nft_contract.grace_period = (await eth_nft_contract.callStatic.GRACE_PERIOD()).toNumber();
-	let controller_address = await resolver_contract.callStatic.interfaceImplementer(namehash(resolver.name), '0x018fac06');
+	let controller_address = await eth_resolver_contract.get_interface('0x018fac06');
 	// https://etherscan.io/address/0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5#code
 	let price_oracle_address = await active_provider.getStorageAt(controller_address, 2);
 	price_oracle_address = '0x' + price_oracle_address.slice(-40);
