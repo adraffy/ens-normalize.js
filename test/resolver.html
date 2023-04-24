@@ -2778,7 +2778,7 @@ async function resolve0(input, skip_norm) {
 				add_row_tag(owner_row, create_resolve_btn(owner));
 			}
 
-			if (!checked_nft && eth_label) {
+			if (!is_wrapped && !checked_nft && eth_label) {
 				let nft_row = create_row(`NFT Owner`, true);
 				output_div.append(nft_row);
 				try {
@@ -2848,7 +2848,7 @@ async function resolve0(input, skip_norm) {
 				}
 			} else {
 				if (owner === address) {
-					if (eth_label && nft_owner !== address) {
+					if (nft_owner && nft_owner !== address) {
 						add_row_tag(address_row, create_typed_tag('good', 'Same as Controller'));	
 					} else {
 						add_row_tag(address_row, create_typed_tag('good', 'Same as Owner'));
