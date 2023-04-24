@@ -1794,7 +1794,9 @@ function add_dot_eth_links(row, name) {
 	let label = get_dot_eth_label(name);
 	if (!label) return ''; // only if 2LD .eth	
 	let hash = labelhash(label);
-	add_row_tag(row, create_link(`https://opensea.io/assets/ethereum/${ENS_NFT}/${ethers.BigNumber.from(hash)}`, OPENSEA_NAME));
+	let base10 = ethers.BigNumber.from(hash);
+	add_row_tag(row, create_link(`https://etherscan.io/nft/${ENS_NFT}/${base10}`, 'Etherscan', 'third-party'));
+	add_row_tag(row, create_link(`https://opensea.io/assets/ethereum/${ENS_NFT}/${base10}`, OPENSEA_NAME));
 	try {
 		let encoded = encodeURIComponent(label); 
 		add_row_tag(row, create_link(`https://www.ens.vision/name/${encoded}`, VISION_NAME));
@@ -2699,13 +2701,15 @@ async function resolve0(input, skip_norm) {
 		add_row_tag(wrapped_row, create_elapsed());
 		if (wrapped_err) {
 			wrapped_row.classList.add('error');
-			wrapped_row.append(create_typed_tag('warn', err));
+			wrapped_row.append(create_typed_tag('warn', wrapped_err));
 		} else {
 			add_row_tag(wrapped_row, is_wrapped ? create_typed_tag('special', 'Wrapped') : 'Unwrapped');
 		}
 		if (is_wrapped) {
-			add_row_tag(wrapped_row, create_link(`https://opensea.io/assets/ethereum/${wrapper_contract.address}/${ethers.BigNumber.from(node)}`, OPENSEA_NAME));
+			let base10 = ethers.BigNumber.from(node).toString();
 			add_row_tag(wrapped_row, create_link(`https://metadata.ens.domains/mainnet/${wrapper_contract.address}/${node}`, 'Metadata', 'ens'));
+			add_row_tag(wrapped_row, create_link(`https://etherscan.io/nft/${wrapper_contract.address}/${base10}`, 'Etherscan', 'third-party'));
+			add_row_tag(wrapped_row, create_link(`https://opensea.io/assets/ethereum/${wrapper_contract.address}/${base10}`, OPENSEA_NAME));
 		}
 
 		// there doesn't seem to be an "owner"

@@ -170,3 +170,26 @@ export function mulberry32(a) {
 		return ((t ^ (t >>> 14)) >>> 0) / 0x100000000;
 	};
 }
+
+export function bytes_from_utf8(s) {
+	if (typeof s !== 'string') throw new TypeError('expected string');
+	let v = [];
+	for (let pos = 0, len = s.length; pos < len; ) {
+		let cp = s.codePointAt(pos++);
+		if (cp < 0x800) {
+			if (cp < 0x80) {
+				v.push(cp);
+			} else {
+				v.push(0xC0 | (cp >> 6), 0x80 | (cp & 0x3F));
+			}
+		} else {
+			if (cp < 0x10000) {
+				v.push(0xE0 | (cp >> 12), 0x80 | ((cp >> 6) & 0x3F), 0x80 | (cp & 0x3F));
+			} else {
+				v.push(0xF0 | (cp >> 18), 0x80 | ((cp >> 12) & 0x3F), 0x80 | ((cp >> 6) & 0x3F), 0x80 | (cp & 0x3F));
+				pos++;
+			}
+		}
+	}
+	return Uint8Array.from(v);
+}
