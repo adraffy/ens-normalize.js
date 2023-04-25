@@ -12,7 +12,6 @@
     "NFC",
     "NFD"
   ],
-  "type": "module",
   "exports": {
     ".": {
       "require": "./dist/index.cjs",
@@ -25,7 +24,9 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "./dist"
   ],
