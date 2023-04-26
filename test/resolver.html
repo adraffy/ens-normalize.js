@@ -2823,7 +2823,7 @@ async function resolve0(input, skip_norm) {
 			add_nft_links(normed_row, name_norm, wrapper_contract.address, node);
 			if (nft_contract) {
 				add_row_tag(wrapped_row, create_etherscan_nft_link(nft_contract.address, nft_token));
-				add_row_tag(wrapped_row, create_opensea_link(nft_contract.address, labelhash(nft_token)));
+				add_row_tag(wrapped_row, create_opensea_link(nft_contract.address, nft_token));
 			}
 		} else if (nft_contract) {
 			
