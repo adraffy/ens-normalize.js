@@ -148,6 +148,7 @@ input[type=checkbox]:checked + label.nonstd.warn {
 	font-size: 14pt;
 }
 .row-label {
+	order: -10;
 	text-align: right;
 	font-weight: bold;
 	white-space: pre-wrap;
@@ -243,6 +244,7 @@ ul .tokens {
 	list-style: disclosure-closed;
 	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 	background: #eff;
+	order: 100;
 }
 a.wide {
 	line-break: anywhere;
@@ -262,6 +264,26 @@ span.tags {
 button.tags {
 	align-self: stretch;
 }
+button.copy {
+	align-self: center;
+	padding: 0;
+	border: none;
+	width: 28px;
+	height: 28px;
+	border-radius: 4px;
+	background-color: inherit;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' height='24' shape-rendering='geometricPrecision' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' viewBox='0 0 24 24' width='24' style='color:var(--geist-foreground)'%3E%3Cpath d='M6 17C4.89543 17 4 16.1046 4 15V5C4 3.89543 4.89543 3 6 3H13C13.7403 3 14.3866 3.4022 14.7324 4M11 21H18C19.1046 21 20 20.1046 20 19V9C20 7.89543 19.1046 7 18 7H11C9.89543 7 9 7.89543 9 9V19C9 20.1046 9.89543 21 11 21Z'/%3E%3C/svg%3E");
+}
+button.copy:hover {
+	background-color: #8f8;
+}
+button.copy.copied {
+	background-color: #8f8;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' height='24' shape-rendering='geometricPrecision' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' viewBox='0 0 24 24' width='24' style='color:var(--geist-foreground)'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
+}
+
 .tags.long { order: 30; }
 .tags.old {
 	background-color: #df8;
@@ -315,6 +337,22 @@ button.tags {
 .tags.white {
 	color: #000;
 	background: #fff;
+}
+.avatar {
+	margin: -1rem 0;
+	order: -1;
+	object-fit: cover;
+} 
+.avatar img {
+	position: relative;
+	z-index: 1;
+	display: block;
+	border-radius: 4px;
+	width: 64px;
+	height: 64px;
+}
+.glow {
+	outline: 3px solid #afa;
 }
 .row.details {
 	display: grid;
@@ -543,6 +581,7 @@ footer span:hover {
 <button>raffy.antistupid.com</button>
 
 <a href="https://docs.ens.domains/ens-improvement-proposals/ensip-10-wildcard-resolution"><b>Wildcard:</b></a>
+<button>565.keeku.eth</button>
 <button>1.offchainexample.eth</button>
 <button>barmstrong.cb.id</button>
 
@@ -797,6 +836,7 @@ Hebrew:
 <li><code>123 456 789</code> is shorthand for <code>{123}{456}{789}</code> <button data-name="65 74 68" data-meta data-delay="1000">65 74 68</button></li>
 <li><a href="#vitalik.eth"><button>Copy Link</button></a> to get a URL that resolves on page-load.</li>
 <li>Many elements have tooltips with additional information.</li>
+<li>Components explained in <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
 </ul>
 <ul class="row legend">
 <li>This is a <b>valid</b> sequence of characters: <div data-tokenize="abc"></div> and <b>.eth</b> name: <div data-tokenize="abc.eth"></div></li>
@@ -840,11 +880,13 @@ let active_provider = infura_provider;
 let window_provider;
 let chain_id;
 let block_explorer;
+let metadata_service;
 let registry_contract;
 let eth_resolver_contract;
 let eth_nft_contract;
 let wrapper_contract;
 let price_oracle_contract;
+let reverse_registrar;
 
 const EMOJI = ens_emoji();
 
@@ -862,6 +904,7 @@ const options_div = document.querySelector('#options');
 const controls_div = document.querySelector('#controls');
 const output_div = document.querySelector('#output');
 const readme_dom = [...output_div.childNodes]; // save initial ux
+//const links_copy = document.querySelector('.row.links').cloneNode(true);
 const examples_div = document.querySelector('#examples');
 const examples_btn = document.createElement('button');
 examples_btn.id = 'examples_btn';
@@ -880,21 +923,23 @@ const STORAGE_HIDE_EXAMPLES = 'hide_examples';
 const APP_TITLE = 'ENS Resolver';
 const INPUT_NAME = 'Input';
 const OPENSEA_NAME = 'OpenSea';
-const VISION_NAME = 'ENS.Vision';
+const VISION_NAME = 'Vision';
 const SKIP_SUFFIX = '_!';
 const PRETTY_NAME = '💖️'; // 🌷️ 🌺️
 
 const emoji_url = './emoji.html#q=%s';
 
-const ENS_REGISTRY = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
-const ENS_NFT = '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85';
-const ENS_WRAPPER = '0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401';
+const CHAIN_ID_MAINNET = 1;
+const CHAIN_ID_GOERLI = 5;
 
-const KNOWN_RESOLVERS = {
-	'0x1da022710dF5002339274AaDEe8D58218e9D6AB5': 'Public Resolver (v1)',
-	'0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41': 'Public Resolver (v2)',
-	'0x231b0Ee14048e9dCcD1d247744d114a4EB5E8E63': 'Public Resolver (v3)',
-	'0xA2C122BE93b0074270ebeE7f6b7292C7deB45047': 'Reverse Resolver',
+const NFT_DOMAINS = new Set(['eth', 'art']);
+const REVERSE_DOMAIN = 'addr.reverse';
+const RESOLVER_NAMES = {
+	'0x1da022710dF5002339274AaDEe8D58218e9D6AB5': 'Old Public Resolver (v1)',
+	'0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41': 'Old Public Resolver (v2)',
+	'0x231b0Ee14048e9dCcD1d247744d114a4EB5E8E63': '✨️ Public Resolver',
+	'0x5fBb459C49BB06083C33109fA4f14810eC2Cf358': 'Old Reverse Resolver (v1)',
+	'0xA2C122BE93b0074270ebeE7f6b7292C7deB45047': '✨️ Reverse Resolver',
 };
 
 const entity_span = document.createElement('span');
@@ -1070,7 +1115,7 @@ function add_recent(name, save = true) {
 
 document.querySelector('#confused_btn').addEventListener('click', () => {
 	let s = input_field.value;
-	create_link(`./confused.html#${encode_uri_component_surrogate_escaped(get_dot_eth_label(s) || s.replaceAll('.', ''))}`).click();
+	create_link(`./confused.html#${encode_uri_component_surrogate_escaped(s.replaceAll('.', ''))}`).click();
 });
 
 document.querySelector('#escape_btn').addEventListener('click', e => {
@@ -1144,12 +1189,26 @@ function update_network(network) {
 	} else {
 		active_provider = infura_provider;
 		provider_name = 'Infura';
-		registry = ENS_REGISTRY;
-		chain_id = 1;
+		registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
+		chain_id = CHAIN_ID_MAINNET;
 	}
-	if (chain_id === 1) network_name = 'mainnet'; 
-	document.body.classList.toggle('testnet', chain_id !== 1);
-	block_explorer = get_block_explorer(chain_id);
+	if (chain_id === CHAIN_ID_MAINNET) network_name = 'mainnet'; 
+	document.body.classList.toggle('testnet', chain_id !== CHAIN_ID_MAINNET);
+	switch (chain_id) {
+		//case 3: return 'https://ropsten.etherscan.io';
+		//case 4: return 'https://rinkeby.etherscan.io';
+		//case 139: return 'https://polygonscan.io';
+		//case 11155111: return 'https://sepolia.etherscan.io';
+		case CHAIN_ID_GOERLI: {
+			block_explorer = 'https://goerli.etherscan.io';
+			metadata_service = 'https://metadata.ens.domains/goerli';
+			break;			
+		}
+		default: {
+			block_explorer = 'https://etherscan.io';
+			metadata_service = 'https://metadata.ens.domains/mainnet';
+		}
+	}
 	document.querySelector('#provider').innerHTML = `using ${provider_name} (<a href="${block_explorer}/address/${registry}">${network_name}</a>)`;
 	registry_contract = new ethers.Contract(registry, [
 		'function resolver(bytes32 node) external view returns (address)',
@@ -1158,20 +1217,9 @@ function update_network(network) {
 	eth_resolver_contract = null;
 	eth_nft_contract = null;
 	wrapper_contract = null;
+	reverse_registrar = null;
 	if (input_field.value) {
 		schedule_resolve();
-	}
-}
-
-function get_block_explorer(i) {
-	// these all use same url scheme
-	switch (i) {
-		//case 3: return 'https://ropsten.etherscan.io';
-		//case 4: return 'https://rinkeby.etherscan.io';
-		case 5: return 'https://goerli.etherscan.io';
-		//case 139: return 'https://polygonscan.io';
-		//case 11155111: return 'https://sepolia.etherscan.io';
-		default: return 'https://etherscan.io';
 	}
 }
 
@@ -1289,6 +1337,7 @@ function presolve(input, skip, resolving) {
 	// TODO: conslidate this code with resolve()
 	let name = replace_escapes(input);
 	output_div.innerHTML = '';
+	//output_div.append(links_copy);
 	controls_div.classList.remove('hide');
 	if (resolve_timer === RESOLVE_MODE_EMPTY) {
 		resolve_timer = RESOLVE_MODE_IDLE;
@@ -1478,7 +1527,7 @@ function create_dns_row(name, replaced) {
 		} else {
 			add_row_tag(row, create_typed_tag('second', 'Punycode Compatible'));
 		}
-		if (chain_id == 1) {
+		if (chain_id == CHAIN_ID_MAINNET) {
 			add_row_tag(row, create_link(`https://${encoded}.limo`, '.limo'));
 			add_row_tag(row, create_link(`https://${encoded}.link`, '.link'));
 			add_row_tag(row, create_link(`https://${encoded}.xyz`, '.xyz'));
@@ -1519,6 +1568,11 @@ function add_alternative_btn(row, name) {
 	}
 }
 
+function is_safe_ascii(cp) {
+	// same as:
+	//return !should_escape(cp) && cp != 0x20;
+	return cp >= 0x21 && cp <= 0x7E;
+}
 function unicode_escape_cp(cp) {
 	let hex = hex_cp(cp);
 	return hex.length > 4 ? `\\u{${hex}}` : `\\u${hex.padStart(4, '0')}`; // be nice
@@ -1527,12 +1581,12 @@ function unicode_escape(s) {
 	return explode_cp(s).map(unicode_escape_cp).join('');
 }
 function entity_escape(s) {
-	return explode_cp(s).map(cp => `&#x${hex_cp(cp)};`).join('');
+	return explode_cp(s).map(cp => is_safe_ascii(cp) ? String.fromCodePoint(cp) : `&#x${hex_cp(cp)};`).join('');
 }
 // escape where escape_fn is true (default: non-ascii)
 // unicode: use \u-format
 function apply_escapes(s, escape_fn, unicode) {
-	if (!escape_fn) escape_fn = cp => !(cp >= 0x21 && cp <= 0x7E); // not ascii
+	if (!escape_fn) escape_fn = cp => !is_safe_ascii(cp);
 	return explode_cp(s).map(cp => {
 		return escape_fn(cp) ? unicode ? unicode_escape_cp(cp) : quote_cp(cp) : String.fromCodePoint(cp);
 	}).join('');
@@ -1575,10 +1629,26 @@ function create_link(url, s, cls) {
 	return a;
 }
 function create_ens_link(name, {title = 'ENS'} = {}) {		
-	return create_link(`https://app.ens.domains/name/${encode_uri_component_ens_escaped(name)}`, title, 'ens');
+	return create_link(`https://app.ens.domains/${encode_uri_component_ens_escaped(name)}`, title, 'ens');
 }
-function create_etherscan_address_link(addr, {title, contract} = {}) {
-	return create_link(`${block_explorer}/address/${addr}${contract ? '#readContract' : ''}`, title || addr, title ? false : 'wide');
+function create_ens_metadata_link(contract, token) {
+	return create_link(`${metadata_service}/${contract}/${token}`, 'Metadata', 'ens');
+}
+function create_etherscan_address_link(addr, {title, anchor = '', contract} = {}) {
+	if (contract === true) anchor = '#readContract';
+	return create_link(`${block_explorer}/address/${addr}${anchor}`, title || addr, title ? false : 'wide');
+}
+function create_etherscan_nft_link(contract, token, title ='Etherscan') {
+	return create_link(`${block_explorer}/nft/${contract}/${ethers.BigNumber.from(token)}`, title, 'third-party');	
+}
+function create_opensea_link(contract, token, title = OPENSEA_NAME) {
+	let prefix;
+	switch (chain_id) {
+		case CHAIN_ID_MAINNET: prefix = 'https://opensea.io/assets/ethereum/'; break;		
+		case CHAIN_ID_GOERLI: prefix = 'https://testnets.opensea.io/assets/goerli/'; break;
+		default: return;
+	}
+	return create_link(`${prefix}${contract}/${ethers.BigNumber.from(token)}`, title);
 }
 
 function create_copy_btn(s, {title = 'Copy', explode} = {}) {
@@ -1591,9 +1661,11 @@ function create_copy_btn(s, {title = 'Copy', explode} = {}) {
 			copy = entity_escape(copy);
 		} 
 		navigator.clipboard.writeText(copy);
+		btn.classList.add('copied');
+		setTimeout(() => btn.classList.remove('copied'), 2000);
 	});
 	btn.classList.add('copy');
-	btn.innerHTML = title;
+	//btn.innerHTML = title;
 	btn.title = s;
 	if (explode === undefined) {
 		explode = !/^0x[0-9a-f]*$/i.test(s);
@@ -1605,7 +1677,7 @@ function create_copy_btn(s, {title = 'Copy', explode} = {}) {
 	return btn;
 }
 function reverse_name(addr) {
-	return `${addr.slice(2).toLowerCase()}.addr.reverse`;
+	return `${addr.slice(2).toLowerCase()}.${REVERSE_DOMAIN}`;
 }
 function create_reverse_resolve_btn(addr) {
 	return create_resolve_btn(reverse_name(addr), '↩️ Reverse Record');
@@ -1636,10 +1708,6 @@ function create_main_span(text) {
 	return outer;
 }
 
-function get_dot_eth_label(name) {
-	let v = name.split('.');
-	return v.length == 2 && v[1].toLowerCase() == 'eth' ? v[0] : undefined;
-}
 
 function create_pretty_tag() {
 	let span = document.createElement('span');
@@ -1758,6 +1826,13 @@ function create_digits_row(name0, values, negative, suffix) {
 	return row;
 }
 
+function add_contract_name(row, address) {
+	let name = RESOLVER_NAMES[address];
+	if (name) {
+		add_row_tag(row, create_typed_tag('good', name));
+	}
+}
+
 function add_old_tag(row, name, is_norm) {
 	const OLD_NAME = 'ENSIP-1';
 	let span = document.createElement('span');
@@ -1787,23 +1862,17 @@ function add_old_tag(row, name, is_norm) {
 	add_row_tag(row, span);
 }
 
-function add_dot_eth_links(row, name) {
-	// TODO: add .art support
-	// TODO: adjust based on chain_id
-	if (chain_id !== 1) return;
-	let label = get_dot_eth_label(name);
-	if (!label) return ''; // only if 2LD .eth	
-	let hash = labelhash(label);
-	let base10 = ethers.BigNumber.from(hash);
-	add_row_tag(row, create_link(`https://etherscan.io/nft/${ENS_NFT}/${base10}`, 'Etherscan', 'third-party'));
-	add_row_tag(row, create_link(`https://opensea.io/assets/ethereum/${ENS_NFT}/${base10}`, OPENSEA_NAME));
+
+function add_nft_links(row, name, contract, token) {
+	add_row_tag(row, create_etherscan_nft_link(contract, token));
+	add_row_tag(row, create_ens_metadata_link(contract, token));
+	add_row_tag(row, create_opensea_link(contract, token));
 	try {
-		let encoded = encodeURIComponent(label); 
+		let encoded = encodeURIComponent(name); 
 		add_row_tag(row, create_link(`https://www.ens.vision/name/${encoded}`, VISION_NAME));
 		add_row_tag(row, create_link(`http://predomain.eth.limo/#/domain/${encoded}`, 'Predomain'));
 	} catch (err) {
 	}
-	add_row_tag(row, create_link(`https://metadata.ens.domains/mainnet/${ENS_NFT}/${hash}`, 'Metadata', 'ens'));
 }
 
 // https://github.com/adraffy/keccak.js/blob/main/src/utils.js#L96
@@ -1985,17 +2054,22 @@ function create_namehash_row(name) {
 }
 
 function create_details_row(name, before) {
-	let eth_label = get_dot_eth_label(name);
-
+	
 	let row = create_namehash_row(name);
 
-	let split = ens_split(name);
+	let split = ens_split(name);	
+
 	for (let info of split) {
+		info.cps = before || !info.output ? info.input : info.output;
+		info.label = String.fromCodePoint(...info.cps);
+	}
 
-		let cps = before || !info.output ? info.input : info.output;
-		let label = String.fromCodePoint(...cps);
+	for (let i = 0; i < split.length; i++) {
+
+		let info = split[i];
+		let {cps, label} = info;
 		let hash = labelhash(label);
-
+		
 		let footer_span = document.createElement('span');
 		footer_span.classList.add('wide', 'footer');
 
@@ -2068,9 +2142,12 @@ function create_details_row(name, before) {
 		}
 
 		let footer = [`<a class="hashproof" href="https://adraffy.github.io/keccak.js/test/demo.html#algo=keccak-256&s=${encode_uri_component_surrogate_escaped(label)}&escape=1" target="_blank">Labelhash:</a> <code>${hash}</code>`];
-		if (label === eth_label) {
-			footer.push(`<b>Token:</b> <code>${ethers.BigNumber.from(labelhash(eth_label))}</code>`);
+		
+		let domain = split.slice(i+1).map(x => x.label).join('.');
+		if (NFT_DOMAINS.has(domain)) {
+			footer.push(`<b>Token:</b> <code>${ethers.BigNumber.from(labelhash(label))}</code>`);
 		}
+
 		if (info.error) { 
 			footer.unshift(`<span class="error">❌️ ${info.error}</span>`);
 		}
@@ -2182,9 +2259,9 @@ function resolve() {
 				// https://element.market/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
 				let v = url.pathname.toLowerCase().split('/').filter(x => x);
 				if (v.length >= 2 && /^[a-f0-9]+$/i.test(v[v.length-1])) {
-					if (v[v.length-2] === ENS_NFT.toLowerCase()) {
+					if (v[v.length-2] === '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85') {
 						input_field.value = input = `token:${v[v.length-1]}`;
-					} else if (v[v.length-2] === ENS_WRAPPER.toLowerCase()) {
+					} else if (v[v.length-2] === '0xd4416b13d2b3a9abae7acd5d6c2bbdbe25686401') {
 						input_field.value = input = `wrapped:${v[v.length-1]}`;
 					}
 				}
@@ -2282,6 +2359,7 @@ function create_elapsed() {
 
 async function resolve0(input, skip_norm) {
 	output_div.innerHTML = '';
+	//output_div.append(links_copy);
 
 	let input_is_address = is_checksum_address(input);
 	let input_row;
@@ -2331,6 +2409,25 @@ async function resolve0(input, skip_norm) {
 		remove_temporary(resolver_row);
 		add_row_tag(resolver_row, create_elapsed());
 
+		try {
+			if (reverse_registrar === null) {
+				reverse_registrar = await registry_contract.callStatic.owner(namehash(REVERSE_DOMAIN));
+			}
+		} catch (err) {
+			reverse_registrar = false;
+		}
+		if (should_stop_resolving()) return;
+
+		if (reverse_registrar) {
+			let set_name_btn = document.createElement('button');
+			set_name_btn.classList.add('glow');
+			set_name_btn.innerHTML = '✍️ Set Name';
+			set_name_btn.addEventListener('click', () => {
+				create_etherscan_address_link(reverse_registrar, {anchor: '#writeContract#F7'}).click();
+			});
+			add_row_tag(input_row, set_name_btn);
+		}
+
 		if (last_err) {
 			resolver_row.classList.add('error');
 			add_row_tag(resolver_row, create_typed_tag('warn', last_err));
@@ -2341,6 +2438,7 @@ async function resolve0(input, skip_norm) {
 		}
 
 		resolver_row.append(create_etherscan_address_link(resolver, {contract: true}));
+		add_contract_name(resolver_row, resolver);
 		add_row_tag(resolver_row, create_copy_btn(resolver));
 
 		reverse_row = normed_row = create_row('Reverse', true);
@@ -2367,7 +2465,7 @@ async function resolve0(input, skip_norm) {
 		make_exploded(reverse_row, primary, false);
 		add_row_tag(reverse_row, create_copy_btn(primary));
 		add_row_tag(reverse_row, create_ens_link(primary));
-		add_dot_eth_links(reverse_row, primary);
+		//add_nft_links(reverse_row, primary);
 		output_div.append(create_details_row(primary, true));
 			
 		try {
@@ -2423,11 +2521,11 @@ async function resolve0(input, skip_norm) {
 		}	
 
 		if (norm_err) {
-			add_dot_eth_links(input_row, input);
+			//add_nft_links(input_row, input);
 		} else {
 			if (name_norm === input) {
 				make_normalized(input_row);
-				add_dot_eth_links(input_row, input);
+				//add_nft_links(input_row, input);
 			} else  { 
 				add_row_tag(input_row, create_typed_tag('fail', 'Normalized'));
 				if (skip_norm) {
@@ -2440,7 +2538,7 @@ async function resolve0(input, skip_norm) {
 					add_row_tag(row, create_copy_btn(name_norm));
 					add_row_tag(row, create_resolve_btn(name_norm));
 					add_row_tag(row, create_ens_link(name_norm));
-					add_dot_eth_links(row, name_norm);
+					//add_nft_links(row, name_norm);
 					add_old_tag(row, name_norm, true);
 					output_div.append(row);
 					output_div.append(create_details_row(name_norm));
@@ -2550,6 +2648,19 @@ async function resolve0(input, skip_norm) {
 			} catch (ignored) {
 			}
 		}
+		try {
+			let avatar = await resolver.getAvatar();
+			if (should_stop_resolving()) return;
+			let img = new Image();
+			img.src = avatar.url;
+			let a = document.createElement('a');
+			a.classList.add('avatar');
+			a.href = avatar.url;
+			a.target = '_blank';
+			a.append(img);
+			normed_row.append(a);
+		} catch (err) {
+		}
 	}
 	add_row_tag(resolver_row, create_elapsed());
 	
@@ -2570,23 +2681,22 @@ async function resolve0(input, skip_norm) {
 				add_row_tag(resolver_row, create_typed_tag('warn', 'Unknown Parent'));
 			}
 		} else {
-			let name = KNOWN_RESOLVERS[resolver.address];
-			if (name) {
-				add_row_tag(resolver_row, create_typed_tag('good', name));
-			} else {
-				//add_row_tag(resolver_row, create_typed_tag('second', 'Custom'));
-			}
+			add_contract_name(resolver_row, resolver.address);
 		}
 		add_row_tag(resolver_row, create_copy_btn(resolver.address));
 	} else {
 		add_row_tag(resolver_row, create_typed_tag('warn', `Name Not Found`));	
 	}
-	// check if *.eth	
-	let eth_label = get_dot_eth_label(name_norm);
+
+	let domain = name_norm.slice(sep_pos+1);
+	let nft_backed = NFT_DOMAINS.has(name_norm.slice(sep_pos+1));
+	let nft_contract;
+	let nft_token;
+
 	let available;	
-	let check_nft;
-	if (eth_label) {
-		let hash = ethers.utils.id(eth_label);
+	if (domain === 'eth') {
+		let eth_label = name_norm.slice(0, sep_pos);
+		nft_token = ethers.utils.id(eth_label);
 		let avail_err;
 		let t_exp;
 		let len = [...eth_label].length;
@@ -2596,10 +2706,11 @@ async function resolve0(input, skip_norm) {
 		try {
 			await ensure_eth_nft();
 			if (should_stop_resolving()) return;
+			nft_contract = eth_nft_contract;
 			if (len >= 3) {
-				available = await eth_nft_contract.callStatic.available(hash);
+				available = await eth_nft_contract.callStatic.available(nft_token);
 				if (should_stop_resolving()) return;
-				t_exp = (await eth_nft_contract.callStatic.nameExpires(hash)).toNumber();
+				t_exp = (await eth_nft_contract.callStatic.nameExpires(nft_token)).toNumber();
 				if (available) {
 					if (should_stop_resolving()) return;
 					premium = await price_oracle_contract.callStatic.premium(eth_label, t_exp, 0);
@@ -2623,7 +2734,7 @@ async function resolve0(input, skip_norm) {
 		} else if (available) {
 			let btn = document.createElement('button');
 			btn.innerHTML = '👌️ Available to Register';
-			btn.style.outline = '3px solid #afa';
+			btn.classList.add('glow');
 			btn.addEventListener('click', () => create_ens_link(name_norm).click());
 			add_row_tag(avail_row, btn);
 			let ether = parseFloat(ethers.utils.formatEther(premium));
@@ -2634,7 +2745,6 @@ async function resolve0(input, skip_norm) {
 			//add_row_tag(avail_row, create_ens_link(name_norm, {title: 'Register'}));
 		} else {
 			let date = new Date(1000 * t_exp);
-			check_nft = hash; 
 			let t_end = t_exp + eth_nft_contract.grace_period;
 			let t_now = Math.round(Date.now() / 1000);
 			if (t_now >= t_exp && t_now <= t_end) {
@@ -2652,35 +2762,37 @@ async function resolve0(input, skip_norm) {
 				}
 			}
 		}
-		add_row_tag(avail_row, create_etherscan_address_link(eth_nft_contract.address, {title: 'Contract', contract: true}));
-
-		/*
-		if (check_nft) {
-			let nft_row = create_row(`NFT Owner`, true);
-			output_div.append(nft_row);
-			let nft_owner, nft_error;
-			try {
-				nft_owner = await eth_nft_contract.callStatic.ownerOf(hash);	
-			} catch (err) {
-				nft_error = err;
-			}
-			if (should_stop_resolving()) return;
-			remove_temporary(nft_row);
-			add_row_tag(nft_row, create_elapsed());
-			if (nft_error) {
-				nft_row.classList.add('error');
-				add_row_tag(nft_row, create_typed_tag('warn', nft_error));
-			} else {
-				nft_row.append(create_etherscan_address_link(nft_owner));
-				add_row_tag(nft_row, create_copy_btn(nft_owner));
-				add_row_tag(nft_row, create_resolve_btn(nft_owner));
-			}
+		add_row_tag(avail_row, create_etherscan_address_link(eth_nft_contract.address, {title: 'NFT Contract', contract: true}));
+	} else if (nft_backed) {
+		let label = name_norm.slice(0, sep_pos);		
+		nft_token = ethers.utils.id(label);
+		let avail_err;
+		let avail_row = create_row('Availability', true);
+		output_div.append(avail_row);
+		try {
+			let address = await registry_contract.callStatic.owner(namehash(domain));
+			if (is_null_hex(address)) throw new Error('Missing backing contract');
+			nft_contract = new ethers.Contract(address, [
+				'function available(uint256 id) external view returns(bool)',
+				'function ownerOf(uint256 id) external view returns (address)',
+			], active_provider);
+		} catch (err) {
+			avail_err = err;
 		}
-		*/
-	}			
-	//	return;
-	//}
-
+		remove_temporary(avail_row);
+		if (should_stop_resolving()) return;
+		add_row_tag(avail_row, create_elapsed()); 
+		if (avail_err) {
+			avail_row.classList.add('error');
+			add_row_tag(avail_row, create_typed_tag('warn', avail_err));
+		} else {
+			add_row_tag(avail_row, create_typed_tag(available ? 'good' : 'fail', 'Available'));
+			if (chain_id === CHAIN_ID_MAINNET && domain === 'art') {
+				add_row_tag(avail_row, create_link(`https://app.protocol.art/name/${encodeURIComponent(label)}.art`, 'Website'));
+			}
+			add_row_tag(avail_row, create_etherscan_address_link(nft_contract.address, {title: 'NFT Contract', contract: true}));
+		}
+	}
 	
 	// get the owner
 	let is_wrapped, owner, nft_owner;
@@ -2701,15 +2813,22 @@ async function resolve0(input, skip_norm) {
 		add_row_tag(wrapped_row, create_elapsed());
 		if (wrapped_err) {
 			wrapped_row.classList.add('error');
-			wrapped_row.append(create_typed_tag('warn', wrapped_err));
+			add_row_tag(wrapped_row, create_typed_tag('warn', wrapped_err));
 		} else {
-			add_row_tag(wrapped_row, is_wrapped ? create_typed_tag('special', 'Wrapped') : 'Unwrapped');
+			add_row_tag(wrapped_row, is_wrapped ? create_typed_tag('good', '🎁 Wrapped') : '➰️ Unwrapped');
 		}
+		if (wrapper_contract) {
+			add_row_tag(wrapped_row, create_etherscan_address_link(wrapper_contract.address, {title: 'Contract', contract: true}));
+		}		
 		if (is_wrapped) {
-			let base10 = ethers.BigNumber.from(node).toString();
-			add_row_tag(wrapped_row, create_link(`https://metadata.ens.domains/mainnet/${wrapper_contract.address}/${node}`, 'Metadata', 'ens'));
-			add_row_tag(wrapped_row, create_link(`https://etherscan.io/nft/${wrapper_contract.address}/${base10}`, 'Etherscan', 'third-party'));
-			add_row_tag(wrapped_row, create_link(`https://opensea.io/assets/ethereum/${wrapper_contract.address}/${base10}`, OPENSEA_NAME));
+			add_nft_links(normed_row, name_norm, wrapper_contract.address, node);
+			if (nft_contract) {
+				add_row_tag(wrapped_row, create_etherscan_nft_link(nft_contract.address, nft_token));
+				add_row_tag(wrapped_row, create_opensea_link(nft_contract.address, labelhash(nft_token)));
+			}
+		} else if (nft_contract) {
+			
+			add_nft_links(normed_row, name_norm, nft_contract.address, nft_token);
 		}
 
 		// there doesn't seem to be an "owner"
@@ -2723,6 +2842,7 @@ async function resolve0(input, skip_norm) {
 		try {
 			if (is_wrapped) {
 				let data = await wrapper_contract.callStatic.getData(node);
+				if (should_stop_resolving()) return;
 				owner = data.owner;
 				let {fuses} = data;
 				if (fuses == 0) add_row_tag(wrapped_row, '👊️ Can Do Everything');
@@ -2739,9 +2859,9 @@ async function resolve0(input, skip_norm) {
 				owner = await registry_contract.callStatic.owner(node);
 				if (should_stop_resolving()) return;
 				if (is_null_hex(owner)) owner = false;
-				if (!owner && check_nft) {
+				if (!owner && nft_contract) {
 					checked_nft = true;
-					owner = await eth_nft_contract.callStatic.ownerOf(check_nft);
+					owner = await nft_contract.callStatic.ownerOf(nft_token).catch(() => {});
 					if (is_null_hex(owner)) owner = false;
 				}
 			}
@@ -2778,19 +2898,18 @@ async function resolve0(input, skip_norm) {
 				add_row_tag(owner_row, create_resolve_btn(owner));
 			}
 
-			if (!is_wrapped && !checked_nft && eth_label) {
+			if (!is_wrapped && !checked_nft && nft_contract) {
 				let nft_row = create_row(`NFT Owner`, true);
 				output_div.append(nft_row);
 				try {
 					await ensure_eth_nft();
-					//nft_owner = await eth_nft_contract.callStatic.getApproved(labelhash(eth_label));
-					nft_owner = await eth_nft_contract.callStatic.ownerOf(check_nft);
+					nft_owner = await nft_contract.callStatic.ownerOf(nft_token);
 					if (is_null_hex(nft_owner)) nft_owner = false;
 				} catch (err) {				
 				}
 				if (should_stop_resolving()) return;
 				if (nft_owner && nft_owner !== owner) {
-					owner_row.querySelector('.row-label').innerText = 'Controller:';
+					owner_row.querySelector('.row-label').innerText = 'Manager:';
 					nft_row.append(create_etherscan_address_link(nft_owner));
 					add_row_tag(nft_row, create_copy_btn(nft_owner));
 					if (owner !== input) {
@@ -2885,7 +3004,7 @@ async function resolve0(input, skip_norm) {
 	remove_temporary(primary_row);
 	if (should_stop_resolving()) return;
 	add_row_tag(primary_row, create_elapsed());
-	
+
 	primary_row.classList.toggle('old', !!available);
 	
 	if (primary_err) {
@@ -2931,7 +3050,7 @@ async function resolve0(input, skip_norm) {
 			add_row_tag(primary_row, create_copy_btn(primary_norm));
 			add_row_tag(primary_row, create_resolve_btn(primary_norm));
 			add_row_tag(primary_row, create_ens_link(primary_norm));
-			add_dot_eth_links(primary_row, primary_norm);
+			//add_nft_links(primary_row, primary_norm);
 		}
 
 	// primary was valid but not normalized
@@ -2945,7 +3064,7 @@ async function resolve0(input, skip_norm) {
 		add_old_tag(primary_row, primary_norm, true);
 		add_row_tag(row, create_copy_btn(primary_norm));
 		add_row_tag(row, create_ens_link(primary_norm));
-		add_dot_eth_links(row, primary_norm);
+		//add_nft_links(row, primary_norm);
 		if (name_norm !== primary_norm) {
 			add_row_tag(row, create_resolve_btn(primary_norm));
 		}
@@ -2966,12 +3085,12 @@ async function resolve0(input, skip_norm) {
 
 // https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar	
 async function ensure_eth_resolver() {
-	if (eth_resolver_contract === false) throw new Error(`No "eth" resolver`);	
 	if (eth_resolver_contract) return;
+	if (eth_resolver_contract === false) throw new Error(`No "eth" resolver`);	
 	let resolver = await active_provider.getResolver('eth');
 	if (!resolver) {
 		eth_resolver_contract = false;
-		await ensure_eth_resolver();
+		return ensure_eth_resolver(); 
 	}
 	eth_resolver_contract = new ethers.Contract(resolver.address, [
 		'function interfaceImplementer(bytes32 node, bytes4 interfaceID) external view returns (address)'
@@ -2982,8 +3101,13 @@ async function ensure_eth_resolver() {
 
 async function ensure_wrapper() {
 	if (wrapper_contract) return;
+	if (wrapper_contract === false) throw new Error(`Not implementated`);
 	await ensure_eth_resolver();
 	let wrapper_address = await eth_resolver_contract.get_interface('0x019a38fe');
+	if (is_null_hex(wrapper_address)) {
+		wrapper_contract = false;
+		return ensure_wrapper();
+	}
 	wrapper_contract = new ethers.Contract(wrapper_address, [
 		'function isWrapped(bytes32 node) public view returns (bool)',
 		'function getData(uint256 id) external view returns (address owner, uint32 fuses, uint64 expiry)',
@@ -2999,7 +3123,6 @@ async function ensure_eth_nft() {
 		'function available(uint256 id) external view returns(bool)',
 		'function nameExpires(uint256 id) external view returns(uint256)',
 		'function ownerOf(uint256 id) external view returns (address)',
-		'function getApproved(uint256 id) external view returns (address)',
 		'function GRACE_PERIOD() external view returns (uint256)',
 	], active_provider);
 	eth_nft_contract.grace_period = (await eth_nft_contract.callStatic.GRACE_PERIOD()).toNumber();
