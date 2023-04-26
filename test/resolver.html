@@ -2625,7 +2625,6 @@ async function resolve0(input, skip_norm) {
 	} catch (err) {
 		resolver_err = err;
 	}
-	remove_temporary(resolver_row);
 	if (should_stop_resolving()) return;
 	if (resolver) {
 		is_wildcard = await resolver.supportsWildcard();
@@ -2662,6 +2661,7 @@ async function resolve0(input, skip_norm) {
 		} catch (err) {
 		}
 	}
+	remove_temporary(resolver_row);	
 	add_row_tag(resolver_row, create_elapsed());
 	
 	if (resolver_err) {
@@ -3017,8 +3017,6 @@ async function resolve0(input, skip_norm) {
 		return;
 	}
 
-
-
 	// primary exists
 	make_exploded(primary_row, primary, false);
 
@@ -3031,12 +3029,15 @@ async function resolve0(input, skip_norm) {
 		add_row_tag(primary_row, create_typed_tag('norm', err));
 	}
 
+	let add_btn;
 	if (primary === input) {
 		add_row_tag(primary_row, 'Same as Input');
 	} else if (primary === name_norm) {		
 		add_row_tag(primary_row, 'Same as Norm');
 	} else {
+		add_row_tag(primary_row, create_copy_btn(primary_norm));
 		add_row_tag(primary_row, create_resolve_btn(primary));
+		add_row_tag(primary_row, create_ens_link(primary_norm));
 		let details_row = create_details_row(primary, true);
 		details_row.classList.toggle('old', !!available);
 		output_div.append(details_row);
@@ -3046,12 +3047,6 @@ async function resolve0(input, skip_norm) {
 	// primary was normalized
 	if (primary === primary_norm) {
 		make_normalized(primary_row);
-		if (name_norm !== primary_norm) {
-			add_row_tag(primary_row, create_copy_btn(primary_norm));
-			add_row_tag(primary_row, create_resolve_btn(primary_norm));
-			add_row_tag(primary_row, create_ens_link(primary_norm));
-			//add_nft_links(primary_row, primary_norm);
-		}
 
 	// primary was valid but not normalized
 	} else if (primary_norm) {
