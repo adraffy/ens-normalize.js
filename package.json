@@ -14,11 +14,13 @@
   ],
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "default": "./dist/index.cjs"
     },
     "./xnf": {
-      "import": "./dist/index-xnf.js",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index-xnf.mjs",
       "default": "./dist/index-xnf.cjs"
     }
   },

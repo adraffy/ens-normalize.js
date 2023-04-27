@@ -38,7 +38,7 @@ export default [
 		plugins: [NATIVE_NF],
 		output: [
 			{
-				file: './dist/index-xnf.js',
+				file: './dist/index-xnf.mjs',
 				format: 'es',
 			},
 			{
