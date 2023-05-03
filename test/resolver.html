@@ -592,6 +592,9 @@ footer span:hover {
 <b>Address:</b>
 <button data-name="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045">d8dA..6045</button>
 
+<b>Contract:</b>
+<button data-name="eth-usd.data.eth">Chainlink ETH-USD</button>
+
 <b>Preimage:</b>
 <button data-delay="1000" data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209">Token#</button>
 <button data-delay="1000" data-name="https://opensea.io/assets/ethereum/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209">OpenSea</button>
@@ -873,6 +876,8 @@ import {
 import {puny_encoded, is_surrogate} from '../../punycode.js/dist/index.min.js';
 import eth_ens_namehash from './eth-ens-namehash@2.0.15.min.js';
 use_default_style();
+
+const url_params = new URLSearchParams(window.location.search)
 
 let infura_provider = new ethers.providers.WebSocketProvider('wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe');
 let active_provider = infura_provider;
@@ -1160,7 +1165,7 @@ examples_btn.addEventListener('click', () => {
 });
 skip_norm_check.addEventListener('input', resolve_if_auto); // not saved
 
-if (window.ethereum) {
+if (!url_params.has('infura') && window.ethereum) {
 	let p = ethereum;;
 	if (Array.isArray(ethereum.providers)) p = ethereum.providers[0]; // fix scuffed multi-provider
 	window_provider = new ethers.providers.Web3Provider(p, 'any');
@@ -2273,27 +2278,29 @@ function resolve() {
 	if (match = input.match(/^token:(0x[a-f0-9]+|[0-9]+)$/i)) {
 		let hash = ethers.BigNumber.from(match[1]).toHexString();
 		resolve_btn.disabled = true;
-		return fetch('https://api.thegraph.com/subgraphs/name/ensdomains/ens', {
-			method: 'POST',
-			body: JSON.stringify({
-				query: `{domains(where:{labelhash:"${hash}"}){labelName}}`
-			})
-		}).then(r => {
-			if (!r.ok) throw new Error(`HTTP Error ${r.status}`);
-			return r.json();
-		}).then(json => {
-			let {data: {domains}} = json;
-			if (domains.length == 0) throw new Error(`Unknown Preimage: ${hash}`);
-			let label = domains[0].labelName;
-			let hash0 = labelhash(label);
-			if (hash0 !== hash) throw new Error(`Incorrect Preimage: labelhash("${label}")\n\nExpected: ${hash}\nComputed: ${hash}`);
-			input_field.value = `${label}.eth`;
-			setTimeout(resolve, 0);
-		}).catch(err => {
-			window.alert(err.message);
-		}).then(() => {
+		return (async() => {
+			try {
+				if (chain_id !== CHAIN_ID_MAINNET) throw new Error(`token: only works on mainnet`);
+				let res = await fetch('https://api.thegraph.com/subgraphs/name/ensdomains/ens', {
+					method: 'POST',
+					body: JSON.stringify({
+						query: `{domains(where:{labelhash:"${hash}"}){labelName}}`
+					})
+				});
+				if (!res.ok) throw new Error(`HTTP Error ${r.status}`);
+				let {data: {domains}} = await res.json();
+				if (domains.length == 0) throw new Error(`Unknown Preimage: ${hash}`);
+				let label = domains[0].labelName;
+				let hash0 = labelhash(label);
+				if (hash0 !== hash) throw new Error(`Incorrect Preimage: labelhash("${label}")\n\nExpected: ${hash}\nComputed: ${hash}`);
+				input_field.value = `${label}.eth`;
+				setTimeout(resolve, 0);
+			} catch (err) {
+				window.alert(err.message);
+				stop_resolving();
+			}
 			resolve_btn.disabled = false;
-		});
+		})();
 	} else if (match = input.match(/^wrapped:(0x[a-f0-9]+|[0-9]+)$/i)) {
 		resolve_btn.disabled = true;
 		return (async () => {
@@ -2301,11 +2308,13 @@ function resolve() {
 				await ensure_wrapper();
 				let bytes = await wrapper_contract.callStatic.names(ethers.BigNumber.from(match[1]));
 				input_field.value = name_from_wrapper_bytes(ethers.utils.arrayify(bytes));
+				resolve_btn.disabled = false;
 				setTimeout(resolve, 0);
 			} catch (err) {
 				window.alert(err.message);
+				stop_resolving();
 			}
-			resolve_btn.disabled = false;
+			resolve_btn.disabled = false;		
 		})();
 	}
 	// input convenience: expand range
@@ -2649,15 +2658,21 @@ async function resolve0(input, skip_norm) {
 		try {
 			let avatar = await resolver.getAvatar();
 			if (should_stop_resolving()) return;
+			let {url} = avatar;
+			if (url.startsWith('data:')) {
+				let pos = url.indexOf(',') + 1;
+				url = url.slice(0, pos) + encodeURIComponent(url.slice(pos));
+			}
 			let img = new Image();
-			img.src = avatar.url;
+			img.src = url;
 			let a = document.createElement('a');
 			a.classList.add('avatar');
-			a.href = avatar.url;
+			a.href = url;
 			a.target = '_blank';
 			a.append(img);
 			normed_row.append(a);
 		} catch (err) {
+			console.log('Avatar error', err);
 		}
 	}
 	remove_temporary(resolver_row);	
