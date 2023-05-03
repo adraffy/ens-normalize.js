@@ -2659,9 +2659,9 @@ async function resolve0(input, skip_norm) {
 			let avatar = await resolver.getAvatar();
 			if (should_stop_resolving()) return;
 			let {url} = avatar;
-			if (url.startsWith('data:') && url.includes('#')) {
-				let pos = url.indexOf(',') + 1;
-				url = url.slice(0, pos) + encodeURIComponent(url.slice(pos));
+			try {
+				url = new URL(url).toString().replaceAll('#', '%23');	
+			} catch (ignored) {
 			}
 			let img = new Image();
 			img.src = url;
