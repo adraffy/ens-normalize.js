@@ -2659,7 +2659,7 @@ async function resolve0(input, skip_norm) {
 			let avatar = await resolver.getAvatar();
 			if (should_stop_resolving()) return;
 			let {url} = avatar;
-			if (url.startsWith('data:')) {
+			if (url.startsWith('data:') && url.includes('#')) {
 				let pos = url.indexOf(',') + 1;
 				url = url.slice(0, pos) + encodeURIComponent(url.slice(pos));
 			}
