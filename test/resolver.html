@@ -945,6 +945,7 @@ const RESOLVER_NAMES = {
 	'0x5fBb459C49BB06083C33109fA4f14810eC2Cf358': 'Old Reverse Resolver (v1)',
 	'0xA2C122BE93b0074270ebeE7f6b7292C7deB45047': '✨️ Reverse Resolver',
 };
+const NOT_IFACE_RESOLVER = new Set();
 
 const entity_span = document.createElement('span');
 
@@ -2658,19 +2659,21 @@ async function resolve0(input, skip_norm) {
 		try {
 			let avatar = await resolver.getAvatar();
 			if (should_stop_resolving()) return;
-			let {url} = avatar;
-			try {
-				url = new URL(url).toString().replaceAll('#', '%23');	
-			} catch (ignored) {
+			if (avatar) {
+				let {url} = avatar;
+				try {
+					url = new URL(url).toString().replaceAll('#', '%23');	
+				} catch (ignored) {
+				}
+				let img = new Image();
+				img.src = url;
+				let a = document.createElement('a');
+				a.classList.add('avatar');
+				a.href = url;
+				a.target = '_blank';
+				a.append(img);
+				normed_row.append(a);
 			}
-			let img = new Image();
-			img.src = url;
-			let a = document.createElement('a');
-			a.classList.add('avatar');
-			a.href = url;
-			a.target = '_blank';
-			a.append(img);
-			normed_row.append(a);
 		} catch (err) {
 			console.log('Avatar error', err);
 		}
@@ -2844,7 +2847,6 @@ async function resolve0(input, skip_norm) {
 			
 			add_nft_links(normed_row, name_norm, nft_contract.address, nft_token);
 		}
-
 		// there doesn't seem to be an "owner"
 		//owner = await resolver._fetch('0x02571be3'); // owner(bytes32)
 		//owner = await resolver._fetch('0x38a699a4'); // exists(bytes32)
@@ -2885,7 +2887,6 @@ async function resolve0(input, skip_norm) {
 		remove_temporary(owner_row);
 		if (should_stop_resolving()) return;
 		add_row_tag(owner_row, create_elapsed());
-
 		if (owner_err) {
 			owner_row.classList.add('error');
 			owner_row.append(create_typed_tag('warn', owner_err));
@@ -2896,7 +2897,6 @@ async function resolve0(input, skip_norm) {
 				add_row_tag(owner_row, 'Not Set');
 			}
 		} else {
-			
 			owner_row.classList.add(available ? 'old' : 'owner');
 			owner_row.append(create_etherscan_address_link(owner));
 			add_row_tag(owner_row, create_copy_btn(owner));
@@ -2911,7 +2911,6 @@ async function resolve0(input, skip_norm) {
 			if (owner !== input) {
 				add_row_tag(owner_row, create_resolve_btn(owner));
 			}
-
 			if (!is_wrapped && !checked_nft && nft_contract) {
 				let nft_row = create_row(`NFT Owner`, true);
 				output_div.append(nft_row);
@@ -2937,6 +2936,47 @@ async function resolve0(input, skip_norm) {
 				}
 			}
 		}
+	}
+
+	if (resolver && !NOT_IFACE_RESOLVER.has(resolver.address)) {
+		let row = create_row('Interfaces', true);
+		output_div.append(row);	
+		let contract = contract_for_resolver(resolver);
+		// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar	
+		let interfaces = [
+			{iface: '0x80ac58cd', name: 'NFT'},  
+			{iface: '0x018fac06', name: 'Controller'},
+			{iface: '0x612e8c09', name: 'Registrar'},
+			//{iface: '0x6ccb2df4', name: 'Old Registrar'},
+			{iface: '0x7ba18ba1', name: 'Migration'},
+			{iface: '0x019a38fe', name: 'Wrapper'},
+		];
+		let any;
+		try {
+			// https://github.com/ensdomains/ens-contracts/blob/dev/contracts/resolvers/profiles/IInterfaceResolver.sol
+			if (!await contract.callStatic.supportsInterface('0x124a319c')) {
+				throw new Error('not EIP-165');
+			}
+			for (let {iface, name} of interfaces) {
+				let addr = await contract.get_interface(iface);
+				if (is_null_hex(addr)) continue;	
+				let title =`<b>${name}</b>/${iface.slice(2)}`;
+				add_row_tag(row, create_etherscan_address_link(addr, {title, contract: true}));
+				any = true;
+			}
+		} catch (err) {
+			if (any) {
+				add_row_tag(row, create_typed_tag('warn', err));
+			}
+		}
+		if (any) {
+			remove_temporary(row);
+			add_row_tag(row, create_elapsed()); 
+		} else {
+			row.remove();
+			NOT_IFACE_RESOLVER.add(resolver.address);
+		}
+		if (should_stop_resolving()) return;
 	}
 
 	// add address
@@ -3092,7 +3132,6 @@ async function resolve0(input, skip_norm) {
 	}
 }
 
-// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar	
 async function ensure_eth_resolver() {
 	if (eth_resolver_contract) return;
 	if (eth_resolver_contract === false) throw new Error(`No "eth" resolver`);	
@@ -3101,11 +3140,16 @@ async function ensure_eth_resolver() {
 		eth_resolver_contract = false;
 		return ensure_eth_resolver(); 
 	}
-	eth_resolver_contract = new ethers.Contract(resolver.address, [
+	eth_resolver_contract = contract_for_resolver(resolver);
+}
+function contract_for_resolver(resolver) {
+	let contract = new ethers.Contract(resolver.address, [
+		'function supportsInterface(bytes4 interfaceID) external view returns (bool)',
 		'function interfaceImplementer(bytes32 node, bytes4 interfaceID) external view returns (address)'
 	], active_provider);
 	let node = namehash(resolver.name);
-	eth_resolver_contract.get_interface = hash => eth_resolver_contract.callStatic.interfaceImplementer(node, hash);
+	contract.get_interface = hash => contract.callStatic.interfaceImplementer(node, hash);
+	return contract;
 }
 
 async function ensure_wrapper() {
@@ -3127,7 +3171,7 @@ async function ensure_wrapper() {
 async function ensure_eth_nft() {
 	if (eth_nft_contract) return;
 	await ensure_eth_resolver();
-	let nft_address = await eth_resolver_contract.get_interface('0x80ac58cd'); // 0x6ccb2df4
+	let nft_address = await eth_resolver_contract.get_interface('0x80ac58cd');
 	eth_nft_contract = new ethers.Contract(nft_address, [
 		'function available(uint256 id) external view returns(bool)',
 		'function nameExpires(uint256 id) external view returns(uint256)',

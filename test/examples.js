@@ -161,7 +161,7 @@ function force_normalize(s) {
 			case 'ignored': return []; // removes ignored (dangerous)
 			case 'mapped': // applies known mappings 
 			case 'emoji': // removes FE0F from known emoji
-			case 'nfc':
+			case 'nfc': // valid or mapped
 			case 'valid': return token.cps;
 			default: return token.cp;
 		}
@@ -192,7 +192,7 @@ function filter_emoji(s) {
 		switch (token.type) { 
 			case 'emoji': return []; // ignore
 			case 'nfc': return token.input; // pre-nfc
-			case 'mapped':
+			case 'mapped': // valid or mapped
 			case 'valid': return token.cps;
 			default: return token.cp;
 		}
