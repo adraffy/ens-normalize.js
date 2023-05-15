@@ -69,7 +69,8 @@ if (args[0] === 'save') {
 		(union.has(label) ? multi : union).add(label);
 	}
 	let multi_map = new Map([...multi].map((label, i) => [label, i]));
-	writeFileSync(new URL('./ens-emoji-freq.json', import.meta.url), JSON.stringify({
+	let out_file = new URL('./ens-emoji-freq.json', import.meta.url);
+	writeFileSync(out_file, JSON.stringify({
 		date: new Date(), 
 		total: labels.length,
 		shared: [...multi],
@@ -84,11 +85,12 @@ if (args[0] === 'save') {
 			};
 		})
 	}));
-} 
-
-console.log(new Date().toJSON());
-let max = tally.reduce((a, rec) => Math.max(a, rec.names.length), 0);
-let count_len = String(max).length;
-for (let {names, form} of tally) {
-	console.log(String(names.length).padStart(count_len), form, hex_seq(explode_cp(form)));
+	console.log(`Wrote: ${out_file}`);
+} else {
+	console.log(new Date().toJSON());
+	let max = tally.reduce((a, rec) => Math.max(a, rec.names.length), 0);
+	let count_len = String(max).length;
+	for (let {names, form} of tally) {
+		console.log(String(names.length).padStart(count_len), form, hex_seq(explode_cp(form)));
+	}
 }

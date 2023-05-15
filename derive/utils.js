@@ -193,10 +193,3 @@ export function bytes_from_utf8(s) {
 	}
 	return Uint8Array.from(v);
 }
-
-export function get_heap_size() {
-	if (typeof gc === 'undefined') {
-		throw new Error(`node --expose-gc`);
-	}
-	return process.memoryUsage().heapUsed;
-}
