@@ -65,17 +65,15 @@ h2 {
 #github a {	
 	white-space: pre;
 }
-.arrows {
-	width: 2rem;
-	padding-bottom: 100%;
+.spinner {
+	width: 1.5rem;
+	height: 1.5rem;
 	animation: spin 2s infinite linear;
-	user-select: none;
-	background-image: url('data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%201000%201000%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M990%2C377.5H622.5l137.4-137.4C690.4%2C170.7%2C598.2%2C132.5%2C500%2C132.5c-98.2%2C0-190.4%2C38.2-259.9%2C107.6C170.7%2C309.6%2C132.5%2C401.8%2C132.5%2C500c0%2C98.2%2C38.2%2C190.4%2C107.6%2C259.9c69.4%2C69.4%2C161.7%2C107.6%2C259.9%2C107.6c98.2%2C0%2C190.4-38.2%2C259.9-107.6c5.8-5.8%2C11.4-11.8%2C16.7-17.9l92.2%2C80.7C778.9%2C925.2%2C647%2C990%2C500%2C990C229.4%2C990%2C10%2C770.6%2C10%2C500C10%2C229.4%2C229.4%2C10%2C500%2C10c135.3%2C0%2C257.8%2C54.9%2C346.5%2C143.5L990%2C10V377.5z%22%2F%3E%3C%2Fsvg%3E');
-	background-size: contain;
-	background-repeat: no-repeat;
+	border: 0.3rem solid #000;
+	border-bottom-color: transparent;
+	border-radius: 100%;
 }
 @keyframes spin {
-	from { transform:rotate(0deg); }
 	to { transform:rotate(360deg); }
 }
 #examples {
@@ -109,7 +107,7 @@ h2 {
 }
 #controls button {
 	align-self: stretch;
-	padding: 0.2rem;
+	padding: 0.2rem 0.4rem;
 }
 input[type=checkbox], label {
 	user-select: none;
@@ -152,9 +150,6 @@ input[type=checkbox]:checked + label.nonstd.warn {
 	text-align: right;
 	font-weight: bold;
 	white-space: pre-wrap;
-}
-.row .arrows {
-	width: 1.5rem;
 }
 .row {
 	padding: 0.7rem;
@@ -553,7 +548,7 @@ footer span:hover {
 <header>
 <h1><a href="https://ens.domains/">ENS Resolver</a><span id="provider" target="_blank" title="Registry Contract"></span></h1>
 <div id="github"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a><br>
-<a href="https://github.com/adraffy/ensip-norm">@adraffy/ensip-norm</a></div>
+<a href="https://github.com/adraffy/ensip-15/blob/master/ens-improvement-proposals/ensip-15-normalization-standard.md">ENSIP-15</a></div>
 </header>
 <div id="examples" class="hide">
 <button>vitalik.eth</button>
@@ -820,8 +815,8 @@ Hebrew:
 		<optgroup label="Recent Names"></optgroup>
 	</select>
 </div>
-<div id="controls">
-	<div id="arrows" class="hide"><div class="arrows"></div></div>
+<div id="controls" class="hide">
+	<div class="spinner hide"></div>
 	<div class="balloon"></div>
 	<button id="confused_btn">Confused</button>
 	<button id="nf_btn">NFD↔NFC</button>
@@ -897,7 +892,7 @@ const EMOJI = ens_emoji();
 
 const input_field = document.querySelector('#input_field');
 const resolve_btn = document.querySelector('#resolve_btn');
-const primary_arrows = document.querySelector('#arrows');
+const primary_loader = document.querySelector('#controls .spinner');
 const auto_resolve_check = document.querySelector('#auto_resolve_check');
 const show_components_check = document.querySelector('#show_components_check');
 const skip_norm_check = document.querySelector('#skip_norm_check');
@@ -1262,7 +1257,7 @@ function schedule_resolve(delay = 500) {
 		clearTimeout(resolve_timer);
 		resolve_timer = RESOLVE_MODE_REPEAT;
 	} else { //if (!should_stop_resolving()) {
-		primary_arrows.classList.remove('hide');
+		primary_loader.classList.remove('hide');
 		controls_div.classList.remove('hide');
 		clearTimeout(resolve_timer);
 		resolve_timer = setTimeout(resolve, delay);
@@ -1278,7 +1273,7 @@ function resolve_if_auto() {
 function stop_resolving() {
 	clearTimeout(resolve_timer);
 	resolve_timer = RESOLVE_MODE_EMPTY;
-	primary_arrows.classList.add('hide');
+	primary_loader.classList.add('hide');
 }
 
 function update_title() {
@@ -2175,7 +2170,7 @@ function create_row(label, waiting) {
 	if (waiting) {
 		let div = document.createElement('div');
 		div.classList.add('temporary');
-		div.innerHTML = '<div class="arrows"></div>';
+		div.innerHTML = '<div class="spinner"></div>';
 		row.append(div);
 	}
 	return row;
@@ -2340,18 +2335,18 @@ function resolve() {
 	let name = replace_escapes(input);
 	add_recent(name);
 	if (!parse() && !skip) {
-		primary_arrows.classList.add('hide');
+		primary_loader.classList.add('hide');
 		return;
 	}
 	resolve_btn.disabled = true;
-	primary_arrows.classList.remove('hide');
+	primary_loader.classList.remove('hide');
 	resolve_date0 = new Date();
 	resolve0(name, skip).then(() => {
 		resolve_btn.disabled = false;
 		if (resolve_timer === RESOLVE_MODE_REPEAT) {
 			setTimeout(resolve, 0);
 		} else {
-			primary_arrows.classList.add('hide');
+			primary_loader.classList.add('hide');
 		}
 	});
 }

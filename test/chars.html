@@ -37,6 +37,10 @@ body {
 	border: 1px solid #ccc;
 	outline-color: #0060df00;
 }
+#grid td.nochar {
+	background: #aaa;
+	opacity: 50%;
+}
 #grid td.active {
 	outline: 8px solid #0060df;
 	border-color: #fff;
@@ -273,6 +277,8 @@ function update_table() {
 				name_span.classList.add('corner', 'name');
 				name_span.innerText = info0.name.toLowerCase();
 				td.append(name_span);
+			} else if (char_map.size) {
+				td.classList.add('nochar');
 			}
 
 			let tokens = ens_tokenize(String.fromCodePoint(cp));

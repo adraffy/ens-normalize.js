@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <title>NormalizationTest</title>
 <style>
+body {
+	margin: 1rem;
+}
 #version {
 	position: absolute;
 	right: 1rem;
@@ -12,6 +15,7 @@
 }
 table {
 	width: 100%;
+	margin: 1rem 0;
 	border-collapse: collapse;
 }
 th {
@@ -46,25 +50,60 @@ tbody tr:nth-child(odd) {
 #summary tbody td {
 	text-align: right;
 }
-#loading {
-	display: inline-block;
-	margin-top: 1rem;
+#loader {
+	display: flex;
+	justify-content: center;
+}
+#loader > div { 
+	display: flex;
 	background: #ffc;
-	border-radius: 1rem;
+	border-radius: 0.5rem;
 	padding: 1rem 2rem;
-	font-size: 24pt;
+	font-size: 20pt;
 	border: 1px solid #ccc;
+	gap: 1rem;
+	align-items: center;
+}
+@keyframes spin {
+	to { transform:rotate(360deg); }
+}
+#loader .spinner {
+	width: 2rem;
+	height: 2rem;
+	animation: spin 2s infinite linear;
+	border: 0.4rem solid #000;
+	border-bottom-color: transparent;
+	border-radius: 100%;
 }
 </style>
 </head>
 <body>
 <h1><a href="https://www.unicode.org/Public/15.0.0/ucd/NormalizationTest.txt">NormalizationTest</a> (15.0.0)</h1>
 <div id="version"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a></div>
-<table id="summary"><thead>
-<tr><th rowspan="2">Test</th><th rowspan="2">Cases</th><th colspan="2">Custom</th><th colspan="2">Browser</th><th rowspan="2">Time</th></tr>
-<tr><th>NFD</th><th>NFC</th><th>NFD</th><th>NFC</th></tr>
-</thead><tbody></tbody></table>
-<div id="loading">Computing...</div>
+<table id="summary">
+	<thead>
+		<tr>
+			<th rowspan="2">Test</th>
+			<th rowspan="2">Cases</th>
+			<th colspan="2">Custom</th>
+			<th colspan="2">Browser</th>
+			<th rowspan="2">Time</th>
+		</tr>
+		<tr>
+			<th>NFD</th>
+			<th>NFC</th>
+			<th>NFD</th>
+			<th>NFC</th>
+		</tr>
+	</thead>
+	<tbody></tbody>
+</table>
+<div id="loader">
+	<div>
+		<div class="spinner"></div>
+		Computing...
+	</div>
+</div>
 <script type="module">
 import {nfc as nfc_custom, nfd as nfd_custom} from '../dist/nf.min.js';
 import {nfc as nfc_native, nfd as nfd_native} from '../src/nf-native.js';
@@ -102,7 +141,7 @@ async function main() {
 	next();
 	function next() {
 		if (tests.length == 0) {
-			document.querySelector('#loading').remove();
+			document.querySelector('#loader').remove();
 			return;
 		}
 		let t0 = Date.now();

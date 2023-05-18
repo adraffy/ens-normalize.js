@@ -11,10 +11,6 @@
 button {
 	cursor: pointer;
 }
-@keyframes spin {
-	from { transform:rotate(0deg); }
-	to	 { transform:rotate(360deg); }
-}
 body { 
 	margin: 3rem; 
 	background: #eee;
@@ -149,11 +145,11 @@ td.info {
 	border-radius: 5px;
 	min-width: 1rem;
 }
-#loading {
+#loader {
 	display: flex;
 	justify-content: center;
 }
-#loading > div { 
+#loader > div { 
 	display: flex;
 	background: #ffc;
 	border-radius: 0.5rem;
@@ -163,14 +159,16 @@ td.info {
 	gap: 1rem;
 	align-items: center;
 }
-#loading .arrows {
+@keyframes spin {
+	to { transform:rotate(360deg); }
+}
+#loader .spinner {
 	width: 2rem;
 	height: 2rem;
 	animation: spin 2s infinite linear;
-	user-select: none;
-	background-image: url('data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%201000%201000%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M990%2C377.5H622.5l137.4-137.4C690.4%2C170.7%2C598.2%2C132.5%2C500%2C132.5c-98.2%2C0-190.4%2C38.2-259.9%2C107.6C170.7%2C309.6%2C132.5%2C401.8%2C132.5%2C500c0%2C98.2%2C38.2%2C190.4%2C107.6%2C259.9c69.4%2C69.4%2C161.7%2C107.6%2C259.9%2C107.6c98.2%2C0%2C190.4-38.2%2C259.9-107.6c5.8-5.8%2C11.4-11.8%2C16.7-17.9l92.2%2C80.7C778.9%2C925.2%2C647%2C990%2C500%2C990C229.4%2C990%2C10%2C770.6%2C10%2C500C10%2C229.4%2C229.4%2C10%2C500%2C10c135.3%2C0%2C257.8%2C54.9%2C346.5%2C143.5L990%2C10V377.5z%22%2F%3E%3C%2Fsvg%3E');
-	background-size: contain;
-	background-repeat: no-repeat;
+	border: 0.4rem solid #000;
+	border-bottom-color: transparent;
+	border-radius: 100%;
 }
 footer {
 	text-align: center;
@@ -237,8 +235,8 @@ footer {
 <ul id="toc"></ul>
 <div id="hover" class="hide"></div>
 <main>
-	<div id="loading"><div>
-		<div class="arrows"></div>
+	<div id="loader"><div>
+		<div class="spinner"></div>
 		<span>Downloading...</span>
 	</div></div>
 </main>
@@ -466,7 +464,7 @@ function update_search() {
 		if (window.location.hash.startsWith(prefix)) {
 			window.history.replaceState(null, null, ' ');
 		}
-		if (main.querySelector('#loading')) {
+		if (main.querySelector('#loader')) {
 			main.innerHTML = '';
 			for (let n = 1; n < buckets.length; n++) {
 				let bucket = buckets[n];
