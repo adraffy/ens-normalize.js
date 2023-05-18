@@ -1,12 +1,27 @@
 import {writeFileSync} from 'node:fs';
-import DISALLOWED from '../rules/chars-disallow.js';
-import {append_table} from './utils.js';
+import {hex_cp, tt} from './utils.js';
+import {UNICODE, IDNA} from '../../derive/unicode-version.js';
+import DISALLOWED from '../../derive/rules/chars-disallow.js';
+
+let allowed = new Set([
+	...IDNA.valid,
+	...IDNA.ignored,
+	...IDNA.mapped.map(v => v[0])
+]);
+
+let disallowed = [...DISALLOWED].filter(cp => allowed.has(cp));
+// use default ordering, don't sort
+//disallowed.sort((a, b) => a - b);
 
 let lines = [];
 
-lines.push(`# Disallowed Characters`);
+lines.push(`# Additional Disallowed Characters (${disallowed.length})`);
 
 // TODO: figure out how to reveal some of these comments
-append_table(lines, [...new Set(DISALLOWED)]); 
+lines.push(`| Codepoint | Form | Name |`);
+lines.push('| -: | :-: | :- |');
+for (let cp of disallowed) { 
+	lines.push(`| ${tt(hex_cp(cp))} | ${tt(String.fromCodePoint(cp))} | ${UNICODE.get_name(cp)} |`)
+}
 
 writeFileSync(new URL('./disallowed.md', import.meta.url), lines.join('\n'));

@@ -124,7 +124,10 @@ export class UnicodeChar {
 		if (use_short && short) return short;
 		if (range) {
 			let {prefix, cp0, cp1} = range;
-			return `${prefix}-${hex_cp(this.cp)} [${1+this.cp-cp0}/${1+cp1-cp0}]`;
+			name = `${prefix}-${hex_cp(this.cp)}`;
+			// 20230517: if short name, don't include range index 
+			if (!use_short) name += ` [${1+this.cp-cp0}/${1+cp1-cp0}]`;
+			return name;
 		}
 		if (name === '<control>' && old_name) return old_name;
 		return name;

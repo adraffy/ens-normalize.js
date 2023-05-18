@@ -1,7 +1,7 @@
 # ens-normalize.js
 0-dependancy Compact ES6 [Ethereum Name Service](https://ens.domains/) (ENS) Name Normalizer that works in the browser.
 
-* Follows [ENS Name Normalization Standard](https://github.com/adraffy/ensip-norm/blob/main/draft.md)
+* Follows [ENS Name Normalization Standard](https://github.com/adraffy/ensip-15/blob/master/ens-improvement-proposals/ensip-15-normalization-standard.md)
 * [Passes **100%**](https://adraffy.github.io/ens-normalize.js/test/validate.html) Validation Tests
 * Custom [`NFC`](https://unicode.org/reports/tr15/) Implementation (or use native)
 	* [Passes **100%**](https://adraffy.github.io/ens-normalize.js/test/report-nf.html) Unicode `15.0.0` [Normalization Tests](https://www.unicode.org/Public/15.0.0/ucd/NormalizationTest.txt)
@@ -10,7 +10,7 @@
 	* [`36KB` **Default** ](./dist/index.min.js) — custom `NFC` via [nf.js](./src/nf.js)
 	* [`42KB`](./dist/all.min.js) *Everything!* — custom `NFC` + sub-libraries: [parts.js](./src/parts.js), [utils.js](./src/utils.js)
 * Included Apps:
-	* [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
+	* [⭐ **Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 	* [Character Viewer](https://adraffy.github.io/ens-normalize.js/test/chars.html)
 	* [Supported Emoji](https://adraffy.github.io/ens-normalize.js/test/emoji.html)
 	* [Confused Explainer](https://adraffy.github.io/ens-normalize.js/test/confused.html)

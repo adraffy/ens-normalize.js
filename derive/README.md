@@ -10,6 +10,7 @@
 * [Unicode Technical Standard #51: Emoji](https://www.unicode.org/reports/tr51/)
 * [Unicode Standard Annex #15: Normalization Forms](https://unicode.org/reports/tr15/)
 * [Unicode Standard Annex #24: Script Property](https://www.unicode.org/reports/tr24/)
+* [Unicode Standard Annex #29: Text Segmentation](https://unicode.org/reports/tr29/)
 * [Unicode Standard Annex #31: Identifier and Pattern Syntax](https://www.unicode.org/reports/tr31/)
 	* [scripts-excluded.json](./data/scripts-excluded.json) — [src](https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers)
 	* [scripts-recommended.json](./data/scripts-recommended.json) — [src](https://www.unicode.org/reports/tr31/#Table_Recommended_Scripts)
