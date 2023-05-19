@@ -88,6 +88,16 @@ h2 {
 #examples_btn {
 	font-weight: bold;
 }
+#options {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem;
+}
+#options > div {
+	display: flex;
+	gap: 0.3rem;
+}
 #input {
 	display: flex;
 	gap: 0.5rem;
@@ -105,9 +115,11 @@ h2 {
 	align-items: center;
 	gap: 0.5rem;
 }
-#controls button {
+#controls button,
+.row.category button {
 	align-self: stretch;
-	padding: 0.2rem 0.4rem;
+	padding: 0.25rem 0.5rem;
+	font-size: 1rem;
 }
 input[type=checkbox], label {
 	user-select: none;
@@ -133,7 +145,6 @@ input[type=checkbox]:checked + label.nonstd.warn {
 	flex-grow: 1;
 }
 #resolve_btn {
-	font-size: 16pt;
 	font-weight: bold;
 }
 #controls.hide + #output {	
@@ -188,7 +199,11 @@ input[type=checkbox]:checked + label.nonstd.warn {
 	background: linear-gradient(90deg, #fff, #fff0fc);
 }
 .row.category {
-	background: linear-gradient(90deg,#fff,#efe);
+	/* background: linear-gradient(90deg,#fff,#efe); */
+	background-color: #fff8ee;
+}
+.row.category.integer {
+	outline: 3px dashed #fc8;
 }
 .formula {
 	display: flex;
@@ -796,17 +811,19 @@ Hebrew:
 
 </div>
 <div id="options">
-<label><input type="checkbox" id="auto_resolve_check" checked>Resolve on Input</label>
-<label><input type="checkbox" id="show_details_check" checked>Details</label>
-<span>
-	<input type="checkbox" id="show_components_check" checked>
-	<label class="nonstd info" for="show_components_check">Emoji Components</label>
-</span>
-<label><input type="checkbox" id="force_ltr_check">Force LTR</label>
-<span>
-	<input type="checkbox" id="skip_norm_check">
-	<label class="nonstd warn" for="skip_norm_check">Skip Normalization</label>
-</span>
+	<button id="examples_btn">👀 Show Examples</button>
+	<label><input type="checkbox" id="auto_resolve_check" checked>Resolve on Input</label>
+	<label><input type="checkbox" id="show_details_check" checked>Details</label>
+	<div>
+		<input type="checkbox" id="show_components_check" checked>
+		<label class="nonstd info" for="show_components_check">Emoji Components</label>
+	</div>
+	<div>
+		<input type="checkbox" id="skip_norm_check">
+		<label class="nonstd warn" for="skip_norm_check">Skip Normalization</label>
+	</div>
+	<label><input type="checkbox" id="force_ltr_check">Force LTR</label>
+	<a href="./emoji.html"><button>Emoji</button></a>	
 </div>
 <div id="input">
 	<input id="input_field" size="20" placeholder="Name or token:XYZ or Marketplace URL or Address (Checksummed)">
@@ -906,8 +923,7 @@ const output_div = document.querySelector('#output');
 const readme_dom = [...output_div.childNodes]; // save initial ux
 //const links_copy = document.querySelector('.row.links').cloneNode(true);
 const examples_div = document.querySelector('#examples');
-const examples_btn = document.createElement('button');
-examples_btn.id = 'examples_btn';
+const examples_btn = document.querySelector('#examples_btn');
 
 const RESOLVE_MODE_IDLE = 'idle';
 const RESOLVE_MODE_REPEAT = 'repeat';
@@ -972,11 +988,11 @@ add_digits('Arabic', '٠١٢٣٤٥٦٧٨٩', {mixed: 1}); //, reversed: true
 [[0x6F4, 4], [0x6F5, 5], [0x6F6, 6]].forEach(([cp, i]) => {
 	DIGIT_MAP.set(cp, {name: 'Extended Arabic', i, mixed: 1});
 });
-add_digits('Simplified CJK', '〇一二三四五六七八九');
+add_digits('CJK', '〇一二三四五六七八九');
 add_digits('Devangari', '०१२३४५६७८९');
 add_digits('Thai', '๐๑๒๓๔๕๖๗๘๙');
-add_digits('Bengali', '০১২৩৪৫৬৭৮৯');
-add_digits('Tamil', '௦௧௨௩௪௫௬௭௮௯'); 
+//add_digits('Bengali', '০১২৩৪৫৬৭৮৯');
+//add_digits('Tamil', '௦௧௨௩௪௫௬௭௮௯'); 
 
 read_local_storage(STORAGE_HIDE_EXAMPLES, x => examples_div.classList.toggle('hide', x), false);
 read_local_storage(STORAGE_SHOW_DETAILS, x => show_details_check.checked = x);
@@ -1047,11 +1063,9 @@ document.querySelector('#nf_btn').addEventListener('click', () => {
 	let s1 = replace_escapes(s0);
 	let s2 = apply_escapes(str_from_cps(nfd(explode_cp(s1))));
 	let s3 = apply_escapes(str_from_cps(nfc(explode_cp(s1))));
-	let s4 = s0 == s2 ? s3 : s2;
-	if (s0 != s4) {
-		input_field.value = s4;
-		resolve();
-	}
+	if (s2 === s3 && s2 === apply_escapes(s1)) return; // do nothing
+	input_field.value = s0 == s2 ? s3 : s2;
+	resolve();
 });
 
 window.addEventListener('storage', e => {
@@ -1791,14 +1805,17 @@ function create_ethmoji_row(tokens) {
 	return row;
 }
 
-function create_digits_row(name0, values, negative, suffix) {
+function create_digits_row(norm, group, values, negative, suffix) {
 	//let row = create_row(`${name0} Digits`);
 	let row = create_row('Integer');
-	row.classList.add('category');
-	let main = document.createElement('span');
+	row.classList.add('category', 'integer');
 	let sign = negative ? '-' : '';
-	main.innerText = sign + values.join('');
-	row.append(main);
+	let form = sign + values.join('');
+	if (norm !== form) {
+		let main = document.createElement('code');
+		main.innerText = form;
+		row.append(main);
+	}
 	if (values.length == (negative ? 2 : 3)) {
 		add_row_tag(row, create_typed_tag('fire', 'Shortest'));
 	}
@@ -1816,12 +1833,12 @@ function create_digits_row(name0, values, negative, suffix) {
 		add_row_tag(row, `Zero Pad (${pad})`);
 	}
 	let btn = create_resolve_btn((negative ? KEYCAP_MINUS : '') + values.map(keycap).join('') + suffix, KEYCAP_NAME);
-	btn.disabled = name0 === KEYCAP_NAME;
+	btn.disabled = group === KEYCAP_NAME;
 	add_row_tag(row, btn);
 	for (let [name, digits] of DIGITS_MAP) {
 		//if (name0 === name) continue;
 		let btn = create_resolve_btn(sign + values.map(x => digits.charAt(x)).join('') + suffix, name);
-		btn.disabled = name0 === name;
+		btn.disabled = group === name;
 		add_row_tag(row, btn);
 	}
 	return row;
@@ -2565,7 +2582,7 @@ async function resolve0(input, skip_norm) {
 			if (negative) tokens = tokens.slice(1);
 			let values = tokens.map(x => x.emoji[0] - 0x30);
 			if (values.every(x => x >= 0 && x < 10)) {
-				output_div.append(create_digits_row(KEYCAP_NAME, values, negative, suffix));
+				output_div.append(create_digits_row(name_norm, KEYCAP_NAME, values, negative, suffix));
 			}
 		} else {
 			let negative = prefix.startsWith('-');
@@ -2578,15 +2595,15 @@ async function resolve0(input, skip_norm) {
 					let name0 = digits[0].name;
 					if (digits.every(x => x.name === name0)) {
 						//if (digits[0].reversed) values.reverse(); // LTR
-						output_div.append(create_digits_row(name0, values, negative, suffix));
+						output_div.append(create_digits_row(name_norm, name0, values, negative, suffix));
 					} else {
 						let first = digits[0].mixed;
 						if (first && digits.every(x => x.mixed == first)) {
-							let row = create_digits_row('Arabic', values, negative, suffix); //values.reverse()); // LTR
+							let row = create_digits_row(name_norm, 'Arabic', values, negative, suffix); //values.reverse()); // LTR
 							add_row_tag(row, create_typed_tag('warn', 'Mixed Digits'));
 							output_div.append(row);
 						} else {
-							let row = create_digits_row('Numeric', values, negative, suffix);
+							let row = create_digits_row(name_norm, 'Numeric', values, negative, suffix);
 							add_row_tag(row, create_typed_tag('warn', 'Multiple Scripts'));
 							output_div.append(row);
 						}
@@ -2828,7 +2845,7 @@ async function resolve0(input, skip_norm) {
 			wrapped_row.classList.add('error');
 			add_row_tag(wrapped_row, create_typed_tag('warn', wrapped_err));
 		} else {
-			add_row_tag(wrapped_row, is_wrapped ? create_typed_tag('good', '🎁 Wrapped') : '➰️ Unwrapped');
+			add_row_tag(wrapped_row, is_wrapped ? create_typed_tag('good', '🎁 Wrapped') : '🎉 Unwrapped');
 		}
 		if (wrapper_contract) {
 			add_row_tag(wrapped_row, create_etherscan_address_link(wrapper_contract.address, {title: 'Contract', contract: true}));

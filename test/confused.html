@@ -174,9 +174,30 @@ h2 span {
 #output li + li {
 	margin-top: 0.5rem;
 }
-#init {
-	text-align: center;
-	font-style: italic;
+#loader {
+	display: flex;
+	justify-content: center;
+}
+#loader > div { 
+	display: flex;
+	background: #ffc;
+	border-radius: 0.5rem;
+	padding: 1rem 2rem;
+	font-size: 20pt;
+	border: 1px solid #ccc;
+	gap: 1rem;
+	align-items: center;
+}
+@keyframes spin {
+	to { transform:rotate(360deg); }
+}
+#loader .spinner {
+	width: 2rem;
+	height: 2rem;
+	animation: spin 2s infinite linear;
+	border: 0.4rem solid #000;
+	border-bottom-color: transparent;
+	border-radius: 100%;
 }
 footer {
 	text-align: center;
@@ -227,9 +248,12 @@ footer {
 <input id="input_field">
 <select id="input_select"></select>
 </div>
-<div id="init">Downloading data files...</div>
+<div id="loader"><div>
+	<div class="spinner"></div>
+	<span>Downloading...</span>
+</div></div>
 <div id="exploded" class="hide"></div>
-<div id="output">
+<div id="output" class="hide">
 <ul class="readme">
 	<li>Only works on single-labels.</li>
 	<li>Only includes confusables for valid <a href="https://github.com/adraffy/ens-normalize.js/blob/main/derive/data/15.0.0/IdnaMappingTable.txt">IDNA 2003</a> characters.</li>
@@ -381,7 +405,8 @@ let init = (async () => {
 			}).join('')},
 		</optgroup>
 	`;
-	document.querySelector('#init').remove();
+	document.querySelector('#loader').remove();
+	output_div.classList.remove('hide');
 	init = undefined;
 })();
 
@@ -422,12 +447,12 @@ async function update() {
 	let input = replace_escapes(input_field.value);
 	window.history.replaceState(null, null, input ? `#${input}` : ' ');
 	input_field.focus();
-	if (!input) {
-		output_div.append(...readme_dom);
-		return;
-	}
 	try {
 		if (init) await init;
+		if (!input) {
+			output_div.append(...readme_dom);
+			return;
+		}
 		await create_grid(input);
 	} catch (err) {
 		output_div.classList.add('error');
