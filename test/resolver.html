@@ -11,6 +11,9 @@
 .hide {
 	display: none !important;
 }
+.balloon {
+	flex: 1;
+}
 .long {
 	white-space: pre-wrap !important;
 	line-break: anywhere;
@@ -108,14 +111,14 @@ h2 {
 	padding: 0.5rem;
 	font-size: 16pt;
 }
-#controls {
+#actions {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: flex-end;
 	align-items: center;
 	gap: 0.5rem;
 }
-#controls button,
+#actions button,
 .row.category button {
 	align-self: stretch;
 	padding: 0.25rem 0.5rem;
@@ -140,15 +143,8 @@ input[type=checkbox]:checked + label.nonstd.warn {
 	margin: -2px -4px;
 	border-radius: 2px;
 }
-
-#controls .balloon {
-	flex-grow: 1;
-}
 #resolve_btn {
 	font-weight: bold;
-}
-#controls.hide + #output {	
-	margin-top: 0.5rem;
 }
 #output {
 	display: flex;
@@ -520,7 +516,7 @@ footer span:hover {
 	header {
 		margin: 1rem 1rem 0 1rem;
 	}
-	#input, #controls, #options, #examples {
+	#input, #actions, #options, #examples {
 		margin: 0 1rem;
 	}
 	#content {
@@ -653,10 +649,10 @@ footer span:hover {
 <button>❌a_b</button>
 
 <a href="./emoji.html"><b>Emoji:</b></a>
-<button id="random_emoji_btn" title="[ALT] Just Singles">🎲 <b>Random</b></button>
 <button>©</button>
 <button>🕵</button>
 <button>🧙‍♂</button>
+<button>🏋🏿‍♂</button>
 <button data-name="💩💩💩">💩<sup>3</sup></button>
 <button data-name="🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞">🍞<sup>13</sup></button>
 <button data-name="👁🗨👁️‍🗨️">👁️‍🗨️</button>
@@ -823,7 +819,6 @@ Hebrew:
 		<label class="nonstd warn" for="skip_norm_check">Skip Normalization</label>
 	</div>
 	<label><input type="checkbox" id="force_ltr_check">Force LTR</label>
-	<a href="./emoji.html"><button>Emoji</button></a>	
 </div>
 <div id="input">
 	<input id="input_field" size="20" placeholder="Name or token:XYZ or Marketplace URL or Address (Checksummed)">
@@ -832,9 +827,11 @@ Hebrew:
 		<optgroup label="Recent Names"></optgroup>
 	</select>
 </div>
-<div id="controls" class="hide">
-	<div class="spinner hide"></div>
+<div id="actions">
+	<div class="spinner"></div>
 	<div class="balloon"></div>
+	<button id="random_emoji_btn" title="Random Emoji&#10;[ALT] Just Singles">🎲</button>
+	<button id="find_emoji_btn">Emoji</button>
 	<button id="confused_btn">Confused</button>
 	<button id="nf_btn">NFD↔NFC</button>
 	<button id="escape_btn" title="[ALT] Unicode Escaped">Escape</button>
@@ -909,7 +906,6 @@ const EMOJI = ens_emoji();
 
 const input_field = document.querySelector('#input_field');
 const resolve_btn = document.querySelector('#resolve_btn');
-const primary_loader = document.querySelector('#controls .spinner');
 const auto_resolve_check = document.querySelector('#auto_resolve_check');
 const show_components_check = document.querySelector('#show_components_check');
 const skip_norm_check = document.querySelector('#skip_norm_check');
@@ -918,7 +914,8 @@ const force_ltr_check = document.querySelector('#force_ltr_check');
 const recent_select = document.querySelector('#recent_select');
 const recent_optgroup = document.querySelector('#recent_select optgroup');
 const options_div = document.querySelector('#options');
-const controls_div = document.querySelector('#controls');
+const actions_div = document.querySelector('#actions');
+const primary_loader = document.querySelector('#actions .spinner');
 const output_div = document.querySelector('#output');
 const readme_dom = [...output_div.childNodes]; // save initial ux
 //const links_copy = document.querySelector('.row.links').cloneNode(true);
@@ -1035,6 +1032,7 @@ for (let div of document.querySelectorAll('[data-tokenize]')) {
 		components: div.dataset.parts
 	}));
 }
+primary_loader.classList.add('hide');
 
 resolve_btn.addEventListener('click', () => resolve());
 input_field.addEventListener('keydown', e => {
@@ -1045,27 +1043,6 @@ input_field.addEventListener('keydown', e => {
 });
 input_field.addEventListener('input', () => {
 	if (parse()) schedule_resolve();
-});
-
-document.querySelector('#random_emoji_btn').addEventListener('click', e => {
-	let name = '';
-	let pool = e.altKey ? EMOJI.filter(cps => cps.length == 1 || (cps.length == 2 && cps[1] === 0xFE0F)) : EMOJI;
-	while ([...name].length < 3) {
-		name += ens_normalize(str_from_cps(pool[Math.random() * pool.length|0]));
-	}
-	input_field.value = `${name}.eth`;
-	skip_norm_check.checked = false;
-	resolve();
-});
-
-document.querySelector('#nf_btn').addEventListener('click', () => {
-	let s0 = input_field.value;
-	let s1 = replace_escapes(s0);
-	let s2 = apply_escapes(str_from_cps(nfd(explode_cp(s1))));
-	let s3 = apply_escapes(str_from_cps(nfc(explode_cp(s1))));
-	if (s2 === s3 && s2 === apply_escapes(s1)) return; // do nothing
-	input_field.value = s0 == s2 ? s3 : s2;
-	resolve();
 });
 
 window.addEventListener('storage', e => {
@@ -1128,11 +1105,36 @@ function add_recent(name, save = true) {
 	} 
 }
 
+
+document.querySelector('#random_emoji_btn').addEventListener('click', e => {
+	let name = '';
+	let pool = e.altKey ? EMOJI.filter(cps => cps.length == 1 || (cps.length == 2 && cps[1] === 0xFE0F)) : EMOJI;
+	while ([...name].length < 3) {
+		name += ens_normalize(str_from_cps(pool[Math.random() * pool.length|0]));
+	}
+	input_field.value = `${name}.eth`;
+	skip_norm_check.checked = false;
+	resolve();
+});
+document.querySelector('#find_emoji_btn').addEventListener('click', () => {
+	let url = './emoji.html';
+	let token = ens_tokenize(input_field.value).find(x => x.emoji);
+	if (token) url += `#q=${encodeURIComponent(String.fromCodePoint(...token.emoji))}`;
+	create_link(url).click();	
+});
 document.querySelector('#confused_btn').addEventListener('click', () => {
 	let s = input_field.value;
 	create_link(`./confused.html#${encode_uri_component_surrogate_escaped(s.replaceAll('.', ''))}`).click();
 });
-
+document.querySelector('#nf_btn').addEventListener('click', () => {
+	let s0 = input_field.value;
+	let s1 = replace_escapes(s0);
+	let s2 = apply_escapes(str_from_cps(nfd(explode_cp(s1))));
+	let s3 = apply_escapes(str_from_cps(nfc(explode_cp(s1))));
+	if (s2 === s3 && s2 === apply_escapes(s1)) return; // do nothing
+	input_field.value = s0 == s2 ? s3 : s2;
+	resolve();
+});
 document.querySelector('#escape_btn').addEventListener('click', e => {
 	let s0 = input_field.value;
 	let s1 = replace_escapes(s0);
@@ -1143,7 +1145,6 @@ document.querySelector('#escape_btn').addEventListener('click', e => {
 	input_field.value = set[(pos + 1) % set.length];
 	update_title();
 });
-
 document.querySelector('#link_btn').addEventListener('click', () => {
 	//let hash = '#' + encodeURIComponent(input_field.value);
 	//if (skip_norm_check.checked) hash += SKIP_SUFFIX;
@@ -1272,7 +1273,7 @@ function schedule_resolve(delay = 500) {
 		resolve_timer = RESOLVE_MODE_REPEAT;
 	} else { //if (!should_stop_resolving()) {
 		primary_loader.classList.remove('hide');
-		controls_div.classList.remove('hide');
+		//actions_div.classList.remove('hide');
 		clearTimeout(resolve_timer);
 		resolve_timer = setTimeout(resolve, delay);
 	}
@@ -1346,14 +1347,14 @@ function presolve(input, skip, resolving) {
 		stop_resolving();
 		output_div.innerHTML = '';
 		output_div.append(...readme_dom);	
-		controls_div.classList.add('hide');
+		//actions_div.classList.add('hide');
 		return;
 	}
 	// TODO: conslidate this code with resolve()
 	let name = replace_escapes(input);
 	output_div.innerHTML = '';
 	//output_div.append(links_copy);
-	controls_div.classList.remove('hide');
+	//actions_div.classList.remove('hide');
 	if (resolve_timer === RESOLVE_MODE_EMPTY) {
 		resolve_timer = RESOLVE_MODE_IDLE;
 	}
@@ -2785,14 +2786,15 @@ async function resolve0(input, skip_norm) {
 				span_reg.innerText = `✍️ Registered until ${date.toLocaleDateString()}`;
 				span_reg.style.backgroundColor = '#def';
 				add_row_tag(avail_row, span_reg);
-				if (t_exp - t_now < 86400 * 30) {
+				if (t_exp - t_now < eth_nft_contract.warning_period) {
 					add_row_tag(avail_row, create_typed_tag('warn', `Expires in ${format_dur(1000 * (t_exp - t_now))}`));
 				} else {
 					span_reg.innerHTML += ` (${format_dur(1000 * (t_exp - t_now))})`;
 				}
 			}
 		}
-		add_row_tag(avail_row, create_etherscan_address_link(eth_nft_contract.address, {title: 'NFT Contract', contract: true}));
+		add_row_tag(avail_row, create_etherscan_address_link(eth_nft_contract.address, {title: 'NFT', contract: true}));
+		add_row_tag(avail_row, create_etherscan_address_link(price_oracle_contract.address, {title: 'Price Oracle', contract: true}));
 	} else if (nft_backed) {
 		let label = name_norm.slice(0, sep_pos);		
 		nft_token = ethers.utils.id(label);
@@ -2958,7 +2960,15 @@ async function resolve0(input, skip_norm) {
 		// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar	
 		let interfaces = [
 			{iface: '0x80ac58cd', name: 'NFT'},  
-			{iface: '0x018fac06', name: 'Controller'},
+			{iface: '0x018fac06', name: 'Controller', children: [
+				{
+					name: 'Price Oracle', 
+					async get(addr) {
+						let contract = await price_oracle_from_controller(addr);
+						return contract.address;
+					}
+				}
+			]},
 			{iface: '0x612e8c09', name: 'Registrar'},
 			//{iface: '0x6ccb2df4', name: 'Old Registrar'},
 			{iface: '0x7ba18ba1', name: 'Migration'},
@@ -2970,12 +2980,22 @@ async function resolve0(input, skip_norm) {
 			if (!await contract.callStatic.supportsInterface('0x124a319c')) {
 				throw new Error('not EIP-165');
 			}
-			for (let {iface, name} of interfaces) {
+			for (let {iface, name, children} of interfaces) {
 				let addr = await contract.get_interface(iface);
 				if (is_null_hex(addr)) continue;	
 				let title =`<b>${name}</b>/${iface.slice(2)}`;
 				add_row_tag(row, create_etherscan_address_link(addr, {title, contract: true}));
 				any = true;
+				if (children) {
+					for (let child of children) {
+						try {
+							let derived_addr = await child.get(addr);
+							if (is_null_hex(derived_addr)) continue;	
+							add_row_tag(row, create_etherscan_address_link(derived_addr, {title: `<b>${child.name}</b>`, contract: true}));
+						} catch (ignored) {
+						}
+					}
+				}
 			}
 		} catch (err) {
 			if (any) {
@@ -3091,24 +3111,23 @@ async function resolve0(input, skip_norm) {
 	let primary_norm;
 	try {
 		primary_norm = ens_normalize(primary);
+		if (primary === input) {
+			add_row_tag(primary_row, 'Same as Input');
+		} else if (primary === name_norm) {		
+			add_row_tag(primary_row, 'Same as Norm');
+		} else {
+			add_row_tag(primary_row, create_copy_btn(primary_norm));
+			add_row_tag(primary_row, create_resolve_btn(primary));
+			add_row_tag(primary_row, create_ens_link(primary_norm));
+			let details_row = create_details_row(primary, true);
+			details_row.classList.toggle('old', !!available);
+			output_div.append(details_row);
+		}
 	} catch (err) {
 		primary_row.classList.add('error');
 		add_row_tag(primary_row, create_typed_tag('norm', err));
 	}
 
-	let add_btn;
-	if (primary === input) {
-		add_row_tag(primary_row, 'Same as Input');
-	} else if (primary === name_norm) {		
-		add_row_tag(primary_row, 'Same as Norm');
-	} else {
-		add_row_tag(primary_row, create_copy_btn(primary_norm));
-		add_row_tag(primary_row, create_resolve_btn(primary));
-		add_row_tag(primary_row, create_ens_link(primary_norm));
-		let details_row = create_details_row(primary, true);
-		details_row.classList.toggle('old', !!available);
-		output_div.append(details_row);
-	}
 	add_old_tag(primary_row, primary);
 
 	// primary was normalized
@@ -3164,6 +3183,21 @@ function contract_for_resolver(resolver) {
 	contract.get_interface = hash => contract.callStatic.interfaceImplementer(node, hash);
 	return contract;
 }
+async function price_oracle_from_controller(controller_address) {
+	let address = await active_provider.getStorageAt(controller_address, 2);
+	address = '0x' + address.slice(-40);
+	let contract = new ethers.Contract(address, [
+		'function premium(string calldata name, uint256 expires, uint256 duration) external view returns (uint256)',
+	], active_provider);
+	/*
+	totalDays = 21; // FromDigits["15"]
+	price0 = 10^(8 + 18) // FromDigits["52b7d2dcc80cd2e4000000", 16]
+	price1 = BitShiftRight[price0, totalDays]
+	dur = 1814400;  // t /. First@Solve[price0*(1/2)^(t/86400) == price1, t, Reals]
+	*/
+	contract.premium_period = 1814400; // 21*86400;
+	return contract;
+}
 
 async function ensure_wrapper() {
 	if (wrapper_contract) return;
@@ -3192,20 +3226,9 @@ async function ensure_eth_nft() {
 		'function GRACE_PERIOD() external view returns (uint256)',
 	], active_provider);
 	eth_nft_contract.grace_period = (await eth_nft_contract.callStatic.GRACE_PERIOD()).toNumber();
+	eth_nft_contract.warning_period = 86400 * 30; // when to show warning in interface
 	let controller_address = await eth_resolver_contract.get_interface('0x018fac06');
-	// https://etherscan.io/address/0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5#code
-	let price_oracle_address = await active_provider.getStorageAt(controller_address, 2);
-	price_oracle_address = '0x' + price_oracle_address.slice(-40);
-	price_oracle_contract = new ethers.Contract(price_oracle_address, [
-		'function premium(string calldata name, uint256 expires, uint256 duration) external view returns (uint256)',
-	], active_provider);
-	/*
-	totalDays = 21; // FromDigits["15"]
-	price0 = 10^(8 + 18) // FromDigits["52b7d2dcc80cd2e4000000", 16]
-	price1 = BitShiftRight[price0, totalDays]
-	dur = 1814400;  // t /. First@Solve[price0*(1/2)^(t/86400) == price1, t, Reals]
-	*/
-	price_oracle_contract.premium_period = 1814400; // 21*86400;
+	price_oracle_contract = await price_oracle_from_controller(controller_address);
 }
 
 function is_checksum_address(s) {

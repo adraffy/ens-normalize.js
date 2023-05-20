@@ -257,6 +257,8 @@ const main = document.querySelector('main');
 const results_section = document.querySelector('#results');
 const hover_div = document.querySelector('#hover');
 
+update_search_from_hash();
+
 let last_hover;
 let search_timer;
 let emoji_seqs = ens_emoji();
@@ -425,9 +427,8 @@ function make_rec(cps) {
 	return rec;
 }
 
-function process_hash(e) {
+function update_search_from_hash() {
 	let hash = window.location.hash.slice(1);
-	let sel;
 	if (hash) {
 		let match;
 		if (match = hash.match(/^q\=(.*)$/)) {
@@ -435,9 +436,13 @@ function process_hash(e) {
 			search_field.select();
 		} else if (/^\d+$/.test(hash)) {
 			search_field.value = '';
-			sel = `[name="${hash}"]`;
+			return `[name="${hash}"]`;
 		}
 	}
+}
+
+function process_hash(e) {
+	let sel = update_search_from_hash();
 	update_search();
 	if (sel) {
 		let el = document.querySelector(sel);
@@ -667,7 +672,7 @@ function create_tr({cps, form, norm, info}, first) {
 	let a_resolve = document.createElement('a');
 	a_resolve.href = `./resolver.html#${repeated(norm)}.eth`;
 	a_resolve.innerHTML = form;
-	a_resolve.title = 'Resolve in Demo\n(Minimal Repeated)';
+	a_resolve.title = 'Show in Resolver\n(Minimal Repeated)';
 	td_form.append(a_resolve);
 
 	let td_cells = document.createElement('td');
