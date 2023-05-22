@@ -7,6 +7,9 @@
 <style>
 :root {
 	--length-color: #f8eedd;
+	--btn-fill-color: #eee;
+	--btn-fill-hover-color: #ccc;
+	--btn-border-color: #888;
 }
 .hide {
 	display: none !important;
@@ -29,9 +32,9 @@ button {
 	appearance: none;
 	margin: 0;
 	padding: 4px 8px;
-	border: 1px solid #888;
+	border: 1px solid var(--btn-border-color);
 	border-radius: 4px;
-	background-color: #efefef;
+	background-color: var(--btn-fill-color);
 	color: #000;
 	font-size: 100%;
 }
@@ -40,7 +43,7 @@ button:disabled {
 	pointer-events: none;
 }
 button:hover {
-	background-color: #ccc;
+	background-color: var(--btn-hover-fill-color);
 }
 button:hover:active {
 	background-color: #aaa;
@@ -164,20 +167,27 @@ input[type=checkbox], label {
 	user-select: none;
 	cursor: pointer;
 }
-input[type=checkbox]:checked + label.nonstd.info {
-	background: #cff;
-	outline: 2px solid #0aa;
+/* .boxed input {
+	display: none;
+} */
+.boxed label {
 	padding: 2px 4px;
-	margin: -2px -4px;
 	border-radius: 2px;
+	margin-left: -2px;
+	border: 2px solid transparent;
 }
-input[type=checkbox]:checked + label.nonstd.warn {
+#show_components_check:checked + label {
+	border-color: #0aa;
+	background: #cff;
+}
+#skip_norm_check:checked + label {
+	border-color: #f00;
 	background: #f00;
 	color: #fff;
-	outline: 2px solid #f00;
-	padding: 2px 4px;
-	margin: -2px -4px;
-	border-radius: 2px;
+}
+#force_ltr_check:checked + label {	
+	border-color: #fb6;
+	background: #fb6;
 }
 #resolve_btn {
 	font-weight: bold;
@@ -238,6 +248,7 @@ input[type=checkbox]:checked + label.nonstd.warn {
 }
 .row.category.ethmoji {
 	outline: 3px dashed #add;
+	background: #f0ffff;
 }
 .row.category.integer {
 	outline: 3px dashed #fc8;
@@ -382,17 +393,20 @@ button.copy.copied {
 	background: #fff;
 }
 .avatar {
-	margin: -16px 0;
 	order: -1;
-	object-fit: cover;
 } 
 .avatar img {
 	position: relative;
 	z-index: 1;
 	display: block;
 	border-radius: 4px;
-	width: 64px;
-	height: 64px;
+	width: 32px;
+	height: 32px;
+	border: 1px solid #ccc;
+	transition: transform 0.2s;
+}
+.avatar img:hover {
+	transform: scale(3);
 }
 button.glow {
 	border: 2px solid #2c2;
@@ -532,16 +546,16 @@ button.glow {
 	width: 37px;
 	padding: 0;
 	margin: 0;
-	border: 1px solid #888;
+	border: 1px solid var(--btn-border-color);
 	border-radius: 4px;
 	cursor: pointer;
 	font-size: 100%;
 	appearance: none;
-	background: no-repeat center url("data:image/svg+xml,%3Csvg height='21' width='20' version='1.1' viewBox='0 0 20 21' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10.5,0 C7,0 3.9,1.9 2.3,4.8 L0,2.5 L0,9 L6.5,9 L3.7,6.2 C5,3.7 7.5,2 10.5,2 C14.6,2 18,5.4 18,9.5 C18,13.6 14.6,17 10.5,17 C7.2,17 4.5,14.9 3.4,12 L1.3,12 C2.4,16 6.1,19 10.5,19 C15.8,19 20,14.7 20,9.5 C20,4.3 15.7,0 10.5,0 L10.5,0 Z M9,5 L9,10.1 L13.7,12.9 L14.5,11.6 L10.5,9.2 L10.5,5 L9,5 L9,5 Z'/%3E%3C/svg%3E"), no-repeat bottom 3px right 2px url("data:image/svg+xml,%3Csvg style='fill: currentColor' width='8' height='4' viewBox='0 0 8 4' version='1.1' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h8l-4 4Z' /%3E%3C/svg%3E") #eee;
+	background: no-repeat center url("data:image/svg+xml,%3Csvg height='21' width='20' version='1.1' viewBox='0 0 20 21' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10.5,0 C7,0 3.9,1.9 2.3,4.8 L0,2.5 L0,9 L6.5,9 L3.7,6.2 C5,3.7 7.5,2 10.5,2 C14.6,2 18,5.4 18,9.5 C18,13.6 14.6,17 10.5,17 C7.2,17 4.5,14.9 3.4,12 L1.3,12 C2.4,16 6.1,19 10.5,19 C15.8,19 20,14.7 20,9.5 C20,4.3 15.7,0 10.5,0 L10.5,0 Z M9,5 L9,10.1 L13.7,12.9 L14.5,11.6 L10.5,9.2 L10.5,5 L9,5 L9,5 Z'/%3E%3C/svg%3E"), no-repeat bottom 3px right 2px url("data:image/svg+xml,%3Csvg style='fill: currentColor' width='8' height='4' viewBox='0 0 8 4' version='1.1' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h8l-4 4Z' /%3E%3C/svg%3E") var(--btn-fill-color);
 }
 #recent_select:hover,
 #recent_select:active {
-	background-color: #ccc;
+	background-color: var(--btn-hover-fill-color);
 }
 footer {
 	text-align: center;
@@ -594,9 +608,6 @@ footer span:hover {
 	.row.details .restricted {
 		flex-direction: row-reverse;
 		font-size: 75%;
-	}
-	.avatar {
-		margin: 0;
 	}
 	#examples_btn {
 		display: block;
@@ -863,15 +874,18 @@ Hebrew:
 	<button id="examples_btn">👀 Show Examples</button>
 	<label><input type="checkbox" id="auto_resolve_check" checked>Resolve on Input</label>
 	<label><input type="checkbox" id="show_details_check" checked>Details</label>
-	<div>
+	<div class="boxed">
 		<input type="checkbox" id="show_components_check" checked>
-		<label class="nonstd info" for="show_components_check">Emoji Components</label>
+		<label for="show_components_check">Emoji Components</label>
 	</div>
-	<div>
+	<div class="boxed">
 		<input type="checkbox" id="skip_norm_check">
-		<label class="nonstd warn" for="skip_norm_check">Skip Normalization</label>
+		<label for="skip_norm_check">Skip Normalization</label>
 	</div>
-	<label><input type="checkbox" id="force_ltr_check">Force LTR</label>
+	<div class="boxed">
+		<input type="checkbox" id="force_ltr_check">
+		<label for="force_ltr_check">Force LTR</label>
+	</div>
 </div>
 <div id="input">
 	<input id="input_field" size="20" placeholder="Name or token:XYZ or Marketplace URL or Address (Checksummed)">
@@ -976,7 +990,6 @@ const examples_div = document.querySelector('#examples');
 const examples_btn = document.querySelector('#examples_btn');
 
 const RESOLVE_MODE_IDLE = 'idle';
-const RESOLVE_MODE_REPEAT = 'repeat';
 const RESOLVE_MODE_EMPTY = 'empty';
 
 const STORAGE_RECENT = 'recent';
@@ -1050,7 +1063,7 @@ read_local_storage(STORAGE_AUTO_RESOLVE, x => auto_resolve_check.checked = x);
 read_local_storage(STORAGE_SHOW_COMPONENTS, x => show_components_check.checked = x);
 read_local_storage(STORAGE_FORCE_LTR, x => force_ltr_check.checked = x);
 
-sync_recent(window.localStorage.getItem(STORAGE_RECENT));
+sync_recent(localStorage.getItem(STORAGE_RECENT));
 
 for (let btn of document.querySelectorAll('#examples button:not([id]), button[data-name]')) {
 	let name = btn.innerText;
@@ -1124,7 +1137,7 @@ recent_select.addEventListener('change', () => {
 	} else if (option.value === 'reset') {
 		recent_select.classList.add('hide');
 		recent_optgroup.innerHTML = '';
-		window.localStorage.setItem(STORAGE_RECENT, '[]');
+		localStorage.setItem(STORAGE_RECENT, '[]');
 	}
 });
 function add_recent(name, save = true) {
@@ -1158,7 +1171,7 @@ function add_recent(name, save = true) {
 	recent_select.selectedIndex = -1;
 	recent_select.classList.remove('hide');
 	if (save) {
-		window.localStorage.setItem(STORAGE_RECENT, JSON.stringify([...recent_optgroup.children].map(x => x.value)));
+		localStorage.setItem(STORAGE_RECENT, JSON.stringify([...recent_optgroup.children].map(x => x.value)));
 	} 
 }
 
@@ -1209,33 +1222,33 @@ document.querySelector('#link_btn').addEventListener('click', () => {
 });
 
 auto_resolve_check.addEventListener('input', () => {
-	window.localStorage.setItem(STORAGE_AUTO_RESOLVE, !!auto_resolve_check.checked);	
+	localStorage.setItem(STORAGE_AUTO_RESOLVE, !!auto_resolve_check.checked);	
 	resolve_if_auto();
 });
 show_details_check.addEventListener('input', () => {	
-	window.localStorage.setItem(STORAGE_SHOW_DETAILS, !!show_details_check.checked);	
+	localStorage.setItem(STORAGE_SHOW_DETAILS, !!show_details_check.checked);	
 	for (let el of document.querySelectorAll('.detailed')) {
 		el.classList.toggle('hide', !show_details_check.checked);
 	}
 });
 show_components_check.addEventListener('input', () => {
-	window.localStorage.setItem(STORAGE_SHOW_COMPONENTS, !!show_details_check.checked);
+	localStorage.setItem(STORAGE_SHOW_COMPONENTS, !!show_components_check.checked);
 	update_exploded();
 });
 force_ltr_check.addEventListener('click', () => {
-	window.localStorage.setItem(STORAGE_FORCE_LTR, !!force_ltr_check.checked);
+	localStorage.setItem(STORAGE_FORCE_LTR, !!force_ltr_check.checked);
 	sync_force_ltr();
 });
 examples_btn.addEventListener('click', () => {
 	let b = !examples_div.classList.contains('hide');
 	examples_div.classList.toggle('hide', b);
-	window.localStorage.setItem(STORAGE_HIDE_EXAMPLES, !!examples_div.classList.contains('hide'));
+	localStorage.setItem(STORAGE_HIDE_EXAMPLES, !!examples_div.classList.contains('hide'));
 	sync_examples();
 });
 skip_norm_check.addEventListener('input', resolve_if_auto); // not saved
 
 if (!url_params.has('infura') && window.ethereum) {
-	let p = ethereum;;
+	let p = ethereum;
 	if (Array.isArray(ethereum.providers)) p = ethereum.providers[0]; // fix scuffed multi-provider
 	window_provider = new ethers.providers.Web3Provider(p, 'any');
 	window_provider.on('network', update_network);
@@ -1275,13 +1288,14 @@ function update_network(network) {
 		case CHAIN_ID_GOERLI: {
 			block_explorer = 'https://goerli.etherscan.io';
 			metadata_service = 'https://metadata.ens.domains/goerli';
-			break;			
+			break;
 		}
 		default: {
 			block_explorer = 'https://etherscan.io';
 			metadata_service = 'https://metadata.ens.domains/mainnet';
 		}
 	}
+	// TODO: add change network button
 	document.querySelector('#provider').innerHTML = `using ${provider_name} (<a href="${block_explorer}/address/${registry}">${network_name}</a>)`;
 	let init = !registry_contract;
 	registry_contract = new ethers.Contract(registry, [
@@ -1328,20 +1342,18 @@ function should_stop_resolving() {
 
 function schedule_resolve(delay = 500) {
 	if (!auto_resolve_check.checked) return;
+	clearTimeout(resolve_timer);
 	if (is_working()) {
-		clearTimeout(resolve_timer);
-		resolve_timer = RESOLVE_MODE_REPEAT;
-	} else { //if (!should_stop_resolving()) {
+		resolve_timer = [Date.now() + delay]; // encode as future time
+	} else {
 		primary_loader.classList.remove('hide');
-		//actions_div.classList.remove('hide');
-		clearTimeout(resolve_timer);
 		resolve_timer = setTimeout(resolve, delay);
 	}
 } 
 
 function resolve_if_auto() {
-	if (auto_resolve_check.checked && input_field.value) {
-		if (parse()) resolve();
+	if (auto_resolve_check.checked && input_field.value && parse()) {
+		resolve();
 	}
 }
 
@@ -1941,7 +1953,6 @@ function add_old_tag(row, name, is_norm) {
 	add_row_tag(row, span);
 }
 
-
 function add_nft_links(row, name, contract, token) {
 	add_row_tag(row, create_etherscan_nft_link(contract, token));
 	add_row_tag(row, create_ens_metadata_link(contract, token));
@@ -1951,6 +1962,28 @@ function add_nft_links(row, name, contract, token) {
 		add_row_tag(row, create_link(`https://www.ens.vision/name/${encoded}`, VISION_NAME));
 		add_row_tag(row, create_link(`http://predomain.eth.limo/#/domain/${encoded}`, 'Predomain'));
 	} catch (err) {
+	}
+}
+
+async function add_avatar(row, resolver) {
+	try {
+		let avatar = await resolver.getAvatar();
+		if (!avatar || should_stop_resolving()) return;
+		let {url} = avatar;
+		try {
+			url = new URL(url).toString().replaceAll('#', '%23');	
+		} catch (ignored) {
+		}
+		let img = new Image();
+		img.src = url;
+		let a = document.createElement('a');
+		a.classList.add('avatar');
+		a.href = url;
+		a.target = '_blank';
+		a.append(img);
+		row.append(a);
+	} catch (err) {
+		console.log('Avatar error', avatar, err);
 	}
 }
 
@@ -2311,7 +2344,7 @@ function is_working() {
 
 function resolve() {
 	if (is_working()) {
-		resolve_timer = RESOLVE_MODE_REPEAT; 
+		resolve_timer = [0]; // ASAP
 		return;
 	}
 	clearTimeout(resolve_timer);
@@ -2421,8 +2454,8 @@ function resolve() {
 	resolve_date0 = new Date();
 	resolve0(name, skip).then(() => {
 		resolve_btn.disabled = false;
-		if (resolve_timer === RESOLVE_MODE_REPEAT) {
-			setTimeout(resolve, 0);
+		if (Array.isArray(resolve_timer)) {
+			setTimeout(resolve, Math.max(0, resolve_timer[0] - Date.now()));
 		} else {
 			primary_loader.classList.add('hide');
 		}
@@ -2730,27 +2763,8 @@ async function resolve0(input, skip_norm) {
 			} catch (ignored) {
 			}
 		}
-		try {
-			let avatar = await resolver.getAvatar();
-			if (should_stop_resolving()) return;
-			if (avatar) {
-				let {url} = avatar;
-				try {
-					url = new URL(url).toString().replaceAll('#', '%23');	
-				} catch (ignored) {
-				}
-				let img = new Image();
-				img.src = url;
-				let a = document.createElement('a');
-				a.classList.add('avatar');
-				a.href = url;
-				a.target = '_blank';
-				a.append(img);
-				normed_row.append(a);
-			}
-		} catch (err) {
-			console.log('Avatar error', err);
-		}
+		await add_avatar(normed_row, resolver);	
+		if (should_stop_resolving()) return;
 	}
 	remove_temporary(resolver_row);	
 	add_row_tag(resolver_row, create_elapsed());
@@ -3313,7 +3327,7 @@ function namehash(s) {
 }
 
 function read_local_storage(key, fn, def) {
-	let stored = window.localStorage.getItem(key);
+	let stored = localStorage.getItem(key);
 	if (typeof stored === 'string') {
 		try {
 			fn(JSON.parse(stored));
