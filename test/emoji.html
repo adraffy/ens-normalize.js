@@ -246,7 +246,7 @@ footer {
 import {
 	ens_normalize, ens_beautify, ens_tokenize, ens_emoji,
 	hex_cp, explode_cp, compare_arrays,
-	dom_from_tokens, use_default_style
+	dom_from_tokens, use_default_style, versions
 } from '../dist/all.min.js';
 use_default_style();
 
@@ -265,14 +265,28 @@ let emoji_seqs = ens_emoji();
 let emoji_disabled = [];
 let info_map = new Map();
 let type_map = new Map();
-let versions = new Set();
+let version_set = new Set();
 let flat = [];
 let buckets = [];
 
-// holy fucking safari without top-level await...
 (async () => {
 	try {
-		for (let info of await fetch_json('../derive/output/emoji-info.json')) {
+		let data;
+		let {built} = versions;
+		try {
+			let cache = JSON.parse(localStorage.getItem('emoji-info'));
+			if (cache.built === built) {
+				data = cache.data;
+			}
+		} catch (err) {			
+		}
+		if (!data) {
+			let res = await fetch('../derive/output/emoji-info.json');
+			if (!res.ok) throw new Error(`HTTP ${res.statusCode}`);
+			data = await res.json();
+			localStorage.setItem('emoji-info', JSON.stringify({data, built}));
+		}
+		for (let info of data) {
 			info_map.set(info.form, info);
 			if (is_not_emoji(info)) {
 				emoji_disabled.push(explode_cp(info.form));
@@ -284,7 +298,7 @@ let buckets = [];
 
 	for (let x of info_map.values()) {
 		type_map.set(x.type.toLowerCase(), x.type);
-		versions.add(parseInt(x.version)|0);
+		version_set.add(parseInt(x.version)|0);
 		let {name, name0} = x;
 		if (name0) {
 			name0 = name0.toLowerCase(); 
@@ -322,10 +336,10 @@ let buckets = [];
 			'Unmod(1)',
 			'{FE0F}',
 		],
-		[...versions].sort((a, b) => a - b).map(x => `v${x}`),
+		[...version_set].sort((a, b) => a - b).map(x => `v${x}`),
 	].flat(Infinity);
 
-	if (type_map.size || versions.size) {
+	if (type_map.size || version_set.size) {
 		search_select.append(...keywords.map(s => {
 			let op = document.createElement('option');
 			let pos = s.indexOf('|');
@@ -433,7 +447,7 @@ function update_search_from_hash() {
 		let match;
 		if (match = hash.match(/^q\=(.*)$/)) {
 			search_field.value = decodeURIComponent(match[1]);
-			search_field.select();
+			search_field.focus();
 		} else if (/^\d+$/.test(hash)) {
 			search_field.value = '';
 			return `[name="${hash}"]`;
@@ -738,12 +752,6 @@ function create_tr({cps, form, norm, info}, first) {
 
 function repeated(norm, n = 3) {
 	return norm.repeat(1 + Math.max(0, n - [...norm].length));
-}
-
-async function fetch_json(url) {
-	let res = await fetch(url);
-	if (res.status !== 200) throw new Error(`HTTP Error ${res.status}`);
-	return res.json();
 }
 
 function is_not_emoji(x) {

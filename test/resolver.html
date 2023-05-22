@@ -22,15 +22,35 @@
 	direction: ltr;
 	unicode-bidi: bidi-override;
 }
-a, button, select {
+a, button {
 	cursor: pointer;
+}
+button {
+	appearance: none;
+	margin: 0;
+	padding: 4px 8px;
+	border: 1px solid #888;
+	border-radius: 4px;
+	background-color: #efefef;
+	color: #000;
+	font-size: 100%;
+}
+button:disabled {
+	opacity: 50%;
+	pointer-events: none;
+}
+button:hover {
+	background-color: #ccc;
+}
+button:hover:active {
+	background-color: #aaa;
 }
 body { 
 	margin: 3rem; 
 	background: #eee;
 	display: flex;
 	flex-direction: column;
-	gap: 0.7rem;
+	gap: 8px;
 	overflow-y: scroll;
 }
 body.testnet {
@@ -45,7 +65,7 @@ h1 {
 	flex-wrap: wrap;
 	align-items: baseline;
 	margin: 0;
-	gap: 0.2rem;
+	gap: 4px;
 	white-space: pre;
 }
 h2 {
@@ -69,10 +89,11 @@ h2 {
 	white-space: pre;
 }
 .spinner {
-	width: 1.5rem;
-	height: 1.5rem;
+	width: 32px;
+	height: 32px;
+	box-sizing: border-box;
 	animation: spin 2s infinite linear;
-	border: 0.3rem solid #000;
+	border: 5px solid #000;
 	border-bottom-color: transparent;
 	border-radius: 100%;
 }
@@ -83,7 +104,25 @@ h2 {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: 3px;
+	gap: 4px;
+	font-size: 11pt;
+}
+#examples b {
+	font-size: 12pt;
+}
+#examples button:not([id]) {
+	background: #fff;
+	padding: 2px 4px;
+	border: 2px solid transparent;
+	transition: transform 0.1s;
+	font-size: 10pt;
+}
+#examples button:not([id]):hover {
+	border-color: #aaa;
+	transform: scale(1.5);
+}
+#examples button:not([id]):hover:active {
+	border-color: #000;
 }
 #examples a {
 	background-color: #ffc;
@@ -95,34 +134,31 @@ h2 {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: 0.5rem;
+	gap: 8px;
 }
 #options > div {
 	display: flex;
-	gap: 0.3rem;
+	align-items: center;
+	gap: 4px;
 }
 #input {
 	display: flex;
-	gap: 0.5rem;
+	align-items: stretch;
+	gap: 8px;
 }
 #input input {
 	box-sizing: border-box;
 	width: 100%;
-	padding: 0.5rem;
+	padding: 8px;
 	font-size: 16pt;
 }
 #actions {
+	min-height: 32px; /* spinner */
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: flex-end;
-	align-items: center;
-	gap: 0.5rem;
-}
-#actions button,
-.row.category button {
-	align-self: stretch;
-	padding: 0.25rem 0.5rem;
-	font-size: 1rem;
+	align-items: stretch;
+	gap: 8px;
 }
 input[type=checkbox], label {
 	user-select: none;
@@ -149,8 +185,11 @@ input[type=checkbox]:checked + label.nonstd.warn {
 #output {
 	display: flex;
 	flex-direction: column;
-	gap: 0.7rem;
+	gap: 8px;
 	font-size: 14pt;
+}
+#output button {
+	font-size: 12pt;
 }
 .row-label {
 	order: -10;
@@ -159,12 +198,12 @@ input[type=checkbox]:checked + label.nonstd.warn {
 	white-space: pre-wrap;
 }
 .row {
-	padding: 0.7rem;
+	padding: 8px;
 	background: #fff;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: 0.5rem;
+	gap: 8px;
 }
 .row.display {
 	background: #eff;
@@ -194,9 +233,11 @@ input[type=checkbox]:checked + label.nonstd.warn {
 .row.pretty {
 	background: linear-gradient(90deg, #fff, #fff0fc);
 }
-.row.category {
-	/* background: linear-gradient(90deg,#fff,#efe); */
-	background-color: #fff8ee;
+.row.category + .row.category {
+	margin-top: 4px;
+}
+.row.category.ethmoji {
+	outline: 3px dashed #add;
 }
 .row.category.integer {
 	outline: 3px dashed #fc8;
@@ -226,7 +267,7 @@ input[type=checkbox]:checked + label.nonstd.warn {
 }
 ul.row {
 	margin: 0;
-	padding-left: 2rem;
+	padding-left: 32px;
 	flex-direction: column;
 	align-items: start;
 }
@@ -246,7 +287,7 @@ ul .tokens {
 }
 .row.links {
 	display: grid;	
-	gap: 0.5rem 0.5rem;
+	gap: 8px;
 	list-style: disclosure-closed;
 	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 	background: #eff;
@@ -261,14 +302,11 @@ sub {
 span.tags {
 	background: #ddd;
 	color: #555;
-	padding: 0.3rem;
+	padding: 4px 8px;
 	font-size: 12pt;
-	border-radius: 0.5rem;
-	border: 1px solid #ccc;
+	border-radius: 4px;
+	/* border: 1px solid #ccc; */
 	white-space: pre;
-}
-button.tags {
-	align-self: stretch;
 }
 button.copy {
 	align-self: center;
@@ -299,7 +337,7 @@ button.copy.copied {
 .tags.third-party { order: 11; font-size: 80%; }
 .tags.invalid { color: #f00; }
 .tags.elapsed {
-	background: #cff;
+	background: #f0f0f0;
 	font-size: 75%;
 	order: 20;
 }
@@ -344,7 +382,7 @@ button.copy.copied {
 	background: #fff;
 }
 .avatar {
-	margin: -1rem 0;
+	margin: -16px 0;
 	order: -1;
 	object-fit: cover;
 } 
@@ -356,8 +394,8 @@ button.copy.copied {
 	width: 64px;
 	height: 64px;
 }
-.glow {
-	outline: 3px solid #afa;
+button.glow {
+	border: 2px solid #2c2;
 }
 .row.details {
 	display: grid;
@@ -365,10 +403,9 @@ button.copy.copied {
 	padding: 0;
 	grid-template-columns: 2fr min-content 3fr;
 	align-items: start;
-	gap: 0.3rem;
+	gap: 4px;
 	font-size: 12pt;
 	box-sizing: border-box;
-	margin-top: -0.2rem;
 }
 .details a.hashproof {
 	color: #000;
@@ -378,9 +415,10 @@ button.copy.copied {
 .details a.hashproof:hover {
 	text-decoration: underline;
 }
-.details button {
+#output .details button {
 	white-space: pre;
-	font-size: 80%;
+	font-size: 85%;
+	padding: 2px 4px;
 }
 .details .length {
 	color: #777;
@@ -456,7 +494,7 @@ button.copy.copied {
 .details .footer {
 	font-size: 90%;
 	color: #666;
-	padding: 0.2rem 0;
+	padding: 4px 0;
 }
 .details .footer .error {
 	color: #d00;
@@ -490,15 +528,26 @@ button.copy.copied {
 	background: #fffaf0;
 }
 #recent_select {
-	width: 28px;
-	font-size: 1rem;
-	align-self: stretch;
+	outline: none;
+	width: 37px;
+	padding: 0;
+	margin: 0;
+	border: 1px solid #888;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 100%;
+	appearance: none;
+	background: no-repeat center url("data:image/svg+xml,%3Csvg height='21' width='20' version='1.1' viewBox='0 0 20 21' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10.5,0 C7,0 3.9,1.9 2.3,4.8 L0,2.5 L0,9 L6.5,9 L3.7,6.2 C5,3.7 7.5,2 10.5,2 C14.6,2 18,5.4 18,9.5 C18,13.6 14.6,17 10.5,17 C7.2,17 4.5,14.9 3.4,12 L1.3,12 C2.4,16 6.1,19 10.5,19 C15.8,19 20,14.7 20,9.5 C20,4.3 15.7,0 10.5,0 L10.5,0 Z M9,5 L9,10.1 L13.7,12.9 L14.5,11.6 L10.5,9.2 L10.5,5 L9,5 L9,5 Z'/%3E%3C/svg%3E"), no-repeat bottom 3px right 2px url("data:image/svg+xml,%3Csvg style='fill: currentColor' width='8' height='4' viewBox='0 0 8 4' version='1.1' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h8l-4 4Z' /%3E%3C/svg%3E") #eee;
+}
+#recent_select:hover,
+#recent_select:active {
+	background-color: #ccc;
 }
 footer {
 	text-align: center;
 	color: #666;
-	margin-top: 1rem;
-	margin-bottom: 0.5rem;
+	margin-top: 16px;
+	margin-bottom: 8px;
 }
 footer span {
 	cursor: help;
@@ -514,10 +563,11 @@ footer span:hover {
 		font-size: 100%;
 	}
 	header {
-		margin: 1rem 1rem 0 1rem;
+		margin: 16px;
+		margin-bottom: 0;
 	}
 	#input, #actions, #options, #examples {
-		margin: 0 1rem;
+		margin: 0 16px;
 	}
 	#content {
 		font-size: 12pt;
@@ -545,12 +595,15 @@ footer span:hover {
 		flex-direction: row-reverse;
 		font-size: 75%;
 	}
+	.avatar {
+		margin: 0;
+	}
 	#examples_btn {
 		display: block;
 		width: 100%;
-		margin-bottom: 0.5rem;
-		font-size: 150%;
-		padding: 0.1rem 0.4rem;
+		margin-bottom: 4px;
+		font-size: 14pt;
+		padding: 4px;
 	}
 }
 </style>
@@ -566,13 +619,13 @@ footer span:hover {
 <button>nIcK.eTh</button>
 <button>brantly.cash</button>
 <button>🏴‍☠.art</button>
-<button>❌..a..eth</button>
+<button>..a..eth</button>
 <button>öbb</button>
 <button>Öbb</button>
-<button data-name="◌̈bb">❌◌̈bb</button>
+<button data-name="◌̈bb">◌̈bb</button>
 
 <a href="https://adraffy.github.io/punycode.js/test/demo.html"><b>Punycode:</b></a>
-<button>❌xn--ls8h</button>
+<button>xn--ls8h</button>
 <button>xn--💩</button>
 <button>💷pound.eth</button>
 
@@ -607,7 +660,7 @@ footer span:hover {
 <button data-delay="1000" data-name="https://opensea.io/assets/ethereum/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209">OpenSea</button>
 <button data-delay="1000" data-name="https://www.gem.xyz/asset/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209">Gem</button>
 
-<a href="./chars.html"><b>Chars</b></a> / <b>Mapped:</b> 
+<a href="./chars.html"><b>Mapped</b></a>
 <button data-name="hyph{2D}{2010}{2011}{2012}{2013}{2014}{2015}{2043}{2212}{23AF}{23E4}{FE58}e{2E3A}n{2E3B}s">Hyphens</button>
 <button>A.™️.Ю</button>
 <button>Ⅷ</button>
@@ -631,22 +684,22 @@ footer span:hover {
 <button data-name="_1{FE0F}E{FE0E}{303}{AD}{1F4A9}{24C2}{FE0E}{2E3B}a{301}"></button>
 
 <b>Combining Marks:</b>
-<button data-name="{300}">❌Leading</button>
-<button data-name="💩{300}">❌Emoji</button>
-<button data-name="x{300}{300}">❌Whitelisted</button>
+<button data-name="{300}">Leading</button>
+<button data-name="💩{300}">Emoji</button>
+<button data-name="x{300}{300}">Whitelisted</button>
 <button data-name="{622}{64D}{64E}.{929}{901}{902}">NFD w/CM</button>
 
 <b>NSM:</b>
-<button data-name="{625}{610}{610}">❌Repeated</button>
-<button data-name="{625}{610}{611}{612}{613}{614}">❌Too Many</button>
+<button data-name="{625}{610}{610}">Repeated</button>
+<button data-name="{625}{610}{611}{612}{613}{614}">Too Many</button>
 
 <a href="https://unicode.org/reports/tr46/#Validity_Criteria"><b>CheckHyphen:</b></a>
 <button>-test.test-.t-e--s---t</button>
-<button>❌te--st</button>
+<button>te--st</button>
 
 <b>Underscore:</b>
 <button>__ab</button>
-<button>❌a_b</button>
+<button>a_b</button>
 
 <a href="./emoji.html"><b>Emoji:</b></a>
 <button>©</button>
@@ -663,11 +716,11 @@ footer span:hover {
 <button>👪👨‍👩‍👦</button>
 <button data-name="🚴️🚵️🚴🏻🚴🏼🚴🏽🚴🏾🚴🏿🚵🏻🚵🏼🚵🏽🚵🏾🚵🏿🚴‍♀️🚴‍♂️🚵‍♀️🚵‍♂️🚴🏻‍♀️🚴🏻‍♂️🚴🏼‍♀️🚴🏼‍♂️🚴🏽‍♀️🚴🏽‍♂️🚴🏾‍♀️🚴🏾‍♂️🚴🏿‍♀️🚴🏿‍♂️🚵🏻‍♀️🚵🏻‍♂️🚵🏼‍♀️🚵🏼‍♂️🚵🏽‍♀️🚵🏽‍♂️🚵🏾‍♀️🚵🏾‍♂️🚵🏿‍♀️🚵🏿‍♂️">🚴️ Bikes (36)</button>
 <button data-name="🦰🦱🦲🦳">🦰</button>
-<button>❌👨‍👩‍👦🏿</button>
-<button data-name="{1F3FB}{1F3FC}{1F3FD}{1F3FE}{1F3FF}">❌🏻</button>
-<button data-name="💩{200D}💩">❌💩+💩</button>
-<button>❌‼️</button>
-<button>❌⁉️</button>
+<button>👨‍👩‍👦🏿</button>
+<button data-name="{1F3FB}{1F3FC}{1F3FD}{1F3FE}{1F3FF}">🏻</button>
+<button data-name="💩{200D}💩">💩+💩</button>
+<button>‼️</button>
+<button>⁉️</button>
 <button data-name="™ℹⓂ㊗㊙🈁🈂🈚🈯🈲🈳🈴🈵🈶🈷🈸🈹🈺🉐🉑">☹️ Demoted</button>
 
 <b>Non-RGI:</b>
@@ -677,8 +730,8 @@ footer span:hover {
 <button data-name="{1F469}{1F3FE}{200D}{1F91D}{200D}{1F469}{1F3FE}">Mod+Mod</button>
 
 <b>Regional:</b>
-<button>❌🇦</button>
-<button>❌🇦🇦</button>
+<button>🇦</button>
+<button>🇦🇦</button>
 <button>🇺🇸🇺🇲</button>
 
 <b>Flag:</b>
@@ -690,7 +743,7 @@ footer span:hover {
 <button>{1F3F4}{E0067}{E0062}{E0065}{E006E}{E0067}{E007F}</button>
 <button>{1F3F4}{E0067}{E0062}{E0073}{E0063}{E0074}{E007F}</button>
 <button>{1F3F4}{E0067}{E0062}{E0077}{E006C}{E0073}{E007F}</button>
-<button data-name="{1F3F4}{E0075}{E0073}{E0063}{E0061}{E007F}">❌usca</button>
+<button data-name="{1F3F4}{E0075}{E0073}{E0063}{E0061}{E007F}">usca</button>
 
 <b>Circled/Squared:</b>
 <button>i{2139}{2139}{FE0F}🛈</button>
@@ -698,9 +751,9 @@ footer span:hover {
 <button data-name="ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ">ⓐ-ⓩ</button>
 <button data-name="⓪①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳㉑㉒㉓㉔㉕㉖㉗㉘㉙㉚㉛㉜㉝㉞㉟">⓪-㉟</button>
 <button data-name="🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉">🅰-🆉</button>
-<button data-name="🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩">❌️🅐-🅩</button>
-<button data-name="⓿❶❷❸❹❺❻❼❽❾❿⓫⓬⓭⓮⓯⓰⓱⓲⓳⓴">❌️⓿-❿</button>
-<button data-name="🄌➊➋➌➍➎➏➐➑➒➓">❌️🄌-➓</button>
+<button data-name="🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩">🅐-🅩</button>
+<button data-name="⓿❶❷❸❹❺❻❼❽❾❿⓫⓬⓭⓮⓯⓰⓱⓲⓳⓴">⓿-❿</button>
+<button data-name="🄌➊➋➌➍➎➏➐➑➒➓">🄌-➓</button>
 <button data-name="㉈㉉㉊㉋㉌㉍㉎㉏">㉈-㉏</button>
 
 <a href="https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.1"><b>ContextJ:</b></a>
@@ -735,9 +788,9 @@ Hebrew Geresh:
 <button data-name="{1F1F8}{1F1E6}{633}{644}{645}{627}{646}">Emoji+RTL</button>
 <button data-name="{633}{644}{645}{627}{646}{1F1F8}{1F1E6}">RTL+Emoji</button>
 <button data-name="bahrain.مصر">LTR.RTL</button>
-<button data-name="bahrainمصر">❌LTR+RTL in Label</button>
-<button data-name="{202e}elgoog{202d}.eth">❌.ethgoogle</button>
-<button data-name="{202e}hte.elgoog">❌google.eth</button>
+<button data-name="bahrainمصر">LTR+RTL in Label</button>
+<button data-name="{202e}elgoog{202d}.eth">.ethgoogle</button>
+<button data-name="{202e}hte.elgoog">google.eth</button>
 
 <b>Keycaps:</b>
 <button>1⃣2️⃣🔟.eth</button>
@@ -754,12 +807,12 @@ Hebrew Geresh:
 <button data-name="0a〇.黑a8">Digit+Latin+Han</button>
 <button data-name="あアいイうウえエおオ">Kana+Hira</button>
 <button data-name="bitcoin.bitcοin.bi̇tcoin.bitсoin">"bitcoin"</button>
-<button>❌ァ힣</button>
+<button>ァ힣</button>
 
 <b>Whole-Script:</b>
 <button data-name="0x.0χ.0х">"0x"</button>
 <button data-name="apple.дррӏе.аррӏе.aррӏе">"apple"</button>
-<button data-name="ιοσρβυνγ">❌Greek</button>
+<button data-name="ιοσρβυνγ">Greek</button>
 <button data-name="o.٥.०.౦.੦.൦.ο.օ">"o"</button>
 <button data-name="あー.〇一.一ー.一.ー.ᅳ">CJK Dash</button>
 
@@ -772,7 +825,7 @@ Hebrew Geresh:
 <button>O'Brian</button>
 <button data-name="¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞⅟↉">"½"</button>
 <button>123⁄456’s</button>
-<button data-name="a'.’z.a'’b.a⁄'.⁄a">❌Invalid</button>
+<button data-name="a'.’z.a'’b.a⁄'.⁄a">Invalid</button>
 
 <b>Misc:</b>
 <button data-name="$¢£¤¥₡₦₩₪₫€₭₮₱₲₴₵₸₹₺₼₽₾⃀₿Ξ.؋">Currency</button>
@@ -784,8 +837,8 @@ Hebrew Geresh:
 <button data-name="_▁▂▃▄▅▆▇█">▃▅▇</button>
 <button data-name="✓.✔︎.✔️.✅️.☑️">Checks</button>
 
-<button data-name="ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘꞯʀꜱᴛᴜᴠᴡxʏᴢ">❌ꜱᴍᴀʟʟ ᴄᴀᴘꜱ</button>
-<button data-name="zʎxʍʌnʇsɹbdouɯꞁʞſ̣ᴉɥᵷɟǝpↄqɐ">❌pǝuɹnʇ</button>
+<button data-name="ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘꞯʀꜱᴛᴜᴠᴡxʏᴢ">ꜱᴍᴀʟʟ ᴄᴀᴘꜱ</button>
+<button data-name="zʎxʍʌnʇsɹbdouɯꞁʞſ̣ᴉɥᵷɟǝpↄqɐ">pǝuɹnʇ</button>
 
 <b>Pure:</b>
 Arabic:
@@ -798,8 +851,8 @@ Hebrew:
 <button data-name="𓀀𓀁𓀂">Egyptian Hieroglyphs</button>
 <button data-name="𐌱𐌻𐍉𐌼𐌰">Gothic</button>
 <button>𓆏➡🐸️</button>
-<button data-name="a𓀂">❌Mixed</button>
-<button>❌ᏎᏮᏂᎥ.eth</button>
+<button data-name="a𓀂">Mixed</button>
+<button>ᏎᏮᏂᎥ.eth</button>
 
 <a href="https://adraffy.github.io/ens-norm-tests/test-compare/output/ens_normalize.git_1.9.0_vs_eth-ens-namehash_2.0.15.html#diff-norm"><b>Different Norm:</b></a>
 <button data-name="‑888">Remapped Hyphen</button>
@@ -851,12 +904,12 @@ Hebrew:
 <li>Components explained in <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
 </ul>
 <ul class="row legend">
-<li>This is a <b>valid</b> sequence of characters: <div data-tokenize="abc"></div> and <b>.eth</b> name: <div data-tokenize="abc.eth"></div></li>
-<li>This is an <b>emoji</b>: <div data-tokenize="👩🏽‍⚕️"></div> and its corresponding <b>components</b>: <div data-tokenize="👩🏽‍⚕️" data-parts="1"></div></li>
-<li>This is a <b>mapped</b> token: <div data-tokenize="™"></div> which transforms into a <b>valid</b> sequence: <div data-tokenize="tm"></div></li>
-<li>Characters not in canonical form require <b>NFC</b>: <div data-tokenize="a{303}"></div></li>
-<li>This is an <b>ignored</b> character: <div data-tokenize="{FE0F}"></div></li>
-<li>These are <b>disallowed</b> characters: <div data-tokenize="#{00}{1FFFFF}{E0061}{200D}"></div></li>
+<li>This is a <b>valid</b> sequence of characters: <span data-tokenize="abc"></span> and <b>.eth</b> name: <span data-tokenize="abc.eth"></span></li>
+<li>This is an <b>emoji</b>: <span data-tokenize="👩🏽‍⚕️"></span> and its corresponding <b>components</b>: <span data-tokenize="👩🏽‍⚕️" data-parts="1"></span></li>
+<li>This is a <b>mapped</b> token: <span data-tokenize="™"></span> which transforms into a <b>valid</b> sequence: <span data-tokenize="tm"></span></li>
+<li>Characters not in canonical form require <b>NFC</b>: <span data-tokenize="a{303}"></span></li>
+<li>This is an <b>ignored</b> character: <span data-tokenize="{FE0F}"></span></li>
+<li>These are <b>disallowed</b> characters: <span data-tokenize="#{00}{1FFFFF}{E0061}{200D}"></span></li>
 </ul>
 <ul class="row links">
 <li><a href="./emoji.html">Supported Emoji</a></li>
@@ -1003,12 +1056,17 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 	let name = btn.innerText;
 	if (btn.dataset.name) {
 		name = btn.dataset.name;
-	} else if (name.startsWith('❌')) {
-		name = [...name].slice(1).join('');
 	}
 	if (typeof btn.dataset.raw !== 'string') name = replace_escapes(name);
 	if (!btn.innerText || btn.innerText.includes('{')) btn.innerText = name;
 	let meta = typeof btn.dataset.meta === 'string' || name.includes(':') || is_checksum_address(name);
+	try {
+		if (meta || name !== ens_normalize(name)) {
+			btn.style.borderColor = '#ccf';
+		}
+	} catch (err) {
+		btn.style.borderColor = '#fcc';
+	}	
 	if (!meta && !name.includes('.')) name += '.eth';
 	if (typeof btn.dataset.escape === 'string') name = apply_escapes(name);
 	if (!btn.title) btn.title = meta ? name : `${name}\n${explode_cp(name).map(hex_cp).join(' ')}`;
@@ -1026,13 +1084,12 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 		}
 	});
 }
-for (let div of document.querySelectorAll('[data-tokenize]')) {
-	div.replaceWith(dom_from_tokens(ens_tokenize(replace_escapes(div.dataset.tokenize)), {
+for (let x of document.querySelectorAll('[data-tokenize]')) {
+	x.replaceWith(dom_from_tokens(ens_tokenize(replace_escapes(x.dataset.tokenize)), {
 		emoji_url,
-		components: div.dataset.parts
+		components: x.dataset.parts
 	}));
 }
-primary_loader.classList.add('hide');
 
 resolve_btn.addEventListener('click', () => resolve());
 input_field.addEventListener('keydown', e => {
@@ -1226,6 +1283,7 @@ function update_network(network) {
 		}
 	}
 	document.querySelector('#provider').innerHTML = `using ${provider_name} (<a href="${block_explorer}/address/${registry}">${network_name}</a>)`;
+	let init = !registry_contract;
 	registry_contract = new ethers.Contract(registry, [
 		'function resolver(bytes32 node) external view returns (address)',
 		'function owner(bytes32 node) external view returns (address)',
@@ -1236,6 +1294,8 @@ function update_network(network) {
 	reverse_registrar = null;
 	if (input_field.value) {
 		schedule_resolve();
+	} else if (init) {
+		primary_loader.classList.add('hide');
 	}
 }
 
@@ -1430,7 +1490,7 @@ function presolve(input, skip, resolving) {
 			let btn = document.createElement('button');
 			btn.innerHTML = '💣️ Replace Unsafe';
 			btn.title = `Replace the following characters:` + [...SLOPPY_MAP.entries()].map(([a, b]) => {
-				return `\n• "${safe_str_from_cps([a])}" ${hex_cp(a)} → "${safe_str_from_cps([b])}" ${hex_cp(b)}`
+				return `\n"${safe_str_from_cps([a])}" ${hex_cp(a)} → "${safe_str_from_cps([b])}" ${hex_cp(b)}`
 			}).join('');
 			btn.addEventListener('click', () => {
 				input_field.value = sloppy;
@@ -1696,9 +1756,9 @@ function reverse_name(addr) {
 	return `${addr.slice(2).toLowerCase()}.${REVERSE_DOMAIN}`;
 }
 function create_reverse_resolve_btn(addr) {
-	return create_resolve_btn(reverse_name(addr), '↩️ Reverse Record');
+	return create_resolve_btn(reverse_name(addr), '↩️ Reverse Record', true);
 }
-function create_resolve_btn(s, html = 'Resolve') {
+function create_resolve_btn(s, html = '↩️ Resolve') {
 	let btn = document.createElement('button');
 	btn.innerHTML = html;
 	btn.title = s;
@@ -1757,7 +1817,7 @@ function create_palindrome_tag() {
 
 function create_ethmoji_row(tokens) {
 	let row = create_row('Ethmoji');
-	row.classList.add('category');
+	row.classList.add('category', 'ethmoji');
 	let unique = new Set();
 	let grouped = [];
 	let last;
@@ -2706,8 +2766,10 @@ async function resolve0(input, skip_norm) {
 		resolver_row.append(create_etherscan_address_link(resolver.address, {contract: true}));
 		if (is_wildcard) {
 			add_row_tag(resolver_row, create_typed_tag('special', 'Wildcard'));
-			if (wildcard_domain) {
-				add_row_tag(resolver_row, wildcard_domain);
+			if (wildcard_domain === name_norm) {
+				add_row_tag(resolver_row, 'Root');
+			} else if (wildcard_domain) {
+				add_row_tag(resolver_row, create_resolve_btn(wildcard_domain, `↩️ ${wildcard_domain}`));
 			} else {
 				add_row_tag(resolver_row, create_typed_tag('warn', 'Unknown Parent'));
 			}
@@ -2761,7 +2823,7 @@ async function resolve0(input, skip_norm) {
 		} else if (available === undefined) {
 			add_row_tag(avail_row, create_typed_tag('fail', `Too Short`));
 			let padded = Array(Math.max(1, 4 - len)).fill(eth_label).join('');
-			add_row_tag(avail_row, create_resolve_btn(`${padded}.eth`, 'Repeat until 3+'));
+			add_row_tag(avail_row, create_resolve_btn(`${padded}.eth`, '↩️ Repeat until 3+'));
 		} else if (available) {
 			let btn = document.createElement('button');
 			btn.innerHTML = '👌️ Available to Register';
