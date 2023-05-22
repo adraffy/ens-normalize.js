@@ -1553,11 +1553,16 @@ function presolve(input, skip, resolving) {
 	}
 }
 
+function add_detailed(row) {
+	row.classList.add('detailed');
+	row.classList.toggle('hide', !show_details_check.checked);
+}
+
 function add_transformed_row(input) {
 	if (ens_tokenize(input).some(x => x.type === 'nfc' || x.type === 'mapped')) {
 		let row = create_row('Transformed');
-		row.classList.add('transform', 'detailed');
-		row.classList.toggle('hide', !show_details_check.checked);
+		row.classList.add('transform');
+		add_detailed(row);
 		make_exploded(row, input, true);
 		output_div.append(row);
 	}
@@ -1830,6 +1835,7 @@ function create_palindrome_tag() {
 function create_ethmoji_row(tokens) {
 	let row = create_row('Ethmoji');
 	row.classList.add('category', 'ethmoji');
+	add_detailed(row);
 	let unique = new Set();
 	let grouped = [];
 	let last;
@@ -1882,6 +1888,7 @@ function create_digits_row(norm, group, values, negative, suffix) {
 	//let row = create_row(`${name0} Digits`);
 	let row = create_row('Integer');
 	row.classList.add('category', 'integer');
+	add_detailed(row);
 	let sign = negative ? '-' : '';
 	let form = sign + values.join('');
 	if (norm !== form) {
@@ -2156,8 +2163,8 @@ function create_typed_tag(type, desc) {
 
 function create_namehash_row(name) {
 	let row = create_row();
-	row.classList.add('details', 'detailed');
-	row.classList.toggle('hide', !show_details_check.checked);
+	row.classList.add('details');
+	add_detailed(row);
 	let hash_span = document.createElement('span');
 	hash_span.classList.add('wide');
 	hash_span.innerHTML = `<a class="hashproof" href="https://adraffy.github.io/keccak.js/test/demo.html#algo=namehash&s=${encode_uri_component_surrogate_escaped(name)}&escape=1" target="_blank">Namehash:</a> <code>${namehash(name)}</code>`;
