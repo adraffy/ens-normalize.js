@@ -8,7 +8,7 @@
 :root {
 	--length-color: #f8eedd;
 	--btn-fill-color: #eee;
-	--btn-fill-hover-color: #ccc;
+	--btn-hover-fill-color: #ccc;
 	--btn-border-color: #888;
 }
 .hide {
@@ -127,6 +127,12 @@ h2 {
 #examples button:not([id]):hover:active {
 	border-color: #000;
 }
+#examples button.mapped:not([id]) {
+	border-color: #ccf;
+}
+#examples button.error:not([id]) {
+	border-color: #fcc;
+}
 #examples a {
 	background-color: #ffc;
 }
@@ -162,6 +168,7 @@ h2 {
 	justify-content: flex-end;
 	align-items: stretch;
 	gap: 8px;
+	margin-bottom: 4px;
 }
 input[type=checkbox], label {
 	user-select: none;
@@ -199,7 +206,7 @@ input[type=checkbox], label {
 	font-size: 14pt;
 }
 #output button {
-	font-size: 12pt;
+	font-size: 11pt;
 }
 .row-label {
 	order: -10;
@@ -1075,10 +1082,10 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 	let meta = typeof btn.dataset.meta === 'string' || name.includes(':') || is_checksum_address(name);
 	try {
 		if (meta || name !== ens_normalize(name)) {
-			btn.style.borderColor = '#ccf';
+			btn.classList.add('mapped');
 		}
 	} catch (err) {
-		btn.style.borderColor = '#fcc';
+		btn.classList.add('error');
 	}	
 	if (!meta && !name.includes('.')) name += '.eth';
 	if (typeof btn.dataset.escape === 'string') name = apply_escapes(name);
