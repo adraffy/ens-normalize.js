@@ -12,20 +12,20 @@
     "NFC",
     "NFD"
   ],
-  "type": "module",
   "exports": {
     ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.cjs"
     },
     "./xnf": {
-      "require": "./dist/index-xnf.cjs",
-      "import": "./dist/index-xnf.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index-xnf.mjs",
+      "default": "./dist/index-xnf.cjs"
     }
   },
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
   "files": [
     "./dist"
   ],

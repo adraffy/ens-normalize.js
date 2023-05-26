@@ -18,7 +18,7 @@ export default [
 		input: './src/lib.js',
 		output: [
 			{
-				file: './dist/index.js',
+				file: './dist/index.mjs',
 				format: 'es',
 			},
 			{
@@ -38,7 +38,7 @@ export default [
 		plugins: [NATIVE_NF],
 		output: [
 			{
-				file: './dist/index-xnf.js',
+				file: './dist/index-xnf.mjs',
 				format: 'es',
 			},
 			{
