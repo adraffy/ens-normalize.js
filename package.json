@@ -51,8 +51,9 @@
 		"build": "rollup -c",
 		"rebuild": "npm run derive && npm run make && npm run validate && npm run test && npm run build",
 		"order": "node validate/dump-group-order.js save && npm run rebuild",
-		"pack": "node ./src/package-hack.js pack",
-		"publish": "node ./src/package-hack.js publish"
+		"pack": "node ./src/prepost.js pack",
+		"pub": "node ./src/prepost.js publish",
+		"prepublishOnly": "exit 1"
 	},
 	"devDependencies": {
 		"@rollup/plugin-node-resolve": "^15.0.1",

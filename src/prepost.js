@@ -11,6 +11,7 @@ let json = JSON.parse(readFileSync(file));
 
 function set_package_type(type) {
 	json.type = type;
+	json.scripts.prepublishOnly = type ? 'exit 1' : undefined;
 	console.log(`*** Package Type: ${type ?? '<unset>'} ***`);
 	writeFileSync(file, JSON.stringify(json, null, '\t'));
 }
