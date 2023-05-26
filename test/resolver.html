@@ -47,6 +47,7 @@ button:hover {
 }
 button:hover:active {
 	background-color: #aaa;
+	/*transform: translate(0px, 1px);*/
 }
 body { 
 	margin: 3rem; 
@@ -658,7 +659,7 @@ footer span:hover {
 
 <a href="https://docs.ens.domains/ens-improvement-proposals/ensip-10-wildcard-resolution"><b>Wildcard:</b></a>
 <button>moo331.nft-owner.eth</button>
-<button>keek565.gmcafe.art</button>
+<button>💎.gmcafe.art</button>
 <button>1.offchainexample.eth</button>
 <button>barmstrong.cb.id</button>
 
@@ -1010,6 +1011,7 @@ const APP_TITLE = 'ENS Resolver';
 const INPUT_NAME = 'Input';
 const OPENSEA_NAME = 'OpenSea';
 const VISION_NAME = 'Vision';
+const CONTROLLER_NAME = 'Manager'; // Controller
 const SKIP_SUFFIX = '_!';
 const PRETTY_NAME = '💖️'; // 🌷️ 🌺️
 
@@ -2792,6 +2794,7 @@ async function resolve0(input, skip_norm) {
 	// name doesn't exist
 	if (resolver) { 
 		resolver_row.append(create_etherscan_address_link(resolver.address, {contract: true}));
+		add_row_tag(resolver_row, create_copy_btn(resolver.address));
 		if (is_wildcard) {
 			add_row_tag(resolver_row, create_typed_tag('special', 'Wildcard'));
 			if (wildcard_domain === name_norm) {
@@ -2804,7 +2807,6 @@ async function resolve0(input, skip_norm) {
 		} else {
 			add_contract_name(resolver_row, resolver.address);
 		}
-		add_row_tag(resolver_row, create_copy_btn(resolver.address));
 	} else {
 		add_row_tag(resolver_row, create_typed_tag('warn', `Name Not Found`));	
 	}
@@ -3050,7 +3052,7 @@ async function resolve0(input, skip_norm) {
 		// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar	
 		let interfaces = [
 			{iface: '0x80ac58cd', name: 'NFT'},  
-			{iface: '0x018fac06', name: 'Controller', children: [
+			{iface: '0x018fac06', name: CONTROLLER_NAME, children: [
 				{
 					name: 'Price Oracle', 
 					async get(addr) {
@@ -3145,7 +3147,7 @@ async function resolve0(input, skip_norm) {
 			} else {
 				if (owner === address) {
 					if (nft_owner && nft_owner !== address) {
-						add_row_tag(address_row, create_typed_tag('good', 'Same as Controller'));	
+						add_row_tag(address_row, create_typed_tag('good', `Same as ${CONTROLLER_NAME}`));	
 					} else {
 						add_row_tag(address_row, create_typed_tag('good', 'Same as Owner'));
 					}
