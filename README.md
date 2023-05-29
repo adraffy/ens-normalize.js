@@ -182,3 +182,9 @@ console.log(is_combining_mark(0x20E3)); // eg. COMBINING ENCLOSING KEYCAP => tru
 * `npm run build` — create `/dist/`
 * `npm run rebuild` — run all the commands above
 * `npm run order` — create optimal group ordering and rebuild again
+
+### Publishing to NPM
+
+This project uses `.js` instead of `.mjs` so [package.json](./package.json) uses `type: module`.  To avoid bundling issues, `type` is [dropped during packing](./src/prepost.js).  `pre/post` hooks aren't used because they're buggy.
+* `npm run pack` instead of `npm pack`
+* `npm run publish` instead of `npm publish`

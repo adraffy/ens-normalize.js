@@ -26,7 +26,6 @@ export default [
 				format: 'es',
 				plugins: [TERSER],
 			},
-			// 20230126: CommonJS support, suggested by Ricmoo
 			{
 				file: './dist/index.cjs',
 				format: 'cjs',
@@ -46,13 +45,13 @@ export default [
 				format: 'es',
 				plugins: [TERSER],
 			},
-			// 20230127: CommonJS support, suggested by Ricmoo
 			{
 				file: './dist/index-xnf.cjs',
 				format: 'cjs',
 			},
 		],
 	},
+	// these are for /test/
 	{
 		input: './src/nf.js',
 		output: {

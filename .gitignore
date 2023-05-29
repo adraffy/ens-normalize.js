@@ -1,5 +1,7 @@
 node_modules/
-*.nb
 old/
 research/
 prior-tests/
+
+*.nb
+*.tgz
