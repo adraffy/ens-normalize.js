@@ -25,6 +25,13 @@
 		}
 	},
 	"types": "./dist/index.d.ts",
+	"typesVersions": {
+    "*": {
+      "xnf": [
+        "./dist/index.d.ts"
+      ]
+    }
+  },
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
 	"files": [
