@@ -187,4 +187,4 @@ console.log(is_combining_mark(0x20E3)); // eg. COMBINING ENCLOSING KEYCAP => tru
 
 This project uses `.js` instead of `.mjs` so [package.json](./package.json) uses `type: module`.  To avoid bundling issues, `type` is [dropped during packing](./src/prepost.js).  `pre/post` hooks aren't used because they're buggy.
 * `npm run pack` instead of `npm pack`
-* `npm run publish` instead of `npm publish`
+* `npm run pub` instead of `npm publish`
