@@ -16,12 +16,13 @@
 	* [Character Viewer](https://adraffy.github.io/ens-normalize.js/test/chars.html)
 	* [Supported Emoji](https://adraffy.github.io/ens-normalize.js/test/emoji.html)
 	* [Confused Explainer](https://adraffy.github.io/ens-normalize.js/test/confused.html)
-* External Apps:
+* Related Projects:
 	* [Recent Registrations](https://raffy.antistupid.com/eth/ens-regs.html)
 	* [Emoji Frequency Explorer](https://raffy.antistupid.com/eth/ens-emoji-freq.html)
 	* [ENS+NFT Matcher](https://raffy.antistupid.com/eth/ens-nft-matcher.html)
 	* [Batch Resolver](https://raffy.antistupid.com/eth/ens-batch-resolver.html)
 	* [Punycode Coder](https://adraffy.github.io/punycode.js/test/demo.html)
+	* [Label Database](https://github.com/adraffy/ens-labels/)
 * [Breakdown Reports:](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/)
 	* [Disallowed Characters](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/disallowed.html)
 	* [Different Norm](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/diff.html)
@@ -65,9 +66,9 @@ Normalize name fragments for [substring search](./test/fragment.js):
 ```Javascript
 // these fragments fail ens_normalize() 
 // but will normalize fine as fragments
-let frag1 = ens_normalize_fragment('AB--');    // error: label ext
-let frag2 = ens_normalize_fragment('\u{303}'); // error: leading cm
-let frag3 = ens_normalize_fragment('οо');      // error: mixture
+let frag1 = ens_normalize_fragment('AB--');    // expected error: label ext
+let frag2 = ens_normalize_fragment('\u{303}'); // expected error: leading cm
+let frag3 = ens_normalize_fragment('οо');      // expected error: mixture
 ```
 
 Input-based tokenization:
