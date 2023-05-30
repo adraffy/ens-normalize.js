@@ -2920,7 +2920,7 @@ async function resolve0(input, skip_norm) {
 	
 	// get the owner
 	let is_wrapped, owner, nft_owner;
-	if (!is_wildcard) {
+	if (!is_wildcard || wildcard_domain === name_norm) {
 		let node = namehash(name_norm);
 		let wrapped_err;
 		let wrapped_row = create_row('Wrapper', true);

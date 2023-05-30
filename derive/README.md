@@ -1,8 +1,5 @@
 # Derive Data Files
 
-* Independent of parent repo
-* Uses built-in `fetch()`
-
 ## Resources
 
 * [Unicode Technical Standard #46: IDNA](https://www.unicode.org/reports/tr46/)
@@ -36,7 +33,7 @@
 1. edit [Rules Files](./rules/)
 1. `node make.js` — creates `/output/` with data files
 
-## Rule Files
+## [Rules](./rules/)
 
 * [chars-valid.js](./rules/chars-valid.js)
 * [chars-ignored.js](./rules/chars-ignored.js)
@@ -48,7 +45,7 @@
 * [cm.js](./rules/cm.js) — combining mark sequence whitelist
 * [scripts.js](./rules/scripts.js) — various script configurations
 * [confuse.js](./rules/confuse.js) — confusables groups
-* [group-order.js](./rules/group-order.js) — how groups should be sorted for matching efficiency
+* [group-order.js](./rules/group-order.js) — how groups should be sorted for matching efficiency (auto-generated)
 
 ## Helpers
 

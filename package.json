@@ -1,6 +1,6 @@
 {
 	"name": "@adraffy/ens-normalize",
-	"version": "1.9.1",
+	"version": "1.9.2",
 	"description": "Compact ES6 Ethereum Name Service (ENS) Name Normalizer",
 	"keywords": [
 		"ENS",
@@ -24,6 +24,14 @@
 			"default": "./dist/index-xnf.cjs"
 		}
 	},
+	"types": "./dist/index.d.ts",
+	"typesVersions": {
+		"*": {
+			"*": [
+				"./dist/index.d.ts"
+			]
+		}
+	},
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
 	"files": [
@@ -44,6 +52,7 @@
 		"url": "http://raffy.antistupid.com"
 	},
 	"scripts": {
+		"labels": "node validate/download-labels.js",
 		"derive": "node derive/make.js",
 		"make": "node src/make.js",
 		"validate": "node validate/make.js",
