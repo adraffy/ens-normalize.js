@@ -1,5 +1,6 @@
 import terser from '@rollup/plugin-terser';
-import nodeResolve from '@rollup/plugin-node-resolve';
+import alias from '@rollup/plugin-alias';
+import { defineConfig } from 'rollup'
 
 const TERSER = terser({
 	compress: {
@@ -9,11 +10,9 @@ const TERSER = terser({
 	}
 });
 
-const NODE = nodeResolve();
+const NATIVE_NF = alias({ entries: { './nf.js': './src/nf-native.js' }});
 
-const NATIVE_NF = replace({'./src/nf.js': './src/nf-native.js'});
-
-export default [
+export default defineConfig([
 	{
 		input: './src/lib.js',
 		output: [
@@ -62,7 +61,6 @@ export default [
 	},
 	{
 		input: './src/all.js',
-		plugins: [NODE],
 		output: [
 			{
 				file: './dist/all.js',
@@ -75,21 +73,4 @@ export default [
 			}
 		],
 	},
-];
-
-function replace(map) {
-	map = Object.fromEntries(Object.entries(map).map(([src, dst]) => [
-		new URL(src, import.meta.url).pathname,
-		new URL(dst, import.meta.url).pathname
-	]));
-	return {
-		resolveId(importee, importer) {
-			try {
-				let dst = map[new URL(importee, 'file://' + importer).pathname];
-				if (dst) return dst;
-			} catch (err) {
-			}
-			return null;
-		}
-	};
-}
+]);

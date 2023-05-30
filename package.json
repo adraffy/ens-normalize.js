@@ -65,7 +65,7 @@
 		"prepublishOnly": "exit 1"
 	},
 	"devDependencies": {
-		"@rollup/plugin-node-resolve": "^15.0.1",
+		"@rollup/plugin-alias": "^5.0.0",
 		"@rollup/plugin-terser": "^0.4.0",
 		"rollup": "^3.20.0"
 	},
