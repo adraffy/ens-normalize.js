@@ -1903,6 +1903,7 @@ function create_digits_row(norm, group, values, negative, suffix) {
 	if (norm !== form) {
 		let main = document.createElement('code');
 		main.innerText = form;
+		main.classList.append('long'); 
 		row.append(main);
 	}
 	if (values.length == (negative ? 2 : 3)) {
@@ -3062,7 +3063,7 @@ async function resolve0(input, skip_norm) {
 				}
 			]},
 			{iface: '0x612e8c09', name: 'Registrar'},
-			//{iface: '0x6ccb2df4', name: 'Old Registrar'},
+			{iface: '0x6ccb2df4', name: 'Old Registrar'},
 			{iface: '0x7ba18ba1', name: 'Migration'},
 			{iface: '0x019a38fe', name: 'Wrapper'},
 		];

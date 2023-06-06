@@ -1,9 +1,10 @@
 # ens-normalize.js
-0-dependancy Compact ES6 [Ethereum Name Service](https://ens.domains/) (ENS) Name Normalizer that works in the browser.
+0-dependancy Compact ES6 [Ethereum Name Service](https://ens.domains/) (ENS) Name Normalizer.
 
-* Follows [ENS Name Normalization Standard](https://github.com/adraffy/ensip-15/blob/master/ens-improvement-proposals/ensip-15-normalization-standard.md)
-* Additional Implementations:
-	* Python — [namehash/ens-normalize-python](https://github.com/namehash/ens-normalize-python)
+* Follows [ENS Name Normalization Standard](https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard)
+	* Other Implementations:
+		* Python — [namehash/ens-normalize-python](https://github.com/namehash/ens-normalize-python)
+		* Javascript — [ensdomains/eth-ens-namehash](https://github.com/ensdomains/eth-ens-namehash)
 * [Passes **100%**](https://adraffy.github.io/ens-normalize.js/test/validate.html) Validation Tests
 * Custom [`NFC`](https://unicode.org/reports/tr15/) Implementation (or use native)
 	* [Passes **100%**](https://adraffy.github.io/ens-normalize.js/test/report-nf.html) Unicode `15.0.0` [Normalization Tests](https://www.unicode.org/Public/15.0.0/ucd/NormalizationTest.txt)
@@ -180,7 +181,7 @@ console.log(is_combining_mark(0x20E3)); // eg. COMBINING ENCLOSING KEYCAP => tru
 	* `npm run validate`
 		* [tests.json](./validate/tests.json)
 * `npm run test` — perform validation tests
-* `npm run build` — create `/dist/`
+* `npm run build` — create [/dist/](./dist/)
 * `npm run rebuild` — run all the commands above
 * `npm run order` — create optimal group ordering and rebuild again
 
