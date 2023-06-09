@@ -153,8 +153,11 @@ h1 {
 	align-items: stretch;
 	user-select: none;
 }
-.heading + .heading {
+.heading.shaded + * + .heading {
 	margin-top: 8px;
+}
+.heading.shaded + * {
+	display: none;
 }
 .heading.shade:hover {
 	background-color: #aaa;
@@ -208,8 +211,6 @@ section {
 	gap: 4px;
 	font-size: 20px;
 }
-
-
 .title {
 	font-size: 20px;
 	font-weight: bold;
@@ -310,10 +311,12 @@ td.info {
 }
 #none {
 	display: flex;
-	justify-content: center;
-	background-color: #fcc;
-	font-size: 16pt;
-	padding: 8px;
+	margin-top: 8px;
+}
+#none div {
+	background-color: #fdd;
+	font-size: 14pt;
+	padding: 8px 16px;
 	border-radius: 4px;
 }
 #loader {
@@ -426,7 +429,7 @@ footer {
 	<button class="raw">&#x1F3F4;</button>
 </div>
 <div id="options">
-	<b>Organize by:</b>
+	<b>By:</b>
 	<button id="by_length_btn" data-by="length">Length</button>
 	<button id="by_cost_btn" data-by="cost">Cost</button>
 	<button id="by_cp_btn" data-by="cp">Codepoint</button>
@@ -439,13 +442,8 @@ footer {
 <div id="search">
 	<input placeholder="Search: Name or {HEX} or v15 or UnicodeProperty">
 </div>
-<div id="none" class="hide">⚠️ No results</div>
-<main>
-	<div id="loader"><div>
-		<div class="spinner"></div>
-		<span>Downloading...</span>
-	</div></div>
-</main>
+<div id="none" class="hide"><div>⚠️ No emoji found.</div></div>
+<main></main>
 <footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
 <script type="module">
 import {
@@ -476,6 +474,7 @@ const examples_div = document.querySelector('#examples');
 const none_div = document.querySelector('#none');
 
 const render_queue = [];
+const shaded = [];
 	
 let jump_to_length;
 let last_hover;
@@ -714,7 +713,7 @@ function search_soon() {
 function update_search() {
 	clearTimeout(search_timer);
 	search_timer = undefined;
-	search_field.focus();
+	//search_field.focus();
 	hover_div.classList.add('hide');
 	let input = searchize(search_field.value);
 	let search = new URLSearchParams();
@@ -1007,14 +1006,10 @@ function create_heading({section, length, cost, count, disabled = 0, shade = tru
 
 	if (section && shade) {
 		heading.classList.add('shade');
+		heading.classList.toggle('shaded', !!shaded[length]);
 		heading.addEventListener('click', () => {
-			let b = section.isConnected;
+			let b = shaded[length] = !heading.classList.contains('shaded');
 			heading.classList.toggle('shaded', b);
-			if (b) {
-				section.remove();
-			} else {
-				heading.insertAdjacentElement('afterend', section);
-			}
 		});
 	}
 
