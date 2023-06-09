@@ -164,10 +164,13 @@ h1 {
 	cursor: pointer;
 }
 .heading.shaded {
-	opacity: 67%;
+	background-color: #ddd;
+}
+.heading.shaded > * {
+	opacity: 0.6;
 }
 .heading.shaded .top {
-	display: none;
+	opacity: 1;
 }
 .heading > span {
 	padding: 4px 8px;
@@ -842,7 +845,7 @@ function render() {
 	requestAnimationFrame(render);
 }
 function setup_render(results) {
-	let top;
+	//let top;
 	render_queue.length = 0;
 	main.innerHTML = '';
 	if (by_mode === BY_LENGTH) {
@@ -859,9 +862,9 @@ function setup_render(results) {
 					if (!section) {
 						section = create_empty_table();
 						tbody = section.querySelector('tbody');
-						heading = create_heading({section, length, disabled, count, top});
+						heading = create_heading({section, length, disabled, count, top: true});
 						main.append(heading, section);
-						top = true;
+						//top = true;
 					}
 					tbody.append(...match_length.slice(i, i + PER_CHUNK).map((rec, j) => cached_tr(rec, j+i+1)));
 				});
@@ -904,9 +907,9 @@ function setup_render(results) {
 				render_queue.push(() => {
 					if (!section) {
 						section = document.createElement('section');
-						let heading = create_heading({section, length, cost, count: match_length.length, top});
+						let heading = create_heading({section, length, cost, count: match_length.length, top: true});
 						main.append(heading, section);
-						top = true;
+						//top = true;
 					}
 					let subheading = document.createElement('div');
 					subheading.classList.add('subheading');
