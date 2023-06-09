@@ -5,44 +5,135 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Emoji</title>
 <style>
+:root {
+	--length-color: #f8eedd;
+	--btn-fill-color: #eee;
+	--btn-hover-fill-color: #ccc;
+	--btn-border-color: #888;
+}
 .hide {
 	display: none !important;
 }
-button {
+.balloon {
+	flex: 1
+}
+a, button {
 	cursor: pointer;
+}
+button {
+	display: flex;
+	gap: 4px;
+	align-items: center;
+	appearance: none;
+	margin: 0;
+	padding: 4px 8px;
+	border: 1px solid var(--btn-border-color);
+	border-radius: 4px;
+	background-color: var(--btn-fill-color);
+	color: #000;
+	font-size: 100%;
+}
+button:disabled {
+	opacity: 50%;
+	pointer-events: none;
+}
+button:hover {
+	background-color: var(--btn-hover-fill-color);
+}
+button:hover:active {
+	background-color: #aaa;
+	/*transform: translate(0px, 1px);*/
+}
+button.active {
+	background-color: #cff;
+	pointer-events: none;
+}
+.cp {
+	font-size: 75%;
+	font-weight: normal;
 }
 body { 
 	margin: 3rem; 
 	background: #eee;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	overflow-y: scroll;
 }
 h1 {
 	margin: 0;
 }
+#examples {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px;
+}
+#examples button {
+	font-size: 10pt;
+	padding: 4px 8px;
+}
+#examples .raw {
+	font-family: monospace;
+}
 #links {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.2rem 0.5rem;
+	gap: 2px 8px;
+}
+#options {
+	display: flex;
+	align-items: center;
+	gap: 8px;
 }
 #search {
-	margin: 1rem 0;
 	display: flex;
 	align-items: stretch;
 }
 #search input {
 	display: block;
 	padding: 5px;
-	font-size: 150%;
+	font-size: 16pt;
 	width: 100%;
 	box-sizing: border-box;
 }
-#search select {
-	margin-left: 0.5rem;
-	max-width: 50px;
-	-webkit-appearance: menulist-button;
+#jumps {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 8px;
+	margin-bottom: 16px;
+}
+#jumps > * {
+	display: flex;
+	align-items: center;
+	font-size: 16pt;
+	border: 3px solid #aaa;
+	border-radius: 4px;
+}
+#jumps a:hover {
+	border-color: #00f;
+}
+#jumps > :first-child {
+	opacity: 50%;
+}
+#jumps .length {
+	background-color: var(--length-color);
+	font-weight: bold;
+	padding: 2px 8px;
+	border-right: 1px dotted #aaa;
+}
+#jumps .count {
+	background-color: #fff;
+	padding: 2px 4px;
+}
+#jumps .disabled {
+	background-color: #fcc;
+	padding: 2px 4px;
 }
 #hover {
 	position: absolute;
-	font-size: 200px;
+	font-size: 150pt;
 	background: rgba(255, 255, 255, .85);
 	padding: 20px;
 	border: 10px solid rgba(128, 128, 128, .2);
@@ -50,13 +141,79 @@ h1 {
 	left: 50%;
 	min-width: 300px;
 	text-align: center;
+	z-index: 999;
 }
 .heading {
 	display: flex;
 	align-items: center;
+	padding: 8px;
+	background: #ccc;
+	gap: 8px;
+	border-radius: 4px;
+	align-items: stretch;
+	user-select: none;
 }
-h2 {
-	flex: 1 0 auto;
+.heading + .heading {
+	margin-top: 8px;
+}
+.heading.shade:hover {
+	background-color: #aaa;
+	cursor: pointer;
+}
+.heading.shaded {
+	opacity: 67%;
+}
+.heading.shaded .top {
+	display: none;
+}
+.heading > span {
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-size: 24px;
+}
+.heading .length {
+	font-weight: bold;
+	background-color: var(--length-color);
+}
+.heading .cost {
+	background-color: #cfc;
+	font-weight: bold;
+}
+.heading .count {
+	background-color: #fff;
+}
+.heading .disabled {
+	background-color: #fcc;
+}
+main:empty {
+	display: none;
+}
+main {
+	margin-top: 8px;
+}
+section {
+	padding: 8px;
+}
+.subheading {
+	background-color: #ddd;
+	border-radius: 4px;
+	padding: 4px 8px;
+	font-size: 20px;
+	text-align: center;
+}
+.emojis {
+	padding: 8px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	font-size: 20px;
+}
+
+
+.title {
+	font-size: 20px;
+	font-weight: bold;
+	flex: 1;
 }
 h2 span {
 	color: #800;
@@ -71,6 +228,7 @@ h2 span {
 table {
 	border-collapse: collapse;
 	width: 100%;
+	margin: 0.5rem 0 1rem;
 	text-align: left;
 }
 tbody tr:nth-child(odd) {
@@ -88,6 +246,11 @@ td {
 }
 *[data-copy] {
 	cursor: pointer;
+}
+h3 {
+	margin: 0.5rem 0;
+	text-align: center;
+	padding: 0.2rem;
 }
 .arrow {
 	color: #888;
@@ -145,6 +308,14 @@ td.info {
 	border-radius: 5px;
 	min-width: 1rem;
 }
+#none {
+	display: flex;
+	justify-content: center;
+	background-color: #fcc;
+	font-size: 16pt;
+	padding: 8px;
+	border-radius: 4px;
+}
 #loader {
 	display: flex;
 	justify-content: center;
@@ -183,34 +354,28 @@ footer {
 		font-size: 20pt;
 	}
 	header {
-		margin: 1rem;
+		padding: 16px;
+		padding-bottom: 0;
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: space-between;
-	}
-	#version {
-		order: 2;
 	}
 	#links {
 		order: 3;
 		flex-basis: 100%;
 	}
-	#search {
-		margin: 0 1rem;
+	#search, #options, #examples, #jumps {
+		padding: 0 16px;
 	}
 	.heading {
-		padding: 0.5rem 1rem;
-		background: #ddd;
-		margin-bottom: 0.5rem;
-	}
-	.heading h2 {
-		margin: 0;
 		font-size: 16pt;
+		border-radius: 0;
 	}
 }
 </style>
 </head>
 <body>
+<div id="hover" class="hide"></div>
 <header>
 <h1>Emoji</h1>
 <div id="links">
@@ -226,21 +391,61 @@ footer {
 <a href="https://unicode.org/emoji/charts/emoji-proposals.html">Proposals</a>
 </div>
 </header>
-<div id="search">
-	<input placeholder="Search: Name or {FFF} or v15 or UnicodeProperty">
-	<select class="hide" placeholder="A">
-		<option selected disabled hidden>🔍️</option>
-	</select>
+<div id="examples">
+	<b>People:</b>
+	<button data-query="Man ">Man</button>
+	<button>Woman</button>
+	<button data-query="{2642}">♂️</button>
+	<button data-query="{2640}">♀️</button>
+	<button>Family</button>
+	<button>Person</button>
+	<b>Skin:</b>
+	<button data-query="=\b(wo)?man\b,\bperson\b!’,{1F3FB},{1F3FC},{1F3FD},{1F3FE},{1F3FF},^flag">Golden</button>
+	<button>&#x1F3FB;</button>
+	<button>&#x1F3FC;</button>
+	<button>&#x1F3FD;</button>
+	<button>&#x1F3FE;</button>
+	<button>&#x1F3FF;</button>
+	<b>Hair:</b>
+	<button>&#x1F9B0;</button>
+	<button>&#x1F9B1;</button>
+	<button>&#x1F9B2;</button>
+	<button>&#x1F9B3;</button>
+	<b>Special:</b>
+	<button data-query="cat">🐈️</button>
+	<button data-query="heart">❤️</button>
+	<button data-query="unmod(1)">Toneless</button>
+	<b>Norm:</b>
+	<button data-query="normalized">✅️</button>
+	<button data-query="already-norm">Verbatim</button>
+	<button data-query="needs-norm">Required</button>
+	<b>Codepoints:</b>
+	<button data-query="{200D}" class="raw">ZWJ</button>
+	<button data-query="{FE0F}" class="raw">FE0F</button>
+	<button data-query="ascii" class="raw">ASCII</button>
+	<button class="raw">&#x1F3F4;</button>
 </div>
-<ul id="toc"></ul>
-<div id="hover" class="hide"></div>
+<div id="options">
+	<b>Organize by:</b>
+	<button id="by_length_btn" data-by="length">Length</button>
+	<button id="by_cost_btn" data-by="cost">Cost</button>
+	<button id="by_cp_btn" data-by="cp">Codepoint</button>
+	<span class="balloon"></span>
+	<button id="csv_btn">
+		<svg class="with-icon_icon__aLCKg" data-testid="geist-icon" fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color:var(--geist-foreground);width:24px;height:24px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+		<span>CSV</span>
+	</button>
+</div>
+<div id="search">
+	<input placeholder="Search: Name or {HEX} or v15 or UnicodeProperty">
+</div>
+<div id="none" class="hide">⚠️ No results</div>
 <main>
 	<div id="loader"><div>
 		<div class="spinner"></div>
 		<span>Downloading...</span>
 	</div></div>
 </main>
-<section id="results" class="hide"></section>
 <footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
 <script type="module">
 import {
@@ -250,26 +455,43 @@ import {
 } from '../dist/all.min.js';
 use_default_style();
 
+const PER_CHUNK = 128;
+const BY_LENGTH = 'length';
+const BY_COST = 'cost';
+
+const COSTS = [
+	{length: 3, cost: 640, title: '3'},
+	{length: 4, cost: 160, title: '4'},
+	{length: 5, cost:   5, title: '5+'},
+];
+
 const search_field = document.querySelector('#search input');
-const search_select = document.querySelector('#search select');
 const toc_ul = document.querySelector('#toc');
 const main = document.querySelector('main');
-const results_section = document.querySelector('#results');
 const hover_div = document.querySelector('#hover');
+const by_buttons = [...document.querySelectorAll('[data-by]')];
+const readme_dom = [...document.querySelectorAll('.readme')];
+const csv_btn = document.querySelector('#csv_btn');
+const examples_div = document.querySelector('#examples');
+const none_div = document.querySelector('#none');
 
-update_search_from_hash();
-
+const render_queue = [];
+	
+let jump_to_length;
 let last_hover;
 let search_timer;
-let emoji_seqs = ens_emoji();
-let emoji_disabled = [];
 let info_map = new Map();
 let type_map = new Map();
-let version_set = new Set();
-let flat = [];
-let buckets = [];
+let all_emoji = [];
+let emoji_count;
+let max_length;
+let by_mode;
 
 (async () => {
+
+	let version_set = new Set();
+	let emoji_disabled = [];
+
 	try {
 		let data;
 		let {built} = versions;
@@ -298,7 +520,7 @@ let buckets = [];
 
 	for (let x of info_map.values()) {
 		type_map.set(x.type.toLowerCase(), x.type);
-		version_set.add(parseInt(x.version)|0);
+		version_set.add(x.version); 
 		let {name, name0} = x;
 		if (name0) {
 			name0 = name0.toLowerCase(); 
@@ -311,67 +533,71 @@ let buckets = [];
 		x.query = searchize(name0 ? `${name} ${name0}` : name);
 	}
 
-	let keywords = [
-		[...type_map.values()].sort(), 
-		[
-			'Man ',
-			'Woman',
-			'Gender: Man|{2640}',
-			'Gender: Woman|{2642}',
-			'Family',
-			'Person',
-			`Golden|=\\b(wo)?man\\b,\\bperson\\b!{1F3FB},{1F3FC},{1F3FD},{1F3FE},{1F3FF},^flag`,
-			'Light Skin',
-			'Medium-light Skin',
-			'Medium Skin',
-			'Medium-dark Skin',
-			'Dark Skin',
-			'Red Hair',
-			'Blond Hair',
-			'Curly Hair',
-			'White Hair',
-			'Is Normalized|is-norm',
-			'Already Normalized|already-norm',
-			'Requires Normalization|gets-normed',
-			'Unmod(1)',
-			'{FE0F}',
-		],
-		[...version_set].sort((a, b) => a - b).map(x => `v${x}`),
-	].flat(Infinity);
-
-	if (type_map.size || version_set.size) {
-		search_select.append(...keywords.map(s => {
-			let op = document.createElement('option');
-			let pos = s.indexOf('|');
-			if (pos >= 0) {
-				op.value = s.slice(pos + 1).trim();
-				s = s.slice(0, pos).trim();
-			}
-			op.innerHTML = s;
-			return op;
-		}));
-		search_select.classList.remove('hide');
-	}
-
-	for (let cps of emoji_seqs) {
+	for (let cps of ens_emoji()) {
 		let rec = make_rec(cps);
-		let n = [...rec.norm].length;
-		rec.n = n;
-		let bucket = buckets[n];
-		if (!bucket) buckets[n] = bucket = [];
-		bucket.push(rec);
-		flat.push(rec);
+		all_emoji.push(rec);
 	}
-	document.querySelector('h1').innerHTML += ` (${flat.length})`; // + ${emoji_disabled.length})`;
-
+	emoji_count = all_emoji.length;
+	document.querySelector('h1').innerHTML += ` (${emoji_count})`; 
 	for (let cps of emoji_disabled) {
-		flat.push(make_rec(cps));
+		all_emoji.push(make_rec(cps));
+	}	
+	max_length = all_emoji.reduce((a, x) => Math.max(a, x.norm_length), 0);
+
+	
+	if (type_map.size) {
+		let b = document.createElement('b');
+		b.innerHTML = 'Unicode:';
+		examples_div.prepend(b, ...[...type_map.values()].sort().map(x => {
+			let btn = document.createElement('button');
+			btn.innerHTML = x;
+			return btn;
+		}));
+	}
+
+	if (version_set.size) {
+		let b = document.createElement('b');
+		b.innerHTML = 'Version:';
+		examples_div.append(b, ...[...version_set].sort((a, b) => a - b).map(x => {
+			let btn = document.createElement('button');
+			btn.innerHTML = x;
+			btn.dataset.query = `v${x}`;
+			return btn;
+		}));
+	}
+
+	let length_set = new Set(all_emoji.map(x => x.norm_length));
+	if (length_set.size) {
+		let b = document.createElement('b');
+		b.innerHTML = 'Length:';
+		examples_div.append(b, ...[...length_set].sort((a, b) => a - b).map(x => {
+			let btn = document.createElement('button');
+			btn.innerHTML = x;
+			btn.dataset.query = `${x}cp`;
+			return btn;
+		}));
+	}
+
+	for (let btn of document.querySelectorAll('#examples button')) {
+		let query = btn.dataset.query || btn.innerText;
+		btn.addEventListener('click', () => {
+			search_field.value = query;
+			update_search();
+		});
+	}
+
+	for (let btn of by_buttons) {
+		btn.addEventListener('click', () => {
+			if (by_mode === btn.dataset.by) return;
+			by_mode = btn.dataset.by;
+			//localStorage.setItem('by', by_mode); 
+			sync_by_mode();
+			update_search();
+		});
 	}
 
 	process_hash();
-
 	window.addEventListener('hashchange', process_hash);
-
 	search_field.addEventListener('input', search_soon);
 
 	// hide on intersection
@@ -384,22 +610,16 @@ let buckets = [];
 		hover_div.classList.add('hide');
 	});
 
-	search_select.addEventListener('input', () => {
-		search_field.value = search_select.value;
-		update_search();
-	});
-
-
 	document.addEventListener('mousemove', e => {
 		let {target} = e;
 		if (!(target instanceof Element)) return;
-		let tr = target.closest('[data-name]');
-		hover_div.classList.toggle('hide', !tr);
-		if (!tr) return;
-		let {name} = tr.dataset;
+		let el = target.closest('[data-name]');
+		hover_div.classList.toggle('hide', !el);
+		if (!el) return;
+		let {name} = el.dataset;
 		if (name == last_hover) return;
 		last_hover = name;
-		let r = tr.getBoundingClientRect();
+		let r = el.getBoundingClientRect();
 		let y = r.top + window.scrollY;
 		let gap = 0.5;
 		if (r.top < window.innerHeight * .5) {		
@@ -425,43 +645,65 @@ let buckets = [];
 
 })();
 
+csv_btn.addEventListener('click', async () => {
+	let lines = [`Form,Hex,Norm,Length,MinLength,MinRepeat,Name,Type,Version`];
+	for (let rec of all_emoji) {
+		if (!rec.is_emoji) continue;
+		let v = [rec.form, rec.cps.map(hex_cp).join(' '), rec.norm, rec.norm_length, rec.min_length, rec.min_repeat];
+		if (rec.info) {
+			v.push(rec.info.name, rec.info.type, rec.info.version);
+		}
+		lines.push(v.map(x => typeof x === 'number' ? x : `"${x}"`).join(','));
+	}
+	let a = document.createElement('a');
+	a.download = 'emoji.csv';
+	a.href = await dataURIFromBlob(new Blob([lines.join('\n')], {type: 'text/csv'}));
+	a.click();
+});
+
+function sync_by_mode() {
+	for (let btn of by_buttons) {
+		btn.classList.toggle('active', by_mode === btn.dataset.by);
+	}
+}
+
 function make_rec(cps) {
 	let form = String.fromCodePoint(...cps);
 	let norm;
-	let is_norm;
 	try {
 		norm = ens_normalize(form);
-		is_norm = true;
 	} catch (err) {
 		norm = form;
 	}
+	let norm_length = [...norm].length;
+	let tokens = ens_tokenize(form);
+	let is_emoji = !!tokens[0].emoji;
 	let info = info_map.get(form);	
-	let rec = {form, norm, cps, info, is_norm};
-	rec.tr = create_tr(rec, `${[...norm].length}<sub>ch</sub>`);
+	let rec = {form, norm, cps, info, is_emoji, tokens, norm_length};
+	if (is_emoji) {
+		let min = Math.min(5, norm_length * (1 + Math.max(0, 3 - norm_length))); 
+		rec.min_length = min;
+		rec.min_repeat = Math.ceil(min / norm_length);
+	}
 	return rec;
 }
 
-function update_search_from_hash() {
+function process_hash(e) {
 	let hash = window.location.hash.slice(1);
-	if (hash) {
-		let match;
-		if (match = hash.match(/^q\=(.*)$/)) {
-			search_field.value = decodeURIComponent(match[1]);
-			search_field.focus();
-		} else if (/^\d+$/.test(hash)) {
-			search_field.value = '';
-			return `[name="${hash}"]`;
+	if (/^\d+$/.test(hash)) {
+		by_mode = BY_LENGTH;
+		jump_to_length = parseInt(hash);
+		search_field.value = '';
+	} else {
+		let params = new URLSearchParams(hash);			
+		search_field.value = params.get('q');
+		by_mode = params.get('by');
+		if (!['cp', BY_COST].includes(by_mode)) {
+			by_mode = BY_LENGTH;
 		}
 	}
-}
-
-function process_hash(e) {
-	let sel = update_search_from_hash();
+	sync_by_mode();
 	update_search();
-	if (sel) {
-		let el = document.querySelector(sel);
-		if (el) requestAnimationFrame(() => el.scrollIntoView());
-	}
 }
 
 function search_soon() {
@@ -472,65 +714,37 @@ function search_soon() {
 function update_search() {
 	clearTimeout(search_timer);
 	search_timer = undefined;
-	search_select.selectedIndex = 0;
-	let input = searchize(search_field.value);
 	search_field.focus();
-	toc_ul.classList.toggle('hide', input);
-	main.classList.toggle('hide', input);
-	results_section.classList.toggle('hide', !input);
-	const prefix = '#q=';
+	hover_div.classList.add('hide');
+	let input = searchize(search_field.value);
+	let search = new URLSearchParams();
+	search.set('by', by_mode);
+	if (input) search.set('q', input);
+	search = search.toString();
+	search = search ? '#' + search : ' ';
+	window.history.replaceState(null, null, search);
 	if (!input) {
-		if (window.location.hash.startsWith(prefix)) {
-			window.history.replaceState(null, null, ' ');
-		}
-		if (main.querySelector('#loader')) {
-			main.innerHTML = '';
-			for (let n = 1; n < buckets.length; n++) {
-				let bucket = buckets[n];
-				if (!bucket) continue;
-				let title =`${n} character${n==1?'':'s'} (${bucket.length})`;
-				let li = document.createElement('li');
-				li.innerHTML = `<a href="#${n}">${title}</a>`;
-				toc_ul.append(li);
-
-				let h2 = document.createElement('h2');
-				h2.innerHTML = `<a name="${n}">${title}</a>`;
-
-				let a_jump = document.createElement('a');
-				a_jump.classList.add('right');
-				a_jump.innerHTML = 'Top ⬆';
-				a_jump.href = '#';
-				a_jump.addEventListener('click', e => {
-					e.preventDefault();
-					window.history.replaceState(null, null, ' ');
-					window.scrollTo(0, 0);
-				});
-
-				let heading_div = document.createElement('div');
-				heading_div.classList.add('heading');
-				heading_div.append(h2, a_jump);
-
-				let section = document.createElement('section');
-				section.append(heading_div, create_table(bucket));
-				main.append(section);
-			}
-		}
+		setup_render(all_emoji);
 		return;
 	}
-	window.history.replaceState(null, null, prefix + input);
 	let results;
 	let match;
-	if (input === 'is-norm') {
-		results = flat.filter(x => x.info && !is_not_emoji(x.info));
-	} else if (input === 'gets-normed') {
-		results = flat.filter(x => x.is_norm && x.form !== x.norm);
+	if (input === 'normalized' || input === 'is-norm') {
+		results = all_emoji.filter(x => x.is_emoji);
+	} else if (input === 'needs-norm' || input === 'gets-normed') {
+		results = all_emoji.filter(x => x.is_emoji && x.form !== x.norm);
 	} else if (input === 'already-norm') {
-		results = flat.filter(x => x.is_norm && x.form === x.norm);	
-	} else if (match = input.match(/^v\d*$/)) {
-		let version = parseInt(input.slice(1));
-		results = flat.filter(x => x.info && parseInt(x.info.version) == version);
+		results = all_emoji.filter(x => x.is_emoji && x.form === x.norm);	
+	} else if (input === 'ascii') {
+		results = all_emoji.filter(x => /[\x00-\x7F]/.test(x.form));
+	} else if (match = input.match(/^v(\d+(?:.\d+))$/)) {
+		let version = match[1];
+		results = all_emoji.filter(x => x.info && x.info.version.startsWith(version));
 	} else if (match = type_map.get(input)) {
-		results = flat.filter(x => x.info && x.info.type === match);
+		results = all_emoji.filter(x => x.info && x.info.type === match);
+	} else if (match = input.match(/^(\d+)cp$/i)) {
+		let length = parseInt(match[1]);
+		results = all_emoji.filter(x => x.norm_length === length);
 	} else if (match = input.match(/^unmod\((\d+)\)$/i)) {
 		let max = parseInt(match[1]);
 		let ignored = new Set([
@@ -540,8 +754,8 @@ function update_search() {
 			0xFE0F,
 		]);
 		let dups = new Map();
-		for (let rec of flat) {
-			if (!(rec.n >= 3)) continue;
+		for (let rec of all_emoji) {
+			if (!(rec.norm_length>= 3)) continue;
 			let key = String.fromCodePoint(...rec.cps.filter(cp => !ignored.has(cp)));
 			let bucket = dups.get(key);
 			if (!bucket) {
@@ -580,7 +794,7 @@ function update_search() {
 				return x.norm.includes(test) || (x.info && x.info.query.includes(test));
 			}
 		}
-		results = flat.filter(x => (any.length == 0 || any.some(test => check(x, test))) && !none.some(test => check(x, test)));
+		results = all_emoji.filter(x => (any.length == 0 || any.some(test => check(x, test))) && !none.some(test => check(x, test)));
 	} else {
 		input = replace_escapes(input);
 		let norm;
@@ -588,66 +802,22 @@ function update_search() {
 			norm = ens_normalize(input.trim());
 		} catch (err) {			
 		}
-		results = flat.filter(x => {
+		results = all_emoji.filter(x => {
 			if (x.info && x.info.query.includes(input)) return true; 
 			if (norm && x.norm.includes(norm)) return true; 
 			if (x.form.includes(input)) return true;
 		});
 	}
-	let valid = results.reduce((a, x) => a + (x.info && is_not_emoji(x.info)?0:1), 0);
-
-
-
-	let h2 = document.createElement('h2');
-	h2.innerText = `${valid} result${valid==1?'':'s'} (${(100*valid/emoji_seqs.length).toFixed(2)}%)`;
-	if (valid < results.length) {
-		let span = document.createElement('span');
-		span.innerText = ` +${results.length - valid} disabled`;
-		h2.append(span);
-	}
-
-	let heading_div = document.createElement('div');
-	heading_div.classList.add('heading');	
-	heading_div.append(h2);
-
-	if (results.length) {
-		let csv_btn = document.createElement('button');
-		csv_btn.innerText = 'CSV';
-		csv_btn.addEventListener('click', () => {
-			let rows = results.map(x => {
-				let v = [x.form, x.cps.map(hex_cp).join(' '), x.norm, [...x.norm].length];
-				if (x.info) {
-					v.push(x.info.name, x.info.type, x.info.version);
-				}
-				return v.map(x => typeof x === 'number' ? x : `"${x}"`).join(',');
-			});
-			let a = document.createElement('a');
-			a.download = 'Emoji.csv';
-			a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent([`Form,Hex,Norm,Length,Name,Type,Version`, ...rows].join('\n'));
-			a.click();
-		});
-
-		let repeated_btn = document.createElement('button');
-		repeated_btn.innerText = 'Copy Min Repeated';
-		repeated_btn.addEventListener('click', () => navigator.clipboard.writeText(results.map(x => repeated(x.norm)).join('\n')));
-
-		let right_div = document.createElement('div');
-		right_div.classList.add('right');
-		right_div.append(repeated_btn, csv_btn);
-		heading_div.append(right_div);
-	}
-	results_section.innerHTML = '';
-	results_section.append(heading_div, create_table(results, true));
-	hover_div.classList.add('hide');
+	setup_render(results);
 }
 
-function create_table(bucket, search) {
+function create_empty_table() {
 	let table = document.createElement('table');
 	table.innerHTML = `
 		<table>
 		<thead>
 		<tr>
-		<th class="index">${search ? 'n<sub>ch</sub>' : '#'}</th>
+		<th class="index">#</th>
 		<th class="form">💖️</th>
 		<th class="info">Name, Version, Codepoints (Fully-Qualified), Components &rarr; Normalized</th>
 		</tr>
@@ -655,7 +825,6 @@ function create_table(bucket, search) {
 		<tbody></tbody>
 		</table>
 	`;
-	table.querySelector('tbody').append(...bucket.map((x, i) => search ? x.tr : create_tr(x, 1+i)));
 	return table;
 }
 
@@ -668,7 +837,209 @@ function create_hex_code(name, cps) {
 	return code;
 }
 
-function create_tr({cps, form, norm, info}, first) {
+function render() {
+	if (!render_queue.length) return;
+	render_queue.shift()();
+	requestAnimationFrame(render);
+}
+function setup_render(results) {
+	let top;
+	render_queue.length = 0;
+	main.innerHTML = '';
+	if (by_mode === BY_LENGTH) {
+		let jumps_div = document.createElement('div');
+		jumps_div.id = 'jumps';
+		for (let length = 1; length <= max_length; length++) {
+			let match_length = results.filter(x => x.norm_length === length);
+			if (!match_length.length) continue;
+			let disabled = match_length.reduce((a, x) => a + (x.is_emoji?0:1), 0);
+			let heading, section, tbody;
+			let count = match_length.length;
+			for (let i = 0; i < count; i += PER_CHUNK) {
+				render_queue.push(() => {
+					if (!section) {
+						section = create_empty_table();
+						tbody = section.querySelector('tbody');
+						heading = create_heading({section, length, disabled, count, top});
+						main.append(heading, section);
+						top = true;
+					}
+					tbody.append(...match_length.slice(i, i + PER_CHUNK).map((rec, j) => cached_tr(rec, j+i+1)));
+				});
+			}
+			if (jump_to_length === length) {
+				render_queue.push(() => heading.scrollIntoView());
+			}
+			let btn = document.createElement('a');
+			btn.innerHTML = `
+				<span class="length">${length}<span class="cp">cp</span></span>
+				<span class="count">${count - disabled}</span>
+			`;
+			if (disabled) {
+				btn.innerHTML += `<span class="disabled">${disabled}</span>`;
+			}
+			btn.addEventListener('click', () => heading.scrollIntoView());
+			jumps_div.append(btn);
+		}
+		if (jumps_div.childElementCount > 1) {
+			let disabled = results.reduce((a, x) => a + (x.is_emoji?0:1), 0);
+			let count = results.length - disabled;
+			let span = document.createElement('span');
+			span.innerHTML = `<span class="count"><b>${count}</b> (${perc_str(count / emoji_count)})</span>`;
+			if (disabled) {
+				span.innerHTML += `<span class="disabled">${disabled}</span>`;
+			}
+			jumps_div.prepend(span);
+			main.prepend(jumps_div);
+		}
+
+		
+	} else if (by_mode === BY_COST) {
+		for (let {length, cost, title} of COSTS) {
+			let match_length = results.filter(x => x.min_length === length && x.is_emoji);
+			if (!match_length.length) continue;
+			let section;
+			for (let repeat = 1; repeat <= length; repeat++) {
+				let match_repeat = match_length.filter(x => x.min_repeat === repeat);
+				if (!match_repeat.length) continue;
+				render_queue.push(() => {
+					if (!section) {
+						section = document.createElement('section');
+						let heading = create_heading({section, length, cost, count: match_length.length, top});
+						main.append(heading, section);
+						top = true;
+					}
+					let subheading = document.createElement('div');
+					subheading.classList.add('subheading');
+					subheading.innerHTML = `<b>${get_repeat_word(repeat)}</b> (${match_repeat.length}, ${perc_str(match_repeat.length / emoji_count)})`;
+					section.append(subheading);
+					if (match_repeat.length > 10) {
+						let emojis_div = document.createElement('div');
+						emojis_div.classList.add('emojis');
+						emojis_div.append(...match_repeat.map(rec => {
+							let dom = dom_from_tokens(rec.tokens, {emoji_url: `#q=${encodeURIComponent(rec.norm)}`});
+							dom.dataset.name = rec.form;
+							return dom;
+						}));
+						section.append(emojis_div);
+					} else {					
+						let table = create_empty_table();
+						table.querySelector('tbody').append(...match_repeat.map((rec, i) => cached_tr(rec, i+1)));
+						section.append(table);
+					}
+				});
+			}
+		}
+	} else if (results.length) {
+		let section = create_empty_table();
+		let tbody = section.querySelector('tbody');
+		let disabled = results.reduce((a, x) => a + (x.is_emoji?0:1), 0);
+		main.append(create_heading({
+			section,
+			disabled,
+			count: results.length,
+			shade: false
+		}), section);
+		for (let i = 0; i < results.length; i += PER_CHUNK) {
+			render_queue.push(() => {
+				tbody.append(...results.slice(i, i + PER_CHUNK).map((rec, j) => cached_tr(rec, j+i+1)));
+			});
+		}
+	}
+	none_div.classList.toggle('hide', render_queue.length);
+	jump_to_length = undefined;
+	render();
+}
+
+function cached_tr(rec, first) {
+	if (!rec.tr) {
+		rec.tr = create_tr(rec);		
+	}
+	rec.tr.firstChild.innerHTML = first;
+	return rec.tr;
+}
+
+function perc_str(p) {
+	return (100 * p).toFixed(2).replace(/\.?0+$/, '') + '%';
+}
+
+function get_repeat_word(n) {
+	switch (n) {
+		case 1: return 'Singles';
+		case 2: return 'Doubles';
+		case 3: return 'Triples';
+		default: return `${n}x`;
+	}
+}
+
+function create_heading({section, length, cost, count, disabled = 0, shade = true, top}) {
+	let heading = document.createElement('div');
+	heading.classList.add('heading');
+	
+	if (cost) {
+		let span = document.createElement('span');
+		span.classList.add('cost');
+		span.innerHTML = `$${cost}`;
+		heading.append(span);
+	}
+
+	if (length) {
+		let span = document.createElement('span');
+		span.classList.add('length');
+		span.innerHTML = `${length}<span class="cp">cp</span>`;
+		heading.append(span);
+	}
+
+	if (count) {
+		let n = count - disabled;
+		let span = document.createElement('span');
+		span.classList.add('count');
+		span.innerHTML = `<b>${n}</b> (${perc_str(n / emoji_count)})`;
+		heading.append(span);
+	}
+
+	if (disabled) {
+		let span = document.createElement('span');
+		span.classList.add('disabled');
+		span.innerHTML = disabled;
+		heading.append(span);
+	}
+
+	if (section && shade) {
+		heading.classList.add('shade');
+		heading.addEventListener('click', () => {
+			let b = section.isConnected;
+			heading.classList.toggle('shaded', b);
+			if (b) {
+				section.remove();
+			} else {
+				heading.insertAdjacentElement('afterend', section);
+			}
+		});
+	}
+
+	if (top) {
+		let balloon = document.createElement('span');
+		balloon.classList.add('balloon');
+
+		let btn = document.createElement('button');
+		btn.classList.add('top');
+		btn.innerHTML = `
+			<svg class="with-icon_icon__aLCKg" data-testid="geist-icon" fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color:var(--geist-foreground);width:24px;height:24px"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+			<span>Top</span>
+		`;
+		btn.addEventListener('click', e => {
+			e.stopPropagation();
+			window.scrollTo(0, 0);
+		});
+
+		heading.append(balloon, btn);
+	}
+
+	return heading;
+}
+
+function create_tr({cps, form, norm, info, tokens, norm_length, is_emoji}, first) {
 	let tr = document.createElement('tr');
 
 	let td_index = document.createElement('td');
@@ -684,7 +1055,7 @@ function create_tr({cps, form, norm, info}, first) {
 	let td_form = document.createElement('td');
 	td_form.classList.add('form');
 	let a_resolve = document.createElement('a');
-	a_resolve.href = `./resolver.html#${repeated(norm)}.eth`;
+	a_resolve.href = `./resolver.html#${norm.repeat(1 + Math.max(0, 3 - norm_length))}.eth`;
 	a_resolve.innerHTML = form;
 	a_resolve.title = 'Show in Resolver\n(Minimal Repeated)';
 	td_form.append(a_resolve);
@@ -712,12 +1083,11 @@ function create_tr({cps, form, norm, info}, first) {
 			span.innerText = `v${version}`;
 			cells_div.append(span);
 		}
-		//if (type === 'Whitelisted') tr.classList.add('whitelisted');
-		if (is_not_emoji(info)) tr.classList.add('error');
 	}	
+	if (!is_emoji) {
+		tr.classList.add('error');
+	}
 	cells_div.append(create_hex_code('Fully-Qualified', cps));
-	
-	let tokens = ens_tokenize(form);
 
 	let exploded_div = document.createElement('div');
 	exploded_div.classList.add('exploded');
@@ -750,9 +1120,15 @@ function create_tr({cps, form, norm, info}, first) {
 	return tr;
 }
 
-function repeated(norm, n = 3) {
-	return norm.repeat(1 + Math.max(0, n - [...norm].length));
+
+async function dataURIFromBlob(blob) {
+	return new Promise((ful) => {
+		const r = new FileReader();
+		r.onload = () => ful(r.result); 
+		r.readAsDataURL(blob);
+	});
 }
+
 
 function is_not_emoji(x) {
 	return x.type === 'Disabled'; // matches /derive/make.js -> emoji-info.json
