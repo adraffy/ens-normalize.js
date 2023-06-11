@@ -35,7 +35,7 @@
 ```Javascript
 import {ens_normalize} from '@adraffy/ens-normalize'; // or require()
 // npm i @adraffy/ens-normalize
-// browser: https://cdn.jsdelivr.net/npm/@adraffy/ens-normalize@latest/dist/index.min.js
+// browser: https://cdn.jsdelivr.net/npm/@adraffy/ens-normalize@latest/dist/index.min.{m|c}js
 
 // *** ALL errors thrown by this library are safe to print ***
 // - characters are shown as {HEX} if should_escape()

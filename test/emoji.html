@@ -7,6 +7,7 @@
 <style>
 :root {
 	--length-color: #f8eedd;
+	--error-bg-color: #fcc;
 	--btn-fill-color: #eee;
 	--btn-hover-fill-color: #ccc;
 	--btn-border-color: #888;
@@ -15,7 +16,8 @@
 	display: none !important;
 }
 .balloon {
-	flex: 1
+	flex: 1;
+	visibility: hidden;
 }
 a, button {
 	cursor: pointer;
@@ -47,10 +49,13 @@ button:hover:active {
 button.active {
 	background-color: #cff;
 	pointer-events: none;
+	border: 3px solid #000;
+	margin: -2px;
 }
 .cp {
 	font-size: 75%;
 	font-weight: normal;
+	align-self: end;
 }
 body { 
 	margin: 3rem; 
@@ -108,6 +113,7 @@ h1 {
 #jumps {
 	display: flex;
 	flex-wrap: wrap;
+	align-items: center;
 	justify-content: center;
 	gap: 8px;
 	margin-bottom: 16px;
@@ -117,13 +123,16 @@ h1 {
 	align-items: center;
 	font-size: 16pt;
 	border: 3px solid #aaa;
-	border-radius: 4px;
+	border-radius: 3px;
 }
 #jumps a:hover {
 	border-color: #00f;
 }
-#jumps > :first-child {
+#jumps .summary {
 	border-color: #000;
+}
+#jumps .summary .count {
+	background-color: #cfc;
 }
 #jumps .length {
 	background-color: var(--length-color);
@@ -133,10 +142,10 @@ h1 {
 }
 #jumps .count {
 	background-color: #fff;
-	padding: 2px 4px;
+	padding: 2px 6px;
 }
 #jumps .disabled {
-	background-color: #fcc;
+	background-color: var(--error-bg-color);
 	padding: 2px 4px;
 }
 #hover {
@@ -181,6 +190,8 @@ h1 {
 	opacity: 1;
 }
 .heading > span {
+	display: flex;
+	align-items: center;
 	padding: 4px 8px;
 	border-radius: 4px;
 	font-size: 24px;
@@ -188,16 +199,19 @@ h1 {
 .heading .length {
 	font-weight: bold;
 	background-color: var(--length-color);
+	border: 1px solid #aaa;
 }
 .heading .cost {
-	background-color: #cfc;
+	background-color: #080;
+	color: #fff;
 	font-weight: bold;
 }
 .heading .count {
-	background-color: #fff;
+	background-color: #cfc;
+	gap: 4px;
 }
 .heading .disabled {
-	background-color: #fcc;
+	background-color: var(--error-bg-color);
 }
 main:empty {
 	display: none;
@@ -302,6 +316,7 @@ td.norm span {
 td.info {
 	padding: 4px 8px;
 	width: 100%;
+	text-align: left;
 }
 .info > div {
 	display: flex;
@@ -315,6 +330,13 @@ td.info {
 .version {
 	color: #999;
 	font-size: 90%;
+}
+.type {
+	background: #ddd;
+	color: #666;
+	font-size: 80%;
+	padding: 2px 4px;
+	border-radius: 4px;
 }
 .cps {
 	display: flex;
@@ -339,43 +361,17 @@ td.info {
 	margin-top: 8px;
 }
 #none div {
-	background-color: #fdd;
 	padding: 8px 16px;
 	background: #ffc;
 	border: 1px solid #ccc;
-	border-radius: 8px;
-}
-#loader {
-	display: flex;
-	justify-content: center;
-}
-#loader > div { 
-	display: flex;
-	background: #ffc;
-	border-radius: 0.5rem;
-	padding: 1rem 2rem;
-	font-size: 20pt;
-	border: 1px solid #ccc;
-	gap: 1rem;
-	align-items: center;
-}
-@keyframes spin {
-	to { transform:rotate(360deg); }
-}
-#loader .spinner {
-	width: 2rem;
-	height: 2rem;
-	animation: spin 2s infinite linear;
-	border: 0.4rem solid #000;
-	border-bottom-color: transparent;
-	border-radius: 100%;
+	border-radius: 4px;
 }
 footer {
 	text-align: center;
 	color: #666;
 	margin-top: 8px;
 }
-@media only screen and (max-width: 800px) { 
+@media only screen and (max-width: 640px) { 
 	body {
 		margin: 16px;
 	}
@@ -438,9 +434,10 @@ footer {
 	<button>&#x1F9B2;</button>
 	<button>&#x1F9B3;</button>
 	<b>Special:</b>
-	<button data-query="cat">🐈️</button>
+	<button data-query="chonk">🐈️</button>
 	<button data-query="heart">❤️</button>
 	<button data-query="Unmod(1)">Toneless</button>
+	<b>Min Repeated:</b>
 	<button>Singles</button>
 	<button>Doubles</button>
 	<button>Triples</button>
@@ -460,7 +457,7 @@ footer {
 	<button id="by_cp_btn" data-by="cp">Codepoint</button>
 	<span class="balloon"></span>
 	<button id="csv_btn" title="Download as CSV">
-		<svg class="with-icon_icon__aLCKg" data-testid="geist-icon" fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color:var(--geist-foreground);width:24px;height:24px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+		<svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color:var(--geist-foreground);width:24px;height:24px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
 		<span>CSV</span>
 	</button>
 </div>
@@ -485,7 +482,7 @@ const BY_COST = 'cost';
 const COSTS = [
 	{length: 3, cost: 640},
 	{length: 4, cost: 160},
-	{length: 5, cost:   5},
+	{length: 5, cost:   5, length_ge: true},
 ];
 
 const search_field = document.querySelector('#search input');
@@ -536,6 +533,8 @@ let by_mode;
 			info_map.set(info.form, info);
 			if (info.type === 'Disabled') {
 				emoji_disabled.push(explode_cp(info.form));
+			} else {
+				info.short_type = info.type.replaceAll(/_?(emoji|sequence|rgi)_?/ig, '');
 			}
 		}
 	} catch (err) {
@@ -744,7 +743,7 @@ function update_search() {
 	hover_div.classList.add('hide');
 	let input = searchize(search_field.value);
 	let search = new URLSearchParams();
-	search.set('by', by_mode);
+	if (by_mode !== BY_LENGTH) search.set('by', by_mode);
 	if (input) search.set('q', input);
 	search = search.toString();
 	search = search ? '#' + search : ' ';
@@ -753,7 +752,7 @@ function update_search() {
 		setup_render(all_emoji);
 		return;
 	}
-	input = input.replace('chonk', 'cat');
+	input = input.replaceAll('chonk', 'cat');
 	let results;
 	let match;
 	if (input === 'normalized' || input === 'is-norm') {
@@ -919,7 +918,8 @@ function setup_render(results) {
 			let disabled = results.reduce((a, x) => a + (x.is_emoji?0:1), 0);
 			let count = results.length - disabled;
 			let span = document.createElement('span');
-			span.innerHTML = `<span class="count"><b>${count}</b> (${fmt_perc(count / emoji_count)})</span>`;
+			span.classList.add('summary');
+			span.append(create_count_span(results.length - disabled, emoji_count));
 			if (disabled) {
 				span.innerHTML += `<span class="disabled">${disabled}</span>`;
 			}
@@ -929,7 +929,7 @@ function setup_render(results) {
 
 		
 	} else if (by_mode === BY_COST) {
-		for (let {length, cost} of COSTS) {
+		for (let {length, cost, length_ge} of COSTS) {
 			let match_length = results.filter(x => x.min_length === length && x.is_emoji);
 			if (!match_length.length) continue;
 			let section;
@@ -939,7 +939,7 @@ function setup_render(results) {
 				render_queue.push(() => {
 					if (!section) {
 						section = document.createElement('section');
-						let heading = create_heading({section, length, length_ge: true, cost, count: match_length.length, top: true});
+						let heading = create_heading({section, length, length_ge, cost, count: match_length.length, top: true});
 						main.append(heading, section);
 					}
 					let subheading = document.createElement('div');
@@ -1005,6 +1005,14 @@ function get_repeat_word(n) {
 	}
 }
 
+function create_count_span(i, n) {
+	let span = document.createElement('span');
+	span.classList.add('count');
+	span.innerHTML = `<b>${i}</b>`;
+	if (i) span.innerHTML += ` (${fmt_perc(i / n)})`;
+	return span;
+}
+
 function create_heading({section, length, length_ge, cost, count, disabled = 0, shade = true, top}) {
 	let heading = document.createElement('div');
 	heading.classList.add('heading');
@@ -1024,11 +1032,7 @@ function create_heading({section, length, length_ge, cost, count, disabled = 0, 
 	}
 
 	if (count) {
-		let n = count - disabled;
-		let span = document.createElement('span');
-		span.classList.add('count');
-		span.innerHTML = `<b>${n}</b> (${fmt_perc(n / emoji_count)})`;
-		heading.append(span);
+		heading.append(create_count_span(count - disabled, emoji_count));
 	}
 
 	if (disabled) {
@@ -1108,7 +1112,7 @@ function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_e
 
 	let info_div = document.createElement('div');
 	if (info) {
-		let {name, name0, version, type} = info;
+		let {name, name0, version, short_type} = info;
 		let a_name = document.createElement('a');
 		a_name.innerText = name;
 		a_name.href = `https://emojipedia.org/${form}`;
@@ -1117,6 +1121,12 @@ function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_e
 			let span = document.createElement('i');
 			span.classList.add('name0');
 			span.innerText = name0;
+			info_div.append(span);
+		}
+		if (short_type) {
+			let span = document.createElement('span');
+			span.classList.add('type');
+			span.innerText =  short_type;
 			info_div.append(span);
 		}
 		if (version) {
