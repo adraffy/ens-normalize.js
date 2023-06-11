@@ -1,3 +1,2 @@
-*.json
-*.csv
-*.txt
+output/
+data/

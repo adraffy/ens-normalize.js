@@ -25,6 +25,7 @@ function run_tests(nfd, nfc) {
 
 // test custom (must pass)
 if (run_tests(nfd_custom, nfc_custom).length) throw new Error('custom');
+console.log('PASS nf custom');
 
 // test native (might fail)
 let errors = run_tests(nfd_native, nfc_native);
@@ -32,6 +33,8 @@ if (errors.length) {
 	console.log(errors);
 	console.log(`Native Errors: ${errors.length}`);
 	console.log(`Native Unicode Version: ${process.versions.unicode}`);
+} else {
+	console.log('PASS nf native');
 }
 
 // compare speed
@@ -48,4 +51,4 @@ for (let x of m) nfc_native(x);
 let t2 = performance.now();
 let t_custom = t1-t0;
 let t_native = t2-t1;
-console.log({t_custom, t_native, factor: t_custom/t_native});
+console.log(`nf Speed: ${(t_custom/t_native).toFixed(2)}x slower`)

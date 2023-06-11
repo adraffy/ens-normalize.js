@@ -1,8 +1,8 @@
 # ens-normalize.js
-0-dependancy Compact ES6 [Ethereum Name Service](https://ens.domains/) (ENS) Name Normalizer.
+0-dependancy [Ethereum Name Service](https://ens.domains/) (ENS) Name Normalizer.
 
-* Follows [ENS Name Normalization Standard](https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard)
-	* Other Implementations:
+* Follows [ENSIP-15: ENS Name Normalization Standard](https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard)
+	* Other implementations:
 		* Python — [namehash/ens-normalize-python](https://github.com/namehash/ens-normalize-python)
 		* Javascript — [ensdomains/eth-ens-namehash](https://github.com/ensdomains/eth-ens-namehash)
 * [Passes **100%**](https://adraffy.github.io/ens-normalize.js/test/validate.html) Validation Tests
@@ -174,9 +174,10 @@ console.log(is_combining_mark(0x20E3)); // eg. COMBINING ENCLOSING KEYCAP => tru
 		* [spec.json](./derive/output/spec.json)
 		* [nf.json](./derive/output/nf.json)
 		* [nf-tests.json](./derive/output/nf-tests.json)
-* `npm run make` — compress data files from `/derive/output/`
+* `npm run make` — compress data files from [/derive/output/](./derive/output/)
 	* [include-ens.js](./src/include-ens.js)
 	* [include-nf.js](./src/include-nf.js)
+	* [include-versions.js](./src/include-versions.js)
 * Follow instructions in [/validate/](./validate/) to generate validation tests
 	* `npm run validate`
 		* [tests.json](./validate/tests.json)
@@ -190,3 +191,10 @@ console.log(is_combining_mark(0x20E3)); // eg. COMBINING ENCLOSING KEYCAP => tru
 This project uses `.js` instead of `.mjs` so [package.json](./package.json) uses `type: module`.  To avoid bundling issues, `type` is [dropped during packing](./src/prepost.js).  `pre/post` hooks aren't used because they're buggy.
 * `npm run pack` instead of `npm pack`
 * `npm run pub` instead of `npm publish`
+
+## Security
+
+* [Build](#build) and compare against [include-versions.js](./src/include-versions.js)
+	* `"spec_hash"` — SHA-256 of [spec.json](./derive/output/spec.json) bytes
+	* `"base64_ens_hash"` — SHA-256 of [include-ens.js](./src/include-ens.js) base64 literal
+	* `"base64_nf_hash"` — SHA-256 of [include-nf.js](./src/include-nf.js) base64 literal

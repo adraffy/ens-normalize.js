@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Emoji</title>
+<title>ENS Emoji</title>
 <style>
 :root {
 	--length-color: #f8eedd;
@@ -60,7 +60,15 @@ body {
 	gap: 8px;
 	overflow-y: scroll;
 }
+header {
+	display: flex;
+}
+header a {
+	text-align: right;
+}
 h1 {
+	flex: 1;
+	white-space: pre;
 	margin: 0;
 }
 #examples {
@@ -115,7 +123,7 @@ h1 {
 	border-color: #00f;
 }
 #jumps > :first-child {
-	opacity: 50%;
+	border-color: #000;
 }
 #jumps .length {
 	background-color: var(--length-color);
@@ -208,7 +216,7 @@ section {
 	text-align: center;
 }
 .emojis {
-	padding: 8px;
+	padding: 8px 0;
 	display: flex;
 	flex-wrap: wrap;
 	gap: 4px;
@@ -232,8 +240,8 @@ h2 span {
 table {
 	border-collapse: collapse;
 	width: 100%;
-	margin: 0.5rem 0 1rem;
-	text-align: left;
+	margin: 8px 0 16px;
+	text-align: center;
 }
 tbody tr:nth-child(odd) {
 	background: #fff;
@@ -241,12 +249,12 @@ tbody tr:nth-child(odd) {
 tbody tr:hover {
 	background-color: #cff;
 }
-tbody tr.error td {
+tr.error td {
 	background: rgba(255, 0, 0, 0.1);
 }
 td {
 	border: 1px solid #ccc;
-	padding: 0 10px;
+	padding: 0 4px;
 }
 *[data-copy] {
 	cursor: pointer;
@@ -260,67 +268,82 @@ h3 {
 	color: #888;
 }
 .index {
-	text-align: center;
+	color: #999;
 }
 .form {
 	text-align: center;
+	padding: 4px;
 }
-td.form {
+td.form,
+td.norm {
 	font-size: 200%;
+}
+td.norm.same {
+	opacity: 30%;
+}
+td.norm.text {
+	color: #666;
+}
+td.norm span {
+	opacity: 15%;
 }
 .form a {
 	text-decoration: none;
 	color: #000;
 }
-td.index {
-	color: #999;
+.part > .tokens {
+	justify-content: center;
+	white-space: pre;
+}
+.norm {
+	min-width: 32px;
+	white-space: pre;
 }
 td.info {
-	padding: 5px 10px;
+	padding: 4px 8px;
 	width: 100%;
 }
-.cells {
+.info > div {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: 5px;
+	gap: 4px;
 }
-.cells .name0 {
+.name0 {
 	color: #666;
 }
-.cells .version {
+.version {
 	color: #999;
 	font-size: 90%;
 }
-.cells code {
-	background: #ffa;
+.cps {
+	display: flex;
 	font-size: 120%;
+	gap: 4px;
+}
+.cps > * {
 	padding: 2px 4px;
 }
-.cells code.mapped {
+.cps :first-child {
+	background: #ffa;
+}
+.cps :nth-child(2) {
 	background: #fff;
 }
-.exploded {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 5px;
-}
-.norm {
-	background: #fca;
-	padding: 2px 5px;
-	border-radius: 5px;
-	min-width: 1rem;
+.resolve a {
+	text-decoration: none;
 }
 #none {
 	display: flex;
+	justify-content: center;
 	margin-top: 8px;
 }
 #none div {
 	background-color: #fdd;
-	font-size: 14pt;
 	padding: 8px 16px;
-	border-radius: 4px;
+	background: #ffc;
+	border: 1px solid #ccc;
+	border-radius: 8px;
 }
 #loader {
 	display: flex;
@@ -350,32 +373,27 @@ td.info {
 footer {
 	text-align: center;
 	color: #666;
-	margin: 1rem;
+	margin-top: 8px;
 }
 @media only screen and (max-width: 800px) { 
 	body {
-		margin: 0;
+		margin: 16px;
 	}
 	h1 {
 		font-size: 20pt;
 	}
-	header {
-		padding: 16px;
-		padding-bottom: 0;
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: space-between;
-	}
-	#links {
-		order: 3;
-		flex-basis: 100%;
-	}
-	#search, #options, #examples, #jumps {
-		padding: 0 16px;
+	main {
+		margin: 8ppx -16px;
 	}
 	.heading {
 		font-size: 16pt;
 		border-radius: 0;
+	}
+	.index, .part {
+		display: none;
+	}
+	.cps {
+		flex: 100%;
 	}
 }
 </style>
@@ -383,20 +401,22 @@ footer {
 <body>
 <div id="hover" class="hide"></div>
 <header>
-<h1>Emoji</h1>
-<div id="links">
-<a href="./resolver.html"><b>Resolver</b></a>
-<a href="https://raffy.antistupid.com/eth/ens-emoji-freq.html">Emoji Frequency</a>
-<a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a>
-•
-<a href="https://www.unicode.org/reports/tr51/">UTS-51</a>
-<a href="https://unicode.org/emoji/charts/full-emoji-list.html">Unicode List</a>
-<a href="https://unicode.org/emoji/charts/full-emoji-modifiers.html">Modifiers</a>
-<a href="https://unicode.org/emoji/charts/emoji-counts.html">Counts</a>
-<a href="https://unicode.org/emoji/charts/emoji-released.html">Recently Added</a>
-<a href="https://unicode.org/emoji/charts/emoji-proposals.html">Proposals</a>
-</div>
+	<h1>Emoji</h1>
+	<a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a>
 </header>
+<div id="links">
+	<a href="./resolver.html"><b>Resolver</b></a>
+	<a href="https://raffy.antistupid.com/eth/ens-emoji-freq.html">Emoji Frequency</a>
+	•
+	<a href="https://www.unicode.org/reports/tr51/">UTS-51</a>
+	<a href="https://unicode.org/emoji/charts/full-emoji-list.html">Unicode List</a>
+	<a href="https://unicode.org/emoji/charts/full-emoji-modifiers.html">Modifiers</a>
+	<a href="https://unicode.org/emoji/charts/emoji-counts.html">Counts</a>
+	<a href="https://unicode.org/emoji/charts/emoji-released.html">Recently Added</a>
+	<a href="https://unicode.org/emoji/charts/emoji-proposals.html">Proposals</a>
+	•
+	<a href="https://github.com/adraffy/ens-normalize.js/blob/main/derive/output/emoji-info.json"><code>emoji-info.json</code></a>
+</div>
 <div id="examples">
 	<b>People:</b>
 	<button data-query="Man ">Man</button>
@@ -420,11 +440,13 @@ footer {
 	<b>Special:</b>
 	<button data-query="cat">🐈️</button>
 	<button data-query="heart">❤️</button>
-	<button data-query="unmod(1)">Toneless</button>
+	<button data-query="Unmod(1)">Toneless</button>
+	<button>Singles</button>
+	<button>Doubles</button>
+	<button>Triples</button>
 	<b>Norm:</b>
-	<button data-query="normalized">✅️</button>
-	<button data-query="already-norm">Verbatim</button>
-	<button data-query="needs-norm">Required</button>
+	<button data-query="Already-norm">Verbatim</button>
+	<button data-query="Needs-norm">Required</button>
 	<b>Codepoints:</b>
 	<button data-query="{200D}" class="raw">ZWJ</button>
 	<button data-query="{FE0F}" class="raw">FE0F</button>
@@ -437,7 +459,7 @@ footer {
 	<button id="by_cost_btn" data-by="cost">Cost</button>
 	<button id="by_cp_btn" data-by="cp">Codepoint</button>
 	<span class="balloon"></span>
-	<button id="csv_btn">
+	<button id="csv_btn" title="Download as CSV">
 		<svg class="with-icon_icon__aLCKg" data-testid="geist-icon" fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color:var(--geist-foreground);width:24px;height:24px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
 		<span>CSV</span>
 	</button>
@@ -461,9 +483,9 @@ const BY_LENGTH = 'length';
 const BY_COST = 'cost';
 
 const COSTS = [
-	{length: 3, cost: 640, title: '3'},
-	{length: 4, cost: 160, title: '4'},
-	{length: 5, cost:   5, title: '5+'},
+	{length: 3, cost: 640},
+	{length: 4, cost: 160},
+	{length: 5, cost:   5},
 ];
 
 const search_field = document.querySelector('#search input');
@@ -512,7 +534,7 @@ let by_mode;
 		}
 		for (let info of data) {
 			info_map.set(info.form, info);
-			if (is_not_emoji(info)) {
+			if (info.type === 'Disabled') {
 				emoji_disabled.push(explode_cp(info.form));
 			}
 		}
@@ -672,8 +694,10 @@ function sync_by_mode() {
 function make_rec(cps) {
 	let form = String.fromCodePoint(...cps);
 	let norm;
+	let is_norm;
 	try {
 		norm = ens_normalize(form);
+		is_norm = true;
 	} catch (err) {
 		norm = form;
 	}
@@ -681,7 +705,7 @@ function make_rec(cps) {
 	let tokens = ens_tokenize(form);
 	let is_emoji = !!tokens[0].emoji;
 	let info = info_map.get(form);	
-	let rec = {form, norm, cps, info, is_emoji, tokens, norm_length};
+	let rec = {form, norm, cps, info, is_emoji, tokens, norm_length, is_norm};
 	if (is_emoji) {
 		let min = Math.min(5, norm_length * (1 + Math.max(0, 3 - norm_length))); 
 		rec.min_length = min;
@@ -729,6 +753,7 @@ function update_search() {
 		setup_render(all_emoji);
 		return;
 	}
+	input = input.replace('chonk', 'cat');
 	let results;
 	let match;
 	if (input === 'normalized' || input === 'is-norm') {
@@ -739,6 +764,12 @@ function update_search() {
 		results = all_emoji.filter(x => x.is_emoji && x.form === x.norm);	
 	} else if (input === 'ascii') {
 		results = all_emoji.filter(x => /[\x00-\x7F]/.test(x.form));
+	} else if (input === 'singles') {
+		results = all_emoji.filter(x => x.min_repeat === 1);
+	} else if (input === 'doubles') {
+		results = all_emoji.filter(x => x.min_repeat === 2);
+	} else if (input === 'triples') {
+		results = all_emoji.filter(x => x.min_repeat === 3);
 	} else if (match = input.match(/^v(\d+(?:.\d+))$/)) {
 		let version = match[1];
 		results = all_emoji.filter(x => x.info && x.info.version.startsWith(version));
@@ -820,8 +851,10 @@ function create_empty_table() {
 		<thead>
 		<tr>
 		<th class="index">#</th>
-		<th class="form">💖️</th>
-		<th class="info">Name, Version, Codepoints (Fully-Qualified), Components &rarr; Normalized</th>
+		<th class="form" title="Beautified Form">💖️</th>
+		<th class="part" title="Components">🛠️</th>
+		<th class="norm" title="Normalized Form">✅️</th>
+		<th class="info">Name, Version, Codepoints</th>
 		</tr>
 		</thead>
 		<tbody></tbody>
@@ -833,7 +866,7 @@ function create_empty_table() {
 function create_hex_code(name, cps) {
 	let hex = cps.map(hex_cp).join(' ');
 	let code = document.createElement('code');
-	code.title = `${name}\n(Click to Copy)`;
+	code.title = `${name} Hex\n(Click to Copy)`;
 	code.dataset.copy = hex;
 	code.innerText = hex;
 	return code;
@@ -845,7 +878,6 @@ function render() {
 	requestAnimationFrame(render);
 }
 function setup_render(results) {
-	//let top;
 	render_queue.length = 0;
 	main.innerHTML = '';
 	if (by_mode === BY_LENGTH) {
@@ -887,7 +919,7 @@ function setup_render(results) {
 			let disabled = results.reduce((a, x) => a + (x.is_emoji?0:1), 0);
 			let count = results.length - disabled;
 			let span = document.createElement('span');
-			span.innerHTML = `<span class="count"><b>${count}</b> (${perc_str(count / emoji_count)})</span>`;
+			span.innerHTML = `<span class="count"><b>${count}</b> (${fmt_perc(count / emoji_count)})</span>`;
 			if (disabled) {
 				span.innerHTML += `<span class="disabled">${disabled}</span>`;
 			}
@@ -897,7 +929,7 @@ function setup_render(results) {
 
 		
 	} else if (by_mode === BY_COST) {
-		for (let {length, cost, title} of COSTS) {
+		for (let {length, cost} of COSTS) {
 			let match_length = results.filter(x => x.min_length === length && x.is_emoji);
 			if (!match_length.length) continue;
 			let section;
@@ -907,13 +939,12 @@ function setup_render(results) {
 				render_queue.push(() => {
 					if (!section) {
 						section = document.createElement('section');
-						let heading = create_heading({section, length, cost, count: match_length.length, top: true});
+						let heading = create_heading({section, length, length_ge: true, cost, count: match_length.length, top: true});
 						main.append(heading, section);
-						//top = true;
 					}
 					let subheading = document.createElement('div');
 					subheading.classList.add('subheading');
-					subheading.innerHTML = `<b>${get_repeat_word(repeat)}</b> (${match_repeat.length}, ${perc_str(match_repeat.length / emoji_count)})`;
+					subheading.innerHTML = `<b>${get_repeat_word(repeat)}</b> — ${match_repeat.length} (${fmt_perc(match_repeat.length / emoji_count)})`;
 					section.append(subheading);
 					if (match_repeat.length > 10) {
 						let emojis_div = document.createElement('div');
@@ -961,8 +992,8 @@ function cached_tr(rec, first) {
 	return rec.tr;
 }
 
-function perc_str(p) {
-	return (100 * p).toFixed(2).replace(/\.?0+$/, '') + '%';
+function fmt_perc(p) {
+	return (100 * p).toFixed(p < 0.1 ? 2 : 1).replace(/\.?0+$/, '') + '%';
 }
 
 function get_repeat_word(n) {
@@ -974,7 +1005,7 @@ function get_repeat_word(n) {
 	}
 }
 
-function create_heading({section, length, cost, count, disabled = 0, shade = true, top}) {
+function create_heading({section, length, length_ge, cost, count, disabled = 0, shade = true, top}) {
 	let heading = document.createElement('div');
 	heading.classList.add('heading');
 	
@@ -988,7 +1019,7 @@ function create_heading({section, length, cost, count, disabled = 0, shade = tru
 	if (length) {
 		let span = document.createElement('span');
 		span.classList.add('length');
-		span.innerHTML = `${length}<span class="cp">cp</span>`;
+		span.innerHTML = `${length}<span class="cp">cp${length_ge?'+':''}</span>`;
 		heading.append(span);
 	}
 
@@ -996,7 +1027,7 @@ function create_heading({section, length, cost, count, disabled = 0, shade = tru
 		let n = count - disabled;
 		let span = document.createElement('span');
 		span.classList.add('count');
-		span.innerHTML = `<b>${n}</b> (${perc_str(n / emoji_count)})`;
+		span.innerHTML = `<b>${n}</b> (${fmt_perc(n / emoji_count)})`;
 		heading.append(span);
 	}
 
@@ -1037,84 +1068,87 @@ function create_heading({section, length, cost, count, disabled = 0, shade = tru
 	return heading;
 }
 
-function create_tr({cps, form, norm, info, tokens, norm_length, is_emoji}, first) {
+function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_emoji, is_norm}) {
 	let tr = document.createElement('tr');
+	tr.dataset.name = form;
+	if (!is_emoji) {
+		tr.classList.add('error');
+	}
 
 	let td_index = document.createElement('td');
 	td_index.classList.add('index');
-	td_index.innerHTML = first;
-	td_index.title = `Fully-Qualified Form\n(Click to Copy)`;
-	td_index.dataset.copy = form;
-	if (form.includes('\uFE0F') && !form.includes('\u200D')) {
-		td_index.dataset.alt = form.replaceAll('\uFE0F', '\uFE0E');
-		td_index.title += `\n[ALT] Text-styled Form`;
-	}
 
 	let td_form = document.createElement('td');
 	td_form.classList.add('form');
-	let a_resolve = document.createElement('a');
-	a_resolve.href = `./resolver.html#${norm.repeat(1 + Math.max(0, 3 - norm_length))}.eth`;
-	a_resolve.innerHTML = form;
-	a_resolve.title = 'Show in Resolver\n(Minimal Repeated)';
-	td_form.append(a_resolve);
+	td_form.innerHTML = form;
+	td_form.dataset.copy = form;
+	td_form.title = `Beautified Form\n(Click to Copy)`;
 
-	let td_cells = document.createElement('td');
-	td_cells.classList.add('info');
-	
-	let cells_div = document.createElement('div');
-	cells_div.classList.add('cells');
+	let td_part = document.createElement('td');
+	td_part.classList.add('part');
+	td_part.append(dom_from_tokens(tokens, {components: true, before: is_emoji, emoji_url: false}));
+
+	let td_norm = document.createElement('td');
+	td_norm.classList.add('norm');
+	if (is_norm) {
+		td_norm.innerHTML = norm;
+		td_norm.dataset.copy = norm;
+		if (is_emoji && form === norm) {
+			td_norm.classList.add('same');
+			td_norm.title = 'Normalized Form\n[Same as Beautified]\n(Click to Copy)';
+		} else {
+			td_norm.title = 'Normalized Form\n(Click to Copy)';
+		}
+		if (!is_emoji) {
+			td_norm.classList.add('text');
+		}
+	} else {
+		td_norm.innerHTML = '<span>❌️</span>';
+	}
+
+	let info_div = document.createElement('div');
 	if (info) {
 		let {name, name0, version, type} = info;
 		let a_name = document.createElement('a');
 		a_name.innerText = name;
 		a_name.href = `https://emojipedia.org/${form}`;
-		cells_div.append(a_name);
+		info_div.append(a_name);
 		if (name0) {
 			let span = document.createElement('i');
 			span.classList.add('name0');
 			span.innerText = name0;
-			cells_div.append(span);
+			info_div.append(span);
 		}
 		if (version) {
 			let span = document.createElement('span');
 			span.classList.add('version');
 			span.innerText = `v${version}`;
-			cells_div.append(span);
+			info_div.append(span);
 		}
 	}	
-	if (!is_emoji) {
-		tr.classList.add('error');
+
+	let cps_div = document.createElement('div');
+	cps_div.classList.add('cps');
+	cps_div.append(create_hex_code('Fully-Qualified', cps));
+	if (tokens.some(t => t.type === 'mapped')) {
+		cps_div.append('→')
+		cps_div.append(create_hex_code('Mapped', explode_cp(norm)));
 	}
-	cells_div.append(create_hex_code('Fully-Qualified', cps));
+	info_div.append(cps_div);
+	
+	let td_info = document.createElement('td');
+	td_info.classList.add('info');	
+	td_info.append(info_div);
 
-	let exploded_div = document.createElement('div');
-	exploded_div.classList.add('exploded');
-	exploded_div.append(dom_from_tokens(tokens, {components: true, before: true, emoji_url: false}));
-	cells_div.append(exploded_div);
-	if (form !== norm) {
-		let span_arrow = document.createElement('span');
-		span_arrow.innerText = '➔';
-		span_arrow.classList.add('arrow');
+	let td_resolve = document.createElement('td');	
+	td_resolve.classList.add('resolve');
+	let a_resolve = document.createElement('a');
+	a_resolve.innerHTML = '↩️';
+	a_resolve.href = `./resolver.html#${norm.repeat(min_repeat)}.eth`;
+	a_resolve.title = 'Show in Resolver';
+	td_resolve.append(a_resolve);
 
-		let span_norm = document.createElement('span');
-		span_norm.classList.add('norm')
-		span_norm.innerText = norm;
-		span_norm.dataset.copy = norm;
-		span_norm.title = 'Normalized Form\n(Click to Copy)';
-
-		exploded_div.append(span_arrow, span_norm);
-		
-		if (tokens.some(t => t.type === 'mapped')) {
-			let span = create_hex_code('Normalized (Mapped)', explode_cp(norm));
-			span.classList.add('mapped');
-			cells_div.append(span);
-		}
-	}	
-
-	td_cells.append(cells_div);
-
-	tr.dataset.name = form;
-	tr.append(td_index, td_form, td_cells);
+	tr.append(td_index, td_form, td_part, td_norm, td_info, td_resolve);
 	return tr;
 }
 
@@ -1127,10 +1161,6 @@ async function dataURIFromBlob(blob) {
 	});
 }
 
-
-function is_not_emoji(x) {
-	return x.type === 'Disabled'; // matches /derive/make.js -> emoji-info.json
-}
 
 function searchize(s) {
 	return s.toLowerCase()

@@ -69,7 +69,7 @@ if (args[0] === 'save') {
 		(union.has(label) ? multi : union).add(label);
 	}
 	let multi_map = new Map([...multi].map((label, i) => [label, i]));
-	let out_file = new URL('./ens-emoji-freq.json', import.meta.url);
+	let out_file = new URL('./output/ens-emoji-freq.json', import.meta.url);
 	writeFileSync(out_file, JSON.stringify({
 		date: new Date(), 
 		total: labels.length,

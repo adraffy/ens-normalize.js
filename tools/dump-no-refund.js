@@ -77,7 +77,7 @@ console.log({
 	found,
 	invis: spoof_invis.length,
 });
-writeFileSync(new URL('./no-refund.json', import.meta.url), JSON.stringify({
+writeFileSync(new URL('./output/no-refund.json', import.meta.url), JSON.stringify({
 	count: labels.length,
 	found,
 	spoof_invis
@@ -85,7 +85,7 @@ writeFileSync(new URL('./no-refund.json', import.meta.url), JSON.stringify({
 
 // double-check matoken
 let matoken = 0;
-for (let label of readFileSync(new URL('./refund_names.csv', import.meta.url), {encoding: 'utf8'}).split('\n')) {
+for (let label of readFileSync(new URL('./data/refund_names.csv', import.meta.url), {encoding: 'utf8'}).split('\n')) {
 	try {
 		ens_normalize(label);		
 		continue;

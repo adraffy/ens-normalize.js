@@ -1,14 +1,16 @@
 {
 	"name": "@adraffy/ens-normalize",
-	"version": "1.9.2",
-	"description": "Compact ES6 Ethereum Name Service (ENS) Name Normalizer",
+	"version": "1.9.3",
+	"description": "Ethereum Name Service (ENS) Name Normalizer",
 	"keywords": [
 		"ENS",
+		"ENSIP-15",
 		"Ethereum",
 		"UTS-46",
 		"UTS-51",
 		"IDNA",
 		"Normalize",
+		"Normalization",
 		"NFC",
 		"NFD"
 	],
@@ -52,11 +54,12 @@
 		"url": "http://raffy.antistupid.com"
 	},
 	"scripts": {
+		"unicode": "node derive/download.js",
 		"labels": "node validate/download-labels.js",
 		"derive": "node derive/make.js",
 		"make": "node src/make.js",
 		"validate": "node validate/make.js",
-		"test": "node test/validate.js",
+		"test": "node test/coder.js && node test/nf.js && node test/validate.js",
 		"build": "rollup -c",
 		"rebuild": "npm run derive && npm run make && npm run validate && npm run test && npm run build",
 		"order": "node validate/dump-group-order.js save && npm run rebuild",
@@ -67,7 +70,7 @@
 	"devDependencies": {
 		"@rollup/plugin-alias": "^5.0.0",
 		"@rollup/plugin-terser": "^0.4.0",
-		"rollup": "^3.20.0"
+		"rollup": "^3.24.1"
 	},
 	"type": "module"
 }

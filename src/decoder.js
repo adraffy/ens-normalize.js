@@ -91,6 +91,7 @@ export function read_compressed_payload(s) {
 
 // unsafe in the sense:
 // expected well-formed Base64 w/o padding 
+// 20220922: added for https://github.com/adraffy/ens-normalize.js/issues/4
 export function unsafe_atob(s) {
 	let lookup = [];
 	[...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'].forEach((c, i) => lookup[c.charCodeAt(0)] = i);

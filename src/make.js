@@ -1,7 +1,7 @@
 import {Encoder, unsafe_btoa} from './encoder.js';
 import {readFileSync, writeFileSync} from 'node:fs';
 import {explode_cp} from './utils.js';
-import {compute_spec_hash} from './make-utils.js';
+import {compute_spec_hash, compute_sha256} from './make-utils.js';
 
 /*
 // import ... assert {type: 'json'} appears to be bugged in node 18.12.1
@@ -317,7 +317,7 @@ encode_emoji(enc, root, sorted_emoji_map); // ~2KB
 const built = new Date().toJSON();
 
 //write('include-only'); // only saves 300 bytes
-write('include-ens', {
+let {hash: base64_ens_hash} = write('include-ens', {
 	FENCED: new Map(fenced),
 	NSM_MAX: nsm_max,
 });
@@ -333,27 +333,37 @@ enc.write_mapped([
 	[1, 1, 1],
 ], decomp);
 enc.write_member(qc);
-write('include-nf');
+let {hash: base64_nf_hash} = write('include-nf');
 
 // write version info
 const versions = {
 	derived: spec.created,
 	unicode: spec.unicode,
 	cldr: spec.cldr,
+	base64_ens_hash, // 20230608: added for https://github.com/adraffy/ens-normalize.js/issues/20
+	base64_nf_hash,
 	spec_hash: compute_spec_hash(spec_file),
 	built,
 	version
 };
 console.log(versions);
-writeFileSync(new URL('./include-versions.js', import.meta.url), Object.entries(versions).map(([k, v]) => {
-	return `export const ${k} = ${JSON.stringify(v)};`;
-}).join('\n'));
+writeFileSync(new URL('./include-versions.js', import.meta.url), [
+	`// see: https://github.com/adraffy/ens-normalize.js#security`,
+	...Object.entries(versions).map(([k, v]) => {
+		return `export const ${k} = ${JSON.stringify(v)};`;
+	})
+].join('\n'));
 
 function write(name, vars = {}) {
 	let {data, symbols} = enc.compressed();
 	let encoded = unsafe_btoa(data);
+	let hash = compute_sha256(encoded);
 	let buf = Buffer.from([
 		`// created ${built}`,
+		`// compressed base64-encoded blob for ${name} data`,
+		`// source: https://github.com/adraffy/ens-normalize.js/blob/main/src/make.js`,
+		`// see: https://github.com/adraffy/ens-normalize.js#security`,
+		`// SHA-256: ${hash}`,
 		`import {read_compressed_payload} from './decoder.js';`,
 		`export default read_compressed_payload('${encoded}');`,
 		...Object.entries(vars).map(([k, v]) => {
@@ -370,5 +380,5 @@ function write(name, vars = {}) {
 	].join('\n'));
 	console.log(`${name} [${data.length} bytes, ${symbols} symbols, ${encoded.length} base64] => ${buf.length} bytes`);
 	writeFileSync(new URL(`./${name}.js`, import.meta.url), buf);
-	//writeFileSync(new URL(`./${name}.json`, import.meta.url), JSON.stringify(enc.values.slice()));
+	return {hash, data, encoded};
 }

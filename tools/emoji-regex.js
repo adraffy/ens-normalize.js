@@ -28,4 +28,4 @@ let mem1 = process.memoryUsage().heapUsed;
 console.log(`Length: ${NAIVE.toString().length}`);
 console.log(`Bytes: ${mem1 - mem0}`); // approximately 3MB?
 
-writeFileSync(new URL('./emoji-regex.txt', import.meta.url), NAIVE.toString());
+writeFileSync(new URL('./output/emoji-regex.txt', import.meta.url), NAIVE.toString());

@@ -37,4 +37,4 @@ for (let g of groups) {
 }
 console.log(found.size);
 
-writeFileSync(new URL('./ens-1ch-names.json', import.meta.url), JSON.stringify([...found], null, '\t'));
+writeFileSync(new URL('./output/ens-1ch-names.json', import.meta.url), JSON.stringify([...found], null, '\t'));
