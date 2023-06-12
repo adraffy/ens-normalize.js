@@ -272,6 +272,10 @@ td {
 }
 *[data-copy] {
 	cursor: pointer;
+	transition: background-color 0.5s;	
+}
+.copied {
+	background-color: #aff !important;
 }
 h3 {
 	margin: 0.5rem 0;
@@ -300,6 +304,7 @@ td.norm.text {
 }
 td.norm span {
 	opacity: 15%;
+	user-select: none;
 }
 .form a {
 	text-decoration: none;
@@ -656,6 +661,7 @@ let by_mode;
 		hover_div.innerHTML = name;
 	});
 
+	let copy_timer;
 	document.body.addEventListener('pointerdown', e => {
 		let node = e.target.closest(`[data-copy]`);
 		if (!node) return;
@@ -663,6 +669,11 @@ let by_mode;
 		if (alt && e.altKey) copy = alt;
 		if (copy) {
 			navigator.clipboard.writeText(copy);
+			const cls = 'copied';
+			document.querySelectorAll(`.${cls}`).forEach(x => x.classList.remove(cls));
+			node.classList.add(cls);
+			clearTimeout(copy_timer);
+			copy_timer = setTimeout(() => node.classList.remove(cls), 2000);
 		}
 	});
 
@@ -1086,7 +1097,7 @@ function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_e
 	td_form.classList.add('form');
 	td_form.innerHTML = form;
 	td_form.dataset.copy = form;
-	td_form.title = `Beautified Form\n(Click to Copy)`;
+	td_form.title = `${is_emoji ? 'Beautified' : 'Input'} Form\n(Click to Copy)`;
 
 	let td_part = document.createElement('td');
 	td_part.classList.add('part');

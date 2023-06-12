@@ -1907,7 +1907,7 @@ function create_digits_row(norm, group, values, negative, suffix) {
 	if (norm !== form) {
 		let main = document.createElement('code');
 		main.innerText = form;
-		main.classList.append('long'); 
+		main.classList.add('long'); 
 		row.append(main);
 	}
 	if (values.length == (negative ? 2 : 3)) {
