@@ -275,7 +275,7 @@ td {
 	transition: background-color 0.5s;	
 }
 .copied {
-	background-color: #aff !important;
+	background-color: #8f8 !important;
 }
 h3 {
 	margin: 0.5rem 0;
@@ -359,6 +359,7 @@ td.info {
 }
 .resolve a {
 	text-decoration: none;
+	cursor: help;
 }
 #none {
 	display: flex;
@@ -864,6 +865,7 @@ function create_empty_table() {
 		<th class="form" title="Beautified Form">💖️</th>
 		<th class="part" title="Components">🛠️</th>
 		<th class="norm" title="Normalized Form">✅️</th>
+		<th class="norm" title="Open in Resolver">↩️</th>
 		<th class="info">Name, Version, Codepoints</th>
 		</tr>
 		</thead>
@@ -1166,10 +1168,10 @@ function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_e
 	let a_resolve = document.createElement('a');
 	a_resolve.innerHTML = '↩️';
 	a_resolve.href = `./resolver.html#${norm.repeat(min_repeat)}.eth`;
-	a_resolve.title = 'Show in Resolver';
+	a_resolve.title = 'Open in Resolver';
 	td_resolve.append(a_resolve);
 
-	tr.append(td_index, td_form, td_part, td_norm, td_info, td_resolve);
+	tr.append(td_index, td_form, td_part, td_norm, td_resolve, td_info);
 	return tr;
 }
 

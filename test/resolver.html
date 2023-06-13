@@ -215,6 +215,9 @@ input[type=checkbox], label {
 	font-weight: bold;
 	white-space: pre-wrap;
 }
+.row-label a {	
+	color: #000;
+}
 .row {
 	padding: 8px;
 	background: #fff;
@@ -909,6 +912,7 @@ Hebrew:
 	<button id="find_emoji_btn">Emoji</button>
 	<button id="confused_btn">Confused</button>
 	<button id="nf_btn">NFD↔NFC</button>
+	<button id="parent_btn">Parent</button>
 	<button id="escape_btn" title="[ALT] Unicode Escaped">Escape</button>
 	<button id="link_btn">Copy Link</button>
 	<button id="resolve_btn">Resolve</button>
@@ -1214,6 +1218,12 @@ document.querySelector('#nf_btn').addEventListener('click', () => {
 	let s3 = apply_escapes(str_from_cps(nfc(explode_cp(s1))));
 	if (s2 === s3 && s2 === apply_escapes(s1)) return; // do nothing
 	input_field.value = s0 == s2 ? s3 : s2;
+	resolve();
+});
+document.querySelector('#parent_btn').addEventListener('click', e => {
+	let name = input_field.value;
+	let pos = name.indexOf('.');
+	input_field.value = pos >= 0 ? name.slice(pos+1) : '';
 	resolve();
 });
 document.querySelector('#escape_btn').addEventListener('click', e => {
@@ -2947,16 +2957,18 @@ async function resolve0(input, skip_norm) {
 			add_row_tag(wrapped_row, is_wrapped ? create_typed_tag('good', '🎁 Wrapped') : '🎉 Unwrapped');
 		}
 		if (wrapper_contract) {
-			add_row_tag(wrapped_row, create_etherscan_address_link(wrapper_contract.address, {title: 'Contract', contract: true}));
-		}		
+			let label = wrapped_row.querySelector('.row-label');
+			let title = label.innerHTML;
+			label.innerHTML = '';
+			label.append(create_etherscan_address_link(wrapper_contract.address, {title, contract: true}));
+		}
 		if (is_wrapped) {
 			add_nft_links(normed_row, name_norm, wrapper_contract.address, node);
-			if (nft_contract) {
+			/*if (nft_contract) {
 				add_row_tag(wrapped_row, create_etherscan_nft_link(nft_contract.address, nft_token));
 				add_row_tag(wrapped_row, create_opensea_link(nft_contract.address, nft_token));
-			}
+			}*/
 		} else if (nft_contract) {
-			
 			add_nft_links(normed_row, name_norm, nft_contract.address, nft_token);
 		}
 		// there doesn't seem to be an "owner"
@@ -2972,7 +2984,17 @@ async function resolve0(input, skip_norm) {
 				let data = await wrapper_contract.callStatic.getData(node);
 				if (should_stop_resolving()) return;
 				owner = data.owner;
+
 				let {fuses} = data;
+				if (!(fuses & (1 << 17))) { // eth
+					await ensure_eth_nft(); 
+					if (should_stop_resolving()) return;
+					let exp = (data.expiry - eth_nft_contract.grace_period) * 1000 ; // includes grace
+					let now = Date.now();
+					if (exp > now) {
+						add_row_tag(wrapped_row, create_typed_tag('warn', `Expires in ${format_dur(exp - now)}`));
+					}
+				}
 				if (fuses == 0) add_row_tag(wrapped_row, '👊️ Can Do Everything');
 				if (fuses & 0x00001) add_row_tag(wrapped_row, '🚫️ Unwrap');
 				if (fuses & 0x00002) add_row_tag(wrapped_row, '🚫️ Burn Fuses');
@@ -2981,7 +3003,7 @@ async function resolve0(input, skip_norm) {
 				if (fuses & 0x00010) add_row_tag(wrapped_row, '🚫️ Set TTL');
 				if (fuses & 0x00020) add_row_tag(wrapped_row, '🚫️ Subdomains');
 				if (fuses & 0x00040) add_row_tag(wrapped_row, '🚫️ Approve');
-				if (fuses & 0x10000) add_row_tag(wrapped_row, '⛔️ Parent Control');
+				if (fuses & 0x10000) add_row_tag(wrapped_row, '🛑️ Parent Controlled');
 				if (fuses & 0x40000) add_row_tag(wrapped_row, '☑️ Extend Expiry');
 			} else {
 				owner = await registry_contract.callStatic.owner(node);
