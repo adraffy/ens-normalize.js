@@ -1989,8 +1989,10 @@ function add_nft_links(row, name, contract, token) {
 	add_row_tag(row, create_ens_metadata_link(contract, token));
 	add_row_tag(row, create_opensea_link(contract, token));
 	try {
-		let encoded = encodeURIComponent(name); 
-		add_row_tag(row, create_link(`https://www.ens.vision/name/${encoded}`, VISION_NAME));
+		let encoded = encodeURIComponent(name);
+		if (encoded.endsWith('.eth')) {
+			add_row_tag(row, create_link(`https://www.ens.vision/name/${encoded.slice(0, -4)}`, VISION_NAME));
+		}
 		add_row_tag(row, create_link(`http://predomain.eth.limo/#/domain/${encoded}`, 'Predomain'));
 	} catch (err) {
 	}
@@ -2161,6 +2163,8 @@ function create_typed_tag(type, desc) {
 			//desc = `❌ ${desc}`;
 			type = 'warn';
 			//break;
+		case 'error':
+			type = 'fail';
 		case 'warn': 
 			desc = `⚠️ ${desc}`;
 			break;
@@ -2306,7 +2310,11 @@ function create_row(label, waiting) {
 	if (label) {
 		let span = document.createElement('span');
 		span.classList.add('row-label');
-		span.innerHTML = `${label}:`;
+		if (typeof label === 'string') {
+			span.innerHTML = `${label}:`;
+		} else {
+			span.append(label);
+		}
 		row.append(span);
 	}
 	if (waiting) {
@@ -2391,7 +2399,7 @@ function resolve() {
 				let v = url.pathname.toLowerCase().split('/').filter(x => x);
 				if (v.length >= 2 && v[0] === 'name') {
 					input = decodeURIComponent(v[1]);
-					if (!input.includes('.')) input += '.eth';
+					if (!input.endsWith('.eth')) input += '.eth';
 					input_field.value = input;
 				}
 			} else { 
@@ -2402,6 +2410,7 @@ function resolve() {
 				// https://element.market/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
 				let v = url.pathname.toLowerCase().split('/').filter(x => x);
 				if (v.length >= 2 && /^[a-f0-9]+$/i.test(v[v.length-1])) {
+					// TODO: fix this, use ensure_nft() and ensure_wrapper() 
 					if (v[v.length-2] === '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85') {
 						input_field.value = input = `token:${v[v.length-1]}`;
 					} else if (v[v.length-2] === '0xd4416b13d2b3a9abae7acd5d6c2bbdbe25686401') {
@@ -2836,7 +2845,7 @@ async function resolve0(input, skip_norm) {
 		let eth_label = name_norm.slice(0, sep_pos);
 		nft_token = ethers.utils.id(eth_label);
 		let avail_err;
-		let t_exp;
+		let expiry;
 		let len = [...eth_label].length;
 		let avail_row = create_row('Availability', true);
 		let premium;
@@ -2848,10 +2857,10 @@ async function resolve0(input, skip_norm) {
 			if (len >= MIN_LENGTH) {
 				available = await eth_nft_contract.callStatic.available(nft_token);
 				if (should_stop_resolving()) return;
-				t_exp = (await eth_nft_contract.callStatic.nameExpires(nft_token)).toNumber();
+				expiry = (await eth_nft_contract.callStatic.nameExpires(nft_token)).toNumber();
 				if (available) {
 					if (should_stop_resolving()) return;
-					premium = await price_oracle_contract.callStatic.premium(eth_label, t_exp, 0);
+					premium = await price_oracle_contract.callStatic.premium(eth_label, expiry, 0);
 				}
 			}
 		} catch (err) {
@@ -2882,26 +2891,24 @@ async function resolve0(input, skip_norm) {
 			//add_row_tag(avail_row, create_typed_tag('fire', 'Available'));
 			//add_row_tag(avail_row, create_ens_link(name_norm, {title: 'Register'}));
 		} else {
-			let date = new Date(1000 * t_exp);
-			let t_end = t_exp + eth_nft_contract.grace_period;
-			let t_now = Math.round(Date.now() / 1000);
-			if (t_now >= t_exp && t_now <= t_end) {
-				let days = (t_end - t_now) / 86400;
-				add_row_tag(avail_row, create_typed_tag('warn', `Grace period (${format_dur(1000 * eth_nft_contract.grace_period)}) ends in ${format_dur(1000 * (t_end - t_now))}`));
+			let exp = expiry * 1000;
+			let end = exp + eth_nft_contract.grace_period;
+			let now = Date.now();
+			if (now >= exp && now <= end) {
+				add_row_tag(avail_row, create_typed_tag('warn', `Grace period (${format_dur(eth_nft_contract.grace_period)}) ends in ${format_dur(end - now)}`));
 			} else {
 				let span_reg = document.createElement('span');
-				span_reg.innerText = `✍️ Registered until ${date.toLocaleDateString()}`;
+				span_reg.innerText = `✍️ Registered until ${new Date(exp).toLocaleDateString()}`;
 				span_reg.style.backgroundColor = '#def';
 				add_row_tag(avail_row, span_reg);
-				if (t_exp - t_now < eth_nft_contract.warning_period) {
-					add_row_tag(avail_row, create_typed_tag('warn', `Expires in ${format_dur(1000 * (t_exp - t_now))}`));
+				if (exp - now < eth_nft_contract.warning_period) {
+					add_row_tag(avail_row, create_typed_tag('warn', `Expires in ${format_dur(exp - now)}`));
 				} else {
-					span_reg.innerHTML += ` (${format_dur(1000 * (t_exp - t_now))})`;
+					span_reg.innerHTML += ` (${format_dur(exp - now)})`;
 				}
 			}
 		}
-		add_row_tag(avail_row, create_etherscan_address_link(eth_nft_contract.address, {title: 'NFT', contract: true}));
-		add_row_tag(avail_row, create_etherscan_address_link(price_oracle_contract.address, {title: 'Price Oracle', contract: true}));
+		//add_row_tag(avail_row, create_etherscan_address_link(price_oracle_contract.address, {title: 'Price Oracle', contract: true}));
 	} else if (nft_backed) {
 		let label = name_norm.slice(0, sep_pos);		
 		nft_token = ethers.utils.id(label);
@@ -2989,7 +2996,7 @@ async function resolve0(input, skip_norm) {
 				if (!(fuses & (1 << 17))) { // eth
 					await ensure_eth_nft(); 
 					if (should_stop_resolving()) return;
-					let exp = (data.expiry - eth_nft_contract.grace_period) * 1000 ; // includes grace
+					let exp = data.expiry * 1000 - eth_nft_contract.grace_period; // includes grace
 					let now = Date.now();
 					if (exp > now) {
 						add_row_tag(wrapped_row, create_typed_tag('warn', `Expires in ${format_dur(exp - now)}`));
@@ -3003,7 +3010,7 @@ async function resolve0(input, skip_norm) {
 				if (fuses & 0x00010) add_row_tag(wrapped_row, '🚫️ Set TTL');
 				if (fuses & 0x00020) add_row_tag(wrapped_row, '🚫️ Subdomains');
 				if (fuses & 0x00040) add_row_tag(wrapped_row, '🚫️ Approve');
-				if (fuses & 0x10000) add_row_tag(wrapped_row, '🛑️ Parent Controlled');
+				if (fuses & 0x10000) add_row_tag(wrapped_row, create_typed_tag('error', 'Parent Controlled'));
 				if (fuses & 0x40000) add_row_tag(wrapped_row, '☑️ Extend Expiry');
 			} else {
 				owner = await registry_contract.callStatic.owner(node);
@@ -3046,7 +3053,7 @@ async function resolve0(input, skip_norm) {
 				add_row_tag(owner_row, create_resolve_btn(owner));
 			}
 			if (!is_wrapped && !checked_nft && nft_contract) {
-				let nft_row = create_row(`NFT Owner`, true);
+				let nft_row = create_row(create_etherscan_address_link(nft_contract.address, {title: 'NFT Owner:', contract: true}), true);
 				output_div.append(nft_row);
 				try {
 					await ensure_eth_nft();
@@ -3307,6 +3314,7 @@ async function price_oracle_from_controller(controller_address) {
 	address = '0x' + address.slice(-40);
 	let contract = new ethers.Contract(address, [
 		'function premium(string calldata name, uint256 expires, uint256 duration) external view returns (uint256)',
+		'function price(string calldata name, uint256 expires, uint256 duration) external view returns (uint256)',
 	], active_provider);
 	/*
 	totalDays = 21; // FromDigits["15"]
@@ -3344,8 +3352,8 @@ async function ensure_eth_nft() {
 		'function ownerOf(uint256 id) external view returns (address)',
 		'function GRACE_PERIOD() external view returns (uint256)',
 	], active_provider);
-	eth_nft_contract.grace_period = (await eth_nft_contract.callStatic.GRACE_PERIOD()).toNumber();
-	eth_nft_contract.warning_period = 86400 * 30; // when to show warning in interface
+	eth_nft_contract.grace_period = 1000 * (await eth_nft_contract.callStatic.GRACE_PERIOD()).toNumber();
+	eth_nft_contract.warning_period = 86400000 * 30; // when to show warning in interface
 	let controller_address = await eth_resolver_contract.get_interface('0x018fac06');
 	price_oracle_contract = await price_oracle_from_controller(controller_address);
 }

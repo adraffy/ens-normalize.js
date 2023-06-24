@@ -416,12 +416,13 @@ footer {
 	<a href="https://unicode.org/emoji/charts/emoji-counts.html">Counts</a>
 	<a href="https://unicode.org/emoji/charts/emoji-released.html">Recently Added</a>
 	<a href="https://unicode.org/emoji/charts/emoji-proposals.html">Proposals</a>
+	<a href="https://www.unicode.org/Public/draft/emoji/">Draft</a>
 	•
 	<a href="https://github.com/adraffy/ens-normalize.js/blob/main/derive/output/emoji-info.json"><code>emoji-info.json</code></a>
 </div>
 <div id="examples">
 	<b>People:</b>
-	<button data-query="Man ">Man</button>
+	<button data-query="=\bMan\b">Man</button>
 	<button>Woman</button>
 	<button data-query="{2642}">♂️</button>
 	<button data-query="{2640}">♀️</button>
@@ -764,95 +765,104 @@ function update_search() {
 		setup_render(all_emoji);
 		return;
 	}
-	input = input.replaceAll('chonk', 'cat');
-	let results;
-	let match;
-	if (input === 'normalized' || input === 'is-norm') {
-		results = all_emoji.filter(x => x.is_emoji);
-	} else if (input === 'needs-norm' || input === 'gets-normed') {
-		results = all_emoji.filter(x => x.is_emoji && x.form !== x.norm);
-	} else if (input === 'already-norm') {
-		results = all_emoji.filter(x => x.is_emoji && x.form === x.norm);	
-	} else if (input === 'ascii') {
-		results = all_emoji.filter(x => /[\x00-\x7F]/.test(x.form));
-	} else if (input === 'singles') {
-		results = all_emoji.filter(x => x.min_repeat === 1);
-	} else if (input === 'doubles') {
-		results = all_emoji.filter(x => x.min_repeat === 2);
-	} else if (input === 'triples') {
-		results = all_emoji.filter(x => x.min_repeat === 3);
-	} else if (match = input.match(/^v(\d+(?:.\d+))$/)) {
-		let version = match[1];
-		results = all_emoji.filter(x => x.info && x.info.version.startsWith(version));
-	} else if (match = type_map.get(input)) {
-		results = all_emoji.filter(x => x.info && x.info.type === match);
-	} else if (match = input.match(/^(\d+)cp$/i)) {
-		let length = parseInt(match[1]);
-		results = all_emoji.filter(x => x.norm_length === length);
-	} else if (match = input.match(/^unmod\((\d+)\)$/i)) {
-		let max = parseInt(match[1]);
-		let ignored = new Set([
-			127995,127996,127997,127998,127999, // skin
-			//129456,129457,129458,129459, // hair
-			0x2640, 0x2642, // gender
-			0xFE0F,
-		]);
-		let dups = new Map();
-		for (let rec of all_emoji) {
-			if (!(rec.norm_length>= 3)) continue;
-			let key = String.fromCodePoint(...rec.cps.filter(cp => !ignored.has(cp)));
-			let bucket = dups.get(key);
-			if (!bucket) {
-				bucket = [];
-				dups.set(key, bucket);
-			}
-			bucket.push(rec);
+	input = input.replaceAll(/\bchonk\b/gi, 'cat');
+	let stack = [];
+	let results = all_emoji;
+	for (let arg of input.split(/\s+/)) {		
+		let match;	
+		if (arg === '+') {
+			stack.push(results);
+			results = all_emoji;
+			continue;
 		}
-		results = [...dups.values()].filter(v => v.length <= max).flat();
-	} else if (input.startsWith('=')) {
-		input = replace_escapes(input.slice(1));
-		let pos = input.indexOf('!');
-		let none = [];
-		function split(s) {
-			return s.split(',').map(x => x.trim()).filter(x => x).map(x => {
-				try {
-					return ens_normalize(x);
-				} catch (err) {
+		if (arg === 'normalized' || arg === 'is-norm') {
+			results = results.filter(x => x.is_emoji);
+		} else if (arg === 'needs-norm' || arg === 'gets-normed') {
+			results = results.filter(x => x.is_emoji && x.form !== x.norm);
+		} else if (arg === 'already-norm') {
+			results = results.filter(x => x.is_emoji && x.form === x.norm);	
+		} else if (arg === 'ascii') {
+			results = results.filter(x => /[\x00-\x7F]/.test(x.form));
+		} else if (arg === 'singles') {
+			results = results.filter(x => x.min_repeat === 1);
+		} else if (arg === 'doubles') {
+			results = results.filter(x => x.min_repeat === 2);
+		} else if (arg === 'triples') {
+			results = results.filter(x => x.min_repeat === 3);
+		} else if (match = arg.match(/^v(\d+(?:.\d+))$/)) {
+			let version = match[1];
+			results = results.filter(x => x.info && x.info.version.startsWith(version));
+		} else if (match = type_map.get(arg)) {
+			results = results.filter(x => x.info && x.info.type === match);
+		} else if (match = arg.match(/^(\d+)cp$/i)) {
+			let length = parseInt(match[1]);
+			results = results.filter(x => x.norm_length === length);
+		} else if (match = arg.match(/^unmod\((\d+)\)$/i)) { // this is a hack
+			let max = parseInt(match[1]);
+			let ignored = new Set([
+				127995,127996,127997,127998,127999, // skin
+				//129456,129457,129458,129459, // hair
+				0x2640, 0x2642, // gender
+				0xFE0F,
+			]);
+			let dups = new Map();
+			for (let rec of results) {
+				if (!(rec.norm_length >= 3)) continue;
+				let key = String.fromCodePoint(...rec.cps.filter(cp => !ignored.has(cp)));
+				let bucket = dups.get(key);
+				if (!bucket) {
+					bucket = [];
+					dups.set(key, bucket);
 				}
-				try {
-					return new RegExp(x, 'iu');
-				} catch (err)  {
+				bucket.push(rec);
+			}
+			results = [...dups.values()].filter(v => v.length <= max).flat();
+		} else if (arg.startsWith('=')) {
+			arg = replace_escapes(arg.slice(1));
+			let pos = arg.indexOf('!');
+			let none = [];
+			function split(s) {
+				return s.split(',').map(x => x.trim()).filter(x => x).map(x => {
+					try {
+						return ens_normalize(x);
+					} catch (err) {
+					}
+					try {
+						return new RegExp(x, 'iu');
+					} catch (err)  {
+					}
+					return x;
+				});
+			}
+			if (pos >= 0) {
+				none = split(arg.slice(pos + 1));
+				arg = arg.slice(0, pos);
+			} 
+			let any = split(arg);
+			function check(x, test) {
+				if (test instanceof RegExp) {
+					return test.test(x.form) || x.info && test.test(x.info.query);
+				} else {
+					return x.norm.includes(test) || (x.info && x.info.query.includes(test));
 				}
-				return x;
+			}
+			results = results.filter(x => (any.length == 0 || any.some(test => check(x, test))) && !none.some(test => check(x, test)));
+		} else {
+			arg = replace_escapes(arg);
+			let norm;
+			try {
+				norm = ens_normalize(arg.trim());
+			} catch (err) {			
+			}
+			results = results.filter(x => {
+				if (x.info && x.info.query.includes(arg)) return true; 
+				if (norm && x.norm.includes(norm)) return true; 
+				if (x.form.includes(arg)) return true;
 			});
 		}
-		if (pos >= 0) {
-			none = split(input.slice(pos + 1));
-			input = input.slice(0, pos);
-		} 
-		let any = split(input);
-		function check(x, test) {
-			if (test instanceof RegExp) {
-				return test.test(x.form) || x.info && test.test(x.info.query);
-			} else {
-				return x.norm.includes(test) || (x.info && x.info.query.includes(test));
-			}
-		}
-		results = all_emoji.filter(x => (any.length == 0 || any.some(test => check(x, test))) && !none.some(test => check(x, test)));
-	} else {
-		input = replace_escapes(input);
-		let norm;
-		try {
-			norm = ens_normalize(input.trim());
-		} catch (err) {			
-		}
-		results = all_emoji.filter(x => {
-			if (x.info && x.info.query.includes(input)) return true; 
-			if (norm && x.norm.includes(norm)) return true; 
-			if (x.form.includes(input)) return true;
-		});
 	}
-	setup_render(results);
+	stack.push(results);
+	setup_render([...new Set(stack.flat())].sort(compare_arrays));
 }
 
 function create_empty_table() {
@@ -1200,6 +1210,7 @@ function replace_escapes(s) {
 		}
 	});
 }
+
 </script>
 </body>
 </html>
