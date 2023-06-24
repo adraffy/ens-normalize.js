@@ -1,5 +1,5 @@
 import {hex_cp} from '../../src/utils.js';
-import {safe_str_from_cps} from '../../src/lib.js';
+import {is_combining_mark} from '../../src/lib.js';
 import {UNICODE} from '../../derive/unicode-version.js';
 import {writeFileSync} from 'node:fs';
 
@@ -29,7 +29,12 @@ export function write_csv(name, recs, {form = true} = {}) {
 			switch (col) {
 				case 'Codepoint': return rec.cps.map(hex_cp).join(' ');
 				case 'Name': return rec.name;
-				case 'Form': return safe_str_from_cps(rec.cps);
+				case 'Form': {
+					let form = String.fromCodePoint(...rec.cps);
+					if (is_combining_mark(rec.cps[0])) form = '◌' + form;
+					return form;
+					//return safe_str_from_cps(rec.cps);
+				}
 				default: throw new Error(`unknown column: ${col}`);
 			}
 		}).map(x => typeof x === 'string' ? `"${x}"` : x).join(','));
