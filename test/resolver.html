@@ -2163,8 +2163,8 @@ function create_typed_tag(type, desc) {
 			//desc = `❌ ${desc}`;
 			type = 'warn';
 			//break;
-		case 'error':
-			type = 'fail';
+		//case 'error':
+		//	type = 'fail';
 		case 'warn': 
 			desc = `⚠️ ${desc}`;
 			break;
@@ -3010,7 +3010,7 @@ async function resolve0(input, skip_norm) {
 				if (fuses & 0x00010) add_row_tag(wrapped_row, '🚫️ Set TTL');
 				if (fuses & 0x00020) add_row_tag(wrapped_row, '🚫️ Subdomains');
 				if (fuses & 0x00040) add_row_tag(wrapped_row, '🚫️ Approve');
-				if (fuses & 0x10000) add_row_tag(wrapped_row, create_typed_tag('error', 'Parent Controlled'));
+				if (fuses & 0x10000) add_row_tag(wrapped_row, create_typed_tag('warn', 'Parent Controlled'));
 				if (fuses & 0x40000) add_row_tag(wrapped_row, '☑️ Extend Expiry');
 			} else {
 				owner = await registry_contract.callStatic.owner(node);
