@@ -1,6 +1,7 @@
 [
-	{ "name": "", "comment": "Null" },
-	{ "name": "\uFE0F", "comment": "Effectively Null" },
+	{ "name": "", "comment": "Empty" },
+	{ "name": " ", "error": true, "comment": "Empty: Whitespace" },
+	{ "name": "\uFE0F", "error": true, "comment": "Empty: Ignorable" },
 
 	{ "name": ".", "error": true, "comment": "Null Labels" },
 	{ "name": ".eth", "error": true, "comment": "Null 2LD" },

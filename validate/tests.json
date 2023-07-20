@@ -11,17 +11,17 @@
 	},
 	{
 		"name": "",
-		"comment": "Null"
+		"comment": "Empty"
 	},
 	{
 		"name": " ",
 		"error": true,
-		"comment": "Disallowed Empty"
+		"comment": "Empty: Whitespace"
 	},
 	{
 		"name": "\uFE0F",
 		"error": true,
-		"comment": "Ignorable Empty"
+		"comment": "Empty: Ignorable"
 	},
 	{
 		"name": ".",

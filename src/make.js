@@ -1,6 +1,6 @@
-import {Encoder, unsafe_btoa, split_between} from './encoder.js';
+import {Encoder, unsafe_btoa} from './encoder.js';
 import {readFileSync, writeFileSync} from 'node:fs';
-import {compare_arrays, explode_cp} from './utils.js';
+import {explode_cp} from './utils.js';
 import {compute_spec_hash, compute_sha256} from './make-utils.js';
 
 /*
@@ -39,10 +39,6 @@ class Node {
 		return Object.values(this.branches).reduce((a, x) => a + 1 + x.nodes, 0);
 	}
 	add(cp) {
-		/*if (cp == 0xFE0F) {
-			this.fe0f = true;
-			return this;
-		}*/
 		let node = this.branches[cp];
 		if (!node) this.branches[cp] = node = new Node();
 		return node;
