@@ -4,12 +4,13 @@
 * Follows [ENSIP-15: ENS Name Normalization Standard](https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard)
 	* Other implementations:
 		* Python — [namehash/ens-normalize-python](https://github.com/namehash/ens-normalize-python)
+		* C# — [adraffy/ENSNormalize.cs](https://github.com/adraffy/ENSNormalize.cs)
+		* Java — [adraffy/ENSNormalize.java](https://github.com/adraffy/ENSNormalize.java)
 		* Javascript — [ensdomains/eth-ens-namehash](https://github.com/ensdomains/eth-ens-namehash)
-* [Passes **100%**](https://adraffy.github.io/ens-normalize.js/test/validate.html) Validation Tests
-* Custom [`NFC`](https://unicode.org/reports/tr15/) Implementation (or use native)
-	* [Passes **100%**](https://adraffy.github.io/ens-normalize.js/test/report-nf.html) Unicode `15.0.0` [Normalization Tests](https://www.unicode.org/Public/15.0.0/ucd/NormalizationTest.txt)
+* Passes **100%** [ENSIP-15 Validation Tests](https://adraffy.github.io/ens-normalize.js/test/validate.html)
+* Passes **100%** [Unicode Normalization Tests](https://adraffy.github.io/ens-normalize.js/test/report-nf.html)
 * Minified File Sizes: 
-	* [`27KB`](./dist/index-xnf.min.js) — native `NFC` via [nf-native.js](./src/nf-native.js) using `String.normalize()`
+	* [`27KB`](./dist/index-xnf.min.js) — native `NFC` via [nf-native.js](./src/nf-native.js) using `String.normalize()` ⚠️
 	* [`36KB` **Default** ](./dist/index.min.js) — custom `NFC` via [nf.js](./src/nf.js)
 	* [`42KB`](./dist/all.min.js) *Everything!* — custom `NFC` + sub-libraries: [parts.js](./src/parts.js), [utils.js](./src/utils.js)
 * Included Apps:

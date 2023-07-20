@@ -288,8 +288,8 @@ input[type=checkbox], label {
 	line-height: 130%;
 }
 ul.row {
-	margin: 0;
-	padding-left: 32px;
+	margin: 4px 0;
+	padding: 16px 16px 16px 36px;
 	flex-direction: column;
 	align-items: start;
 }
@@ -741,6 +741,7 @@ footer span:hover {
 <button>👨‍👩‍👦🏿</button>
 <button data-name="{1F3FB}{1F3FC}{1F3FD}{1F3FE}{1F3FF}">🏻</button>
 <button data-name="💩{200D}💩">💩+💩</button>
+<button data-name="{261D}{FE0F}{1F3FB}"></button>
 <button>‼️</button>
 <button>⁉️</button>
 <button data-name="™ℹⓂ㊗㊙🈁🈂🈚🈯🈲🈳🈴🈵🈶🈷🈸🈹🈺🉐🉑">☹️ Demoted</button>
@@ -1023,6 +1024,7 @@ const emoji_url = './emoji.html#q=%s';
 
 const CHAIN_ID_MAINNET = 1;
 const CHAIN_ID_GOERLI = 5;
+const CHAIN_ID_SEPOLIA = 11155111;
 
 const MIN_LENGTH = 3;
 
@@ -1284,38 +1286,37 @@ apply_location_hash();
 window.addEventListener('hashchange', apply_location_hash);
 
 function update_network(network) {
-	let registry;
-	let provider_name;
+	active_provider = window_provider;
+	let registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
+	let provider_name = 'window.ethereum';
 	let network_name;
-	if (network && network.ensAddress) {
-		active_provider = window_provider;
-		provider_name = `window.ethereum`;
-		network_name = network.name;
-		registry = network.ensAddress;
-		chain_id = network.chainId;
-	} else {
-		active_provider = infura_provider;
-		provider_name = 'Infura';
-		registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
-		chain_id = CHAIN_ID_MAINNET;
-	}
-	if (chain_id === CHAIN_ID_MAINNET) network_name = 'mainnet'; 
-	document.body.classList.toggle('testnet', chain_id !== CHAIN_ID_MAINNET);
-	switch (chain_id) {
+	switch (network && network.chainId) {
 		//case 3: return 'https://ropsten.etherscan.io';
 		//case 4: return 'https://rinkeby.etherscan.io';
-		//case 139: return 'https://polygonscan.io';
-		//case 11155111: return 'https://sepolia.etherscan.io';
+		//case 139: return 'https://polygonscan.io';		
+		case CHAIN_ID_SEPOLIA: {
+			network_name = 'Sepolia';
+			block_explorer = 'https://sepolia.etherscan.io';
+			metadata_service = 'https://metadata.ens.domains/sepolia';
+			break;
+		}
 		case CHAIN_ID_GOERLI: {
+			network_name = 'Goerli';
 			block_explorer = 'https://goerli.etherscan.io';
 			metadata_service = 'https://metadata.ens.domains/goerli';
 			break;
 		}
 		default: {
+			chain_id = 1;
+			network_name = 'mainnet'; 
 			block_explorer = 'https://etherscan.io';
 			metadata_service = 'https://metadata.ens.domains/mainnet';
 		}
 	}
+	if (chain_id != 1) { 
+		network.ensAddress = registry; // force it into ethers
+	}
+	document.body.classList.toggle('testnet', chain_id !== CHAIN_ID_MAINNET);
 	// TODO: add change network button
 	document.querySelector('#provider').innerHTML = `using ${provider_name} (<a href="${block_explorer}/address/${registry}">${network_name}</a>)`;
 	let init = !registry_contract;
@@ -1400,6 +1401,11 @@ function update_title() {
 	document.title = title;
 }
 
+function replace_name(name) {
+	//if (name === '[root]') return '';
+	return name;
+}
+
 function parse() {
 	update_title();	
 	let input = input_field.value;
@@ -1444,7 +1450,7 @@ function presolve(input, skip, resolving) {
 		return;
 	}
 	// TODO: conslidate this code with resolve()
-	let name = replace_escapes(input);
+	let name = replace_name(replace_escapes(input));
 	output_div.innerHTML = '';
 	//output_div.append(links_copy);
 	//actions_div.classList.remove('hide');
@@ -2483,7 +2489,7 @@ function resolve() {
 		return apply_escapes(entity_span.innerText);
 	});
 	input_field.value = input;
-	let name = replace_escapes(input);
+	let name = replace_name(replace_escapes(input));
 	add_recent(name);
 	if (!parse() && !skip) {
 		primary_loader.classList.add('hide');
@@ -3331,6 +3337,7 @@ async function ensure_wrapper() {
 	if (wrapper_contract === false) throw new Error(`Not implementated`);
 	await ensure_eth_resolver();
 	let wrapper_address = await eth_resolver_contract.get_interface('0x019a38fe');
+	console.log(wrapper_address);
 	if (is_null_hex(wrapper_address)) {
 		wrapper_contract = false;
 		return ensure_wrapper();

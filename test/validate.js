@@ -23,9 +23,12 @@ function ens_normalize_via_tokenize(name) {
 			default: return token.cps;
 		}
 	})));
-	if (ens_normalize(norm) !== norm) {
+	if (ens_normalize(norm) !== norm) { 
 		throw new Error(`wrong: ${norm}`);
 	}
+	// an ignorable single label filters to an empty string
+	// and wont throw due to null label allowance	
+	if (!norm) ens_normalize(name);
 	return norm;
 }
 

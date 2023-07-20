@@ -1,6 +1,6 @@
-//const t0 = performance.now();
+//console.time('init');
 import r, {FENCED, NSM_MAX} from './include-ens.js';
-import {read_sorted, read_sorted_arrays, read_mapped, read_array_while} from './decoder.js';
+import {read_sorted, read_sorted_arrays, read_mapped, read_trie, read_array_while} from './decoder.js';
 import {explode_cp, str_from_cps, quote_cp, compare_arrays} from './utils.js';
 import {nfc, nfd} from './nf.js';
 //import {nfc, nfd} from './nf-native.js'; // replaced by rollup
@@ -116,31 +116,46 @@ for (let cp of union) {
 	}
 }
 const VALID = new Set([...union, ...nfd(union)]); // possibly valid
+const INVALID_COMPS = new Set([...VALID].filter(cp => union.has(cp))); // invalid compositions
 
 // decode emoji
-const EMOJI_SORTED = read_sorted(r); // temporary
-//const EMOJI_SOLO = new Set(read_sorted(r).map(i => EMOJI_SORTED[i])); // not needed
-const EMOJI_ROOT = read_emoji_trie([]);
-function read_emoji_trie(cps) {
-	let B = read_array_while(() => {
-		let keys = read_sorted(r).map(i => EMOJI_SORTED[i]);
-		if (keys.length) return read_emoji_trie(keys);
-	}).sort((a, b) => b.Q.size - a.Q.size); // sort by likelihood
-	let temp = r();
-	let V = temp % 3; // valid (0 = false, 1 = true, 2 = weird)
-	temp = (temp / 3)|0;
-	let F = temp & 1; // allow FE0F
-	temp >>= 1;
-	let S = temp & 1; // save
-	let C = temp & 2; // check
-	return {B, V, F, S, C, Q: new Set(cps)};
-}
-//console.log(performance.now() - t0);
-
-// free tagging system
 class Emoji extends Array {
-	get is_emoji() { return true; }
+	get is_emoji() { return true; } // free tagging system
 }
+// 20230719: emoji are now fully-expanded to avoid quirk logic 
+const EMOJI_LIST = read_trie(r).map(v => Emoji.from(v)).sort(compare_arrays);
+const EMOJI_ROOT = new Map(); // this has approx 7K nodes (2+ per emoji)
+for (let cps of EMOJI_LIST) {
+	// 20230719: change to *slightly* stricter algorithm which disallows 
+	// insertion of misplaced FE0F in emoji sequences (matching ENSIP-15)
+	// example: beautified [A B] (eg. flag emoji) 
+	//  before: allow: [A FE0F B], error: [A FE0F FE0F B] 
+	//   after: error: both
+	// note: this code now matches ENSNormalize.{cs,java} logic
+	let prev = [EMOJI_ROOT];
+	for (let cp of cps) {
+		let next = prev.map(node => {
+			let child = node.get(cp);
+			if (!child) {
+				// should this be object? 
+				// (most have 1-2 items, few have many)
+				// 20230719: no, v8 default map is 4?
+				child = new Map();
+				node.set(cp, child);
+			}
+			return child;
+		});
+		if (cp === FE0F) {
+			prev.push(...next);
+		} else {
+			prev = next;
+		}
+	}
+	for (let x of prev) {
+		x.V = cps;
+	}
+}
+//console.timeEnd('init');
 
 // create a safe to print string 
 // invisibles are escaped
@@ -182,7 +197,7 @@ function bidi_qq(s) {
 
 function check_label_extension(cps) {
 	if (cps.length >= 4 && cps[2] == HYPHEN && cps[3] == HYPHEN) {
-		throw new Error('invalid label extension');
+		throw new Error(`invalid label extension: "${str_from_cps(cps.slice(0, 4))}"`);
 	}
 }
 function check_leading_underscore(cps) {
@@ -271,6 +286,7 @@ export function ens_beautify(name) {
 }
 
 export function ens_split(name, preserve_emoji) {
+	if (!name) return []; // 20230719: null name allowance
 	let offset = 0;
 	// https://unicode.org/reports/tr46/#Validity_Criteria
 	// 4.) "The label must not contain a U+002E ( . ) FULL STOP."
@@ -313,10 +329,10 @@ export function ens_split(name, preserve_emoji) {
 						chars = tokens.flatMap(x => x.is_emoji ? [] : x); // all of the nfc tokens concat together
 					}
 					norm = tokens.flatMap(x => !preserve_emoji && x.is_emoji ? filter_fe0f(x) : x);
-					check_leading_underscore(norm);
 					if (!chars.length) { // theres no text, just emoji
 						type = 'Emoji';
 					} else {
+						check_leading_underscore(norm);
 						// 5. "The label must not begin with a combining mark, that is: General_Category=Mark."
 						if (CM.has(norm[0])) throw error_placement('leading combining mark');
 						for (let i = 1; i < token_count; i++) { // we've already checked the first token
@@ -385,7 +401,7 @@ function determine_group(unique) {
 		// but that code isn't currently necessary
 		let gs = groups.filter(g => g.V.has(cp));
 		if (!gs.length) {
-			if (groups === GROUPS) {
+			if (INVALID_COMPS.has(cp)) { // 20230716: change to more exact statement, see: ENSNormalize.{cs,java}
 				// the character was composed of valid parts
 				// but it's NFC form is invalid
 				throw error_disallowed(cp); // this should be rare
@@ -475,7 +491,7 @@ function check_group(g, cps) {
 					// a. Forbid sequences of the same nonspacing mark.
 					for (let k = i; k < j; k++) { // O(n^2) but n < 100
 						if (decomposed[k] == cp) {
-							throw new Error(`non-spacing marks: repeated ${quoted_cp(cp)}`);
+							throw new Error(`duplicate non-spacing marks: ${quoted_cp(cp)}`);
 						}
 					}
 				}
@@ -483,7 +499,7 @@ function check_group(g, cps) {
 				// b. Forbid sequences of more than 4 nonspacing marks (gc=Mn or gc=Me).
 				if (j - i > NSM_MAX) {
 					// note: this slice starts with a base char or spacing-mark cm
-					throw new Error(`non-spacing marks: too many ${bidi_qq(safe_str_from_cps(decomposed.slice(i-1, j)))} (${j-i}/${NSM_MAX})`);
+					throw new Error(`excessive non-spacing marks: ${bidi_qq(safe_str_from_cps(decomposed.slice(i-1, j)))} (${j-i}/${NSM_MAX})`);
 				}
 				i = j;
 			}
@@ -585,73 +601,25 @@ function filter_fe0f(cps) {
 function consume_emoji_reversed(cps, eaten) {
 	let node = EMOJI_ROOT;
 	let emoji;
-	let saved;
-	let stack = [];
 	let pos = cps.length;
 	if (eaten) eaten.length = 0; // clear input buffer (if needed)
 	while (pos) {
-		let cp = cps[--pos];
-		node = node.B.find(x => x.Q.has(cp));
+		node = node.get(cps[--pos]);
 		if (!node) break;
-		if (node.S) { // remember
-			saved = cp;
-		} else if (node.C) { // check exclusion
-			if (cp === saved) break;
-		}
-		stack.push(cp);
-		if (node.F) {
-			stack.push(FE0F);
-			if (pos > 0 && cps[pos - 1] == FE0F) pos--; // consume optional FE0F
-		}
-		if (node.V) { // this is a valid emoji (so far)
-			emoji = conform_emoji_copy(stack, node);
+		let {V} = node;
+		if (V) { // this is a valid emoji (so far)
+			emoji = V;
 			if (eaten) eaten.push(...cps.slice(pos).reverse()); // copy input (if needed)
 			cps.length = pos; // truncate
 		}
 	}
-	/*
-	// *** this code currently isn't needed ***
-	if (!emoji) {
-		let cp = cps[cps.length-1];
-		if (EMOJI_SOLO.has(cp)) {
-			if (eaten) eaten.push(cp);
-			emoji = Emoji.of(cp);
-			cps.pop();
-		}
-	}
-	*/
 	return emoji;
-}
-
-// create a copy and fix any unicode quirks
-function conform_emoji_copy(cps, node) {
-	let copy = Emoji.from(cps); // copy stack
-	if (node.V == 2) copy.splice(1, 1); // delete FE0F at position 1 (see: make.js)
-	return copy;
 }
 
 // return all supported emoji as fully-qualified emoji 
 // ordered by length then lexicographic 
 export function ens_emoji() {
-	// *** this code currently isn't needed ***
-	//let ret = [...EMOJI_SOLO].map(x => [x]);
-	let ret = [];
-	build(EMOJI_ROOT, []);
-	return ret.sort(compare_arrays);
-	function build(node, cps, saved) {
-		if (node.S) { 
-			saved = cps[cps.length-1];
-		} else if (node.C) { 
-			if (saved === cps[cps.length-1]) return;
-		}
-		if (node.F) cps.push(FE0F);
-		if (node.V) ret.push(conform_emoji_copy(cps, node));
-		for (let br of node.B) {
-			for (let cp of br.Q) {
-				build(br, [...cps, cp], saved);
-			}
-		}
-	}
+	return EMOJI_LIST.map(v => v.slice()); // return a copy
 }
 
 // ************************************************************

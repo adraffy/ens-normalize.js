@@ -1,6 +1,6 @@
-import {Encoder, unsafe_btoa} from './encoder.js';
+import {Encoder, unsafe_btoa, split_between} from './encoder.js';
 import {readFileSync, writeFileSync} from 'node:fs';
-import {explode_cp} from './utils.js';
+import {compare_arrays, explode_cp} from './utils.js';
 import {compute_spec_hash, compute_sha256} from './make-utils.js';
 
 /*
@@ -39,10 +39,10 @@ class Node {
 		return Object.values(this.branches).reduce((a, x) => a + 1 + x.nodes, 0);
 	}
 	add(cp) {
-		if (cp == 0xFE0F) {
+		/*if (cp == 0xFE0F) {
 			this.fe0f = true;
 			return this;
-		}
+		}*/
 		let node = this.branches[cp];
 		if (!node) this.branches[cp] = node = new Node();
 		return node;
@@ -119,34 +119,6 @@ root.scan((node, path) => {
 	}
 });
 
-// check every emoji sequence for non-standard FE0F handling
-// emoji with ZWJ dont obey emoji presentation rules
-// this should only happen with the second character of the first emoji
-// eg. "A FE0F" vs. "A ZWJ B"
-for (let cps of emoji_seqs) {
-	let node = root;
-	let i = 0;
-	let n = 0; // number of fe0f
-	let quirk;
-	while (i < cps.length) {
-		let cp = cps[i++];
-		node = node.branches[cp]; // must exist
-		if (i < cps.length && node.fe0f) {
-			if (cps[i] == 0xFE0F) {
-				i++;
-			} else {
-				if (n != 0) throw new Error('expected first FE0F');
-				if (i != 1) throw new Error('expected second character');
-				//console.log('quirk', cps, i, n);
-				//bits |= 1 << n;
-				quirk = true;
-			}
-			n++;
-		}
-	}
-	node.quirk = quirk;
-}
-
 // compress
 console.log('Compress Emoji:')
 console.log(` Before: ${root.nodes}`);
@@ -154,19 +126,13 @@ root.collapse_nodes();
 root.collapse_keys();
 console.log(`  After: ${root.nodes}`);
 
-function encode_emoji(enc, node, map) {
+function encode_emoji(enc, node, map) {	
+	enc.unsigned((node.valid << 0) | (node.save_mod << 1) | (node.check_mod << 2)); 
 	for (let [keys, x] of Object.entries(node.branches)) {
 		enc.write_member(keys.split(',').map(k => map.get(parseInt(k))));
 		encode_emoji(enc, x, map);
 	}
 	enc.write_member([]);
-	let flag = node.quirk ? 2 : node.valid ? 1 : 0;
-	let mod = node.check_mod ? 2 : node.save_mod ? 1 : 0;
-	let fe0f = node.fe0f ? 1 : 0;
-	//enc.unsigned(6*valid + 2*mod + fe0f); // 11888
-	//enc.unsigned(6*mod + 2*valid + fe0f); // 11866
-	//enc.unsigned(9*fe0f + 3*mod + valid); // 11844
-	enc.unsigned(6*mod + 3*fe0f + flag); // 11833
 }
 
 function find_shared_chunks(groups, {min_overlap = 0.9, min_size = 1} = {}) {

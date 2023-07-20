@@ -1,5 +1,7 @@
 [
-	{ "name": "", "error": true, "comment": "Null" },
+	{ "name": "", "comment": "Null" },
+	{ "name": "\uFE0F", "comment": "Effectively Null" },
+
 	{ "name": ".", "error": true, "comment": "Null Labels" },
 	{ "name": ".eth", "error": true, "comment": "Null 2LD" },
 	{ "name": "eth.", "error": true, "comment": "Null TLD" },

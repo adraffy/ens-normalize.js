@@ -102,7 +102,7 @@ const LABELS = new Set(read_labels());
 
 // remove trivial
 for (let name of LABELS) {
-	if (/^[0-9a-z]+$/i.test(name)) {
+	if (/^[0-9a-z]*$/i.test(name)) {
 		LABELS.delete(name);
 	}
 }

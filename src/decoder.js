@@ -229,35 +229,28 @@ function read_replacement_table(w, next) {
 	return m.map(v => [v[0], v.slice(1)]);
 }
 
-export function read_emoji_trie(next) {
-	let sorted = read_member_array(next).sort((a, b) => a - b);
-	return read();
-	function read() {
-		let branches = [];
-		while (true) {
-			let keys = read_member_array(next, sorted);
-			if (keys.length == 0) break;
-			branches.push({set: new Set(keys), node: read()});
+
+export function read_trie(next) {
+	let ret = [];
+	let sorted = read_sorted(next); 
+	expand(decode([]), []);
+	return ret;
+	function decode(Q) {
+		let S = next();
+		let B = read_array_while(() => {
+			let cps = read_sorted(next).map(i => sorted[i]);
+			if (cps.length) return decode(cps);
+		});
+		return {S, B, Q};
+	}
+	function expand({S, B}, cps, saved) {
+		if (S & 4 && saved === cps[cps.length-1]) return;
+		if (S & 2) saved = cps[cps.length-1];
+		if (S & 1) ret.push(cps); 
+		for (let br of B) {
+			for (let cp of br.Q) {
+				expand(br, [...cps, cp], saved);
+			}
 		}
-		branches.sort((a, b) => b.set.size - a.set.size); // sort by likelihood
-		let temp = next();
-		let valid = temp % 3;
-		temp = (temp / 3)|0;
-		let fe0f = !!(temp & 1);
-		temp >>= 1;
-		let save = temp == 1;
-		let check = temp == 2;
-		return {branches, valid, fe0f, save, check};
 	}
 }
-
-// read a list of non-empty lists
-// where 0 is terminal
-// [1 0 1 2 0 0] => [[1],[1,2]]
-export function read_sequences(next) {
-	return read_array_while(() => {
-		let v = read_array_while(next);
-		if (v.length) return v.map(x => x - 1);
-	});
-}
-
