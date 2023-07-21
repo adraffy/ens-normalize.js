@@ -27,7 +27,7 @@ function ens_normalize_via_tokenize(name) {
 		throw new Error(`wrong: ${norm}`);
 	}
 	// an ignorable single label filters to an empty string
-	// and wont throw due to null label allowance	
+	// and wont throw due to empty label allowance
 	if (!norm) ens_normalize(name);
 	return norm;
 }

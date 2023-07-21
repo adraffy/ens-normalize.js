@@ -208,10 +208,10 @@ function read_trie(next) {
 	let ret = [];
 	let sorted = read_sorted(next); 
 	expand(decode([]), []);
-	return ret;
-	function decode(Q) {
-		let S = next();
-		let B = read_array_while(() => {
+	return ret; // not sorted
+	function decode(Q) { // characters that lead into this node
+		let S = next(); // state: valid, save, check
+		let B = read_array_while(() => { // buckets leading to new nodes
 			let cps = read_sorted(next).map(i => sorted[i]);
 			if (cps.length) return decode(cps);
 		});
@@ -573,7 +573,6 @@ for (let cp of union) {
 	}
 }
 const VALID = new Set([...union, ...nfd(union)]); // possibly valid
-const INVALID_COMPS = new Set([...VALID].filter(cp => union.has(cp))); // invalid compositions
 
 // decode emoji
 class Emoji extends Array {
@@ -693,20 +692,25 @@ function should_escape(cp) {
 	return ESCAPE.has(cp);
 }
 
+// return all supported emoji as fully-qualified emoji 
+// ordered by length then lexicographic 
+function ens_emoji() {
+	return EMOJI_LIST.map(x => x.slice()); // emoji are exposed so copy
+}
+
 function ens_normalize_fragment(frag, decompose) {
 	let nf = decompose ? nfd : nfc;
-	return frag.split(STOP_CH).map(label => str_from_cps(process(explode_cp(label), nf).flatMap(x => x.is_emoji ? filter_fe0f(x) : x))).join(STOP_CH);
+	return frag.split(STOP_CH).map(label => str_from_cps(process(explode_cp(label), nf, filter_fe0f).flat())).join(STOP_CH);
 }
 
 function ens_normalize(name) {
-	return flatten(ens_split(name));
+	return flatten(split(name, nfc, filter_fe0f));
 }
 
 function ens_beautify(name) {
-	let split = ens_split(name, true);
-	// this is experimental
-	for (let {type, output, error} of split) {
-		if (error) continue;
+	let labels = split(name, nfc, x => x); // emoji not exposed
+	for (let {type, output, error} of labels) {
+		if (error) break; // flatten will throw
 
 		// replace leading/trailing hyphen
 		// 20230121: consider beautifing all or leading/trailing hyphen to unicode variant
@@ -739,11 +743,15 @@ function ens_beautify(name) {
 		// could be fixed with special case for: 2D (.) + 200E (LTR)
 		//output.splice(0, 0, 0x200E);
 	}
-	return flatten(split);
+	return flatten(labels);
 }
 
 function ens_split(name, preserve_emoji) {
-	if (!name) return []; // 20230719: null name allowance
+	return split(name, nfc, preserve_emoji ? x => x.slice() : filter_fe0f); // emoji are exposed so copy
+}
+
+function split(name, nf, ef) {
+	if (!name) return []; // 20230719: empty name allowance
 	let offset = 0;
 	// https://unicode.org/reports/tr46/#Validity_Criteria
 	// 4.) "The label must not contain a U+002E ( . ) FULL STOP."
@@ -757,7 +765,7 @@ function ens_split(name, preserve_emoji) {
 		let norm;
 		try {
 			// 1.) "The label must be in Unicode Normalization Form NFC"
-			let tokens = info.tokens = process(input, nfc); // if we parse, we get [norm and mapped]
+			let tokens = info.tokens = process(input, nf, ef); // if we parse, we get [norm and mapped]
 			let token_count = tokens.length;
 			let type;
 			if (!token_count) { // the label was effectively empty (could of had ignored characters)
@@ -767,11 +775,10 @@ function ens_split(name, preserve_emoji) {
 				//type = 'None'; // use this instead of next match, "ASCII"
 				throw new Error(`empty label`);
 			} else {
-				let chars = tokens[0];
-				let emoji = token_count > 1 || chars.is_emoji;
-				if (!emoji && chars.every(cp => cp < 0x80)) { // special case for ascii
-					norm = chars;
-					check_leading_underscore(norm);
+				norm = tokens.flat();
+				check_leading_underscore(norm);
+				let emoji = info.emoji = token_count > 1 || tokens[0].is_emoji;
+				if (!emoji && norm.every(cp => cp < 0x80)) { // special case for ascii
 					// only needed for ascii
 					// 20230123: matches matches WHATWG, see note 3.3
 					check_label_extension(norm);
@@ -781,15 +788,10 @@ function ens_split(name, preserve_emoji) {
 					// see derive: "Fastpath ASCII"
 					type = 'ASCII';
 				} else {
-					if (emoji) { // there is at least one emoji
-						info.emoji = true; 
-						chars = tokens.flatMap(x => x.is_emoji ? [] : x); // all of the nfc tokens concat together
-					}
-					norm = tokens.flatMap(x => !preserve_emoji && x.is_emoji ? filter_fe0f(x) : x);
+					let chars = tokens.flatMap(x => x.is_emoji ? [] : x); // all of the nfc tokens concat together
 					if (!chars.length) { // theres no text, just emoji
 						type = 'Emoji';
 					} else {
-						check_leading_underscore(norm);
 						// 5. "The label must not begin with a combining mark, that is: General_Category=Mark."
 						if (CM.has(norm[0])) throw error_placement('leading combining mark');
 						for (let i = 1; i < token_count; i++) { // we've already checked the first token
@@ -825,7 +827,7 @@ function ens_split(name, preserve_emoji) {
 
 function check_whole(group, unique) {
 	let maker;
-	let shared = []; // TODO: can this be avoided?
+	let shared = [];
 	for (let cp of unique) {
 		let whole = WHOLE_MAP.get(cp);
 		if (whole === UNIQUE_PH) return; // unique, non-confusable
@@ -858,9 +860,12 @@ function determine_group(unique) {
 		// but that code isn't currently necessary
 		let gs = groups.filter(g => g.V.has(cp));
 		if (!gs.length) {
-			if (INVALID_COMPS.has(cp)) { // 20230716: change to more exact statement, see: ENSNormalize.{cs,java}
+			if (!GROUPS.some(g => g.V.has(cp))) { 
+				// 20230716: change to more exact statement, see: ENSNormalize.{cs,java}
 				// the character was composed of valid parts
 				// but it's NFC form is invalid
+				// note: this doesn't have to be a composition
+				// 20230720: change to full check
 				throw error_disallowed(cp); // this should be rare
 			} else {
 				// there is no group that contains all these characters
@@ -1013,7 +1018,7 @@ function check_group(g, cps) {
 // given a list of codepoints
 // returns a list of lists, where emoji are a fully-qualified (as Array subclass)
 // eg. explode_cp("abc💩d") => [[61, 62, 63], Emoji[1F4A9, FE0F], [64]]
-function process(input, nf) {
+function process(input, nf, ef) {
 	let ret = [];
 	let chars = [];
 	input = input.slice().reverse(); // flip so we can pop
@@ -1024,7 +1029,7 @@ function process(input, nf) {
 				ret.push(nf(chars));
 				chars = [];
 			}
-			ret.push(emoji);
+			ret.push(ef(emoji));
 		} else {
 			let cp = input.pop();
 			if (VALID.has(cp)) {
@@ -1052,14 +1057,12 @@ function filter_fe0f(cps) {
 // given array of codepoints
 // returns the longest valid emoji sequence (or undefined if no match)
 // *MUTATES* the supplied array
-// allows optional FE0F
 // disallows interleaved ignored characters
 // fills (optional) eaten array with matched codepoints
 function consume_emoji_reversed(cps, eaten) {
 	let node = EMOJI_ROOT;
 	let emoji;
 	let pos = cps.length;
-	if (eaten) eaten.length = 0; // clear input buffer (if needed)
 	while (pos) {
 		node = node.get(cps[--pos]);
 		if (!node) break;
@@ -1071,12 +1074,6 @@ function consume_emoji_reversed(cps, eaten) {
 		}
 	}
 	return emoji;
-}
-
-// return all supported emoji as fully-qualified emoji 
-// ordered by length then lexicographic 
-function ens_emoji() {
-	return EMOJI_LIST.map(v => v.slice()); // return a copy
 }
 
 // ************************************************************
@@ -1099,7 +1096,13 @@ function ens_tokenize(name, {
 	while (input.length) {		
 		let emoji = consume_emoji_reversed(input, eaten);
 		if (emoji) {
-			tokens.push({type: TY_EMOJI, emoji, input: eaten.slice(), cps: filter_fe0f(emoji)});
+			tokens.push({
+				type: TY_EMOJI, 
+				emoji: emoji.slice(), // copy emoji
+				input: eaten, 
+				cps: filter_fe0f(emoji)
+			});
+			eaten = []; // reset buffer
 		} else {
 			let cp = input.pop();
 			if (cp == STOP) {

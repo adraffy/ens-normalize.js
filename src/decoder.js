@@ -234,10 +234,10 @@ export function read_trie(next) {
 	let ret = [];
 	let sorted = read_sorted(next); 
 	expand(decode([]), []);
-	return ret;
-	function decode(Q) {
-		let S = next();
-		let B = read_array_while(() => {
+	return ret; // not sorted
+	function decode(Q) { // characters that lead into this node
+		let S = next(); // state: valid, save, check
+		let B = read_array_while(() => { // buckets leading to new nodes
 			let cps = read_sorted(next).map(i => sorted[i]);
 			if (cps.length) return decode(cps);
 		});

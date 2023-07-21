@@ -15,12 +15,14 @@ console.log(ens_normalize(''));
 console.log(ens_normalize('RAFFY.ETH'));
 console.log(ens_beautify('1⃣2️⃣.eth'));
 console.log(ens_emoji().length);
+console.log(ens_emoji().slice(0, 3));
 
 // readme examples
 debug(ens_tokenize(''));
 debug(ens_tokenize(' '));
 debug(ens_tokenize('_R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./'));
 debug(ens_split('💩Raffy.eth_'));
+debug(ens_split('💩'));
 
 function debug_frag(name) {
 	try {

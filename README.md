@@ -1,17 +1,18 @@
 # ens-normalize.js
 0-dependancy [Ethereum Name Service](https://ens.domains/) (ENS) Name Normalizer.
 
-* Follows [ENSIP-15: ENS Name Normalization Standard](https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard)
+* 🏛️ Follows [ENSIP-15: ENS Name Normalization Standard](https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard)
 	* Other implementations:
 		* Python — [namehash/ens-normalize-python](https://github.com/namehash/ens-normalize-python)
 		* C# — [adraffy/ENSNormalize.cs](https://github.com/adraffy/ENSNormalize.cs)
 		* Java — [adraffy/ENSNormalize.java](https://github.com/adraffy/ENSNormalize.java)
 		* Javascript — [ensdomains/eth-ens-namehash](https://github.com/ensdomains/eth-ens-namehash)
-* Passes **100%** [ENSIP-15 Validation Tests](https://adraffy.github.io/ens-normalize.js/test/validate.html)
-* Passes **100%** [Unicode Normalization Tests](https://adraffy.github.io/ens-normalize.js/test/report-nf.html)
+	* [Breakdown Reports from ENSIP-1](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/)	
+* ✅️ Passes **100%** [ENSIP-15 Validation Tests](https://adraffy.github.io/ens-normalize.js/test/validate.html)
+* ✅️ Passes **100%** [Unicode Normalization Tests](https://adraffy.github.io/ens-normalize.js/test/report-nf.html)
 * Minified File Sizes: 
 	* [`27KB`](./dist/index-xnf.min.js) — native `NFC` via [nf-native.js](./src/nf-native.js) using `String.normalize()` ⚠️
-	* [`36KB` **Default** ](./dist/index.min.js) — custom `NFC` via [nf.js](./src/nf.js)
+	* [`37KB` **Default**](./dist/index.min.js) — custom `NFC` via [nf.js](./src/nf.js)
 	* [`42KB`](./dist/all.min.js) *Everything!* — custom `NFC` + sub-libraries: [parts.js](./src/parts.js), [utils.js](./src/utils.js)
 * Included Apps:
 	* [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html) ⭐
@@ -23,20 +24,13 @@
 	* [Emoji Frequency Explorer](https://raffy.antistupid.com/eth/ens-emoji-freq.html)
 	* [ENS+NFT Matcher](https://raffy.antistupid.com/eth/ens-nft-matcher.html)
 	* [Batch Resolver](https://raffy.antistupid.com/eth/ens-batch-resolver.html)
-	* [Punycode Coder](https://adraffy.github.io/punycode.js/test/demo.html)
+	* [Punycode Coder](https://adraffy.github.io/punycode.js/test/demo.html)	
 	* [Label Database](https://github.com/adraffy/ens-labels/)
-* [Breakdown Reports:](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/)
-	* [Disallowed Characters](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/disallowed.html)
-	* [Different Norm](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/diff.html)
-	* [Illegal Mixtures](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/mixtures.html)
-	* [Whole-script Confusables](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/wholes.html)
-	* [Illegal Placement](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/placement.html)
-	* [Non-spacing Marks](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/nsm.html)
 
 ```Javascript
 import {ens_normalize} from '@adraffy/ens-normalize'; // or require()
 // npm i @adraffy/ens-normalize
-// browser: https://cdn.jsdelivr.net/npm/@adraffy/ens-normalize@latest/dist/index.min.{m|c}js
+// browser: https://cdn.jsdelivr.net/npm/@adraffy/ens-normalize@latest/dist/index.min.mjs (or .cjs)
 
 // *** ALL errors thrown by this library are safe to print ***
 // - characters are shown as {HEX} if should_escape()
@@ -196,6 +190,6 @@ This project uses `.js` instead of `.mjs` so [package.json](./package.json) uses
 ## Security
 
 * [Build](#build) and compare against [include-versions.js](./src/include-versions.js)
-	* `"spec_hash"` — SHA-256 of [spec.json](./derive/output/spec.json) bytes
-	* `"base64_ens_hash"` — SHA-256 of [include-ens.js](./src/include-ens.js) base64 literal
-	* `"base64_nf_hash"` — SHA-256 of [include-nf.js](./src/include-nf.js) base64 literal
+	* `spec_hash` — SHA-256 of [spec.json](./derive/output/spec.json) bytes
+	* `base64_ens_hash` — SHA-256 of [include-ens.js](./src/include-ens.js) base64 literal
+	* `base64_nf_hash` — SHA-256 of [include-nf.js](./src/include-nf.js) base64 literal
