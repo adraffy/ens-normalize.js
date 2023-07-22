@@ -404,9 +404,9 @@ function determine_group(unique) {
 		let gs = groups.filter(g => g.V.has(cp));
 		if (!gs.length) {
 			if (!GROUPS.some(g => g.V.has(cp))) { 
-				// 20230716: change to more exact statement, see: ENSNormalize.{cs,java}
 				// the character was composed of valid parts
 				// but it's NFC form is invalid
+				// 20230716: change to more exact statement, see: ENSNormalize.{cs,java}
 				// note: this doesn't have to be a composition
 				// 20230720: change to full check
 				throw error_disallowed(cp); // this should be rare
