@@ -901,7 +901,7 @@ Hebrew:
 	</div>
 </div>
 <div id="input">
-	<input id="input_field" size="20" placeholder="Name or token:XYZ or Marketplace URL or Address (Checksummed)">
+	<input id="input_field" size="20" placeholder="Name or token:HEX or Marketplace URL or Address (Checksummed)">
 	<select id="recent_select" title="Recent Names" class="hide">
 		<option value="reset">🗑️ Clear History</option>
 		<optgroup label="Recent Names"></optgroup>
@@ -922,21 +922,21 @@ Hebrew:
 <div id="output">
 <ul class="row readme">
 <li>Click an <button data-name="👁️‍🗨️A{303}">Example</button> to see how it works.</li>
-<li>Use <code>{FF}</code> or <code>[255]</code> or <code>\u200D</code> to manually include codepoints <button data-raw data-name="{200D}a[8205]b\u200D.eth">ZWJ</button></li>
-<li><code>range:A..B</code> expands to a range of characters <button data-name="range:61..7A" data-delay="1000">ASCII a-z</button></li>
-<li><code>token:X</code> resolves to the .eth preimage (if known) <button data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209" data-delay="1000">token:</button></li>
-<li><code>wrapped:X</code> resolves to the name (if wrapped) <button data-name="wrapped:0xc44eec7fb870ae46d4ef4392d33fbbbdc164e7817a86289a1fe30e5f4d98ae85" data-delay="1000">wrapped:</button></li>
-<li><code>123 456 789</code> is shorthand for <code>{123}{456}{789}</code> <button data-name="65 74 68" data-meta data-delay="1000">65 74 68</button></li>
+<li>Use <code>{FF}</code>, <code>[255]</code>, <code>\uFF</code>, or <code>\u{FF}</code> to manually include codepoints <button data-raw data-name="{200D}a[8205]b\u200D.eth">ZWJ</button></li>
+<li><code>range:HEX<sub>1</sub>..HEX<sub>n</sub></code> expands to a range of characters <button data-name="range:61..7A" data-delay="1000">ASCII a-z</button></li>
+<li><code>token:HEX</code> resolves to the .eth preimage (if known) <button data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209" data-delay="1000">token:</button></li>
+<li><code>wrapped:HEX</code> resolves to the name (if wrapped) <button data-name="wrapped:0xc44eec7fb870ae46d4ef4392d33fbbbdc164e7817a86289a1fe30e5f4d98ae85" data-delay="1000">wrapped:</button></li>
+<li><code>12F 4C6 A89</code> is shorthand for <code>{12F}{4C6}{A89}</code> <button data-name="65 74 68" data-meta data-delay="1000">65 74 68</button></li>
 <li><a href="#vitalik.eth"><button>Copy Link</button></a> to get a URL that resolves on page-load.</li>
 <li>Many elements have tooltips with additional information.</li>
-<li>Components explained in <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
+<li>Uses <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
 </ul>
 <ul class="row legend">
 <li>This is a <b>valid</b> sequence of characters: <span data-tokenize="abc"></span> and <b>.eth</b> name: <span data-tokenize="abc.eth"></span></li>
 <li>This is an <b>emoji</b>: <span data-tokenize="👩🏽‍⚕️"></span> and its corresponding <b>components</b>: <span data-tokenize="👩🏽‍⚕️" data-parts="1"></span></li>
 <li>This is a <b>mapped</b> token: <span data-tokenize="™"></span> which transforms into a <b>valid</b> sequence: <span data-tokenize="tm"></span></li>
 <li>Characters not in canonical form require <b>NFC</b>: <span data-tokenize="a{303}"></span></li>
-<li>This is an <b>ignored</b> character: <span data-tokenize="{FE0F}"></span></li>
+<li>These are <b>ignored</b> characters: <span data-tokenize="{AD}{FE0F}{E0100}"></span></li>
 <li>These are <b>disallowed</b> characters: <span data-tokenize="#{00}{1FFFFF}{E0061}{200D}"></span></li>
 </ul>
 <ul class="row links">
@@ -1528,7 +1528,7 @@ function presolve(input, skip, resolving) {
 		let sloppy = str_from_cps(explode_cp(name).map(x => SLOPPY_MAP.get(x) || x))
 		if (sloppy !== name) {
 			let btn = document.createElement('button');
-			btn.innerHTML = '💣️ Replace Unsafe';
+			btn.innerHTML = '💣️ Unsafe Replace';
 			btn.title = `Replace the following characters:` + [...SLOPPY_MAP.entries()].map(([a, b]) => {
 				return `\n"${safe_str_from_cps([a])}" ${hex_cp(a)} → "${safe_str_from_cps([b])}" ${hex_cp(b)}`
 			}).join('');
