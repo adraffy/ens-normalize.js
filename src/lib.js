@@ -384,7 +384,7 @@ function check_whole(group, unique) {
 	}
 	if (maker) {
 		// we have 1+ confusable
-		// check if any of the remaning groups
+		// check if any of the remaining groups
 		// contain the shared characters too
 		for (let g of maker) {
 			if (shared.every(cp => g.V.has(cp))) {
