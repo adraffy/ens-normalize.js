@@ -2623,6 +2623,9 @@ async function resolve0(input, skip_norm) {
 			reverse_row.classList.add('error');
 			add_row_tag(reverse_row, create_typed_tag('warn', last_err));
 			return;
+		} else if (!primary) {
+			add_row_tag(reverse_row, create_typed_tag('stop', 'Primary is Null'));
+			return;
 		}
 
 		make_exploded(reverse_row, primary, false);
