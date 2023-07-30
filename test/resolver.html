@@ -363,6 +363,7 @@ button.copy.copied {
 	font-size: 75%;
 	order: 20;
 }
+.tags.normalized { background: #8f8; }
 .tags.length {
 	background: var(--length-color);
 }
@@ -1471,14 +1472,14 @@ function presolve(input, skip, resolving) {
 	try {
 		let norm = ens_normalize(name);
 		if (norm === name) {
-			make_normalized(row);
+			make_normalized(row, norm);
 		} else {
 			add_row_tag(row, create_typed_tag('fail', 'Normalized'));
 			if (!skip) {
 				add_transformed_row(name);
 				let norm_row = create_row('Normalized');
 				make_exploded(norm_row, norm, true);
-				make_normalized(norm_row);
+				make_normalized(norm_row, norm);
 				add_old_tag(norm_row, name, true);
 				output_div.append(norm_row, create_details_row(norm));
 			}
@@ -1838,11 +1839,22 @@ function create_pretty_tag() {
 	return span;
 }
 
-function make_normalized(row) {
+
+function make_normalized(row, name) {
 	row.classList.add('normalized');
 	let span = document.createElement('span');
-	span.classList.add('clean');
-	span.innerHTML = '✅️'; 
+	//span.classList.add('clean');
+	let split = ens_split(name);
+	//if (split.length > 1 && split[split.length-1].type === 'ASCII') split.pop();
+	let types = new Set(split.map(x => x.type));
+	types.delete('ASCII');
+	if (types.size) {
+		span.classList.add('normalized');
+		span.innerHTML = `✅️ ${[...types].join('+')}`; 
+	} else {
+		span.classList.add('clean');
+		span.innerHTML = `✅️`; 
+	}
 	span.title = 'Normalized Form';
 	add_row_tag(row, span);
 }
@@ -2646,14 +2658,14 @@ async function resolve0(input, skip_norm) {
 		if (!norm_err) {
 			if (name_norm === primary) {
 				add_row_tag(reverse_row, create_resolve_btn(primary));
-				make_normalized(reverse_row);
+				make_normalized(reverse_row, name_norm);
 			} else {
 				add_row_tag(reverse_row, create_typed_tag('fail', 'Normalized'));
 				let row = normed_row = create_row('Normalized Reverse');
 				make_exploded(row, name_norm, true);
 				add_row_tag(row, create_copy_btn(name_norm));
 				add_row_tag(row, create_resolve_btn(name_norm));
-				make_normalized(row);
+				make_normalized(row, name_norm);
 				output_div.append(row);
 				output_div.append(create_details_row(name_norm));
 			}	
@@ -2690,7 +2702,7 @@ async function resolve0(input, skip_norm) {
 			//add_nft_links(input_row, input);
 		} else {
 			if (name_norm === input) {
-				make_normalized(input_row);
+				make_normalized(input_row, name_norm);
 				//add_nft_links(input_row, input);
 			} else  { 
 				add_row_tag(input_row, create_typed_tag('fail', 'Normalized'));
@@ -2700,7 +2712,7 @@ async function resolve0(input, skip_norm) {
 					add_transformed_row(input);
 					let row = normed_row = create_row('Normalized');
 					make_exploded(row, name_norm, true);
-					make_normalized(row);
+					make_normalized(row, name_norm);
 					add_row_tag(row, create_copy_btn(name_norm));
 					add_row_tag(row, create_resolve_btn(name_norm));
 					add_row_tag(row, create_ens_link(name_norm));
@@ -3268,7 +3280,7 @@ async function resolve0(input, skip_norm) {
 
 	// primary was normalized
 	if (primary === primary_norm) {
-		make_normalized(primary_row);
+		make_normalized(primary_row, primary_norm);
 
 	// primary was valid but not normalized
 	} else if (primary_norm) {
@@ -3277,7 +3289,7 @@ async function resolve0(input, skip_norm) {
 		let row = create_row('Normalized Primary');
 		row.classList.toggle('old', !!available);
 		make_exploded(row, primary_norm, true);
-		make_normalized(row);
+		make_normalized(row, primary_norm);
 		add_old_tag(primary_row, primary_norm, true);
 		add_row_tag(row, create_copy_btn(primary_norm));
 		add_row_tag(row, create_ens_link(primary_norm));
