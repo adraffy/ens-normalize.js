@@ -1290,34 +1290,43 @@ window.addEventListener('hashchange', apply_location_hash);
 function update_network(network) {
 	active_provider = window_provider;
 	let registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
-	let provider_name = 'window.ethereum';
-	let network_name;
-	switch (network && network.chainId) {
-		//case 3: return 'https://ropsten.etherscan.io';
-		//case 4: return 'https://rinkeby.etherscan.io';
-		//case 139: return 'https://polygonscan.io';		
-		case CHAIN_ID_SEPOLIA: {
-			network_name = 'Sepolia';
-			block_explorer = 'https://sepolia.etherscan.io';
-			metadata_service = 'https://metadata.ens.domains/sepolia';
-			break;
+	let network_name = 'mainnet';
+	chain_id = CHAIN_ID_MAINNET;
+	block_explorer = 'https://etherscan.io';
+	metadata_service = 'https://metadata.ens.domains/mainnet';
+	let use_window;
+	if (network) {
+		switch (network.chainId) {
+			//case 3: return 'https://ropsten.etherscan.io';
+			//case 4: return 'https://rinkeby.etherscan.io';
+			//case 139: return 'https://polygonscan.io';		
+			case CHAIN_ID_SEPOLIA: {
+				network_name = 'Sepolia';
+				block_explorer = 'https://sepolia.etherscan.io';
+				metadata_service = 'https://metadata.ens.domains/sepolia';
+				use_window = true;
+				break;
+			}
+			case CHAIN_ID_GOERLI: {
+				network_name = 'Goerli';
+				block_explorer = 'https://goerli.etherscan.io';
+				metadata_service = 'https://metadata.ens.domains/goerli';
+				use_window = true;
+				break;
+			}
+			case CHAIN_ID_MAINNET: {
+				use_window = true;
+				break;
+			}
 		}
-		case CHAIN_ID_GOERLI: {
-			network_name = 'Goerli';
-			block_explorer = 'https://goerli.etherscan.io';
-			metadata_service = 'https://metadata.ens.domains/goerli';
-			break;
-		}
-		default: {
-			chain_id = 1;
-			network_name = 'mainnet'; 
-			block_explorer = 'https://etherscan.io';
-			metadata_service = 'https://metadata.ens.domains/mainnet';
+		if (use_window) {
+			chain_id = network.chainId;
+			if (!network.ensAddress) {
+				network.ensAddress = registry; // force it into ethers
+			}
 		}
 	}
-	if (chain_id != 1) { 
-		network.ensAddress = registry; // force it into ethers
-	}
+	let provider_name = use_window ? 'window.ethereum' : 'Infura';
 	document.body.classList.toggle('testnet', chain_id !== CHAIN_ID_MAINNET);
 	// TODO: add change network button
 	document.querySelector('#provider').innerHTML = `using ${provider_name} (<a href="${block_explorer}/address/${registry}">${network_name}</a>)`;
@@ -2887,6 +2896,7 @@ async function resolve0(input, skip_norm) {
 			}
 		} catch (err) {
 			avail_err = err;
+			console.log(err);
 		}
 		remove_temporary(avail_row);
 		if (should_stop_resolving()) return;
@@ -3353,7 +3363,6 @@ async function ensure_wrapper() {
 	if (wrapper_contract === false) throw new Error(`Not implementated`);
 	await ensure_eth_resolver();
 	let wrapper_address = await eth_resolver_contract.get_interface('0x019a38fe');
-	console.log(wrapper_address);
 	if (is_null_hex(wrapper_address)) {
 		wrapper_contract = false;
 		return ensure_wrapper();
@@ -3367,16 +3376,22 @@ async function ensure_wrapper() {
 
 async function ensure_eth_nft() {
 	if (eth_nft_contract) return;
+	if (eth_nft_contract === false) throw new Error(`Not implemented`);
 	await ensure_eth_resolver();
 	let nft_address = await eth_resolver_contract.get_interface('0x80ac58cd');
+	if (is_null_hex(nft_address)) {
+		eth_nft_contract = false;
+		return ensure_eth_nft();
+	}
 	eth_nft_contract = new ethers.Contract(nft_address, [
 		'function available(uint256 id) external view returns(bool)',
 		'function nameExpires(uint256 id) external view returns(uint256)',
 		'function ownerOf(uint256 id) external view returns (address)',
 		'function GRACE_PERIOD() external view returns (uint256)',
 	], active_provider);
-	eth_nft_contract.grace_period = 1000 * (await eth_nft_contract.callStatic.GRACE_PERIOD()).toNumber();
-	eth_nft_contract.warning_period = 86400000 * 30; // when to show warning in interface
+	const DAY = 86400000;
+	eth_nft_contract.grace_period = (await eth_nft_contract.callStatic.GRACE_PERIOD().then(x => 1000 * x.toNumber()).catch(() => DAY * 90));
+	eth_nft_contract.warning_period = Math.round(eth_nft_contract.grace_period / 2); // when to show warning in interface
 	let controller_address = await eth_resolver_contract.get_interface('0x018fac06');
 	price_oracle_contract = await price_oracle_from_controller(controller_address);
 }
