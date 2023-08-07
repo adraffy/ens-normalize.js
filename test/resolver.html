@@ -367,6 +367,29 @@ button.copy.copied {
 .tags.length {
 	background: var(--length-color);
 }
+.tags.iface {
+	display: flex;
+	gap: 4px;
+	text-decoration: none;
+	background-color: #dde;
+	padding: 4px 8px;
+	border-radius: 4px;
+	white-space: pre;
+}
+.tags.iface:hover {
+	background-color: #bbd;
+}
+.tags.iface b {
+	font-size: 12pt;
+	text-decoration: underline;
+	color: #000;
+}
+.tags.iface code {
+	font-size: 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 .tags.good {
 	color: #060;
 	background: #cfc;
@@ -826,7 +849,7 @@ Hebrew Geresh:
 <button>aα.ɑ</button>
 <button>ஶ்ரீ.ஸ்ரீ</button>
 <button data-name="i.i̇.ı̇">i̇</button>
-<button data-name="è.è.ѐ.ѐ">è</button>
+<button data-name="è.è.ѐ.ѐ">è</button>
 
 <b>Mixed-Script:</b>
 <button data-name="0a〇.黑a8">Digit+Latin+Han</button>
@@ -1051,7 +1074,6 @@ document.querySelector('footer').innerHTML += ` — <span>v${versions.version} (
 document.querySelector('footer span').addEventListener('click', () => {
 	window.alert(JSON.stringify(versions, null, ' '));
 });
-
 // TODO: add more 
 function keycap(i) {
 	return String.fromCodePoint(0x30+i, 0xFE0F, 0x20E3);
@@ -1288,7 +1310,7 @@ apply_location_hash();
 window.addEventListener('hashchange', apply_location_hash);
 
 function update_network(network) {
-	active_provider = window_provider;
+	active_provider = infura_provider;
 	let registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
 	let network_name = 'mainnet';
 	chain_id = CHAIN_ID_MAINNET;
@@ -1321,6 +1343,7 @@ function update_network(network) {
 		}
 		if (use_window) {
 			chain_id = network.chainId;
+			active_provider = window_provider;
 			if (!network.ensAddress) {
 				network.ensAddress = registry; // force it into ethers
 			}
@@ -1744,10 +1767,14 @@ function encode_uri_component_ens_escaped(s) {
 function encode_uri_component_surrogate_escaped(s) {
 	return encodeURIComponent(apply_escapes(s, is_surrogate));
 }
-function create_link(url, s, cls) {
+function create_link(url, inner, cls) {
 	let a = document.createElement('a');
 	a.href = url;
-	a.innerHTML = s || url;
+	if (inner && typeof inner !== 'string') {
+		a.append(...[inner].flat(Infinity));
+	} else {
+		a.innerHTML = inner || url;
+	}
 	if (cls) a.classList.add(cls);
 	if (!url.includes('ens.domains/') && !url.includes('adraffy.github.io/') && !url.includes('etherscan.io/')) {
 		a.classList.add('third-party');
@@ -1838,8 +1865,6 @@ function create_main_span(text) {
 	outer.append(inner);
 	return outer;
 }
-
-
 function create_pretty_tag() {
 	let span = document.createElement('span');
 	span.classList.add('clean');
@@ -1847,7 +1872,13 @@ function create_pretty_tag() {
 	span.title = 'Beautified Form';
 	return span;
 }
-
+function create_iface_tag(name, iface, addr) {
+	let title =`<b>${name}</b>`;
+	if (iface) title += `<code>${iface.slice(2)}</code>`;
+	let a = create_etherscan_address_link(addr, {title, contract: true});
+	a.classList.add('iface');
+	return a;
+}
 
 function make_normalized(row, name) {
 	row.classList.add('normalized');
@@ -2896,7 +2927,6 @@ async function resolve0(input, skip_norm) {
 			}
 		} catch (err) {
 			avail_err = err;
-			console.log(err);
 		}
 		remove_temporary(avail_row);
 		if (should_stop_resolving()) return;
@@ -3112,7 +3142,7 @@ async function resolve0(input, skip_norm) {
 	}
 
 	if (resolver && !NOT_IFACE_RESOLVER.has(resolver.address)) {
-		let row = create_row('Interfaces', true);
+		let row = create_row('<a href="https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar#discovery">Interfaces</a>', true);
 		output_div.append(row);	
 		let contract = contract_for_resolver(resolver);
 		// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar	
@@ -3140,16 +3170,15 @@ async function resolve0(input, skip_norm) {
 			}
 			for (let {iface, name, children} of interfaces) {
 				let addr = await contract.get_interface(iface);
-				if (is_null_hex(addr)) continue;	
-				let title =`<b>${name}</b>/${iface.slice(2)}`;
-				add_row_tag(row, create_etherscan_address_link(addr, {title, contract: true}));
+				if (is_null_hex(addr)) continue;					
+				add_row_tag(row, create_iface_tag(name, iface, addr));
 				any = true;
 				if (children) {
 					for (let child of children) {
 						try {
 							let derived_addr = await child.get(addr);
-							if (is_null_hex(derived_addr)) continue;	
-							add_row_tag(row, create_etherscan_address_link(derived_addr, {title: `<b>${child.name}</b>`, contract: true}));
+							if (is_null_hex(derived_addr)) continue;
+							add_row_tag(row, create_iface_tag(name, null, derived_addr));
 						} catch (ignored) {
 						}
 					}

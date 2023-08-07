@@ -218,10 +218,15 @@ export default [
 	0xA7D7, // (ꟗ) LATIN SMALL LETTER MIDDLE SCOTS S
 	0xA7D9, // (ꟙ) LATIN SMALL LETTER SIGMOID S
 
+	// 0xDE, // (Þ) LATIN CAPITAL LETTER THORN (disallowed idna)
+	// 20230804: iceland uses this
+	// https://en.wikipedia.org/wiki/Thorn_(letter)
+	// node tools/reg-count.js DE === 0
+	0xFE, // (þ) LATIN SMALL LETTER THORN 
+
 	0x1BF, // (ƿ) LATIN LETTER WYNN
 	0xA7D5, // (ꟕ) LATIN SMALL LETTER DOUBLE WYNN
 	0xF0, // (ð) LATIN SMALL LETTER ETH
-	0xFE, // (þ) LATIN SMALL LETTER THORN	
 	0xA765, // (ꝥ) LATIN SMALL LETTER THORN WITH STROKE
 	0xA767, // (ꝧ) LATIN SMALL LETTER THORN WITH STROKE THROUGH DESCENDER
 	0xA7D3, // (ꟓ) LATIN SMALL LETTER DOUBLE THORN
