@@ -307,6 +307,9 @@ ul .tokens {
 	background: #fff;
 	gap: 2px;
 }
+.row.legend .tokens {
+	min-height: 32px;
+}
 .row.links {
 	display: grid;	
 	gap: 8px;
@@ -848,8 +851,8 @@ Hebrew Geresh:
 <a href="https://util.unicode.org/UnicodeJsps/confusables.jsp"><b>Confusables:</b></a>
 <button>aα.ɑ</button>
 <button>ஶ்ரீ.ஸ்ரீ</button>
-<button data-name="i.i̇.ı̇">i̇</button>
-<button data-name="è.è.ѐ.ѐ">è</button>
+<button data-name="i.i{307}.{131}{307}">i̇</button>
+<button data-name="{E8}.e{300}.{450}.{435}{300}">è</button>
 
 <b>Mixed-Script:</b>
 <button data-name="0a〇.黑a8">Digit+Latin+Han</button>
@@ -1041,7 +1044,6 @@ const APP_TITLE = 'ENS Resolver';
 const INPUT_NAME = 'Input';
 const OPENSEA_NAME = 'OpenSea';
 const VISION_NAME = 'Vision';
-const CONTROLLER_NAME = 'Manager'; // Controller
 const SKIP_SUFFIX = '_!';
 const PRETTY_NAME = '💖️'; // 🌷️ 🌺️
 
@@ -1053,7 +1055,8 @@ const CHAIN_ID_SEPOLIA = 11155111;
 
 const MIN_LENGTH = 3;
 
-const NFT_DOMAINS = new Set(['eth', 'art']);
+const ETH_TLD = 'eth';
+const NFT_DOMAINS = new Set([ETH_TLD, 'art']);
 const REVERSE_DOMAIN = 'addr.reverse';
 const RESOLVER_NAMES = {
 	'0x1da022710dF5002339274AaDEe8D58218e9D6AB5': 'Old Public Resolver (v1)',
@@ -1121,7 +1124,7 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 	} catch (err) {
 		btn.classList.add('error');
 	}	
-	if (!meta && !name.includes('.')) name += '.eth';
+	if (!meta && !name.includes('.')) name += `.${ETH_TLD}`;
 	if (typeof btn.dataset.escape === 'string') name = apply_escapes(name);
 	if (!btn.title) btn.title = meta ? name : `${name}\n${explode_cp(name).map(hex_cp).join(' ')}`;
 	btn.addEventListener('click', () => {
@@ -2903,7 +2906,7 @@ async function resolve0(input, skip_norm) {
 	let nft_token;
 
 	let available;	
-	if (domain === 'eth') {
+	if (domain === ETH_TLD) {
 		let eth_label = name_norm.slice(0, sep_pos);
 		nft_token = ethers.utils.id(eth_label);
 		let avail_err;
@@ -3148,7 +3151,7 @@ async function resolve0(input, skip_norm) {
 		// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar	
 		let interfaces = [
 			{iface: '0x80ac58cd', name: 'NFT'},  
-			{iface: '0x018fac06', name: CONTROLLER_NAME, children: [
+			{iface: '0x018fac06', name: 'Controller', children: [
 				{
 					name: 'Price Oracle', 
 					async get(addr) {
@@ -3178,7 +3181,7 @@ async function resolve0(input, skip_norm) {
 						try {
 							let derived_addr = await child.get(addr);
 							if (is_null_hex(derived_addr)) continue;
-							add_row_tag(row, create_iface_tag(name, null, derived_addr));
+							add_row_tag(row, create_iface_tag(child.name, null, derived_addr));
 						} catch (ignored) {
 						}
 					}
@@ -3242,7 +3245,7 @@ async function resolve0(input, skip_norm) {
 			} else {
 				if (owner === address) {
 					if (nft_owner && nft_owner !== address) {
-						add_row_tag(address_row, create_typed_tag('good', `Same as ${CONTROLLER_NAME}`));	
+						add_row_tag(address_row, create_typed_tag('good', `Same as Manager`));	
 					} else {
 						add_row_tag(address_row, create_typed_tag('good', 'Same as Owner'));
 					}
@@ -3353,8 +3356,8 @@ async function resolve0(input, skip_norm) {
 
 async function ensure_eth_resolver() {
 	if (eth_resolver_contract) return;
-	if (eth_resolver_contract === false) throw new Error(`No "eth" resolver`);	
-	let resolver = await active_provider.getResolver('eth');
+	if (eth_resolver_contract === false) throw new Error(`No "${ETH_TLD}" resolver`);	
+	let resolver = await active_provider.getResolver(ETH_TLD);
 	if (!resolver) {
 		eth_resolver_contract = false;
 		return ensure_eth_resolver(); 
