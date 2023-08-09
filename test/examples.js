@@ -203,3 +203,25 @@ console.log(filter_emoji);
 console.log(filter_emoji('\u{1F4A9}') == ''); // true
 console.log(filter_emoji('\u{1F4A9}\uFE0F') == ''); // true
 console.log(filter_emoji('\u{1F4A9}\uFE0F\uFE0F') == '\uFE0F'); // true
+
+// ********************************************************************************
+// latin but only ascii+emoji
+function is_ascii_or_emoji(s) {
+	return ens_split(s).every(x => !x.error && x.tokens.every(cps => cps.is_emoji || cps.every(cp => cp < 0x80)));
+}
+
+console.log(is_ascii_or_emoji);
+console.log(is_ascii_or_emoji('a')); // true (ASCII)
+console.log(is_ascii_or_emoji('💩a')); // true (Latin)
+console.log(is_ascii_or_emoji('💩')); // true (Latin)
+console.log(is_ascii_or_emoji('💩è')); // false (Latin)
+
+// ********************************************************************************
+// "possibly confusing" Latin
+// (assuming input is normalized)
+function is_rare_latin(s) {
+	return /[ąçęìíîïǐşł]/u.test(s);
+}
+console.log(is_rare_latin);
+console.log(is_rare_latin('è')); // false
+console.log(is_rare_latin('ì')); // true

@@ -404,6 +404,12 @@ button.copy.copied {
 .tags.warn {
 	background: #ffc;
 }
+.tags.attn {
+	/* background: #fe0;
+	color: #000; */
+	background: #d47;
+	color: #fff;
+}
 .tags.second {
 	background: #fff0dd;
 }
@@ -527,7 +533,7 @@ button.glow {
 	background-color: #cff;
 }
 .details .disabled {
-	opacity: 0.5;
+	opacity: 50%;
 	user-select: none;
 }
 .details .wide {
@@ -887,9 +893,9 @@ Hebrew Geresh:
 <button>♢⟠⧫</button>
 <button data-name="_▁▂▃▄▅▆▇█">▃▅▇</button>
 <button data-name="✓.✔︎.✔️.✅️.☑️">Checks</button>
-
 <button data-name="ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘꞯʀꜱᴛᴜᴠᴡxʏᴢ">ꜱᴍᴀʟʟ ᴄᴀᴘꜱ</button>
 <button data-name="zʎxʍʌnʇsɹbdouɯꞁʞſ̣ᴉɥᵷɟǝpↄqɐ">pǝuɹnʇ</button>
+<button data-name="💩ąçęìíîïǐşł">Rare Latin</button>
 
 <b>Pure:</b>
 Arabic:
@@ -1230,15 +1236,19 @@ document.querySelector('#random_emoji_btn').addEventListener('click', e => {
 	skip_norm_check.checked = false;
 	resolve();
 });
-document.querySelector('#find_emoji_btn').addEventListener('click', () => {
+document.querySelector('#find_emoji_btn').addEventListener('click', e => {
 	let url = './emoji.html';
 	let token = ens_tokenize(input_field.value).find(x => x.emoji);
 	if (token) url += `#q=${encodeURIComponent(String.fromCodePoint(...token.emoji))}`;
-	create_link(url).click();	
+	let a = create_link(url);
+	if (e.altKey) a.target = '_blank';
+	a.click();	
 });
-document.querySelector('#confused_btn').addEventListener('click', () => {
+document.querySelector('#confused_btn').addEventListener('click', e => {
 	let s = input_field.value;
-	create_link(`./confused.html#${encode_uri_component_surrogate_escaped(s.replaceAll('.', ''))}`).click();
+	let a = create_link(`./confused.html#${encode_uri_component_surrogate_escaped(s.replaceAll('.', ''))}`);
+	if (e.altKey) a.target = '_blank';
+	a.click();
 });
 document.querySelector('#nf_btn').addEventListener('click', () => {
 	let s0 = input_field.value;
@@ -1883,23 +1893,60 @@ function create_iface_tag(name, iface, addr) {
 	return a;
 }
 
+function upgrade_split_type(info) {
+	if (info.type !== 'Latin') return;
+	let cps = info.tokens.flatMap(x => x.is_emoji ? [] : x);
+	if (cps.every(cp => cp < 0x80)) {
+		info.type = 'ASCII';
+		return;
+	}
+	let rare = new Set(explode_cp('ąçęìíîïǐşł'));
+	if (cps.some(cp => rare.has(cp))) {
+		info.rare = true;
+		return;
+	}
+}
+
 function make_normalized(row, name) {
 	row.classList.add('normalized');
 	let span = document.createElement('span');
-	//span.classList.add('clean');
+	span.title = 'Normalized Form';
 	let split = ens_split(name);
-	//if (split.length > 1 && split[split.length-1].type === 'ASCII') split.pop();
-	let types = new Set(split.map(x => x.type));
-	types.delete('ASCII');
-	if (types.size) {
-		span.classList.add('normalized');
-		span.innerHTML = `✅️ ${[...types].join('+')}`; 
-	} else {
+	if (split.every(x => x.type === 'ASCII')) {
 		span.classList.add('clean');
 		span.innerHTML = `✅️`; 
+	} else if (split.every(x => x.type === 'Emoji')) {
+		span.classList.add('normalized');
+		span.innerHTML = `✅️ Emoji`; 
+	} else {
+		split.forEach(upgrade_split_type);
+		let types = new Set(split.map(x => x.type));
+		types.delete('Emoji');
+		if (types.size > 1 && types.has('ASCII')) types.delete('ASCII');
+		span.classList.add('normalized');
+		span.innerHTML = `✅️ ${[...types].join('+')}`;
+		if (split.some(x => x.emoji)) {
+			span.innerHTML += ' w/Emoji';
+		}
+		if (split.some(x => x.rare)) {
+			//let label = row.querySelector('.row-label');
+			//label.innerHTML = `⚠️ ${label.innerHTML}`;
+			//row.querySelector('.tokens').classList.add('confusing');
+			//add_row_tag(row, create_typed_tag('attn', 'Confusable'));
+			let span = document.createElement('span');
+			//span.innerHTML = 'Exotic<br>Characters';
+			span.innerHTML = 'Possibly<br>Confusing';
+			span.style.cssText = `
+				color: #fff;
+				background-color: #d47;
+				margin: -8px 0;
+				text-align: center;
+				font-size: 75%;
+			`;
+			add_row_tag(row, span);
+		}
 	}
-	span.title = 'Normalized Form';
-	add_row_tag(row, span);
+	add_row_tag(row, span);	
 }
 
 function make_contract(row) {
@@ -2226,7 +2273,10 @@ function create_typed_tag(type, desc) {
 			type = 'warn';
 			//break;
 		//case 'error':
-		//	type = 'fail';
+		//	type = 'fail'
+		case 'attn': 
+			//desc = `👀️ ${desc}`;
+			//break;
 		case 'warn': 
 			desc = `⚠️ ${desc}`;
 			break;
@@ -2292,8 +2342,8 @@ function create_details_row(name, before) {
 			} else if (compare_arrays(info.input, info.output)) { 
 				label_div.classList.add('mapped');
 			} else {
-				let type = info.type;
-				if (type.includes('Restricted[')) {
+				upgrade_split_type(info);
+				if (info.type.startsWith('Restricted[')) {
 					let script = type.slice(11, -1);
 					let a = document.createElement('a');
 					a.classList.add('restricted');
@@ -2303,7 +2353,10 @@ function create_details_row(name, before) {
 				} else {
 					let span = document.createElement('span');
 					span.classList.add('group');
-					span.innerHTML = type;
+					span.innerHTML = info.type;
+					if (info.emoji && info.type !== 'Emoji') {
+						span.innerHTML += '<sub>+</sub>';
+					}
 					label_div.append(span);
 				}
 			}
