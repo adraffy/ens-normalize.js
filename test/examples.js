@@ -205,7 +205,7 @@ console.log(filter_emoji('\u{1F4A9}\uFE0F') == ''); // true
 console.log(filter_emoji('\u{1F4A9}\uFE0F\uFE0F') == '\uFE0F'); // true
 
 // ********************************************************************************
-// latin but only ascii+emoji
+// ascii with emoji removed
 function is_ascii_or_emoji(s) {
 	return ens_split(s).every(x => !x.error && x.tokens.every(cps => cps.is_emoji || cps.every(cp => cp < 0x80)));
 }

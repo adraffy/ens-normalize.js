@@ -429,9 +429,6 @@ button.copy.copied {
 	font-size: 110%;
 	order: 7;
 }
-.tags.palindrome {
-	background: #dfd;
-}
 .tags.white {
 	color: #000;
 	background: #fff;
@@ -1907,34 +1904,35 @@ function make_normalized(row, name) {
 	row.classList.add('normalized');
 	let span = document.createElement('span');
 	span.title = 'Normalized Form';
+	span.innerHTML = `✅️`; 
 	let split = ens_split(name);
 	if (split.every(x => x.type === 'ASCII')) {
 		span.classList.add('clean');
-		span.innerHTML = `✅️`; 
-	} else if (split.every(x => x.type === 'Emoji')) {
-		span.classList.add('normalized');
-		span.innerHTML = `✅️ Emoji`; 
 	} else {
-		split.forEach(upgrade_split_type);
-		let types = new Set(split.map(x => x.type));
-		types.delete('Emoji');
-		if (types.size > 1 && types.has('ASCII')) types.delete('ASCII');
 		span.classList.add('normalized');
-		span.innerHTML = `✅️ ${[...types].join('+')}`;
-		if (split.some(x => x.emoji)) {
-			span.innerHTML += ' w/Emoji';
-		}
-		if (split.some(x => x.rare)) {
-			let span = document.createElement('span');
-			span.innerHTML = 'Possibly<br>Confusing';
-			span.style.cssText = `
-				color: #fff;
-				background-color: #d47;
-				margin: -8px 0;
-				text-align: center;
-				font-size: 75%;
-			`;
-			add_row_tag(row, span);
+		if (split.every(x => x.type === 'Emoji')) {
+			span.innerHTML += ` Emoji`; 
+		} else {
+			split.forEach(upgrade_split_type);
+			let types = new Set(split.map(x => x.type));
+			if (types.has('Latin') && types.has('ASCII')) types.delete('ASCII');
+			types.delete('Emoji');
+			if (split.some(x => x.emoji)) {
+				types.add('Emoji');
+			}
+			span.innerHTML += ` ${[...types].join('+')}`;
+			if (split.some(x => x.rare)) {
+				let span = document.createElement('span');
+				span.innerHTML = 'Possibly<br>Confusing';
+				span.style.cssText = `
+					color: #fff;
+					background-color: #d47;
+					margin: -8px 0;
+					text-align: center;
+					font-size: 75%;
+				`;
+				add_row_tag(row, span);
+			}
 		}
 	}
 	add_row_tag(row, span);	
