@@ -895,7 +895,7 @@ Hebrew Geresh:
 <button data-name="✓.✔︎.✔️.✅️.☑️">Checks</button>
 <button data-name="ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘꞯʀꜱᴛᴜᴠᴡxʏᴢ">ꜱᴍᴀʟʟ ᴄᴀᴘꜱ</button>
 <button data-name="zʎxʍʌnʇsɹbdouɯꞁʞſ̣ᴉɥᵷɟǝpↄqɐ">pǝuɹnʇ</button>
-<button data-name="💩ąçęìíîïǐşł">Rare Latin</button>
+<button data-name="💩ąçęşìíîïǐł">Rare Latin</button>
 
 <b>Pure:</b>
 Arabic:
@@ -1897,13 +1897,9 @@ function upgrade_split_type(info) {
 	if (info.type !== 'Latin') return;
 	let cps = info.tokens.flatMap(x => x.is_emoji ? [] : x);
 	if (cps.every(cp => cp < 0x80)) {
-		info.type = 'ASCII';
-		return;
-	}
-	let rare = new Set(explode_cp('ąçęìíîïǐşł'));
-	if (cps.some(cp => rare.has(cp))) {
+		info.type = 'ASCII';	
+	} else if (/[ąçęşìíîïǐł]/u.test(str_from_cps(cps))) {
 		info.rare = true;
-		return;
 	}
 }
 
@@ -1929,12 +1925,7 @@ function make_normalized(row, name) {
 			span.innerHTML += ' w/Emoji';
 		}
 		if (split.some(x => x.rare)) {
-			//let label = row.querySelector('.row-label');
-			//label.innerHTML = `⚠️ ${label.innerHTML}`;
-			//row.querySelector('.tokens').classList.add('confusing');
-			//add_row_tag(row, create_typed_tag('attn', 'Confusable'));
 			let span = document.createElement('span');
-			//span.innerHTML = 'Exotic<br>Characters';
 			span.innerHTML = 'Possibly<br>Confusing';
 			span.style.cssText = `
 				color: #fff;
@@ -2355,7 +2346,10 @@ function create_details_row(name, before) {
 					span.classList.add('group');
 					span.innerHTML = info.type;
 					if (info.emoji && info.type !== 'Emoji') {
-						span.innerHTML += '<sub>+</sub>';
+						span.innerHTML += '+';
+					}
+					if (info.rare) {
+						span.style.color = '#d47';
 					}
 					label_div.append(span);
 				}

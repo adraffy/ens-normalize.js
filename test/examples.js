@@ -220,7 +220,7 @@ console.log(is_ascii_or_emoji('💩è')); // false (Latin)
 // "possibly confusing" Latin
 // (assuming input is normalized)
 function is_rare_latin(s) {
-	return /[ąçęìíîïǐşł]/u.test(s);
+	return /[ąçęşìíîïǐł]/u.test(s);
 }
 console.log(is_rare_latin);
 console.log(is_rare_latin('è')); // false
