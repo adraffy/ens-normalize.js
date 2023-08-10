@@ -67,19 +67,25 @@ header {
 h1 {
 	display: flex;
 	flex-wrap: wrap;
-	align-items: baseline;
+	align-items: end;
 	margin: 0;
 	gap: 4px;
 	white-space: pre;
-}
-h2 {
-	margin: 0;
-	font-size: 16pt;
 }
 #provider {
 	font-size: 11pt;
 	font-weight: normal;
 	color: #666;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+#provider .error {
+	background-color: #fcc;
+	color: #000;
+	padding: 1px 4px;
+	border-radius: 4px;
+	font-size: 90%;
 }
 #provider a {
 	font-weight: bold;
@@ -171,6 +177,19 @@ h2 {
 	gap: 8px;
 	margin-bottom: 4px;
 }
+.segmented {
+	display: flex;
+}
+.segmented button:not(:last-child) {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+.segmented button:not(:first-child) {
+	border-left: 0;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
 input[type=checkbox], label {
 	user-select: none;
 	cursor: pointer;
@@ -225,6 +244,7 @@ input[type=checkbox], label {
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 8px;
+	border-radius: 4px;
 }
 .row.display {
 	background: #eff;
@@ -574,6 +594,7 @@ button.glow {
 .row.error {
 	background: #fcc;
 	outline: 3px dashed #d00;
+	border-radius: 0;
 }
 .row.contract:not(.error) {
 	background-color: #ffc;
@@ -621,6 +642,10 @@ footer span:hover {
 		margin: 16px;
 		margin-bottom: 0;
 	}
+	#provider {
+		flex-direction: row;
+		align-items: center;
+	}
 	#input, #actions, #options, #examples {
 		margin: 0 16px;
 	}
@@ -662,7 +687,7 @@ footer span:hover {
 </head>
 <body>
 <header>
-<h1><a href="https://ens.domains/">ENS Resolver</a><span id="provider" target="_blank" title="Registry Contract"></span></h1>
+<h1><a href="https://ens.domains/">ENS Resolver</a><div id="provider" target="_blank" title="Registry Contract"></div></h1>
 <div id="github"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a><br>
 <a href="https://github.com/adraffy/ensip-15/blob/master/ens-improvement-proposals/ensip-15-normalization-standard.md">ENSIP-15</a></div>
 </header>
@@ -940,12 +965,16 @@ Hebrew:
 <div id="actions">
 	<div class="spinner"></div>
 	<div class="balloon"></div>
-	<button id="random_emoji_btn" title="Random Emoji&#10;[ALT] Just Singles">🎲</button>
-	<button id="find_emoji_btn">Emoji</button>
+	<div class="segmented">
+		<button id="random_emoji_btn" title="Random Emoji&#10;[ALT] Just Singles">🎲</button>
+		<button id="find_emoji_btn">Emoji</button>
+	</div>
 	<button id="confused_btn">Confused</button>
-	<button id="nf_btn">NFD↔NFC</button>
+	<div class="segmented">
+		<button id="nf_btn">NFD↔NFC</button>
+		<button id="escape_btn" title="[ALT] Unicode Escaped">Escape</button>
+	</div>
 	<button id="parent_btn">Parent</button>
-	<button id="escape_btn" title="[ALT] Unicode Escaped">Escape</button>
 	<button id="link_btn">Copy Link</button>
 	<button id="resolve_btn">Resolve</button>
 </div>
@@ -1032,6 +1061,7 @@ const readme_dom = [...output_div.childNodes]; // save initial ux
 //const links_copy = document.querySelector('.row.links').cloneNode(true);
 const examples_div = document.querySelector('#examples');
 const examples_btn = document.querySelector('#examples_btn');
+const provider_div = document.querySelector('#provider');
 
 const RESOLVE_MODE_IDLE = 'idle';
 const RESOLVE_MODE_EMPTY = 'empty';
@@ -1222,7 +1252,6 @@ function add_recent(name, save = true) {
 	} 
 }
 
-
 document.querySelector('#random_emoji_btn').addEventListener('click', e => {
 	let name = '';
 	let pool = e.altKey ? EMOJI.filter(cps => cps.length == 1 || (cps.length == 2 && cps[1] === 0xFE0F)) : EMOJI;
@@ -1362,7 +1391,16 @@ function update_network(network) {
 	let provider_name = use_window ? 'window.ethereum' : 'Infura';
 	document.body.classList.toggle('testnet', chain_id !== CHAIN_ID_MAINNET);
 	// TODO: add change network button
-	document.querySelector('#provider').innerHTML = `using ${provider_name} (<a href="${block_explorer}/address/${registry}">${network_name}</a>)`;
+	let network_div = document.createElement('div');
+	network_div.innerHTML = `${provider_name} → <a href="${block_explorer}/address/${registry}">${network_name}</a>`;
+	if (network && !use_window) {
+		provider_div.innerHTML = `<div class="error">⚠️ Unsupported Network (${network.chainId})</div>`;
+		network_div.innerHTML += ' instead';
+	} else {
+		provider_div.innerHTML = '';	
+	}
+	provider_div.append(network_div);
+
 	let init = !registry_contract;
 	registry_contract = new ethers.Contract(registry, [
 		'function resolver(bytes32 node) external view returns (address)',
@@ -2561,8 +2599,9 @@ function resolve() {
 		return (async () => {
 			try {
 				await ensure_wrapper();
-				let bytes = await wrapper_contract.callStatic.names(ethers.BigNumber.from(match[1]));
-				input_field.value = name_from_wrapper_bytes(ethers.utils.arrayify(bytes));
+				let bytes = ethers.utils.arrayify(await wrapper_contract.callStatic.names(ethers.BigNumber.from(match[1])));
+				if (!bytes.length) throw new Error('Unknown namehash');
+				input_field.value = name_from_wrapper_bytes(bytes);
 				resolve_btn.disabled = false;
 				setTimeout(resolve, 0);
 			} catch (err) {
