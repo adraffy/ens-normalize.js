@@ -44,7 +44,7 @@ import {ens_normalize} from '@adraffy/ens-normalize'; // or require()
 let normalized = ens_normalize('RaFFY🚴‍♂️.eTh');
 // => "raffy🚴‍♂.eth"
 
-// note: does not enforce .eth TLD 3-character minimum
+// note: does not enforce .eth registrar 3-character minimum
 ```
 
 Format names with fully-qualified emoji:

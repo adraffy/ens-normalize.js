@@ -502,6 +502,7 @@ button.glow {
 	text-align: center;
 	padding: 2px 4px;
 	border-radius: 5px;
+	justify-self: center;
 }
 .details .label {
 	font-size: 14pt;
@@ -1392,7 +1393,7 @@ function update_network(network) {
 	document.body.classList.toggle('testnet', chain_id !== CHAIN_ID_MAINNET);
 	// TODO: add change network button
 	let network_div = document.createElement('div');
-	network_div.innerHTML = `${provider_name} → <a href="${block_explorer}/address/${registry}">${network_name}</a>`;
+	network_div.innerHTML = `using ${provider_name} on <a href="${block_explorer}/address/${registry}">${network_name}</a>`;
 	if (network && !use_window) {
 		provider_div.innerHTML = `<div class="error">⚠️ Unsupported Network (${network.chainId})</div>`;
 		network_div.innerHTML += ' instead';
@@ -1929,12 +1930,13 @@ function create_iface_tag(name, iface, addr) {
 }
 
 function upgrade_split_type(info) {
+	info.restricted = info.type.startsWith('Restricted[');
 	if (info.type !== 'Latin') return;
 	let cps = info.tokens.flatMap(x => x.is_emoji ? [] : x);
 	if (cps.every(cp => cp < 0x80)) {
 		info.type = 'ASCII';	
 	} else if (/[ąçęşìíîïǐł]/u.test(str_from_cps(cps))) {
-		info.rare = true;
+		info.rare_latin = true;
 	}
 }
 
@@ -1958,8 +1960,8 @@ function make_normalized(row, name) {
 			if (split.some(x => x.emoji)) {
 				types.add('Emoji');
 			}
-			span.innerHTML += ` ${[...types].join('+')}`;
-			if (split.some(x => x.rare)) {
+			span.innerHTML += ` ${[...types].sort().join('+')}`;
+			if (split.some(x => x.rare_latin)) { //|| x.restricted)) {
 				let span = document.createElement('span');
 				span.innerHTML = 'Possibly<br>Confusing';
 				span.style.cssText = `
@@ -1997,7 +1999,7 @@ function create_ethmoji_row(tokens, suffix) {
 	let grouped = [];
 	let last;
 	for (let token of tokens) {
-		let form = String.fromCodePoint(...token.emoji);
+		let form = str_from_cps(token.emoji);
 		token.form = form; // save
 		unique.add(form);
 		if (!last || last.form !== form) {
@@ -2011,7 +2013,7 @@ function create_ethmoji_row(tokens, suffix) {
 	let formula = document.createElement('div');
 	formula.classList.add('formula');
 	formula.innerHTML = grouped.map(token => {
-		return `<a href="./emoji.html#q=${String.fromCodePoint(...token.cps)}">${token.form}<sup>${token.count}</sup></a>`;
+		return `<a href="./emoji.html#q=${str_from_cps(token.cps)}">${token.form}<sup>${token.count}</sup></a>`;
 	}).join('');
 	row.append(formula);
 	let span_grade = document.createElement('span');
@@ -2029,7 +2031,7 @@ function create_ethmoji_row(tokens, suffix) {
 			add_row_tag(row, create_typed_tag('fire', last.count == 1 ? 'Single' : 'Shortest Repeated'));
 		} else {
 			add_row_tag(row, create_typed_tag('second', 'Repeated'));
-			min_repeated = String.fromCodePoint(...last.cps).repeat(repeat);
+			min_repeated = str_from_cps(last.cps).repeat(repeat);
 		}
 	} else {
 		add_row_tag(row, `Unique: ${unique.size}`);
@@ -2193,7 +2195,7 @@ function utf8_from_bytes(v) {
 			cps.push(((x & 0x07) << 18) | (req_utf8_cont(v, i++) << 12) | (req_utf8_cont(v, i++) << 6) | req_utf8_cont(v, i++));
 		}
 	}
-	return String.fromCodePoint(...cps);
+	return str_from_cps(cps);
 }
 function req_utf8_cont(v, i) {
 	let x = v[i];
@@ -2225,7 +2227,7 @@ function make_tokens_div(name, before) {
 			wrapper.append(...dom_from_tokens(ens_tokenize('.')).children); 
 		}
 		let {input, error} = split[i];
-		let tokens = dom_from_tokens(ens_tokenize(String.fromCodePoint(...input)), {
+		let tokens = dom_from_tokens(ens_tokenize(str_from_cps(input)), {
 			before, 
 			emoji_url,
 			components: show_components_check.checked,
@@ -2347,7 +2349,7 @@ function create_details_row(name, before) {
 
 	for (let info of split) {
 		info.cps = before || !info.output ? info.input : info.output;
-		info.label = String.fromCodePoint(...info.cps);
+		info.label = str_from_cps(info.cps);
 	}
 
 	for (let i = 0; i < split.length; i++) {
@@ -2370,7 +2372,7 @@ function create_details_row(name, before) {
 				label_div.classList.add('mapped');
 			} else {
 				upgrade_split_type(info);
-				if (info.type.startsWith('Restricted[')) {
+				if (info.restricted) {
 					let script = type.slice(11, -1);
 					let a = document.createElement('a');
 					a.classList.add('restricted');
@@ -2384,7 +2386,7 @@ function create_details_row(name, before) {
 					if (info.emoji && info.type !== 'Emoji') {
 						span.innerHTML += '+';
 					}
-					if (info.rare) {
+					if (info.rare_latin) {
 						span.style.color = '#d47';
 					}
 					label_div.append(span);
@@ -2616,7 +2618,7 @@ function resolve() {
 		let lo = parseInt(match[1], 16);
 		let hi = parseInt(match[2], 16);
 		if (hi >= lo) {
-			input = String.fromCodePoint(...Array(1 + hi - lo).fill().map((_, i) => lo + i));
+			input = str_from_cps(Array(1 + hi - lo).fill().map((_, i) => lo + i));
 		}
 	}
 	// input convenience: HEX HEX HEX => {HEX}{HEX}
@@ -2861,7 +2863,7 @@ async function resolve0(input, skip_norm) {
 		let tokens = ens_tokenize(prefix);
 		if (tokens.every(t => t.type === 'emoji')) {
 			output_div.append(create_ethmoji_row(tokens, suffix));
-			let negative = String.fromCodePoint(...tokens[0].emoji) == KEYCAP_MINUS;
+			let negative = str_from_cps(tokens[0].emoji) == KEYCAP_MINUS;
 			if (negative) tokens = tokens.slice(1);
 			let values = tokens.map(x => x.emoji[0] - 0x30);
 			if (values.every(x => x >= 0 && x < 10)) {
