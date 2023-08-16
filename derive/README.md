@@ -53,3 +53,12 @@
 * `node names.js script Latn` — print Unicode names for `Latin`
 * `node names.js prop White_Space` — print Unicode names with property `White_Space`
 * `node names.js find abc` — find characters by name
+
+## Upgrade Notes
+
+### 15.0.0 → 15.1.0
+* UTS-39: **New** Confusable Bidi Logic 
+* UAX-31: **Unchanged** Recommended, Excluded, Limited Use
+* `confusables.txt`: **Unchanged**
+* `node test/validate.js prior-tests/1.9.4.json`
+* `node derivate/unicode-diff.js 15.0.0/42 15.1.0/43`

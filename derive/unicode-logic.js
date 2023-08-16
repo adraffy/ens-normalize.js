@@ -688,8 +688,12 @@ export class UnicodeSpec {
 		// - Field 1 is the source, 
 		// - Field 2 is the target,
 		// - Field 3 is obsolete, always containing the letters “MA” for backwards compatibility. 
+		// Everything after the # is a comment and is purely informative. 
+		// A asterisk after the comment indicates that the character is not an XID character [UAX31]. 
+		// The comments provide the character names.
 		// 06E8 ;	0306 0307 ;	MA	# ( ۨ → ̆̇ ) ARABIC SMALL HIGH NOON → COMBINING BREVE, COMBINING DOT ABOVE
 		// 0310 ;	0306 0307 ;	MA	# ( ̐ → ̆̇ ) COMBINING CANDRABINDU → COMBINING BREVE, COMBINING DOT ABOVE
+		// FF65 ;	00B7      ;	MA	#* ( ･ → · ) HALFWIDTH KATAKANA MIDDLE DOT → MIDDLE DOT	# →•→
 		return Object.entries(parse_semicolon_file(new URL('./confusables.txt', this.data_dir), {
 			row([src, target]) {
 				let key = String.fromCodePoint(...parse_cp_sequence(target));

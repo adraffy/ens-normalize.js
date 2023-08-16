@@ -89,9 +89,9 @@ function url_for_version(version) {
 }
 
 // https://cldr.unicode.org/index/downloads
-// 20230412: v43
-// 20221019: v42
 // 20220406: v41
+// 20221019: v42
+// 20230412: v43
 const version = 43;
 let url = url_for_version(version);
 let header = {version, url, date: new Date()};

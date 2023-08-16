@@ -1,37 +1,37 @@
-// Computed: 2023-02-21T07:57:13.071Z
-// Spec: 962316964553fce6188e25a5166a4c1e906333adf53bdf2964c71dedc0f8e2c8
-// Total: 2489334
+// Computed: 2023-08-15T23:46:27.498Z
+// Spec: a50364cab255b819b8b827381a72e2cc133a4e62998b63845e0f2ee91a34f711
+// Total: 2648909
 export default [
-	'ASCII',      // 2219207 |  89.14862%
-	'Latin',      //  121315 |   4.87339%
-	'Emoji',      //   57048 |   2.29170%
-	'Arabic',     //   29247 |   1.17489%
-	'Han',        //   27023 |   1.08555%
-	'*** Error',  //   18830 |   0.75643%
-	'Devanagari', //    3528 |   0.14172%
-	'Japanese',   //    2723 |   0.10939%
-	'Korean',     //    2530 |   0.10163%
-	'Cyrillic',   //    1988 |   0.07986%
-	'Hebrew',     //    1760 |   0.07070%
-	'Thai',       //    1496 |   0.06010%
-	'Bengali',    //     893 |   0.03587%
-	'Tamil',      //     454 |   0.01824%
-	'Greek',      //     324 |   0.01302%
-	'Tibetan',    //     188 |   0.00755%
-	'Gurmukhi',   //      76 |   0.00305%
-	'Lao',        //      62 |   0.00249%
-	'Gujarati',   //      43 |   0.00173%
-	'Telugu',     //      43 |   0.00173%
-	'Bopomofo',   //      42 |   0.00169%
-	'Myanmar',    //      41 |   0.00165%
-	'Georgian',   //      35 |   0.00141%
-	'Armenian',   //      33 |   0.00133%
-	'Malayalam',  //      24 |   0.00096%
-	'Khmer',      //      24 |   0.00096%
-	'Kannada',    //      22 |   0.00088%
-	'Ethiopic',   //      19 |   0.00076%
-	'Sinhala',    //      13 |   0.00052%
-	'Oriya',      //       9 |   0.00036%
+	'ASCII',      // 2373026 |  89.58503%
+	'Latin',      //  124388 |   4.69582%
+	'Emoji',      //   58125 |   2.19430%
+	'Arabic',     //   29366 |   1.10861%
+	'Han',        //   28164 |   1.06323%
+	'*** Error',  //   18873 |   0.71248%
+	'Devanagari', //    3536 |   0.13349%
+	'Japanese',   //    2821 |   0.10650%
+	'Korean',     //    2582 |   0.09747%
+	'Cyrillic',   //    2079 |   0.07849%
+	'Hebrew',     //    1764 |   0.06659%
+	'Thai',       //    1499 |   0.05659%
+	'Bengali',    //     893 |   0.03371%
+	'Tamil',      //     455 |   0.01718%
+	'Greek',      //     336 |   0.01268%
+	'Tibetan',    //     190 |   0.00717%
+	'Gurmukhi',   //      76 |   0.00287%
+	'Lao',        //      62 |   0.00234%
+	'Gujarati',   //      43 |   0.00162%
+	'Telugu',     //      43 |   0.00162%
+	'Bopomofo',   //      43 |   0.00162%
+	'Myanmar',    //      41 |   0.00155%
+	'Georgian',   //      35 |   0.00132%
+	'Armenian',   //      34 |   0.00128%
+	'Malayalam',  //      25 |   0.00094%
+	'Khmer',      //      24 |   0.00091%
+	'Kannada',    //      22 |   0.00083%
+	'Ethiopic',   //      19 |   0.00072%
+	'Sinhala',    //      15 |   0.00057%
+	'Oriya',      //       9 |   0.00034%
 	'Thaana',     //       2 |   0.00008%
 	'Syrc',       //       1 |   0.00004% [Restricted];
 	'Nkoo',       //       1 |   0.00004% [Restricted];
@@ -49,7 +49,11 @@ export default [
 	'Dsrt',       //       1 |   0.00004% [Restricted];
 	'Ogam',       //       1 |   0.00004% [Restricted];
 	'Tglg',       //       1 |   0.00004% [Restricted];
+	'Gonm',       //       1 |   0.00004% [Restricted];
 	'Tfng',       //       1 |   0.00004% [Restricted];
+	'Bamu',       //       1 |   0.00004% [Restricted];
+	'Mroo',       //       1 |   0.00004% [Restricted];
+	'Yiii',       //       1 |   0.00004% [Restricted];
 	'Vaii',       //       1 |   0.00004% [Restricted];
 	'Java',       //       1 |   0.00004% [Restricted];
 	'Copt',       //       1 |   0.00004% [Restricted];
