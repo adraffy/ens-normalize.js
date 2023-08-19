@@ -2373,7 +2373,7 @@ function create_details_row(name, before) {
 			} else {
 				upgrade_split_type(info);
 				if (info.restricted) {
-					let script = type.slice(11, -1);
+					let script = info.type.slice(11, -1);
 					let a = document.createElement('a');
 					a.classList.add('restricted');
 					a.innerHTML = `<span>${script}</span>⚠️`;

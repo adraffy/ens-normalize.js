@@ -516,6 +516,11 @@ let emoji_count;
 let max_length;
 let by_mode;
 
+document.querySelector('footer').innerHTML += ` — <span>v${versions.version} (${versions.spec_hash.slice(0, 8)})</span>`;
+document.querySelector('footer span').addEventListener('click', () => {
+	window.alert(JSON.stringify(versions, null, ' '));
+});
+
 (async () => {
 
 	let version_set = new Set();
@@ -688,7 +693,7 @@ csv_btn.addEventListener('click', async () => {
 		if (!rec.is_emoji) continue;
 		let v = [rec.form, rec.cps.map(hex_cp).join(' '), rec.norm, rec.norm_length, rec.min_length, rec.min_repeat];
 		if (rec.info) {
-			v.push(rec.info.name, rec.info.type, rec.info.version);
+			v.push(rec.info.name, rec.info.type, rec.info.version.toString());
 		}
 		lines.push(v.map(x => typeof x === 'number' ? x : `"${x}"`).join(','));
 	}
