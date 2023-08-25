@@ -288,6 +288,8 @@ export function use_default_style() {
 	}
 	.tokens .arrow {
 		color: rgba(0, 0, 0, 0.35);
+		user-select: none;
+		margin: 0 -2px;
 	}
 	.tokens .code {
 		font-family: monospace;

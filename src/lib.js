@@ -243,7 +243,7 @@ export function ens_emoji() {
 
 export function ens_normalize_fragment(frag, decompose) {
 	let nf = decompose ? nfd : nfc;
-	return frag.split(STOP_CH).map(label => str_from_cps(tokes_from_str(explode_cp(label), nf, filter_fe0f).flat())).join(STOP_CH);
+	return frag.split(STOP_CH).map(label => str_from_cps(tokens_from_str(explode_cp(label), nf, filter_fe0f).flat())).join(STOP_CH);
 }
 
 export function ens_normalize(name) {
@@ -308,7 +308,7 @@ function split(name, nf, ef) {
 		let norm;
 		try {
 			// 1.) "The label must be in Unicode Normalization Form NFC"
-			let tokens = info.tokens = tokes_from_str(input, nf, ef); // if we parse, we get [norm and mapped]
+			let tokens = info.tokens = tokens_from_str(input, nf, ef); // if we parse, we get [norm and mapped]
 			let token_count = tokens.length;
 			let type;
 			if (!token_count) { // the label was effectively empty (could of had ignored characters)
@@ -563,7 +563,7 @@ function check_group(g, cps) {
 // eg. explode_cp("abc💩d") => [[61, 62, 63], Emoji[1F4A9, FE0F], [64]]
 // 20230818: rename for 'process' name collision h/t Javarome
 // https://github.com/adraffy/ens-normalize.js/issues/23
-function tokes_from_str(input, nf, ef) {
+function tokens_from_str(input, nf, ef) {
 	let ret = [];
 	let chars = [];
 	input = input.slice().reverse(); // flip so we can pop

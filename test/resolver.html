@@ -78,7 +78,12 @@ h1 {
 	color: #666;
 	display: flex;
 	flex-direction: column;
-	gap: 2px;
+	align-items: start;
+}
+#provider .chain {
+	margin-left: 5px;
+	font-size: 10pt;
+	padding: 3px 6px;
 }
 #provider .error {
 	background-color: #fcc;
@@ -166,7 +171,7 @@ h1 {
 	box-sizing: border-box;
 	width: 100%;
 	padding: 8px;
-	font-size: 16pt;
+	font-size: 20pt;
 }
 #actions {
 	min-height: 32px; /* spinner */
@@ -463,7 +468,6 @@ button.copy.copied {
 	border-radius: 4px;
 	width: 32px;
 	height: 32px;
-	border: 1px solid #ccc;
 	transition: transform 0.2s;
 }
 .avatar img:hover {
@@ -643,6 +647,9 @@ footer span:hover {
 		margin: 16px;
 		margin-bottom: 0;
 	}
+	#input input {
+		font-size: 20pt;
+	}
 	#provider {
 		flex-direction: row;
 		align-items: center;
@@ -688,7 +695,7 @@ footer span:hover {
 </head>
 <body>
 <header>
-<h1><a href="https://ens.domains/">ENS Resolver</a><div id="provider" target="_blank" title="Registry Contract"></div></h1>
+<h1><a href="https://ens.domains/">ENS Resolver</a><div id="provider"></div></h1>
 <div id="github"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a><br>
 <a href="https://github.com/adraffy/ensip-15/blob/master/ens-improvement-proposals/ensip-15-normalization-standard.md">ENSIP-15</a></div>
 </header>
@@ -957,7 +964,7 @@ Hebrew:
 	</div>
 </div>
 <div id="input">
-	<input id="input_field" size="20" placeholder="Name or token:HEX or Marketplace URL or Address (Checksummed)">
+	<input id="input_field" size="20" placeholder="Name or Address or URL">
 	<select id="recent_select" title="Recent Names" class="hide">
 		<option value="reset">🗑️ Clear History</option>
 		<optgroup label="Recent Names"></optgroup>
@@ -990,6 +997,7 @@ Hebrew:
 <li><a href="#vitalik.eth"><button>Copy Link</button></a> to get a URL that resolves on page-load.</li>
 <li>Many elements have tooltips with additional information.</li>
 <li>Uses <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
+<li>Supports <button id="add_goerli_btn" class="chain">Goerli</button> and <button id="add_sepolia_btn" class="chain">Sepolia</button> testnets.</li>
 </ul>
 <ul class="row legend">
 <li>This is a <b>valid</b> sequence of characters: <span data-tokenize="abc"></span> and <b>.eth</b> name: <span data-tokenize="abc.eth"></span></li>
@@ -1252,7 +1260,8 @@ function add_recent(name, save = true) {
 		localStorage.setItem(STORAGE_RECENT, JSON.stringify([...recent_optgroup.children].map(x => x.value)));
 	} 
 }
-
+document.querySelector('#add_goerli_btn').addEventListener('click', () => switch_to_network(CHAIN_ID_GOERLI));
+document.querySelector('#add_sepolia_btn').addEventListener('click', () => switch_to_network(CHAIN_ID_SEPOLIA));
 document.querySelector('#random_emoji_btn').addEventListener('click', e => {
 	let name = '';
 	let pool = e.altKey ? EMOJI.filter(cps => cps.length == 1 || (cps.length == 2 && cps[1] === 0xFE0F)) : EMOJI;
@@ -1348,7 +1357,15 @@ sync_force_ltr();
 input_field.focus();
 apply_location_hash();
 window.addEventListener('hashchange', apply_location_hash);
-
+function is_mainnet() {
+	return chain_id === CHAIN_ID_MAINNET;
+}
+async function switch_to_network(id) {
+	return window.ethereum.request({
+		method: 'wallet_switchEthereumChain',
+		params: [{chainId: `0x${id.toString(16)}`}]
+	});
+}
 function update_network(network) {
 	active_provider = infura_provider;
 	let registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
@@ -1390,10 +1407,10 @@ function update_network(network) {
 		}
 	}
 	let provider_name = use_window ? 'window.ethereum' : 'Infura';
-	document.body.classList.toggle('testnet', chain_id !== CHAIN_ID_MAINNET);
+	document.body.classList.toggle('testnet', !is_mainnet());
 	// TODO: add change network button
 	let network_div = document.createElement('div');
-	network_div.innerHTML = `using ${provider_name} on <a href="${block_explorer}/address/${registry}">${network_name}</a>`;
+	network_div.innerHTML = `using <b>${provider_name}</b> on <a href="${block_explorer}/address/${registry}" target="_blank" title="Registry Contract">${network_name}</a>`;
 	if (network && !use_window) {
 		provider_div.innerHTML = `<div class="error">⚠️ Unsupported Network (${network.chainId})</div>`;
 		network_div.innerHTML += ' instead';
@@ -1401,7 +1418,13 @@ function update_network(network) {
 		provider_div.innerHTML = '';	
 	}
 	provider_div.append(network_div);
-
+	if (!is_mainnet() || !use_window) {
+		let btn = document.createElement('button');
+		btn.classList.add('chain');
+		btn.innerHTML = '↪ Mainnet';
+		btn.addEventListener('click', () => switch_to_network(CHAIN_ID_MAINNET));
+		network_div.append(btn);
+	}
 	let init = !registry_contract;
 	registry_contract = new ethers.Contract(registry, [
 		'function resolver(bytes32 node) external view returns (address)',
@@ -1730,7 +1753,7 @@ function create_dns_row(name, replaced) {
 		} else {
 			add_row_tag(row, create_typed_tag('second', 'Punycode Compatible'));
 		}
-		if (chain_id == CHAIN_ID_MAINNET) {
+		if (is_mainnet()) {
 			add_row_tag(row, create_link(`https://${encoded}.limo`, '.limo'));
 			add_row_tag(row, create_link(`https://${encoded}.link`, '.link'));
 			add_row_tag(row, create_link(`https://${encoded}.xyz`, '.xyz'));
@@ -1892,7 +1915,7 @@ function create_reverse_resolve_btn(addr) {
 function create_resolve_btn(s, html = '↩️ Resolve') {
 	let btn = document.createElement('button');
 	btn.innerHTML = html;
-	btn.title = s;
+	btn.title = `Resolve: ${s}\nHex: ${explode_cp(s).map(hex_cp).join(' ')}`;
 	btn.addEventListener('click', () => {
 		input_field.value = s;
 		resolve();
@@ -2126,6 +2149,7 @@ function add_nft_links(row, name, contract, token) {
 	add_row_tag(row, create_etherscan_nft_link(contract, token));
 	add_row_tag(row, create_ens_metadata_link(contract, token));
 	add_row_tag(row, create_opensea_link(contract, token));
+	if (!is_mainnet()) return;
 	try {
 		let encoded = encodeURIComponent(name);
 		if (encoded.endsWith('.eth')) {
@@ -2575,7 +2599,7 @@ function resolve() {
 		resolve_btn.disabled = true;
 		return (async() => {
 			try {
-				if (chain_id !== CHAIN_ID_MAINNET) throw new Error(`token: only works on mainnet`);
+				if (!is_mainnet()) throw new Error(`token: only works on mainnet`);
 				let res = await fetch('https://api.thegraph.com/subgraphs/name/ensdomains/ens', {
 					method: 'POST',
 					body: JSON.stringify({
@@ -3084,7 +3108,7 @@ async function resolve0(input, skip_norm) {
 			add_row_tag(avail_row, create_typed_tag('warn', avail_err));
 		} else {
 			add_row_tag(avail_row, create_typed_tag(available ? 'good' : 'fail', 'Available'));
-			if (chain_id === CHAIN_ID_MAINNET && domain === 'art') {
+			if (is_mainnet() && domain === 'art') {
 				add_row_tag(avail_row, create_link(`https://app.protocol.art/name/${encodeURIComponent(label)}.art`, 'Website'));
 			}
 			add_row_tag(avail_row, create_etherscan_address_link(nft_contract.address, {title: 'NFT Contract', contract: true}));
@@ -3319,6 +3343,7 @@ async function resolve0(input, skip_norm) {
 			add_row_tag(address_row, create_typed_tag('warn', 'Not Set'));
 		} else {
 			address_row.append(create_etherscan_address_link(address));
+			address_row.append(create_copy_btn(address));
 			if (input_is_address) {
 				if (address === input) {
 					add_row_tag(input_row, create_typed_tag('fire', 'Primary'));

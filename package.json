@@ -4,11 +4,13 @@
 	"description": "Ethereum Name Service (ENS) Name Normalizer",
 	"keywords": [
 		"ENS",
+		"ENSIP-1",
 		"ENSIP-15",
 		"Ethereum",
 		"UTS-46",
 		"UTS-51",
 		"IDNA",
+		"Name",
 		"Normalize",
 		"Normalization",
 		"NFC",

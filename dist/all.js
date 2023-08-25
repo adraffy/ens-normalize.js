@@ -739,7 +739,7 @@ function ens_emoji() {
 
 function ens_normalize_fragment(frag, decompose) {
 	let nf = decompose ? nfd : nfc;
-	return frag.split(STOP_CH).map(label => str_from_cps(process(explode_cp(label), nf, filter_fe0f).flat())).join(STOP_CH);
+	return frag.split(STOP_CH).map(label => str_from_cps(tokens_from_str(explode_cp(label), nf, filter_fe0f).flat())).join(STOP_CH);
 }
 
 function ens_normalize(name) {
@@ -804,7 +804,7 @@ function split(name, nf, ef) {
 		let norm;
 		try {
 			// 1.) "The label must be in Unicode Normalization Form NFC"
-			let tokens = info.tokens = process(input, nf, ef); // if we parse, we get [norm and mapped]
+			let tokens = info.tokens = tokens_from_str(input, nf, ef); // if we parse, we get [norm and mapped]
 			let token_count = tokens.length;
 			let type;
 			if (!token_count) { // the label was effectively empty (could of had ignored characters)
@@ -880,7 +880,7 @@ function check_whole(group, unique) {
 	}
 	if (maker) {
 		// we have 1+ confusable
-		// check if any of the remaning groups
+		// check if any of the remaining groups
 		// contain the shared characters too
 		for (let g of maker) {
 			if (shared.every(cp => g.V.has(cp))) {
@@ -900,9 +900,9 @@ function determine_group(unique) {
 		let gs = groups.filter(g => g.V.has(cp));
 		if (!gs.length) {
 			if (!GROUPS.some(g => g.V.has(cp))) { 
-				// 20230716: change to more exact statement, see: ENSNormalize.{cs,java}
 				// the character was composed of valid parts
 				// but it's NFC form is invalid
+				// 20230716: change to more exact statement, see: ENSNormalize.{cs,java}
 				// note: this doesn't have to be a composition
 				// 20230720: change to full check
 				throw error_disallowed(cp); // this should be rare
@@ -1057,7 +1057,9 @@ function check_group(g, cps) {
 // given a list of codepoints
 // returns a list of lists, where emoji are a fully-qualified (as Array subclass)
 // eg. explode_cp("abc💩d") => [[61, 62, 63], Emoji[1F4A9, FE0F], [64]]
-function process(input, nf, ef) {
+// 20230818: rename for 'process' name collision h/t Javarome
+// https://github.com/adraffy/ens-normalize.js/issues/23
+function tokens_from_str(input, nf, ef) {
 	let ret = [];
 	let chars = [];
 	input = input.slice().reverse(); // flip so we can pop
@@ -1509,6 +1511,8 @@ function use_default_style() {
 	}
 	.tokens .arrow {
 		color: rgba(0, 0, 0, 0.35);
+		user-select: none;
+		margin: 0 -2px;
 	}
 	.tokens .code {
 		font-family: monospace;
