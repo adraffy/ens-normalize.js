@@ -57,9 +57,6 @@ body {
 	gap: 8px;
 	overflow-y: scroll;
 }
-body.testnet {
-	background: #fef;
-}
 header {
 	display: flex;
 	justify-content: space-between;
@@ -78,12 +75,13 @@ h1 {
 	color: #666;
 	display: flex;
 	flex-direction: column;
+	flex-wrap: wrap;
 	align-items: start;
 }
 #provider .chain {
 	margin-left: 5px;
-	font-size: 10pt;
-	padding: 3px 6px;
+	font-size: 9pt;
+	padding: 2px 6px;
 }
 #provider .error {
 	background-color: #fcc;
@@ -94,6 +92,17 @@ h1 {
 }
 #provider a {
 	font-weight: bold;
+}
+body.testnet {
+	background: #fef;
+}
+body.testnet #provider a {
+	background: #f3f;
+	color: #fff;
+	border-radius: 4px;
+	padding: 2px 4px;
+	margin: -2px 0;
+	text-decoration: none;
 }
 #github {
 	text-align: right;
@@ -330,6 +339,7 @@ ul .tokens {
 }
 .row.legend {
 	background: #fff;
+	list-style: disclosure-closed;
 	gap: 2px;
 }
 .row.legend .tokens {
@@ -338,8 +348,7 @@ ul .tokens {
 .row.links {
 	display: grid;	
 	gap: 8px;
-	list-style: disclosure-closed;
-	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 	background: #eff;
 	order: 100;
 }
@@ -653,6 +662,7 @@ footer span:hover {
 	#provider {
 		flex-direction: row;
 		align-items: center;
+		gap: 4px;
 	}
 	#input, #actions, #options, #examples {
 		margin: 0 16px;
@@ -990,13 +1000,13 @@ Hebrew:
 <ul class="row readme">
 <li>Click an <button data-name="👁️‍🗨️A{303}">Example</button> to see how it works.</li>
 <li>Use <code>{FF}</code>, <code>[255]</code>, <code>\uFF</code>, or <code>\u{FF}</code> to manually include codepoints <button data-raw data-name="{200D}a[8205]b\u200D.eth">ZWJ</button></li>
+<li><code>token:__</code> lookup the <a href="../../keccak.js/test/demo.html#algo=keccak-256&s=raffy&escape=1&encoding=utf8">labelhash</a> (if known) <button data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209" data-delay="1000">raffy.eth</button></li>
+<li><code>wrapped:__</code> lookup the <a href="../../keccak.js/test/demo.html#algo=namehash&s=firstwrappedname.eth&escape=1&encoding=utf8">namehash</a> (if wrapped) <button data-name="wrapped:0xc44eec7fb870ae46d4ef4392d33fbbbdc164e7817a86289a1fe30e5f4d98ae85" data-delay="1000">firstwrappedname.eth</button></li>
+<li><code>HEX<sub>1</sub> HEX<sub>2</sub></code> is shorthand for <code>{HEX<sub>1</sub>}{HEX<sub>2</sub>}</code> <button data-name="65 74 68" data-meta data-delay="1000">eth</button></li>
 <li><code>range:HEX<sub>1</sub>..HEX<sub>n</sub></code> expands to a range of characters <button data-name="range:61..7A" data-delay="1000">ASCII a-z</button></li>
-<li><code>token:HEX</code> resolves to the .eth preimage (if known) <button data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209" data-delay="1000">token:</button></li>
-<li><code>wrapped:HEX</code> resolves to the name (if wrapped) <button data-name="wrapped:0xc44eec7fb870ae46d4ef4392d33fbbbdc164e7817a86289a1fe30e5f4d98ae85" data-delay="1000">wrapped:</button></li>
-<li><code>12F 4C6 A89</code> is shorthand for <code>{12F}{4C6}{A89}</code> <button data-name="65 74 68" data-meta data-delay="1000">65 74 68</button></li>
 <li><a href="#vitalik.eth"><button>Copy Link</button></a> to get a URL that resolves on page-load.</li>
 <li>Many elements have tooltips with additional information.</li>
-<li>Uses <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
+<li>Follows <a href="https://github.com/adraffy/ensip-15/blob/master/ens-improvement-proposals/ensip-15-normalization-standard.md">ENSIP-15</a> and <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
 <li>Supports <button id="add_goerli_btn" class="chain">Goerli</button> and <button id="add_sepolia_btn" class="chain">Sepolia</button> testnets.</li>
 </ul>
 <ul class="row legend">
@@ -1412,8 +1422,8 @@ function update_network(network) {
 	let network_div = document.createElement('div');
 	network_div.innerHTML = `using <b>${provider_name}</b> on <a href="${block_explorer}/address/${registry}" target="_blank" title="Registry Contract">${network_name}</a>`;
 	if (network && !use_window) {
-		provider_div.innerHTML = `<div class="error">⚠️ Unsupported Network (${network.chainId})</div>`;
-		network_div.innerHTML += ' instead';
+		provider_div.innerHTML = `<div class="error">🚫️ Unsupported Network (${network.chainId})</div>`;
+		//network_div.innerHTML += ' instead';
 	} else {
 		provider_div.innerHTML = '';	
 	}
