@@ -457,7 +457,10 @@ export default [
 	0x1E9C, // (ẜ) LATIN SMALL LETTER LONG S WITH DIAGONAL STROKE
 	0x1E9D, // (ẝ) LATIN SMALL LETTER LONG S WITH HIGH STROKE
 	//0x1E9B, // (ẛ) LATIN SMALL LETTER LONG S WITH DOT ABOVE
-	0x1E9E, // (ẞ) LATIN CAPITAL LETTER SHARP S
+
+	// 20230829: changed in unicode 15.1
+	// now mapped to: DF (ß) LATIN SMALL LETTER SHARP S
+	//0x1E9E, // (ẞ) LATIN CAPITAL LETTER SHARP S
 
 	// what the fuck are these, latin greeks?
 	0x251, // (ɑ) LATIN SMALL LETTER ALPHA

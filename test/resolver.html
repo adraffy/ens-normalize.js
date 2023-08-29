@@ -57,9 +57,6 @@ body {
 	gap: 8px;
 	overflow-y: scroll;
 }
-body.testnet {
-	background: #fef;
-}
 header {
 	display: flex;
 	justify-content: space-between;
@@ -78,7 +75,13 @@ h1 {
 	color: #666;
 	display: flex;
 	flex-direction: column;
-	gap: 2px;
+	flex-wrap: wrap;
+	align-items: start;
+}
+#provider .chain {
+	margin-left: 5px;
+	font-size: 9pt;
+	padding: 2px 6px;
 }
 #provider .error {
 	background-color: #fcc;
@@ -89,6 +92,17 @@ h1 {
 }
 #provider a {
 	font-weight: bold;
+}
+body.testnet {
+	background: #fef;
+}
+body.testnet #provider a {
+	background: #f3f;
+	color: #fff;
+	border-radius: 4px;
+	padding: 2px 4px;
+	margin: -2px 0;
+	text-decoration: none;
 }
 #github {
 	text-align: right;
@@ -166,7 +180,7 @@ h1 {
 	box-sizing: border-box;
 	width: 100%;
 	padding: 8px;
-	font-size: 16pt;
+	font-size: 20pt;
 }
 #actions {
 	min-height: 32px; /* spinner */
@@ -325,6 +339,7 @@ ul .tokens {
 }
 .row.legend {
 	background: #fff;
+	list-style: disclosure-closed;
 	gap: 2px;
 }
 .row.legend .tokens {
@@ -333,8 +348,7 @@ ul .tokens {
 .row.links {
 	display: grid;	
 	gap: 8px;
-	list-style: disclosure-closed;
-	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 	background: #eff;
 	order: 100;
 }
@@ -463,7 +477,6 @@ button.copy.copied {
 	border-radius: 4px;
 	width: 32px;
 	height: 32px;
-	border: 1px solid #ccc;
 	transition: transform 0.2s;
 }
 .avatar img:hover {
@@ -643,9 +656,13 @@ footer span:hover {
 		margin: 16px;
 		margin-bottom: 0;
 	}
+	#input input {
+		font-size: 20pt;
+	}
 	#provider {
 		flex-direction: row;
 		align-items: center;
+		gap: 4px;
 	}
 	#input, #actions, #options, #examples {
 		margin: 0 16px;
@@ -688,7 +705,7 @@ footer span:hover {
 </head>
 <body>
 <header>
-<h1><a href="https://ens.domains/">ENS Resolver</a><div id="provider" target="_blank" title="Registry Contract"></div></h1>
+<h1><a href="https://ens.domains/">ENS Resolver</a><div id="provider"></div></h1>
 <div id="github"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a><br>
 <a href="https://github.com/adraffy/ensip-15/blob/master/ens-improvement-proposals/ensip-15-normalization-standard.md">ENSIP-15</a></div>
 </header>
@@ -901,6 +918,10 @@ Hebrew Geresh:
 <button data-name="{1FAF7}{1F3FB}{1FAF7}{1F3FC}{1FAF7}{1F3FD}{1FAF7}{1F3FE}{1FAF7}{1F3FF}{1FAF8}{1F3FB}{1FAF8}{1F3FC}{1FAF8}{1F3FD}{1FAF8}{1F3FE}{1FAF8}{1F3FF}">Sequences (10)</button>
 <button data-name="{1F426}{200D}{2B1B}">Black Bird</button>
 
+<a href="https://unicode.org/reports/tr51/proposed.html"><b>Unicode 15.1:</b></a>
+<button data-name="{26D3}{200D}{1F4A5}.{1F344}{200D}{1F7EB}.{1F34B}{200D}{1F7E9}.{1F426}{200D}{1F525}.{1F642}{200D}{2194}.{1F642}{200D}{2195}.{1F9D1}{200D}{1F9D2}.{1F9D1}{200D}{1F9D1}{200D}{1F9D2}.{1F9D1}{200D}{1F9D2}{200D}{1F9D2}.{1F9D1}{200D}{1F9D1}{200D}{1F9D2}{200D}{1F9D2}">ZWJ Sequences (10)</button>
+<button data-name="{1F3C3}{1F3FB}{200D}{27A1}.{1F3C3}{1F3FB}{200D}{27A1}.{1F3C3}{1F3FC}{200D}{27A1}.{1F3C3}{1F3FD}{200D}{27A1}.{1F3C3}{1F3FE}{200D}{27A1}.{1F3C3}{1F3FF}{200D}{27A1}">Directional (108)</button>
+
 <b>Fenced:</b>
 <button>O'Brian</button>
 <button data-name="¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞⅟↉">"½"</button>
@@ -957,7 +978,7 @@ Hebrew:
 	</div>
 </div>
 <div id="input">
-	<input id="input_field" size="20" placeholder="Name or token:HEX or Marketplace URL or Address (Checksummed)">
+	<input id="input_field" size="20" placeholder="Name or Address or URL">
 	<select id="recent_select" title="Recent Names" class="hide">
 		<option value="reset">🗑️ Clear History</option>
 		<optgroup label="Recent Names"></optgroup>
@@ -982,14 +1003,15 @@ Hebrew:
 <div id="output">
 <ul class="row readme">
 <li>Click an <button data-name="👁️‍🗨️A{303}">Example</button> to see how it works.</li>
-<li>Use <code>{FF}</code>, <code>[255]</code>, <code>\uFF</code>, or <code>\u{FF}</code> to manually include codepoints <button data-raw data-name="{200D}a[8205]b\u200D.eth">ZWJ</button></li>
+<li>Use <code>{FF}</code>, <code>[255]</code>, <code>\uFF</code>, <code>\u{FF}</code>, <code>&amp;#xFF;</code>, <code>&amp;#255;</code>, or <code>&amp;abc;</code> to manually include codepoints <button data-raw data-name="{200D}a[8205]b\u200D.eth">ZWJ</button></li>
+<li><code>token:__</code> lookup the <a href="../../keccak.js/test/demo.html#algo=keccak-256&s=raffy&escape=1&encoding=utf8">labelhash</a> (if known) <button data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209" data-delay="1000">raffy.eth</button></li>
+<li><code>wrapped:__</code> lookup the <a href="../../keccak.js/test/demo.html#algo=namehash&s=firstwrappedname.eth&escape=1&encoding=utf8">namehash</a> (if wrapped) <button data-name="wrapped:0xc44eec7fb870ae46d4ef4392d33fbbbdc164e7817a86289a1fe30e5f4d98ae85" data-delay="1000">firstwrappedname.eth</button></li>
+<li><code>HEX<sub>1</sub> HEX<sub>2</sub></code> is shorthand for <code>{HEX<sub>1</sub>}{HEX<sub>2</sub>}</code> <button data-name="65 74 68" data-meta data-delay="1000">eth</button></li>
 <li><code>range:HEX<sub>1</sub>..HEX<sub>n</sub></code> expands to a range of characters <button data-name="range:61..7A" data-delay="1000">ASCII a-z</button></li>
-<li><code>token:HEX</code> resolves to the .eth preimage (if known) <button data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209" data-delay="1000">token:</button></li>
-<li><code>wrapped:HEX</code> resolves to the name (if wrapped) <button data-name="wrapped:0xc44eec7fb870ae46d4ef4392d33fbbbdc164e7817a86289a1fe30e5f4d98ae85" data-delay="1000">wrapped:</button></li>
-<li><code>12F 4C6 A89</code> is shorthand for <code>{12F}{4C6}{A89}</code> <button data-name="65 74 68" data-meta data-delay="1000">65 74 68</button></li>
 <li><a href="#vitalik.eth"><button>Copy Link</button></a> to get a URL that resolves on page-load.</li>
 <li>Many elements have tooltips with additional information.</li>
-<li>Uses <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
+<li>Follows <a href="https://github.com/adraffy/ensip-15/blob/master/ens-improvement-proposals/ensip-15-normalization-standard.md">ENSIP-15</a> and <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
+<li>Supports <button id="add_goerli_btn" class="chain">Goerli</button> and <button id="add_sepolia_btn" class="chain">Sepolia</button> testnets.</li>
 </ul>
 <ul class="row legend">
 <li>This is a <b>valid</b> sequence of characters: <span data-tokenize="abc"></span> and <b>.eth</b> name: <span data-tokenize="abc.eth"></span></li>
@@ -1009,7 +1031,7 @@ Hebrew:
 <li><a href="https://raffy.antistupid.com/eth/ens-emoji-freq.html">Emoji Frequency Browser</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-nft-matcher.html">ENS+NFT Matcher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-batch-resolver.html">Batch Resolver</a></li>
-<li><a href="https://github.com/adraffy/ens-labels/">Label Database</a>
+<li><a href="https://adraffy.github.io/ens-labels/demo.html">Label Database</a>
 <li><a href="./validate.html">Validation Test</a>
 <li><a href="./report-nf.html">Unicode NormalizationTest</a>
 <li><a href="https://adraffy.github.io/ens-norm-tests/test-breakdown/output/">Breakdown Reports</a></li>
@@ -1145,9 +1167,7 @@ sync_recent(localStorage.getItem(STORAGE_RECENT));
 
 for (let btn of document.querySelectorAll('#examples button:not([id]), button[data-name]')) {
 	let name = btn.innerText;
-	if (btn.dataset.name) {
-		name = btn.dataset.name;
-	}
+	if (btn.dataset.name) name = btn.dataset.name;
 	if (typeof btn.dataset.raw !== 'string') name = replace_escapes(name);
 	if (!btn.innerText || btn.innerText.includes('{')) btn.innerText = name;
 	let meta = typeof btn.dataset.meta === 'string' || name.includes(':') || is_checksum_address(name);
@@ -1252,7 +1272,8 @@ function add_recent(name, save = true) {
 		localStorage.setItem(STORAGE_RECENT, JSON.stringify([...recent_optgroup.children].map(x => x.value)));
 	} 
 }
-
+document.querySelector('#add_goerli_btn').addEventListener('click', () => switch_to_network(CHAIN_ID_GOERLI));
+document.querySelector('#add_sepolia_btn').addEventListener('click', () => switch_to_network(CHAIN_ID_SEPOLIA));
 document.querySelector('#random_emoji_btn').addEventListener('click', e => {
 	let name = '';
 	let pool = e.altKey ? EMOJI.filter(cps => cps.length == 1 || (cps.length == 2 && cps[1] === 0xFE0F)) : EMOJI;
@@ -1348,7 +1369,15 @@ sync_force_ltr();
 input_field.focus();
 apply_location_hash();
 window.addEventListener('hashchange', apply_location_hash);
-
+function is_mainnet() {
+	return chain_id === CHAIN_ID_MAINNET;
+}
+async function switch_to_network(id) {
+	return window.ethereum.request({
+		method: 'wallet_switchEthereumChain',
+		params: [{chainId: `0x${id.toString(16)}`}]
+	});
+}
 function update_network(network) {
 	active_provider = infura_provider;
 	let registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
@@ -1390,18 +1419,24 @@ function update_network(network) {
 		}
 	}
 	let provider_name = use_window ? 'window.ethereum' : 'Infura';
-	document.body.classList.toggle('testnet', chain_id !== CHAIN_ID_MAINNET);
+	document.body.classList.toggle('testnet', !is_mainnet());
 	// TODO: add change network button
 	let network_div = document.createElement('div');
-	network_div.innerHTML = `using ${provider_name} on <a href="${block_explorer}/address/${registry}">${network_name}</a>`;
+	network_div.innerHTML = `using <b>${provider_name}</b> on <a href="${block_explorer}/address/${registry}" target="_blank" title="Registry Contract">${network_name}</a>`;
 	if (network && !use_window) {
-		provider_div.innerHTML = `<div class="error">⚠️ Unsupported Network (${network.chainId})</div>`;
-		network_div.innerHTML += ' instead';
+		provider_div.innerHTML = `<div class="error">🚫️ Unsupported Network (${network.chainId})</div>`;
+		//network_div.innerHTML += ' instead';
 	} else {
 		provider_div.innerHTML = '';	
 	}
 	provider_div.append(network_div);
-
+	if (!is_mainnet() || !use_window) {
+		let btn = document.createElement('button');
+		btn.classList.add('chain');
+		btn.innerHTML = '↪ Mainnet';
+		btn.addEventListener('click', () => switch_to_network(CHAIN_ID_MAINNET));
+		network_div.append(btn);
+	}
 	let init = !registry_contract;
 	registry_contract = new ethers.Contract(registry, [
 		'function resolver(bytes32 node) external view returns (address)',
@@ -1730,7 +1765,7 @@ function create_dns_row(name, replaced) {
 		} else {
 			add_row_tag(row, create_typed_tag('second', 'Punycode Compatible'));
 		}
-		if (chain_id == CHAIN_ID_MAINNET) {
+		if (is_mainnet()) {
 			add_row_tag(row, create_link(`https://${encoded}.limo`, '.limo'));
 			add_row_tag(row, create_link(`https://${encoded}.link`, '.link'));
 			add_row_tag(row, create_link(`https://${encoded}.xyz`, '.xyz'));
@@ -1892,7 +1927,7 @@ function create_reverse_resolve_btn(addr) {
 function create_resolve_btn(s, html = '↩️ Resolve') {
 	let btn = document.createElement('button');
 	btn.innerHTML = html;
-	btn.title = s;
+	btn.title = `Resolve: ${s}\nHex: ${explode_cp(s).map(hex_cp).join(' ')}`;
 	btn.addEventListener('click', () => {
 		input_field.value = s;
 		resolve();
@@ -2126,6 +2161,7 @@ function add_nft_links(row, name, contract, token) {
 	add_row_tag(row, create_etherscan_nft_link(contract, token));
 	add_row_tag(row, create_ens_metadata_link(contract, token));
 	add_row_tag(row, create_opensea_link(contract, token));
+	if (!is_mainnet()) return;
 	try {
 		let encoded = encodeURIComponent(name);
 		if (encoded.endsWith('.eth')) {
@@ -2373,7 +2409,7 @@ function create_details_row(name, before) {
 			} else {
 				upgrade_split_type(info);
 				if (info.restricted) {
-					let script = type.slice(11, -1);
+					let script = info.type.slice(11, -1);
 					let a = document.createElement('a');
 					a.classList.add('restricted');
 					a.innerHTML = `<span>${script}</span>⚠️`;
@@ -2492,8 +2528,10 @@ function add_row_tag(row, tag) {
 }
 
 function trim_trailing_decimal_zeros(s) {
-	let match = s.match(/^(.*)\.0+$/);
-	if (match) return match[1];
+	if (s.includes('.')) {
+		s = s.replace(/0+$/, '');
+		if (s.endsWith('.')) s = s.slice(0, -1);
+	}
 	return s;
 }
 function format_dur(t) {
@@ -2575,7 +2613,7 @@ function resolve() {
 		resolve_btn.disabled = true;
 		return (async() => {
 			try {
-				if (chain_id !== CHAIN_ID_MAINNET) throw new Error(`token: only works on mainnet`);
+				if (!is_mainnet()) throw new Error(`token: only works on mainnet`);
 				let res = await fetch('https://api.thegraph.com/subgraphs/name/ensdomains/ens', {
 					method: 'POST',
 					body: JSON.stringify({
@@ -3084,7 +3122,7 @@ async function resolve0(input, skip_norm) {
 			add_row_tag(avail_row, create_typed_tag('warn', avail_err));
 		} else {
 			add_row_tag(avail_row, create_typed_tag(available ? 'good' : 'fail', 'Available'));
-			if (chain_id === CHAIN_ID_MAINNET && domain === 'art') {
+			if (is_mainnet() && domain === 'art') {
 				add_row_tag(avail_row, create_link(`https://app.protocol.art/name/${encodeURIComponent(label)}.art`, 'Website'));
 			}
 			add_row_tag(avail_row, create_etherscan_address_link(nft_contract.address, {title: 'NFT Contract', contract: true}));
@@ -3319,6 +3357,7 @@ async function resolve0(input, skip_norm) {
 			add_row_tag(address_row, create_typed_tag('warn', 'Not Set'));
 		} else {
 			address_row.append(create_etherscan_address_link(address));
+			address_row.append(create_copy_btn(address));
 			if (input_is_address) {
 				if (address === input) {
 					add_row_tag(input_row, create_typed_tag('fire', 'Primary'));
