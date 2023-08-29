@@ -999,7 +999,7 @@ Hebrew:
 <div id="output">
 <ul class="row readme">
 <li>Click an <button data-name="👁️‍🗨️A{303}">Example</button> to see how it works.</li>
-<li>Use <code>{FF}</code>, <code>[255]</code>, <code>\uFF</code>, or <code>\u{FF}</code> to manually include codepoints <button data-raw data-name="{200D}a[8205]b\u200D.eth">ZWJ</button></li>
+<li>Use <code>{FF}</code>, <code>[255]</code>, <code>\uFF</code>, <code>\u{FF}</code>, <code>&amp;#xFF;</code>, <code>&amp;#255;</code>, or <code>&amp;abc;</code> to manually include codepoints <button data-raw data-name="{200D}a[8205]b\u200D.eth">ZWJ</button></li>
 <li><code>token:__</code> lookup the <a href="../../keccak.js/test/demo.html#algo=keccak-256&s=raffy&escape=1&encoding=utf8">labelhash</a> (if known) <button data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209" data-delay="1000">raffy.eth</button></li>
 <li><code>wrapped:__</code> lookup the <a href="../../keccak.js/test/demo.html#algo=namehash&s=firstwrappedname.eth&escape=1&encoding=utf8">namehash</a> (if wrapped) <button data-name="wrapped:0xc44eec7fb870ae46d4ef4392d33fbbbdc164e7817a86289a1fe30e5f4d98ae85" data-delay="1000">firstwrappedname.eth</button></li>
 <li><code>HEX<sub>1</sub> HEX<sub>2</sub></code> is shorthand for <code>{HEX<sub>1</sub>}{HEX<sub>2</sub>}</code> <button data-name="65 74 68" data-meta data-delay="1000">eth</button></li>
@@ -1027,7 +1027,7 @@ Hebrew:
 <li><a href="https://raffy.antistupid.com/eth/ens-emoji-freq.html">Emoji Frequency Browser</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-nft-matcher.html">ENS+NFT Matcher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-batch-resolver.html">Batch Resolver</a></li>
-<li><a href="https://github.com/adraffy/ens-labels/">Label Database</a>
+<li><a href="https://adraffy.github.io/ens-labels/demo.html">Label Database</a>
 <li><a href="./validate.html">Validation Test</a>
 <li><a href="./report-nf.html">Unicode NormalizationTest</a>
 <li><a href="https://adraffy.github.io/ens-norm-tests/test-breakdown/output/">Breakdown Reports</a></li>
@@ -1163,9 +1163,7 @@ sync_recent(localStorage.getItem(STORAGE_RECENT));
 
 for (let btn of document.querySelectorAll('#examples button:not([id]), button[data-name]')) {
 	let name = btn.innerText;
-	if (btn.dataset.name) {
-		name = btn.dataset.name;
-	}
+	if (btn.dataset.name) name = btn.dataset.name;
 	if (typeof btn.dataset.raw !== 'string') name = replace_escapes(name);
 	if (!btn.innerText || btn.innerText.includes('{')) btn.innerText = name;
 	let meta = typeof btn.dataset.meta === 'string' || name.includes(':') || is_checksum_address(name);
@@ -2526,8 +2524,10 @@ function add_row_tag(row, tag) {
 }
 
 function trim_trailing_decimal_zeros(s) {
-	let match = s.match(/^(.*)\.0+$/);
-	if (match) return match[1];
+	if (s.includes('.')) {
+		s = s.replace(/0+$/, '');
+		if (s.endsWith('.')) s = s.slice(0, -1);
+	}
 	return s;
 }
 function format_dur(t) {
