@@ -406,26 +406,21 @@ button.copy.copied {
 }
 .tags.iface {
 	display: flex;
+	align-items: center;
 	gap: 4px;
 	text-decoration: none;
 	background-color: #dde;
 	padding: 4px 8px;
 	border-radius: 4px;
 	white-space: pre;
+	color: #000;
 }
 .tags.iface:hover {
 	background-color: #bbd;
 }
-.tags.iface b {
-	font-size: 12pt;
-	text-decoration: underline;
-	color: #000;
-}
 .tags.iface code {
-	font-size: 12px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	font-size: 13px;
+	color: #666;
 }
 .tags.good {
 	color: #060;
@@ -1120,7 +1115,7 @@ const RESOLVER_NAMES = {
 };
 const NOT_IFACE_RESOLVER = new Set();
 const IFACE_ETH_CONTROLLER = '0x612e8c09';
-const IFACE_ETH_NFT = '0x80ac58cd';
+//const IFACE_ETH_NFT = '0x6ccb2df4'; // '0x80ac58cd'; // using registry owner() instead
 
 const entity_span = document.createElement('span');
 
@@ -3267,47 +3262,46 @@ async function resolve0(input, skip_norm) {
 		let contract = contract_for_resolver(resolver);
 		// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar	
 		let interfaces = [
-			{iface: IFACE_ETH_NFT, name: 'NFT'},  
+			//{iface: IFACE_ETH_NFT, name: 'NFT'},  
 			{iface: '0x019a38fe', name: 'Wrapper'},
 			{iface: IFACE_ETH_CONTROLLER, name: 'Controller'},
 			{iface: '0x018fac06', name: 'Old Controller'},
-			{iface: '0x6ccb2df4', name: 'NFT'},
+			//{iface: '0x6ccb2df4', name: 'NFT'},
 			{iface: '0x7ba18ba1', name: 'Migration'},
 		];
-		let known = new Set();
-		function add_iface(name, iface, addr) {
+		let discovered = new Set();
+		function add_iface(html, addr) {
 			if (is_null_hex(addr)) return;
-			if (known.has(addr)) return;
-			let title =`<b>${name}</b>`;
-			if (iface) title += `<code>${iface.slice(2)}</code>`;
-			let a = create_etherscan_address_link(addr, {title, contract: true});
+			//if (known.has(addr)) return;
+			discovered.add(addr);
+			let a = create_etherscan_address_link(addr, {title: html, contract: true});
 			a.classList.add('iface');
 			add_row_tag(row, a);
-			known.add(addr);
 		}
 		try {
 			// https://github.com/ensdomains/ens-contracts/blob/dev/contracts/resolvers/profiles/IInterfaceResolver.sol
 			if (!await contract.callStatic.supportsInterface('0x124a319c')) {
 				throw new Error('not EIP-165');
 			}
+			add_iface('<b>NFT</b> (ERC-721)', owner);
 			for (let {iface, name} of interfaces) {
 				let addr = await contract.get_interface(iface);
-				add_iface(name, iface, addr);
+				add_iface(`<b>${name}</b> <code>${iface.slice(2)}</code>`, addr);
 				if (iface === IFACE_ETH_CONTROLLER) {
 					let contract = contract_for_controller(addr);
 					let oracle = contract_for_price_oracle(await contract.callStatic.prices());
-					add_iface('Price Oracle', null, oracle.address);
-					add_iface('USD Oracle', null, await oracle.callStatic.usdOracle());
-					add_iface('Wrapper', null, await contract.callStatic.nameWrapper());
-					//add_iface('DAO Wallet', null, await contract.callStatic.owner().catch(() => ''));
+					add_iface('<b>Price Oracle</b>', oracle.address);
+					add_iface('<b>USD Oracle</b>', await oracle.callStatic.usdOracle());
+					add_iface('<b>Wrapper</b>', await contract.callStatic.nameWrapper());
+					//add_iface('DAO Wallet', await contract.callStatic.owner().catch(() => ''));
 				}
 			}
 		} catch (err) {
-			if (known.size) {
+			if (discovered.size) {
 				add_row_tag(row, create_typed_tag('warn', err));
 			}
 		}
-		if (known.size) {
+		if (discovered.size) {
 			remove_temporary(row);
 			add_row_tag(row, create_elapsed()); 
 		} else {
@@ -3483,10 +3477,10 @@ async function ensure_eth_resolver() {
 function contract_for_resolver(resolver) {
 	let contract = new ethers.Contract(resolver.address, [
 		'function supportsInterface(bytes4 interfaceID) external view returns (bool)',
-		'function interfaceImplementer(bytes32 node, bytes4 interfaceID) external view returns (address)'
+		'function interfaceImplementer(bytes32 node, bytes4 interfaceID) external view returns (address)',
 	], active_provider);
-	let node = namehash(resolver.name);
-	contract.get_interface = hash => contract.callStatic.interfaceImplementer(node, hash);
+	contract.node = namehash(resolver.name);
+	contract.get_interface = hash => contract.callStatic.interfaceImplementer(contract.node, hash);
 	return contract;
 }
 function contract_for_controller(address) {
@@ -3531,7 +3525,8 @@ async function ensure_eth_nft() {
 	if (eth_nft_contract) return;
 	if (eth_nft_contract === false) throw new Error(`Not implemented`);
 	await ensure_eth_resolver();
-	let nft_address = await eth_resolver_contract.get_interface(IFACE_ETH_NFT);
+	let nft_address = await registry_contract.callStatic.owner(eth_nft_contract.node);
+	//let nft_address = await eth_resolver_contract.get_interface(IFACE_ETH_NFT);
 	if (is_null_hex(nft_address)) {
 		eth_nft_contract = false;
 		return ensure_eth_nft();
