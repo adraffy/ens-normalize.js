@@ -3282,17 +3282,19 @@ async function resolve0(input, skip_norm) {
 			// https://github.com/ensdomains/ens-contracts/blob/dev/contracts/resolvers/profiles/IInterfaceResolver.sol
 			if (!await contract.callStatic.supportsInterface('0x124a319c')) {
 				throw new Error('not EIP-165');
-			}
-			add_iface('<b>NFT</b> (ERC-721)', owner);
+			}			
 			for (let {iface, name} of interfaces) {
 				let addr = await contract.get_interface(iface);
+				if (!is_null_hex(addr) && !discovered.size) {
+					add_iface('<b>NFT</b> (ERC-721)', owner);
+				}
 				add_iface(`<b>${name}</b> <code>${iface.slice(2)}</code>`, addr);
 				if (iface === IFACE_ETH_CONTROLLER) {
-					let contract = contract_for_controller(addr);
-					let oracle = contract_for_price_oracle(await contract.callStatic.prices());
+					let controller = contract_for_controller(addr);
+					let oracle = contract_for_price_oracle(await controller.callStatic.prices());
 					add_iface('<b>Price Oracle</b>', oracle.address);
 					add_iface('<b>USD Oracle</b>', await oracle.callStatic.usdOracle());
-					add_iface('<b>Wrapper</b>', await contract.callStatic.nameWrapper());
+					add_iface('<b>Wrapper</b>', await controller.callStatic.nameWrapper());
 					//add_iface('DAO Wallet', await contract.callStatic.owner().catch(() => ''));
 				}
 			}
@@ -3324,11 +3326,13 @@ async function resolve0(input, skip_norm) {
 		} catch (err) {
 			address_err = err;
 		}
+		let is_contract;
 		if (address) {
 			try {
 				if (should_stop_resolving()) return;
 				if (!is_null_hex(await active_provider.getCode(address))) {
 					make_contract(address_row);
+					is_contract = true;
 				}
 			} catch (err) {
 			}			
@@ -3369,9 +3373,11 @@ async function resolve0(input, skip_norm) {
 						add_row_tag(address_row, create_typed_tag('fail', 'Owner'));	
 					}
 				}
-				add_row_tag(address_row, create_link(`https://opensea.io/${address}?tab=collected`, OPENSEA_NAME, 'external'));
-				add_row_tag(address_row, create_link(`https://ens.vision/0x/${address}`, VISION_NAME, 'external'));	
-				add_row_tag(address_row, create_link(`https://rainbow.me/${address}`, 'Rainbow', 'external'));	
+				if (!is_contract) {
+					add_row_tag(address_row, create_link(`https://opensea.io/${address}?tab=collected`, OPENSEA_NAME, 'external'));
+					add_row_tag(address_row, create_link(`https://ens.vision/0x/${address}`, VISION_NAME, 'external'));	
+					add_row_tag(address_row, create_link(`https://rainbow.me/${address}`, 'Rainbow', 'external'));	
+				}
 			}
 		}
 		add_row_tag(address_row, create_elapsed());	
@@ -3525,7 +3531,7 @@ async function ensure_eth_nft() {
 	if (eth_nft_contract) return;
 	if (eth_nft_contract === false) throw new Error(`Not implemented`);
 	await ensure_eth_resolver();
-	let nft_address = await registry_contract.callStatic.owner(eth_nft_contract.node);
+	let nft_address = await registry_contract.callStatic.owner(eth_resolver_contract.node);
 	//let nft_address = await eth_resolver_contract.get_interface(IFACE_ETH_NFT);
 	if (is_null_hex(nft_address)) {
 		eth_nft_contract = false;
