@@ -3352,7 +3352,6 @@ async function resolve0(input, skip_norm) {
 					add_row_tag(input_row, create_typed_tag('fire', 'Primary'));
 					add_row_tag(address_row, 'Same as Input');
 				} else if (address) {
-					add_row_tag(address_row, create_copy_btn(address));
 					add_row_tag(address_row, create_resolve_btn(address));
 					add_row_tag(address_row, create_typed_tag('warn', 'Different from Owner'));	
 				}
@@ -3366,7 +3365,6 @@ async function resolve0(input, skip_norm) {
 				} else if (nft_owner === address) {
 					add_row_tag(address_row, create_typed_tag('good', 'Same as NFT Owner'));
 				} else {
-					add_row_tag(address_row, create_copy_btn(address));
 					add_row_tag(address_row, create_resolve_btn(address));
 					if (owner) {
 						//add_row_tag(address_row, create_typed_tag('warn', 'Not Owner'));	
