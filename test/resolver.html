@@ -288,20 +288,19 @@ input[type=checkbox], label {
 .row.pretty {
 	background: linear-gradient(90deg, #fff, #fff0fc);
 }
+.row.category {
+	background: #ffe;
+}
+.row.category .row-label {
+	color: #654;
+}
 .row.category + .row.category {
-	margin-top: 4px;
-}
-.row.category.ethmoji {
-	outline: 3px dashed #add;
-	background: #f0ffff;
-}
-.row.category.integer {
-	outline: 3px dashed #fc8;
+	margin-top: -6px;
 }
 .formula {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 2px;
+	gap: 4px;
 }
 .formula a {
 	padding: 4px;
@@ -1767,10 +1766,12 @@ function create_dns_row(name, replaced) {
 		} else {
 			add_row_tag(row, create_typed_tag('second', 'Punycode Compatible'));
 		}
-		if (is_mainnet()) {
+		if (is_mainnet() && encoded.endsWith('.eth')) {
 			add_row_tag(row, create_link(`https://${encoded}.limo`, '.limo', 'external'));
 			add_row_tag(row, create_link(`https://${encoded}.link`, '.link', 'external'));
-			add_row_tag(row, create_link(`https://${encoded}.xyz`, '.xyz', 'external'));
+			add_row_tag(row, create_link(`https://${encoded}.li`,   '.li',   'external'));
+			add_row_tag(row, create_link(`https://${encoded}.xyz`,  '.xyz',  'external'));
+			add_row_tag(row, create_link(`https://${encoded}.co`, '  .co',   'external'));
 		}
 		add_row_tag(row, create_link(`../../punycode.js/test/demo.html#${browser?'p':'u'}=${browser || name}`, 'Check'));
 	} catch (err) {
@@ -2007,36 +2008,34 @@ function make_contract(row) {
 }
 
 function create_palindrome_tag() {
-	let span = document.createElement('span');
-	span.classList.add('palindrome');
-	span.innerHTML = '⇄ Palindrome';
-	return span;
+	// let span = document.createElement('span');
+	// span.classList.add('palindrome');
+	// span.innerHTML = '⇄ Palindrome';
+	// return span;
+	return create_typed_tag('good', '⇄')
 }
 
 function create_ethmoji_row(tokens, suffix) {
 	let row = create_row('Ethmoji');
 	row.classList.add('category', 'ethmoji');
 	add_detailed(row);
-	let unique = new Set();
-	let grouped = [];
+	let tally = new Map();
 	let last;
 	for (let token of tokens) {
 		let form = str_from_cps(token.emoji);
-		token.form = form; // save
-		unique.add(form);
-		if (!last || last.form !== form) {
-			grouped.push(token);
-			token.count = 1;
-			last = token;
-		} else {
-			last.count++;
+		let rec = tally.get(form);
+		if (!rec) {
+			rec = {form, count: 0, ...token};
+			tally.set(form, rec);
 		}
+		++rec.count;
 	}
+	tally = [...tally.values()];
 	let formula = document.createElement('div');
 	formula.classList.add('formula');
-	formula.innerHTML = grouped.map(token => {
-		return `<a href="./emoji.html#q=${str_from_cps(token.cps)}">${token.form}<sup>${token.count}</sup></a>`;
-	}).join('');
+	for (let rec of tally.values()) {
+		formula.append(create_link(`./emoji.html#q=${str_from_cps(rec.cps)}`, `${rec.form}<sup>${rec.count}</sup>`));
+	}
 	row.append(formula);
 	let span_grade = document.createElement('span');
 	let min_repeated;
@@ -2046,21 +2045,23 @@ function create_ethmoji_row(tokens, suffix) {
 		} else {
 			add_row_tag(row, create_typed_tag('second', 'Keycaps'));
 		}
-	} else if (unique.size == 1) {
-		let ncp = last.cps.length;
+	} else if (tally.length == 1) {
+		let ncp = tally[0].cps.length;
 		let repeat = 1 + Math.max(0, MIN_LENGTH - ncp);
-		if (last.count === repeat) {
-			add_row_tag(row, create_typed_tag('fire', last.count == 1 ? 'Single' : 'Shortest Repeated'));
+		if (tally[0].count === repeat) {
+			add_row_tag(row, create_typed_tag('fire', repeat == 1 ? 'Single' : 'Shortest'));
 		} else {
+			if (tally[0].count > 1) {
 			add_row_tag(row, create_typed_tag('second', 'Repeated'));
-			min_repeated = str_from_cps(last.cps).repeat(repeat);
+			}
+			min_repeated = str_from_cps(tally[0].cps).repeat(repeat);
 		}
 	} else {
-		add_row_tag(row, `Unique: ${unique.size}`);
+		add_row_tag(row, `Unique: ${tally.length}`);
 	}
-	if (tokens.every((x, i) => x.form == tokens[tokens.length-1-i].form)) {
-		add_row_tag(row, create_palindrome_tag());
-	}
+	// if (tokens.every((x, i) => x.form == tokens[tokens.length-1-i].form)) {
+	// 	add_row_tag(row, create_palindrome_tag());
+	// }
 	if (min_repeated) {
 		add_row_tag(row, create_resolve_btn(min_repeated + suffix, '↩️ Shortest'));
 	}
@@ -2074,12 +2075,12 @@ function create_digits_row(norm, group, values, negative, suffix) {
 	add_detailed(row);
 	let sign = negative ? '-' : '';
 	let form = sign + values.join('');
-	if (norm !== form) {
-		let main = document.createElement('code');
-		main.innerText = form;
-		main.classList.add('long'); 
-		row.append(main);
-	}
+	// if (norm !== form) {
+	let main = document.createElement('code');
+	main.innerText = form;
+	main.classList.add('long', 'main'); 
+	row.append(main);
+	// }
 	if (values.length == (negative ? 2 : 3)) {
 		add_row_tag(row, create_typed_tag('fire', 'Shortest'));
 	}
@@ -2088,7 +2089,7 @@ function create_digits_row(norm, group, values, negative, suffix) {
 	}
 	if (negative) {
 		add_row_tag(row, 'Negative');
-	} else if (values.every((x, i) => x == values[values.length-1-i])) {
+	} else if (values.length > 1 && values.every((x, i) => x == values[values.length-1-i])) {
 		add_row_tag(row, create_palindrome_tag());
 	}	
 	let pad = 0;
@@ -2887,12 +2888,12 @@ async function resolve0(input, skip_norm) {
 		let suffix = name_norm.slice(sep_pos); 
 		let tokens = ens_tokenize(prefix);
 		if (tokens.every(t => t.type === 'emoji')) {
-			output_div.append(create_ethmoji_row(tokens, suffix));
+			input_row.after(create_ethmoji_row(tokens, suffix));
 			let negative = str_from_cps(tokens[0].emoji) == KEYCAP_MINUS;
 			if (negative) tokens = tokens.slice(1);
 			let values = tokens.map(x => x.emoji[0] - 0x30);
 			if (values.every(x => x >= 0 && x < 10)) {
-				output_div.append(create_digits_row(name_norm, KEYCAP_NAME, values, negative, suffix));
+				input_row.after(create_digits_row(name_norm, KEYCAP_NAME, values, negative, suffix));
 			}
 		} else {
 			let negative = prefix.startsWith('-');
@@ -2905,17 +2906,17 @@ async function resolve0(input, skip_norm) {
 					let name0 = digits[0].name;
 					if (digits.every(x => x.name === name0)) {
 						//if (digits[0].reversed) values.reverse(); // LTR
-						output_div.append(create_digits_row(name_norm, name0, values, negative, suffix));
+						input_row.after(create_digits_row(name_norm, name0, values, negative, suffix));
 					} else {
 						let first = digits[0].mixed;
 						if (first && digits.every(x => x.mixed == first)) {
 							let row = create_digits_row(name_norm, 'Arabic', values, negative, suffix); //values.reverse()); // LTR
 							add_row_tag(row, create_typed_tag('warn', 'Mixed Digits'));
-							output_div.append(row);
+							input_row.after(row);
 						} else {
 							let row = create_digits_row(name_norm, 'Numeric', values, negative, suffix);
 							add_row_tag(row, create_typed_tag('warn', 'Multiple Scripts'));
-							output_div.append(row);
+							input_row.after(row);
 						}
 					}
 				}
