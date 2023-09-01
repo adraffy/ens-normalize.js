@@ -907,7 +907,7 @@ Hebrew Geresh:
 <button data-name="o.٥.०.౦.੦.൦.ο.օ">"o"</button>
 <button data-name="あー.〇一.一ー.一.ー.ᅳ">CJK Dash</button>
 
-<a href="https://unicode.org/emoji/charts/emoji-released.html"><b>Unicode 15:</b></a>
+<a href="https://unicode.org/emoji/charts/emoji-released.html"><b>Unicode 15.0:</b></a>
 <button data-name="{1F6DC}{1FA75}{1FA76}{1FA77}{1FA87}{1FA88}{1FAAD}{1FAAE}{1FAAF}{1FABB}{1FABC}{1FABD}{1FABF}{1FACE}{1FACF}{1FADA}{1FADB}{1FAE8}{1FAF7}{1FAF8}">Single Emoji (20)</button>
 <button data-name="{1FAF7}{1F3FB}{1FAF7}{1F3FC}{1FAF7}{1F3FD}{1FAF7}{1F3FE}{1FAF7}{1F3FF}{1FAF8}{1F3FB}{1FAF8}{1F3FC}{1FAF8}{1F3FD}{1FAF8}{1F3FE}{1FAF8}{1F3FF}">Sequences (10)</button>
 <button data-name="{1F426}{200D}{2B1B}">Black Bird</button>
@@ -951,7 +951,7 @@ Hebrew:
 
 </div>
 <div id="options">
-	<button id="examples_btn">👀 Show Examples</button>
+	<button id="examples_btn">👀 Examples</button>
 	<label><input type="checkbox" id="auto_resolve_check" checked>Resolve on Input</label>
 	<label><input type="checkbox" id="show_details_check" checked>Details</label>
 	<div class="boxed">
@@ -1039,8 +1039,6 @@ import {
 import {puny_encoded, is_surrogate} from '../../punycode.js/dist/index.min.js';
 import eth_ens_namehash from './eth-ens-namehash@2.0.15.min.js';
 use_default_style();
-
-const url_params = new URLSearchParams(window.location.search)
 
 let infura_provider = new ethers.providers.WebSocketProvider('wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe');
 let active_provider = infura_provider;
@@ -1156,7 +1154,7 @@ read_local_storage(STORAGE_AUTO_RESOLVE, x => auto_resolve_check.checked = x);
 read_local_storage(STORAGE_SHOW_COMPONENTS, x => show_components_check.checked = x);
 read_local_storage(STORAGE_FORCE_LTR, x => force_ltr_check.checked = x);
 
-sync_recent(localStorage.getItem(STORAGE_RECENT));
+sync_recent(localStorage[STORAGE_RECENT]);
 
 for (let btn of document.querySelectorAll('#examples button:not([id]), button[data-name]')) {
 	let name = btn.innerText;
@@ -1228,7 +1226,7 @@ recent_select.addEventListener('change', () => {
 	} else if (option.value === 'reset') {
 		recent_select.classList.add('hide');
 		recent_optgroup.innerHTML = '';
-		localStorage.setItem(STORAGE_RECENT, '[]');
+		localStorage[STORAGE_RECENT] = '[]';
 	}
 });
 function add_recent(name, save = true) {
@@ -1262,7 +1260,7 @@ function add_recent(name, save = true) {
 	recent_select.selectedIndex = -1;
 	recent_select.classList.remove('hide');
 	if (save) {
-		localStorage.setItem(STORAGE_RECENT, JSON.stringify([...recent_optgroup.children].map(x => x.value)));
+		localStorage[STORAGE_RECENT] = JSON.stringify([...recent_optgroup.children].map(x => x.value));
 	} 
 }
 document.querySelector('#add_goerli_btn').addEventListener('click', () => switch_to_network(CHAIN_ID_GOERLI));
@@ -1280,15 +1278,15 @@ document.querySelector('#random_emoji_btn').addEventListener('click', e => {
 document.querySelector('#find_emoji_btn').addEventListener('click', e => {
 	let url = './emoji.html';
 	let token = ens_tokenize(input_field.value).find(x => x.emoji);
-	if (token) url += `#q=${encodeURIComponent(String.fromCodePoint(...token.emoji))}`;
+	if (token) url += `#q=${encodeURIComponent(String.fromCodePoint(...token.cps))}`;
 	let a = create_link(url);
-	if (e.altKey) a.target = '_blank';
+	a.target = '_blank';
 	a.click();	
 });
 document.querySelector('#confused_btn').addEventListener('click', e => {
 	let s = input_field.value;
 	let a = create_link(`./confused.html#${encode_uri_component_surrogate_escaped(s.replaceAll('.', ''))}`);
-	if (e.altKey) a.target = '_blank';
+	a.target = '_blank';
 	a.click();
 });
 document.querySelector('#nf_btn').addEventListener('click', () => {
@@ -1317,38 +1315,35 @@ document.querySelector('#escape_btn').addEventListener('click', e => {
 	update_title();
 });
 document.querySelector('#link_btn').addEventListener('click', () => {
-	//let hash = '#' + encodeURIComponent(input_field.value);
-	//if (skip_norm_check.checked) hash += SKIP_SUFFIX;
 	navigator.clipboard.writeText(window.location.href);
 });
-
 auto_resolve_check.addEventListener('input', () => {
-	localStorage.setItem(STORAGE_AUTO_RESOLVE, !!auto_resolve_check.checked);	
+	localStorage[STORAGE_AUTO_RESOLVE] = !!auto_resolve_check.checked;	
 	resolve_if_auto();
 });
 show_details_check.addEventListener('input', () => {	
-	localStorage.setItem(STORAGE_SHOW_DETAILS, !!show_details_check.checked);	
+	localStorage[STORAGE_SHOW_DETAILS] = !!show_details_check.checked;	
 	for (let el of document.querySelectorAll('.detailed')) {
 		el.classList.toggle('hide', !show_details_check.checked);
 	}
 });
 show_components_check.addEventListener('input', () => {
-	localStorage.setItem(STORAGE_SHOW_COMPONENTS, !!show_components_check.checked);
+	localStorage[STORAGE_SHOW_COMPONENTS] = !!show_components_check.checked;
 	update_exploded();
 });
 force_ltr_check.addEventListener('click', () => {
-	localStorage.setItem(STORAGE_FORCE_LTR, !!force_ltr_check.checked);
+	localStorage[STORAGE_FORCE_LTR] = !!force_ltr_check.checked;
 	sync_force_ltr();
 });
 examples_btn.addEventListener('click', () => {
 	let b = !examples_div.classList.contains('hide');
 	examples_div.classList.toggle('hide', b);
-	localStorage.setItem(STORAGE_HIDE_EXAMPLES, !!examples_div.classList.contains('hide'));
+	localStorage[STORAGE_HIDE_EXAMPLES] = b;
 	sync_examples();
 });
 skip_norm_check.addEventListener('input', resolve_if_auto); // not saved
 
-if (!url_params.has('infura') && window.ethereum) {
+if (window.ethereum) {
 	let p = ethereum;
 	if (Array.isArray(ethereum.providers)) p = ethereum.providers[0]; // fix scuffed multi-provider
 	window_provider = new ethers.providers.Web3Provider(p, 'any');
@@ -1376,7 +1371,6 @@ function disable_chain_buttons(b) {
 		btn.disabled = b;
 	}
 }
-
 function update_network(network) {
 	disable_chain_buttons(false);
 	active_provider = infura_provider;
@@ -1423,14 +1417,14 @@ function update_network(network) {
 	// TODO: add change network button
 	let network_div = document.createElement('div');
 	network_div.innerHTML = `using <b>${provider_name}</b> on <a href="${block_explorer}/address/${registry}" target="_blank" title="Registry Contract">${network_name}</a>`;
-	if (network && !use_window) {
+	if (window_provider && network && !use_window) {
 		provider_div.innerHTML = `<div class="error">🚫️ Unsupported Network (${network.chainId})</div>`;
 		//network_div.innerHTML += ' instead';
 	} else {
 		provider_div.innerHTML = '';	
 	}
 	provider_div.append(network_div);
-	if (!is_mainnet() || !use_window) {
+	if (!is_mainnet()) {
 		let btn = document.createElement('button');
 		btn.classList.add('chain');
 		btn.innerHTML = '↪ Mainnet';
@@ -1456,7 +1450,7 @@ function update_network(network) {
 
 function sync_examples() {
 	if (examples_div.classList.contains('hide')) {
-		examples_btn.innerText = '👀 Show Examples';
+		examples_btn.innerText = '👀 Examples';
 		options_div.prepend(examples_btn);
 	} else {
 		examples_btn.innerText = '🙈 Hide Examples';
@@ -3372,11 +3366,9 @@ async function resolve0(input, skip_norm) {
 						add_row_tag(address_row, create_typed_tag('fail', 'Owner'));	
 					}
 				}
-				if (!is_contract) {
-					add_row_tag(address_row, create_link(`https://opensea.io/${address}?tab=collected`, OPENSEA_NAME, 'external'));
-					add_row_tag(address_row, create_link(`https://ens.vision/0x/${address}`, VISION_NAME, 'external'));	
-					add_row_tag(address_row, create_link(`https://rainbow.me/${address}`, 'Rainbow', 'external'));	
-				}
+				add_row_tag(address_row, create_link(`https://opensea.io/${address}?tab=collected`, OPENSEA_NAME, 'external'));
+				add_row_tag(address_row, create_link(`https://ens.vision/0x/${address}`, VISION_NAME, 'external'));	
+				add_row_tag(address_row, create_link(`https://rainbow.me/${address}`, 'Rainbow', 'external'));
 			}
 		}
 		add_row_tag(address_row, create_elapsed());	
@@ -3525,7 +3517,6 @@ async function ensure_wrapper() {
 		'function names(bytes32 node) public view returns (bytes)',	
 	], active_provider);
 }
-
 async function ensure_eth_nft() {
 	if (eth_nft_contract) return;
 	if (eth_nft_contract === false) throw new Error(`Not implemented`);
@@ -3569,11 +3560,10 @@ function namehash(s) {
 }
 
 function read_local_storage(key, fn, def) {
-	let stored = localStorage.getItem(key);
-	if (typeof stored === 'string') {
+	let value = localStorage[key];
+	if (typeof value === 'string') {
 		try {
-			fn(JSON.parse(stored));
-			return;
+			return fn(JSON.parse(value));
 		} catch (err) {
 		}
 	}
