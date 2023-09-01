@@ -392,7 +392,7 @@ button.copy.copied {
 }
 .tags.ens { order: 9; }
 .tags.metadata { order: 10; }
-.tags.third-party { order: 11; font-size: 80%; }
+.tags.external { order: 11; font-size: 80%; }
 .tags.invalid { color: #f00; }
 .tags.elapsed {
 	background: #f0f0f0;
@@ -405,26 +405,21 @@ button.copy.copied {
 }
 .tags.iface {
 	display: flex;
+	align-items: center;
 	gap: 4px;
 	text-decoration: none;
 	background-color: #dde;
 	padding: 4px 8px;
 	border-radius: 4px;
 	white-space: pre;
+	color: #000;
 }
 .tags.iface:hover {
 	background-color: #bbd;
 }
-.tags.iface b {
-	font-size: 12pt;
-	text-decoration: underline;
-	color: #000;
-}
 .tags.iface code {
-	font-size: 12px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	font-size: 13px;
+	color: #666;
 }
 .tags.good {
 	color: #060;
@@ -704,7 +699,7 @@ footer span:hover {
 </head>
 <body>
 <header>
-<h1><a href="https://ens.domains/">ENS Resolver</a><div id="provider"></div></h1>
+<h1><div><a href="https://ens.domains/">ENS</a> Resolver</div><div id="provider"></div></h1>
 <div id="github"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a><br>
 <a href="https://github.com/adraffy/ensip-15/blob/master/ens-improvement-proposals/ensip-15-normalization-standard.md">ENSIP-15</a></div>
 </header>
@@ -1024,16 +1019,16 @@ Hebrew:
 <li><a href="./emoji.html">Supported Emoji</a></li>
 <li><a href="./chars.html">Characters Viewer</a></li>
 <li><a href="./confused.html">Confused Explainer</a>
-<li><a href="https://adraffy.github.io/punycode.js/test/demo.html">Punycode Coder</a></li>
-<li><a href="https://adraffy.github.io/keccak.js/test/demo.html">Keccak Hasher</a></li>
-<li><a href="https://raffy.antistupid.com/eth/ens-regs.html">Recent ENS Registrations</a></li>
+<li><a href="../../punycode.js/test/demo.html">Punycode Coder</a></li>
+<li><a href="../../keccak.js/test/demo.html">Keccak Hasher</a></li>
+<li><a href="https://raffy.antistupid.com/eth/ens-regs.html">Recent Registrations</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-emoji-freq.html">Emoji Frequency Browser</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-nft-matcher.html">ENS+NFT Matcher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-batch-resolver.html">Batch Resolver</a></li>
-<li><a href="https://adraffy.github.io/ens-labels/demo.html">Label Database</a>
+<li><a href="../../ens-labels/demo.html">Label Database</a>
 <li><a href="./validate.html">Validation Test</a>
 <li><a href="./report-nf.html">Unicode NormalizationTest</a>
-<li><a href="https://adraffy.github.io/ens-norm-tests/test-breakdown/output/">Breakdown Reports</a></li>
+<li><a href="../../ens-norm-tests/test-breakdown/output/">Breakdown Reports</a></li>
 <li><a href="https://raffy.antistupid.com/eth/emoji-pixels.html">Emoji Pixel Maker</a></li>
 </ul>
 </div>
@@ -1060,6 +1055,7 @@ let metadata_service;
 let registry_contract;
 let eth_resolver_contract;
 let eth_nft_contract;
+let eth_controller_contract;
 let wrapper_contract;
 let price_oracle_contract;
 let reverse_registrar;
@@ -1121,6 +1117,8 @@ const RESOLVER_NAMES = {
 	'0xA2C122BE93b0074270ebeE7f6b7292C7deB45047': '✨️ Reverse Resolver',
 };
 const NOT_IFACE_RESOLVER = new Set();
+const IFACE_ETH_CONTROLLER = '0x612e8c09';
+//const IFACE_ETH_NFT = '0x6ccb2df4'; // '0x80ac58cd'; // using registry owner() instead
 
 const entity_span = document.createElement('span');
 
@@ -1375,9 +1373,16 @@ async function switch_to_network(id) {
 	return window.ethereum.request({
 		method: 'wallet_switchEthereumChain',
 		params: [{chainId: `0x${id.toString(16)}`}]
-	});
+	}).then(() => disable_chain_buttons(true));
 }
+function disable_chain_buttons(b) {
+	for (let btn of document.querySelectorAll('.chain')) {
+		btn.disabled = b;
+	}
+}
+
 function update_network(network) {
+	disable_chain_buttons(false);
 	active_provider = infura_provider;
 	let registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
 	let network_name = 'mainnet';
@@ -1443,6 +1448,7 @@ function update_network(network) {
 	], active_provider);
 	eth_resolver_contract = null;
 	eth_nft_contract = null;
+	eth_controller_contract = null;
 	wrapper_contract = null;
 	reverse_registrar = null;
 	if (input_field.value) {
@@ -1765,13 +1771,13 @@ function create_dns_row(name, replaced) {
 			add_row_tag(row, create_typed_tag('second', 'Punycode Compatible'));
 		}
 		if (is_mainnet() && encoded.endsWith('.eth')) {
-			add_row_tag(row, create_link(`https://${encoded}.limo`, '.limo'));
-			add_row_tag(row, create_link(`https://${encoded}.link`, '.link'));
-			add_row_tag(row, create_link(`https://${encoded}.li`, '.li'));
-			add_row_tag(row, create_link(`https://${encoded}.xyz`, '.xyz'));
-			add_row_tag(row, create_link(`https://${encoded}.co`, '.co'));
+			add_row_tag(row, create_link(`https://${encoded}.limo`, '.limo', 'external'));
+			add_row_tag(row, create_link(`https://${encoded}.link`, '.link', 'external'));
+			add_row_tag(row, create_link(`https://${encoded}.li`,   '.li',   'external'));
+			add_row_tag(row, create_link(`https://${encoded}.xyz`,  '.xyz',  'external'));
+			add_row_tag(row, create_link(`https://${encoded}.co`, '  .co',   'external'));
 		}
-		add_row_tag(row, create_link(`https://adraffy.github.io/punycode.js/test/demo.html#${browser?'p':'u'}=${browser || name}`, 'Check'));
+		add_row_tag(row, create_link(`../../punycode.js/test/demo.html#${browser?'p':'u'}=${browser || name}`, 'Check'));
 	} catch (err) {
 		row.classList.add('invalid');
 		add_row_tag(row, create_typed_tag('fail', err));
@@ -1852,20 +1858,13 @@ function encode_uri_component_ens_escaped(s) {
 function encode_uri_component_surrogate_escaped(s) {
 	return encodeURIComponent(apply_escapes(s, is_surrogate));
 }
-function create_link(url, inner, cls) {
+function create_link(url, title, cls) {
 	let a = document.createElement('a');
 	a.href = url;
-	if (inner && typeof inner !== 'string') {
-		a.append(...[inner].flat(Infinity));
-	} else {
-		a.innerHTML = inner || url;
-	}
+	a.innerHTML = title || url;
 	if (cls) a.classList.add(cls);
-	if (!url.includes('ens.domains/') && !url.includes('adraffy.github.io/') && !url.includes('etherscan.io/')) {
-		a.classList.add('third-party');
-	}
 	try {
-		new URL(url);
+		new URL(url, window.location.href);
 	} catch (err) {
 		a.classList.add('invalid');
 	}
@@ -1874,30 +1873,31 @@ function create_link(url, inner, cls) {
 function create_ens_link(name, {title = 'ENS'} = {}) {		
 	return create_link(`https://app.ens.domains/${encode_uri_component_ens_escaped(name)}`, title, 'ens');
 }
-function create_ens_metadata_link(contract, token) {
-	return create_link(`${metadata_service}/${contract}/${token}`, 'Metadata', 'ens');
+function create_ens_metadata_link(contract, token, {title = 'Metadata', cls = 'metadata'} = {}) {
+	return create_link(`${metadata_service}/${contract}/${token}`, title, cls);
 }
 function create_etherscan_address_link(addr, {title, anchor = '', contract} = {}) {
 	if (contract === true) anchor = '#readContract';
 	return create_link(`${block_explorer}/address/${addr}${anchor}`, title || addr, title ? false : 'wide');
 }
-function create_etherscan_nft_link(contract, token, title ='Etherscan') {
-	return create_link(`${block_explorer}/nft/${contract}/${ethers.BigNumber.from(token)}`, title, 'third-party');	
+function create_etherscan_nft_link(contract, token, {title = 'Etherscan', cls = 'metadata'} = {}) {
+	return create_link(`${block_explorer}/nft/${contract}/${ethers.BigNumber.from(token)}`, title, cls); 
 }
-function create_opensea_link(contract, token, title = OPENSEA_NAME) {
+function create_opensea_nft_link(contract, token, {title = OPENSEA_NAME, cls = 'external'} = {}) {
 	let prefix;
 	switch (chain_id) {
-		case CHAIN_ID_MAINNET: prefix = 'https://opensea.io/assets/ethereum/'; break;		
-		case CHAIN_ID_GOERLI: prefix = 'https://testnets.opensea.io/assets/goerli/'; break;
+		case CHAIN_ID_MAINNET: prefix = 'https://opensea.io/assets/ethereum/';         break;		
+		case CHAIN_ID_GOERLI:  prefix = 'https://testnets.opensea.io/assets/goerli/';  break;
+		case CHAIN_ID_SEPOLIA: prefix = 'https://testnets.opensea.io/assets/sepolia/'; break;
 		default: return;
 	}
-	return create_link(`${prefix}${contract}/${ethers.BigNumber.from(token)}`, title);
+	return create_link(`${prefix}${contract}/${ethers.BigNumber.from(token)}`, title, cls);
 }
 
-function create_copy_btn(s, {title = 'Copy', explode} = {}) {
+function create_copy_btn(raw, {explode} = {}) {
 	let btn = document.createElement('button');
 	btn.addEventListener('click', e => {
-		let copy = s;
+		let copy = raw;
 		if (e.altKey) {
 			copy = unicode_escape(copy);
 		} else if (e.shiftKey) {
@@ -1908,13 +1908,12 @@ function create_copy_btn(s, {title = 'Copy', explode} = {}) {
 		setTimeout(() => btn.classList.remove('copied'), 2000);
 	});
 	btn.classList.add('copy');
-	//btn.innerHTML = title;
-	btn.title = s;
+	btn.title = raw;
 	if (explode === undefined) {
-		explode = !/^0x[0-9a-f]*$/i.test(s);
+		explode = !/^0x[0-9a-f]*$/i.test(raw);
 	}
 	if (explode) {
-		btn.title += '\n' + explode_cp(s).map(hex_cp).join(' ');
+		btn.title += '\n' + explode_cp(raw).map(hex_cp).join(' ');
 	}
 	btn.title += `\n[ALT] Unicode Escaped\n[SHIFT] Entity Escaped`;
 	return btn;
@@ -1923,14 +1922,14 @@ function reverse_name(addr) {
 	return `${addr.slice(2).toLowerCase()}.${REVERSE_DOMAIN}`;
 }
 function create_reverse_resolve_btn(addr) {
-	return create_resolve_btn(reverse_name(addr), '↩️ Reverse Record', true);
+	return create_resolve_btn(reverse_name(addr), '↩️ Reverse Record');
 }
-function create_resolve_btn(s, html = '↩️ Resolve') {
+function create_resolve_btn(name, html = '↩️ Resolve') {
 	let btn = document.createElement('button');
 	btn.innerHTML = html;
-	btn.title = `Resolve: ${s}\nHex: ${explode_cp(s).map(hex_cp).join(' ')}`;
+	btn.title = `Resolve: ${name}\nHex: ${explode_cp(name).map(hex_cp).join(' ')}`;
 	btn.addEventListener('click', () => {
-		input_field.value = s;
+		input_field.value = name;
 		resolve();
 	});
 	return btn;
@@ -1957,14 +1956,6 @@ function create_pretty_tag() {
 	span.title = 'Beautified Form';
 	return span;
 }
-function create_iface_tag(name, iface, addr) {
-	let title =`<b>${name}</b>`;
-	if (iface) title += `<code>${iface.slice(2)}</code>`;
-	let a = create_etherscan_address_link(addr, {title, contract: true});
-	a.classList.add('iface');
-	return a;
-}
-
 function upgrade_split_type(info) {
 	info.restricted = info.type.startsWith('Restricted[');
 	if (info.type !== 'Latin') return;
@@ -2018,6 +2009,14 @@ function make_contract(row) {
 	row.classList.add('contract');
 	let span = row.querySelector('.row-label');
 	span.innerHTML = span.innerHTML.replace('Address', 'Contract'); // meh
+}
+
+function create_palindrome_tag() {
+	// let span = document.createElement('span');
+	// span.classList.add('palindrome');
+	// span.innerHTML = '⇄ Palindrome';
+	// return span;
+	return create_typed_tag('good', '⇄')
 }
 
 function create_ethmoji_row(tokens, suffix) {
@@ -2095,7 +2094,7 @@ function create_digits_row(norm, group, values, negative, suffix) {
 	if (negative) {
 		add_row_tag(row, 'Negative');
 	} else if (values.length > 1 && values.every((x, i) => x == values[values.length-1-i])) {
-		add_row_tag(row, create_typed_tag('good', '⇄'));
+		add_row_tag(row, create_palindrome_tag());
 	}	
 	let pad = 0;
 	while (values[pad] === 0) pad++;
@@ -2151,16 +2150,16 @@ function add_old_tag(row, name, is_norm) {
 }
 
 function add_nft_links(row, name, contract, token) {
-	add_row_tag(row, create_etherscan_nft_link(contract, token));
 	add_row_tag(row, create_ens_metadata_link(contract, token));
-	add_row_tag(row, create_opensea_link(contract, token));
+	add_row_tag(row, create_etherscan_nft_link(contract, token));
+	add_row_tag(row, create_opensea_nft_link(contract, token));
 	if (!is_mainnet()) return;
 	try {
 		let encoded = encodeURIComponent(name);
 		if (encoded.endsWith('.eth')) {
-			add_row_tag(row, create_link(`https://www.ens.vision/name/${encoded.slice(0, -4)}`, VISION_NAME));
+			add_row_tag(row, create_link(`https://www.ens.vision/name/${encoded.slice(0, -4)}`, VISION_NAME, 'external'));
 		}
-		add_row_tag(row, create_link(`http://predomain.eth.limo/#/domain/${encoded}`, 'Predomain'));
+		add_row_tag(row, create_link(`http://predomain.eth.limo/#/domain/${encoded}`, 'Predomain', 'external'));
 	} catch (err) {
 	}
 }
@@ -3047,6 +3046,7 @@ async function resolve0(input, skip_norm) {
 			}
 		} catch (err) {
 			avail_err = err;
+			console.log(err);
 		}
 		remove_temporary(avail_row);
 		if (should_stop_resolving()) return;
@@ -3267,49 +3267,48 @@ async function resolve0(input, skip_norm) {
 		let contract = contract_for_resolver(resolver);
 		// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar	
 		let interfaces = [
-			{iface: '0x80ac58cd', name: 'NFT'},  
-			{iface: '0x018fac06', name: 'Controller', children: [
-				{
-					name: 'Price Oracle', 
-					async get(addr) {
-						let contract = await price_oracle_from_controller(addr);
-						return contract.address;
-					}
-				}
-			]},
-			{iface: '0x612e8c09', name: 'Registrar'},
-			{iface: '0x6ccb2df4', name: 'Old Registrar'},
-			{iface: '0x7ba18ba1', name: 'Migration'},
+			//{iface: IFACE_ETH_NFT, name: 'NFT'},  
 			{iface: '0x019a38fe', name: 'Wrapper'},
+			{iface: IFACE_ETH_CONTROLLER, name: 'Controller'},
+			{iface: '0x018fac06', name: 'Old Controller'},
+			//{iface: '0x6ccb2df4', name: 'NFT'},
+			{iface: '0x7ba18ba1', name: 'Migration'},
 		];
-		let any;
+		let discovered = new Set();
+		function add_iface(html, addr) {
+			if (is_null_hex(addr)) return;
+			//if (known.has(addr)) return;
+			discovered.add(addr);
+			let a = create_etherscan_address_link(addr, {title: html, contract: true});
+			a.classList.add('iface');
+			add_row_tag(row, a);
+		}
 		try {
 			// https://github.com/ensdomains/ens-contracts/blob/dev/contracts/resolvers/profiles/IInterfaceResolver.sol
 			if (!await contract.callStatic.supportsInterface('0x124a319c')) {
 				throw new Error('not EIP-165');
 			}
-			for (let {iface, name, children} of interfaces) {
+			for (let {iface, name} of interfaces) {
 				let addr = await contract.get_interface(iface);
-				if (is_null_hex(addr)) continue;					
-				add_row_tag(row, create_iface_tag(name, iface, addr));
-				any = true;
-				if (children) {
-					for (let child of children) {
-						try {
-							let derived_addr = await child.get(addr);
-							if (is_null_hex(derived_addr)) continue;
-							add_row_tag(row, create_iface_tag(child.name, null, derived_addr));
-						} catch (ignored) {
+				if (!is_null_hex(addr) && !discovered.size) {
+					add_iface('<b>NFT</b> (ERC-721)', owner);
 						}
-					}
+				add_iface(`<b>${name}</b> <code>${iface.slice(2)}</code>`, addr);
+				if (iface === IFACE_ETH_CONTROLLER) {
+					let controller = contract_for_controller(addr);
+					let oracle = contract_for_price_oracle(await controller.callStatic.prices());
+					add_iface('<b>Price Oracle</b>', oracle.address);
+					add_iface('<b>USD Oracle</b>', await oracle.callStatic.usdOracle());
+					add_iface('<b>Wrapper</b>', await controller.callStatic.nameWrapper());
+					//add_iface('DAO Wallet', await contract.callStatic.owner().catch(() => ''));
 				}
 			}
 		} catch (err) {
-			if (any) {
+			if (discovered.size) {
 				add_row_tag(row, create_typed_tag('warn', err));
 			}
 		}
-		if (any) {
+		if (discovered.size) {
 			remove_temporary(row);
 			add_row_tag(row, create_elapsed()); 
 		} else {
@@ -3332,11 +3331,13 @@ async function resolve0(input, skip_norm) {
 		} catch (err) {
 			address_err = err;
 		}
+		let is_contract;
 		if (address) {
 			try {
 				if (should_stop_resolving()) return;
 				if (!is_null_hex(await active_provider.getCode(address))) {
 					make_contract(address_row);
+					is_contract = true;
 				}
 			} catch (err) {
 			}			
@@ -3356,7 +3357,6 @@ async function resolve0(input, skip_norm) {
 					add_row_tag(input_row, create_typed_tag('fire', 'Primary'));
 					add_row_tag(address_row, 'Same as Input');
 				} else if (address) {
-					add_row_tag(address_row, create_copy_btn(address));
 					add_row_tag(address_row, create_resolve_btn(address));
 					add_row_tag(address_row, create_typed_tag('warn', 'Different from Owner'));	
 				}
@@ -3370,16 +3370,15 @@ async function resolve0(input, skip_norm) {
 				} else if (nft_owner === address) {
 					add_row_tag(address_row, create_typed_tag('good', 'Same as NFT Owner'));
 				} else {
-					add_row_tag(address_row, create_copy_btn(address));
 					add_row_tag(address_row, create_resolve_btn(address));
 					if (owner) {
 						//add_row_tag(address_row, create_typed_tag('warn', 'Not Owner'));	
 						add_row_tag(address_row, create_typed_tag('fail', 'Owner'));	
 					}
 				}
-				add_row_tag(address_row, create_link(`https://opensea.io/${address}?tab=collected`, OPENSEA_NAME));
-				add_row_tag(address_row, create_link(`https://ens.vision/0x/${address}`, VISION_NAME));	
-				add_row_tag(address_row, create_link(`https://rainbow.me/${address}`, 'Rainbow'));	
+				add_row_tag(address_row, create_link(`https://opensea.io/${address}?tab=collected`, OPENSEA_NAME, 'external'));
+				add_row_tag(address_row, create_link(`https://ens.vision/0x/${address}`, VISION_NAME, 'external'));	
+				add_row_tag(address_row, create_link(`https://rainbow.me/${address}`, 'Rainbow', 'external'));
 			}
 		}
 		add_row_tag(address_row, create_elapsed());	
@@ -3485,18 +3484,24 @@ async function ensure_eth_resolver() {
 function contract_for_resolver(resolver) {
 	let contract = new ethers.Contract(resolver.address, [
 		'function supportsInterface(bytes4 interfaceID) external view returns (bool)',
-		'function interfaceImplementer(bytes32 node, bytes4 interfaceID) external view returns (address)'
+		'function interfaceImplementer(bytes32 node, bytes4 interfaceID) external view returns (address)',
 	], active_provider);
-	let node = namehash(resolver.name);
-	contract.get_interface = hash => contract.callStatic.interfaceImplementer(node, hash);
+	contract.node = namehash(resolver.name);
+	contract.get_interface = hash => contract.callStatic.interfaceImplementer(contract.node, hash);
 	return contract;
 }
-async function price_oracle_from_controller(controller_address) {
-	let address = await active_provider.getStorageAt(controller_address, 2);
-	address = '0x' + address.slice(-40);
+function contract_for_controller(address) {
+	return new ethers.Contract(address, [
+		'function owner() external view returns (address)',
+		'function prices() external view returns (address)',
+		'function nameWrapper() external view returns (address)',
+	], active_provider);
+}
+function contract_for_price_oracle(address) {
 	let contract = new ethers.Contract(address, [
 		'function premium(string calldata name, uint256 expires, uint256 duration) external view returns (uint256)',
 		'function price(string calldata name, uint256 expires, uint256 duration) external view returns (uint256)',
+		'function usdOracle() external view returns (address)',
 	], active_provider);
 	/*
 	totalDays = 21; // FromDigits["15"]
@@ -3507,7 +3512,6 @@ async function price_oracle_from_controller(controller_address) {
 	contract.premium_period = 1814400; // 21*86400;
 	return contract;
 }
-
 async function ensure_wrapper() {
 	if (wrapper_contract) return;
 	if (wrapper_contract === false) throw new Error(`Not implementated`);
@@ -3528,7 +3532,8 @@ async function ensure_eth_nft() {
 	if (eth_nft_contract) return;
 	if (eth_nft_contract === false) throw new Error(`Not implemented`);
 	await ensure_eth_resolver();
-	let nft_address = await eth_resolver_contract.get_interface('0x80ac58cd');
+	let nft_address = await registry_contract.callStatic.owner(eth_resolver_contract.node);
+	//let nft_address = await eth_resolver_contract.get_interface(IFACE_ETH_NFT);
 	if (is_null_hex(nft_address)) {
 		eth_nft_contract = false;
 		return ensure_eth_nft();
@@ -3542,8 +3547,8 @@ async function ensure_eth_nft() {
 	const DAY = 86400000;
 	eth_nft_contract.grace_period = (await eth_nft_contract.callStatic.GRACE_PERIOD().then(x => 1000 * x.toNumber()).catch(() => DAY * 90));
 	eth_nft_contract.warning_period = Math.round(eth_nft_contract.grace_period / 2); // when to show warning in interface
-	let controller_address = await eth_resolver_contract.get_interface('0x018fac06');
-	price_oracle_contract = await price_oracle_from_controller(controller_address);
+	eth_controller_contract = contract_for_controller(await eth_resolver_contract.get_interface(IFACE_ETH_CONTROLLER));
+	price_oracle_contract = contract_for_price_oracle(await eth_controller_contract.callStatic.prices());
 }
 
 function is_checksum_address(s) {
@@ -3553,7 +3558,7 @@ function is_checksum_address(s) {
 	}
 }
 function is_null_hex(s) {
-	return /^0x0*$/.test(s);
+	return !s || /^0x0*$/.test(s);
 }
 function labelhash(s) {
 	//return ethers.utils.id(s);
