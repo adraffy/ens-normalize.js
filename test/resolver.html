@@ -129,6 +129,8 @@ body.testnet #provider a {
 	align-items: center;
 	gap: 4px;
 	font-size: 11pt;
+	padding-bottom: 6px;
+	border-bottom: 2px solid #fff;
 }
 #examples b {
 	font-size: 12pt;
@@ -214,21 +216,24 @@ body.testnet #provider a {
 #options :disabled + label {
 	opacity: 0.5;
 }
-#options :not(:disabled) + label:hover {
+#options :not(:disabled) + label {
 	cursor: pointer;
-	border-color: #000 !important;
+}
+#options :not(:disabled) + label:hover {
+	outline: 2px solid #000;
 }
 #options :checked + label {	
 	color: #000;
 }
 #auto_resolve_check:checked + label {
-	border-color: #aca;
+	border-color: #5c5;
 	background: linear-gradient(90deg, #fff, #cfc);
 }
 #show_details_check:checked + label {
 	border-color: #ca4;
 	background-color: #edb;
-	font-family: monospace;
+	/* font: 85% monospace; */
+	color: #432;
 }
 #show_components_check:checked + label {
 	border-color: #0aa;
@@ -981,9 +986,9 @@ Hebrew:
 	<input type="checkbox" id="skip_norm_check">
 	<label for="skip_norm_check">Skip Norm</label>
 	<input type="checkbox" id="force_mainnet_check">
-	<label for="force_mainnet_check">Mainnet!</label>
+	<label for="force_mainnet_check">🔒︎ Mainnet</label>
 	<input type="checkbox" id="force_ltr_check">
-	<label for="force_ltr_check">LTR!</label>
+	<label for="force_ltr_check" title="Override Bidi Handling with Left-to-Right Direction&#10;(Applies only to Input)">LTR!</label>
 </div>
 <div id="input">
 	<input id="input_field" size="20" placeholder="Name or Address or URL">
@@ -1195,6 +1200,7 @@ read_local_storage(STORAGE_SHOW_DETAILS, x => show_details_check.checked = x);
 read_local_storage(STORAGE_AUTO_RESOLVE, x => auto_resolve_check.checked = x);
 read_local_storage(STORAGE_SHOW_COMPONENTS, x => show_components_check.checked = x);
 read_local_storage(STORAGE_FORCE_LTR, x => force_ltr_check.checked = x);
+input_field.value = decodeURIComponent(location0.hash.slice(1));
 force_mainnet_check.checked = location0.searchParams.has('1');
 skip_norm_check.checked = location0.searchParams.has('skip');
 
@@ -1406,26 +1412,25 @@ if (window.ethereum) {
 	if (Array.isArray(ethereum.providers)) p = ethereum.providers[0]; // fix scuffed multi-provider
 	window_provider = new ethers.providers.Web3Provider(p, 'any');
 }
-if (location0.hash.endsWith('_!')) { // backwards compat
+if (input_field.value.endsWith('_!')) { // backwards compat
+	input_field.value = input_field.value.slice(0, -2);
 	skip_norm_check.checked = true;
-
-	// cleanup url
-	let url = new URL(location0);
-	url.search = url.searchParams.get('1') ? '1' : '';
-	window.history.replaceState(null, null, url);
 }
 if (window_provider) {
 	window_provider.on('network', update_network);
 } else {
 	update_network();
-	force_mainnet_check.disabled = true;
+	force_mainnet_check.checked = false;
+	force_mainnet_check.classList.add('hide');
 }
 
 sync_examples();
 sync_force_ltr();
 input_field.focus();
-apply_location_hash();
-window.addEventListener('hashchange', apply_location_hash);
+window.addEventListener('hashchange', () => {
+	input_field.value = decodeURIComponent(window.location.hash.slice(1));
+	resolve();
+});
 
 function make_network_switcher(btn, id) {
 	btn.classList.add('chain');
@@ -1514,11 +1519,6 @@ function sync_examples() {
 
 function sync_force_ltr() {
 	input_field.classList.toggle('force-ltr', force_ltr_check.checked);
-}
-
-function apply_location_hash() {
-	input_field.value = decodeURIComponent(window.location.hash.slice(1));
-	if (registry_contract) resolve();
 }
 
 function should_stop_resolving() {
@@ -2561,12 +2561,9 @@ function format_dur(t) {
 function is_working() {
 	return resolve_btn.disabled || !registry_contract;
 }
-
-
 function resolve() {
-	parse() && resolve0();
-}
-function resolve0() {
+	if (!registry_contract) return;
+	if (!parse()) return;
 	if (is_working()) {
 		resolve_timer = [0]; // ASAP
 		return;
@@ -3339,13 +3336,11 @@ async function resolve1(input, skip_norm) {
 		} catch (err) {
 			address_err = err;
 		}
-		let is_contract;
 		if (address) {
 			try {
 				if (should_stop_resolving()) return;
 				if (!is_null_hex(await active_provider.getCode(address))) {
 					make_contract(address_row);
-					is_contract = true;
 				}
 			} catch (err) {
 			}			
@@ -3384,6 +3379,7 @@ async function resolve1(input, skip_norm) {
 						add_row_tag(address_row, create_typed_tag('fail', 'Owner'));	
 					}
 				}
+				// mainnet urls regardless of active_chain
 				add_row_tag(address_row, create_link(`https://opensea.io/${address}?tab=collected`, OPENSEA_NAME, 'external'));
 				add_row_tag(address_row, create_link(`https://ens.vision/0x/${address}`, VISION_NAME, 'external'));	
 				add_row_tag(address_row, create_link(`https://rainbow.me/${address}`, 'Rainbow', 'external'));
