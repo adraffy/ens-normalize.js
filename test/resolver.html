@@ -6,7 +6,6 @@
 <title>ENS Resolver</title>
 <style>
 :root {
-	--length-color: #f8eedd;
 	--btn-fill-color: #eee;
 	--btn-hover-fill-color: #ccc;
 	--btn-border-color: #888;
@@ -66,7 +65,7 @@ h1 {
 	flex-wrap: wrap;
 	align-items: end;
 	margin: 0;
-	gap: 4px;
+	gap: 4px 8px;
 	white-space: pre;
 }
 #provider {
@@ -78,7 +77,7 @@ h1 {
 	flex-wrap: wrap;
 	align-items: start;
 }
-#provider .chain {
+#provider button {
 	margin-left: 5px;
 	font-size: 9pt;
 	padding: 2px 6px;
@@ -160,17 +159,6 @@ body.testnet #provider a {
 #examples_btn {
 	font-weight: bold;
 }
-#options {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 8px;
-}
-#options > div {
-	display: flex;
-	align-items: center;
-	gap: 4px;
-}
 #input {
 	display: flex;
 	align-items: stretch;
@@ -203,32 +191,64 @@ body.testnet #provider a {
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
 }
-
-input[type=checkbox], label {
-	user-select: none;
-	cursor: pointer;
+#options {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: stretch;
+	gap: 6px;
 }
-/* .boxed input {
+#options input {
 	display: none;
-} */
-.boxed label {
+}
+#options label {
+	display: flex;
+	gap: 4px;
+	align-items: center;
 	padding: 2px 4px;
-	border-radius: 2px;
-	margin-left: -2px;
-	border: 2px solid transparent;
+	border-radius: 4px;
+	border: 2px solid #ccc;
+	user-select: none;
+	color: #666;
+	background-color: #fff;
+}
+#options :disabled + label {
+	opacity: 0.5;
+}
+#options :not(:disabled) + label:hover {
+	cursor: pointer;
+	border-color: #000 !important;
+}
+#options :checked + label {	
+	color: #000;
+}
+#auto_resolve_check:checked + label {
+	border-color: #aca;
+	background: linear-gradient(90deg, #fff, #cfc);
+}
+#show_details_check:checked + label {
+	border-color: #ca4;
+	background-color: #edb;
+	font-family: monospace;
 }
 #show_components_check:checked + label {
 	border-color: #0aa;
-	background: #cff;
+	background-color: #cff;
+	content: 'Bidi';
 }
 #skip_norm_check:checked + label {
 	border-color: #f00;
-	background: #f00;
+	background-color: #f00;
 	color: #fff;
 }
 #force_ltr_check:checked + label {	
-	border-color: #fb6;
-	background: #fb6;
+	border-color: #c61;
+	background-color: #c61;
+	color: #fff;
+}
+#force_mainnet_check:checked + label {
+	border-color: #58f;
+	background-color: #58f;
+	color: #fff;
 }
 #resolve_btn {
 	font-weight: bold;
@@ -401,7 +421,7 @@ button.copy.copied {
 }
 .tags.normalized { background: #8f8; }
 .tags.length {
-	background: var(--length-color);
+	background: #f8eedd;
 }
 .tags.iface {
 	display: flex;
@@ -504,7 +524,7 @@ button.glow {
 }
 .details .length {
 	color: #777;
-	background: var(--length-color);
+	background: #f8eedd;
 	border: 1px solid #ccc;
 	text-align: center;
 	padding: 2px 4px;
@@ -952,20 +972,18 @@ Hebrew:
 </div>
 <div id="options">
 	<button id="examples_btn">👀 Examples</button>
-	<label><input type="checkbox" id="auto_resolve_check" checked>Resolve on Input</label>
-	<label><input type="checkbox" id="show_details_check" checked>Details</label>
-	<div class="boxed">
-		<input type="checkbox" id="show_components_check" checked>
-		<label for="show_components_check">Emoji Components</label>
-	</div>
-	<div class="boxed">
-		<input type="checkbox" id="skip_norm_check">
-		<label for="skip_norm_check">Skip Normalization</label>
-	</div>
-	<div class="boxed">
-		<input type="checkbox" id="force_ltr_check">
-		<label for="force_ltr_check">Force LTR</label>
-	</div>
+	<input type="checkbox" id="auto_resolve_check" checked>
+	<label for="auto_resolve_check">⟳ <i>on Input</i></label>
+	<input type="checkbox" id="show_details_check" checked>
+	<label for="show_details_check">Details</label>
+	<input type="checkbox" id="show_components_check" checked>
+	<label for="show_components_check">Emoji Components</label>
+	<input type="checkbox" id="skip_norm_check">
+	<label for="skip_norm_check">Skip Norm</label>
+	<input type="checkbox" id="force_mainnet_check">
+	<label for="force_mainnet_check">Mainnet!</label>
+	<input type="checkbox" id="force_ltr_check">
+	<label for="force_ltr_check">LTR!</label>
 </div>
 <div id="input">
 	<input id="input_field" size="20" placeholder="Name or Address or URL">
@@ -986,7 +1004,7 @@ Hebrew:
 		<button id="nf_btn">NFD↔NFC</button>
 		<button id="escape_btn" title="[ALT] Unicode Escaped">Escape</button>
 	</div>
-	<button id="parent_btn">Parent</button>
+	<button id="parent_btn" title="Drop the leading label">Parent</button>
 	<button id="link_btn">Copy Link</button>
 	<button id="resolve_btn">Resolve</button>
 </div>
@@ -1001,7 +1019,7 @@ Hebrew:
 <li><a href="#vitalik.eth"><button>Copy Link</button></a> to get a URL that resolves on page-load.</li>
 <li>Many elements have tooltips with additional information.</li>
 <li>Follows <a href="https://github.com/adraffy/ensip-15/blob/master/ens-improvement-proposals/ensip-15-normalization-standard.md">ENSIP-15</a> and <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
-<li>Supports <button id="add_goerli_btn" class="chain">Goerli</button> and <button id="add_sepolia_btn" class="chain">Sepolia</button> testnets.</li>
+<li class="req-window">Supports <button id="add_goerli_btn" class="chain">Goerli</button> and <button id="add_sepolia_btn" class="chain">Sepolia</button> testnets.</li>
 </ul>
 <ul class="row legend">
 <li>This is a <b>valid</b> sequence of characters: <span data-tokenize="abc"></span> and <b>.eth</b> name: <span data-tokenize="abc.eth"></span></li>
@@ -1040,20 +1058,6 @@ import {puny_encoded, is_surrogate} from '../../punycode.js/dist/index.min.js';
 import eth_ens_namehash from './eth-ens-namehash@2.0.15.min.js';
 use_default_style();
 
-let infura_provider = new ethers.providers.WebSocketProvider('wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe');
-let active_provider = infura_provider;
-let window_provider;
-let chain_id;
-let block_explorer;
-let metadata_service;
-let registry_contract;
-let eth_resolver_contract;
-let eth_nft_contract;
-let eth_controller_contract;
-let wrapper_contract;
-let price_oracle_contract;
-let reverse_registrar;
-
 const EMOJI = ens_emoji();
 
 const input_field = document.querySelector('#input_field');
@@ -1063,6 +1067,7 @@ const show_components_check = document.querySelector('#show_components_check');
 const skip_norm_check = document.querySelector('#skip_norm_check');
 const show_details_check = document.querySelector('#show_details_check');
 const force_ltr_check = document.querySelector('#force_ltr_check');
+const force_mainnet_check = document.querySelector('#force_mainnet_check');
 const recent_select = document.querySelector('#recent_select');
 const recent_optgroup = document.querySelector('#recent_select optgroup');
 const options_div = document.querySelector('#options');
@@ -1085,11 +1090,9 @@ const STORAGE_SHOW_COMPONENTS = 'show_components';
 const STORAGE_FORCE_LTR = 'force_ltr';
 const STORAGE_HIDE_EXAMPLES = 'hide_examples';
 
-const APP_TITLE = 'ENS Resolver';
 const INPUT_NAME = 'Input';
 const OPENSEA_NAME = 'OpenSea';
 const VISION_NAME = 'Vision';
-const SKIP_SUFFIX = '_!';
 const PRETTY_NAME = '💖️'; // 🌷️ 🌺️
 
 const emoji_url = './emoji.html#q=%s';
@@ -1097,10 +1100,37 @@ const emoji_url = './emoji.html#q=%s';
 const CHAIN_ID_MAINNET = 1;
 const CHAIN_ID_GOERLI = 5;
 const CHAIN_ID_SEPOLIA = 11155111;
-
-const MIN_LENGTH = 3;
+const CHAINS = [
+	// https://chainlist.wtf/
+	//case 3: return 'https://ropsten.etherscan.io';
+	//case 4: return 'https://rinkeby.etherscan.io';
+	//case 139: return 'https://polygonscan.io';	
+	{
+		id: CHAIN_ID_MAINNET,
+		name: 'Mainnet',
+		explorer: 'https://etherscan.io',
+		metadata: 'https://metadata.ens.domains/mainnet',
+		opensea: 'https://opensea.io/assets/ethereum/',
+		is_mainnet: true,
+	},
+	{
+		id: CHAIN_ID_GOERLI,
+		name: 'Goerli',
+		explorer: 'https://goerli.etherscan.io',
+		metadata: 'https://metadata.ens.domains/goerli',
+		opensea: 'https://testnets.opensea.io/assets/goerli/'
+	},
+	{
+		id: CHAIN_ID_SEPOLIA,
+		name: 'Sepolia',
+		explorer: 'https://sepolia.etherscan.io',
+		metadata: 'https://metadata.ens.domains/sepolia',
+		opensea: 'https://testnets.opensea.io/assets/sepolia/',
+	}
+];
 
 const ETH_TLD = 'eth';
+const MIN_LENGTH = 3;
 const NFT_DOMAINS = new Set([ETH_TLD, 'art']);
 const REVERSE_DOMAIN = 'addr.reverse';
 const RESOLVER_NAMES = {
@@ -1114,8 +1144,20 @@ const NOT_IFACE_RESOLVER = new Set();
 const IFACE_ETH_CONTROLLER = '0x612e8c09';
 //const IFACE_ETH_NFT = '0x6ccb2df4'; // '0x80ac58cd'; // using registry owner() instead
 
+const location0 = new URL(window.location.href);
 const entity_span = document.createElement('span');
 
+let infura_provider = new ethers.providers.WebSocketProvider('wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe');
+let active_provider = infura_provider;
+let window_provider;
+let active_chain; // = CHAINS[0];
+let registry_contract;
+let eth_resolver_contract;
+let eth_nft_contract;
+let eth_controller_contract;
+let wrapper_contract;
+let price_oracle_contract;
+let reverse_registrar;
 let resolve_timer = RESOLVE_MODE_IDLE;
 let resolve_date0;
 
@@ -1153,6 +1195,8 @@ read_local_storage(STORAGE_SHOW_DETAILS, x => show_details_check.checked = x);
 read_local_storage(STORAGE_AUTO_RESOLVE, x => auto_resolve_check.checked = x);
 read_local_storage(STORAGE_SHOW_COMPONENTS, x => show_components_check.checked = x);
 read_local_storage(STORAGE_FORCE_LTR, x => force_ltr_check.checked = x);
+force_mainnet_check.checked = location0.searchParams.has('1');
+skip_norm_check.checked = location0.searchParams.has('skip');
 
 sync_recent(localStorage[STORAGE_RECENT]);
 
@@ -1201,7 +1245,7 @@ input_field.addEventListener('keydown', e => {
 	}
 });
 input_field.addEventListener('input', () => {
-	if (parse()) schedule_resolve();
+	if (parse() && auto_resolve_check.checked) schedule_resolve();
 });
 
 window.addEventListener('storage', e => {
@@ -1230,6 +1274,7 @@ recent_select.addEventListener('change', () => {
 	}
 });
 function add_recent(name, save = true) {
+	if (!name) return;
 	let found;
 	for (let x of recent_optgroup.children) {
 		if (x.value === name) {
@@ -1262,9 +1307,9 @@ function add_recent(name, save = true) {
 	if (save) {
 		localStorage[STORAGE_RECENT] = JSON.stringify([...recent_optgroup.children].map(x => x.value));
 	} 
-}
-document.querySelector('#add_goerli_btn').addEventListener('click', () => switch_to_network(CHAIN_ID_GOERLI));
-document.querySelector('#add_sepolia_btn').addEventListener('click', () => switch_to_network(CHAIN_ID_SEPOLIA));
+}		
+make_network_switcher(document.querySelector('#add_goerli_btn'), CHAIN_ID_GOERLI);
+make_network_switcher(document.querySelector('#add_sepolia_btn'), CHAIN_ID_SEPOLIA);
 document.querySelector('#random_emoji_btn').addEventListener('click', e => {
 	let name = '';
 	let pool = e.altKey ? EMOJI.filter(cps => cps.length == 1 || (cps.length == 2 && cps[1] === 0xFE0F)) : EMOJI;
@@ -1319,7 +1364,9 @@ document.querySelector('#link_btn').addEventListener('click', () => {
 });
 auto_resolve_check.addEventListener('input', () => {
 	localStorage[STORAGE_AUTO_RESOLVE] = !!auto_resolve_check.checked;	
-	resolve_if_auto();
+	if (auto_resolve_check.checked && input_field.value) {
+		resolve();
+	}
 });
 show_details_check.addEventListener('input', () => {	
 	localStorage[STORAGE_SHOW_DETAILS] = !!show_details_check.checked;	
@@ -1331,25 +1378,47 @@ show_components_check.addEventListener('input', () => {
 	localStorage[STORAGE_SHOW_COMPONENTS] = !!show_components_check.checked;
 	update_exploded();
 });
-force_ltr_check.addEventListener('click', () => {
+force_ltr_check.addEventListener('input', () => {
 	localStorage[STORAGE_FORCE_LTR] = !!force_ltr_check.checked;
 	sync_force_ltr();
 });
+force_mainnet_check.addEventListener('input', async () => {
+	update_title();
+	if (!window_provider) return;
+	force_mainnet_check.disabled = true;
+	if (update_network(await window_provider.getNetwork().catch(() => {}))) {
+		resolve();
+	}
+	force_mainnet_check.disabled = false;
+});
+skip_norm_check.addEventListener('input', () => {
+	resolve();
+}); 
 examples_btn.addEventListener('click', () => {
 	let b = !examples_div.classList.contains('hide');
 	examples_div.classList.toggle('hide', b);
 	localStorage[STORAGE_HIDE_EXAMPLES] = b;
 	sync_examples();
 });
-skip_norm_check.addEventListener('input', resolve_if_auto); // not saved
 
 if (window.ethereum) {
 	let p = ethereum;
 	if (Array.isArray(ethereum.providers)) p = ethereum.providers[0]; // fix scuffed multi-provider
 	window_provider = new ethers.providers.Web3Provider(p, 'any');
+}
+if (location0.hash.endsWith('_!')) { // backwards compat
+	skip_norm_check.checked = true;
+
+	// cleanup url
+	let url = new URL(location0);
+	url.search = url.searchParams.get('1') ? '1' : '';
+	window.history.replaceState(null, null, url);
+}
+if (window_provider) {
 	window_provider.on('network', update_network);
 } else {
 	update_network();
+	force_mainnet_check.disabled = true;
 }
 
 sync_examples();
@@ -1357,80 +1426,62 @@ sync_force_ltr();
 input_field.focus();
 apply_location_hash();
 window.addEventListener('hashchange', apply_location_hash);
-function is_mainnet() {
-	return chain_id === CHAIN_ID_MAINNET;
+
+function make_network_switcher(btn, id) {
+	btn.classList.add('chain');
+	btn.dataset.chain = id;
+	btn.addEventListener('click', () => switch_to_network(id).catch(() => {}));
 }
 async function switch_to_network(id) {
-	return window.ethereum.request({
-		method: 'wallet_switchEthereumChain',
-		params: [{chainId: `0x${id.toString(16)}`}]
-	}).then(() => disable_chain_buttons(true));
-}
-function disable_chain_buttons(b) {
+	if (!window_provider) return;
+	let network = await window_provider.getNetwork();
+	if (network.chainId === id) {
+		if (active_provider === window_provider) return;
+		return update_network(network);
+	}
+	await window_provider.send('wallet_switchEthereumChain', [{chainId: `0x${id.toString(16)}`}]);
 	for (let btn of document.querySelectorAll('.chain')) {
-		btn.disabled = b;
+		btn.disabled = true;
 	}
 }
 function update_network(network) {
-	disable_chain_buttons(false);
+	let chain0 = active_chain;
+	active_chain = CHAINS[0];
 	active_provider = infura_provider;
 	let registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
-	let network_name = 'mainnet';
-	chain_id = CHAIN_ID_MAINNET;
-	block_explorer = 'https://etherscan.io';
-	metadata_service = 'https://metadata.ens.domains/mainnet';
-	let use_window;
 	if (network) {
-		switch (network.chainId) {
-			//case 3: return 'https://ropsten.etherscan.io';
-			//case 4: return 'https://rinkeby.etherscan.io';
-			//case 139: return 'https://polygonscan.io';		
-			case CHAIN_ID_SEPOLIA: {
-				network_name = 'Sepolia';
-				block_explorer = 'https://sepolia.etherscan.io';
-				metadata_service = 'https://metadata.ens.domains/sepolia';
-				use_window = true;
-				break;
-			}
-			case CHAIN_ID_GOERLI: {
-				network_name = 'Goerli';
-				block_explorer = 'https://goerli.etherscan.io';
-				metadata_service = 'https://metadata.ens.domains/goerli';
-				use_window = true;
-				break;
-			}
-			case CHAIN_ID_MAINNET: {
-				use_window = true;
-				break;
-			}
-		}
-		if (use_window) {
-			chain_id = network.chainId;
+		let chain = CHAINS.find(x => x.id === network.chainId);
+		if (chain && (!force_mainnet_check.checked || chain.is_mainnet)) {
+			active_chain = chain;
 			active_provider = window_provider;
-			if (!network.ensAddress) {
+			if (network.ensAddress) {
+				registry = network.ensAddress;
+			} else {
 				network.ensAddress = registry; // force it into ethers
 			}
 		}
 	}
-	let provider_name = use_window ? 'window.ethereum' : 'Infura';
-	document.body.classList.toggle('testnet', !is_mainnet());
-	// TODO: add change network button
+	let using_window = active_provider === window_provider;
+	let provider_name = using_window ? 'window.ethereum' : 'Infura';
+	document.body.classList.toggle('testnet', !active_chain.is_mainnet);	
 	let network_div = document.createElement('div');
-	network_div.innerHTML = `using <b>${provider_name}</b> on <a href="${block_explorer}/address/${registry}" target="_blank" title="Registry Contract">${network_name}</a>`;
-	if (window_provider && network && !use_window) {
-		provider_div.innerHTML = `<div class="error">🚫️ Unsupported Network (${network.chainId})</div>`;
-		//network_div.innerHTML += ' instead';
+	network_div.innerHTML = `using <b>${provider_name}</b> on <a href="${active_chain.explorer}/address/${registry}" target="_blank" title="Registry Contract">${active_chain.name}</a>`;
+	if (network && !using_window && !force_mainnet_check.checked) {
+		provider_div.innerHTML = `<div class="error">Unsupported Network (${network.chainId})</div>`;
 	} else {
-		provider_div.innerHTML = '';	
+		provider_div.innerHTML = '';
 	}
 	provider_div.append(network_div);
-	if (!is_mainnet()) {
+	for (let btn of document.querySelectorAll('.chain')) {
+		btn.disabled = !window_provider || active_chain.id == btn.dataset.chain;
+	}
+	if (!active_chain.is_mainnet || (window_provider && active_provider !== window_provider)) {
 		let btn = document.createElement('button');
-		btn.classList.add('chain');
-		btn.innerHTML = '↪ Mainnet';
-		btn.addEventListener('click', () => switch_to_network(CHAIN_ID_MAINNET));
+		btn.innerHTML = active_chain.is_mainnet ? 'Use Browser' : '↪ Mainnet';
+		make_network_switcher(btn, CHAIN_ID_MAINNET);
 		network_div.append(btn);
 	}
+	if (chain0 === active_chain) return; // no change	
 	let init = !registry_contract;
 	registry_contract = new ethers.Contract(registry, [
 		'function resolver(bytes32 node) external view returns (address)',
@@ -1441,11 +1492,14 @@ function update_network(network) {
 	eth_controller_contract = null;
 	wrapper_contract = null;
 	reverse_registrar = null;
+	NOT_IFACE_RESOLVER.clear();
 	if (input_field.value) {
 		schedule_resolve();
 	} else if (init) {
-		primary_loader.classList.add('hide');
+		//primary_loader.classList.add('hide');
+		parse();
 	}
+	return true; // changed
 }
 
 function sync_examples() {
@@ -1463,12 +1517,8 @@ function sync_force_ltr() {
 }
 
 function apply_location_hash() {
-	let name = decodeURIComponent(window.location.hash.slice(1));
-	let skip = name.endsWith(SKIP_SUFFIX);
-	if (skip) name = name.slice(0, -SKIP_SUFFIX.length);
-	skip_norm_check.checked = skip;
-	input_field.value = name;
-	resolve();
+	input_field.value = decodeURIComponent(window.location.hash.slice(1));
+	if (registry_contract) resolve();
 }
 
 function should_stop_resolving() {
@@ -1476,7 +1526,6 @@ function should_stop_resolving() {
 }
 
 function schedule_resolve(delay = 500) {
-	if (!auto_resolve_check.checked) return;
 	clearTimeout(resolve_timer);
 	if (is_working()) {
 		resolve_timer = [Date.now() + delay]; // encode as future time
@@ -1486,12 +1535,6 @@ function schedule_resolve(delay = 500) {
 	}
 } 
 
-function resolve_if_auto() {
-	if (auto_resolve_check.checked && input_field.value && parse()) {
-		resolve();
-	}
-}
-
 function stop_resolving() {
 	clearTimeout(resolve_timer);
 	resolve_timer = RESOLVE_MODE_EMPTY;
@@ -1499,18 +1542,30 @@ function stop_resolving() {
 }
 
 function update_title() {
-	let title = APP_TITLE;
-	let hash = ' '; // cannot be empty
+	let title = 'ENS Resolver';
 	let input = input_field.value;
+	let url = new URL(location0);
+	let args = [];
+	if (force_mainnet_check.checked) {
+		args.push('1');
+	}
+	if (skip_norm_check.checked) {
+		args.push('skip');
+	}
+	url.search = args.join('&');
 	if (input) {
-		title = `${title}: "${input}"`;
-		hash = '#' + encode_uri_component_surrogate_escaped(input);
+		title += `: “${input}”`;
 		if (skip_norm_check.checked) {
 			title += ' (!)';
-			hash += SKIP_SUFFIX;
 		}
+		url.hash = '#' + encode_uri_component_surrogate_escaped(input);
+	} else {
+		url.hash = '';	
 	}
-	window.history.replaceState(null, null, hash); 
+	if (!active_chain.is_mainnet) {
+		title += ` / ${active_chain.name}`;
+	}
+	window.history.replaceState(null, null, url); 
 	document.title = title;
 }
 
@@ -1523,50 +1578,15 @@ function parse() {
 	update_title();	
 	let input = input_field.value;
 	let skip = skip_norm_check.checked;
-	/*
-function parse() {
-	return presolve(input_field.value, skip_norm_check.checked, false);
-}
-function presolve(input, skip, resolving) {
-	// update browser history
-	let title = APP_TITLE;
-	let hash = ' '; // cannot be empty
-	let input = input_field.value;
-	if (input) {
-		title = `${title}: "${input}"`;
-		hash = '#' + encodeURIComponent(input);
-	}
-	let name = replace_escapes(input);
-	let state0 = window.history.state;
-	let state = {name, resolving};
-	if (skip) {
-		title += ' (!)';
-		hash += SKIP_SUFFIX;
-		state.name += SKIP_SUFFIX;
-	}
-	// note: only push if records that differ 
-	// history API is total dogshit
-	// cannot reliably pop a duplicate
-	// eg. "A" + [space] => "A " + [del] => "A"
-	if (state0 && (resolving || state0.resolving) && state0.name != name) {
-		window.history.pushState(state, null, hash);
-	} else {
-		window.history.replaceState(state, null, hash);
-	}
-	*/
-	// show readme if empty
 	if (!input) {
 		stop_resolving();
 		output_div.innerHTML = '';
 		output_div.append(...readme_dom);	
-		//actions_div.classList.add('hide');
 		return;
 	}
 	// TODO: conslidate this code with resolve()
 	let name = replace_name(replace_escapes(input));
 	output_div.innerHTML = '';
-	//output_div.append(links_copy);
-	//actions_div.classList.remove('hide');
 	if (resolve_timer === RESOLVE_MODE_EMPTY) {
 		resolve_timer = RESOLVE_MODE_IDLE;
 	}
@@ -1760,7 +1780,7 @@ function create_dns_row(name, replaced) {
 		} else {
 			add_row_tag(row, create_typed_tag('second', 'Punycode Compatible'));
 		}
-		if (is_mainnet() && encoded.endsWith('.eth')) {
+		if (active_chain.is_mainnet && encoded.endsWith('.eth')) {
 			add_row_tag(row, create_link(`https://${encoded}.limo`, '.limo', 'external'));
 			add_row_tag(row, create_link(`https://${encoded}.link`, '.link', 'external'));
 			add_row_tag(row, create_link(`https://${encoded}.li`,   '.li',   'external'));
@@ -1864,24 +1884,18 @@ function create_ens_link(name, {title = 'ENS'} = {}) {
 	return create_link(`https://app.ens.domains/${encode_uri_component_ens_escaped(name)}`, title, 'ens');
 }
 function create_ens_metadata_link(contract, token, {title = 'Metadata', cls = 'metadata'} = {}) {
-	return create_link(`${metadata_service}/${contract}/${token}`, title, cls);
+	return create_link(`${active_chain.metadata}/${contract}/${token}`, title, cls);
 }
 function create_etherscan_address_link(addr, {title, anchor = '', contract} = {}) {
 	if (contract === true) anchor = '#readContract';
-	return create_link(`${block_explorer}/address/${addr}${anchor}`, title || addr, title ? false : 'wide');
+	return create_link(`${active_chain.explorer}/address/${addr}${anchor}`, title || addr, title ? false : 'wide');
 }
 function create_etherscan_nft_link(contract, token, {title = 'Etherscan', cls = 'metadata'} = {}) {
-	return create_link(`${block_explorer}/nft/${contract}/${ethers.BigNumber.from(token)}`, title, cls); 
+	return create_link(`${active_chain.explorer}/nft/${contract}/${ethers.BigNumber.from(token)}`, title, cls); 
 }
 function create_opensea_nft_link(contract, token, {title = OPENSEA_NAME, cls = 'external'} = {}) {
-	let prefix;
-	switch (chain_id) {
-		case CHAIN_ID_MAINNET: prefix = 'https://opensea.io/assets/ethereum/';         break;		
-		case CHAIN_ID_GOERLI:  prefix = 'https://testnets.opensea.io/assets/goerli/';  break;
-		case CHAIN_ID_SEPOLIA: prefix = 'https://testnets.opensea.io/assets/sepolia/'; break;
-		default: return;
-	}
-	return create_link(`${prefix}${contract}/${ethers.BigNumber.from(token)}`, title, cls);
+	let {opensea} = active_chain;
+	return opensea && create_link(`${opensea}${contract}/${ethers.BigNumber.from(token)}`, title, cls);
 }
 
 function create_copy_btn(raw, {explode} = {}) {
@@ -2143,7 +2157,7 @@ function add_nft_links(row, name, contract, token) {
 	add_row_tag(row, create_ens_metadata_link(contract, token));
 	add_row_tag(row, create_etherscan_nft_link(contract, token));
 	add_row_tag(row, create_opensea_nft_link(contract, token));
-	if (!is_mainnet()) return;
+	if (!active_chain.is_mainnet) return;
 	try {
 		let encoded = encodeURIComponent(name);
 		if (encoded.endsWith('.eth')) {
@@ -2548,7 +2562,11 @@ function is_working() {
 	return resolve_btn.disabled || !registry_contract;
 }
 
+
 function resolve() {
+	parse() && resolve0();
+}
+function resolve0() {
 	if (is_working()) {
 		resolve_timer = [0]; // ASAP
 		return;
@@ -2595,7 +2613,7 @@ function resolve() {
 		resolve_btn.disabled = true;
 		return (async() => {
 			try {
-				if (!is_mainnet()) throw new Error(`token: only works on mainnet`);
+				if (!active_chain.is_mainnet) throw new Error(`token: only works on mainnet`);
 				let res = await fetch('https://api.thegraph.com/subgraphs/name/ensdomains/ens', {
 					method: 'POST',
 					body: JSON.stringify({
@@ -2660,7 +2678,7 @@ function resolve() {
 	resolve_btn.disabled = true;
 	primary_loader.classList.remove('hide');
 	resolve_date0 = new Date();
-	resolve0(name, skip).then(() => {
+	resolve1(name, skip).then(() => {
 		resolve_btn.disabled = false;
 		if (Array.isArray(resolve_timer)) {
 			setTimeout(resolve, Math.max(0, resolve_timer[0] - Date.now()));
@@ -2681,7 +2699,7 @@ function create_elapsed() {
 	return span;
 }
 
-async function resolve0(input, skip_norm) {
+async function resolve1(input, skip_norm) {
 	output_div.innerHTML = '';
 	//output_div.append(links_copy);
 
@@ -3105,7 +3123,7 @@ async function resolve0(input, skip_norm) {
 			add_row_tag(avail_row, create_typed_tag('warn', avail_err));
 		} else {
 			add_row_tag(avail_row, create_typed_tag(available ? 'good' : 'fail', 'Available'));
-			if (is_mainnet() && domain === 'art') {
+			if (active_chain.is_mainnet && domain === 'art') {
 				add_row_tag(avail_row, create_link(`https://app.protocol.art/name/${encodeURIComponent(label)}.art`, 'Website'));
 			}
 			add_row_tag(avail_row, create_etherscan_address_link(nft_contract.address, {title: 'NFT Contract', contract: true}));
