@@ -699,7 +699,7 @@ csv_btn.addEventListener('click', async () => {
 		if (!rec.is_emoji) continue;
 		let v = [rec.form, rec.cps.map(hex_cp).join(' '), rec.norm, rec.norm_length, rec.min_length, rec.min_repeat];
 		if (rec.info) {
-			v.push(rec.info.name, rec.info.type, rec.info.version.toString());
+			v.push(rec.info.name, rec.info.type, rec.info.version);
 		}
 		lines.push(v.map(x => typeof x === 'number' ? x : `"${x}"`).join(','));
 	}
@@ -801,7 +801,7 @@ function update_search() {
 			results = results.filter(x => x.min_repeat === 2);
 		} else if (arg === 'triples') {
 			results = results.filter(x => x.min_repeat === 3);
-		} else if (match = arg.match(/^v(\d+(?:.\d+))$/)) {
+		} else if (match = arg.match(/^v(\d+.?\d*)$/)) {
 			let version = match[1];
 			results = results.filter(x => x.info && x.info.version.startsWith(version));
 		} else if (match = type_map.get(arg)) {
