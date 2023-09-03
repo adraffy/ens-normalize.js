@@ -68,13 +68,17 @@ body {
 header {
 	display: flex;
 }
-header a {
+#github {
 	text-align: right;
 }
 h1 {
 	flex: 1;
 	white-space: pre;
 	margin: 0;
+}
+h1 .count {
+	font-size: 60%;
+	font-weight: bold;
 }
 #examples {
 	display: flex;
@@ -148,6 +152,13 @@ h1 {
 #jumps .disabled {
 	background-color: var(--error-bg-color);
 	padding: 2px 4px;
+}
+#top_btn {
+	position: fixed;
+	bottom: 16px;
+	right: 16px;
+	box-shadow: 3px 3px 0 #666;
+	transition: .5s ease opacity;
 }
 #hover {
 	position: absolute;
@@ -392,7 +403,7 @@ footer span:hover {
 		font-size: 20pt;
 	}
 	main {
-		margin: 8ppx -16px;
+		margin: 8px -16px;
 	}
 	.heading {
 		font-size: 16pt;
@@ -408,16 +419,20 @@ footer span:hover {
 </style>
 </head>
 <body>
+<button id="top_btn" style="display: none">
+	<svg class="with-icon_icon__aLCKg" data-testid="geist-icon" fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color:var(--geist-foreground);width:24px;height:24px"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+	<span>Top</span>
+</button>
 <div id="hover" class="hide"></div>
 <header>
-	<h1>Emoji</h1>
-	<a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize.js</a>
+	<h1><a href="https://ens.domains/">ENS</a> Emoji</h1>
+	<a id="github" href="https://github.com/adraffy/ens-normalize.js">adraffy/ens-normalize.js</a>
 </header>
 <div id="links">
 	<a href="./resolver.html"><b>Resolver</b></a>
 	<a href="https://raffy.antistupid.com/eth/ens-emoji-freq.html">Emoji Frequency</a>
 	•
-	<a href="https://www.unicode.org/reports/tr51/">UTS-51</a>
+	<a href="https://www.unicode.org/reports/tr51/"><b>UTS-51</b></a>
 	<a href="https://unicode.org/emoji/charts/full-emoji-list.html">Unicode List</a>
 	<a href="https://unicode.org/emoji/charts/full-emoji-modifiers.html">Modifiers</a>
 	<a href="https://unicode.org/emoji/charts/emoji-counts.html">Counts</a>
@@ -508,6 +523,7 @@ const readme_dom = [...document.querySelectorAll('.readme')];
 const csv_btn = document.querySelector('#csv_btn');
 const examples_div = document.querySelector('#examples');
 const none_div = document.querySelector('#none');
+const top_btn = document.querySelector('#top_btn');
 
 const render_queue = [];
 const shaded = [];
@@ -526,6 +542,8 @@ document.querySelector('footer').innerHTML += ` — <span>v${versions.version} (
 document.querySelector('footer span').addEventListener('click', () => {
 	window.alert(JSON.stringify(versions, null, ' '));
 });
+
+top_btn.addEventListener('click', () => window.scrollTo(0, 0));
 
 (async () => {
 
@@ -580,7 +598,7 @@ document.querySelector('footer span').addEventListener('click', () => {
 		all_emoji.push(rec);
 	}
 	emoji_count = all_emoji.length;
-	document.querySelector('h1').innerHTML += ` (${emoji_count})`; 
+	document.querySelector('h1').innerHTML += ` <span class="count">(${emoji_count})</span>`; 
 	for (let cps of emoji_disabled) {
 		all_emoji.push(make_rec(cps));
 	}	
@@ -642,6 +660,8 @@ document.querySelector('footer span').addEventListener('click', () => {
 	window.addEventListener('hashchange', process_hash);
 	search_field.addEventListener('input', search_soon);
 
+	top_btn.style.display = '';
+
 	// hide on intersection
 	hover_div.addEventListener('mousemove', e => {
 		hover_div.classList.add('hide');
@@ -693,13 +713,19 @@ document.querySelector('footer span').addEventListener('click', () => {
 
 })();
 
+update_top();
+window.addEventListener('scroll', update_top);
+function update_top() {
+	top_btn.style.opacity = window.scrollY < 50 ? 0 : 1;
+}
+
 csv_btn.addEventListener('click', async () => {
 	let lines = [`Form,Hex,Norm,Length,MinLength,MinRepeat,Name,Type,Version`];
 	for (let rec of all_emoji) {
 		if (!rec.is_emoji) continue;
 		let v = [rec.form, rec.cps.map(hex_cp).join(' '), rec.norm, rec.norm_length, rec.min_length, rec.min_repeat];
 		if (rec.info) {
-			v.push(rec.info.name, rec.info.type, rec.info.version.toString());
+			v.push(rec.info.name, rec.info.type, rec.info.version);
 		}
 		lines.push(v.map(x => typeof x === 'number' ? x : `"${x}"`).join(','));
 	}
@@ -801,8 +827,9 @@ function update_search() {
 			results = results.filter(x => x.min_repeat === 2);
 		} else if (arg === 'triples') {
 			results = results.filter(x => x.min_repeat === 3);
-		} else if (match = arg.match(/^v(\d+(?:.\d+))$/)) {
+		} else if (match = arg.match(/^v(\d+.?\d*)$/)) {
 			let version = match[1];
+			if (!version.includes('.')) version += '.';
 			results = results.filter(x => x.info && x.info.version.startsWith(version));
 		} else if (match = type_map.get(arg)) {
 			results = results.filter(x => x.info && x.info.type === match);
@@ -928,7 +955,7 @@ function setup_render(results) {
 					if (!section) {
 						section = create_empty_table();
 						tbody = section.querySelector('tbody');
-						heading = create_heading({section, length, disabled, count, top: true});
+						heading = create_heading({section, length, disabled, count});
 						main.append(heading, section);
 						//top = true;
 					}
@@ -974,7 +1001,7 @@ function setup_render(results) {
 				render_queue.push(() => {
 					if (!section) {
 						section = document.createElement('section');
-						let heading = create_heading({section, length, length_ge, cost, count: match_length.length, top: true});
+						let heading = create_heading({section, length, length_ge, cost, count: match_length.length});
 						main.append(heading, section);
 					}
 					let subheading = document.createElement('div');
@@ -1048,7 +1075,7 @@ function create_count_span(i, n) {
 	return span;
 }
 
-function create_heading({section, length, length_ge, cost, count, disabled = 0, shade = true, top}) {
+function create_heading({section, length, length_ge, cost, count, disabled = 0, shade = true}) {
 	let heading = document.createElement('div');
 	heading.classList.add('heading');
 	
@@ -1084,24 +1111,6 @@ function create_heading({section, length, length_ge, cost, count, disabled = 0, 
 			let b = shaded[length] = !heading.classList.contains('shaded');
 			heading.classList.toggle('shaded', b);
 		});
-	}
-
-	if (top) {
-		let balloon = document.createElement('span');
-		balloon.classList.add('balloon');
-
-		let btn = document.createElement('button');
-		btn.classList.add('top');
-		btn.innerHTML = `
-			<svg class="with-icon_icon__aLCKg" data-testid="geist-icon" fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color:var(--geist-foreground);width:24px;height:24px"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
-			<span>Top</span>
-		`;
-		btn.addEventListener('click', e => {
-			e.stopPropagation();
-			window.scrollTo(0, 0);
-		});
-
-		heading.append(balloon, btn);
 	}
 
 	return heading;

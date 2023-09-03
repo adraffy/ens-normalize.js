@@ -85,14 +85,15 @@ async function fetch_short_names(url, lang, dir) {
 function url_for_version(version) {
 	// wow this was 3-4 years old
 	//return `https://raw.githubusercontent.com/unicode-org/cldr/latest/`; 
-	return `https://raw.githubusercontent.com/unicode-org/cldr/release-${version}/`;
+	return `https://raw.githubusercontent.com/unicode-org/cldr/release-${version.replace('.', '-')}/`;
 }
 
 // https://cldr.unicode.org/index/downloads
 // 20220406: v41
 // 20221019: v42
 // 20230412: v43
-const version = 43;
+// 20230903: v43.1
+const version = '43.1';
 let url = url_for_version(version);
 let header = {version, url, date: new Date()};
 console.log(header);

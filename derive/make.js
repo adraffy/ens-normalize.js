@@ -163,12 +163,12 @@ for (let info of emoji_map.values()) {
 	}
 }
 
-print_section(`Whitelist Emoji`);
+print_section('Whitelist Emoji');
 for (let info of EMOJI_SEQ_WHITELIST) {
 	register_emoji({cps: parse_cp_sequence(info.hex), type: 'Whitelisted', name: info.name});
 }
 
-print_section(`Blacklist Emoji`);
+print_section('Blacklist Emoji');
 for (let def of EMOJI_SEQ_BLACKLIST) {
 	let cps = Number.isInteger(def) ? [def] : parse_cp_sequence(def);
 	let key = String.fromCodePoint(...cps);
@@ -179,7 +179,18 @@ for (let def of EMOJI_SEQ_BLACKLIST) {
 	valid_emoji.delete(key);
 }
 
-print_section(`Add Mapped Characters`);
+// 20230903: added, is there a better official source for this stuff?
+// TODO: check CLDR
+print_section('Assign Emoji Groups');
+for (let test of UNICODE.read_emoji_test()) {
+	let key = String.fromCodePoint(...test.cps);
+	let info = valid_emoji.get(key);
+	if (!info) continue;
+	info.group = test.group;
+	info.subgroup = test.subgroup;
+}
+
+print_section('Add Mapped Characters');
 for (let [x, ys] of CHARS_MAPPED) {
 	let old = mapped.get(x);
 	if (old && !compare_arrays(old, ys)) throw new Error(`Duplicate mapped: ${PRINTER.desc_for_mapped(x, ys)}`);
@@ -188,7 +199,7 @@ for (let [x, ys] of CHARS_MAPPED) {
 	console.log(`Add Mapped: ${PRINTER.desc_for_mapped(x, ys)}`);
 }
 
-print_section(`Add Ignored Characters`);
+print_section('Add Ignored Characters');
 for (let cp of CHARS_IGNORED) {
 	if (ignored.has(cp)) throw new Error(`Already ignored: ${PRINTER.desc_for_cp(cp)}`);
 	disallow_char(cp);
@@ -196,7 +207,7 @@ for (let cp of CHARS_IGNORED) {
 	console.log(`Added Ignored: ${PRINTER.desc_for_cp(cp)}`);
 }
 
-print_section(`Add Valid Characters`);
+print_section('Add Valid Characters');
 for (let cp of CHARS_VALID) {
 	if (valid.has(cp)) throw new Error(`Already valid: ${PRINTER.desc_for_cp(cp)}`);
 	disallow_char(cp);
@@ -205,7 +216,7 @@ for (let cp of CHARS_VALID) {
 }
 
 // 20221213: this comes after Adds
-print_section(`Remove Disallowed Characters`);
+print_section('Remove Disallowed Characters');
 for (let cp of CHARS_DISALLOWED) {
 	if (!mapped.has(cp) && !ignored.has(cp) && !valid.has(cp)) {
 		console.log(`*** Already disallowed: ${PRINTER.desc_for_cp(cp)}`); // not fatal		
@@ -926,8 +937,8 @@ for (let info of emoji_disabled) { // make every disabled emoji a solo-sequence
 	info.type = 'Disabled';
 }
 write_json('emoji-info.json', [...valid_emoji.values(), ...emoji_disabled].map(info => {
-	let {cps, name, name0, version, type} = info;
-	return {form: String.fromCodePoint(...cps), name, name0, version, type};
+	let {cp, same, cps, ...rest} = info;
+	return {form: String.fromCodePoint(...cps), ...rest};
 }));
 
 // for chars.html

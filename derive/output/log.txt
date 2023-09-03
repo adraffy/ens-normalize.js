@@ -1,6 +1,6 @@
-Build Date: 2023-08-29T07:32:32.520Z
-Unicode Version: 15.1.0 (2023-08-15T23:41:02.137Z)
-CLDR Version: 43 (2023-04-23T01:05:30.514Z)
+Build Date: 2023-09-03T22:00:45.789Z
+Unicode Version: 15.1.0 (2023-09-03T21:35:33.527Z)
+CLDR Version: 43.1 (2023-09-03T21:58:22.687Z)
 ==== RGI Emoji ZWJ Sequences ====
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -5191,6 +5191,7 @@ Register Emoji [Emoji_Presentation]: [1FAF8 FE0F] (🫸️) rightwards pushing h
 ==== Register Leftover Emoji ====
 ==== Whitelist Emoji ====
 ==== Blacklist Emoji ====
+==== Assign Emoji Groups ====
 ==== Add Mapped Characters ====
 Removed Valid: 6F0 (۰) EXTENDED ARABIC-INDIC DIGIT ZERO
 Add Mapped: 6F0 (۰) EXTENDED ARABIC-INDIC DIGIT ZERO => [660] (٠) ARABIC-INDIC DIGIT ZERO
@@ -14871,7 +14872,7 @@ Optimized: 2110 => 541
 CM(2450) => NSM(1998) => 1050
 Per Group Max: 61
 ==== Write Output ====
-Wrote: spec.json [3137694]
+Unchanged: spec.json
 Unchanged: nf.json
 Unchanged: nf-tests.json
 Unchanged: emoji-info.json
