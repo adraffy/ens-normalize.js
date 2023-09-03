@@ -1167,7 +1167,7 @@ let resolve_timer = RESOLVE_MODE_IDLE;
 let resolve_date0;
 
 console.log(versions);
-document.querySelector('footer').innerHTML += ` — <span>v${versions.version} (${versions.spec_hash.slice(0, 8)})</span>`;
+document.querySelector('footer').innerHTML += ` — <span>v${versions.version}</span>`;
 document.querySelector('footer span').addEventListener('click', () => {
 	window.alert(JSON.stringify(versions, null, ' '));
 });
@@ -2563,8 +2563,8 @@ function is_working() {
 }
 function resolve() {
 	if (!registry_contract) return;
-	if (!parse()) return;
 	if (is_working()) {
+		//parse(); // is this needed?
 		resolve_timer = [0]; // ASAP
 		return;
 	}
