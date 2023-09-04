@@ -1974,7 +1974,7 @@ function upgrade_split_type(info) {
 	let cps = info.tokens.flatMap(x => x.is_emoji ? [] : x);
 	if (cps.every(cp => cp < 0x80)) {
 		info.type = 'ASCII';	
-	} else if (/[ąçęşìíîïǐł]/u.test(str_from_cps(cps))) {
+	} else if (/[ąçęşìíîïǐł]/u.test(str_from_cps(cps))) { // TODO: formalize this logic in ens-normalize
 		info.rare_latin = true;
 	}
 }
@@ -2481,7 +2481,6 @@ function create_details_row(name, before) {
 		if (NFT_DOMAINS.has(domain)) {
 			footer.push(`<b>Token:</b> <code>${ethers.BigNumber.from(labelhash(label))}</code>`);
 		}
-
 		if (info.error) { 
 			footer.unshift(`<span class="error">❌️ ${info.error}</span>`);
 		}
@@ -3163,10 +3162,14 @@ async function resolve1(input, skip_norm) {
 		let wrapped_err;
 		let wrapped_row = create_row('Wrapper', true);
 		output_div.append(wrapped_row);
+
+		let unwrappable = name_norm.split('.').some(x => bytes_from_utf8(x).length > 255);
 		try {
 			await ensure_wrapper();
 			if (should_stop_resolving()) return;
-			is_wrapped = await wrapper_contract.callStatic.isWrapped(node);
+			if (!unwrappable) {
+				is_wrapped = await wrapper_contract.callStatic.isWrapped(node);
+			}
 		} catch (err) {
 			wrapped_err = err;
 		}
@@ -3176,6 +3179,8 @@ async function resolve1(input, skip_norm) {
 		if (wrapped_err) {
 			wrapped_row.classList.add('error');
 			add_row_tag(wrapped_row, create_typed_tag('warn', wrapped_err));
+		} else if (unwrappable) {
+			add_row_tag(wrapped_row, create_typed_tag('warn', 'Unwrappable'));
 		} else {
 			add_row_tag(wrapped_row, is_wrapped ? create_typed_tag('good', '🎁 Wrapped') : '🎉 Unwrapped');
 		}

@@ -229,7 +229,7 @@ function read_trie(next) {
 	}
 }
 
-// created 2023-09-03T22:00:50.059Z
+// created 2023-09-04T04:56:31.178Z
 // compressed base64-encoded blob for include-ens data
 // source: https://github.com/adraffy/ens-normalize.js/blob/main/src/make.js
 // see: https://github.com/adraffy/ens-normalize.js#security
@@ -279,7 +279,7 @@ function compare_arrays(a, b) {
 	return c;
 }
 
-// created 2023-09-03T22:00:50.059Z
+// created 2023-09-04T04:56:31.178Z
 // compressed base64-encoded blob for include-nf data
 // source: https://github.com/adraffy/ens-normalize.js/blob/main/src/make.js
 // see: https://github.com/adraffy/ens-normalize.js#security

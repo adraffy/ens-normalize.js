@@ -182,12 +182,12 @@ for (let def of EMOJI_SEQ_BLACKLIST) {
 // 20230903: added, is there a better official source for this stuff?
 // TODO: check CLDR
 print_section('Assign Emoji Groups');
-for (let test of UNICODE.read_emoji_test()) {
-	let key = String.fromCodePoint(...test.cps);
+for (let {cps, group, subgroup} of UNICODE.read_emoji_test()) {
+	let key = String.fromCodePoint(...cps);
 	let info = valid_emoji.get(key);
 	if (!info) continue;
-	info.group = test.group;
-	info.subgroup = test.subgroup;
+	if (group) info.group = group;
+	if (subgroup) info.subgroup = subgroup; //capitalize(subgroup);
 }
 
 print_section('Add Mapped Characters');

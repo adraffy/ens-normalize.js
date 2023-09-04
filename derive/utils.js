@@ -193,3 +193,7 @@ export function bytes_from_utf8(s) {
 	}
 	return Uint8Array.from(v);
 }
+
+export function capitalize(s) {
+	return s.replaceAll(/(\b|\s)\S/g, x => x.toUpperCase());
+}

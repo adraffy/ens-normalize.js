@@ -80,6 +80,9 @@ h1 .count {
 	font-size: 60%;
 	font-weight: bold;
 }
+h1 .count span {
+	color: #a00;
+}
 #examples {
 	display: flex;
 	flex-wrap: wrap;
@@ -96,10 +99,11 @@ h1 .count {
 #links {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 2px 8px;
+	gap: 4px 8px;
 }
-#options {
+#by {
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	gap: 8px;
 }
@@ -119,21 +123,21 @@ h1 .count {
 	flex-wrap: wrap;
 	align-items: center;
 	justify-content: center;
-	gap: 8px;
+	gap: 6px;
 	margin-bottom: 16px;
+	font-size: 14pt;
 }
 #jumps > * {
 	display: flex;
 	align-items: center;
-	font-size: 16pt;
-	border: 3px solid #aaa;
-	border-radius: 3px;
+	border: 2px solid #aaa;
+	background-color: #fff;
 }
 #jumps a:hover {
 	border-color: #00f;
 }
 #jumps .summary {
-	border: 1px solid #ccc;
+	border: 2px solid #000;
 	border-radius: 0;
 }
 #jumps .summary .count {
@@ -143,7 +147,13 @@ h1 .count {
 	background-color: var(--length-color);
 	font-weight: bold;
 	padding: 2px 8px;
-	border-right: 1px dotted #aaa;
+	border-right: 1px dotted #ccc;
+}
+#jumps .title {
+	background-color: #fff;
+	font-weight: normal;
+	font-size: 75%;
+	padding: 2px 4px;
 }
 #jumps .count {
 	background-color: #cfc;
@@ -206,7 +216,10 @@ h1 .count {
 	align-items: center;
 	padding: 4px 8px;
 	border-radius: 4px;
-	font-size: 24px;
+	font-size: 18pt;
+}
+.heading .title {
+	background-color: #fff;
 }
 .heading .length {
 	font-weight: bold;
@@ -238,7 +251,7 @@ section {
 	background-color: #ddd;
 	border-radius: 4px;
 	padding: 4px 8px;
-	font-size: 20px;
+	font-size: 16pt;
 	text-align: center;
 }
 .emojis {
@@ -246,12 +259,7 @@ section {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 4px;
-	font-size: 20px;
-}
-.title {
-	font-size: 20px;
-	font-weight: bold;
-	flex: 1;
+	font-size: 18pt;
 }
 h2 span {
 	color: #800;
@@ -326,8 +334,10 @@ td.norm span {
 	justify-content: center;
 	white-space: pre;
 }
-.norm {
+.form, .norm {
 	min-width: 32px;
+	max-width: 100px;
+	overflow: hidden;
 	white-space: pre;
 }
 td.info {
@@ -348,12 +358,29 @@ td.info {
 	color: #999;
 	font-size: 90%;
 }
-.type {
+.prop {
 	background: #ddd;
 	color: #666;
 	font-size: 80%;
 	padding: 2px 4px;
 	border-radius: 4px;
+	font: 10px sans-serif;
+}
+.prop.type {  background-color: #cdf; }
+.prop.group { background-color: #fdc; }
+[data-by="version"] .version,
+[data-by="type"] .prop.type,
+[data-by="group"] .prop.group,
+[data-by="subgroup"] .prop.subgroup {
+	display: none;
+}
+[data-by="type"] .title,
+[data-by="subgroup"] .title {
+	font-family: monospace;
+}
+[data-by="type"] #jumps .title,
+[data-by="subgroup"] #jumps.title {
+	font-size: 10pt;
 }
 .cps {
 	display: flex;
@@ -395,7 +422,7 @@ footer span {
 footer span:hover {	
 	color: #000;
 }
-@media only screen and (max-width: 640px) { 
+@media only screen and (max-width: 1000px) { 
 	body {
 		margin: 16px;
 	}
@@ -409,7 +436,15 @@ footer span:hover {
 		font-size: 16pt;
 		border-radius: 0;
 	}
-	.index, .part {
+	.part {
+		display: none;
+	}
+}
+@media only screen and (max-width: 640px) { 	
+	.index, .part, .norm, .resolve {
+		display: none;
+	}
+	thead {
 		display: none;
 	}
 	.cps {
@@ -431,6 +466,7 @@ footer span:hover {
 <div id="links">
 	<a href="./resolver.html"><b>Resolver</b></a>
 	<a href="https://raffy.antistupid.com/eth/ens-emoji-freq.html">Emoji Frequency</a>
+	<a href="../derive/output/emoji-info.json"><code>emoji-info.json</code></a>
 	•
 	<a href="https://www.unicode.org/reports/tr51/"><b>UTS-51</b></a>
 	<a href="https://unicode.org/emoji/charts/full-emoji-list.html">Unicode List</a>
@@ -439,33 +475,37 @@ footer span:hover {
 	<a href="https://unicode.org/emoji/charts/emoji-released.html">Recently Added</a>
 	<a href="https://unicode.org/emoji/charts/emoji-proposals.html">Proposals</a>
 	<a href="https://www.unicode.org/Public/draft/emoji/">Draft</a>
-	•
-	<a href="https://github.com/adraffy/ens-normalize.js/blob/main/derive/output/emoji-info.json"><code>emoji-info.json</code></a>
 </div>
 <div id="examples">
 	<b>People:</b>
-	<button data-query="=\bMan\b">Man</button>
-	<button>Woman</button>
+	<button style="background-color: #dff" data-query="=\bMan\b">Man</button>
+	<button style="background-color: #fdf" >Woman</button>
 	<button data-query="{2642}">♂️</button>
 	<button data-query="{2640}">♀️</button>
 	<button>Family</button>
 	<button>Person</button>
-	<b>Skin:</b>
-	<button data-query="=\b(wo)?man\b,\bperson\b!’,{1F3FB},{1F3FC},{1F3FD},{1F3FE},{1F3FF},^flag">Golden</button>
+	<button data-query="=face!clock">Face</button>
+	<button>Finger</button>
+	<b>Tone:</b>
+	<button style="background-color: #fe3" data-query="=\b(wo)?man\b,\bperson\b!’,[\u{1F3FB}-\u{1F3FF}],^flag:">Golden</button>
+	<button data-query="=[\u{1F3FB}-\u{1F3FF}]">Any</button>
 	<button>&#x1F3FB;</button>
 	<button>&#x1F3FC;</button>
 	<button>&#x1F3FD;</button>
 	<button>&#x1F3FE;</button>
 	<button>&#x1F3FF;</button>
+	<button data-query="Unmod(1)">Unique</button>
 	<b>Hair:</b>
+	<button data-query="=[\u{1F9B0}-\u{1F9B3}]">Any</button>
 	<button>&#x1F9B0;</button>
 	<button>&#x1F9B1;</button>
 	<button>&#x1F9B2;</button>
 	<button>&#x1F9B3;</button>
 	<b>Special:</b>
-	<button data-query="chonk">🐈️</button>
+	<button data-query="=\bcat\b">🐈️</button>
+	<button data-query="=\bdog\b">🐕️</button>
 	<button data-query="heart">❤️</button>
-	<button data-query="Unmod(1)">Toneless</button>
+	<button data-query="{200D}{27A1}">➡️</button>
 	<b>Min Repeated:</b>
 	<button>Singles</button>
 	<button>Doubles</button>
@@ -479,11 +519,15 @@ footer span:hover {
 	<button data-query="ascii" class="raw">ASCII</button>
 	<button class="raw">&#x1F3F4;</button>
 </div>
-<div id="options">
+<div id="by">
 	<b>By:</b>
-	<button id="by_length_btn" data-by="length">Length</button>
-	<button id="by_cost_btn" data-by="cost">Cost</button>
-	<button id="by_cp_btn" data-by="cp">Codepoint</button>
+	<button data-by="length">Length</button>
+	<button data-by="cost">Cost</button>
+	<button data-by="type">Type</button>
+	<button data-by="group">Group</button>
+	<button data-by="subgroup">Subgroup</button>
+	<button data-by="version">Version</button>
+	<button data-by="cp">Codepoint</button>
 	<span class="balloon"></span>
 	<button id="csv_btn" title="Download as CSV">
 		<svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color:var(--geist-foreground);width:24px;height:24px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
@@ -498,7 +542,7 @@ footer span:hover {
 <footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
 <script type="module">
 import {
-	ens_normalize, ens_beautify, ens_tokenize, ens_emoji,
+	ens_normalize, ens_normalize_fragment, ens_beautify, ens_tokenize, ens_emoji,
 	hex_cp, explode_cp, compare_arrays,
 	dom_from_tokens, use_default_style, versions
 } from '../dist/all.min.js';
@@ -506,7 +550,11 @@ use_default_style();
 
 const PER_CHUNK = 128;
 const BY_LENGTH = 'length';
+const BY_TYPE = 'type';
 const BY_COST = 'cost';
+const BY_VERSION = 'version';
+const BY_GROUP = 'group';
+const BY_SUBGROUP = 'subgroup';
 
 const COSTS = [
 	{length: 3, cost: 640},
@@ -526,19 +574,21 @@ const none_div = document.querySelector('#none');
 const top_btn = document.querySelector('#top_btn');
 
 const render_queue = [];
-const shaded = [];
+const shaded = {};
 	
 let jump_to_length;
 let last_hover;
 let search_timer;
 let info_map = new Map();
 let type_map = new Map();
+let emoji_versions = new Set();
 let all_emoji = [];
+let disabled_emoji = [];
 let emoji_count;
 let max_length;
 let by_mode;
 
-document.querySelector('footer').innerHTML += ` — <span>v${versions.version} (${versions.spec_hash.slice(0, 8)})</span>`;
+document.querySelector('footer').innerHTML += ` — <span>v${versions.version}</span>`;
 document.querySelector('footer span').addEventListener('click', () => {
 	window.alert(JSON.stringify(versions, null, ' '));
 });
@@ -546,30 +596,27 @@ document.querySelector('footer span').addEventListener('click', () => {
 top_btn.addEventListener('click', () => window.scrollTo(0, 0));
 
 (async () => {
-
-	let version_set = new Set();
-	let emoji_disabled = [];
-
+	const store_key = 'emoji-info';
 	try {
 		let data;
 		let {built} = versions;
 		try {
-			let cache = JSON.parse(localStorage.getItem('emoji-info'));
+			let cache = JSON.parse(localStorage[store_key]);
 			if (cache.built === built) {
 				data = cache.data;
 			}
-		} catch (err) {			
+		} catch (err) {
 		}
 		if (!data) {
 			let res = await fetch('../derive/output/emoji-info.json');
 			if (!res.ok) throw new Error(`HTTP ${res.statusCode}`);
 			data = await res.json();
-			localStorage.setItem('emoji-info', JSON.stringify({data, built}));
+			localStorage[store_key] = JSON.stringify({data, built});
 		}
 		for (let info of data) {
 			info_map.set(info.form, info);
 			if (info.type === 'Disabled') {
-				emoji_disabled.push(explode_cp(info.form));
+				disabled_emoji.push(explode_cp(info.form));
 			} else {
 				info.short_type = info.type.replaceAll(/_?(emoji|sequence|rgi)_?/ig, '');
 			}
@@ -580,8 +627,10 @@ top_btn.addEventListener('click', () => window.scrollTo(0, 0));
 
 	for (let x of info_map.values()) {
 		type_map.set(x.type.toLowerCase(), x.type);
-		version_set.add(x.version); 
-		let {name, name0} = x;
+		if (x.version !== '0.0') {
+			emoji_versions.add(x.version);
+		} 
+		let {name, name0, group, subgroup} = x;
 		if (name0) {
 			name0 = name0.toLowerCase(); 
 			if (name0 === name) {
@@ -590,21 +639,26 @@ top_btn.addEventListener('click', () => window.scrollTo(0, 0));
 				x.name0 = name0;
 			}
 		}
-		x.query = searchize(name0 ? `${name} ${name0}` : name);
+		let parts = [name];
+		if (name0) parts.push(name0);
+		if (group) parts.push(group);
+		if (subgroup) parts.push(subgroup);
+		x.query = searchize(parts.join(' '));
 	}
+	emoji_versions = [...emoji_versions].sort((a, b) => a - b);
 
 	for (let cps of ens_emoji()) {
 		let rec = make_rec(cps);
 		all_emoji.push(rec);
 	}
 	emoji_count = all_emoji.length;
-	document.querySelector('h1').innerHTML += ` <span class="count">(${emoji_count})</span>`; 
-	for (let cps of emoji_disabled) {
+	document.querySelector('h1').innerHTML += ` <span class="count">(${emoji_count}<span>+${disabled_emoji.length}</span>)</span>`; 
+	for (let cps of disabled_emoji) {
 		all_emoji.push(make_rec(cps));
 	}	
 	max_length = all_emoji.reduce((a, x) => Math.max(a, x.norm_length), 0);
 
-	
+	/*
 	if (type_map.size) {
 		let b = document.createElement('b');
 		b.innerHTML = 'Unicode:';
@@ -615,16 +669,17 @@ top_btn.addEventListener('click', () => window.scrollTo(0, 0));
 		}));
 	}
 
-	if (version_set.size) {
+	if (emoji_versions.length) {
 		let b = document.createElement('b');
 		b.innerHTML = 'Version:';
-		examples_div.append(b, ...[...version_set].sort((a, b) => a - b).map(x => {
+		examples_div.append(b, ...emoji_versions.map(x => {
 			let btn = document.createElement('button');
 			btn.innerHTML = x;
 			btn.dataset.query = `v${x}`;
 			return btn;
 		}));
 	}
+	*/
 
 	let length_set = new Set(all_emoji.map(x => x.norm_length));
 	if (length_set.size) {
@@ -739,6 +794,7 @@ function sync_by_mode() {
 	for (let btn of by_buttons) {
 		btn.classList.toggle('active', by_mode === btn.dataset.by);
 	}
+	main.dataset.by = by_mode;
 }
 
 function make_rec(cps) {
@@ -774,7 +830,7 @@ function process_hash(e) {
 		let params = new URLSearchParams(hash);			
 		search_field.value = params.get('q');
 		by_mode = params.get('by');
-		if (!['cp', BY_COST].includes(by_mode)) {
+		if (!by_buttons.some(x => x.dataset.by === by_mode)) {
 			by_mode = BY_LENGTH;
 		}
 	}
@@ -857,20 +913,21 @@ function update_search() {
 			}
 			results = [...dups.values()].filter(v => v.length <= max).flat();
 		} else if (arg.startsWith('=')) {
-			arg = replace_escapes(arg.slice(1));
+			arg = arg.slice(1);
 			let pos = arg.indexOf('!');
 			let none = [];
 			function split(s) {
-				return s.split(',').map(x => x.trim()).filter(x => x).map(x => {
+				return s.split(',').map(x => x.trim()).filter(x => x).map(raw => {
+					let str = replace_escapes(raw);
 					try {
-						return ens_normalize(x);
+						return ens_normalize_fragment(str);
 					} catch (err) {
 					}
 					try {
-						return new RegExp(x, 'iu');
+						return new RegExp(raw, 'iu');
 					} catch (err)  {
 					}
-					return x;
+					return str;
 				});
 			}
 			if (pos >= 0) {
@@ -880,7 +937,7 @@ function update_search() {
 			let any = split(arg);
 			function check(x, test) {
 				if (test instanceof RegExp) {
-					return test.test(x.form) || x.info && test.test(x.info.query);
+					return test.test(x.form) || (x.info && test.test(x.info.query));
 				} else {
 					return x.norm.includes(test) || (x.info && x.info.query.includes(test));
 				}
@@ -890,7 +947,7 @@ function update_search() {
 			arg = replace_escapes(arg);
 			let norm;
 			try {
-				norm = ens_normalize(arg.trim());
+				norm = ens_normalize_fragment(arg.trim());
 			} catch (err) {			
 			}
 			results = results.filter(x => {
@@ -912,9 +969,9 @@ function create_empty_table() {
 		<tr>
 		<th class="index">#</th>
 		<th class="form" title="Beautified Form">💖️</th>
-		<th class="part" title="Components">🛠️</th>
+		<th class="part" title="Emoji Components">🛠️</th>
 		<th class="norm" title="Normalized Form">✅️</th>
-		<th class="norm" title="Open in Resolver">↩️</th>
+		<th class="resolve" title="Open in Resolver">↩️</th>
 		<th class="info">Name, Version, Codepoints</th>
 		</tr>
 		</thead>
@@ -932,7 +989,24 @@ function create_hex_code(name, cps) {
 	code.innerText = hex;
 	return code;
 }
-
+function create_jump(heading_future, {length, count = 0, disabled = 0, title} = {}) {
+	let a = document.createElement('a');
+	a.append(create_span(count - disabled, 'count'));
+	if (length) {
+		a.append(create_span(`${length}<span class="cp">cp</span>`, 'length'));
+	}
+	if (disabled) {
+		a.append(create_span(disabled, 'disabled'));
+	}
+	if (title) {
+		a.append(create_span(title, 'title'));
+	}
+	a.addEventListener('click', () => heading_future().scrollIntoView());
+	return a;
+}
+function count_disabled(v) {
+	return v.reduce((a, x) => a + +!x.is_emoji, 0);;
+}
 function render() {
 	if (!render_queue.length) return;
 	render_queue.shift()();
@@ -941,15 +1015,15 @@ function render() {
 function setup_render(results) {
 	render_queue.length = 0;
 	main.innerHTML = '';
+	let jumps = [];		
 	if (by_mode === BY_LENGTH) {
-		let jumps_div = document.createElement('div');
-		jumps_div.id = 'jumps';
 		for (let length = 1; length <= max_length; length++) {
-			let match_length = results.filter(x => x.norm_length === length);
-			if (!match_length.length) continue;
-			let disabled = match_length.reduce((a, x) => a + (x.is_emoji?0:1), 0);
+			let matched = results.filter(x => x.norm_length === length);
+			if (!matched.length) continue;
+			let disabled = count_disabled(matched);
 			let heading, section, tbody;
-			let count = match_length.length;
+			let count = matched.length;
+			jumps.push(create_jump(() => heading, {length, count, disabled}));
 			for (let i = 0; i < count; i += PER_CHUNK) {
 				render_queue.push(() => {
 					if (!section) {
@@ -959,37 +1033,80 @@ function setup_render(results) {
 						main.append(heading, section);
 						//top = true;
 					}
-					tbody.append(...match_length.slice(i, i + PER_CHUNK).map((rec, j) => cached_tr(rec, j+i+1)));
+					tbody.append(...matched.slice(i, i + PER_CHUNK).map((rec, j) => cached_tr(rec, j+i+1)));
 				});
 			}
 			if (jump_to_length === length) {
 				render_queue.push(() => heading.scrollIntoView());
 			}
-			let btn = document.createElement('a');
-			btn.innerHTML = `
-				<span class="length">${length}<span class="cp">cp</span></span>
-				<span class="count">${count - disabled}</span>
-			`;
-			if (disabled) {
-				btn.innerHTML += `<span class="disabled">${disabled}</span>`;
-			}
-			btn.addEventListener('click', () => heading.scrollIntoView());
-			jumps_div.append(btn);
 		}
-		if (jumps_div.childElementCount > 1) {
-			let disabled = results.reduce((a, x) => a + (x.is_emoji?0:1), 0);
-			let count = results.length - disabled;
-			let span = document.createElement('span');
-			span.classList.add('summary');
-			span.append(create_count_span(results.length - disabled, emoji_count));
-			if (disabled) {
-				span.innerHTML += `<span class="disabled">${disabled}</span>`;
-			}
-			jumps_div.prepend(span);
-			main.prepend(jumps_div);
+	} else if (by_mode === BY_VERSION) {
+		for (let version of emoji_versions) {
+			let matched = results.filter(x => (x.info && x.info.version) === version);
+			if (!matched.length) continue;
+			let disabled = count_disabled(matched);
+			let count = matched.length;
+			let heading;
+			let title = version ? `v${version}` : 'Unknown';
+			jumps.push(create_jump(() => heading, {count, disabled, title}));
+			render_queue.push(() => {
+				let section = create_empty_table();
+				heading = create_heading({title, section, disabled, count});
+				section.querySelector('tbody').append(...matched.map((rec, i) => cached_tr(rec, i+1)));
+				main.append(heading, section);
+			});
 		}
-
-		
+	} else if (by_mode === BY_TYPE) {
+		let groups = [...type_map.values()].sort();
+		for (let group of groups) {
+			let matched = results.filter(x => (x.info && x.info.type) === group);
+			if (!matched.length) continue;
+			let disabled = count_disabled(matched);
+			let count = matched.length;
+			let heading;
+			let title = group || 'Unknown';
+			jumps.push(create_jump(() => heading, {count, disabled, title}));
+			render_queue.push(() => {
+				let section = create_empty_table();
+				heading = create_heading({title, section, disabled, count});
+				section.querySelector('tbody').append(...matched.map((rec, i) => cached_tr(rec, i+1)));
+				main.append(heading, section);
+			});
+		}
+	} else if (by_mode === BY_GROUP) {
+		let groups = [...new Set(results.map(x => x.info && x.info.group))].sort();
+		for (let group of groups) {
+			let matched = results.filter(x => (x.info && x.info.group) === group);
+			if (!matched.length) continue;
+			let disabled = count_disabled(matched);
+			let count = matched.length;
+			let heading;
+			let title = group || 'Unknown';
+			jumps.push(create_jump(() => heading, {count, disabled, title}));
+			render_queue.push(() => {
+				let section = create_empty_table();
+				heading = create_heading({title, section, disabled, count});
+				section.querySelector('tbody').append(...matched.map((rec, i) => cached_tr(rec, i+1)));
+				main.append(heading, section);
+			});
+		}
+	} else if (by_mode === BY_SUBGROUP) {
+		let groups = [...new Set(results.map(x => x.info && x.info.subgroup))].sort();
+		for (let group of groups) {
+			let matched = results.filter(x => (x.info && x.info.subgroup) === group);
+			if (!matched.length) continue;
+			let disabled = count_disabled(matched);
+			let count = matched.length;
+			let heading;
+			let title = group || 'Unknown';
+			//jumps.push(create_jump(() => heading, {count, disabled, title}));
+			render_queue.push(() => {
+				let section = create_empty_table();
+				heading = create_heading({title, section, disabled, count});
+				section.querySelector('tbody').append(...matched.map((rec, i) => cached_tr(rec, i+1)));
+				main.append(heading, section);
+			});
+		}
 	} else if (by_mode === BY_COST) {
 		for (let {length, cost, length_ge} of COSTS) {
 			let match_length = results.filter(x => x.min_length === length && x.is_emoji);
@@ -1041,6 +1158,20 @@ function setup_render(results) {
 			});
 		}
 	}
+	if (jumps.length > 1) {
+		let jumps_div = document.createElement('div');
+		jumps_div.id = 'jumps';
+		let disabled = results.reduce((a, x) => a + (x.is_emoji?0:1), 0);
+		let count = results.length - disabled;
+		let span = document.createElement('span');
+		span.classList.add('summary');
+		span.append(create_count_span(results.length - disabled, emoji_count));
+		if (disabled) {
+			span.innerHTML += `<span class="disabled">${disabled}</span>`;
+		}
+		jumps_div.append(span, ...jumps);
+		main.append(jumps_div);
+	}
 	none_div.classList.toggle('hide', render_queue.length);
 	jump_to_length = undefined;
 	render();
@@ -1067,6 +1198,13 @@ function get_repeat_word(n) {
 	}
 }
 
+function create_span(html, cls) {
+	let span = document.createElement('span');
+	span.classList.add(cls);
+	span.innerHTML = html;
+	return span;
+}
+
 function create_count_span(i, n) {
 	let span = document.createElement('span');
 	span.classList.add('count');
@@ -1075,44 +1213,36 @@ function create_count_span(i, n) {
 	return span;
 }
 
-function create_heading({section, length, length_ge, cost, count, disabled = 0, shade = true}) {
+function create_heading({title, section, length, length_ge, cost, count, disabled = 0, shade = true}) {
 	let heading = document.createElement('div');
 	heading.classList.add('heading');
-	
 	if (cost) {
-		let span = document.createElement('span');
-		span.classList.add('cost');
-		span.innerHTML = `$${cost}`;
-		heading.append(span);
+		heading.append(create_span(`$${cost}`, 'cost'));
 	}
-
-	if (length) {
+	if (typeof length === 'number') {
 		let span = document.createElement('span');
 		span.classList.add('length');
 		span.innerHTML = `${length}<span class="cp">cp${length_ge?'+':''}</span>`;
 		heading.append(span);
 	}
-
-	if (count) {
+	if (typeof count === 'number') {
 		heading.append(create_count_span(count - disabled, emoji_count));
 	}
-
 	if (disabled) {
-		let span = document.createElement('span');
-		span.classList.add('disabled');
-		span.innerHTML = disabled;
-		heading.append(span);
+		heading.append(create_span(disabled, 'disabled'));
 	}
-
+	if (title) {
+		heading.append(create_span(title, 'title'));
+	}
 	if (section && shade) {
+		const shade_key = title || length;
 		heading.classList.add('shade');
-		heading.classList.toggle('shaded', !!shaded[length]);
+		heading.classList.toggle('shaded', !!shaded[shade_key]);
 		heading.addEventListener('click', () => {
-			let b = shaded[length] = !heading.classList.contains('shaded');
+			let b = shaded[shade_key] = !heading.classList.contains('shaded');
 			heading.classList.toggle('shaded', b);
 		});
 	}
-
 	return heading;
 }
 
@@ -1156,7 +1286,7 @@ function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_e
 
 	let info_div = document.createElement('div');
 	if (info) {
-		let {name, name0, version, short_type} = info;
+		let {name, name0, version, short_type, group, subgroup} = info;
 		let a_name = document.createElement('a');
 		a_name.innerText = name;
 		a_name.href = `https://emojipedia.org/${form}`;
@@ -1169,8 +1299,20 @@ function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_e
 		}
 		if (short_type) {
 			let span = document.createElement('span');
-			span.classList.add('type');
+			span.classList.add('prop', 'type');
 			span.innerText =  short_type;
+			info_div.append(span);
+		}
+		if (group) {
+			let span = document.createElement('span');
+			span.classList.add('prop', 'group');
+			span.innerText =  group;
+			info_div.append(span);
+		}
+		if (subgroup) {
+			let span = document.createElement('span');
+			span.classList.add('prop', 'subgroup');
+			span.innerText = subgroup;
 			info_div.append(span);
 		}
 		if (version) {
