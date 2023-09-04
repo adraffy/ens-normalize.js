@@ -1005,7 +1005,7 @@ Hebrew:
 	<div class="spinner"></div>
 	<div class="balloon"></div>
 	<div class="segmented">
-		<button id="random_emoji_btn" title="Random Emoji&#10;[ALT] Just Singles">🎲</button>
+		<button id="random_emoji_btn" title="Random Emoji&#10;[ALT] Only Use Singles">🎲</button>
 		<button id="find_emoji_btn">Emoji</button>
 	</div>
 	<button id="confused_btn">Confused</button>
@@ -1724,7 +1724,7 @@ function add_detailed(row) {
 
 function add_transformed_row(input) {
 	if (ens_tokenize(input).some(x => x.type === 'nfc' || x.type === 'mapped')) {
-		let row = create_row('Transformed');
+		let row = create_row('Transform');
 		row.classList.add('transform');
 		add_detailed(row);
 		make_exploded(row, input, true);

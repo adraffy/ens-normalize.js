@@ -40,17 +40,11 @@ button:disabled {
 	pointer-events: none;
 }
 button:hover {
+	border-color: #000;
 	background-color: var(--btn-hover-fill-color);
 }
 button:hover:active {
 	background-color: #aaa;
-	/*transform: translate(0px, 1px);*/
-}
-button.active {
-	background-color: #cff;
-	pointer-events: none;
-	border: 3px solid #000;
-	margin: -2px;
 }
 .cp {
 	font-size: 75%;
@@ -106,6 +100,14 @@ h1 .count span {
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 8px;
+	border-top: 2px solid #fff;
+	padding-top: 8px;
+}
+#by button.active {
+	background-color: #cff;
+	pointer-events: none;
+	border: 3px solid #000;
+	margin: -2px;
 }
 #search {
 	display: flex;
@@ -114,7 +116,7 @@ h1 .count span {
 #search input {
 	display: block;
 	padding: 5px;
-	font-size: 16pt;
+	font-size: 20pt;
 	width: 100%;
 	box-sizing: border-box;
 }
@@ -133,6 +135,9 @@ h1 .count span {
 	border: 2px solid #aaa;
 	background-color: #fff;
 }
+#jumps > * > * {	
+	padding: 2px 4px;
+}
 #jumps a:hover {
 	border-color: #00f;
 }
@@ -143,31 +148,23 @@ h1 .count span {
 #jumps .summary .count {
 	background-color: #fff;
 }
-#jumps .length {
-	background-color: var(--length-color);
-	font-weight: bold;
-	padding: 2px 8px;
-	border-right: 1px dotted #ccc;
-}
 #jumps .title {
-	background-color: #fff;
-	font-weight: normal;
-	font-size: 75%;
-	padding: 2px 4px;
+	align-self: stretch;
+	display: flex;
+	align-items: center;
+	font-size: 12pt;
 }
 #jumps .count {
 	background-color: #cfc;
-	padding: 2px 6px;
 }
 #jumps .disabled {
 	background-color: var(--error-bg-color);
-	padding: 2px 4px;
 }
 #top_btn {
 	position: fixed;
 	bottom: 16px;
 	right: 16px;
-	box-shadow: 3px 3px 0 #666;
+	box-shadow: 0 0 5px #0004;
 	transition: .5s ease opacity;
 }
 #hover {
@@ -185,41 +182,50 @@ h1 .count span {
 .heading {
 	display: flex;
 	align-items: center;
-	padding: 8px;
+	padding: 5px;
 	background: #ccc;
 	gap: 8px;
-	border-radius: 4px;
-	align-items: stretch;
 	user-select: none;
+	position: relative;
+	font-size: 16pt;
 }
-.heading.shaded + * + .heading {
-	margin-top: 8px;
+.heading.shade {
+	padding-left: 40px;
+}
+.heading.shaded {
+	margin-bottom: 8px;
 }
 .heading.shaded + * {
 	display: none;
 }
 .heading.shade:hover {
-	background-color: #aaa;
+	outline: 2px solid #aaa;
 	cursor: pointer;
 }
-.heading.shaded {
-	background-color: #ddd;
+.heading.shade::before {
+	position: absolute;
+	left: 10px;
+	transform: rotate(135deg) translateX(-25%);
+	width: 12px;
+	height: 12px;
+	content: ' ';
+	border-top: 4px solid #aaa;
+	border-right: 4px solid #aaa;
+	transition: transform 0.2s ease;
 }
-.heading.shaded > * {
-	opacity: 0.6;
-}
-.heading.shaded .top {
-	opacity: 1;
+.heading.shade.shaded::before {
+	transform: rotate(45deg);
 }
 .heading > span {
 	display: flex;
 	align-items: center;
 	padding: 4px 8px;
 	border-radius: 4px;
-	font-size: 18pt;
 }
 .heading .title {
 	background-color: #fff;
+	border: 1px solid #aaa;
+	margin: -1px;
 }
 .heading .length {
 	font-weight: bold;
@@ -354,21 +360,19 @@ td.info {
 .name0 {
 	color: #666;
 }
-.version {
-	color: #999;
-	font-size: 90%;
-}
-.prop {
-	background: #ddd;
-	color: #666;
+.prop {	
+	color: #555;
 	font-size: 80%;
-	padding: 2px 4px;
+	padding: 3px 4px;
 	border-radius: 4px;
 	font: 10px sans-serif;
 }
-.prop.type {  background-color: #cdf; }
-.prop.group { background-color: #fdc; }
-[data-by="version"] .version,
+button[data-by="version"], [data-by="version"] .title { background-color: #fee; }
+button[data-by="length"], [data-by="length"] .title { background-color: var(--length-color); }
+button[data-by="type"], [data-by="type"] .title, .type {  background-color: #ffe0c0; }
+button[data-by="group"], [data-by="group"] .title, .group { background-color: #ddf; }
+button[data-by="subgroup"], [data-by="subgroup"] .title, .subgroup { background-color: #def; }
+[data-by="version"] .prop.version,
 [data-by="type"] .prop.type,
 [data-by="group"] .prop.group,
 [data-by="subgroup"] .prop.subgroup {
@@ -422,7 +426,7 @@ footer span {
 footer span:hover {	
 	color: #000;
 }
-@media only screen and (max-width: 1000px) { 
+@media only screen and (max-width: 900px) { 
 	body {
 		margin: 16px;
 	}
@@ -434,7 +438,6 @@ footer span:hover {
 	}
 	.heading {
 		font-size: 16pt;
-		border-radius: 0;
 	}
 	.part {
 		display: none;
@@ -477,6 +480,7 @@ footer span:hover {
 	<a href="https://www.unicode.org/Public/draft/emoji/">Draft</a>
 </div>
 <div id="examples">
+	<button style="background-color: #afa" data-query="v15.1">New</button>
 	<b>People:</b>
 	<button style="background-color: #dff" data-query="=\bMan\b">Man</button>
 	<button style="background-color: #fdf" >Woman</button>
@@ -522,11 +526,11 @@ footer span:hover {
 <div id="by">
 	<b>By:</b>
 	<button data-by="length">Length</button>
-	<button data-by="cost">Cost</button>
 	<button data-by="type">Type</button>
 	<button data-by="group">Group</button>
 	<button data-by="subgroup">Subgroup</button>
 	<button data-by="version">Version</button>
+	<button data-by="cost">Cost</button>
 	<button data-by="cp">Codepoint</button>
 	<span class="balloon"></span>
 	<button id="csv_btn" title="Download as CSV">
@@ -535,7 +539,7 @@ footer span:hover {
 	</button>
 </div>
 <div id="search">
-	<input placeholder="Search: Name or {HEX} or v15 or UnicodeProperty">
+	<input placeholder="Name or {HEX} or v15 or UnicodeProperty">
 </div>
 <div id="none" class="hide"><div>⚠️ No emoji found.</div></div>
 <main></main>
@@ -555,6 +559,8 @@ const BY_COST = 'cost';
 const BY_VERSION = 'version';
 const BY_GROUP = 'group';
 const BY_SUBGROUP = 'subgroup';
+
+const TYPE_DISABLED = 'Disabled';
 
 const COSTS = [
 	{length: 3, cost: 640},
@@ -615,7 +621,7 @@ top_btn.addEventListener('click', () => window.scrollTo(0, 0));
 		}
 		for (let info of data) {
 			info_map.set(info.form, info);
-			if (info.type === 'Disabled') {
+			if (info.type === TYPE_DISABLED) {
 				disabled_emoji.push(explode_cp(info.form));
 			} else {
 				info.short_type = info.type.replaceAll(/_?(emoji|sequence|rgi)_?/ig, '');
@@ -989,11 +995,11 @@ function create_hex_code(name, cps) {
 	code.innerText = hex;
 	return code;
 }
-function create_jump(heading_future, {length, count = 0, disabled = 0, title} = {}) {
+function create_jump(heading_future, {count = 0, disabled = 0, title} = {}) {
 	let a = document.createElement('a');
-	a.append(create_span(count - disabled, 'count'));
-	if (length) {
-		a.append(create_span(`${length}<span class="cp">cp</span>`, 'length'));
+	let valid = count - +disabled;
+	if (valid) {
+		a.append(create_span(valid, 'count'));
 	}
 	if (disabled) {
 		a.append(create_span(disabled, 'disabled'));
@@ -1023,7 +1029,7 @@ function setup_render(results) {
 			let disabled = count_disabled(matched);
 			let heading, section, tbody;
 			let count = matched.length;
-			jumps.push(create_jump(() => heading, {length, count, disabled}));
+			jumps.push(create_jump(() => heading, {title: `${length}<span class="cp">cp</span>`, count, disabled}));
 			for (let i = 0; i < count; i += PER_CHUNK) {
 				render_queue.push(() => {
 					if (!section) {
@@ -1047,7 +1053,8 @@ function setup_render(results) {
 			let disabled = count_disabled(matched);
 			let count = matched.length;
 			let heading;
-			let title = version ? `v${version}` : 'Unknown';
+			//let title = version ? `v${version}` : 'Unknown';
+			let title = version || 'Unknown';
 			jumps.push(create_jump(() => heading, {count, disabled, title}));
 			render_queue.push(() => {
 				let section = create_empty_table();
@@ -1057,7 +1064,10 @@ function setup_render(results) {
 			});
 		}
 	} else if (by_mode === BY_TYPE) {
-		let groups = [...type_map.values()].sort();
+		let groups = new Set(type_map.values());
+		groups.delete(TYPE_DISABLED);
+		groups = Array.from(groups).sort();
+		groups.push(TYPE_DISABLED);
 		for (let group of groups) {
 			let matched = results.filter(x => (x.info && x.info.type) === group);
 			if (!matched.length) continue;
@@ -1204,29 +1214,29 @@ function create_span(html, cls) {
 	span.innerHTML = html;
 	return span;
 }
-
 function create_count_span(i, n) {
-	let span = document.createElement('span');
-	span.classList.add('count');
-	span.innerHTML = `<b>${i}</b>`;
-	if (i) span.innerHTML += ` (${fmt_perc(i / n)})`;
+	// let span = document.createElement('span');
+	// span.classList.add('count');
+	// span.innerHTML = `<b>${i}</b>`;
+	let span = create_span(i, 'count');
+	if (i) span.append(` (${fmt_perc(i / n)})`);
 	return span;
 }
-
 function create_heading({title, section, length, length_ge, cost, count, disabled = 0, shade = true}) {
 	let heading = document.createElement('div');
 	heading.classList.add('heading');
 	if (cost) {
 		heading.append(create_span(`$${cost}`, 'cost'));
 	}
-	if (typeof length === 'number') {
+	if (length) {
 		let span = document.createElement('span');
 		span.classList.add('length');
 		span.innerHTML = `${length}<span class="cp">cp${length_ge?'+':''}</span>`;
 		heading.append(span);
 	}
-	if (typeof count === 'number') {
-		heading.append(create_count_span(count - disabled, emoji_count));
+	let valid = count - +disabled;
+	if (valid) {
+		heading.append(create_count_span(valid, emoji_count));
 	}
 	if (disabled) {
 		heading.append(create_span(disabled, 'disabled'));
@@ -1235,15 +1245,25 @@ function create_heading({title, section, length, length_ge, cost, count, disable
 		heading.append(create_span(title, 'title'));
 	}
 	if (section && shade) {
-		const shade_key = title || length;
+		heading.dataset.shade = title || cost || length;
 		heading.classList.add('shade');
-		heading.classList.toggle('shaded', !!shaded[shade_key]);
-		heading.addEventListener('click', () => {
-			let b = shaded[shade_key] = !heading.classList.contains('shaded');
-			heading.classList.toggle('shaded', b);
+		if (shaded[heading.dataset.shade]) {
+			heading.classList.add('shaded');
+		}
+		heading.addEventListener('click', e => {
+			let b = !heading.classList.contains('shaded');
+			if (e.altKey) {
+				document.querySelectorAll('.shade').forEach(x => toggle_shade(x, b));
+			} else {
+				toggle_shade(heading, b);
+			}
 		});
 	}
 	return heading;
+}
+function toggle_shade(heading, b) {
+	shaded[heading.dataset.shade] = b;
+	heading.classList.toggle('shaded', b);
 }
 
 function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_emoji, is_norm}) {
@@ -1317,7 +1337,7 @@ function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_e
 		}
 		if (version) {
 			let span = document.createElement('span');
-			span.classList.add('version');
+			span.classList.add('prop', 'version');
 			span.innerText = `v${version}`;
 			info_div.append(span);
 		}

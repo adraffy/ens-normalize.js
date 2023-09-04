@@ -229,7 +229,7 @@ function read_trie(next) {
 	}
 }
 
-// created 2023-09-04T04:56:31.178Z
+// created 2023-09-04T18:53:20.738Z
 // compressed base64-encoded blob for include-ens data
 // source: https://github.com/adraffy/ens-normalize.js/blob/main/src/make.js
 // see: https://github.com/adraffy/ens-normalize.js#security
@@ -318,7 +318,7 @@ function run_tests(fn, tests) {
 	return errors;
 }
 
-// created 2023-09-04T04:56:31.178Z
+// created 2023-09-04T18:53:20.738Z
 // compressed base64-encoded blob for include-nf data
 // source: https://github.com/adraffy/ens-normalize.js/blob/main/src/make.js
 // see: https://github.com/adraffy/ens-normalize.js#security
@@ -1530,7 +1530,7 @@ const cldr = "43.1 (2023-09-03T21:58:22.687Z)";
 const base64_ens_hash = "0565ed049b9cf1614bb9e11ba7d8ac6a6fb96c893253d890f7e2b2884b9ded32";
 const base64_nf_hash = "a974b6f8541fc29d919bc85118af0a44015851fab5343f8679cb31be2bdb209e";
 const spec_hash = "2c382c18764d70150cfd6c6859157ade29a0127917ecbea4c9c624ebe9392857";
-const built = "2023-09-04T04:56:31.178Z";
+const built = "2023-09-04T18:53:20.738Z";
 const version = "1.10.0";
 
 var includeVersions = /*#__PURE__*/Object.freeze({

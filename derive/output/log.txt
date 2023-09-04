@@ -1,4 +1,4 @@
-Build Date: 2023-09-04T04:56:26.888Z
+Build Date: 2023-09-04T18:53:16.443Z
 Unicode Version: 15.1.0 (2023-09-03T21:35:33.527Z)
 CLDR Version: 43.1 (2023-09-03T21:58:22.687Z)
 ==== RGI Emoji ZWJ Sequences ====
@@ -14875,6 +14875,6 @@ Per Group Max: 61
 Unchanged: spec.json
 Unchanged: nf.json
 Unchanged: nf-tests.json
-Wrote: emoji-info.json [563530]
+Unchanged: emoji-info.json
 Unchanged: names.json
 Unchanged: confused.json

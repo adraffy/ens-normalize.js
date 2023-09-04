@@ -146,6 +146,7 @@ export class UnicodeSpec {
 		// cache some stuff
 		this.char_map = new Map(this.read_ucd().map(x => [x.cp, x]));
 		this.cm = new Set([...this.char_map.values()].filter(x => x.is_cm).map(x => x.cp)); 
+		this.nsm = new Set([...this.char_map.values()].filter(x => x.is_nsm).map(x => x.cp));
 		// add all single char CLDR short names
 		// since they are lost due to the stupid A..B syntax
 		// emoji sequences already have proper names

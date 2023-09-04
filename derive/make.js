@@ -15,8 +15,7 @@ import {CM_WHITELIST} from './rules/cm.js';
 import {NSM_MAX, SCRIPT_GROUPS, RESTRICTED_SCRIPTS, SCRIPT_EXTENSIONS, DISALLOWED_SCRIPTS} from './rules/scripts.js';
 
 const CM = UNICODE.cm;
-// TODO: maybe this should be part of UnicodeSpec
-const NSM = new Set([...UNICODE.char_map.values()].filter(x => x.is_nsm).map(x => x.cp));
+const NSM = UNICODE.nsm;
 
 const STOP = 0x2E; // label separator
 const FE0F = 0xFE0F; // emoji style
@@ -52,6 +51,7 @@ let ignored = new Set(IDNA.ignored);
 let valid = new Set(IDNA.valid);
 let mapped = new Map(IDNA.mapped);
 let valid_emoji = new Map();
+let disabled_emoji = new Map();
 
 // this should be safe by construction
 // a character should only be in one of the sets
@@ -87,6 +87,12 @@ function register_emoji(info) {
 	}
 }
 
+function disable_emoji(info) {
+	if (!info.cps) info.cps = [info.cp];  // make every disabled emoji a solo-sequence 
+	info.type = 'Disabled';
+	disabled_emoji.set(String.fromCodePoint(...info.cps), info);
+}	
+
 let emoji_zwjs = UNICODE.read_emoji_zwjs();
 print_section('RGI Emoji ZWJ Sequences');
 emoji_zwjs.RGI_Emoji_ZWJ_Sequence.forEach(register_emoji);
@@ -105,9 +111,8 @@ emoji_seqs.RGI_Emoji_Modifier_Sequence.forEach(register_emoji);
 print_section('RGI Emoji Flag Sequences');
 emoji_seqs.RGI_Emoji_Flag_Sequence.forEach(register_emoji);
 
-let emoji_disabled = [];
-let emoji_chrs = UNICODE.read_emoji_data();
-let emoji_map = new Map(emoji_chrs.Emoji.map(x => [x.cp, x]));
+let emoji_data = UNICODE.read_emoji_data();
+let emoji_map = new Map(emoji_data.Emoji.map(x => [x.cp, x]));
 
 print_section(`Demote Emoji to Characters`);
 for (let cp of EMOJI_DEMOTED) {
@@ -115,8 +120,8 @@ for (let cp of EMOJI_DEMOTED) {
 	if (!info) throw new Error(`Expected emoji: ${PRINTER.desc_for_cp(cp)}`);
 	if (info.used) throw new Error(`Duplicate: ${PRINTER.desc_for_cp(cp)}`);
 	info.used = true;
-	emoji_disabled.push(info);
 	console.log(`Demoted Emoji: ${PRINTER.desc_for_emoji(info)}`);
+	disable_emoji(info);
 }
 
 print_section(`Disable Emoji (and Characters)`);
@@ -125,8 +130,8 @@ for (let cp of EMOJI_DISABLED) {
 	if (!info) throw new Error(`Expected emoji: ${PRINTER.desc_for_cp(cp)}`);
 	if (info.used) throw new Error(`Duplicate: ${PRINTER.desc_for_cp(cp)}`);
 	info.used = true;
-	emoji_disabled.push(info);
 	disallow_char(cp);
+	disable_emoji(info);
 }
 
 print_section('Remove Emoji from Characters');
@@ -148,7 +153,7 @@ for (let seq of emoji_seqs.Basic_Emoji) {
 }
 
 print_section('Register Default Emoji-Presentation Emoji');
-for (let seq of emoji_chrs.Emoji_Presentation) {
+for (let seq of emoji_data.Emoji_Presentation) {
 	let info = emoji_map.get(seq.cp);
 	if (!info) throw new Error(`Expected emoji: ${PRINTER.desc_for_emoji(seq)}`);	
 	if (info.used) continue;
@@ -175,8 +180,8 @@ for (let def of EMOJI_SEQ_BLACKLIST) {
 	let info = valid_emoji.get(key);
 	if (!info) throw new Error(`Expected emoji sequence: ${PRINTER.desc_for_cps(cps)}`);
 	console.log(`Unregistered Emoji: ${PRINTER.desc_for_emoji(info)}`);
-	emoji_disabled.push(info);
 	valid_emoji.delete(key);
+	disable_emoji(info);
 }
 
 // 20230903: added, is there a better official source for this stuff?
@@ -184,7 +189,7 @@ for (let def of EMOJI_SEQ_BLACKLIST) {
 print_section('Assign Emoji Groups');
 for (let {cps, group, subgroup} of UNICODE.read_emoji_test()) {
 	let key = String.fromCodePoint(...cps);
-	let info = valid_emoji.get(key);
+	let info = valid_emoji.get(key) || disabled_emoji.get(key);
 	if (!info) continue;
 	if (group) info.group = group;
 	if (subgroup) info.subgroup = subgroup; //capitalize(subgroup);
@@ -932,11 +937,7 @@ write_json('nf-tests.json', UNICODE.read_nf_tests());
 // the remaining files are not critical
 
 // for emoji.html
-for (let info of emoji_disabled) { // make every disabled emoji a solo-sequence 
-	if (!info.cps) info.cps = [info.cp];
-	info.type = 'Disabled';
-}
-write_json('emoji-info.json', [...valid_emoji.values(), ...emoji_disabled].map(info => {
+write_json('emoji-info.json', [...valid_emoji.values(), ...disabled_emoji.values()].map(info => {
 	let {cp, same, cps, ...rest} = info;
 	return {form: String.fromCodePoint(...cps), ...rest};
 }));
