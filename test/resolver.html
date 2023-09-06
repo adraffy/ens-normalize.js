@@ -58,15 +58,12 @@ body {
 }
 header {
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: space-between;
+	gap: 4px 8px;
 }
 h1 {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: end;
 	margin: 0;
-	gap: 4px 8px;
-	white-space: pre;
 }
 #provider {
 	font-size: 11pt;
@@ -76,6 +73,7 @@ h1 {
 	flex-direction: column;
 	flex-wrap: wrap;
 	align-items: start;
+	align-self: end;
 }
 #provider button {
 	margin-left: 5px;
@@ -92,6 +90,17 @@ h1 {
 #provider a {
 	font-weight: bold;
 }
+#github {
+	flex: 1;
+	text-align: right;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	order: 2;
+}
+#github a {	
+	white-space: pre;
+}
 body.testnet {
 	background: #fef;
 }
@@ -102,14 +111,6 @@ body.testnet #provider a {
 	padding: 2px 4px;
 	margin: -2px 0;
 	text-decoration: none;
-}
-#github {
-	text-align: right;
-	box-sizing: border-box;
-	width: min-content;
-}
-#github a {	
-	white-space: pre;
 }
 .spinner {
 	width: 32px;
@@ -675,13 +676,15 @@ footer span:hover {
 		margin: 16px;
 		margin-bottom: 0;
 	}
-	#input input {
-		font-size: 20pt;
-	}
 	#provider {
+		order: 3;
 		flex-direction: row;
 		align-items: center;
 		gap: 4px;
+		width: 100%;
+	}
+	#input input {
+		font-size: 20pt;
 	}
 	#input, #actions, #options, #examples {
 		margin: 0 16px;
@@ -720,13 +723,21 @@ footer span:hover {
 		padding: 4px;
 	}
 }
+@media only screen and (max-width: 400px) { 
+	h1 a {
+		display: none;
+	}
+}
 </style>
 </head>
 <body>
 <header>
-<h1><div><a href="https://ens.domains/">ENS</a> Resolver</div><div id="provider"></div></h1>
-<div id="github"><a href="https://github.com/adraffy/ens-normalize.js">adraffy/ens-normalize.js</a><br>
-<a href="https://github.com/adraffy/ensip-15/blob/master/ens-improvement-proposals/ensip-15-normalization-standard.md">ENSIP-15</a></div>
+	<h1><a href="https://ens.domains/">ENS</a> Resolver</h1>
+	<div id="provider"></div>
+	<div id="github">
+		<a href="https://github.com/adraffy/ens-normalize.js">adraffy/ens-normalize.js</a>
+		<a href="https://github.com/adraffy/ensip-15/blob/master/ens-improvement-proposals/ensip-15-normalization-standard.md">ENSIP-15</a>
+	</div>
 </header>
 <div id="examples" class="hide">
 <button>vitalik.eth</button>
@@ -1020,7 +1031,7 @@ Hebrew:
 <div id="output">
 <ul class="row readme">
 <li>Click an <button data-name="👁️‍🗨️A{303}">Example</button> to see how it works.</li>
-<li>Use <code>{FF}</code>, <code>[255]</code>, <code>\uFF</code>, <code>\u{FF}</code>, <code>&amp;#xFF;</code>, <code>&amp;#255;</code>, or <code>&amp;abc;</code> to manually include codepoints <button data-raw data-name="{200D}a[8205]b\u200D.eth">ZWJ</button></li>
+<li>Use <code>{FF}</code>, <code>[255]</code>, <code>\uFFFF</code>, <code>\u{FF}</code>, <code>&amp;#xFF;</code>, <code>&amp;#255;</code>, or <code>&amp;abc;</code> to manually include codepoints <button data-raw data-name="{200D}a[8205]b\u200D.eth">ZWJ</button></li>
 <li><code>token:__</code> lookup the <a href="../../keccak.js/test/demo.html#algo=keccak-256&s=raffy&escape=1&encoding=utf8">labelhash</a> (if known) <button data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209" data-delay="1000">raffy.eth</button></li>
 <li><code>wrapped:__</code> lookup the <a href="../../keccak.js/test/demo.html#algo=namehash&s=firstwrappedname.eth&escape=1&encoding=utf8">namehash</a> (if wrapped) <button data-name="wrapped:0xc44eec7fb870ae46d4ef4392d33fbbbdc164e7817a86289a1fe30e5f4d98ae85" data-delay="1000">firstwrappedname.eth</button></li>
 <li><code>HEX<sub>1</sub> HEX<sub>2</sub></code> is shorthand for <code>{HEX<sub>1</sub>}{HEX<sub>2</sub>}</code> <button data-name="65 74 68" data-meta data-delay="1000">eth</button></li>
@@ -2612,7 +2623,7 @@ function resolve() {
 	}
 	let match;
 	// replace token:XXX with ens subgraph label (or fail)
-	if (match = input.match(/^token:(0x[a-f0-9]+|[0-9]+)$/i)) {
+	if (match = input.match(/^(?:labelhash|token):(0x[a-f0-9]+|[0-9]+)$/i)) {
 		let hash = ethers.BigNumber.from(match[1]).toHexString();
 		resolve_btn.disabled = true;
 		return (async() => {
@@ -2626,10 +2637,10 @@ function resolve() {
 				});
 				if (!res.ok) throw new Error(`HTTP Error ${r.status}`);
 				let {data: {domains}} = await res.json();
-				if (domains.length == 0) throw new Error(`Unknown Preimage: ${hash}`);
+				if (domains.length == 0) throw new Error(`Unknown labelhash preimage: ${hash}`);
 				let label = domains[0].labelName;
 				let hash0 = labelhash(label);
-				if (hash0 !== hash) throw new Error(`Incorrect Preimage: labelhash("${label}")\n\nExpected: ${hash}\nComputed: ${hash}`);
+				if (hash0 !== hash) throw new Error(`Incorrect labelhash preimage: "${label}")\n\nExpected: ${hash}\nComputed: ${hash}`);
 				input_field.value = `${label}.eth`;
 				setTimeout(resolve, 0);
 			} catch (err) {
@@ -2638,13 +2649,14 @@ function resolve() {
 			}
 			resolve_btn.disabled = false;
 		})();
-	} else if (match = input.match(/^wrapped:(0x[a-f0-9]+|[0-9]+)$/i)) {
+	} else if (match = input.match(/^(?:namehash|wrapped):(0x[a-f0-9]+|[0-9]+)$/i)) {
 		resolve_btn.disabled = true;
 		return (async () => {
 			try {
 				await ensure_wrapper();
-				let bytes = ethers.utils.arrayify(await wrapper_contract.callStatic.names(ethers.BigNumber.from(match[1])));
-				if (!bytes.length) throw new Error('Unknown namehash');
+				let hash = ethers.utils.hexZeroPad(ethers.BigNumber.from(match[1]).toHexString(), 32);
+				let bytes = ethers.utils.arrayify(await wrapper_contract.callStatic.names(hash));
+				if (!bytes.length) throw new Error(`Unknown namehash preimage: ${hash}`);
 				input_field.value = name_from_wrapper_bytes(bytes);
 				resolve_btn.disabled = false;
 				setTimeout(resolve, 0);

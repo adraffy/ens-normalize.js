@@ -11,9 +11,9 @@
 * ✅️ Passes **100%** [ENSIP-15 Validation Tests](https://adraffy.github.io/ens-normalize.js/test/validate.html)
 * ✅️ Passes **100%** [Unicode Normalization Tests](https://adraffy.github.io/ens-normalize.js/test/report-nf.html)
 * Minified File Sizes: 
-	* [`27KB`](./dist/index-xnf.min.js) — native `NFC` via [nf-native.js](./src/nf-native.js) using `String.normalize()` ⚠️
-	* [`36KB` **Default**](./dist/index.min.js) — custom `NFC` via [nf.js](./src/nf.js)
-	* [`42KB`](./dist/all.min.js) *Everything!* — custom `NFC` + sub-libraries: [parts.js](./src/parts.js), [utils.js](./src/utils.js)
+	* [`28KB`](./dist/index-xnf.min.js) — native `NFC` via [nf-native.js](./src/nf-native.js) using `String.normalize()` ⚠️
+	* [`37KB` **Default**](./dist/index.min.js) — custom `NFC` via [nf.js](./src/nf.js)
+	* [`43KB`](./dist/all.min.js) *Everything!* — custom `NFC` + sub-libraries: [parts.js](./src/parts.js), [utils.js](./src/utils.js)
 * Included Apps:
 	* [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html) ⭐
 	* [Character Viewer](https://adraffy.github.io/ens-normalize.js/test/chars.html)
@@ -140,7 +140,7 @@ let labels = ens_split('💩Raffy.eth_');
 Generate a sorted array of supported emoji codepoints:
 ```Javascript
 // () -> number[][]
-console.log(ens_emoji());
+let emojis = ens_emoji();
 // [
 //     [ 2764 ],
 //     [ 128169, 65039 ],
@@ -152,13 +152,13 @@ console.log(ens_emoji());
 Determine if a character shouldn't be printed directly:
 ```Javascript
 // number -> bool
-console.log(should_escape(0x202E)); // eg. RIGHT-TO-LEFT OVERRIDE => true
+should_escape(0x202E); // eg. RIGHT-TO-LEFT OVERRIDE => true
 ```
 
 Determine if a character is a combining mark:
 ```Javascript
 // number -> bool
-console.log(is_combining_mark(0x20E3)); // eg. COMBINING ENCLOSING KEYCAP => true
+is_combining_mark(0x20E3); // eg. COMBINING ENCLOSING KEYCAP => true
 ```
 
 ## Build

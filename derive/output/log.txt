@@ -1,5 +1,5 @@
-Build Date: 2023-09-04T18:53:16.443Z
-Unicode Version: 15.1.0 (2023-09-03T21:35:33.527Z)
+Build Date: 2023-09-06T06:07:30.043Z
+Unicode Version: 15.1.0 (2023-09-06T02:58:19.261Z)
 CLDR Version: 43.1 (2023-09-03T21:58:22.687Z)
 ==== RGI Emoji ZWJ Sequences ====
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man

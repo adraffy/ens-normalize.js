@@ -75,10 +75,8 @@ function register_emoji(info) {
 		if (!info.type) throw new Error('expected type');
 		let key = String.fromCodePoint(...cps);
 		let old = valid_emoji.get(key);
-		if (old) {
-			console.log(old);
-			throw new Error(`duplicate`);
-		}
+		if (old) throw new Error(`duplicate: ${key}`);
+		if (disabled_emoji.has(key)) throw new Error(`disabled: ${key}`);
 		console.log(`Register Emoji [${info.type}]: ${PRINTER.desc_for_emoji(info)}`);
 		valid_emoji.set(key, info);
 	} catch (err) {
@@ -87,7 +85,7 @@ function register_emoji(info) {
 	}
 }
 
-function disable_emoji(info) {
+function mark_emoji_as_disabled(info) {
 	if (!info.cps) info.cps = [info.cp];  // make every disabled emoji a solo-sequence 
 	info.type = 'Disabled';
 	disabled_emoji.set(String.fromCodePoint(...info.cps), info);
@@ -121,7 +119,7 @@ for (let cp of EMOJI_DEMOTED) {
 	if (info.used) throw new Error(`Duplicate: ${PRINTER.desc_for_cp(cp)}`);
 	info.used = true;
 	console.log(`Demoted Emoji: ${PRINTER.desc_for_emoji(info)}`);
-	disable_emoji(info);
+	mark_emoji_as_disabled(info);
 }
 
 print_section(`Disable Emoji (and Characters)`);
@@ -131,7 +129,7 @@ for (let cp of EMOJI_DISABLED) {
 	if (info.used) throw new Error(`Duplicate: ${PRINTER.desc_for_cp(cp)}`);
 	info.used = true;
 	disallow_char(cp);
-	disable_emoji(info);
+	mark_emoji_as_disabled(info);
 }
 
 print_section('Remove Emoji from Characters');
@@ -181,7 +179,7 @@ for (let def of EMOJI_SEQ_BLACKLIST) {
 	if (!info) throw new Error(`Expected emoji sequence: ${PRINTER.desc_for_cps(cps)}`);
 	console.log(`Unregistered Emoji: ${PRINTER.desc_for_emoji(info)}`);
 	valid_emoji.delete(key);
-	disable_emoji(info);
+	mark_emoji_as_disabled(info);
 }
 
 // 20230903: added, is there a better official source for this stuff?

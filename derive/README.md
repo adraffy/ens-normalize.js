@@ -21,10 +21,10 @@
 * [Unicode data files](https://www.unicode.org/Public/)
 	* Download Latest: `node download.js` 
 	* To download older versions: `node download.js 12.1.0` 
-	* Already included: [Unicode 11-15](./data/)
+	* Already included: [Unicode 11-15.1](./data/)
 * [CLDR data files](https://github.com/unicode-org/cldr)
-	* Download Latest: `node parse-cldr.js` 
-	* Already included: [CLDR 42](./data/CLDR-42/)
+	* Download Latest: `node download-cldr.js` 
+	* Already included: [CLDR 43.1](./data/CLDR-43.1/)
 	* Warning: these aren't versioned with Unicode!
 
 ## Instructions

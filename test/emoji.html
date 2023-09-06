@@ -166,6 +166,7 @@ h1 .count span {
 	right: 16px;
 	box-shadow: 0 0 5px #0004;
 	transition: .5s ease opacity;
+	z-index: 1;
 }
 #hover {
 	position: absolute;
@@ -323,14 +324,10 @@ td.norm {
 	font-size: 200%;
 }
 td.norm.same {
-	opacity: 30%;
+	opacity: .2;
 }
 td.norm.text {
 	color: #666;
-}
-td.norm span {
-	opacity: 15%;
-	user-select: none;
 }
 .form a {
 	text-decoration: none;
@@ -362,20 +359,20 @@ td.info {
 }
 .prop {	
 	color: #555;
-	font-size: 80%;
 	padding: 3px 4px;
 	border-radius: 4px;
 	font: 10px sans-serif;
+	text-decoration: none;
 }
-button[data-by="version"], [data-by="version"] .title { background-color: #fee; }
 button[data-by="length"], [data-by="length"] .title { background-color: var(--length-color); }
 button[data-by="type"], [data-by="type"] .title, .type {  background-color: #ffe0c0; }
 button[data-by="group"], [data-by="group"] .title, .group { background-color: #ddf; }
 button[data-by="subgroup"], [data-by="subgroup"] .title, .subgroup { background-color: #def; }
-[data-by="version"] .prop.version,
+button[data-by="version"], [data-by="version"] .title, .version { background-color: #f0fff0; }
 [data-by="type"] .prop.type,
 [data-by="group"] .prop.group,
-[data-by="subgroup"] .prop.subgroup {
+[data-by="subgroup"] .prop.subgroup,
+[data-by="version"] .prop.version {
 	display: none;
 }
 [data-by="type"] .title,
@@ -480,7 +477,8 @@ footer span:hover {
 	<a href="https://www.unicode.org/Public/draft/emoji/">Draft</a>
 </div>
 <div id="examples">
-	<button style="background-color: #afa" data-query="v15.1">New</button>
+	<button style="background-color: #afa" data-query="v15.1">⭐️ New in 15.1</button>
+	<button style="background-color: #faa" data-query="Disabled">Disabled</button>
 	<b>People:</b>
 	<button style="background-color: #dff" data-query="=\bMan\b">Man</button>
 	<button style="background-color: #fdf" >Woman</button>
@@ -491,7 +489,7 @@ footer span:hover {
 	<button data-query="=face!clock">Face</button>
 	<button>Finger</button>
 	<b>Tone:</b>
-	<button style="background-color: #fe3" data-query="=\b(wo)?man\b,\bperson\b!’,[\u{1F3FB}-\u{1F3FF}],^flag:">Golden</button>
+	<button style="background-color: #fe8" data-query="=\b(wo)?man\b,\bperson\b!’,[\u{1F3FB}-\u{1F3FF}],^flag:">Golden</button>
 	<button data-query="=[\u{1F3FB}-\u{1F3FF}]">Any</button>
 	<button>&#x1F3FB;</button>
 	<button>&#x1F3FC;</button>
@@ -539,7 +537,7 @@ footer span:hover {
 	</button>
 </div>
 <div id="search">
-	<input placeholder="Name or {HEX} or v15 or UnicodeProperty">
+	<input placeholder="Name or {HEX} or v15 or UnicodeProperty ">
 </div>
 <div id="none" class="hide"><div>⚠️ No emoji found.</div></div>
 <main></main>
@@ -636,7 +634,7 @@ top_btn.addEventListener('click', () => window.scrollTo(0, 0));
 		if (x.version !== '0.0') {
 			emoji_versions.add(x.version);
 		} 
-		let {name, name0, group, subgroup} = x;
+		let {name, name0} = x;
 		if (name0) {
 			name0 = name0.toLowerCase(); 
 			if (name0 === name) {
@@ -647,8 +645,9 @@ top_btn.addEventListener('click', () => window.scrollTo(0, 0));
 		}
 		let parts = [name];
 		if (name0) parts.push(name0);
-		if (group) parts.push(group);
-		if (subgroup) parts.push(subgroup);
+		if (x.type) parts.push(x.type);
+		if (x.group) parts.push(x.group);
+		if (x.subgroup) parts.push(x.subgroup);
 		x.query = searchize(parts.join(' '));
 	}
 	emoji_versions = [...emoji_versions].sort((a, b) => a - b);
@@ -842,6 +841,16 @@ function process_hash(e) {
 	}
 	sync_by_mode();
 	update_search();
+}
+function hash_for_query(s) {
+	let params = new URLSearchParams();
+	if (by_mode !== BY_LENGTH) {
+		params.set('by', by_mode);
+	}
+	if (s) {
+		params.set('q', s);
+	}
+	return '#' + params;
 }
 
 function search_soon() {
@@ -1196,7 +1205,14 @@ function cached_tr(rec, first) {
 }
 
 function fmt_perc(p) {
-	return (100 * p).toFixed(p < 0.1 ? 2 : 1).replace(/\.?0+$/, '') + '%';
+	return trim_trailing_decimal_zeros((100 * p).toFixed(p < 0.1 ? p < 0.01 ? 2 : 1 : 0)) + '%';
+}
+function trim_trailing_decimal_zeros(s) {
+	if (s.includes('.')) {
+		s = s.replace(/0+$/, '');
+		if (s.endsWith('.')) s = s.slice(0, -1);
+	}
+	return s;
 }
 
 function get_repeat_word(n) {
@@ -1318,28 +1334,32 @@ function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_e
 			info_div.append(span);
 		}
 		if (short_type) {
-			let span = document.createElement('span');
-			span.classList.add('prop', 'type');
-			span.innerText =  short_type;
-			info_div.append(span);
+			let a = document.createElement('a');
+			a.classList.add('prop', 'type');
+			a.innerText = short_type;
+			a.href = hash_for_query(info.type);
+			info_div.append(a);
 		}
 		if (group) {
-			let span = document.createElement('span');
-			span.classList.add('prop', 'group');
-			span.innerText =  group;
-			info_div.append(span);
+			let a = document.createElement('a');
+			a.classList.add('prop', 'group');
+			a.innerText =  group;
+			a.href = hash_for_query(group);
+			info_div.append(a);
 		}
 		if (subgroup) {
-			let span = document.createElement('span');
-			span.classList.add('prop', 'subgroup');
-			span.innerText = subgroup;
-			info_div.append(span);
+			let a = document.createElement('a');
+			a.classList.add('prop', 'subgroup');
+			a.innerText = subgroup;
+			a.href = hash_for_query(subgroup);
+			info_div.append(a);
 		}
 		if (version) {
-			let span = document.createElement('span');
-			span.classList.add('prop', 'version');
-			span.innerText = `v${version}`;
-			info_div.append(span);
+			let a = document.createElement('a');
+			a.classList.add('prop', 'version');
+			a.innerText = `v${version}`;
+			a.href = hash_for_query(`v${version}`);
+			info_div.append(a);
 		}
 	}	
 

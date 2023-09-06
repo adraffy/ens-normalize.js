@@ -1,6 +1,5 @@
-//console.time('init');
-import r, {FENCED, NSM_MAX} from './include-ens.js';
-import {read_sorted, read_sorted_arrays, read_mapped, read_trie, read_array_while} from './decoder.js';
+import COMPRESSED, {FENCED, NSM_MAX} from './include-ens.js';
+import {read_compressed_payload, read_set, read_sorted, read_sorted_arrays, read_mapped, read_trie, read_array_while} from './decoder.js';
 import {explode_cp, str_from_cps, quote_cp, compare_arrays} from './utils.js';
 import {nfc, nfd} from './nf.js';
 //import {nfc, nfd} from './nf-native.js'; // replaced by rollup
@@ -12,173 +11,165 @@ const STOP_CH = '.';
 const UNIQUE_PH = 1;
 const HYPHEN = 0x2D;
 
-function read_set() {
-	return new Set(read_sorted(r));
-}
-const MAPPED = new Map(read_mapped(r)); 
-const IGNORED = read_set(); // ignored characters are not valid, so just read raw codepoints
-/*
-// direct include from payload is smaller that the decompression code
-const FENCED = new Map(read_array_while(() => {
-	let cp = r();
-	if (cp) return [cp, read_str(r())];
-}));
-*/
-// 20230217: we still need all CM for proper error formatting
-// but norm only needs NSM subset that are potentially-valid
-const CM = read_set();
-const NSM = new Set(read_sorted(r).map(function(i) { return this[i]; }, [...CM]));
-/*
-const CM_SORTED = read_sorted(r);
-const NSM = new Set(read_sorted(r).map(i => CM_SORTED[i]));
-const CM = new Set(CM_SORTED);
-*/
-const ESCAPE = read_set(); // characters that should not be printed
-const NFC_CHECK = read_set();
-const CHUNKS = read_sorted_arrays(r);
-function read_chunked() {
-	// deduplicated sets + uniques
-	return new Set([read_sorted(r).map(i => CHUNKS[i]), read_sorted(r)].flat(2));
-}
-const UNRESTRICTED = r();
-const GROUPS = read_array_while(i => {
-	// minifier property mangling seems unsafe
-	// so these are manually renamed to single chars
-	let N = read_array_while(r).map(x => x+0x60);
-	if (N.length) {
-		let R = i >= UNRESTRICTED; // first arent restricted
-		N[0] -= 32; // capitalize
-		N = str_from_cps(N);
-		if (R) N=`Restricted[${N}]`;
-		let P = read_chunked(r); // primary
-		let Q = read_chunked(r); // secondary
-		let V = [...P, ...Q].sort((a, b) => a-b); // derive: sorted valid
-		//let M = r()-1; // combining mark
-		let M = !r(); // not-whitelisted, check for NSM
-		// code currently isn't needed
-		/*if (M < 0) { // whitelisted
-			M = new Map(read_array_while(() => {
-				let i = r();
-				if (i) return [V[i-1], read_array_while(() => {
-					let v = read_array_while(r);
-					if (v.length) return v.map(x => x-1);
-				})];
-			}));
-		}*/
-		return {N, P, M, R, V: new Set(V)};
-	}
-});
-const WHOLE_VALID = read_set();
-const WHOLE_MAP = new Map();
-// decode compressed wholes
-[...WHOLE_VALID, ...read_set()].sort((a, b) => a-b).map((cp, i, v) => {
-	let d = r(); 
-	let w = v[i] = d ? v[i-d] : {V: [], M: new Map()};
-	w.V.push(cp); // add to member set
-	if (!WHOLE_VALID.has(cp)) {
-		WHOLE_MAP.set(cp, w);  // register with whole map
-	}
-});
-// compute confusable-extent complements
-for (let {V, M} of new Set(WHOLE_MAP.values())) {
-	// connect all groups that have each whole character
-	let recs = [];
-	for (let cp of V) {
-		let gs = GROUPS.filter(g => g.V.has(cp));
-		let rec = recs.find(({G}) => gs.some(g => G.has(g)));
-		if (!rec) {
-			rec = {G: new Set(), V: []};
-			recs.push(rec);
-		}
-		rec.V.push(cp);
-		gs.forEach(g => rec.G.add(g));
-	}
-	// per character cache groups which are not a member of the extent
-	let union = recs.flatMap(({G}) => [...G]);
-	for (let {G, V} of recs) {
-		let complement = new Set(union.filter(g => !G.has(g)));
-		for (let cp of V) {
-			M.set(cp, complement);
-		}
-	}
-}
-let union = new Set(); // exists in 1+ groups
-let multi = new Set(); // exists in 2+ groups
-for (let g of GROUPS) {
-	for (let cp of g.V) {
-		(union.has(cp) ? multi : union).add(cp);
-	}
-}
-// dual purpose WHOLE_MAP: return placeholder if unique non-confusable
-for (let cp of union) {
-	if (!WHOLE_MAP.has(cp) && !multi.has(cp)) {
-		WHOLE_MAP.set(cp, UNIQUE_PH);
-	}
-}
-const VALID = new Set([...union, ...nfd(union)]); // possibly valid
-
-// decode emoji
 class Emoji extends Array {
 	get is_emoji() { return true; } // free tagging system
 }
-// 20230719: emoji are now fully-expanded to avoid quirk logic 
-const EMOJI_LIST = read_trie(r).map(v => Emoji.from(v)).sort(compare_arrays);
-const EMOJI_ROOT = new Map(); // this has approx 7K nodes (2+ per emoji)
-for (let cps of EMOJI_LIST) {
-	// 20230719: change to *slightly* stricter algorithm which disallows 
-	// insertion of misplaced FE0F in emoji sequences (matching ENSIP-15)
-	// example: beautified [A B] (eg. flag emoji) 
-	//  before: allow: [A FE0F B], error: [A FE0F FE0F B] 
-	//   after: error: both
-	// note: this code now matches ENSNormalize.{cs,java} logic
-	let prev = [EMOJI_ROOT];
-	for (let cp of cps) {
-		let next = prev.map(node => {
-			let child = node.get(cp);
-			if (!child) {
-				// should this be object? 
-				// (most have 1-2 items, few have many)
-				// 20230719: no, v8 default map is 4?
-				child = new Map();
-				node.set(cp, child);
-			}
-			return child;
-		});
-		if (cp === FE0F) {
-			prev.push(...next);
-		} else {
-			prev = next;
-		}
-	}
-	for (let x of prev) {
-		x.V = cps;
-	}
-}
-//console.timeEnd('init');
 
-// create a safe to print string 
-// invisibles are escaped
-// leading cm uses placeholder
-// quoter(cp) => string, eg. 3000 => "{3000}"
-// note: in html, you'd call this function then replace [<>&] with entities
-export function safe_str_from_cps(cps, quoter = quote_cp) {
-	//if (Number.isInteger(cps)) cps = [cps];
-	//if (!Array.isArray(cps)) throw new TypeError(`expected codepoints`);
-	let buf = [];
-	if (is_combining_mark(cps[0])) buf.push('◌');
-	let prev = 0;
-	let n = cps.length;
-	for (let i = 0; i < n; i++) {
-		let cp = cps[i];
-		if (should_escape(cp)) {
-			buf.push(str_from_cps(cps.slice(prev, i)));
-			buf.push(quoter(cp));
-			prev = i + 1;
+let MAPPED, IGNORED, CM, NSM, ESCAPE, NFC_CHECK, GROUPS, WHOLE_VALID, WHOLE_MAP, VALID, EMOJI_LIST, EMOJI_ROOT;
+
+function init() {
+	if (MAPPED) return;
+	//console.time('lib');
+
+	let r = read_compressed_payload(COMPRESSED);
+	MAPPED = new Map(read_mapped(r)); 
+	IGNORED = read_set(r); // ignored characters are not valid, so just read raw codepoints
+
+	/*
+	// direct include from payload is smaller that the decompression code
+	const FENCED = new Map(read_array_while(() => {
+		let cp = r();
+		if (cp) return [cp, read_str(r())];
+	}));
+	*/
+	// 20230217: we still need all CM for proper error formatting
+	// but norm only needs NSM subset that are potentially-valid
+	CM = read_sorted(r);
+	NSM = new Set(read_sorted(r).map(i => CM[i]));
+	CM = new Set(CM);
+	
+	ESCAPE = read_set(r); // characters that should not be printed
+	NFC_CHECK = read_set(r);
+
+	let chunks = read_sorted_arrays(r);
+	function read_chunked() {
+		// deduplicated sets + uniques
+		return new Set([read_sorted(r).map(i => chunks[i]), read_sorted(r)].flat(2));
+	}
+	let unrestricted = r();
+	GROUPS = read_array_while(i => {
+		// minifier property mangling seems unsafe
+		// so these are manually renamed to single chars
+		let N = read_array_while(r).map(x => x+0x60);
+		if (N.length) {
+			let R = i >= unrestricted; // first arent restricted
+			N[0] -= 32; // capitalize
+			N = str_from_cps(N);
+			if (R) N=`Restricted[${N}]`;
+			let P = read_chunked(r); // primary
+			let Q = read_chunked(r); // secondary
+			let V = [...P, ...Q].sort((a, b) => a-b); // derive: sorted valid
+			//let M = r()-1; // combining mark
+			let M = !r(); // not-whitelisted, check for NSM
+			// code currently isn't needed
+			/*if (M < 0) { // whitelisted
+				M = new Map(read_array_while(() => {
+					let i = r();
+					if (i) return [V[i-1], read_array_while(() => {
+						let v = read_array_while(r);
+						if (v.length) return v.map(x => x-1);
+					})];
+				}));
+			}*/
+			return {N, P, M, R, V: new Set(V)};
+		}
+	});
+
+	// decode compressed wholes
+	WHOLE_VALID = read_set(r);
+	WHOLE_MAP = new Map();
+	let wholes = [...WHOLE_VALID, ...read_sorted(r)].sort((a, b) => a-b);
+	wholes.forEach((cp, i) => {
+		let d = r(); 
+		let w = wholes[i] = d ? wholes[i-d] : {V: [], M: new Map()};
+		w.V.push(cp); // add to member set
+		if (!WHOLE_VALID.has(cp)) {
+			WHOLE_MAP.set(cp, w);  // register with whole map
+		}
+	});
+
+	// compute confusable-extent complements
+	for (let {V, M} of new Set(WHOLE_MAP.values())) {
+		// connect all groups that have each whole character
+		let recs = [];
+		for (let cp of V) {
+			let gs = GROUPS.filter(g => g.V.has(cp));
+			let rec = recs.find(({G}) => gs.some(g => G.has(g)));
+			if (!rec) {
+				rec = {G: new Set(), V: []};
+				recs.push(rec);
+			}
+			rec.V.push(cp);
+			gs.forEach(g => rec.G.add(g));
+		}
+		// per character cache groups which are not a member of the extent
+		let union = recs.flatMap(({G}) => [...G]);
+		for (let {G, V} of recs) {
+			let complement = new Set(union.filter(g => !G.has(g)));
+			for (let cp of V) {
+				M.set(cp, complement);
+			}
 		}
 	}
-	buf.push(str_from_cps(cps.slice(prev, n)));
-	return buf.join('');
+	let union = new Set(); // exists in 1+ groups
+	let multi = new Set(); // exists in 2+ groups
+	for (let g of GROUPS) {
+		for (let cp of g.V) {
+			if (union.has(cp)) {
+				multi.add(cp);
+			} else {
+				union.add(cp);
+			}
+		}
+	}
+	// dual purpose WHOLE_MAP: return placeholder if unique non-confusable
+	for (let cp of union) {
+		if (!WHOLE_MAP.has(cp) && !multi.has(cp)) {
+			WHOLE_MAP.set(cp, UNIQUE_PH);
+		}
+	}
+
+	VALID = new Set([...union, ...nfd(union)]); // possibly valid
+
+	// decode emoji
+	// 20230719: emoji are now fully-expanded to avoid quirk logic 
+	EMOJI_LIST = read_trie(r).map(v => Emoji.from(v)).sort(compare_arrays);
+	EMOJI_ROOT = new Map(); // this has approx 7K nodes (2+ per emoji)
+	for (let cps of EMOJI_LIST) {
+		// 20230719: change to *slightly* stricter algorithm which disallows 
+		// insertion of misplaced FE0F in emoji sequences (matching ENSIP-15)
+		// example: beautified [A B] (eg. flag emoji) 
+		//  before: allow: [A FE0F B], error: [A FE0F FE0F B] 
+		//   after: error: both
+		// note: this code now matches ENSNormalize.{cs,java} logic
+		let prev = [EMOJI_ROOT];
+		for (let cp of cps) {
+			let next = prev.map(node => {
+				let child = node.get(cp);
+				if (!child) {
+					// should this be object? 
+					// (most have 1-2 items, few have many)
+					// 20230719: no, v8 default map is 4?
+					child = new Map();
+					node.set(cp, child);
+				}
+				return child;
+			});
+			if (cp === FE0F) {
+				prev.push(...next);
+			} else {
+				prev = next;
+			}
+		}
+		for (let x of prev) {
+			x.V = cps;
+		}
+	}
+
+	//console.timeEnd('lib');
+	// 20230905: 285ms
 }
+init();
 
 // if escaped: {HEX}
 //       else: "x" {HEX}
@@ -227,23 +218,51 @@ function check_fenced(cps) {
 	if (last == n) throw error_placement(`trailing ${prev}`);
 }
 
+// create a safe to print string 
+// invisibles are escaped
+// leading cm uses placeholder
+// quoter(cp) => string, eg. 3000 => "{3000}"
+// note: in html, you'd call this function then replace [<>&] with entities
+export function safe_str_from_cps(cps, quoter = quote_cp) {
+	//if (Number.isInteger(cps)) cps = [cps];
+	//if (!Array.isArray(cps)) throw new TypeError(`expected codepoints`);
+	let buf = [];
+	if (is_combining_mark(cps[0])) buf.push('◌');
+	let prev = 0;
+	let n = cps.length;
+	for (let i = 0; i < n; i++) {
+		let cp = cps[i];
+		if (should_escape(cp)) {
+			buf.push(str_from_cps(cps.slice(prev, i)));
+			buf.push(quoter(cp));
+			prev = i + 1;
+		}
+	}
+	buf.push(str_from_cps(cps.slice(prev, n)));
+	return buf.join('');
+}
+
 // note: set(s) cannot be exposed because they can be modified
 export function is_combining_mark(cp) {
+	init();
 	return CM.has(cp);
 }
 export function should_escape(cp) {
+	init();
 	return ESCAPE.has(cp);
 }
 
 // return all supported emoji as fully-qualified emoji 
 // ordered by length then lexicographic 
 export function ens_emoji() {
+	init();
 	return EMOJI_LIST.map(x => x.slice()); // emoji are exposed so copy
 }
 
 export function ens_normalize_fragment(frag, decompose) {
+	init();
 	let nf = decompose ? nfd : nfc;
-	return frag.split(STOP_CH).map(label => str_from_cps(process(explode_cp(label), nf, filter_fe0f).flat())).join(STOP_CH);
+	return frag.split(STOP_CH).map(label => str_from_cps(tokens_from_str(explode_cp(label), nf, filter_fe0f).flat())).join(STOP_CH);
 }
 
 export function ens_normalize(name) {
@@ -295,6 +314,7 @@ export function ens_split(name, preserve_emoji) {
 
 function split(name, nf, ef) {
 	if (!name) return []; // 20230719: empty name allowance
+	init();
 	let offset = 0;
 	// https://unicode.org/reports/tr46/#Validity_Criteria
 	// 4.) "The label must not contain a U+002E ( . ) FULL STOP."
@@ -308,7 +328,7 @@ function split(name, nf, ef) {
 		let norm;
 		try {
 			// 1.) "The label must be in Unicode Normalization Form NFC"
-			let tokens = info.tokens = process(input, nf, ef); // if we parse, we get [norm and mapped]
+			let tokens = info.tokens = tokens_from_str(input, nf, ef); // if we parse, we get [norm and mapped]
 			let token_count = tokens.length;
 			let type;
 			if (!token_count) { // the label was effectively empty (could of had ignored characters)
@@ -561,7 +581,9 @@ function check_group(g, cps) {
 // given a list of codepoints
 // returns a list of lists, where emoji are a fully-qualified (as Array subclass)
 // eg. explode_cp("abc💩d") => [[61, 62, 63], Emoji[1F4A9, FE0F], [64]]
-function process(input, nf, ef) {
+// 20230818: rename for 'process' name collision h/t Javarome
+// https://github.com/adraffy/ens-normalize.js/issues/23
+function tokens_from_str(input, nf, ef) {
 	let ret = [];
 	let chars = [];
 	input = input.slice().reverse(); // flip so we can pop
@@ -633,6 +655,7 @@ const TY_STOP = 'stop';
 export function ens_tokenize(name, {
 	nf = true, // collapse unnormalized runs into a single token
 } = {}) {
+	init();
 	let input = explode_cp(name).reverse();
 	let eaten = [];
 	let tokens = [];
