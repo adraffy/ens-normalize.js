@@ -555,6 +555,9 @@ export class UnicodeSpec {
 			}
 		});
 	}
+	read_regions() {
+		return JSON.parse(readFileSync(new URL('./regions.json', this.cldr_dir)));
+	}
 	/*
 	emoji_skin_colors() {
 		// warning: this sucks
@@ -568,9 +571,6 @@ export class UnicodeSpec {
 	}
 	regional_indicators() {
 		return this.props().Regional_Indicator;
-	}
-	regions() {
-		return JSON.parse(readFileSync(new URL('./regions.json', this.cldr_dir)));
 	}
 	derive_emoji_flag_sequences() {
 		let regions = this.regions(); 

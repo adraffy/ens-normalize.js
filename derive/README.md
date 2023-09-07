@@ -20,12 +20,13 @@
 * [WHATWG URL: IDNA](https://url.spec.whatwg.org/#idna)
 * [Unicode data files](https://www.unicode.org/Public/)
 	* Download Latest: `node download.js` 
-	* To download older versions: `node download.js 12.1.0` 
+	* To download older version: `node download.js 12.1.0` 
 	* Already included: [Unicode 11-15.1](./data/)
 * [CLDR data files](https://github.com/unicode-org/cldr)
-	* Download Latest: `node download-cldr.js` 
+	* Download Latest: `node parse-cldr.js`
+	* To download older version: `node parse-cldr.js 42` 
 	* Already included: [CLDR 43.1](./data/CLDR-43.1/)
-	* Warning: these aren't versioned with Unicode!
+	* Warning: versioned separately from Unicode!
 
 ## Instructions
 
@@ -57,8 +58,18 @@
 ## Upgrade Notes
 
 ### 15.0.0 → 15.1.0
-* UTS-39: **New** Confusable Bidi Logic 
-* UAX-31: **Unchanged** Recommended, Excluded, Limited Use
-* `confusables.txt`: **Unchanged**
-* `node test/validate.js prior-tests/1.9.4.json`
-* `node derivate/unicode-diff.js 15.0.0/42 15.1.0/43`
+
+ `node unicode-diff.js 15.0.0/42 15.1.0/43.1`
+* CLDR
+	* `short-names.json` **Unchanged**
+	* `regions.json` **New** `"CQ"`
+* UAX-31: 
+	* **Unchanged** Scripts 
+	* **Unchanged** Recommended, Excluded, Limited Use Scripts
+* UTS-39: 
+	* **New** Confusable Bidi Logic (doesn't apply since mixed-Bidi not allowed)
+	* `confusables.txt` **Unchanged**
+* UTS-46: 
+	* **Change** `1E9E (ẞ) LATIN CAPITAL LETTER SHARP S` &rarr; `0xDF (ß) LATIN SMALL LETTER SHARP S`
+* Prior Validation: `node ../test/validate.js prior-tests/1.9.4.json`
+	* Only fails on emoji that are now valid.

@@ -423,7 +423,7 @@ footer span {
 footer span:hover {	
 	color: #000;
 }
-@media only screen and (max-width: 900px) { 
+@media only screen and (max-width: 800px) { 
 	body {
 		margin: 16px;
 	}
@@ -517,6 +517,7 @@ footer span:hover {
 	<button data-query="Needs-norm">Required</button>
 	<b>Codepoints:</b>
 	<button data-query="{200D}" class="raw">ZWJ</button>
+	<button data-query="2zwj" class="raw">2xZWJ</button>
 	<button data-query="{FE0F}" class="raw">FE0F</button>
 	<button data-query="ascii" class="raw">ASCII</button>
 	<button class="raw">&#x1F3F4;</button>
@@ -631,9 +632,7 @@ top_btn.addEventListener('click', () => window.scrollTo(0, 0));
 
 	for (let x of info_map.values()) {
 		type_map.set(x.type.toLowerCase(), x.type);
-		if (x.version !== '0.0') {
-			emoji_versions.add(x.version);
-		} 
+		emoji_versions.add(x.version);
 		let {name, name0} = x;
 		if (name0) {
 			name0 = name0.toLowerCase(); 
@@ -907,6 +906,9 @@ function update_search() {
 		} else if (match = arg.match(/^(\d+)cp$/i)) {
 			let length = parseInt(match[1]);
 			results = results.filter(x => x.norm_length === length);
+		} else if (match = arg.match(/^(\d)zwj$/i)) {
+			let n = parseInt(match[1]);
+			results = results.filter(x => x.cps.reduce((a, cp) => a + +(cp === 0x200D), 0) === n);
 		} else if (match = arg.match(/^unmod\((\d+)\)$/i)) { // this is a hack
 			let max = parseInt(match[1]);
 			let ignored = new Set([
@@ -987,7 +989,7 @@ function create_empty_table() {
 		<th class="part" title="Emoji Components">🛠️</th>
 		<th class="norm" title="Normalized Form">✅️</th>
 		<th class="resolve" title="Open in Resolver">↩️</th>
-		<th class="info">Name, Version, Codepoints</th>
+		<th class="info">Name, Properties, Codepoints</th>
 		</tr>
 		</thead>
 		<tbody></tbody>
