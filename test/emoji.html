@@ -513,11 +513,11 @@ footer span:hover {
 	<button>Doubles</button>
 	<button>Triples</button>
 	<b>Norm:</b>
-	<button data-query="Already-norm">Verbatim</button>
-	<button data-query="Needs-norm">Required</button>
+	<button data-query="Already-norm" title="Already Normalized">✅️</button>
+	<button data-query="Needs-norm" title="Requires Normalization">☑️</button>
 	<b>Codepoints:</b>
 	<button data-query="{200D}" class="raw">ZWJ</button>
-	<button data-query="2zwj" class="raw">2xZWJ</button>
+	<button data-query="{200D}^2" class="raw">2xZWJ</button>
 	<button data-query="{FE0F}" class="raw">FE0F</button>
 	<button data-query="ascii" class="raw">ASCII</button>
 	<button class="raw">&#x1F3F4;</button>
@@ -906,9 +906,10 @@ function update_search() {
 		} else if (match = arg.match(/^(\d+)cp$/i)) {
 			let length = parseInt(match[1]);
 			results = results.filter(x => x.norm_length === length);
-		} else if (match = arg.match(/^(\d)zwj$/i)) {
-			let n = parseInt(match[1]);
-			results = results.filter(x => x.cps.reduce((a, cp) => a + +(cp === 0x200D), 0) === n);
+		} else if (match = arg.match(/^(.*)\^(\d+)$/i)) {
+			let c = replace_escapes(match[1]).codePointAt(0);
+			let n = parseInt(match[2]);
+			results = results.filter(x => x.cps.reduce((a, cp) => a + +(c === cp), 0) === n);
 		} else if (match = arg.match(/^unmod\((\d+)\)$/i)) { // this is a hack
 			let max = parseInt(match[1]);
 			let ignored = new Set([
@@ -1190,7 +1191,7 @@ function setup_render(results) {
 		if (disabled) {
 			span.innerHTML += `<span class="disabled">${disabled}</span>`;
 		}
-		jumps_div.append(span, ...jumps);
+		jumps_div.append(span, '⏬️', ...jumps);
 		main.append(jumps_div);
 	}
 	none_div.classList.toggle('hide', render_queue.length);

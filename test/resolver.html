@@ -97,6 +97,7 @@ h1 {
 	flex-direction: column;
 	gap: 2px;
 	order: 2;
+	align-items: end;
 }
 #github a {	
 	white-space: pre;
@@ -1026,18 +1027,18 @@ Hebrew:
 		<button id="escape_btn" title="[ALT] Unicode Escaped">Escape</button>
 	</div>
 	<button id="parent_btn" title="Drop the leading label">Parent</button>
-	<button id="link_btn">Copy Link</button>
+	<button id="copy_link_btn">Copy Link</button>
 	<button id="resolve_btn">Resolve</button>
 </div>
 <div id="output">
 <ul class="row readme">
 <li>Click an <button data-name="👁️‍🗨️A{303}">Example</button> to see how it works.</li>
-<li>Use <code>{FF}</code>, <code>[255]</code>, <code>\uFFFF</code>, <code>\u{FF}</code>, <code>&amp;#xFF;</code>, <code>&amp;#255;</code>, or <code>&amp;abc;</code> to manually include codepoints <button data-raw data-name="{200D}a[8205]b\u200D.eth">ZWJ</button></li>
+<li>Use <code>{FF}</code>, <code>[255]</code>, <code>\uFFFF</code>, <code>\u{FF}</code>, <code>&amp;#xFF;</code>, <code>&amp;#255;</code>, or <code>&amp;entity;</code> to include codepoints <button data-raw data-name="{200D}a[8205]b\u200D.eth">ZWJ</button></li>
 <li><code>token:__</code> lookup the <a href="../../keccak.js/test/demo.html#algo=keccak-256&s=raffy&escape=1&encoding=utf8">labelhash</a> (if known) <button data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209" data-delay="1000">raffy.eth</button></li>
 <li><code>wrapped:__</code> lookup the <a href="../../keccak.js/test/demo.html#algo=namehash&s=firstwrappedname.eth&escape=1&encoding=utf8">namehash</a> (if wrapped) <button data-name="wrapped:0xc44eec7fb870ae46d4ef4392d33fbbbdc164e7817a86289a1fe30e5f4d98ae85" data-delay="1000">firstwrappedname.eth</button></li>
 <li><code>HEX<sub>1</sub> HEX<sub>2</sub></code> is shorthand for <code>{HEX<sub>1</sub>}{HEX<sub>2</sub>}</code> <button data-name="65 74 68" data-meta data-delay="1000">eth</button></li>
 <li><code>range:HEX<sub>1</sub>..HEX<sub>n</sub></code> expands to a range of characters <button data-name="range:61..7A" data-delay="1000">ASCII a-z</button></li>
-<li><a href="#vitalik.eth"><button>Copy Link</button></a> to get a URL that resolves on page-load.</li>
+<li><button id="copy_example_btn">Copy Link</button></a> to get a URL that resolves on page-load.</li>
 <li>Many elements have tooltips with additional information.</li>
 <li>Follows <a href="https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard">ENSIP-15</a> and <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
 <li class="req-window">Supports <button id="add_goerli_btn" class="chain">Goerli</button> and <button id="add_sepolia_btn" class="chain">Sepolia</button> testnets.</li>
@@ -1062,7 +1063,7 @@ Hebrew:
 <li><a href="https://raffy.antistupid.com/eth/ens-nft-matcher.html">ENS+NFT Matcher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-batch-resolver.html">Batch Resolver</a></li>
 <li><a href="https://github.com/adraffy/ens-labels/">Label Database</a>
-<li><a href="../../ens-labels/demo.html">Label⁻¹</a>
+<li><a href="../../ens-labels/demo.html">Labelhash⁻¹</a>
 <li><a href="./validate.html">Validation Test</a>
 <li><a href="./report-nf.html">Unicode NormalizationTest</a>
 <li><a href="../../ens-norm-tests/test-breakdown/output/">Breakdown Reports</a></li>
@@ -1098,7 +1099,6 @@ const actions_div = document.querySelector('#actions');
 const primary_loader = document.querySelector('#actions .spinner');
 const output_div = document.querySelector('#output');
 const readme_dom = [...output_div.childNodes]; // save initial ux
-//const links_copy = document.querySelector('.row.links').cloneNode(true);
 const examples_div = document.querySelector('#examples');
 const examples_btn = document.querySelector('#examples_btn');
 const provider_div = document.querySelector('#provider');
@@ -1116,7 +1116,7 @@ const STORAGE_HIDE_EXAMPLES = 'hide_examples';
 const INPUT_NAME = 'Input';
 const OPENSEA_NAME = 'OpenSea';
 const VISION_NAME = 'Vision';
-const PRETTY_NAME = '💖️'; // 🌷️ 🌺️
+const PRETTY_NAME = '💖️';
 
 const emoji_url = './emoji.html#q=%s';
 
@@ -1382,8 +1382,13 @@ document.querySelector('#escape_btn').addEventListener('click', e => {
 	input_field.value = set[(pos + 1) % set.length];
 	update_title();
 });
-document.querySelector('#link_btn').addEventListener('click', () => {
+document.querySelector('#copy_link_btn').addEventListener('click', () => {
 	navigator.clipboard.writeText(window.location.href);
+});
+document.querySelector('#copy_example_btn').addEventListener('click', () => {
+	let url = new URL(window.location.href);
+	url.hash = '#vitalik.eth';
+	navigator.clipboard.writeText(url);
 });
 auto_resolve_check.addEventListener('input', () => {
 	localStorage[STORAGE_AUTO_RESOLVE] = !!auto_resolve_check.checked;	
@@ -1424,22 +1429,22 @@ examples_btn.addEventListener('click', () => {
 	sync_examples();
 });
 
-if (window.ethereum) {
-	let p = ethereum;
-	if (Array.isArray(ethereum.providers)) p = ethereum.providers[0]; // fix scuffed multi-provider
-	window_provider = new ethers.providers.Web3Provider(p, 'any');
-}
 if (input_field.value.endsWith('_!')) { // backwards compat
 	input_field.value = input_field.value.slice(0, -2);
 	skip_norm_check.checked = true;
 }
-if (window_provider) {
+if (window.ethereum) {
+	let p = ethereum;
+	if (Array.isArray(ethereum.providers)) p = ethereum.providers[0]; // fix scuffed multi-provider
+	window_provider = new ethers.providers.Web3Provider(p, 'any');
 	window_provider.on('network', update_network);
+	ethereum.on('connect', async () => update_network(await window_provider.getNetwork()));
+	ethereum.on('disconnect', () => update_network());
 } else {
-	update_network();
 	force_mainnet_check.checked = false;
 	force_mainnet_check.classList.add('hide');
 }
+update_network();
 
 sync_examples();
 sync_force_ltr();
@@ -1470,8 +1475,9 @@ function update_network(network) {
 	let chain0 = active_chain;
 	active_chain = CHAINS[0];
 	active_provider = infura_provider;
+	let window_online = window_provider && window_provider.provider.isConnected();
 	let registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
-	if (network) {
+	if (network && window_online) {
 		let chain = CHAINS.find(x => x.id === network.chainId);
 		if (chain && (!force_mainnet_check.checked || chain.is_mainnet)) {
 			active_chain = chain;
@@ -1488,16 +1494,16 @@ function update_network(network) {
 	document.body.classList.toggle('testnet', !active_chain.is_mainnet);	
 	let network_div = document.createElement('div');
 	network_div.innerHTML = `using <b>${provider_name}</b> on <a href="${active_chain.explorer}/address/${registry}" target="_blank" title="Registry Contract">${active_chain.name}</a>`;
-	if (network && !using_window && !force_mainnet_check.checked) {
+	if (window_online && !using_window && network && network.chainId !== CHAIN_ID_MAINNET && !force_mainnet_check.checked) {
 		provider_div.innerHTML = `<div class="error">Unsupported Network (${network.chainId})</div>`;
 	} else {
 		provider_div.innerHTML = '';	
 	}
 	provider_div.append(network_div);
 	for (let btn of document.querySelectorAll('.chain')) {
-		btn.disabled = !window_provider || active_chain.id == btn.dataset.chain;
+		btn.disabled = !window_online || active_chain.id == btn.dataset.chain;
 	}
-	if (!active_chain.is_mainnet || (window_provider && active_provider !== window_provider)) {
+	if (!active_chain.is_mainnet || (window_online && active_provider !== window_provider)) {
 		let btn = document.createElement('button');
 		btn.innerHTML = active_chain.is_mainnet ? 'Use Browser' : '↪ Mainnet';
 		make_network_switcher(btn, CHAIN_ID_MAINNET);
@@ -1516,9 +1522,8 @@ function update_network(network) {
 	reverse_registrar = null;
 	NOT_IFACE_RESOLVER.clear();
 	if (input_field.value) {
-		schedule_resolve();
+		schedule_resolve(0);
 	} else if (init) {
-		//primary_loader.classList.add('hide');
 		parse();
 	}
 	return true; // changed
@@ -3607,7 +3612,7 @@ async function ensure_eth_nft() {
 function is_checksum_address(s) {
 	try {
 		return s === ethers.utils.getAddress(s);
-	} catch (ignored) {		
+	} catch (ignored) {
 	}
 }
 function is_null_hex(s) {
@@ -3618,9 +3623,10 @@ function labelhash(s) {
 	return ethers.utils.keccak256(bytes_from_utf8(s));
 }
 function namehash(s) {
-	let hash = '0x0000000000000000000000000000000000000000000000000000000000000000';
+	const N = 66;
+	let hash = '0x'.padEnd(N, '0');
 	if (s) hash = s.split('.').reduceRight((h, x) => ethers.utils.keccak256(h + labelhash(x).slice(2)), hash);
-	return hash.slice(0, 66);
+	return hash.slice(0, N);
 }
 
 function read_local_storage(key, fn, def) {
