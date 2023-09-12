@@ -36,7 +36,7 @@ button {
 	font-size: 100%;
 }
 button:disabled {
-	opacity: 50%;
+	opacity: .5;
 	pointer-events: none;
 }
 button:hover {
@@ -142,8 +142,7 @@ h1 .count span {
 	border-color: #00f;
 }
 #jumps .summary {
-	border: 2px solid #000;
-	border-radius: 0;
+	border: 1px solid #ccc;
 }
 #jumps .summary .count {
 	background-color: #fff;
@@ -210,8 +209,8 @@ h1 .count span {
 	width: 12px;
 	height: 12px;
 	content: ' ';
-	border-top: 4px solid #aaa;
-	border-right: 4px solid #aaa;
+	border-top: 4px solid #0003;
+	border-right: 4px solid #0003;
 	transition: transform 0.2s ease;
 }
 .heading.shade.shaded::before {
@@ -302,7 +301,7 @@ td {
 	transition: background-color 0.5s;	
 }
 .copied {
-	background-color: #8f8 !important;
+	background-color: #6f6 !important;
 }
 h3 {
 	margin: 0.5rem 0;
@@ -324,7 +323,7 @@ td.norm {
 	font-size: 200%;
 }
 td.norm.same {
-	opacity: .2;
+	opacity: .25;
 }
 td.norm.text {
 	color: #666;
@@ -517,7 +516,8 @@ footer span:hover {
 	<button data-query="Needs-norm" title="Requires Normalization">☑️</button>
 	<b>Codepoints:</b>
 	<button data-query="{200D}" class="raw">ZWJ</button>
-	<button data-query="{200D}^2" class="raw">2xZWJ</button>
+	<button data-query="=!{200D}" class="raw" style="text-decoration: line-through">ZWJ</button>
+	<button data-query="{200D}^2" class="raw">ZWJ²</button>
 	<button data-query="{FE0F}" class="raw">FE0F</button>
 	<button data-query="ascii" class="raw">ASCII</button>
 	<button class="raw">&#x1F3F4;</button>

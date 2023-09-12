@@ -78,7 +78,7 @@ document.querySelector('#built').innerText = `Built on ${new Date(versions.built
 fetch('../validate/tests.json').then(r => r.json()).then(tests => {
 	const t0 = performance.now();
 	let errors = run_tests(ens_normalize, tests); // see: validate.js
-	document.querySelector('#time').innerHTML = `<b>${tests.length}</b> tests in <b>${performance.now() - t0}ms</b>`;
+	document.querySelector('#time').innerHTML = `<b>${tests.length}</b> <a href="../validate/tests.json">tests</a> in <b>${performance.now() - t0}ms</b>`;
 	if (errors.length || window.location.hash === '#debug') {
 		show_error(`${errors.length} tests failed!`);
 		let a = document.querySelector('#download');

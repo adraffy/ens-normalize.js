@@ -363,6 +363,9 @@ ul .tokens {
 	background: #cff;
 	padding: 1px;
 }
+a.internal {
+	font-weight: bold;
+}
 .row.legend {
 	background: #fff;
 	list-style: disclosure-closed;
@@ -1032,15 +1035,16 @@ Hebrew:
 </div>
 <div id="output">
 <ul class="row readme">
-<li>Click an <button data-name="👁️‍🗨️A{303}">Example</button> to see how it works.</li>
-<li>Use <code>{FF}</code>, <code>[255]</code>, <code>\uFFFF</code>, <code>\u{FF}</code>, <code>&amp;#xFF;</code>, <code>&amp;#255;</code>, or <code>&amp;entity;</code> to include codepoints <button data-raw data-name="{200D}a[8205]b\u200D.eth">ZWJ</button></li>
+<li>Click an <button data-name="👁️‍🗨️A{303}.Eth">Example</button> to see how it works.</li>
+<li>Use <code>{FF}</code> or <code>[255]</code> to include codepoints <button data-raw data-name="a{61}[97].eth">aaa</button></li>
+<li><code>\uFFFF</code>, <code>\u{HEX}</code>, <code>&amp;#xFF;</code>, <code>&amp;#255;</code>, or <code>&amp;entity;</code> are shorthand for <code>{HEX}</code>.</li>
+<li><code>HEX<sub>1</sub> HEX<sub>2</sub></code> is shorthand for <code>{HEX<sub>1</sub>}{HEX<sub>2</sub>}</code> <button data-name="65 74 68" data-meta data-delay="1000">eth</button></li>
 <li><code>token:__</code> lookup the <a href="../../keccak.js/test/demo.html#algo=keccak-256&s=raffy&escape=1&encoding=utf8">labelhash</a> (if known) <button data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209" data-delay="1000">raffy.eth</button></li>
 <li><code>wrapped:__</code> lookup the <a href="../../keccak.js/test/demo.html#algo=namehash&s=firstwrappedname.eth&escape=1&encoding=utf8">namehash</a> (if wrapped) <button data-name="wrapped:0xc44eec7fb870ae46d4ef4392d33fbbbdc164e7817a86289a1fe30e5f4d98ae85" data-delay="1000">firstwrappedname.eth</button></li>
-<li><code>HEX<sub>1</sub> HEX<sub>2</sub></code> is shorthand for <code>{HEX<sub>1</sub>}{HEX<sub>2</sub>}</code> <button data-name="65 74 68" data-meta data-delay="1000">eth</button></li>
 <li><code>range:HEX<sub>1</sub>..HEX<sub>n</sub></code> expands to a range of characters <button data-name="range:61..7A" data-delay="1000">ASCII a-z</button></li>
 <li><button id="copy_example_btn">Copy Link</button></a> to get a URL that resolves on page-load.</li>
 <li>Many elements have tooltips with additional information.</li>
-<li>Follows <a href="https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard">ENSIP-15</a> and <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
+<li>Follows <a class="internal" href="https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard">ENSIP-15</a> and <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
 <li class="req-window">Supports <button id="add_goerli_btn" class="chain">Goerli</button> and <button id="add_sepolia_btn" class="chain">Sepolia</button> testnets.</li>
 </ul>
 <ul class="row legend">
@@ -1052,9 +1056,9 @@ Hebrew:
 <li>These are <b>disallowed</b> characters: <span data-tokenize="#{00}{1FFFFF}{E0061}{200D}"></span></li>
 </ul>
 <ul class="row links">
-<li><a href="./emoji.html">Supported Emoji</a></li>
-<li><a href="./chars.html">Characters Viewer</a></li>
-<li><a href="./confused.html">Confused Explainer</a>
+<li><a class="internal" href="./emoji.html">Supported Emoji</a></li>
+<li><a class="internal" href="./chars.html">Characters Viewer</a></li>
+<li><a class="internal" href="./confused.html">Confused Explainer</a>
 <li><a href="../../punycode.js/test/demo.html">Punycode Coder</a></li>
 <li><a href="../../keccak.js/test/demo.html">Keccak Hasher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-regs.html">Recent Registrations</a></li>
@@ -1064,8 +1068,8 @@ Hebrew:
 <li><a href="https://raffy.antistupid.com/eth/ens-batch-resolver.html">Batch Resolver</a></li>
 <li><a href="https://github.com/adraffy/ens-labels/">Label Database</a>
 <li><a href="../../ens-labels/demo.html">Labelhash⁻¹</a>
-<li><a href="./validate.html">Validation Test</a>
-<li><a href="./report-nf.html">Unicode NormalizationTest</a>
+<li><a class="internal" href="./validate.html">Validation Test</a>
+<li><a class="internal" href="./report-nf.html">Unicode NormalizationTest</a>
 <li><a href="../../ens-norm-tests/test-breakdown/output/">Breakdown Reports</a></li>
 <li><a href="https://raffy.antistupid.com/eth/emoji-pixels.html">Emoji Pixel Maker</a></li>
 </ul>
@@ -1457,6 +1461,7 @@ window.addEventListener('hashchange', () => {
 function make_network_switcher(btn, id) {
 	btn.classList.add('chain');
 	btn.dataset.chain = id;
+	btn.title = `Chain: ${id} / 0x${id.toString(16)}`;
 	btn.addEventListener('click', () => switch_to_network(id).catch(() => {}));
 }
 async function switch_to_network(id) {
@@ -2644,7 +2649,7 @@ function resolve() {
 				});
 				if (!res.ok) throw new Error(`HTTP Error ${r.status}`);
 				let {data: {domains}} = await res.json();
-				if (domains.length == 0) throw new Error(`Unknown labelhash preimage: ${hash}`);
+				if (!domains.length) throw new Error(`Unknown labelhash preimage: ${hash}`);
 				let label = domains[0].labelName;
 				let hash0 = labelhash(label);
 				if (hash0 !== hash) throw new Error(`Incorrect labelhash preimage: "${label}")\n\nExpected: ${hash}\nComputed: ${hash}`);
@@ -3044,7 +3049,7 @@ async function resolve1(input, skip_norm) {
 			add_contract_name(resolver_row, resolver.address);
 		}
 	} else {
-		add_row_tag(resolver_row, create_typed_tag('warn', `Name Not Found`));	
+		add_row_tag(resolver_row, create_typed_tag('warn', `Not Set`));	
 	}
 
 	let parent_domain = name_norm.slice(sep_pos+1);

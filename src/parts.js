@@ -121,7 +121,9 @@ export function dom_from_tokens(tokens, {
 				let form = safe_str_from_cps(token.cps);
 				if (tld_class && (tokens.length == 1 || (i === tokens.length-1 && tokens[i-1].type === 'stop')) && /[a-z]/.test(form)) { 
 					// theres just 1 token/or we're the last token with a stop before us
-					el.classList.add(form);
+					//el.classList.add(form);
+					// 20230909: this triggered for stupid things
+					el.dataset.tld = form;	
 				}
 				el.innerText = form;
 				el.title = format_tooltip({
@@ -196,25 +198,25 @@ export function use_default_style() {
 		border: 2px solid #0a0;
 		line-break: anywhere;
 	}
-	.tokens .valid.eth {
+	.tokens [data-tld="eth"].valid {
 		color: #fff;
 		background: #58f;
-		border: none;
+		border-color: #58f;
 	}
-	.tokens .valid.art {
+	.tokens [data-tld="art"].valid {
 		color: #fff;
-		background: #333; /*#f63;*/
-		border: none;
+		background: #333;
+		border-color: #333;
 	}
-	.tokens .valid.com,
-	.tokens .valid.net,
-	.tokens .valid.org,
-	.tokens .valid.io,
-	.tokens .valid.cash,
-	.tokens .valid.xyz {
+	.tokens [data-tld="com"].valid,
+	.tokens [data-tld="net"].valid,
+	.tokens [data-tld="org"].valid,
+	.tokens [data-tld="io"].valid,
+	.tokens [data-tld="cash"].valid,
+	.tokens [data-tld="xyz"].valid {
 		color: #fff;
 		background: #0a0;
-		border: none;
+		border-color: #0a0;
 	}
 	.tokens .ignored {
 		color: #fff;

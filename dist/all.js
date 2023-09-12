@@ -1,4 +1,4 @@
-// created 2023-09-06T06:07:34.296Z
+// created 2023-09-12T22:05:14.211Z
 // compressed base64-encoded blob for include-ens data
 // source: https://github.com/adraffy/ens-normalize.js/blob/main/src/make.js
 // see: https://github.com/adraffy/ens-normalize.js#security
@@ -322,7 +322,7 @@ function run_tests(fn, tests) {
 	return errors;
 }
 
-// created 2023-09-06T06:07:34.296Z
+// created 2023-09-12T22:05:14.211Z
 // compressed base64-encoded blob for include-nf data
 // source: https://github.com/adraffy/ens-normalize.js/blob/main/src/make.js
 // see: https://github.com/adraffy/ens-normalize.js#security
@@ -1377,7 +1377,9 @@ function dom_from_tokens(tokens, {
 				let form = safe_str_from_cps(token.cps);
 				if (tld_class && (tokens.length == 1 || (i === tokens.length-1 && tokens[i-1].type === 'stop')) && /[a-z]/.test(form)) { 
 					// theres just 1 token/or we're the last token with a stop before us
-					el.classList.add(form);
+					//el.classList.add(form);
+					// 20230909: this triggered for stupid things
+					el.dataset.tld = form;	
 				}
 				el.innerText = form;
 				el.title = format_tooltip({
@@ -1452,25 +1454,25 @@ function use_default_style() {
 		border: 2px solid #0a0;
 		line-break: anywhere;
 	}
-	.tokens .valid.eth {
+	.tokens [data-tld="eth"].valid {
 		color: #fff;
 		background: #58f;
-		border: none;
+		border-color: #58f;
 	}
-	.tokens .valid.art {
+	.tokens [data-tld="art"].valid {
 		color: #fff;
-		background: #333; /*#f63;*/
-		border: none;
+		background: #333;
+		border-color: #333;
 	}
-	.tokens .valid.com,
-	.tokens .valid.net,
-	.tokens .valid.org,
-	.tokens .valid.io,
-	.tokens .valid.cash,
-	.tokens .valid.xyz {
+	.tokens [data-tld="com"].valid,
+	.tokens [data-tld="net"].valid,
+	.tokens [data-tld="org"].valid,
+	.tokens [data-tld="io"].valid,
+	.tokens [data-tld="cash"].valid,
+	.tokens [data-tld="xyz"].valid {
 		color: #fff;
 		background: #0a0;
-		border: none;
+		border-color: #0a0;
 	}
 	.tokens .ignored {
 		color: #fff;
@@ -1565,7 +1567,7 @@ const cldr = "43.1 (2023-09-03T21:58:22.687Z)";
 const base64_ens_hash = "0565ed049b9cf1614bb9e11ba7d8ac6a6fb96c893253d890f7e2b2884b9ded32";
 const base64_nf_hash = "a974b6f8541fc29d919bc85118af0a44015851fab5343f8679cb31be2bdb209e";
 const spec_hash = "1f6d3bdb7a724fe3b91f6d73ab14defcb719e0f4ab79022089c940e7e9c56b9c";
-const built = "2023-09-06T06:07:34.296Z";
+const built = "2023-09-12T22:05:14.211Z";
 const version = "1.10.0";
 
 var includeVersions = /*#__PURE__*/Object.freeze({

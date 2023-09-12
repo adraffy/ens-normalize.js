@@ -1,4 +1,4 @@
-// created 2023-09-06T06:07:34.296Z
+// created 2023-09-12T22:05:14.211Z
 // compressed base64-encoded blob for include-ens data
 // source: https://github.com/adraffy/ens-normalize.js/blob/main/src/make.js
 // see: https://github.com/adraffy/ens-normalize.js#security
@@ -283,7 +283,7 @@ function compare_arrays(a, b) {
 	return c;
 }
 
-// created 2023-09-06T06:07:34.296Z
+// created 2023-09-12T22:05:14.211Z
 // compressed base64-encoded blob for include-nf data
 // source: https://github.com/adraffy/ens-normalize.js/blob/main/src/make.js
 // see: https://github.com/adraffy/ens-normalize.js#security
