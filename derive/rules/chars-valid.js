@@ -3,6 +3,8 @@ export default [
 	// enable ascii
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/237
 	// https://discuss.ens.domains/t/ens-name-normalization/8652/381
+	// 20230815: both suggested as natural-language identifiers
+	// https://www.unicode.org/reports/tr31/#Table_Optional_Start
 	0x24, // ($) DOLLAR SIGN
 	0x5F, // (_) LOW LINE
 

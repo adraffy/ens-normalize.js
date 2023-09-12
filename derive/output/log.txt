@@ -1,6 +1,6 @@
-Build Date: 2023-06-10T03:33:29.224Z
-Unicode Version: 15.0.0 (2022-10-23T06:00:57.990Z)
-CLDR Version: 42 (2022-11-04T04:55:37.180Z)
+Build Date: 2023-09-12T22:05:09.894Z
+Unicode Version: 15.1.0 (2023-09-06T02:58:19.261Z)
+CLDR Version: 43.1 (2023-09-03T21:58:22.687Z)
 ==== RGI Emoji ZWJ Sequences ====
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -244,6 +244,10 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F91D 200D 1F469 1F3F
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F91D 200D 1F469 1F3FD] (👩🏿‍🤝‍👩🏽) women holding hands: dark skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F91D 200D 1F469 1F3FE] (👩🏿‍🤝‍👩🏾) women holding hands: dark skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F91D 200D 1F9D1] (🧑‍🤝‍🧑) people holding hands
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F9D1 200D 1F9D2] (🧑‍🧑‍🧒) family: adult, adult, child
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F9D1 200D 1F9D2 200D 1F9D2] (🧑‍🧑‍🧒‍🧒) family: adult, adult, child, child
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F9D2] (🧑‍🧒) family: adult, child
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F9D2 200D 1F9D2] (🧑‍🧒‍🧒) family: adult, child, child
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 2764 FE0F 200D 1F48B 200D 1F9D1 1F3FC] (🧑🏻‍❤️‍💋‍🧑🏼) kiss: person, person, light skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 2764 FE0F 200D 1F48B 200D 1F9D1 1F3FD] (🧑🏻‍❤️‍💋‍🧑🏽) kiss: person, person, light skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 2764 FE0F 200D 1F48B 200D 1F9D1 1F3FE] (🧑🏻‍❤️‍💋‍🧑🏾) kiss: person, person, light skin tone, medium-dark skin tone
@@ -252,7 +256,6 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 2764 FE0F 200D 1F9D1 
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 2764 FE0F 200D 1F9D1 1F3FD] (🧑🏻‍❤️‍🧑🏽) couple with heart: person, person, light skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 2764 FE0F 200D 1F9D1 1F3FE] (🧑🏻‍❤️‍🧑🏾) couple with heart: person, person, light skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 2764 FE0F 200D 1F9D1 1F3FF] (🧑🏻‍❤️‍🧑🏿) couple with heart: person, person, light skin tone, dark skin tone
-Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F384] (🧑🏻‍🎄) mx claus: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F91D 200D 1F9D1 1F3FB] (🧑🏻‍🤝‍🧑🏻) people holding hands: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F91D 200D 1F9D1 1F3FC] (🧑🏻‍🤝‍🧑🏼) people holding hands: light skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F91D 200D 1F9D1 1F3FD] (🧑🏻‍🤝‍🧑🏽) people holding hands: light skin tone, medium skin tone
@@ -266,7 +269,6 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 2764 FE0F 200D 1F9D1 
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 2764 FE0F 200D 1F9D1 1F3FD] (🧑🏼‍❤️‍🧑🏽) couple with heart: person, person, medium-light skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 2764 FE0F 200D 1F9D1 1F3FE] (🧑🏼‍❤️‍🧑🏾) couple with heart: person, person, medium-light skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 2764 FE0F 200D 1F9D1 1F3FF] (🧑🏼‍❤️‍🧑🏿) couple with heart: person, person, medium-light skin tone, dark skin tone
-Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F384] (🧑🏼‍🎄) mx claus: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F91D 200D 1F9D1 1F3FB] (🧑🏼‍🤝‍🧑🏻) people holding hands: medium-light skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F91D 200D 1F9D1 1F3FC] (🧑🏼‍🤝‍🧑🏼) people holding hands: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F91D 200D 1F9D1 1F3FD] (🧑🏼‍🤝‍🧑🏽) people holding hands: medium-light skin tone, medium skin tone
@@ -280,7 +282,6 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 2764 FE0F 200D 1F9D1 
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 2764 FE0F 200D 1F9D1 1F3FC] (🧑🏽‍❤️‍🧑🏼) couple with heart: person, person, medium skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 2764 FE0F 200D 1F9D1 1F3FE] (🧑🏽‍❤️‍🧑🏾) couple with heart: person, person, medium skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 2764 FE0F 200D 1F9D1 1F3FF] (🧑🏽‍❤️‍🧑🏿) couple with heart: person, person, medium skin tone, dark skin tone
-Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F384] (🧑🏽‍🎄) mx claus: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F91D 200D 1F9D1 1F3FB] (🧑🏽‍🤝‍🧑🏻) people holding hands: medium skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F91D 200D 1F9D1 1F3FC] (🧑🏽‍🤝‍🧑🏼) people holding hands: medium skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F91D 200D 1F9D1 1F3FD] (🧑🏽‍🤝‍🧑🏽) people holding hands: medium skin tone
@@ -294,7 +295,6 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 2764 FE0F 200D 1F9D1 
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 2764 FE0F 200D 1F9D1 1F3FC] (🧑🏾‍❤️‍🧑🏼) couple with heart: person, person, medium-dark skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 2764 FE0F 200D 1F9D1 1F3FD] (🧑🏾‍❤️‍🧑🏽) couple with heart: person, person, medium-dark skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 2764 FE0F 200D 1F9D1 1F3FF] (🧑🏾‍❤️‍🧑🏿) couple with heart: person, person, medium-dark skin tone, dark skin tone
-Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F384] (🧑🏾‍🎄) mx claus: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F91D 200D 1F9D1 1F3FB] (🧑🏾‍🤝‍🧑🏻) people holding hands: medium-dark skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F91D 200D 1F9D1 1F3FC] (🧑🏾‍🤝‍🧑🏼) people holding hands: medium-dark skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F91D 200D 1F9D1 1F3FD] (🧑🏾‍🤝‍🧑🏽) people holding hands: medium-dark skin tone, medium skin tone
@@ -308,7 +308,6 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 2764 FE0F 200D 1F9D1 
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 2764 FE0F 200D 1F9D1 1F3FC] (🧑🏿‍❤️‍🧑🏼) couple with heart: person, person, dark skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 2764 FE0F 200D 1F9D1 1F3FD] (🧑🏿‍❤️‍🧑🏽) couple with heart: person, person, dark skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 2764 FE0F 200D 1F9D1 1F3FE] (🧑🏿‍❤️‍🧑🏾) couple with heart: person, person, dark skin tone, medium-dark skin tone
-Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F384] (🧑🏿‍🎄) mx claus: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F91D 200D 1F9D1 1F3FB] (🧑🏿‍🤝‍🧑🏻) people holding hands: dark skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F91D 200D 1F9D1 1F3FC] (🧑🏿‍🤝‍🧑🏼) people holding hands: dark skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F91D 200D 1F9D1 1F3FD] (🧑🏿‍🤝‍🧑🏽) people holding hands: dark skin tone, medium skin tone
@@ -334,6 +333,12 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1FAF1 1F3FF 200D 1FAF2 1F3FB] (🫱�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1FAF1 1F3FF 200D 1FAF2 1F3FC] (🫱🏿‍🫲🏼) handshake: dark skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1FAF1 1F3FF 200D 1FAF2 1F3FD] (🫱🏿‍🫲🏽) handshake: dark skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1FAF1 1F3FF 200D 1FAF2 1F3FE] (🫱🏿‍🫲🏾) handshake: dark skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 200D 27A1 FE0F] (🏃‍➡️) person running facing right
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FB 200D 27A1 FE0F] (🏃🏻‍➡️) person running facing right: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FC 200D 27A1 FE0F] (🏃🏼‍➡️) person running facing right: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FD 200D 27A1 FE0F] (🏃🏽‍➡️) person running facing right: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FE 200D 27A1 FE0F] (🏃🏾‍➡️) person running facing right: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FF 200D 27A1 FE0F] (🏃🏿‍➡️) person running facing right: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2695 FE0F] (👨‍⚕️) man health worker
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2696 FE0F] (👨‍⚖️) man judge
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2708 FE0F] (👨‍✈️) man pilot
@@ -352,8 +357,11 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 1F52C] (👨‍🔬) man sc
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 1F680] (👨‍🚀) man astronaut
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 1F692] (👨‍🚒) man firefighter
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 1F9AF] (👨‍🦯) man with white cane
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 1F9AF 200D 27A1 FE0F] (👨‍🦯‍➡️) man with white cane facing right
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 1F9BC] (👨‍🦼) man in motorized wheelchair
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 1F9BC 200D 27A1 FE0F] (👨‍🦼‍➡️) man in motorized wheelchair facing right
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 1F9BD] (👨‍🦽) man in manual wheelchair
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 1F9BD 200D 27A1 FE0F] (👨‍🦽‍➡️) man in manual wheelchair facing right
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 2695 FE0F] (👨🏻‍⚕️) man health worker: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 2696 FE0F] (👨🏻‍⚖️) man judge: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 2708 FE0F] (👨🏻‍✈️) man pilot: light skin tone
@@ -372,8 +380,11 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1F52C] (👨🏻‍�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1F680] (👨🏻‍🚀) man astronaut: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1F692] (👨🏻‍🚒) man firefighter: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1F9AF] (👨🏻‍🦯) man with white cane: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1F9AF 200D 27A1 FE0F] (👨🏻‍🦯‍➡️) man with white cane facing right: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1F9BC] (👨🏻‍🦼) man in motorized wheelchair: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1F9BC 200D 27A1 FE0F] (👨🏻‍🦼‍➡️) man in motorized wheelchair facing right: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1F9BD] (👨🏻‍🦽) man in manual wheelchair: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1F9BD 200D 27A1 FE0F] (👨🏻‍🦽‍➡️) man in manual wheelchair facing right: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 2695 FE0F] (👨🏼‍⚕️) man health worker: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 2696 FE0F] (👨🏼‍⚖️) man judge: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 2708 FE0F] (👨🏼‍✈️) man pilot: medium-light skin tone
@@ -392,8 +403,11 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1F52C] (👨🏼‍�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1F680] (👨🏼‍🚀) man astronaut: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1F692] (👨🏼‍🚒) man firefighter: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1F9AF] (👨🏼‍🦯) man with white cane: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1F9AF 200D 27A1 FE0F] (👨🏼‍🦯‍➡️) man with white cane facing right: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1F9BC] (👨🏼‍🦼) man in motorized wheelchair: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1F9BC 200D 27A1 FE0F] (👨🏼‍🦼‍➡️) man in motorized wheelchair facing right: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1F9BD] (👨🏼‍🦽) man in manual wheelchair: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1F9BD 200D 27A1 FE0F] (👨🏼‍🦽‍➡️) man in manual wheelchair facing right: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 2695 FE0F] (👨🏽‍⚕️) man health worker: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 2696 FE0F] (👨🏽‍⚖️) man judge: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 2708 FE0F] (👨🏽‍✈️) man pilot: medium skin tone
@@ -412,8 +426,11 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1F52C] (👨🏽‍�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1F680] (👨🏽‍🚀) man astronaut: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1F692] (👨🏽‍🚒) man firefighter: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1F9AF] (👨🏽‍🦯) man with white cane: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1F9AF 200D 27A1 FE0F] (👨🏽‍🦯‍➡️) man with white cane facing right: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1F9BC] (👨🏽‍🦼) man in motorized wheelchair: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1F9BC 200D 27A1 FE0F] (👨🏽‍🦼‍➡️) man in motorized wheelchair facing right: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1F9BD] (👨🏽‍🦽) man in manual wheelchair: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1F9BD 200D 27A1 FE0F] (👨🏽‍🦽‍➡️) man in manual wheelchair facing right: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 2695 FE0F] (👨🏾‍⚕️) man health worker: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 2696 FE0F] (👨🏾‍⚖️) man judge: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 2708 FE0F] (👨🏾‍✈️) man pilot: medium-dark skin tone
@@ -432,8 +449,11 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1F52C] (👨🏾‍�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1F680] (👨🏾‍🚀) man astronaut: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1F692] (👨🏾‍🚒) man firefighter: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1F9AF] (👨🏾‍🦯) man with white cane: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1F9AF 200D 27A1 FE0F] (👨🏾‍🦯‍➡️) man with white cane facing right: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1F9BC] (👨🏾‍🦼) man in motorized wheelchair: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1F9BC 200D 27A1 FE0F] (👨🏾‍🦼‍➡️) man in motorized wheelchair facing right: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1F9BD] (👨🏾‍🦽) man in manual wheelchair: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1F9BD 200D 27A1 FE0F] (👨🏾‍🦽‍➡️) man in manual wheelchair facing right: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 2695 FE0F] (👨🏿‍⚕️) man health worker: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 2696 FE0F] (👨🏿‍⚖️) man judge: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 2708 FE0F] (👨🏿‍✈️) man pilot: dark skin tone
@@ -452,8 +472,11 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1F52C] (👨🏿‍�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1F680] (👨🏿‍🚀) man astronaut: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1F692] (👨🏿‍🚒) man firefighter: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1F9AF] (👨🏿‍🦯) man with white cane: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1F9AF 200D 27A1 FE0F] (👨🏿‍🦯‍➡️) man with white cane facing right: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1F9BC] (👨🏿‍🦼) man in motorized wheelchair: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1F9BC 200D 27A1 FE0F] (👨🏿‍🦼‍➡️) man in motorized wheelchair facing right: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1F9BD] (👨🏿‍🦽) man in manual wheelchair: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1F9BD 200D 27A1 FE0F] (👨🏿‍🦽‍➡️) man in manual wheelchair facing right: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 200D 2695 FE0F] (👩‍⚕️) woman health worker
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 200D 2696 FE0F] (👩‍⚖️) woman judge
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 200D 2708 FE0F] (👩‍✈️) woman pilot
@@ -472,8 +495,11 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 200D 1F52C] (👩‍🔬) woman 
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 200D 1F680] (👩‍🚀) woman astronaut
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 200D 1F692] (👩‍🚒) woman firefighter
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 200D 1F9AF] (👩‍🦯) woman with white cane
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 200D 1F9AF 200D 27A1 FE0F] (👩‍🦯‍➡️) woman with white cane facing right
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 200D 1F9BC] (👩‍🦼) woman in motorized wheelchair
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 200D 1F9BC 200D 27A1 FE0F] (👩‍🦼‍➡️) woman in motorized wheelchair facing right
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 200D 1F9BD] (👩‍🦽) woman in manual wheelchair
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 200D 1F9BD 200D 27A1 FE0F] (👩‍🦽‍➡️) woman in manual wheelchair facing right
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 2695 FE0F] (👩🏻‍⚕️) woman health worker: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 2696 FE0F] (👩🏻‍⚖️) woman judge: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 2708 FE0F] (👩🏻‍✈️) woman pilot: light skin tone
@@ -492,8 +518,11 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F52C] (👩🏻‍�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F680] (👩🏻‍🚀) woman astronaut: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F692] (👩🏻‍🚒) woman firefighter: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F9AF] (👩🏻‍🦯) woman with white cane: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F9AF 200D 27A1 FE0F] (👩🏻‍🦯‍➡️) woman with white cane facing right: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F9BC] (👩🏻‍🦼) woman in motorized wheelchair: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F9BC 200D 27A1 FE0F] (👩🏻‍🦼‍➡️) woman in motorized wheelchair facing right: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F9BD] (👩🏻‍🦽) woman in manual wheelchair: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F9BD 200D 27A1 FE0F] (👩🏻‍🦽‍➡️) woman in manual wheelchair facing right: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 2695 FE0F] (👩🏼‍⚕️) woman health worker: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 2696 FE0F] (👩🏼‍⚖️) woman judge: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 2708 FE0F] (👩🏼‍✈️) woman pilot: medium-light skin tone
@@ -512,8 +541,11 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F52C] (👩🏼‍�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F680] (👩🏼‍🚀) woman astronaut: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F692] (👩🏼‍🚒) woman firefighter: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F9AF] (👩🏼‍🦯) woman with white cane: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F9AF 200D 27A1 FE0F] (👩🏼‍🦯‍➡️) woman with white cane facing right: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F9BC] (👩🏼‍🦼) woman in motorized wheelchair: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F9BC 200D 27A1 FE0F] (👩🏼‍🦼‍➡️) woman in motorized wheelchair facing right: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F9BD] (👩🏼‍🦽) woman in manual wheelchair: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F9BD 200D 27A1 FE0F] (👩🏼‍🦽‍➡️) woman in manual wheelchair facing right: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 2695 FE0F] (👩🏽‍⚕️) woman health worker: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 2696 FE0F] (👩🏽‍⚖️) woman judge: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 2708 FE0F] (👩🏽‍✈️) woman pilot: medium skin tone
@@ -532,8 +564,11 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F52C] (👩🏽‍�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F680] (👩🏽‍🚀) woman astronaut: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F692] (👩🏽‍🚒) woman firefighter: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F9AF] (👩🏽‍🦯) woman with white cane: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F9AF 200D 27A1 FE0F] (👩🏽‍🦯‍➡️) woman with white cane facing right: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F9BC] (👩🏽‍🦼) woman in motorized wheelchair: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F9BC 200D 27A1 FE0F] (👩🏽‍🦼‍➡️) woman in motorized wheelchair facing right: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F9BD] (👩🏽‍🦽) woman in manual wheelchair: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F9BD 200D 27A1 FE0F] (👩🏽‍🦽‍➡️) woman in manual wheelchair facing right: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 2695 FE0F] (👩🏾‍⚕️) woman health worker: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 2696 FE0F] (👩🏾‍⚖️) woman judge: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 2708 FE0F] (👩🏾‍✈️) woman pilot: medium-dark skin tone
@@ -552,8 +587,11 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F52C] (👩🏾‍�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F680] (👩🏾‍🚀) woman astronaut: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F692] (👩🏾‍🚒) woman firefighter: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F9AF] (👩🏾‍🦯) woman with white cane: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F9AF 200D 27A1 FE0F] (👩🏾‍🦯‍➡️) woman with white cane facing right: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F9BC] (👩🏾‍🦼) woman in motorized wheelchair: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F9BC 200D 27A1 FE0F] (👩🏾‍🦼‍➡️) woman in motorized wheelchair facing right: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F9BD] (👩🏾‍🦽) woman in manual wheelchair: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F9BD 200D 27A1 FE0F] (👩🏾‍🦽‍➡️) woman in manual wheelchair facing right: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 2695 FE0F] (👩🏿‍⚕️) woman health worker: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 2696 FE0F] (👩🏿‍⚖️) woman judge: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 2708 FE0F] (👩🏿‍✈️) woman pilot: dark skin tone
@@ -572,14 +610,30 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F52C] (👩🏿‍�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F680] (👩🏿‍🚀) woman astronaut: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F692] (👩🏿‍🚒) woman firefighter: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F9AF] (👩🏿‍🦯) woman with white cane: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F9AF 200D 27A1 FE0F] (👩🏿‍🦯‍➡️) woman with white cane facing right: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F9BC] (👩🏿‍🦼) woman in motorized wheelchair: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F9BC 200D 27A1 FE0F] (👩🏿‍🦼‍➡️) woman in motorized wheelchair facing right: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F9BD] (👩🏿‍🦽) woman in manual wheelchair: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F9BD 200D 27A1 FE0F] (👩🏿‍🦽‍➡️) woman in manual wheelchair facing right: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 200D 27A1 FE0F] (🚶‍➡️) person walking facing right
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FB 200D 27A1 FE0F] (🚶🏻‍➡️) person walking facing right: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FC 200D 27A1 FE0F] (🚶🏼‍➡️) person walking facing right: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FD 200D 27A1 FE0F] (🚶🏽‍➡️) person walking facing right: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FE 200D 27A1 FE0F] (🚶🏾‍➡️) person walking facing right: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FF 200D 27A1 FE0F] (🚶🏿‍➡️) person walking facing right: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 200D 27A1 FE0F] (🧎‍➡️) person kneeling facing right
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FB 200D 27A1 FE0F] (🧎🏻‍➡️) person kneeling facing right: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FC 200D 27A1 FE0F] (🧎🏼‍➡️) person kneeling facing right: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FD 200D 27A1 FE0F] (🧎🏽‍➡️) person kneeling facing right: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FE 200D 27A1 FE0F] (🧎🏾‍➡️) person kneeling facing right: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FF 200D 27A1 FE0F] (🧎🏿‍➡️) person kneeling facing right: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 2695 FE0F] (🧑‍⚕️) health worker
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 2696 FE0F] (🧑‍⚖️) judge
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 2708 FE0F] (🧑‍✈️) pilot
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F33E] (🧑‍🌾) farmer
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F373] (🧑‍🍳) cook
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F37C] (🧑‍🍼) person feeding baby
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F384] (🧑‍🎄) mx claus
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F393] (🧑‍🎓) student
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F3A4] (🧑‍🎤) singer
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F3A8] (🧑‍🎨) artist
@@ -592,14 +646,18 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F52C] (🧑‍🔬) scient
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F680] (🧑‍🚀) astronaut
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F692] (🧑‍🚒) firefighter
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F9AF] (🧑‍🦯) person with white cane
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F9AF 200D 27A1 FE0F] (🧑‍🦯‍➡️) person with white cane facing right
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F9BC] (🧑‍🦼) person in motorized wheelchair
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F9BC 200D 27A1 FE0F] (🧑‍🦼‍➡️) person in motorized wheelchair facing right
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F9BD] (🧑‍🦽) person in manual wheelchair
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F9BD 200D 27A1 FE0F] (🧑‍🦽‍➡️) person in manual wheelchair facing right
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 2695 FE0F] (🧑🏻‍⚕️) health worker: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 2696 FE0F] (🧑🏻‍⚖️) judge: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 2708 FE0F] (🧑🏻‍✈️) pilot: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F33E] (🧑🏻‍🌾) farmer: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F373] (🧑🏻‍🍳) cook: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F37C] (🧑🏻‍🍼) person feeding baby: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F384] (🧑🏻‍🎄) mx claus: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F393] (🧑🏻‍🎓) student: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F3A4] (🧑🏻‍🎤) singer: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F3A8] (🧑🏻‍🎨) artist: light skin tone
@@ -612,14 +670,18 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F52C] (🧑🏻‍�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F680] (🧑🏻‍🚀) astronaut: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F692] (🧑🏻‍🚒) firefighter: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F9AF] (🧑🏻‍🦯) person with white cane: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F9AF 200D 27A1 FE0F] (🧑🏻‍🦯‍➡️) person with white cane facing right: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F9BC] (🧑🏻‍🦼) person in motorized wheelchair: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F9BC 200D 27A1 FE0F] (🧑🏻‍🦼‍➡️) person in motorized wheelchair facing right: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F9BD] (🧑🏻‍🦽) person in manual wheelchair: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F9BD 200D 27A1 FE0F] (🧑🏻‍🦽‍➡️) person in manual wheelchair facing right: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 2695 FE0F] (🧑🏼‍⚕️) health worker: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 2696 FE0F] (🧑🏼‍⚖️) judge: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 2708 FE0F] (🧑🏼‍✈️) pilot: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F33E] (🧑🏼‍🌾) farmer: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F373] (🧑🏼‍🍳) cook: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F37C] (🧑🏼‍🍼) person feeding baby: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F384] (🧑🏼‍🎄) mx claus: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F393] (🧑🏼‍🎓) student: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F3A4] (🧑🏼‍🎤) singer: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F3A8] (🧑🏼‍🎨) artist: medium-light skin tone
@@ -632,14 +694,18 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F52C] (🧑🏼‍�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F680] (🧑🏼‍🚀) astronaut: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F692] (🧑🏼‍🚒) firefighter: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F9AF] (🧑🏼‍🦯) person with white cane: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F9AF 200D 27A1 FE0F] (🧑🏼‍🦯‍➡️) person with white cane facing right: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F9BC] (🧑🏼‍🦼) person in motorized wheelchair: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F9BC 200D 27A1 FE0F] (🧑🏼‍🦼‍➡️) person in motorized wheelchair facing right: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F9BD] (🧑🏼‍🦽) person in manual wheelchair: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F9BD 200D 27A1 FE0F] (🧑🏼‍🦽‍➡️) person in manual wheelchair facing right: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 2695 FE0F] (🧑🏽‍⚕️) health worker: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 2696 FE0F] (🧑🏽‍⚖️) judge: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 2708 FE0F] (🧑🏽‍✈️) pilot: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F33E] (🧑🏽‍🌾) farmer: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F373] (🧑🏽‍🍳) cook: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F37C] (🧑🏽‍🍼) person feeding baby: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F384] (🧑🏽‍🎄) mx claus: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F393] (🧑🏽‍🎓) student: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F3A4] (🧑🏽‍🎤) singer: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F3A8] (🧑🏽‍🎨) artist: medium skin tone
@@ -652,14 +718,18 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F52C] (🧑🏽‍�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F680] (🧑🏽‍🚀) astronaut: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F692] (🧑🏽‍🚒) firefighter: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F9AF] (🧑🏽‍🦯) person with white cane: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F9AF 200D 27A1 FE0F] (🧑🏽‍🦯‍➡️) person with white cane facing right: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F9BC] (🧑🏽‍🦼) person in motorized wheelchair: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F9BC 200D 27A1 FE0F] (🧑🏽‍🦼‍➡️) person in motorized wheelchair facing right: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F9BD] (🧑🏽‍🦽) person in manual wheelchair: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F9BD 200D 27A1 FE0F] (🧑🏽‍🦽‍➡️) person in manual wheelchair facing right: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 2695 FE0F] (🧑🏾‍⚕️) health worker: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 2696 FE0F] (🧑🏾‍⚖️) judge: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 2708 FE0F] (🧑🏾‍✈️) pilot: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F33E] (🧑🏾‍🌾) farmer: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F373] (🧑🏾‍🍳) cook: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F37C] (🧑🏾‍🍼) person feeding baby: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F384] (🧑🏾‍🎄) mx claus: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F393] (🧑🏾‍🎓) student: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F3A4] (🧑🏾‍🎤) singer: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F3A8] (🧑🏾‍🎨) artist: medium-dark skin tone
@@ -672,14 +742,18 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F52C] (🧑🏾‍�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F680] (🧑🏾‍🚀) astronaut: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F692] (🧑🏾‍🚒) firefighter: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F9AF] (🧑🏾‍🦯) person with white cane: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F9AF 200D 27A1 FE0F] (🧑🏾‍🦯‍➡️) person with white cane facing right: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F9BC] (🧑🏾‍🦼) person in motorized wheelchair: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F9BC 200D 27A1 FE0F] (🧑🏾‍🦼‍➡️) person in motorized wheelchair facing right: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F9BD] (🧑🏾‍🦽) person in manual wheelchair: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F9BD 200D 27A1 FE0F] (🧑🏾‍🦽‍➡️) person in manual wheelchair facing right: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 2695 FE0F] (🧑🏿‍⚕️) health worker: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 2696 FE0F] (🧑🏿‍⚖️) judge: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 2708 FE0F] (🧑🏿‍✈️) pilot: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F33E] (🧑🏿‍🌾) farmer: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F373] (🧑🏿‍🍳) cook: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F37C] (🧑🏿‍🍼) person feeding baby: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F384] (🧑🏿‍🎄) mx claus: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F393] (🧑🏿‍🎓) student: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F3A4] (🧑🏿‍🎤) singer: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F3A8] (🧑🏿‍🎨) artist: dark skin tone
@@ -692,8 +766,11 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F52C] (🧑🏿‍�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F680] (🧑🏿‍🚀) astronaut: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F692] (🧑🏿‍🚒) firefighter: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F9AF] (🧑🏿‍🦯) person with white cane: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F9AF 200D 27A1 FE0F] (🧑🏿‍🦯‍➡️) person with white cane facing right: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F9BC] (🧑🏿‍🦼) person in motorized wheelchair: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F9BC 200D 27A1 FE0F] (🧑🏿‍🦼‍➡️) person in motorized wheelchair facing right: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F9BD] (🧑🏿‍🦽) person in manual wheelchair: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F9BD 200D 27A1 FE0F] (🧑🏿‍🦽‍➡️) person in manual wheelchair facing right: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [26F9 1F3FB 200D 2640 FE0F] (⛹🏻‍♀️) woman bouncing ball: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [26F9 1F3FB 200D 2642 FE0F] (⛹🏻‍♂️) man bouncing ball: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [26F9 1F3FC 200D 2640 FE0F] (⛹🏼‍♀️) woman bouncing ball: medium-light skin tone
@@ -707,17 +784,29 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [26F9 1F3FF 200D 2642 FE0F] (⛹🏿‍
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [26F9 FE0F 200D 2640 FE0F] (⛹️‍♀️) woman bouncing ball
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [26F9 FE0F 200D 2642 FE0F] (⛹️‍♂️) man bouncing ball
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 200D 2640 FE0F] (🏃‍♀️) woman running
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 200D 2640 FE0F 200D 27A1 FE0F] (🏃‍♀️‍➡️) woman running facing right
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 200D 2642 FE0F] (🏃‍♂️) man running
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 200D 2642 FE0F 200D 27A1 FE0F] (🏃‍♂️‍➡️) man running facing right
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FB 200D 2640 FE0F] (🏃🏻‍♀️) woman running: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FB 200D 2640 FE0F 200D 27A1 FE0F] (🏃🏻‍♀️‍➡️) woman running facing right: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FB 200D 2642 FE0F] (🏃🏻‍♂️) man running: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FB 200D 2642 FE0F 200D 27A1 FE0F] (🏃🏻‍♂️‍➡️) man running facing right: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FC 200D 2640 FE0F] (🏃🏼‍♀️) woman running: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FC 200D 2640 FE0F 200D 27A1 FE0F] (🏃🏼‍♀️‍➡️) woman running facing right: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FC 200D 2642 FE0F] (🏃🏼‍♂️) man running: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FC 200D 2642 FE0F 200D 27A1 FE0F] (🏃🏼‍♂️‍➡️) man running facing right: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FD 200D 2640 FE0F] (🏃🏽‍♀️) woman running: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FD 200D 2640 FE0F 200D 27A1 FE0F] (🏃🏽‍♀️‍➡️) woman running facing right: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FD 200D 2642 FE0F] (🏃🏽‍♂️) man running: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FD 200D 2642 FE0F 200D 27A1 FE0F] (🏃🏽‍♂️‍➡️) man running facing right: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FE 200D 2640 FE0F] (🏃🏾‍♀️) woman running: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FE 200D 2640 FE0F 200D 27A1 FE0F] (🏃🏾‍♀️‍➡️) woman running facing right: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FE 200D 2642 FE0F] (🏃🏾‍♂️) man running: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FE 200D 2642 FE0F 200D 27A1 FE0F] (🏃🏾‍♂️‍➡️) man running facing right: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FF 200D 2640 FE0F] (🏃🏿‍♀️) woman running: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FF 200D 2640 FE0F 200D 27A1 FE0F] (🏃🏿‍♀️‍➡️) woman running facing right: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FF 200D 2642 FE0F] (🏃🏿‍♂️) man running: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C3 1F3FF 200D 2642 FE0F 200D 27A1 FE0F] (🏃🏿‍♂️‍➡️) man running facing right: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C4 200D 2640 FE0F] (🏄‍♀️) woman surfing
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C4 200D 2642 FE0F] (🏄‍♂️) man surfing
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3C4 1F3FB 200D 2640 FE0F] (🏄🏻‍♀️) woman surfing: light skin tone
@@ -997,17 +1086,29 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B5 1F3FE 200D 2642 FE0F] (🚵🏾�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B5 1F3FF 200D 2640 FE0F] (🚵🏿‍♀️) woman mountain biking: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B5 1F3FF 200D 2642 FE0F] (🚵🏿‍♂️) man mountain biking: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 200D 2640 FE0F] (🚶‍♀️) woman walking
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 200D 2640 FE0F 200D 27A1 FE0F] (🚶‍♀️‍➡️) woman walking facing right
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 200D 2642 FE0F] (🚶‍♂️) man walking
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 200D 2642 FE0F 200D 27A1 FE0F] (🚶‍♂️‍➡️) man walking facing right
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FB 200D 2640 FE0F] (🚶🏻‍♀️) woman walking: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FB 200D 2640 FE0F 200D 27A1 FE0F] (🚶🏻‍♀️‍➡️) woman walking facing right: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FB 200D 2642 FE0F] (🚶🏻‍♂️) man walking: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FB 200D 2642 FE0F 200D 27A1 FE0F] (🚶🏻‍♂️‍➡️) man walking facing right: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FC 200D 2640 FE0F] (🚶🏼‍♀️) woman walking: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FC 200D 2640 FE0F 200D 27A1 FE0F] (🚶🏼‍♀️‍➡️) woman walking facing right: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FC 200D 2642 FE0F] (🚶🏼‍♂️) man walking: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FC 200D 2642 FE0F 200D 27A1 FE0F] (🚶🏼‍♂️‍➡️) man walking facing right: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FD 200D 2640 FE0F] (🚶🏽‍♀️) woman walking: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FD 200D 2640 FE0F 200D 27A1 FE0F] (🚶🏽‍♀️‍➡️) woman walking facing right: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FD 200D 2642 FE0F] (🚶🏽‍♂️) man walking: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FD 200D 2642 FE0F 200D 27A1 FE0F] (🚶🏽‍♂️‍➡️) man walking facing right: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FE 200D 2640 FE0F] (🚶🏾‍♀️) woman walking: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FE 200D 2640 FE0F 200D 27A1 FE0F] (🚶🏾‍♀️‍➡️) woman walking facing right: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FE 200D 2642 FE0F] (🚶🏾‍♂️) man walking: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FE 200D 2642 FE0F 200D 27A1 FE0F] (🚶🏾‍♂️‍➡️) man walking facing right: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FF 200D 2640 FE0F] (🚶🏿‍♀️) woman walking: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FF 200D 2640 FE0F 200D 27A1 FE0F] (🚶🏿‍♀️‍➡️) woman walking facing right: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FF 200D 2642 FE0F] (🚶🏿‍♂️) man walking: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F6B6 1F3FF 200D 2642 FE0F 200D 27A1 FE0F] (🚶🏿‍♂️‍➡️) man walking facing right: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F926 200D 2640 FE0F] (🤦‍♀️) woman facepalming
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F926 200D 2642 FE0F] (🤦‍♂️) man facepalming
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F926 1F3FB 200D 2640 FE0F] (🤦🏻‍♀️) woman facepalming: light skin tone
@@ -1131,17 +1232,29 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CD 1F3FE 200D 2642 FE0F] (🧍🏾�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CD 1F3FF 200D 2640 FE0F] (🧍🏿‍♀️) woman standing: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CD 1F3FF 200D 2642 FE0F] (🧍🏿‍♂️) man standing: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 200D 2640 FE0F] (🧎‍♀️) woman kneeling
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 200D 2640 FE0F 200D 27A1 FE0F] (🧎‍♀️‍➡️) woman kneeling facing right
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 200D 2642 FE0F] (🧎‍♂️) man kneeling
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 200D 2642 FE0F 200D 27A1 FE0F] (🧎‍♂️‍➡️) man kneeling facing right
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FB 200D 2640 FE0F] (🧎🏻‍♀️) woman kneeling: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FB 200D 2640 FE0F 200D 27A1 FE0F] (🧎🏻‍♀️‍➡️) woman kneeling facing right: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FB 200D 2642 FE0F] (🧎🏻‍♂️) man kneeling: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FB 200D 2642 FE0F 200D 27A1 FE0F] (🧎🏻‍♂️‍➡️) man kneeling facing right: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FC 200D 2640 FE0F] (🧎🏼‍♀️) woman kneeling: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FC 200D 2640 FE0F 200D 27A1 FE0F] (🧎🏼‍♀️‍➡️) woman kneeling facing right: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FC 200D 2642 FE0F] (🧎🏼‍♂️) man kneeling: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FC 200D 2642 FE0F 200D 27A1 FE0F] (🧎🏼‍♂️‍➡️) man kneeling facing right: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FD 200D 2640 FE0F] (🧎🏽‍♀️) woman kneeling: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FD 200D 2640 FE0F 200D 27A1 FE0F] (🧎🏽‍♀️‍➡️) woman kneeling facing right: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FD 200D 2642 FE0F] (🧎🏽‍♂️) man kneeling: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FD 200D 2642 FE0F 200D 27A1 FE0F] (🧎🏽‍♂️‍➡️) man kneeling facing right: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FE 200D 2640 FE0F] (🧎🏾‍♀️) woman kneeling: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FE 200D 2640 FE0F 200D 27A1 FE0F] (🧎🏾‍♀️‍➡️) woman kneeling facing right: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FE 200D 2642 FE0F] (🧎🏾‍♂️) man kneeling: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FE 200D 2642 FE0F 200D 27A1 FE0F] (🧎🏾‍♂️‍➡️) man kneeling facing right: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FF 200D 2640 FE0F] (🧎🏿‍♀️) woman kneeling: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FF 200D 2640 FE0F 200D 27A1 FE0F] (🧎🏿‍♀️‍➡️) woman kneeling facing right: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FF 200D 2642 FE0F] (🧎🏿‍♂️) man kneeling: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CE 1F3FF 200D 2642 FE0F 200D 27A1 FE0F] (🧎🏿‍♂️‍➡️) man kneeling facing right: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CF 200D 2640 FE0F] (🧏‍♀️) deaf woman
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CF 200D 2642 FE0F] (🧏‍♂️) deaf man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9CF 1F3FB 200D 2640 FE0F] (🧏🏻‍♀️) deaf woman: light skin tone
@@ -1338,20 +1451,25 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F9B0] (🧑🏿‍�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F9B1] (🧑🏿‍🦱) person: dark skin tone, curly hair
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F9B2] (🧑🏿‍🦲) person: dark skin tone, bald
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F9B3] (🧑🏿‍🦳) person: dark skin tone, white hair
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [26D3 FE0F 200D 1F4A5] (⛓️‍💥) broken chain
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [2764 FE0F 200D 1F525] (❤️‍🔥) heart on fire
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [2764 FE0F 200D 1FA79] (❤️‍🩹) mending heart
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F344 200D 1F7EB] (🍄‍🟫) brown mushroom
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F34B 200D 1F7E9] (🍋‍🟩) lime
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3F3 FE0F 200D 26A7 FE0F] (🏳️‍⚧️) transgender flag
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3F3 FE0F 200D 1F308] (🏳️‍🌈) rainbow flag
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F3F4 200D 2620 FE0F] (🏴‍☠️) pirate flag
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F408 200D 2B1B] (🐈‍⬛) black cat
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F415 200D 1F9BA] (🐕‍🦺) service dog
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F426 200D 2B1B] (🐦‍⬛) black bird
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F426 200D 1F525] (🐦‍🔥) phoenix
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F43B 200D 2744 FE0F] (🐻‍❄️) polar bear
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F441 FE0F 200D 1F5E8 FE0F] (👁️‍🗨️) eye in speech bubble
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F62E 200D 1F4A8] (😮‍💨) face exhaling
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F635 200D 1F4AB] (😵‍💫) face with spiral eyes
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F636 200D 1F32B FE0F] (😶‍🌫️) face in clouds
-Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F384] (🧑‍🎄) mx claus
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F642 200D 2194 FE0F] (🙂‍↔️) head shaking horizontally
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F642 200D 2195 FE0F] (🙂‍↕️) head shaking vertically
 ==== RGI Emoji Keycap Sequences ====
 Register Emoji [Emoji_Keycap_Sequence]: [23 FE0F 20E3] (#️⃣) keycap: #
 Register Emoji [Emoji_Keycap_Sequence]: [2A FE0F 20E3] (*️⃣) keycap: *
@@ -2257,7 +2375,7 @@ Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1F1] (🇹🇱) flag: Timor-L
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1F2] (🇹🇲) flag: Turkmenistan
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1F3] (🇹🇳) flag: Tunisia
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1F4] (🇹🇴) flag: Tonga
-Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1F7] (🇹🇷) flag: Turkey
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1F7] (🇹🇷) flag: Türkiye
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1F9] (🇹🇹) flag: Trinidad & Tobago
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1FB] (🇹🇻) flag: Tuvalu
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1FC] (🇹🇼) flag: Taiwan
@@ -5073,6 +5191,7 @@ Register Emoji [Emoji_Presentation]: [1FAF8 FE0F] (🫸️) rightwards pushing h
 ==== Register Leftover Emoji ====
 ==== Whitelist Emoji ====
 ==== Blacklist Emoji ====
+==== Assign Emoji Groups ====
 ==== Add Mapped Characters ====
 Removed Valid: 6F0 (۰) EXTENDED ARABIC-INDIC DIGIT ZERO
 Add Mapped: 6F0 (۰) EXTENDED ARABIC-INDIC DIGIT ZERO => [660] (٠) ARABIC-INDIC DIGIT ZERO
@@ -5296,10 +5415,10 @@ Removed Valid: A7C3 (ꟃ) LATIN SMALL LETTER ANGLICANA W
 Removed Valid: A7D1 (ꟑ) LATIN SMALL LETTER CLOSED INSULAR G
 Removed Valid: A7D7 (ꟗ) LATIN SMALL LETTER MIDDLE SCOTS S
 Removed Valid: A7D9 (ꟙ) LATIN SMALL LETTER SIGMOID S
+Removed Valid: FE (þ) LATIN SMALL LETTER THORN
 Removed Valid: 1BF (ƿ) LATIN LETTER WYNN
 Removed Valid: A7D5 (ꟕ) LATIN SMALL LETTER DOUBLE WYNN
 Removed Valid: F0 (ð) LATIN SMALL LETTER ETH
-Removed Valid: FE (þ) LATIN SMALL LETTER THORN
 Removed Valid: A765 (ꝥ) LATIN SMALL LETTER THORN WITH STROKE
 Removed Valid: A767 (ꝧ) LATIN SMALL LETTER THORN WITH STROKE THROUGH DESCENDER
 Removed Valid: A7D3 (ꟓ) LATIN SMALL LETTER DOUBLE THORN
@@ -5486,7 +5605,6 @@ Removed Valid: 1EFF (ỿ) LATIN SMALL LETTER Y WITH LOOP
 Removed Mapped: 1E9A (ẚ) LATIN SMALL LETTER A WITH RIGHT HALF RING => [61 2BE] (aʾ) LATIN SMALL LETTER A + MODIFIER LETTER RIGHT HALF RING
 Removed Valid: 1E9C (ẜ) LATIN SMALL LETTER LONG S WITH DIAGONAL STROKE
 Removed Valid: 1E9D (ẝ) LATIN SMALL LETTER LONG S WITH HIGH STROKE
-Removed Mapped: 1E9E (ẞ) LATIN CAPITAL LETTER SHARP S => [73 73] (ss) LATIN SMALL LETTER S + LATIN SMALL LETTER S
 Removed Valid: 251 (ɑ) LATIN SMALL LETTER ALPHA
 Removed Valid: 1E9F (ẟ) LATIN SMALL LETTER DELTA
 Removed Valid: 263 (ɣ) LATIN SMALL LETTER GAMMA
@@ -7657,7 +7775,7 @@ Removed Valid: 225C (≜) DELTA EQUAL TO
 Removed Valid: 225D (≝) EQUAL TO BY DEFINITION
 Removed Valid: 225E (≞) MEASURED BY
 Removed Valid: 225F (≟) QUESTIONED EQUAL TO
-*** Already disallowed: 2260 (≠) NOT EQUAL TO
+Removed Valid: 2260 (≠) NOT EQUAL TO
 Removed Valid: 2261 (≡) IDENTICAL TO
 Removed Valid: 2262 (≢) NOT IDENTICAL TO
 Removed Valid: 2263 (≣) STRICTLY EQUIVALENT TO
@@ -7671,8 +7789,8 @@ Removed Valid: 226A (≪) MUCH LESS-THAN
 Removed Valid: 226B (≫) MUCH GREATER-THAN
 Removed Valid: 226C (≬) BETWEEN
 Removed Valid: 226D (≭) NOT EQUIVALENT TO
-*** Already disallowed: 226E (≮) NOT LESS-THAN
-*** Already disallowed: 226F (≯) NOT GREATER-THAN
+Removed Valid: 226E (≮) NOT LESS-THAN
+Removed Valid: 226F (≯) NOT GREATER-THAN
 Removed Valid: 2270 (≰) NEITHER LESS-THAN NOR EQUAL TO
 Removed Valid: 2271 (≱) NEITHER GREATER-THAN NOR EQUAL TO
 Removed Valid: 2272 (≲) LESS-THAN OR EQUIVALENT TO
@@ -11029,10 +11147,10 @@ Disallowed Script: [Lina] Linear A [X]
 Disallowed Script: [Linb] Linear B [X]
 Disallowed Script: [Sgnw] SignWriting [X]
 Valid  | Name       | Test      | Rest      | Extra                     
- 98466 | Japanese   | Kana+Hira | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
-109784 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
- 98257 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
- 97258 | Bopomofo   | Bopo      | Hani      |                           
+ 99088 | Japanese   | Kana+Hira | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+110406 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+ 98879 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
+ 97880 | Bopomofo   | Bopo      | Hani      |                           
   1338 | Latin      | Latn+Zyyy | Zinh      | π                         
   1184 | Cyrillic   | Cyrl      | Zyyy+Zinh |                           
   1172 | Greek      | Grek      | Zyyy+Zinh |                           
@@ -14577,8 +14695,8 @@ Removed Mapping: 1F248 (🉈) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-655
 [✓] Fastpath ASCII
 [✓] Groups Names are A-Z
 ==== Find Unique Characters ====
-Valid: 133635
-Multi: 98363
+Valid: 134257
+Multi: 98985
 Unique: 35272
 [✓] Matching Groups have Same CM Style
 [✓] Wholes are Valid
@@ -14594,10 +14712,10 @@ Non-Confusable Non-Unique: 52
 Ord | Valid  | Uniqu | Prima | Secon | CM   | Group     
   1 |   1129 |    55 |  1128 |     1 | 0/51 | Latin     
   2 |    395 |   372 |   394 |     1 |      | Arabic    
-  3 |  98257 |     0 | 97184 |  1073 | 0/0  | Han       
+  3 |  98879 |     0 | 97806 |  1073 | 0/0  | Han       
   4 |    120 |   110 |   120 |     0 |      | Devanagari
-  5 |  98464 |   207 |   209 | 98255 | 0/58 | Japanese  
-  6 | 109783 | 11526 | 11528 | 98255 | 0/0  | Korean    
+  5 |  99086 |   207 |   209 | 98877 | 0/58 | Japanese  
+  6 | 110405 | 11526 | 11528 | 98877 | 0/0  | Korean    
   7 |   1152 |   105 |   105 |  1047 | 0/8  | Cyrillic  
   8 |     84 |    83 |    83 |     1 |      | Hebrew    
   9 |     86 |    85 |    85 |     1 |      | Thai      
@@ -14609,7 +14727,7 @@ Ord | Valid  | Uniqu | Prima | Secon | CM   | Group
  15 |     80 |    80 |    80 |     0 |      | Lao       
  16 |     91 |    81 |    91 |     0 |      | Gujarati  
  17 |     96 |    96 |    96 |     0 |      | Telugu    
- 18 |  97258 |    74 |    76 | 97182 | 0/0  | Bopomofo  
+ 18 |  97880 |    74 |    76 | 97804 | 0/0  | Bopomofo  
  19 |    213 |   203 |   213 |     0 |      | Myanmar   
  20 |     42 |    42 |    42 |     0 |      | Georgian  
  21 |     43 |    43 |    43 |     0 |      | Armenian  
@@ -14636,80 +14754,80 @@ Ord | Valid  | Uniqu | Prima | Secon | CM   | Group
  42 |     40 |    40 |    40 |     0 |      | Dsrt      
  43 |     28 |    28 |    28 |     0 |      | Ogam      
  44 |     23 |    23 |    23 |     0 |      | Tglg      
- 45 |     58 |    58 |    58 |     0 |      | Tfng      
- 46 |    292 |   292 |   292 |     0 |      | Vaii      
- 47 |     89 |    88 |    89 |     0 |      | Java      
- 48 |     75 |    75 |    75 |     0 |      | Copt      
- 49 |     50 |    50 |    50 |     0 |      | Xpeo      
- 50 |     52 |    52 |    52 |     0 |      | Adlm      
- 51 |     90 |    90 |    90 |     0 |      | Bali      
- 52 |    654 |   654 |   654 |     0 |      | Bamu      
- 53 |     56 |    56 |    56 |     0 |      | Batk      
- 54 |     88 |    68 |    88 |     0 |      | Cakm      
- 55 |     71 |    71 |    71 |     0 |      | Hmnp      
- 56 |     46 |    46 |    46 |     0 |      | Kali      
- 57 |    123 |   123 |   123 |     0 |      | Lana      
- 58 |     72 |    72 |    72 |     0 |      | Lepc      
- 59 |     41 |    41 |    41 |     0 |      | Lisu      
- 60 |     29 |    29 |    29 |     0 |      | Mand      
- 61 |     76 |    76 |    76 |     0 |      | Mtei      
- 62 |     93 |    93 |    93 |     0 |      | Newa      
- 63 |     46 |    46 |    46 |     0 |      | Olck      
- 64 |     36 |    36 |    36 |     0 |      | Osge      
- 65 |    149 |   149 |   149 |     0 |      | Plrd      
- 66 |     50 |    50 |    50 |     0 |      | Rohg      
- 67 |     80 |    80 |    80 |     0 |      | Saur      
- 68 |     72 |    72 |    72 |     0 |      | Sund      
- 69 |     55 |    45 |    55 |     0 |      | Sylo      
- 70 |     45 |    35 |    45 |     0 |      | Tale      
- 71 |     72 |    72 |    72 |     0 |      | Tavt      
- 72 |     59 |    59 |    59 |     0 |      | Wcho      
- 73 |   1221 |  1220 |  1221 |     0 |      | Yiii      
- 74 |     53 |    53 |    53 |     0 |      | Aghb      
- 75 |     62 |    62 |    62 |     0 |      | Ahom      
- 76 |     31 |    31 |    31 |     0 |      | Armi      
- 77 |     61 |    61 |    61 |     0 |      | Avst      
- 78 |     35 |    35 |    35 |     0 |      | Bass      
- 79 |     95 |    95 |    95 |     0 |      | Bhks      
- 80 |    113 |   113 |   113 |     0 |      | Brah      
- 81 |     31 |    30 |    31 |     0 |      | Bugi      
- 82 |     20 |    20 |    20 |     0 |      | Buhd      
- 83 |     49 |    49 |    49 |     0 |      | Cari      
- 84 |     28 |    28 |    28 |     0 |      | Chrs      
- 85 |     99 |    99 |    99 |     0 |      | Cpmn      
- 86 |     55 |    55 |    55 |     0 |      | Cprt      
- 87 |     70 |    70 |    70 |     0 |      | Diak      
- 88 |     70 |    60 |    70 |     0 |      | Dogr      
- 89 |    142 |   142 |   142 |     0 |      | Dupl      
- 90 |     40 |    40 |    40 |     0 |      | Elba      
- 91 |     23 |    23 |    23 |     0 |      | Elym      
- 92 |     86 |    86 |    86 |     0 |      | Glag      
- 93 |     63 |    63 |    63 |     0 |      | Gong      
- 94 |     75 |    75 |    75 |     0 |      | Gonm      
- 95 |     27 |    27 |    27 |     0 |      | Goth      
- 96 |    103 |    82 |   103 |     0 |      | Gran      
- 97 |     21 |    21 |    21 |     0 |      | Hano      
- 98 |     26 |    26 |    26 |     0 |      | Hatr      
- 99 |    583 |   583 |   583 |     0 |      | Hluw      
-100 |    124 |   124 |   124 |     0 |      | Hmng      
-101 |     57 |    57 |    57 |     0 |      | Hung      
-102 |     84 |    84 |    84 |     0 |      | Kawi      
-103 |     60 |    60 |    60 |     0 |      | Khar      
-104 |     71 |    61 |    71 |     0 |      | Khoj      
-105 |    471 |   471 |   471 |     0 |      | Kits      
-106 |     72 |    62 |    72 |     0 |      | Kthi      
-107 |     29 |    29 |    29 |     0 |      | Lyci      
-108 |     27 |    27 |    27 |     0 |      | Lydi      
-109 |     23 |    23 |    23 |     0 |      | Maka      
-110 |     49 |    39 |    49 |     0 |      | Mahj      
-111 |     51 |    50 |    51 |     0 |      | Mani      
-112 |     68 |    68 |    68 |     0 |      | Marc      
-113 |     57 |    57 |    57 |     0 |      | Medf      
-114 |    213 |   213 |   213 |     0 |      | Mend      
-115 |     90 |    90 |    90 |     0 |      | Merc      
-116 |     32 |    32 |    32 |     0 |      | Mero      
-117 |     77 |    77 |    77 |     0 |      | Modi      
-118 |     41 |    41 |    41 |     0 |      | Mroo      
+ 45 |     75 |    75 |    75 |     0 |      | Gonm      
+ 46 |     58 |    58 |    58 |     0 |      | Tfng      
+ 47 |    654 |   654 |   654 |     0 |      | Bamu      
+ 48 |     41 |    41 |    41 |     0 |      | Mroo      
+ 49 |   1221 |  1220 |  1221 |     0 |      | Yiii      
+ 50 |    292 |   292 |   292 |     0 |      | Vaii      
+ 51 |     89 |    88 |    89 |     0 |      | Java      
+ 52 |     75 |    75 |    75 |     0 |      | Copt      
+ 53 |     50 |    50 |    50 |     0 |      | Xpeo      
+ 54 |     52 |    52 |    52 |     0 |      | Adlm      
+ 55 |     90 |    90 |    90 |     0 |      | Bali      
+ 56 |     56 |    56 |    56 |     0 |      | Batk      
+ 57 |     88 |    68 |    88 |     0 |      | Cakm      
+ 58 |     71 |    71 |    71 |     0 |      | Hmnp      
+ 59 |     46 |    46 |    46 |     0 |      | Kali      
+ 60 |    123 |   123 |   123 |     0 |      | Lana      
+ 61 |     72 |    72 |    72 |     0 |      | Lepc      
+ 62 |     41 |    41 |    41 |     0 |      | Lisu      
+ 63 |     29 |    29 |    29 |     0 |      | Mand      
+ 64 |     76 |    76 |    76 |     0 |      | Mtei      
+ 65 |     93 |    93 |    93 |     0 |      | Newa      
+ 66 |     46 |    46 |    46 |     0 |      | Olck      
+ 67 |     36 |    36 |    36 |     0 |      | Osge      
+ 68 |    149 |   149 |   149 |     0 |      | Plrd      
+ 69 |     50 |    50 |    50 |     0 |      | Rohg      
+ 70 |     80 |    80 |    80 |     0 |      | Saur      
+ 71 |     72 |    72 |    72 |     0 |      | Sund      
+ 72 |     55 |    45 |    55 |     0 |      | Sylo      
+ 73 |     45 |    35 |    45 |     0 |      | Tale      
+ 74 |     72 |    72 |    72 |     0 |      | Tavt      
+ 75 |     59 |    59 |    59 |     0 |      | Wcho      
+ 76 |     53 |    53 |    53 |     0 |      | Aghb      
+ 77 |     62 |    62 |    62 |     0 |      | Ahom      
+ 78 |     31 |    31 |    31 |     0 |      | Armi      
+ 79 |     61 |    61 |    61 |     0 |      | Avst      
+ 80 |     35 |    35 |    35 |     0 |      | Bass      
+ 81 |     95 |    95 |    95 |     0 |      | Bhks      
+ 82 |    113 |   113 |   113 |     0 |      | Brah      
+ 83 |     31 |    30 |    31 |     0 |      | Bugi      
+ 84 |     20 |    20 |    20 |     0 |      | Buhd      
+ 85 |     49 |    49 |    49 |     0 |      | Cari      
+ 86 |     28 |    28 |    28 |     0 |      | Chrs      
+ 87 |     99 |    99 |    99 |     0 |      | Cpmn      
+ 88 |     55 |    55 |    55 |     0 |      | Cprt      
+ 89 |     70 |    70 |    70 |     0 |      | Diak      
+ 90 |     70 |    60 |    70 |     0 |      | Dogr      
+ 91 |    142 |   142 |   142 |     0 |      | Dupl      
+ 92 |     40 |    40 |    40 |     0 |      | Elba      
+ 93 |     23 |    23 |    23 |     0 |      | Elym      
+ 94 |     86 |    86 |    86 |     0 |      | Glag      
+ 95 |     63 |    63 |    63 |     0 |      | Gong      
+ 96 |     27 |    27 |    27 |     0 |      | Goth      
+ 97 |    103 |    82 |   103 |     0 |      | Gran      
+ 98 |     21 |    21 |    21 |     0 |      | Hano      
+ 99 |     26 |    26 |    26 |     0 |      | Hatr      
+100 |    583 |   583 |   583 |     0 |      | Hluw      
+101 |    124 |   124 |   124 |     0 |      | Hmng      
+102 |     57 |    57 |    57 |     0 |      | Hung      
+103 |     84 |    84 |    84 |     0 |      | Kawi      
+104 |     60 |    60 |    60 |     0 |      | Khar      
+105 |     71 |    61 |    71 |     0 |      | Khoj      
+106 |    471 |   471 |   471 |     0 |      | Kits      
+107 |     72 |    62 |    72 |     0 |      | Kthi      
+108 |     29 |    29 |    29 |     0 |      | Lyci      
+109 |     27 |    27 |    27 |     0 |      | Lydi      
+110 |     23 |    23 |    23 |     0 |      | Maka      
+111 |     49 |    39 |    49 |     0 |      | Mahj      
+112 |     51 |    50 |    51 |     0 |      | Mani      
+113 |     68 |    68 |    68 |     0 |      | Marc      
+114 |     57 |    57 |    57 |     0 |      | Medf      
+115 |    213 |   213 |   213 |     0 |      | Mend      
+116 |     90 |    90 |    90 |     0 |      | Merc      
+117 |     32 |    32 |    32 |     0 |      | Mero      
+118 |     77 |    77 |    77 |     0 |      | Modi      
 119 |     47 |    37 |    47 |     0 |      | Mult      
 120 |     42 |    42 |    42 |     0 |      | Nagm      
 121 |     32 |    32 |    32 |     0 |      | Narb      

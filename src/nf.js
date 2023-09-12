@@ -2,32 +2,8 @@
 // for reference implementation
 // see: /derive/nf.js
 
-import r from './include-nf.js';
-import {read_sorted, read_sorted_arrays, read_mapped} from './decoder.js';
-
-function unpack_cc(packed) {
-	return (packed >> 24) & 0xFF;
-}
-function unpack_cp(packed) {
-	return packed & 0xFFFFFF;
-}
-
-const SHIFTED_RANK = new Map(read_sorted_arrays(r).flatMap((v, i) => v.map(x => [x, (i+1) << 24]))); // pre-shifted
-const EXCLUSIONS = new Set(read_sorted(r));
-const DECOMP = new Map();
-const RECOMP = new Map();
-for (let [cp, cps] of read_mapped(r)) {
-	if (!EXCLUSIONS.has(cp) && cps.length == 2) {
-		let [a, b] = cps;
-		let bucket = RECOMP.get(a);
-		if (!bucket) {
-			bucket = new Map();
-			RECOMP.set(a, bucket);
-		}
-		bucket.set(b, cp);
-	}
-	DECOMP.set(cp, cps.reverse()); // stored reversed
-}
+import COMPRESSED from './include-nf.js';
+import {read_compressed_payload, read_sorted, read_sorted_arrays, read_mapped} from './decoder.js';
 
 // algorithmic hangul
 // https://www.unicode.org/versions/Unicode15.0.0/ch03.pdf (page 144)
@@ -44,6 +20,38 @@ const S1 = S0 + S_COUNT;
 const L1 = L0 + L_COUNT;
 const V1 = V0 + V_COUNT;
 const T1 = T0 + T_COUNT;
+
+function unpack_cc(packed) {
+	return (packed >> 24) & 0xFF;
+}
+function unpack_cp(packed) {
+	return packed & 0xFFFFFF;
+}
+
+let SHIFTED_RANK, EXCLUSIONS, DECOMP, RECOMP;
+
+function init() {
+	//console.time('nf');
+	let r = read_compressed_payload(COMPRESSED);
+	SHIFTED_RANK = new Map(read_sorted_arrays(r).flatMap((v, i) => v.map(x => [x, (i+1) << 24]))); // pre-shifted
+	EXCLUSIONS = new Set(read_sorted(r));
+	DECOMP = new Map();
+	RECOMP = new Map();
+	for (let [cp, cps] of read_mapped(r)) {
+		if (!EXCLUSIONS.has(cp) && cps.length == 2) {
+			let [a, b] = cps;
+			let bucket = RECOMP.get(a);
+			if (!bucket) {
+				bucket = new Map();
+				RECOMP.set(a, bucket);
+			}
+			bucket.set(b, cp);
+		}
+		DECOMP.set(cp, cps.reverse()); // stored reversed
+	}
+	//console.timeEnd('nf');
+	// 20230905: 11ms
+}
 
 function is_hangul(cp) {
 	return cp >= S0 && cp < S1;
@@ -67,6 +75,7 @@ function compose_pair(a, b) {
 }
 
 function decomposed(cps) {
+	if (!SHIFTED_RANK) init();
 	let ret = [];
 	let buf = [];
 	let check_order = false;

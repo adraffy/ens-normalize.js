@@ -316,6 +316,7 @@ writeFileSync(new URL('./include-versions.js', import.meta.url), [
 	})
 ].join('\n'));
 
+// 20230905: add delayed init for ricmoo
 function write(name, vars = {}) {
 	let {data, symbols} = enc.compressed();
 	let encoded = unsafe_btoa(data);
@@ -326,8 +327,7 @@ function write(name, vars = {}) {
 		`// source: https://github.com/adraffy/ens-normalize.js/blob/main/src/make.js`,
 		`// see: https://github.com/adraffy/ens-normalize.js#security`,
 		`// SHA-256: ${hash}`,
-		`import {read_compressed_payload} from './decoder.js';`,
-		`export default read_compressed_payload('${encoded}');`,
+		`export default '${encoded}';`,
 		...Object.entries(vars).map(([k, v]) => {
 			let expr;
 			if (v instanceof Map) {

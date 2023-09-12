@@ -58,15 +58,12 @@ body {
 }
 header {
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: space-between;
+	gap: 4px 8px;
 }
 h1 {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: end;
 	margin: 0;
-	gap: 4px 8px;
-	white-space: pre;
 }
 #provider {
 	font-size: 11pt;
@@ -76,6 +73,7 @@ h1 {
 	flex-direction: column;
 	flex-wrap: wrap;
 	align-items: start;
+	align-self: end;
 }
 #provider button {
 	margin-left: 5px;
@@ -92,6 +90,18 @@ h1 {
 #provider a {
 	font-weight: bold;
 }
+#github {
+	flex: 1;
+	text-align: right;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	order: 2;
+	align-items: end;
+}
+#github a {	
+	white-space: pre;
+}
 body.testnet {
 	background: #fef;
 }
@@ -102,14 +112,6 @@ body.testnet #provider a {
 	padding: 2px 4px;
 	margin: -2px 0;
 	text-decoration: none;
-}
-#github {
-	text-align: right;
-	box-sizing: border-box;
-	width: min-content;
-}
-#github a {	
-	white-space: pre;
 }
 .spinner {
 	width: 32px;
@@ -360,6 +362,9 @@ ul .tokens {
 .row.readme code {
 	background: #cff;
 	padding: 1px;
+}
+a.internal {
+	font-weight: bold;
 }
 .row.legend {
 	background: #fff;
@@ -675,13 +680,15 @@ footer span:hover {
 		margin: 16px;
 		margin-bottom: 0;
 	}
-	#input input {
-		font-size: 20pt;
-	}
 	#provider {
+		order: 3;
 		flex-direction: row;
 		align-items: center;
 		gap: 4px;
+		width: 100%;
+	}
+	#input input {
+		font-size: 20pt;
 	}
 	#input, #actions, #options, #examples {
 		margin: 0 16px;
@@ -720,13 +727,21 @@ footer span:hover {
 		padding: 4px;
 	}
 }
+@media only screen and (max-width: 400px) { 
+	h1 a {
+		display: none;
+	}
+}
 </style>
 </head>
 <body>
 <header>
-<h1><div><a href="https://ens.domains/">ENS</a> Resolver</div><div id="provider"></div></h1>
-<div id="github"><a href="https://github.com/adraffy/ens-normalize.js">adraffy/ens-normalize.js</a><br>
-<a href="https://github.com/adraffy/ensip-15/blob/master/ens-improvement-proposals/ensip-15-normalization-standard.md">ENSIP-15</a></div>
+	<h1><a href="https://ens.domains/">ENS</a> Resolver</h1>
+	<div id="provider"></div>
+	<div id="github">
+		<a href="https://github.com/adraffy/ens-normalize.js">adraffy/ens-normalize.js</a>
+		<a href="https://github.com/adraffy/ensip-15/blob/master/ens-improvement-proposals/ensip-15-normalization-standard.md">ENSIP-15</a>
+	</div>
 </header>
 <div id="examples" class="hide">
 <button>vitalik.eth</button>
@@ -793,6 +808,7 @@ footer span:hover {
 
 <b>Deviation:</b> 
 <button>ß</button>
+<button>ẞ</button>
 <button>ς</button>
 
 <b>Complex:</b>
@@ -937,6 +953,10 @@ Hebrew Geresh:
 <button data-name="{1FAF7}{1F3FB}{1FAF7}{1F3FC}{1FAF7}{1F3FD}{1FAF7}{1F3FE}{1FAF7}{1F3FF}{1FAF8}{1F3FB}{1FAF8}{1F3FC}{1FAF8}{1F3FD}{1FAF8}{1F3FE}{1FAF8}{1F3FF}">Sequences (10)</button>
 <button data-name="{1F426}{200D}{2B1B}">Black Bird</button>
 
+<a href="https://unicode.org/reports/tr51/proposed.html"><b>Unicode 15.1:</b></a>
+<button data-name="{26D3}{200D}{1F4A5}.{1F344}{200D}{1F7EB}.{1F34B}{200D}{1F7E9}.{1F426}{200D}{1F525}.{1F642}{200D}{2194}.{1F642}{200D}{2195}.{1F9D1}{200D}{1F9D2}.{1F9D1}{200D}{1F9D1}{200D}{1F9D2}.{1F9D1}{200D}{1F9D2}{200D}{1F9D2}.{1F9D1}{200D}{1F9D1}{200D}{1F9D2}{200D}{1F9D2}">ZWJ Sequences (10)</button>
+<button data-name="{1F3C3}{1F3FB}{200D}{27A1}.{1F3C3}{1F3FB}{200D}{27A1}.{1F3C3}{1F3FC}{200D}{27A1}.{1F3C3}{1F3FD}{200D}{27A1}.{1F3C3}{1F3FE}{200D}{27A1}.{1F3C3}{1F3FF}{200D}{27A1}">Directional (108)</button>
+
 <b>Fenced:</b>
 <button>O'Brian</button>
 <button data-name="¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞⅟↉">"½"</button>
@@ -981,13 +1001,13 @@ Hebrew:
 	<label for="auto_resolve_check">⟳ <i>on Input</i></label>
 	<input type="checkbox" id="show_details_check" checked>
 	<label for="show_details_check">Details</label>
-	<input type="checkbox" id="show_components_check" checked>
-	<label for="show_components_check">Emoji Components</label>
-	<input type="checkbox" id="skip_norm_check">
+		<input type="checkbox" id="show_components_check" checked>
+		<label for="show_components_check">Emoji Components</label>
+		<input type="checkbox" id="skip_norm_check">
 	<label for="skip_norm_check">Skip Norm</label>
 	<input type="checkbox" id="force_mainnet_check">
 	<label for="force_mainnet_check">🔒︎ Mainnet</label>
-	<input type="checkbox" id="force_ltr_check">
+		<input type="checkbox" id="force_ltr_check">
 	<label for="force_ltr_check" title="Override Bidi Handling with Left-to-Right Direction&#10;(Applies only to Input)">LTR!</label>
 </div>
 <div id="input">
@@ -1001,7 +1021,7 @@ Hebrew:
 	<div class="spinner"></div>
 	<div class="balloon"></div>
 	<div class="segmented">
-		<button id="random_emoji_btn" title="Random Emoji&#10;[ALT] Just Singles">🎲</button>
+		<button id="random_emoji_btn" title="Random Emoji&#10;[ALT] Only Use Singles">🎲</button>
 		<button id="find_emoji_btn">Emoji</button>
 	</div>
 	<button id="confused_btn">Confused</button>
@@ -1010,20 +1030,21 @@ Hebrew:
 		<button id="escape_btn" title="[ALT] Unicode Escaped">Escape</button>
 	</div>
 	<button id="parent_btn" title="Drop the leading label">Parent</button>
-	<button id="link_btn">Copy Link</button>
+	<button id="copy_link_btn">Copy Link</button>
 	<button id="resolve_btn">Resolve</button>
 </div>
 <div id="output">
 <ul class="row readme">
-<li>Click an <button data-name="👁️‍🗨️A{303}">Example</button> to see how it works.</li>
-<li>Use <code>{FF}</code>, <code>[255]</code>, <code>\uFF</code>, <code>\u{FF}</code>, <code>&amp;#xFF;</code>, <code>&amp;#255;</code>, or <code>&amp;abc;</code> to manually include codepoints <button data-raw data-name="{200D}a[8205]b\u200D.eth">ZWJ</button></li>
+<li>Click an <button data-name="👁️‍🗨️A{303}.Eth">Example</button> to see how it works.</li>
+<li>Use <code>{FF}</code> or <code>[255]</code> to include codepoints <button data-raw data-name="a{61}[97].eth">aaa</button></li>
+<li><code>\uFFFF</code>, <code>\u{HEX}</code>, <code>&amp;#xFF;</code>, <code>&amp;#255;</code>, or <code>&amp;entity;</code> are shorthand for <code>{HEX}</code>.</li>
+<li><code>HEX<sub>1</sub> HEX<sub>2</sub></code> is shorthand for <code>{HEX<sub>1</sub>}{HEX<sub>2</sub>}</code> <button data-name="65 74 68" data-meta data-delay="1000">eth</button></li>
 <li><code>token:__</code> lookup the <a href="../../keccak.js/test/demo.html#algo=keccak-256&s=raffy&escape=1&encoding=utf8">labelhash</a> (if known) <button data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209" data-delay="1000">raffy.eth</button></li>
 <li><code>wrapped:__</code> lookup the <a href="../../keccak.js/test/demo.html#algo=namehash&s=firstwrappedname.eth&escape=1&encoding=utf8">namehash</a> (if wrapped) <button data-name="wrapped:0xc44eec7fb870ae46d4ef4392d33fbbbdc164e7817a86289a1fe30e5f4d98ae85" data-delay="1000">firstwrappedname.eth</button></li>
-<li><code>HEX<sub>1</sub> HEX<sub>2</sub></code> is shorthand for <code>{HEX<sub>1</sub>}{HEX<sub>2</sub>}</code> <button data-name="65 74 68" data-meta data-delay="1000">eth</button></li>
 <li><code>range:HEX<sub>1</sub>..HEX<sub>n</sub></code> expands to a range of characters <button data-name="range:61..7A" data-delay="1000">ASCII a-z</button></li>
-<li><a href="#vitalik.eth"><button>Copy Link</button></a> to get a URL that resolves on page-load.</li>
+<li><button id="copy_example_btn">Copy Link</button></a> to get a URL that resolves on page-load.</li>
 <li>Many elements have tooltips with additional information.</li>
-<li>Follows <a href="https://github.com/adraffy/ensip-15/blob/master/ens-improvement-proposals/ensip-15-normalization-standard.md">ENSIP-15</a> and <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
+<li>Follows <a class="internal" href="https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard">ENSIP-15</a> and <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
 <li class="req-window">Supports <button id="add_goerli_btn" class="chain">Goerli</button> and <button id="add_sepolia_btn" class="chain">Sepolia</button> testnets.</li>
 </ul>
 <ul class="row legend">
@@ -1035,9 +1056,9 @@ Hebrew:
 <li>These are <b>disallowed</b> characters: <span data-tokenize="#{00}{1FFFFF}{E0061}{200D}"></span></li>
 </ul>
 <ul class="row links">
-<li><a href="./emoji.html">Supported Emoji</a></li>
-<li><a href="./chars.html">Characters Viewer</a></li>
-<li><a href="./confused.html">Confused Explainer</a>
+<li><a class="internal" href="./emoji.html">Supported Emoji</a></li>
+<li><a class="internal" href="./chars.html">Characters Viewer</a></li>
+<li><a class="internal" href="./confused.html">Confused Explainer</a>
 <li><a href="../../punycode.js/test/demo.html">Punycode Coder</a></li>
 <li><a href="../../keccak.js/test/demo.html">Keccak Hasher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-regs.html">Recent Registrations</a></li>
@@ -1045,9 +1066,10 @@ Hebrew:
 <li><a href="../../emoji.js/test/demo.html">Emoji Parser</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-nft-matcher.html">ENS+NFT Matcher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-batch-resolver.html">Batch Resolver</a></li>
-<li><a href="../../ens-labels/demo.html">Label Database</a>
-<li><a href="./validate.html">Validation Test</a>
-<li><a href="./report-nf.html">Unicode NormalizationTest</a>
+<li><a href="https://github.com/adraffy/ens-labels/">Label Database</a>
+<li><a href="../../ens-labels/demo.html">Labelhash⁻¹</a>
+<li><a class="internal" href="./validate.html">Validation Test</a>
+<li><a class="internal" href="./report-nf.html">Unicode NormalizationTest</a>
 <li><a href="../../ens-norm-tests/test-breakdown/output/">Breakdown Reports</a></li>
 <li><a href="https://raffy.antistupid.com/eth/emoji-pixels.html">Emoji Pixel Maker</a></li>
 </ul>
@@ -1081,7 +1103,6 @@ const actions_div = document.querySelector('#actions');
 const primary_loader = document.querySelector('#actions .spinner');
 const output_div = document.querySelector('#output');
 const readme_dom = [...output_div.childNodes]; // save initial ux
-//const links_copy = document.querySelector('.row.links').cloneNode(true);
 const examples_div = document.querySelector('#examples');
 const examples_btn = document.querySelector('#examples_btn');
 const provider_div = document.querySelector('#provider');
@@ -1099,7 +1120,7 @@ const STORAGE_HIDE_EXAMPLES = 'hide_examples';
 const INPUT_NAME = 'Input';
 const OPENSEA_NAME = 'OpenSea';
 const VISION_NAME = 'Vision';
-const PRETTY_NAME = '💖️'; // 🌷️ 🌺️
+const PRETTY_NAME = '💖️';
 
 const emoji_url = './emoji.html#q=%s';
 
@@ -1135,9 +1156,8 @@ const CHAINS = [
 	}
 ];
 
-const ETH_TLD = 'eth';
 const MIN_LENGTH = 3;
-const NFT_DOMAINS = new Set([ETH_TLD, 'art']);
+const NFT_DOMAINS = new Set(['eth', 'art']); // 'box'
 const REVERSE_DOMAIN = 'addr.reverse';
 const RESOLVER_NAMES = {
 	'0x1da022710dF5002339274AaDEe8D58218e9D6AB5': 'Old Public Resolver (v1)',
@@ -1220,7 +1240,7 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 	} catch (err) {
 		btn.classList.add('error');
 	}	
-	if (!meta && !name.includes('.')) name += `.${ETH_TLD}`;
+	if (!meta && !name.includes('.')) name += '.eth';
 	if (typeof btn.dataset.escape === 'string') name = apply_escapes(name);
 	if (!btn.title) btn.title = meta ? name : `${name}\n${explode_cp(name).map(hex_cp).join(' ')}`;
 	btn.addEventListener('click', () => {
@@ -1314,13 +1334,13 @@ function add_recent(name, save = true) {
 	if (save) {
 		localStorage[STORAGE_RECENT] = JSON.stringify([...recent_optgroup.children].map(x => x.value));
 	} 
-}		
+}
 make_network_switcher(document.querySelector('#add_goerli_btn'), CHAIN_ID_GOERLI);
 make_network_switcher(document.querySelector('#add_sepolia_btn'), CHAIN_ID_SEPOLIA);
 document.querySelector('#random_emoji_btn').addEventListener('click', e => {
 	let name = '';
 	let pool = e.altKey ? EMOJI.filter(cps => cps.length == 1 || (cps.length == 2 && cps[1] === 0xFE0F)) : EMOJI;
-	while ([...name].length < MIN_LENGTH) {
+	while (Array.from(name).length < MIN_LENGTH) {
 		name += ens_normalize(str_from_cps(pool[Math.random() * pool.length|0]));
 	}
 	input_field.value = `${name}.eth`;
@@ -1366,8 +1386,13 @@ document.querySelector('#escape_btn').addEventListener('click', e => {
 	input_field.value = set[(pos + 1) % set.length];
 	update_title();
 });
-document.querySelector('#link_btn').addEventListener('click', () => {
+document.querySelector('#copy_link_btn').addEventListener('click', () => {
 	navigator.clipboard.writeText(window.location.href);
+});
+document.querySelector('#copy_example_btn').addEventListener('click', () => {
+	let url = new URL(window.location.href);
+	url.hash = '#vitalik.eth';
+	navigator.clipboard.writeText(url);
 });
 auto_resolve_check.addEventListener('input', () => {
 	localStorage[STORAGE_AUTO_RESOLVE] = !!auto_resolve_check.checked;	
@@ -1408,22 +1433,22 @@ examples_btn.addEventListener('click', () => {
 	sync_examples();
 });
 
-if (window.ethereum) {
-	let p = ethereum;
-	if (Array.isArray(ethereum.providers)) p = ethereum.providers[0]; // fix scuffed multi-provider
-	window_provider = new ethers.providers.Web3Provider(p, 'any');
-}
 if (input_field.value.endsWith('_!')) { // backwards compat
 	input_field.value = input_field.value.slice(0, -2);
 	skip_norm_check.checked = true;
 }
-if (window_provider) {
+if (window.ethereum) {
+	let p = ethereum;
+	if (Array.isArray(ethereum.providers)) p = ethereum.providers[0]; // fix scuffed multi-provider
+	window_provider = new ethers.providers.Web3Provider(p, 'any');
 	window_provider.on('network', update_network);
+	ethereum.on('connect', async () => update_network(await window_provider.getNetwork()));
+	ethereum.on('disconnect', () => update_network());
 } else {
-	update_network();
 	force_mainnet_check.checked = false;
 	force_mainnet_check.classList.add('hide');
 }
+update_network();
 
 sync_examples();
 sync_force_ltr();
@@ -1436,6 +1461,7 @@ window.addEventListener('hashchange', () => {
 function make_network_switcher(btn, id) {
 	btn.classList.add('chain');
 	btn.dataset.chain = id;
+	btn.title = `Chain: ${id} / 0x${id.toString(16)}`;
 	btn.addEventListener('click', () => switch_to_network(id).catch(() => {}));
 }
 async function switch_to_network(id) {
@@ -1444,7 +1470,7 @@ async function switch_to_network(id) {
 	if (network.chainId === id) {
 		if (active_provider === window_provider) return;
 		return update_network(network);
-	}
+}
 	await window_provider.send('wallet_switchEthereumChain', [{chainId: `0x${id.toString(16)}`}]);
 	for (let btn of document.querySelectorAll('.chain')) {
 		btn.disabled = true;
@@ -1454,8 +1480,9 @@ function update_network(network) {
 	let chain0 = active_chain;
 	active_chain = CHAINS[0];
 	active_provider = infura_provider;
+	let window_online = window_provider && window_provider.provider.isConnected();
 	let registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
-	if (network) {
+	if (network && window_online) {
 		let chain = CHAINS.find(x => x.id === network.chainId);
 		if (chain && (!force_mainnet_check.checked || chain.is_mainnet)) {
 			active_chain = chain;
@@ -1472,16 +1499,16 @@ function update_network(network) {
 	document.body.classList.toggle('testnet', !active_chain.is_mainnet);	
 	let network_div = document.createElement('div');
 	network_div.innerHTML = `using <b>${provider_name}</b> on <a href="${active_chain.explorer}/address/${registry}" target="_blank" title="Registry Contract">${active_chain.name}</a>`;
-	if (network && !using_window && !force_mainnet_check.checked) {
+	if (window_online && !using_window && network && network.chainId !== CHAIN_ID_MAINNET && !force_mainnet_check.checked) {
 		provider_div.innerHTML = `<div class="error">Unsupported Network (${network.chainId})</div>`;
 	} else {
-		provider_div.innerHTML = '';
+		provider_div.innerHTML = '';	
 	}
 	provider_div.append(network_div);
 	for (let btn of document.querySelectorAll('.chain')) {
-		btn.disabled = !window_provider || active_chain.id == btn.dataset.chain;
+		btn.disabled = !window_online || active_chain.id == btn.dataset.chain;
 	}
-	if (!active_chain.is_mainnet || (window_provider && active_provider !== window_provider)) {
+	if (!active_chain.is_mainnet || (window_online && active_provider !== window_provider)) {
 		let btn = document.createElement('button');
 		btn.innerHTML = active_chain.is_mainnet ? 'Use Browser' : '↪ Mainnet';
 		make_network_switcher(btn, CHAIN_ID_MAINNET);
@@ -1500,9 +1527,8 @@ function update_network(network) {
 	reverse_registrar = null;
 	NOT_IFACE_RESOLVER.clear();
 	if (input_field.value) {
-		schedule_resolve();
+		schedule_resolve(0);
 	} else if (init) {
-		//primary_loader.classList.add('hide');
 		parse();
 	}
 	return true; // changed
@@ -1721,7 +1747,7 @@ function add_detailed(row) {
 
 function add_transformed_row(input) {
 	if (ens_tokenize(input).some(x => x.type === 'nfc' || x.type === 'mapped')) {
-		let row = create_row('Transformed');
+		let row = create_row('Transform');
 		row.classList.add('transform');
 		add_detailed(row);
 		make_exploded(row, input, true);
@@ -1781,12 +1807,16 @@ function create_dns_row(name, replaced) {
 		} else {
 			add_row_tag(row, create_typed_tag('second', 'Punycode Compatible'));
 		}
-		if (active_chain.is_mainnet && encoded.endsWith('.eth')) {
-			add_row_tag(row, create_link(`https://${encoded}.limo`, '.limo', 'external'));
-			add_row_tag(row, create_link(`https://${encoded}.link`, '.link', 'external'));
-			add_row_tag(row, create_link(`https://${encoded}.li`,   '.li',   'external'));
-			add_row_tag(row, create_link(`https://${encoded}.xyz`,  '.xyz',  'external'));
-			add_row_tag(row, create_link(`https://${encoded}.co`, '  .co',   'external'));
+		if (active_chain.is_mainnet) {
+			if (encoded.endsWith('.eth')) {
+				add_row_tag(row, create_link(`https://${encoded}.limo`, '.limo', 'external'));
+				add_row_tag(row, create_link(`https://${encoded}.link`, '.link', 'external'));
+				add_row_tag(row, create_link(`https://${encoded}.li`,   '.li',   'external'));
+				add_row_tag(row, create_link(`https://${encoded}.xyz`,  '.xyz',  'external'));
+				add_row_tag(row, create_link(`https://${encoded}.co`,   '.co',   'external'));
+			} else {
+				add_row_tag(row, create_link(`https://${encoded}`, 'Website', 'external'));
+			}
 		}
 		add_row_tag(row, create_link(`../../punycode.js/test/demo.html#${browser?'p':'u'}=${browser || name}`, 'Check'));
 	} catch (err) {
@@ -1967,7 +1997,7 @@ function upgrade_split_type(info) {
 	let cps = info.tokens.flatMap(x => x.is_emoji ? [] : x);
 	if (cps.every(cp => cp < 0x80)) {
 		info.type = 'ASCII';	
-	} else if (/[ąçęşìíîïǐł]/u.test(str_from_cps(cps))) {
+	} else if (/[ąçęşìíîïǐł]/u.test(str_from_cps(cps))) { // TODO: formalize this logic in ens-normalize
 		info.rare_latin = true;
 	}
 }
@@ -2061,7 +2091,7 @@ function create_ethmoji_row(tokens, suffix) {
 			add_row_tag(row, create_typed_tag('fire', repeat == 1 ? 'Single' : 'Shortest'));
 		} else {
 			if (tally[0].count > 1) {
-			add_row_tag(row, create_typed_tag('second', 'Repeated'));
+				add_row_tag(row, create_typed_tag('second', 'Repeated'));
 			}
 			min_repeated = str_from_cps(tally[0].cps).repeat(repeat);
 		}
@@ -2474,7 +2504,6 @@ function create_details_row(name, before) {
 		if (NFT_DOMAINS.has(domain)) {
 			footer.push(`<b>Token:</b> <code>${ethers.BigNumber.from(labelhash(label))}</code>`);
 		}
-
 		if (info.error) { 
 			footer.unshift(`<span class="error">❌️ ${info.error}</span>`);
 		}
@@ -2606,7 +2635,7 @@ function resolve() {
 	}
 	let match;
 	// replace token:XXX with ens subgraph label (or fail)
-	if (match = input.match(/^token:(0x[a-f0-9]+|[0-9]+)$/i)) {
+	if (match = input.match(/^(?:labelhash|token):(0x[a-f0-9]+|[0-9]+)$/i)) {
 		let hash = ethers.BigNumber.from(match[1]).toHexString();
 		resolve_btn.disabled = true;
 		return (async() => {
@@ -2620,10 +2649,10 @@ function resolve() {
 				});
 				if (!res.ok) throw new Error(`HTTP Error ${r.status}`);
 				let {data: {domains}} = await res.json();
-				if (domains.length == 0) throw new Error(`Unknown Preimage: ${hash}`);
+				if (!domains.length) throw new Error(`Unknown labelhash preimage: ${hash}`);
 				let label = domains[0].labelName;
 				let hash0 = labelhash(label);
-				if (hash0 !== hash) throw new Error(`Incorrect Preimage: labelhash("${label}")\n\nExpected: ${hash}\nComputed: ${hash}`);
+				if (hash0 !== hash) throw new Error(`Incorrect labelhash preimage: "${label}")\n\nExpected: ${hash}\nComputed: ${hash}`);
 				input_field.value = `${label}.eth`;
 				setTimeout(resolve, 0);
 			} catch (err) {
@@ -2632,13 +2661,14 @@ function resolve() {
 			}
 			resolve_btn.disabled = false;
 		})();
-	} else if (match = input.match(/^wrapped:(0x[a-f0-9]+|[0-9]+)$/i)) {
+	} else if (match = input.match(/^(?:namehash|wrapped):(0x[a-f0-9]+|[0-9]+)$/i)) {
 		resolve_btn.disabled = true;
 		return (async () => {
 			try {
 				await ensure_wrapper();
-				let bytes = ethers.utils.arrayify(await wrapper_contract.callStatic.names(ethers.BigNumber.from(match[1])));
-				if (!bytes.length) throw new Error('Unknown namehash');
+				let hash = ethers.utils.hexZeroPad(ethers.BigNumber.from(match[1]).toHexString(), 32);
+				let bytes = ethers.utils.arrayify(await wrapper_contract.callStatic.names(hash));
+				if (!bytes.length) throw new Error(`Unknown namehash preimage: ${hash}`);
 				input_field.value = name_from_wrapper_bytes(bytes);
 				resolve_btn.disabled = false;
 				setTimeout(resolve, 0);
@@ -2646,7 +2676,7 @@ function resolve() {
 				window.alert(err.message);
 				stop_resolving();
 			}
-			resolve_btn.disabled = false;		
+			resolve_btn.disabled = false;
 		})();
 	}
 	// input convenience: expand range
@@ -3019,22 +3049,23 @@ async function resolve1(input, skip_norm) {
 			add_contract_name(resolver_row, resolver.address);
 		}
 	} else {
-		add_row_tag(resolver_row, create_typed_tag('warn', `Name Not Found`));	
+		add_row_tag(resolver_row, create_typed_tag('warn', `Not Set`));	
 	}
 
-	let domain = name_norm.slice(sep_pos+1);
+	let parent_domain = name_norm.slice(sep_pos+1);
 	let nft_backed = NFT_DOMAINS.has(name_norm.slice(sep_pos+1));
 	let nft_contract;
 	let nft_token;
 
+	let avail_row;
 	let available;	
-	if (domain === ETH_TLD) {
+	if (parent_domain === 'eth') {
 		let eth_label = name_norm.slice(0, sep_pos);
 		nft_token = ethers.utils.id(eth_label);
 		let avail_err;
 		let expiry;
-		let len = [...eth_label].length;
-		let avail_row = create_row('Availability', true);
+		let len = Array.from(eth_label).length;
+		avail_row = create_row('Availability', true);
 		let premium;
 		output_div.append(avail_row);
 		try {
@@ -3100,31 +3131,51 @@ async function resolve1(input, skip_norm) {
 	} else if (nft_backed) {
 		let label = name_norm.slice(0, sep_pos);		
 		nft_token = ethers.utils.id(label);
+		let avail_url;
 		let avail_err;
-		let avail_row = create_row('Availability', true);
+		avail_row = create_row('Availability', true);
 		output_div.append(avail_row);
 		try {
-			let address = await registry_contract.callStatic.owner(namehash(domain));
+			let address = await registry_contract.callStatic.owner(namehash(parent_domain));
+			if (should_stop_resolving()) return;
 			if (is_null_hex(address)) throw new Error('Missing backing contract');
 			nft_contract = new ethers.Contract(address, [
 				'function available(uint256 id) external view returns(bool)',
 				'function ownerOf(uint256 id) external view returns (address)',
 			], active_provider);
+			available = await nft_contract.callStatic.available(nft_token);
+			if (active_chain.is_mainnet && parent_domain === 'art') {
+				avail_url = `https://protocol.art/api/art-tokens?exact=${encodeURIComponent(label)}`;
+				if (available) {
+					try {
+						let res = await fetch(avail_url);
+						let {Items} = await res.json();
+						available = !Items.length;
+					} catch (ignored) {
+					}
+				}
+			}
 		} catch (err) {
 			avail_err = err;
 		}
 		remove_temporary(avail_row);
 		if (should_stop_resolving()) return;
 		add_row_tag(avail_row, create_elapsed()); 
+		add_row_tag(avail_row, set_length(document.createElement('span'), Array.from(label).length));
+		if (nft_contract) {
+			let label = avail_row.querySelector('.row-label');
+			let title = label.innerHTML;
+			label.innerHTML = '';
+			label.append(create_etherscan_address_link(nft_contract.address, {title, contract: true}));
+		}
 		if (avail_err) {
 			avail_row.classList.add('error');
 			add_row_tag(avail_row, create_typed_tag('warn', avail_err));
 		} else {
 			add_row_tag(avail_row, create_typed_tag(available ? 'good' : 'fail', 'Available'));
-			if (active_chain.is_mainnet && domain === 'art') {
-				add_row_tag(avail_row, create_link(`https://app.protocol.art/name/${encodeURIComponent(label)}.art`, 'Website'));
+			if (avail_url) {
+				add_row_tag(avail_row, create_link(avail_url, 'Details', 'external'));
 			}
-			add_row_tag(avail_row, create_etherscan_address_link(nft_contract.address, {title: 'NFT Contract', contract: true}));
 		}
 	}
 	
@@ -3135,10 +3186,14 @@ async function resolve1(input, skip_norm) {
 		let wrapped_err;
 		let wrapped_row = create_row('Wrapper', true);
 		output_div.append(wrapped_row);
+
+		let unwrappable = name_norm.split('.').some(x => bytes_from_utf8(x).length > 255);
 		try {
 			await ensure_wrapper();
 			if (should_stop_resolving()) return;
-			is_wrapped = await wrapper_contract.callStatic.isWrapped(node);
+			if (!unwrappable) {
+				is_wrapped = await wrapper_contract.callStatic.isWrapped(node);
+			}
 		} catch (err) {
 			wrapped_err = err;
 		}
@@ -3148,6 +3203,8 @@ async function resolve1(input, skip_norm) {
 		if (wrapped_err) {
 			wrapped_row.classList.add('error');
 			add_row_tag(wrapped_row, create_typed_tag('warn', wrapped_err));
+		} else if (unwrappable) {
+			add_row_tag(wrapped_row, create_typed_tag('warn', 'Unwrappable'));
 		} else {
 			add_row_tag(wrapped_row, is_wrapped ? create_typed_tag('good', '🎁 Wrapped') : '🎉 Unwrapped');
 		}
@@ -3179,7 +3236,6 @@ async function resolve1(input, skip_norm) {
 				let data = await wrapper_contract.callStatic.getData(node);
 				if (should_stop_resolving()) return;
 				owner = data.owner;
-
 				let {fuses} = data;
 				if (!(fuses & (1 << 17))) { // eth
 					await ensure_eth_nft(); 
@@ -3240,6 +3296,9 @@ async function resolve1(input, skip_norm) {
 			if (owner !== input) {
 				add_row_tag(owner_row, create_resolve_btn(owner));
 			}
+			if (active_chain.is_mainnet && parent_domain === 'art') {
+				add_row_tag(avail_row, create_link(`https://protocol.art/account/${owner}`, 'Configure', 'external'));
+			}
 			if (!is_wrapped && !checked_nft && nft_contract) {
 				let nft_row = create_row(create_etherscan_address_link(nft_contract.address, {title: 'NFT Owner:', contract: true}), true);
 				output_div.append(nft_row);
@@ -3293,12 +3352,12 @@ async function resolve1(input, skip_norm) {
 			// https://github.com/ensdomains/ens-contracts/blob/dev/contracts/resolvers/profiles/IInterfaceResolver.sol
 			if (!await contract.callStatic.supportsInterface('0x124a319c')) {
 				throw new Error('not EIP-165');
-			}			
+			}
 			for (let {iface, name} of interfaces) {
 				let addr = await contract.get_interface(iface);
 				if (!is_null_hex(addr) && !discovered.size) {
 					add_iface('<b>NFT</b> (ERC-721)', owner);
-				}
+						}
 				add_iface(`<b>${name}</b> <code>${iface.slice(2)}</code>`, addr);
 				if (iface === IFACE_ETH_CONTROLLER) {
 					let controller = contract_for_controller(addr);
@@ -3478,8 +3537,8 @@ async function resolve1(input, skip_norm) {
 
 async function ensure_eth_resolver() {
 	if (eth_resolver_contract) return;
-	if (eth_resolver_contract === false) throw new Error(`No "${ETH_TLD}" resolver`);	
-	let resolver = await active_provider.getResolver(ETH_TLD);
+	if (eth_resolver_contract === false) throw new Error(`No "eth" resolver`);	
+	let resolver = await active_provider.getResolver('eth');
 	if (!resolver) {
 		eth_resolver_contract = false;
 		return ensure_eth_resolver(); 
@@ -3558,7 +3617,7 @@ async function ensure_eth_nft() {
 function is_checksum_address(s) {
 	try {
 		return s === ethers.utils.getAddress(s);
-	} catch (ignored) {		
+	} catch (ignored) {
 	}
 }
 function is_null_hex(s) {
@@ -3569,9 +3628,10 @@ function labelhash(s) {
 	return ethers.utils.keccak256(bytes_from_utf8(s));
 }
 function namehash(s) {
-	let hash = '0x0000000000000000000000000000000000000000000000000000000000000000';
+	const N = 66;
+	let hash = '0x'.padEnd(N, '0');
 	if (s) hash = s.split('.').reduceRight((h, x) => ethers.utils.keccak256(h + labelhash(x).slice(2)), hash);
-	return hash.slice(0, 66);
+	return hash.slice(0, N);
 }
 
 function read_local_storage(key, fn, def) {

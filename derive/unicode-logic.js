@@ -146,6 +146,7 @@ export class UnicodeSpec {
 		// cache some stuff
 		this.char_map = new Map(this.read_ucd().map(x => [x.cp, x]));
 		this.cm = new Set([...this.char_map.values()].filter(x => x.is_cm).map(x => x.cp)); 
+		this.nsm = new Set([...this.char_map.values()].filter(x => x.is_nsm).map(x => x.cp));
 		// add all single char CLDR short names
 		// since they are lost due to the stupid A..B syntax
 		// emoji sequences already have proper names
@@ -554,6 +555,9 @@ export class UnicodeSpec {
 			}
 		});
 	}
+	read_regions() {
+		return JSON.parse(readFileSync(new URL('./regions.json', this.cldr_dir)));
+	}
 	/*
 	emoji_skin_colors() {
 		// warning: this sucks
@@ -567,9 +571,6 @@ export class UnicodeSpec {
 	}
 	regional_indicators() {
 		return this.props().Regional_Indicator;
-	}
-	regions() {
-		return JSON.parse(readFileSync(new URL('./regions.json', this.cldr_dir)));
 	}
 	derive_emoji_flag_sequences() {
 		let regions = this.regions(); 
@@ -688,8 +689,12 @@ export class UnicodeSpec {
 		// - Field 1 is the source, 
 		// - Field 2 is the target,
 		// - Field 3 is obsolete, always containing the letters “MA” for backwards compatibility. 
+		// Everything after the # is a comment and is purely informative. 
+		// A asterisk after the comment indicates that the character is not an XID character [UAX31]. 
+		// The comments provide the character names.
 		// 06E8 ;	0306 0307 ;	MA	# ( ۨ → ̆̇ ) ARABIC SMALL HIGH NOON → COMBINING BREVE, COMBINING DOT ABOVE
 		// 0310 ;	0306 0307 ;	MA	# ( ̐ → ̆̇ ) COMBINING CANDRABINDU → COMBINING BREVE, COMBINING DOT ABOVE
+		// FF65 ;	00B7      ;	MA	#* ( ･ → · ) HALFWIDTH KATAKANA MIDDLE DOT → MIDDLE DOT	# →•→
 		return Object.entries(parse_semicolon_file(new URL('./confusables.txt', this.data_dir), {
 			row([src, target]) {
 				let key = String.fromCodePoint(...parse_cp_sequence(target));

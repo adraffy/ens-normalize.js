@@ -15,8 +15,7 @@ import {CM_WHITELIST} from './rules/cm.js';
 import {NSM_MAX, SCRIPT_GROUPS, RESTRICTED_SCRIPTS, SCRIPT_EXTENSIONS, DISALLOWED_SCRIPTS} from './rules/scripts.js';
 
 const CM = UNICODE.cm;
-// TODO: maybe this should be part of UnicodeSpec
-const NSM = new Set([...UNICODE.char_map.values()].filter(x => x.is_nsm).map(x => x.cp));
+const NSM = UNICODE.nsm;
 
 const STOP = 0x2E; // label separator
 const FE0F = 0xFE0F; // emoji style
@@ -52,6 +51,7 @@ let ignored = new Set(IDNA.ignored);
 let valid = new Set(IDNA.valid);
 let mapped = new Map(IDNA.mapped);
 let valid_emoji = new Map();
+let disabled_emoji = new Map();
 
 // this should be safe by construction
 // a character should only be in one of the sets
@@ -75,10 +75,8 @@ function register_emoji(info) {
 		if (!info.type) throw new Error('expected type');
 		let key = String.fromCodePoint(...cps);
 		let old = valid_emoji.get(key);
-		if (old) {
-			console.log(old);
-			throw new Error(`duplicate`);
-		}
+		if (old) throw new Error(`duplicate: ${key}`);
+		if (disabled_emoji.has(key)) throw new Error(`disabled: ${key}`);
 		console.log(`Register Emoji [${info.type}]: ${PRINTER.desc_for_emoji(info)}`);
 		valid_emoji.set(key, info);
 	} catch (err) {
@@ -86,6 +84,12 @@ function register_emoji(info) {
 		throw err;
 	}
 }
+
+function mark_emoji_as_disabled(info) {
+	if (!info.cps) info.cps = [info.cp];  // make every disabled emoji a solo-sequence 
+	info.type = 'Disabled';
+	disabled_emoji.set(String.fromCodePoint(...info.cps), info);
+}	
 
 let emoji_zwjs = UNICODE.read_emoji_zwjs();
 print_section('RGI Emoji ZWJ Sequences');
@@ -105,9 +109,8 @@ emoji_seqs.RGI_Emoji_Modifier_Sequence.forEach(register_emoji);
 print_section('RGI Emoji Flag Sequences');
 emoji_seqs.RGI_Emoji_Flag_Sequence.forEach(register_emoji);
 
-let emoji_disabled = [];
-let emoji_chrs = UNICODE.read_emoji_data();
-let emoji_map = new Map(emoji_chrs.Emoji.map(x => [x.cp, x]));
+let emoji_data = UNICODE.read_emoji_data();
+let emoji_map = new Map(emoji_data.Emoji.map(x => [x.cp, x]));
 
 print_section(`Demote Emoji to Characters`);
 for (let cp of EMOJI_DEMOTED) {
@@ -115,8 +118,8 @@ for (let cp of EMOJI_DEMOTED) {
 	if (!info) throw new Error(`Expected emoji: ${PRINTER.desc_for_cp(cp)}`);
 	if (info.used) throw new Error(`Duplicate: ${PRINTER.desc_for_cp(cp)}`);
 	info.used = true;
-	emoji_disabled.push(info);
 	console.log(`Demoted Emoji: ${PRINTER.desc_for_emoji(info)}`);
+	mark_emoji_as_disabled(info);
 }
 
 print_section(`Disable Emoji (and Characters)`);
@@ -125,8 +128,8 @@ for (let cp of EMOJI_DISABLED) {
 	if (!info) throw new Error(`Expected emoji: ${PRINTER.desc_for_cp(cp)}`);
 	if (info.used) throw new Error(`Duplicate: ${PRINTER.desc_for_cp(cp)}`);
 	info.used = true;
-	emoji_disabled.push(info);
 	disallow_char(cp);
+	mark_emoji_as_disabled(info);
 }
 
 print_section('Remove Emoji from Characters');
@@ -148,7 +151,7 @@ for (let seq of emoji_seqs.Basic_Emoji) {
 }
 
 print_section('Register Default Emoji-Presentation Emoji');
-for (let seq of emoji_chrs.Emoji_Presentation) {
+for (let seq of emoji_data.Emoji_Presentation) {
 	let info = emoji_map.get(seq.cp);
 	if (!info) throw new Error(`Expected emoji: ${PRINTER.desc_for_emoji(seq)}`);	
 	if (info.used) continue;
@@ -163,23 +166,34 @@ for (let info of emoji_map.values()) {
 	}
 }
 
-print_section(`Whitelist Emoji`);
+print_section('Whitelist Emoji');
 for (let info of EMOJI_SEQ_WHITELIST) {
 	register_emoji({cps: parse_cp_sequence(info.hex), type: 'Whitelisted', name: info.name});
 }
 
-print_section(`Blacklist Emoji`);
+print_section('Blacklist Emoji');
 for (let def of EMOJI_SEQ_BLACKLIST) {
 	let cps = Number.isInteger(def) ? [def] : parse_cp_sequence(def);
 	let key = String.fromCodePoint(...cps);
 	let info = valid_emoji.get(key);
 	if (!info) throw new Error(`Expected emoji sequence: ${PRINTER.desc_for_cps(cps)}`);
 	console.log(`Unregistered Emoji: ${PRINTER.desc_for_emoji(info)}`);
-	emoji_disabled.push(info);
 	valid_emoji.delete(key);
+	mark_emoji_as_disabled(info);
 }
 
-print_section(`Add Mapped Characters`);
+// 20230903: added, is there a better official source for this stuff?
+// TODO: check CLDR
+print_section('Assign Emoji Groups');
+for (let {cps, group, subgroup} of UNICODE.read_emoji_test()) {
+	let key = String.fromCodePoint(...cps);
+	let info = valid_emoji.get(key) || disabled_emoji.get(key);
+	if (!info) continue;
+	if (group) info.group = group;
+	if (subgroup) info.subgroup = subgroup; //capitalize(subgroup);
+}
+
+print_section('Add Mapped Characters');
 for (let [x, ys] of CHARS_MAPPED) {
 	let old = mapped.get(x);
 	if (old && !compare_arrays(old, ys)) throw new Error(`Duplicate mapped: ${PRINTER.desc_for_mapped(x, ys)}`);
@@ -188,7 +202,7 @@ for (let [x, ys] of CHARS_MAPPED) {
 	console.log(`Add Mapped: ${PRINTER.desc_for_mapped(x, ys)}`);
 }
 
-print_section(`Add Ignored Characters`);
+print_section('Add Ignored Characters');
 for (let cp of CHARS_IGNORED) {
 	if (ignored.has(cp)) throw new Error(`Already ignored: ${PRINTER.desc_for_cp(cp)}`);
 	disallow_char(cp);
@@ -196,7 +210,7 @@ for (let cp of CHARS_IGNORED) {
 	console.log(`Added Ignored: ${PRINTER.desc_for_cp(cp)}`);
 }
 
-print_section(`Add Valid Characters`);
+print_section('Add Valid Characters');
 for (let cp of CHARS_VALID) {
 	if (valid.has(cp)) throw new Error(`Already valid: ${PRINTER.desc_for_cp(cp)}`);
 	disallow_char(cp);
@@ -205,7 +219,7 @@ for (let cp of CHARS_VALID) {
 }
 
 // 20221213: this comes after Adds
-print_section(`Remove Disallowed Characters`);
+print_section('Remove Disallowed Characters');
 for (let cp of CHARS_DISALLOWED) {
 	if (!mapped.has(cp) && !ignored.has(cp) && !valid.has(cp)) {
 		console.log(`*** Already disallowed: ${PRINTER.desc_for_cp(cp)}`); // not fatal		
@@ -921,13 +935,9 @@ write_json('nf-tests.json', UNICODE.read_nf_tests());
 // the remaining files are not critical
 
 // for emoji.html
-for (let info of emoji_disabled) { // make every disabled emoji a solo-sequence 
-	if (!info.cps) info.cps = [info.cp];
-	info.type = 'Disabled';
-}
-write_json('emoji-info.json', [...valid_emoji.values(), ...emoji_disabled].map(info => {
-	let {cps, name, name0, version, type} = info;
-	return {form: String.fromCodePoint(...cps), name, name0, version, type};
+write_json('emoji-info.json', [...valid_emoji.values(), ...disabled_emoji.values()].map(info => {
+	let {cp, same, cps, ...rest} = info;
+	return {form: String.fromCodePoint(...cps), ...rest};
 }));
 
 // for chars.html

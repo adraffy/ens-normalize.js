@@ -56,8 +56,9 @@ if (!versions.length) {
 		let text = await res.text();
 		let match = text.match(/Version (\d+\.\d+\.\d+)/);
 		if (!match) throw new Error(`no match`);
-		console.log(`Latest version: ${match[1]}`);
-		versions.push(parse_version(match[1]));
+		let version = match[1];
+		console.log(`Latest version: ${version}`);
+		versions.push(parse_version(version));
 	} catch (err) {
 		throw new Error(`Unable to determine latest Unicode version: ${err.message}`);
 	}
@@ -70,31 +71,33 @@ for (let version of versions) {
 }
 
 async function download({major, minor, patch}, files) {
-	let dir = new URL(`./data/${major}.${minor}.${patch}/`, import.meta.url);	
-	console.log(`Downloading ${major}.${minor}.${patch} (${files.length} files)`);
+	let version = `${major}.${minor}.${patch}`;
+	let dir = new URL(`./data/${major}.${minor}.${patch}/`, import.meta.url);
+	let changed = 0;
+	console.log(`Downloading ${version} (${files.length} files)`);
 	for (let sources of files) {
 		let urls = sources.map(s => url_from_source(s, {major, minor, patch}));
 		try {
 			let [i, buf] = await Promise.any(urls.map(async (url, i) => {
 				let res = await fetch(url);
-				if (res.status != 200) throw new Error(`HTTP error ${res.status}`);
+				if (!res.ok) throw new Error(`HTTP error ${res.status}`);
 				return [i, Buffer.from(await res.arrayBuffer())];
 			}));
 			let name = urls[i].pathname.split('/').pop();
 			let file = new URL(name, dir);
-			let verb;
+			let same;
 			try {
-				if (Buffer.compare(await readFile(file), buf) == 0) {
-					verb = 'Same';
+				if (!Buffer.compare(await readFile(file), buf)) {
+					same = true;
 				}
 			} catch (ignored) {	
 			}
-			if (!verb) {
-				verb = 'Downloaded';
+			if (!same) {
+				changed++;
 				await mkdir(dir, {recursive: true});
 				await writeFile(file, buf);
 			}
-			console.log(`${verb} <${urls[i]}> [${i+1}/${sources.length}]`);
+			console.log(`${same ? 'Same' : 'Downloaded'} <${urls[i]}> [${i+1}/${sources.length}]`);
 		} catch (err) {
 			if (err instanceof AggregateError) {
 				for (let i = 0; i < sources.length; i++) {
@@ -107,6 +110,10 @@ async function download({major, minor, patch}, files) {
 			throw new Error(`Download failed`);
 		}
 	}
-	let version = `${major}.${minor}.${patch}`;
-	await writeFile(new URL('./version.json', dir), JSON.stringify({version, major, minor, patch, date: new Date()}));	
+	console.log(`Changes: ${changed}`);
+	if (changed) {
+		let file = new URL('./version.json', dir);
+		await writeFile(file, JSON.stringify({version, major, minor, patch, date: new Date()}));	
+		console.log(`Wrote: ${file}`);
+	}
 }

@@ -1,6 +1,6 @@
 import terser from '@rollup/plugin-terser';
 import alias from '@rollup/plugin-alias';
-import { defineConfig } from 'rollup'
+import {defineConfig} from 'rollup';
 
 const TERSER = terser({
 	compress: {
@@ -10,8 +10,8 @@ const TERSER = terser({
 	}
 });
 
-const NATIVE_NF = alias({ entries: { './nf.js': './src/nf-native.js' }});
-
+const NATIVE_NF = alias({entries: {'./nf.js': './src/nf-native.js'}});
+		
 export default defineConfig([
 	{
 		input: './src/lib.js',

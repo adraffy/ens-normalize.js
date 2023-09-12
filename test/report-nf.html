@@ -78,8 +78,8 @@ tbody tr:nth-child(odd) {
 </style>
 </head>
 <body>
-<h1><a href="https://www.unicode.org/Public/15.0.0/ucd/NormalizationTest.txt">NormalizationTest</a> (15.0.0)</h1>
-<div id="version"><a href="https://github.com/adraffy/ens-normalize.js">@adraffy/ens-normalize</a></div>
+<h1><a href="https://www.unicode.org/Public/15.1.0/ucd/NormalizationTest.txt">NormalizationTest</a> (15.1.0)</h1>
+<div id="version"><a href="https://github.com/adraffy/ens-normalize.js">adraffy/ens-normalize</a></div>
 <table id="summary">
 	<thead>
 		<tr>
@@ -146,7 +146,7 @@ async function main() {
 		}
 		let t0 = Date.now();
 		let [name, cases] = tests.pop();
-		let html = `<a name="${name}"></a><h2>${name}(${cases.length})</h2><table><thead>
+		let html = `<a name="${name}"></a><h2>${name} (${cases.length})</h2><table><thead>
 		<tr><th class="big" rowspan="2" colspan="2">Input</th><th class="big" colspan="4">NFD</th><th class="big" colspan="4">NFC</th></tr>
 		<tr><th colspan="2">Expected Output</th><th>Custom</th><th>Browser</th><th colspan="2">Expected Output</th><th>Custom</th><th>Browser</th></tr>
 		</tr></thead><tbody>`;
