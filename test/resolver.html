@@ -2699,7 +2699,7 @@ function resolve() {
 	input_field.value = input;
 	let name = replace_name(replace_escapes(input));
 	add_recent(name);
-	if (!parse() && !skip) {
+	if (!parse() && (!input || !skip)) {
 		primary_loader.classList.add('hide');
 		return;
 	}
