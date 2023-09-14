@@ -488,7 +488,7 @@ let MAPPED, IGNORED, CM, NSM, ESCAPE, NFC_CHECK, GROUPS, WHOLE_VALID, WHOLE_MAP,
 
 function init() {
 	if (MAPPED) return;
-	//console.time('lib');
+	console.time('lib');
 
 	let r = read_compressed_payload(COMPRESSED$1);
 	MAPPED = new Map(read_mapped(r)); 
@@ -635,10 +635,9 @@ function init() {
 		}
 	}
 
-	//console.timeEnd('lib');
+	console.timeEnd('lib');
 	// 20230905: 285ms
 }
-init();
 
 // if escaped: {HEX}
 //       else: "x" {HEX}
@@ -1073,6 +1072,12 @@ function tokens_from_str(input, nf, ef) {
 				if (cps) {
 					chars.push(...cps);
 				} else if (!IGNORED.has(cp)) {
+					// 20230912: unicode 15.1 changed the order of processing such that
+					// disallowed parts are only rejected after NFC
+					// https://unicode.org/reports/tr46/#Validity_Criteria
+					// this doesn't impact normalization as of today
+					// technically, this error can be removed as the group logic will apply similar logic
+					// however the error type might be less clear
 					throw error_disallowed(cp);
 				}
 			}
