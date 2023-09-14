@@ -490,14 +490,14 @@ let MAPPED, IGNORED, CM, NSM, ESCAPE, NFC_CHECK, GROUPS, WHOLE_VALID, WHOLE_MAP,
 
 function init() {
 	if (MAPPED) return;
-	console.time('lib');
+	//console.time('lib');
 
 	let r = read_compressed_payload(COMPRESSED$1);
 	MAPPED = new Map(read_mapped(r)); 
 	IGNORED = read_set(r); // ignored characters are not valid, so just read raw codepoints
 
 	/*
-	// direct include from payload is smaller that the decompression code
+	// direct include from payload is smaller than the decompression code
 	const FENCED = new Map(read_array_while(() => {
 		let cp = r();
 		if (cp) return [cp, read_str(r())];
@@ -510,7 +510,7 @@ function init() {
 	CM = new Set(CM);
 	
 	ESCAPE = read_set(r); // characters that should not be printed
-	NFC_CHECK = read_set(r);
+	NFC_CHECK = read_set(r); // only needed to illustrate ens_tokenize() transformations
 
 	let chunks = read_sorted_arrays(r);
 	function read_chunked() {
@@ -637,7 +637,7 @@ function init() {
 		}
 	}
 
-	console.timeEnd('lib');
+	//console.timeEnd('lib');
 	// 20230905: 285ms
 }
 
