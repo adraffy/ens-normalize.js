@@ -130,10 +130,6 @@ export function read_deltas(n, next) {
 	return v;
 }
 
-export function read_set(next) {
-	return new Set(read_sorted(next));
-}
-
 // [123][5] => [0 3] [1 1] [0 0]
 export function read_sorted(next, prev = 0) {
 	let ret = [];

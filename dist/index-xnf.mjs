@@ -127,10 +127,6 @@ function read_deltas(n, next) {
 	return v;
 }
 
-function read_set(next) {
-	return new Set(read_sorted(next));
-}
-
 // [123][5] => [0 3] [1 1] [0 0]
 function read_sorted(next, prev = 0) {
 	let ret = [];
@@ -299,11 +295,19 @@ function nfd(cps) {
 	return nf(cps, 'NFD');
 }
 
-const STOP = 0x2E;
-const FE0F = 0xFE0F;
-const STOP_CH = '.';
-const UNIQUE_PH = 1;
 const HYPHEN = 0x2D;
+const STOP = 0x2E;
+const STOP_CH = '.';
+const FE0F = 0xFE0F;
+const UNIQUE_PH = 1;
+
+// 20230913: replace [...v] with Array_from(v) to avoid large spreads
+const Array_from = x => Array.from(x); // Array.from.bind(Array);
+
+function group_has_cp(g, cp) {
+	// 20230913: keep primary and secondary distinct instead of creating valid union
+	return g.P.has(cp) || g.Q.has(cp);
+}
 
 class Emoji extends Array {
 	get is_emoji() { return true; } // free tagging system
@@ -313,11 +317,13 @@ let MAPPED, IGNORED, CM, NSM, ESCAPE, NFC_CHECK, GROUPS, WHOLE_VALID, WHOLE_MAP,
 
 function init() {
 	if (MAPPED) return;
-	//console.time('lib');
-
+	
 	let r = read_compressed_payload(COMPRESSED);
+	const read_sorted_array = () => read_sorted(r);
+	const read_sorted_set = () => new Set(read_sorted_array());
+
 	MAPPED = new Map(read_mapped(r)); 
-	IGNORED = read_set(r); // ignored characters are not valid, so just read raw codepoints
+	IGNORED = read_sorted_set(); // ignored characters are not valid, so just read raw codepoints
 
 	/*
 	// direct include from payload is smaller than the decompression code
@@ -328,19 +334,16 @@ function init() {
 	*/
 	// 20230217: we still need all CM for proper error formatting
 	// but norm only needs NSM subset that are potentially-valid
-	CM = read_sorted(r);
-	NSM = new Set(read_sorted(r).map(i => CM[i]));
+	CM = read_sorted_array();
+	NSM = new Set(read_sorted_array().map(i => CM[i]));
 	CM = new Set(CM);
 	
-	ESCAPE = read_set(r); // characters that should not be printed
-	NFC_CHECK = read_set(r); // only needed to illustrate ens_tokenize() transformations
+	ESCAPE = read_sorted_set(); // characters that should not be printed
+	NFC_CHECK = read_sorted_set(); // only needed to illustrate ens_tokenize() transformations
 
 	let chunks = read_sorted_arrays(r);
-	function read_chunked() {
-		// deduplicated sets + uniques
-		return new Set([read_sorted(r).map(i => chunks[i]), read_sorted(r)].flat(2));
-	}
 	let unrestricted = r();
+	const read_chunked = () => new Set(read_sorted_array().flatMap(i => chunks[i]).concat(read_sorted_array()));
 	GROUPS = read_array_while(i => {
 		// minifier property mangling seems unsafe
 		// so these are manually renamed to single chars
@@ -352,11 +355,12 @@ function init() {
 			if (R) N=`Restricted[${N}]`;
 			let P = read_chunked(); // primary
 			let Q = read_chunked(); // secondary
-			let V = [...P, ...Q].sort((a, b) => a-b); // derive: sorted valid
-			//let M = r()-1; // combining mark
 			let M = !r(); // not-whitelisted, check for NSM
-			// code currently isn't needed
-			/*if (M < 0) { // whitelisted
+			// *** this code currently isn't needed ***
+			/*
+			let V = [...P, ...Q].sort((a, b) => a-b); // derive: sorted valid
+			let M = r()-1; // number of combining mark
+			if (M < 0) { // whitelisted
 				M = new Map(read_array_while(() => {
 					let i = r();
 					if (i) return [V[i-1], read_array_while(() => {
@@ -365,14 +369,14 @@ function init() {
 					})];
 				}));
 			}*/
-			return {N, P, M, R, V: new Set(V)};
+			return {N, P, Q, M, R};
 		}
 	});
 
 	// decode compressed wholes
-	WHOLE_VALID = read_set(r);
+	WHOLE_VALID = read_sorted_set();
 	WHOLE_MAP = new Map();
-	let wholes = [...WHOLE_VALID, ...read_sorted(r)].sort((a, b) => a-b);
+	let wholes = read_sorted_array().concat(Array_from(WHOLE_VALID)).sort((a, b) => a-b); // must be sorted
 	wholes.forEach((cp, i) => {
 		let d = r(); 
 		let w = wholes[i] = d ? wholes[i-d] : {V: [], M: new Map()};
@@ -387,7 +391,7 @@ function init() {
 		// connect all groups that have each whole character
 		let recs = [];
 		for (let cp of V) {
-			let gs = GROUPS.filter(g => g.V.has(cp));
+			let gs = GROUPS.filter(g => group_has_cp(g, cp));
 			let rec = recs.find(({G}) => gs.some(g => G.has(g)));
 			if (!rec) {
 				rec = {G: new Set(), V: []};
@@ -397,7 +401,7 @@ function init() {
 			gs.forEach(g => rec.G.add(g));
 		}
 		// per character cache groups which are not a member of the extent
-		let union = recs.flatMap(({G}) => [...G]);
+		let union = recs.flatMap(x => Array_from(x.G));
 		for (let {G, V} of recs) {
 			let complement = new Set(union.filter(g => !G.has(g)));
 			for (let cp of V) {
@@ -405,16 +409,14 @@ function init() {
 			}
 		}
 	}
+
+	// compute valid set
 	let union = new Set(); // exists in 1+ groups
 	let multi = new Set(); // exists in 2+ groups
+	const add_to_union = cp => union.has(cp) ? multi.add(cp) : union.add(cp);
 	for (let g of GROUPS) {
-		for (let cp of g.V) {
-			if (union.has(cp)) {
-				multi.add(cp);
-			} else {
-				union.add(cp);
-			}
-		}
+		for (let cp of g.P) add_to_union(cp);
+		for (let cp of g.Q) add_to_union(cp);
 	}
 	// dual purpose WHOLE_MAP: return placeholder if unique non-confusable
 	for (let cp of union) {
@@ -422,8 +424,7 @@ function init() {
 			WHOLE_MAP.set(cp, UNIQUE_PH);
 		}
 	}
-
-	VALID = new Set([...union, ...nfd(union)]); // possibly valid
+	VALID = new Set(Array_from(union).concat(Array_from(nfd(union)))); // possibly valid
 
 	// decode emoji
 	// 20230719: emoji are now fully-expanded to avoid quirk logic 
@@ -450,7 +451,7 @@ function init() {
 				return child;
 			});
 			if (cp === FE0F) {
-				prev.push(...next);
+				prev.push(...next); // less than 20 elements
 			} else {
 				prev = next;
 			}
@@ -459,9 +460,6 @@ function init() {
 			x.V = cps;
 		}
 	}
-
-	//console.timeEnd('lib');
-	// 20230905: 285ms
 }
 
 // if escaped: {HEX}
@@ -658,7 +656,7 @@ function split(name, nf, ef) {
 							}
 						}
 						check_fenced(norm);
-						let unique = [...new Set(chars)];
+						let unique = Array_from(new Set(chars));
 						let [g] = determine_group(unique); // take the first match
 						// see derive: "Matching Groups have Same CM Style"
 						// alternative: could form a hybrid type: Latin/Japanese/...	
@@ -689,7 +687,7 @@ function check_whole(group, unique) {
 		if (whole === UNIQUE_PH) return; // unique, non-confusable
 		if (whole) {
 			let set = whole.M.get(cp); // groups which have a character that look-like this character
-			maker = maker ? maker.filter(g => set.has(g)) : [...set];
+			maker = maker ? maker.filter(g => set.has(g)) : Array_from(set);
 			if (!maker.length) return; // confusable intersection is empty
 		} else {
 			shared.push(cp); 
@@ -700,7 +698,7 @@ function check_whole(group, unique) {
 		// check if any of the remaining groups
 		// contain the shared characters too
 		for (let g of maker) {
-			if (shared.every(cp => g.V.has(cp))) {
+			if (shared.every(cp => group_has_cp(g, cp))) {
 				throw new Error(`whole-script confusable: ${group.N}/${g.N}`);
 			}
 		}
@@ -714,9 +712,9 @@ function determine_group(unique) {
 	for (let cp of unique) {
 		// note: we need to dodge CM that are whitelisted
 		// but that code isn't currently necessary
-		let gs = groups.filter(g => g.V.has(cp));
+		let gs = groups.filter(g => group_has_cp(g, cp));
 		if (!gs.length) {
-			if (!GROUPS.some(g => g.V.has(cp))) { 
+			if (!GROUPS.some(g => group_has_cp(g, cp))) { 
 				// the character was composed of valid parts
 				// but it's NFC form is invalid
 				// 20230716: change to more exact statement, see: ENSNormalize.{cs,java}
@@ -756,7 +754,7 @@ function error_disallowed(cp) {
 }
 function error_group_member(g, cp) {
 	let quoted = quoted_cp(cp);
-	let gg = GROUPS.find(g => g.P.has(cp));
+	let gg = GROUPS.find(g => g.P.has(cp)); // only check primary
 	if (gg) {
 		quoted = `${gg.N} ${quoted}`;
 	}
@@ -770,9 +768,8 @@ function error_placement(where) {
 // assumption: cps[0] isn't a CM
 // assumption: the previous character isn't an emoji
 function check_group(g, cps) {
-	let {V, M} = g;
 	for (let cp of cps) {
-		if (!V.has(cp)) {
+		if (!group_has_cp(g, cp)) {
 			// for whitelisted scripts, this will throw illegal mixture on invalid cm, eg. "e{300}{300}"
 			// at the moment, it's unnecessary to introduce an extra error type
 			// until there exists a whitelisted multi-character
@@ -781,13 +778,13 @@ function check_group(g, cps) {
 			//   1. illegal cm for wrong group => mixture error
 			//   2. illegal cm for same group => cm error
 			//       requires set of whitelist cm per group: 
-			//        eg. new Set([...g.V].flatMap(nfc).filter(cp => CM.has(cp)))
+			//        eg. new Set([...g.P, ...g.Q].flatMap(nfc).filter(cp => CM.has(cp)))
 			//   3. wrong group => mixture error
 			throw error_group_member(g, cp);
 		}
 	}
 	//if (M >= 0) { // we have a known fixed cm count
-	if (M) { // we need to check for NSM
+	if (g.M) { // we need to check for NSM
 		let decomposed = nfd(cps);
 		for (let i = 1, e = decomposed.length; i < e; i++) { // see: assumption
 			// 20230210: bugfix: using cps instead of decomposed h/t Carbon225
@@ -895,7 +892,7 @@ function tokens_from_str(input, nf, ef) {
 			} else {
 				let cps = MAPPED.get(cp);
 				if (cps) {
-					chars.push(...cps);
+					chars.push(...cps); // less than 10 elements
 				} else if (!IGNORED.has(cp)) {
 					// 20230912: unicode 15.1 changed the order of processing such that
 					// disallowed parts are only rejected after NFC
@@ -933,7 +930,7 @@ function consume_emoji_reversed(cps, eaten) {
 		let {V} = node;
 		if (V) { // this is a valid emoji (so far)
 			emoji = V;
-			if (eaten) eaten.push(...cps.slice(pos).reverse()); // copy input (if needed)
+			if (eaten) eaten.push(...cps.slice(pos).reverse()); // (optional) copy input, used for ens_tokenize()
 			cps.length = pos; // truncate
 		}
 	}

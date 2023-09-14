@@ -2,6 +2,7 @@
 
 ## Resources
 
+* [Unicode Standard](https://www.unicode.org/versions/latest/)
 * [Unicode Technical Standard #46: IDNA](https://www.unicode.org/reports/tr46/)
 	* [unicode-logic.js/`idna_rules()`](./unicode-logic.js) — [src](https://unicode.org/reports/tr46/#Implementation_Notes)
 * [Unicode Technical Standard #51: Emoji](https://www.unicode.org/reports/tr51/)
