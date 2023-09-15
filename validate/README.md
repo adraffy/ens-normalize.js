@@ -2,7 +2,7 @@
 
 * Depends on `/derive/`
 * Depends on [current implementation](../) of `ens_normalize()`
-* Depends on [@adraffy/ens-labels](https://github.com/adraffy/ens-labels)
+* Depends on `labels.json` from [adraffy/ens-labels](https://github.com/adraffy/ens-labels)
 
 ## Data Files (not included)
 
@@ -13,6 +13,6 @@
 
 ## Instructions
 
-1. `node make.js` — creates [tests.json](./tests.json)
+1. `npm run validate` — creates [tests.json](./tests.json)
 	* Check output for any warnings
-1. `npm run test` — run latest validation tests
+1. `npm run test` — run validation tests

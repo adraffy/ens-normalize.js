@@ -709,6 +709,7 @@ function safe_str_from_cps(cps, quoter = quote_cp) {
 }
 
 // note: set(s) cannot be exposed because they can be modified
+// note: Object.freeze() doesn't work
 function is_combining_mark(cp) {
 	init();
 	return CM.has(cp);
@@ -769,6 +770,7 @@ function ens_beautify(name) {
 
 		// 20221213: fixes bidi subdomain issue, but breaks invariant (200E is disallowed)
 		// could be fixed with special case for: 2D (.) + 200E (LTR)
+		// https://discuss.ens.domains/t/bidi-label-ordering-spoof/15824
 		//output.splice(0, 0, 0x200E);
 	}
 	return flatten(labels);
@@ -791,65 +793,61 @@ function split(name, nf, ef) {
 			offset, // codepoint, not substring!
 		};
 		offset += input.length + 1; // + stop
-		let norm;
 		try {
 			// 1.) "The label must be in Unicode Normalization Form NFC"
-			let tokens = info.tokens = tokens_from_str(input, nf, ef); // if we parse, we get [norm and mapped]
+			let tokens = info.tokens = tokens_from_str(input, nf, ef);
 			let token_count = tokens.length;
 			let type;
 			if (!token_count) { // the label was effectively empty (could of had ignored characters)
-				// 20230120: change to strict
-				// https://discuss.ens.domains/t/ens-name-normalization-2nd/14564/59
 				//norm = [];
 				//type = 'None'; // use this instead of next match, "ASCII"
+				// 20230120: change to strict
+				// https://discuss.ens.domains/t/ens-name-normalization-2nd/14564/59
 				throw new Error(`empty label`);
+			} 
+			let norm = info.output = tokens.flat();
+			check_leading_underscore(norm);
+			let emoji = info.emoji = token_count > 1 || tokens[0].is_emoji; // same as: tokens.some(x => x.is_emoji);
+			if (!emoji && norm.every(cp => cp < 0x80)) { // special case for ascii
+				// 20230123: matches matches WHATWG, see note 3.3
+				check_label_extension(norm); // only needed for ascii
+				// cant have fenced
+				// cant have cm
+				// cant have wholes
+				// see derive: "Fastpath ASCII"
+				type = 'ASCII';
 			} else {
-				norm = tokens.flat();
-				check_leading_underscore(norm);
-				let emoji = info.emoji = token_count > 1 || tokens[0].is_emoji;
-				if (!emoji && norm.every(cp => cp < 0x80)) { // special case for ascii
-					// only needed for ascii
-					// 20230123: matches matches WHATWG, see note 3.3
-					check_label_extension(norm);
-					// cant have fenced
-					// cant have cm
-					// cant have wholes
-					// see derive: "Fastpath ASCII"
-					type = 'ASCII';
+				let chars = tokens.flatMap(x => x.is_emoji ? [] : x); // all of the nfc tokens concat together
+				if (!chars.length) { // theres no text, just emoji
+					type = 'Emoji';
 				} else {
-					let chars = tokens.flatMap(x => x.is_emoji ? [] : x); // all of the nfc tokens concat together
-					if (!chars.length) { // theres no text, just emoji
-						type = 'Emoji';
-					} else {
-						// 5. "The label must not begin with a combining mark, that is: General_Category=Mark."
-						if (CM.has(norm[0])) throw error_placement('leading combining mark');
-						for (let i = 1; i < token_count; i++) { // we've already checked the first token
-							let cps = tokens[i];
-							if (!cps.is_emoji && CM.has(cps[0])) { // every text token has emoji neighbors, eg. EtEEEtEt...
-								// bidi_qq() not needed since emoji is LTR and cps is a CM
-								throw error_placement(`emoji + combining mark: "${str_from_cps(tokens[i-1])} + ${safe_str_from_cps([cps[0]])}"`); 
-							}
+					// 5.) "The label must not begin with a combining mark, that is: General_Category=Mark."
+					if (CM.has(norm[0])) throw error_placement('leading combining mark');
+					for (let i = 1; i < token_count; i++) { // we've already checked the first token
+						let cps = tokens[i];
+						if (!cps.is_emoji && CM.has(cps[0])) { // every text token has emoji neighbors, eg. EtEEEtEt...
+							// bidi_qq() not needed since emoji is LTR and cps is a CM
+							throw error_placement(`emoji + combining mark: "${str_from_cps(tokens[i-1])} + ${safe_str_from_cps([cps[0]])}"`); 
 						}
-						check_fenced(norm);
-						let unique = Array_from(new Set(chars));
-						let [g] = determine_group(unique); // take the first match
-						// see derive: "Matching Groups have Same CM Style"
-						// alternative: could form a hybrid type: Latin/Japanese/...	
-						check_group(g, chars); // need text in order
-						check_whole(g, unique); // only need unique text (order would be required for multiple-char confusables)
-						type = g.N;
-						// 20230121: consider exposing restricted flag
-						// it's simpler to just check for 'Restricted'
-						// or even better: type.endsWith(']')
-						//if (g.R) info.restricted = true;
 					}
+					check_fenced(norm);
+					let unique = Array_from(new Set(chars));
+					let [g] = determine_group(unique); // take the first match
+					// see derive: "Matching Groups have Same CM Style"
+					// alternative: could form a hybrid type: Latin/Japanese/...	
+					check_group(g, chars); // need text in order
+					check_whole(g, unique); // only need unique text (order would be required for multiple-char confusables)
+					type = g.N;
+					// 20230121: consider exposing restricted flag
+					// it's simpler to just check for 'Restricted'
+					// or even better: type.endsWith(']')
+					//if (g.R) info.restricted = true;
 				}
 			}
 			info.type = type;
 		} catch (err) {
 			info.error = err; // use full error object
 		}
-		info.output = norm;
 		return info;
 	});
 }
@@ -1130,13 +1128,13 @@ function ens_tokenize(name, {
 	let input = explode_cp(name).reverse();
 	let eaten = [];
 	let tokens = [];
-	while (input.length) {		
+	while (input.length) {
 		let emoji = consume_emoji_reversed(input, eaten);
 		if (emoji) {
 			tokens.push({
-				type: TY_EMOJI, 
+				type: TY_EMOJI,
 				emoji: emoji.slice(), // copy emoji
-				input: eaten, 
+				input: eaten,
 				cps: filter_fe0f(emoji)
 			});
 			eaten = []; // reset buffer

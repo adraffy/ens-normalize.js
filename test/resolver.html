@@ -1076,13 +1076,17 @@ Hebrew:
 </div>
 <footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
 <script type="module">
+// to prepare this for self-hosting deployment:
+// * replace infura_provider with a public provider, eg. new ethers.providers.CloudflareProvider();
+// * replace punycode.js import with 'https://cdn.jsdelivr.net/npm/@adraffy/punycode@latest/dist/index.min.js'
+// * replace "../../" with "https://adraffy.github.io/"
 import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.esm.min.js';
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
 	nfc, nfd, hex_cp, quote_cp, explode_cp, str_from_cps, safe_str_from_cps,
 	dom_from_tokens, use_default_style, versions, compare_arrays, should_escape,
 } from '../dist/all.min.js';
-import {puny_encoded, is_surrogate} from '../../punycode.js/dist/index.min.js';
+import {puny_encoded, is_surrogate} from '../../punycode.js/dist/index.min.js'; 
 import eth_ens_namehash from './eth-ens-namehash@2.0.15.min.js';
 use_default_style();
 

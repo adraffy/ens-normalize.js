@@ -135,6 +135,9 @@ export class UnicodeChar {
 	get_extended() {
 		return this.extended ?? [this.script];
 	}
+	toString() {
+		return `UnicodeChar(${hex_cp(this.cp)}, ${this.name})`;
+	}
 }
 
 export class UnicodeSpec {
@@ -739,7 +742,7 @@ function parse_version_from_comment(s) {
 	return match[1];
 }
 
-class UnicodeScript {
+export class UnicodeScript {
 	constructor(abbr, name, map) {
 		this.abbr = abbr;
 		this.name = name;
@@ -759,6 +762,9 @@ class UnicodeScript {
 	//get description() {
 	//	return `${this.name} (${this.map.size}) Ext(+${this.ext_gain.size}-${this.ext_loss.size})`;
 	//}
+	toString() {
+		return `UnicodeScript(${this.abbr}, ${this.name})`;
+	}
 }
 
 /*
