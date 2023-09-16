@@ -1,4 +1,5 @@
 // compare two unicode versions AFTER parsing
+// TODO: support arg1 arg2 where arg = unicode-version/cldr-version
 
 import {UnicodeSpec} from './unicode-logic.js';
 import {ens_idna_rules} from './idna.js'; 
@@ -14,8 +15,8 @@ function expand(unicode) {
 	let obj = {
 		scripts: unicode.script_map, // force this before char_map
 		unicode, 
-		idnaENS: expand_idna(ens_idna_rules(unicode)),
-		//idna2003: unicode.derive_idna_rules({version: 2003, use_STD3: true, valid_deviations: true}),
+		idna_ens: expand_idna(ens_idna_rules(unicode)),
+		//idna_2003: unicode.derive_idna_rules({version: 2003, use_STD3: true, valid_deviations: true}),
 		emoji_data: map_values(unicode.read_emoji_data(), v => new Map(v.map(x => [x.cp, x]))),
 		emoji_zwjs: expand_named_cps(unicode.read_emoji_zwjs()),
 		emoji_seqs: expand_named_cps(unicode.read_emoji_seqs()),
@@ -39,7 +40,6 @@ function expand(unicode) {
 		'get_noncharacter_cps', 
 		'combining_ranks',
 		'decompositions',
-		'read_nf_props',
 		'read_confusables',
 		'read_intentional_confusables',
 
@@ -50,7 +50,7 @@ function expand(unicode) {
 		//'core_props',
 		//'read_allowed_identifiers',
 		//'read_identifier_types',
-
+		//'read_nf_props',
 	]) {
 		obj[fn] = unicode[fn]();
 	}
@@ -94,7 +94,7 @@ function deep_diff(a, b, callback, path = [], visited = new Set()) {
 			let a_minus_b = new Set([...a].filter(x => !b.has(x)));
 			let b_minus_a = new Set([...b].filter(x => !a.has(x)));
 			if (a_minus_b.size || b_minus_a.size) {
-				callback([...path, 'symmetricDiff'], [...a_minus_b], [...b_minus_a]);
+				callback([...path, 'symmetricDiff()'], [...a_minus_b], [...b_minus_a]);
 			}
 		} else {
 			for (let k of new Set([...a, ...b])) {
@@ -103,14 +103,14 @@ function deep_diff(a, b, callback, path = [], visited = new Set()) {
 		}
 	} else if (Array.isArray(a)) {
 		let size = Math.max(a.length, b.length);
-		if (size <= 10 && [...a, ...b].every(is_primitive)) {
+		if (size <= 10 && [...a, ...b].every(is_primitive)) { // treat small array as literal
 			return deep_diff(JSON.stringify(a), JSON.stringify(b), callback, [...path, 'stringify()'], visited);
 		}
 		for (let i = 0; i < size; i++) {
-			deep_diff(a[i], b[i], callback, [...path, i], visited);
+			deep_diff(a[i], b[i], callback, [...path, `[${i}]`], visited);
 		}
 	} else {
-		for (let k of new Set([...Object.keys(a), Object.keys(b)])) {
+		for (let k of new Set([...Object.keys(a), ...Object.keys(b)])) {
 			deep_diff(a[k], b[k], callback, [...path, k], visited);
 		}
 	}

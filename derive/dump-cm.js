@@ -33,9 +33,9 @@ for (let bucket of by_og_script) {
 console.log();
 print_section('ScriptExt');
 for (let bucket of by_script_ext) {
-	console.log(`\t${bucket[0][1].description} (${bucket.length})`);
+	console.log(`${bucket[0][1].description} (${bucket.length})`);
 	for (let [char] of bucket) {
-		console.log(`\t\t${char.gc} ${PRINTER.desc_for_cp(char.cp)}`);
+		console.log(`\t${char.gc} ${PRINTER.desc_for_cp(char.cp)}`);
 	}
 }
 console.log();
@@ -48,8 +48,6 @@ for (let bucket of by_script_ext) {
 	}
 	
 }
-
-
 
 console.log();
 print_section('By Type');

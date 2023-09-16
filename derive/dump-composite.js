@@ -1,9 +1,10 @@
-// dump chraracters that arent naturally NFC
+// dump characters that arent naturally NFC
 
+import {MAX_CP} from './utils.js';
 import {NF, PRINTER} from './unicode-version.js';
 
 let found = [];
-for (let cp = 0; cp <= 0x10FFFF; cp++) {
+for (let cp = 0; cp <= MAX_CP; cp++) {
 	if (NF.is_composite(cp)) {
 		found.push(cp);
 	}

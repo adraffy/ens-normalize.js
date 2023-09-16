@@ -58,15 +58,19 @@
 
 ## Upgrade Notes
 
-### 15.0.0 → 15.1.0
+### [15.0.0 → 15.1.0](https://www.unicode.org/versions/Unicode15.1.0/#Character_Additions)
 
- `node unicode-diff.js 15.0.0/42 15.1.0/43.1`
+ `node unicode-diff.js`
 * CLDR
 	* `short-names.json` **Unchanged**
 	* `regions.json` **New** `"CQ"`
+* UCD:
+	* **New** Ideographic Description Characters
+	* **New** CJK Ideograph Extension I Block
 * UAX-31: 
 	* **Unchanged** Scripts 
 	* **Unchanged** Recommended, Excluded, Limited Use Scripts
+	* **New** Zyyy Script Extensions
 * UTS-39: 
 	* **New** Confusable Bidi Logic (doesn't apply since mixed-Bidi not allowed)
 	* `confusables.txt` **Unchanged**

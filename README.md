@@ -16,8 +16,8 @@
 	* [`43KB`](./dist/all.min.js) *Everything!* — custom `NFC` + sub-libraries: [parts.js](./src/parts.js), [utils.js](./src/utils.js)
 * Included Apps:
 	* [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html) ⭐
-	* [Character Viewer](https://adraffy.github.io/ens-normalize.js/test/chars.html)
 	* [Supported Emoji](https://adraffy.github.io/ens-normalize.js/test/emoji.html)
+	* [Character Viewer](https://adraffy.github.io/ens-normalize.js/test/chars.html)
 	* [Confused Explainer](https://adraffy.github.io/ens-normalize.js/test/confused.html)
 * Related Projects:
 	* [Recent Registrations](https://raffy.antistupid.com/eth/ens-regs.html)

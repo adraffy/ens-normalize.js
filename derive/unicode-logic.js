@@ -136,7 +136,7 @@ export class UnicodeChar {
 		return this.extended ?? [this.script];
 	}
 	toString() {
-		return `UnicodeChar(${hex_cp(this.cp)}, ${this.name})`;
+		return `${this.constructor.name}(${hex_cp(this.cp)}, ${this.name})`;
 	}
 }
 
@@ -247,7 +247,6 @@ export class UnicodeSpec {
 			}
 		});
 	}
-
 	is_printable(cp) {
 		return this.char_map.has(cp) && !UNPRINTABLES.has(cp);
 	}
@@ -384,7 +383,7 @@ export class UnicodeSpec {
 		} else if (typeof x.cp === 'number') {
 			ret = `${hex_cp(x.cp)} (${String.fromCodePoint(x.cp)}) ${x.name}`;
 		} else {
-			ret = `${hex_seq(x.cps) } (${String.fromCodePoint(...x.cps)}) ${x.name}`;
+			ret = `${hex_seq(x.cps)} (${String.fromCodePoint(...x.cps)}) ${x.name}`;
 		}
 		if (a.length) {
 			ret = `${ret} => ${this.format(...a)}`;
@@ -418,7 +417,7 @@ export class UnicodeSpec {
 	}
 	read_prop_values() {
 		// AHex; N ; No ; F ; False
-		//sc ; Latn ; Latin
+		// sc ; Latn ; Latin
 		return parse_semicolon_file(new URL('./PropertyValueAliases.txt', this.data_dir), {
 			row([key, ...a]) {
 				this.get_bucket(key).push(a);
@@ -494,12 +493,12 @@ export class UnicodeSpec {
 		});
 	}
 	read_emoji_seqs() {
-		//231A..231B    ; Basic_Emoji                  ; watch                              # E0.6   [2] (⌚..⌛)
-		//25AB FE0F     ; Basic_Emoji                  ; white small square                 # E0.6   [1] (▫️)
-		//0023 FE0F 20E3; Emoji_Keycap_Sequence        ; keycap: \x{23}                     # E0.6   [1] (#️⃣)
-		//1F1E6 1F1E8   ; RGI_Emoji_Flag_Sequence      ; flag: Ascension Island             # E2.0   [1] (🇦🇨)
-		//1F3F4 E0067 E0062 E0065 E006E E0067 E007F; RGI_Emoji_Tag_Sequence; flag: England  # E5.0   [1] (🏴󠁧󠁢󠁥󠁮󠁧󠁿)
-		//261D 1F3FB    ; RGI_Emoji_Modifier_Sequence  ; index pointing up: light skin tone # E1.0   [1] (☝🏻)
+		// 231A..231B    ; Basic_Emoji                  ; watch                              # E0.6   [2] (⌚..⌛)
+		// 25AB FE0F     ; Basic_Emoji                  ; white small square                 # E0.6   [1] (▫️)
+		// 0023 FE0F 20E3; Emoji_Keycap_Sequence        ; keycap: \x{23}                     # E0.6   [1] (#️⃣)
+		// 1F1E6 1F1E8   ; RGI_Emoji_Flag_Sequence      ; flag: Ascension Island             # E2.0   [1] (🇦🇨)
+		// 1F3F4 E0067 E0062 E0065 E006E E0067 E007F; RGI_Emoji_Tag_Sequence; flag: England  # E5.0   [1] (🏴󠁧󠁢󠁥󠁮󠁧󠁿)
+		// 261D 1F3FB    ; RGI_Emoji_Modifier_Sequence  ; index pointing up: light skin tone # E1.0   [1] (☝🏻)
 		const self = this;
 		return parse_semicolon_file(new URL('./emoji-sequences.txt', this.data_dir), {
 			row([src, type, name], comment) {
@@ -763,146 +762,9 @@ export class UnicodeScript {
 	//	return `${this.name} (${this.map.size}) Ext(+${this.ext_gain.size}-${this.ext_loss.size})`;
 	//}
 	toString() {
-		return `UnicodeScript(${this.abbr}, ${this.name})`;
+		return `${this.constructor.name}(${this.abbr}, ${this.name})`;
 	}
 }
-
-/*
-// work in abbrs		
-export class UnicodeScripts {
-	constructor(spec) {
-		this.spec = spec;
-		let {sc} = spec.prop_values(); // sc = Script
-		// this.names = new Map(sc.map(v => [v[0], v[1]])); // abbr -> name
-		let name2abbr = new Map(sc.map(v => [v[1], v[0]])); // name -> abbr
-		this.map = spec.scripts().map(([name, cps]) => {
-			let abbr = name2abbr.get(name);
-			if (!abbr) throw new TypeError(`unknown script abbr: ${name}`);
-			name = name.replaceAll('_', ' '); // fix name
-			let set = new Set(cps);
-			return [abbr, new UnicodeScript(abbr, name, set)];
-		});
-		this.exts = new Map(spec.script_extensions().map(([cp, abbrs]) => [cp, abbrs.map(abbr => this.require(abbr))]));
-		for (let [cp, scripts] of this.exts) {			
-			let script0 = this.get_script(cp);
-			for (let script of scripts) {
-				if (script === script0) {
-					script0 = false;
-				} else {
-					script.ext_gain.add(cp);
-				}
-			}
-			script0?.ext_loss.add(cp);
-		}
-		for (let abbr of read_excluded_scripts()) {
-			this.require(abbr).excluded = true;
-		}
-		for (let abbr of read_limited_scripts()) {
-			this.require(abbr).limited = true;
-		}
-	}
-	[Symbol.iterator]() {
-		return this.map.values();
-	}
-	require(abbr) {	
-		let script = this.map.get(abbr);
-		if (!script) throw new TypeError(`expected script abbr: ${abbr}`);
-		return script;
-	}
-	excluded() { 
-		return [...this].filter(x => x.excluded);
-	}
-	limited() { 
-		return [...this].filter(x => x.limited);
-	}
-	get_details(cp) {
-		let script = this.get_script(cp);
-		let aug = this.get_extended_script_set(cp);
-		let ret = script?.abbr ?? 'Unknown';
-		if (script ? aug.size == 1 && aug.has(script.abbr) : aug.size == 0) {
-			// same, not aug
-		} else {
-			ret = `${ret} => ${[...aug].join(',')}`;
-		}
-		return `${this.spec.get_name(cp)} [${ret}]`;
-	}
-	get_script(cp) {
-		for (let script of this.map.values()) {
-			if (script.set.has(cp)) {
-				return script;
-			}
-		}
-	}
-	get_script_set(x) {
-		let ret = new Set();
-		for (let cp of explode_cp(x)) {
-			let script = this.get_script(cp);
-			if (script) {
-				ret.add(script);
-			}
-		}
-		return ret;
-	}
-	get_extended_script_set(x) {
-		let ret = new Set();
-		for (let cp of explode_cp(x)) {
-			let ext = this.exts.get(cp);
-			if (ext) {
-				for (let x of ext) {
-					ret.add(x);
-				}
-			} else {
-				let script = this.get_script(cp);
-				if (script) {
-					ret.add(script);
-				}
-			}
-		}
-		return ret;
-	}
-	get_augmented_script_set(x) {
-		return augment_script_set(this.get_extended_script_set(x));
-	}
-	get_resolved_script_set(x) {
-		// https://www.unicode.org/reports/tr39/#def-resolved-script-set
-		let cps = explode_cp(x);
-		if (!cps.length) return new Set();
-		let resolved = this.get_augmented_script_set(cps[0]);
-		for (let i = 1; i < cps.length; i++) {
-			let set = this.get_resolved_script_set(cps[i]);
-			if (set.has(AUGMENTED_ALL)) continue;
-			if (resolved.has(AUGMENTED_ALL)) {
-				resolved = set;
-			} else {
-				for (let abbr of set) {
-					if (!resolved.has(abbr)) {
-						resolved.delete(abbr);
-					}
-				}
-				for (let abbr of resolved) {
-					if (!set.has(abbr)) {
-						resolved.delete(abbr);
-					}
-				}
-
-			}
-		}
-		return resolved;
-	}
-	apply_changes(map) { // abbr => [cp, ...]
-		for (let [abbr, cps] of Object.entries(map)) {
-			let dst = this.require(abbr);
-			for (let cp of cps) {
-				let src = this.get_script(cp);
-				if (!src) throw new Error(`Expected script: ${this.spec.format(cp)}`);
-				src.set.delete(cp);
-				dst.set.add(cp);
-				console.log(`Changed Script [${src.abbr} => ${dst.abbr}]: ${this.spec.format(cp)}`);
-			}
-		}
-	}
-}
-*/
 
 export class UnicodePrinter {
 	constructor(spec) {
