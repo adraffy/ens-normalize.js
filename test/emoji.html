@@ -115,7 +115,7 @@ h1 .count span {
 }
 #search input {
 	display: block;
-	padding: 5px;
+	padding: 8px;
 	font-size: 20pt;
 	width: 100%;
 	box-sizing: border-box;
@@ -1211,11 +1211,7 @@ function fmt_perc(p) {
 	return trim_trailing_decimal_zeros((100 * p).toFixed(p < 0.1 ? p < 0.01 ? 2 : 1 : 0)) + '%';
 }
 function trim_trailing_decimal_zeros(s) {
-	if (s.includes('.')) {
-		s = s.replace(/0+$/, '');
-		if (s.endsWith('.')) s = s.slice(0, -1);
-	}
-	return s;
+	return s.includes('.') ? s.replace(/\.?0*$/, '') : s;
 }
 
 function get_repeat_word(n) {
@@ -1391,20 +1387,16 @@ function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_e
 	return tr;
 }
 
-
 async function dataURIFromBlob(blob) {
-	return new Promise((ful) => {
+	return new Promise(ful => {
 		const r = new FileReader();
 		r.onload = () => ful(r.result); 
 		r.readAsDataURL(blob);
 	});
 }
 
-
 function searchize(s) {
-	return s.toLowerCase()
-		.replace(/^\s+/, '') // leading whitespace
-		.replaceAll(/\s+/gu, ' '); // repeated whitespace
+	return s.toLowerCase().trim().replaceAll(/\s+/gu, ' '); // repeated whitespace
 }
 
 function replace_escapes(s) {

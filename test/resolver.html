@@ -954,6 +954,7 @@ Hebrew Geresh:
 <button data-name="{1F426}{200D}{2B1B}">Black Bird</button>
 
 <a href="https://unicode.org/reports/tr51/proposed.html"><b>Unicode 15.1:</b></a>
+<button>≠.≮.≯</button>
 <button data-name="{26D3}{200D}{1F4A5}.{1F344}{200D}{1F7EB}.{1F34B}{200D}{1F7E9}.{1F426}{200D}{1F525}.{1F642}{200D}{2194}.{1F642}{200D}{2195}.{1F9D1}{200D}{1F9D2}.{1F9D1}{200D}{1F9D1}{200D}{1F9D2}.{1F9D1}{200D}{1F9D2}{200D}{1F9D2}.{1F9D1}{200D}{1F9D1}{200D}{1F9D2}{200D}{1F9D2}">ZWJ Sequences (10)</button>
 <button data-name="{1F3C3}{1F3FB}{200D}{27A1}.{1F3C3}{1F3FB}{200D}{27A1}.{1F3C3}{1F3FC}{200D}{27A1}.{1F3C3}{1F3FD}{200D}{27A1}.{1F3C3}{1F3FE}{200D}{27A1}.{1F3C3}{1F3FF}{200D}{27A1}">Directional (108)</button>
 
@@ -1001,13 +1002,13 @@ Hebrew:
 	<label for="auto_resolve_check">⟳ <i>on Input</i></label>
 	<input type="checkbox" id="show_details_check" checked>
 	<label for="show_details_check">Details</label>
-		<input type="checkbox" id="show_components_check" checked>
-		<label for="show_components_check">Emoji Components</label>
-		<input type="checkbox" id="skip_norm_check">
+	<input type="checkbox" id="show_components_check" checked>
+	<label for="show_components_check">Emoji Components</label>
+	<input type="checkbox" id="skip_norm_check">
 	<label for="skip_norm_check">Skip Norm</label>
 	<input type="checkbox" id="force_mainnet_check">
-	<label for="force_mainnet_check">🔒︎ Mainnet</label>
-		<input type="checkbox" id="force_ltr_check">
+	<label for="force_mainnet_check" title="Use mainnet regardless of selected browser provider network">🔒︎ Mainnet</label>
+	<input type="checkbox" id="force_ltr_check">
 	<label for="force_ltr_check" title="Override Bidi Handling with Left-to-Right Direction&#10;(Applies only to Input)">LTR!</label>
 </div>
 <div id="input">
@@ -1076,7 +1077,7 @@ Hebrew:
 </div>
 <footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
 <script type="module">
-// to prepare this for self-hosting deployment:
+// to prepare this file for self-hosted deployment:
 // * replace infura_provider with a public provider, eg. new ethers.providers.CloudflareProvider();
 // * replace punycode.js import with 'https://cdn.jsdelivr.net/npm/@adraffy/punycode@latest/dist/index.min.js'
 // * replace "../../" with "https://adraffy.github.io/"
@@ -2558,11 +2559,7 @@ function add_row_tag(row, tag) {
 }
 
 function trim_trailing_decimal_zeros(s) {
-	if (s.includes('.')) {
-		s = s.replace(/0+$/, '');
-		if (s.endsWith('.')) s = s.slice(0, -1);
-	}
-	return s;
+	return s.includes('.') ? s.replace(/\.?0*$/, '') : s;
 }
 function format_dur(t) {
 	if (t < 1000) return `${Math.ceil(t)}ms`;

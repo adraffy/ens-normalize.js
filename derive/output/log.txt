@@ -1,4 +1,4 @@
-Build Date: 2023-09-12T22:05:09.894Z
+Build Date: 2023-09-18T23:08:36.406Z
 Unicode Version: 15.1.0 (2023-09-06T02:58:19.261Z)
 CLDR Version: 43.1 (2023-09-03T21:58:22.687Z)
 ==== RGI Emoji ZWJ Sequences ====
@@ -7724,6 +7724,9 @@ Removed Valid: 22A1 (⊡) SQUARED DOT OPERATOR
 Removed Valid: 27CC (⟌) LONG DIVISION
 Removed Valid: 221B (∛) CUBE ROOT
 Removed Valid: 221C (∜) FOURTH ROOT
+Removed Valid: 2260 (≠) NOT EQUAL TO
+Removed Valid: 226E (≮) NOT LESS-THAN
+Removed Valid: 226F (≯) NOT GREATER-THAN
 Removed Valid: 232F (⌯) SYMMETRY
 Removed Valid: 2201 (∁) COMPLEMENT
 Removed Valid: 2203 (∃) THERE EXISTS
@@ -7775,7 +7778,6 @@ Removed Valid: 225C (≜) DELTA EQUAL TO
 Removed Valid: 225D (≝) EQUAL TO BY DEFINITION
 Removed Valid: 225E (≞) MEASURED BY
 Removed Valid: 225F (≟) QUESTIONED EQUAL TO
-Removed Valid: 2260 (≠) NOT EQUAL TO
 Removed Valid: 2261 (≡) IDENTICAL TO
 Removed Valid: 2262 (≢) NOT IDENTICAL TO
 Removed Valid: 2263 (≣) STRICTLY EQUIVALENT TO
@@ -7789,8 +7791,6 @@ Removed Valid: 226A (≪) MUCH LESS-THAN
 Removed Valid: 226B (≫) MUCH GREATER-THAN
 Removed Valid: 226C (≬) BETWEEN
 Removed Valid: 226D (≭) NOT EQUIVALENT TO
-Removed Valid: 226E (≮) NOT LESS-THAN
-Removed Valid: 226F (≯) NOT GREATER-THAN
 Removed Valid: 2270 (≰) NEITHER LESS-THAN NOR EQUAL TO
 Removed Valid: 2271 (≱) NEITHER GREATER-THAN NOR EQUAL TO
 Removed Valid: 2272 (≲) LESS-THAN OR EQUIVALENT TO

@@ -823,6 +823,17 @@ export default [
 	0x2078, // (⁸) SUPERSCRIPT EIGHT
 	0x2079, // (⁹) SUPERSCRIPT NINE
 	*/
+	
+	// 20230916: these were added in Unicode 15.1
+	// but are disabled (and likely should be disabled)
+	// added here for future reference
+	/*
+	0x2FFC, // IDEOGRAPHIC DESCRIPTION CHARACTER SURROUND FROM RIGHT
+	0x2FFD, // IDEOGRAPHIC DESCRIPTION CHARACTER SURROUND FROM LOWER RIGHT
+	0x2FFE, // IDEOGRAPHIC DESCRIPTION CHARACTER HORIZONTAL REFLECTION
+	0x2FFF, // IDEOGRAPHIC DESCRIPTION CHARACTER ROTATION
+	0x31EF, // IDEOGRAPHIC DESCRIPTION CHARACTER SUBTRACTION
+	*/
 
 	// cjk
 	0x302A, // (◌〪) IDEOGRAPHIC LEVEL TONE MARK
@@ -2910,7 +2921,13 @@ export default [
 	0x221B, // (∛) CUBE ROOT
 	0x221C, // (∜) FOURTH ROOT
 
-	
+	// 20230916: these became legal in unicode 15.1 idna changes
+	// however this decision was insane as no registrar is gonna allow these (and "=" will never valid)
+	// note: these were already disabled by norm
+	0x2260, // (≠) NOT EQUAL TO
+	0x226E, // (≮) NOT LESS-THAN
+	0x226F, // (≯) NOT GREATER-THAN
+
 	0x232F, // (⌯) SYMMETRY
 	0x2201, // (∁) COMPLEMENT
 	0x2203, // (∃) THERE EXISTS
@@ -2962,7 +2979,6 @@ export default [
 	0x225D, // (≝) EQUAL TO BY DEFINITION
 	0x225E, // (≞) MEASURED BY
 	0x225F, // (≟) QUESTIONED EQUAL TO
-	0x2260, // (≠) NOT EQUAL TO
 	0x2261, // (≡) IDENTICAL TO
 	0x2262, // (≢) NOT IDENTICAL TO
 	0x2263, // (≣) STRICTLY EQUIVALENT TO
@@ -2976,8 +2992,6 @@ export default [
 	0x226B, // (≫) MUCH GREATER-THAN
 	0x226C, // (≬) BETWEEN
 	0x226D, // (≭) NOT EQUIVALENT TO
-	0x226E, // (≮) NOT LESS-THAN
-	0x226F, // (≯) NOT GREATER-THAN
 	0x2270, // (≰) NEITHER LESS-THAN NOR EQUAL TO
 	0x2271, // (≱) NEITHER GREATER-THAN NOR EQUAL TO
 	0x2272, // (≲) LESS-THAN OR EQUIVALENT TO
