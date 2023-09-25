@@ -363,11 +363,15 @@ td.info {
 	font: 10px sans-serif;
 	text-decoration: none;
 }
-button[data-by="length"], [data-by="length"] .title { background-color: var(--length-color); }
+.prop.length {
+	font: bold 12px monospace;
+}
+button[data-by="length"], [data-by="length"] .title, .length { background-color: var(--length-color); }
 button[data-by="type"], [data-by="type"] .title, .type {  background-color: #ffe0c0; }
 button[data-by="group"], [data-by="group"] .title, .group { background-color: #ddf; }
 button[data-by="subgroup"], [data-by="subgroup"] .title, .subgroup { background-color: #def; }
 button[data-by="version"], [data-by="version"] .title, .version { background-color: #f0fff0; }
+[data-by="length"] .prop.length,
 [data-by="type"] .prop.type,
 [data-by="group"] .prop.group,
 [data-by="subgroup"] .prop.subgroup,
@@ -1332,6 +1336,11 @@ function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_e
 			span.innerText = name0;
 			info_div.append(span);
 		}
+		let a_len = document.createElement('a');
+		a_len.classList.add('prop', 'length');
+		a_len.innerHTML = `${norm_length}<span class="cp">cp</span>`;
+		a_len.href = hash_for_query(`${norm_length}cp`);
+		info_div.append(a_len);
 		if (short_type) {
 			let a = document.createElement('a');
 			a.classList.add('prop', 'type');

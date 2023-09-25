@@ -248,8 +248,8 @@ body.testnet #provider a {
 	color: #fff;
 }
 #force_ltr_check:checked + label {	
-	border-color: #c61;
-	background-color: #c61;
+	border-color: #555;
+	background-color: #555;
 	color: #fff;
 }
 #force_mainnet_check:checked + label {
@@ -1221,7 +1221,7 @@ add_digits('Thai', '๐๑๒๓๔๕๖๗๘๙');
 //add_digits('Bengali', '০১২৩৪৫৬৭৮৯');
 //add_digits('Tamil', '௦௧௨௩௪௫௬௭௮௯'); 
 
-read_local_storage(STORAGE_HIDE_EXAMPLES, x => examples_div.classList.toggle('hide', x), false);
+read_local_storage(STORAGE_HIDE_EXAMPLES, x => examples_div.classList.toggle('hide', x), true);
 read_local_storage(STORAGE_SHOW_DETAILS, x => show_details_check.checked = x);
 read_local_storage(STORAGE_AUTO_RESOLVE, x => auto_resolve_check.checked = x);
 read_local_storage(STORAGE_SHOW_COMPONENTS, x => show_components_check.checked = x);
@@ -3208,6 +3208,13 @@ async function resolve1(input, skip_norm) {
 			add_row_tag(wrapped_row, create_typed_tag('warn', 'Unwrappable'));
 		} else {
 			add_row_tag(wrapped_row, is_wrapped ? create_typed_tag('good', '🎁 Wrapped') : '🎉 Unwrapped');
+			if (nft_backed) {
+				// let tag = document.createElement('span');
+				// tag.classList.add('tags', 'second');
+				// tag.innerHTML = '🪙️ ';
+				// tag.append(create_etherscan_address_link(nft_contract.address, {title: 'Tokenized', contract: true}));
+				add_row_tag(wrapped_row, create_typed_tag('second', `Tokenized`));
+			}
 		}
 		if (wrapper_contract) {
 			let label = wrapped_row.querySelector('.row-label');
