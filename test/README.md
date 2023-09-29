@@ -11,7 +11,7 @@
 
 ### Tools
 
-* [`resolver.html``](./resolver.html) → [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html) ⭐
+* [`resolver.html`](./resolver.html) → [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html) ⭐
 * [`emoji.html`](./emoji.html) → [Supported Emoji](https://adraffy.github.io/ens-normalize.js/test/emoji.html)
 * [`chars.html`](./chars.html) → [Character Viewer](https://adraffy.github.io/ens-normalize.js/test/chars.html)
 * [`confused.html`](./confused.html) → [Confused Explainer](https://adraffy.github.io/ens-normalize.js/test/confused.html)

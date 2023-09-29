@@ -783,14 +783,15 @@ function update_top() {
 }
 
 csv_btn.addEventListener('click', async () => {
-	let lines = [`Form,Hex,Norm,Length,MinLength,MinRepeat,Name,Type,Version`];
+	// note: utf8 csv is a little fucky in some boomer software
+	let lines = [`#Form,Hex,Norm,Length,MinLength,MinRepeat,Name,Type,Group,Subgroup,Version`];
 	for (let rec of all_emoji) {
 		if (!rec.is_emoji) continue;
 		let v = [rec.form, rec.cps.map(hex_cp).join(' '), rec.norm, rec.norm_length, rec.min_length, rec.min_repeat];
 		if (rec.info) {
-			v.push(rec.info.name, rec.info.type, rec.info.version);
+			v.push(rec.info.name, rec.info.type, rec.info.group, rec.info.subgroup, rec.info.version);
 		}
-		lines.push(v.map(x => typeof x === 'number' ? x : `"${x}"`).join(','));
+		lines.push(v.map(x => typeof x === 'number' ? x : `"${x || ''}"`).join(','));
 	}
 	let a = document.createElement('a');
 	a.download = 'emoji.csv';
@@ -1328,7 +1329,12 @@ function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_e
 		let {name, name0, version, short_type, group, subgroup} = info;
 		let a_name = document.createElement('a');
 		a_name.innerText = name;
+		// 20230926: emojipedia doesn't like trailing fe0f
 		a_name.href = `https://emojipedia.org/${form}`;
+		// can't seem to fix it
+		// whatever they're doing, its goofy
+		//a_name.href = `https://emojipedia.org/${form.replace(/\uFE0F$/u, '')}`;
+		//a_name.href = `https://emojipedia.org/${info.name.replace(/[^a-z]+/g, info.name.includes(':') ? '_' : '-')}`;
 		info_div.append(a_name);
 		if (name0) {
 			let span = document.createElement('i');
@@ -1388,7 +1394,7 @@ function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_e
 	td_resolve.classList.add('resolve');
 	let a_resolve = document.createElement('a');
 	a_resolve.innerHTML = '↩️';
-	a_resolve.href = `./resolver.html#${norm.repeat(min_repeat)}.eth`;
+	a_resolve.href = `./resolver.html#${is_emoji ? norm.repeat(min_repeat) : form}.eth`;
 	a_resolve.title = 'Open in Resolver';
 	td_resolve.append(a_resolve);
 

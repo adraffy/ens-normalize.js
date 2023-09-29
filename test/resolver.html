@@ -3208,7 +3208,7 @@ async function resolve1(input, skip_norm) {
 			add_row_tag(wrapped_row, create_typed_tag('warn', 'Unwrappable'));
 		} else {
 			add_row_tag(wrapped_row, is_wrapped ? create_typed_tag('good', '🎁 Wrapped') : '🎉 Unwrapped');
-			if (nft_backed) {
+			if (nft_backed && !is_wrapped) {
 				// let tag = document.createElement('span');
 				// tag.classList.add('tags', 'second');
 				// tag.innerHTML = '🪙️ ';
