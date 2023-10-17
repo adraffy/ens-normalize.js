@@ -451,6 +451,9 @@ button.copy.copied {
 	font-size: 13px;
 	color: #666;
 }
+.tags.iface code.prefix {
+	color: #00f;
+}
 .tags.good {
 	color: #060;
 	background: #cfc;
@@ -726,6 +729,9 @@ footer span:hover {
 		font-size: 14pt;
 		padding: 4px;
 	}
+	#output {
+		font-size: 13pt;
+	}
 }
 @media only screen and (max-width: 400px) { 
 	h1 a {
@@ -999,15 +1005,15 @@ Hebrew:
 <div id="options">
 	<button id="examples_btn">👀 Examples</button>
 	<input type="checkbox" id="auto_resolve_check" checked>
-	<label for="auto_resolve_check">⟳ <i>on Input</i></label>
+	<label for="auto_resolve_check"><svg data-testid="geist-icon" fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--geist-foreground);width:20px;height:20px"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> <i>on Input</i></label>
 	<input type="checkbox" id="show_details_check" checked>
 	<label for="show_details_check">Details</label>
 	<input type="checkbox" id="show_components_check" checked>
 	<label for="show_components_check">Emoji Components</label>
 	<input type="checkbox" id="skip_norm_check">
-	<label for="skip_norm_check">Skip Norm</label>
+	<label for="skip_norm_check"><svg data-testid="geist-icon" fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--geist-foreground);width:20px;height:20px"><circle cx="12" cy="12" r="10" fill="var(--geist-fill)"></circle><path d="M15 9L9 15" stroke="var(--geist-stroke)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M9 9L15 15" stroke="var(--geist-stroke)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>Norm</label>
 	<input type="checkbox" id="force_mainnet_check">
-	<label for="force_mainnet_check" title="Use mainnet regardless of selected browser provider network">🔒︎ Mainnet</label>
+	<label for="force_mainnet_check" title="Use mainnet regardless of selected browser provider network"><svg data-testid="geist-icon" fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--geist-foreground);width:20px;height:20px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Mainnet</label>
 	<input type="checkbox" id="force_ltr_check">
 	<label for="force_ltr_check" title="Override Bidi Handling with Left-to-Right Direction&#10;(Applies only to Input)">LTR!</label>
 </div>
@@ -1423,7 +1429,7 @@ force_mainnet_check.addEventListener('input', async () => {
 	update_title();
 	if (!window_provider) return;
 	force_mainnet_check.disabled = true;
-	if (update_network(await window_provider.getNetwork().catch(() => {}))) {
+	if (update_network(await get_window_provider_network().catch(() => {}))) {
 		resolve();
 	}
 	force_mainnet_check.disabled = false;
@@ -1469,13 +1475,17 @@ function make_network_switcher(btn, id) {
 	btn.title = `Chain: ${id} / 0x${id.toString(16)}`;
 	btn.addEventListener('click', () => switch_to_network(id).catch(() => {}));
 }
+async function get_window_provider_network() {
+	if (!window_provider) throw new Error('no window');
+	if (!window_provider.provider.isConnected()) throw new Error('not connected');
+	return window_provider.getNetwork();
+}
 async function switch_to_network(id) {
-	if (!window_provider) return;
-	let network = await window_provider.getNetwork();
+	let network = await get_window_provider_network();
 	if (network.chainId === id) {
 		if (active_provider === window_provider) return;
 		return update_network(network);
-}
+	}
 	await window_provider.send('wallet_switchEthereumChain', [{chainId: `0x${id.toString(16)}`}]);
 	for (let btn of document.querySelectorAll('.chain')) {
 		btn.disabled = true;
@@ -2404,7 +2414,7 @@ function create_namehash_row(name) {
 	add_detailed(row);
 	let hash_span = document.createElement('span');
 	hash_span.classList.add('wide');
-	hash_span.innerHTML = `<a class="hashproof" href="https://adraffy.github.io/keccak.js/test/demo.html#algo=namehash&s=${encode_uri_component_surrogate_escaped(name)}&escape=1" target="_blank">Namehash:</a> <code>${namehash(name)}</code>`;
+	hash_span.innerHTML = `<a class="hashproof" href="../../keccak.js/test/demo.html#algo=namehash&s=${encode_uri_component_surrogate_escaped(name)}&escape=1" target="_blank">Namehash:</a> <code>${namehash(name)}</code>`;
 	row.append(hash_span);
 	return row;
 }
@@ -2503,7 +2513,7 @@ function create_details_row(name, before) {
 			footer_span.classList.add('sep');
 		}
 
-		let footer = [`<a class="hashproof" href="https://adraffy.github.io/keccak.js/test/demo.html#algo=keccak-256&s=${encode_uri_component_surrogate_escaped(label)}&escape=1" target="_blank">Labelhash:</a> <code>${hash}</code>`];
+		let footer = [`<a class="hashproof" href="../../keccak.js/test/demo.html#algo=keccak-256&s=${encode_uri_component_surrogate_escaped(label)}&escape=1" target="_blank">Labelhash:</a> <code>${hash}</code>`];
 		
 		let domain = split.slice(i+1).map(x => x.label).join('.');
 		if (NFT_DOMAINS.has(domain)) {
@@ -3084,7 +3094,6 @@ async function resolve1(input, skip_norm) {
 			}
 		} catch (err) {
 			avail_err = err;
-			console.log(err);
 		}
 		remove_temporary(avail_row);
 		if (should_stop_resolving()) return;
@@ -3339,19 +3348,22 @@ async function resolve1(input, skip_norm) {
 		output_div.append(row);	
 		let contract = contract_for_resolver(resolver);
 		// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar	
+		const TITLE_WRAPPER = '<b>Wrapper</b> ERC-1155';
+		const TITLE_NFT = '<b>NFT</b> ERC-721';
 		let interfaces = [
 			//{iface: IFACE_ETH_NFT, name: 'NFT'},  
-			{iface: '0x019a38fe', name: 'Wrapper'},
-			{iface: IFACE_ETH_CONTROLLER, name: 'Controller'},
-			{iface: '0x018fac06', name: 'Old Controller'},
-			//{iface: '0x6ccb2df4', name: 'NFT'},
-			{iface: '0x7ba18ba1', name: 'Migration'},
+			{iface: '0x019a38fe', title: TITLE_WRAPPER},
+			{iface: IFACE_ETH_CONTROLLER, title: '<b>Controller</b>'},
+			{iface: '0x018fac06', title: '<b>Old Controller</b>'},
+			{iface: '0x6ccb2df4', name: TITLE_NFT},
+			{iface: '0x7ba18ba1', title: '<b>Migration</b>'},
 		];
 		let discovered = new Set();
 		function add_iface(html, addr) {
 			if (is_null_hex(addr)) return;
-			//if (known.has(addr)) return;
+			if (discovered.has(addr)) return;
 			discovered.add(addr);
+			html += ` <code class="prefix">${addr.slice(0, 6)}</code>`;
 			let a = create_etherscan_address_link(addr, {title: html, contract: true});
 			a.classList.add('iface');
 			add_row_tag(row, a);
@@ -3361,18 +3373,19 @@ async function resolve1(input, skip_norm) {
 			if (!await contract.callStatic.supportsInterface('0x124a319c')) {
 				throw new Error('not EIP-165');
 			}
-			for (let {iface, name} of interfaces) {
+			for (let {iface, title} of interfaces) {
 				let addr = await contract.get_interface(iface);
-				if (!is_null_hex(addr) && !discovered.size) {
-					add_iface('<b>NFT</b> (ERC-721)', owner);
-						}
-				add_iface(`<b>${name}</b> <code>${iface.slice(2)}</code>`, addr);
+				if (is_null_hex(addr)) continue;
+				if (!discovered.size) {
+					add_iface(TITLE_NFT, owner);
+				}
+				add_iface(`${title} <code>${iface.slice(2)}</code>`, addr);
 				if (iface === IFACE_ETH_CONTROLLER) {
 					let controller = contract_for_controller(addr);
 					let oracle = contract_for_price_oracle(await controller.callStatic.prices());
 					add_iface('<b>Price Oracle</b>', oracle.address);
 					add_iface('<b>USD Oracle</b>', await oracle.callStatic.usdOracle());
-					add_iface('<b>Wrapper</b>', await controller.callStatic.nameWrapper());
+					add_iface(TITLE_WRAPPER, await controller.callStatic.nameWrapper());
 					//add_iface('DAO Wallet', await contract.callStatic.owner().catch(() => ''));
 				}
 			}

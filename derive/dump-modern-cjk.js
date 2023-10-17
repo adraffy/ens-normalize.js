@@ -45,8 +45,10 @@ for (let i = 1; i < buckets.length; i++) {
 			console.log(`${abbr_i} == ${abbr_j}`);
 		} else if (i_j) {
 			console.log(`${abbr_i} contains ${abbr_j}`);
-		} else {
+		} else if (j_i) {
 			console.log(`${abbr_j} contains ${abbr_i}`);
+		} else {
+			console.log(`${abbr_i} and ${abbr_j} are different`);
 		}
 	}
 }
