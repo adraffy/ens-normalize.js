@@ -997,7 +997,7 @@ Hebrew:
 <button data-name="a𓀂">Mixed</button>
 <button>ᏎᏮᏂᎥ.eth</button>
 
-<a href="https://adraffy.github.io/ens-norm-tests/test-compare/output/ens_normalize.git_1.9.0_vs_eth-ens-namehash_2.0.15.html#diff-norm"><b>Different Norm:</b></a>
+<a href="https://adraffy.github.io/ens-norm-tests/test-compare/output/ensNormalize.git_1.9.0_vs_eth-ens-namehash_2.0.15.html#diff-norm"><b>Different Norm:</b></a>
 <button data-name="‑888">Remapped Hyphen</button>
 <button data-name="۰۱۲۳۷۸۹">Mapped Arabic</button>
 
@@ -1089,15 +1089,15 @@ Hebrew:
 // * replace "../../" with "https://adraffy.github.io/"
 import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.esm.min.js';
 import {
-	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
-	nfc, nfd, hex_cp, quote_cp, explode_cp, str_from_cps, safe_str_from_cps,
-	dom_from_tokens, use_default_style, versions, compare_arrays, should_escape,
+	ensNormalize, ensSplit, ensBeautify, ensTokenize, ensEmoji,
+	nfc, nfd, hex_cp, quote_cp, explodeCp, strFromCps, safe_strFromCps,
+	dom_from_tokens, use_default_style, versions, compareArrays, shouldEscape,
 } from '../dist/all.min.js';
 import {puny_encoded, is_surrogate} from '../../punycode.js/dist/index.min.js'; 
 import eth_ens_namehash from './eth-ens-namehash@2.0.15.min.js';
 use_default_style();
 
-const EMOJI = ens_emoji();
+const EMOJI = ensEmoji();
 
 const input_field = document.querySelector('#input_field');
 const resolve_btn = document.querySelector('#resolve_btn');
@@ -1213,7 +1213,7 @@ const DIGIT_MAP = new Map();
 const DIGITS_MAP = new Map();
 for (let i = 0; i < 10; i++) DIGIT_MAP.set(keycap(i), i);
 function add_digits(name, digits, extra = {}) {
-	explode_cp(digits).forEach((cp, i) => DIGIT_MAP.set(cp, {name, i, ...extra}));
+	explodeCp(digits).forEach((cp, i) => DIGIT_MAP.set(cp, {name, i, ...extra}));
 	DIGITS_MAP.set(name, digits);
 }
 add_digits('ASCII', '0123456789');
@@ -1245,7 +1245,7 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 	if (!btn.innerText || btn.innerText.includes('{')) btn.innerText = name;
 	let meta = typeof btn.dataset.meta === 'string' || name.includes(':') || is_checksum_address(name);
 	try {
-		if (meta || name !== ens_normalize(name)) {
+		if (meta || name !== ensNormalize(name)) {
 			btn.classList.add('mapped');
 		}
 	} catch (err) {
@@ -1253,7 +1253,7 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 	}	
 	if (!meta && !name.includes('.')) name += '.eth';
 	if (typeof btn.dataset.escape === 'string') name = apply_escapes(name);
-	if (!btn.title) btn.title = meta ? name : `${name}\n${explode_cp(name).map(hex_cp).join(' ')}`;
+	if (!btn.title) btn.title = meta ? name : `${name}\n${explodeCp(name).map(hex_cp).join(' ')}`;
 	btn.addEventListener('click', () => {
 		input_field.value = name;
 		if (btn.dataset.skip) skip_norm_check.checked = true;
@@ -1269,7 +1269,7 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 	});
 }
 for (let x of document.querySelectorAll('[data-tokenize]')) {
-	x.replaceWith(dom_from_tokens(ens_tokenize(replace_escapes(x.dataset.tokenize)), {
+	x.replaceWith(dom_from_tokens(ensTokenize(replace_escapes(x.dataset.tokenize)), {
 		emoji_url,
 		components: x.dataset.parts
 	}));
@@ -1331,10 +1331,10 @@ function add_recent(name, save = true) {
 			option.innerHTML = `🏠️ ${name}`; 
 		} else {
 			try {
-				let norm = ens_normalize(name);
+				let norm = ensNormalize(name);
 				option.innerHTML = `${norm === name ? '✅️' : '☑️'} ${name}`;
 			} catch (err) {
-				option.innerHTML = `❌️ ${apply_escapes(name, cp => should_escape(cp) || cp == 0x20)}`;
+				option.innerHTML = `❌️ ${apply_escapes(name, cp => shouldEscape(cp) || cp == 0x20)}`;
 			}
 		}
 		recent_optgroup.prepend(option);
@@ -1352,7 +1352,7 @@ document.querySelector('#random_emoji_btn').addEventListener('click', e => {
 	let name = '';
 	let pool = e.altKey ? EMOJI.filter(cps => cps.length == 1 || (cps.length == 2 && cps[1] === 0xFE0F)) : EMOJI;
 	while (Array.from(name).length < MIN_LENGTH) {
-		name += ens_normalize(str_from_cps(pool[Math.random() * pool.length|0]));
+		name += ensNormalize(strFromCps(pool[Math.random() * pool.length|0]));
 	}
 	input_field.value = `${name}.eth`;
 	skip_norm_check.checked = false;
@@ -1360,7 +1360,7 @@ document.querySelector('#random_emoji_btn').addEventListener('click', e => {
 });
 document.querySelector('#find_emoji_btn').addEventListener('click', e => {
 	let url = './emoji.html';
-	let token = ens_tokenize(input_field.value).find(x => x.emoji);
+	let token = ensTokenize(input_field.value).find(x => x.emoji);
 	if (token) url += `#q=${encodeURIComponent(String.fromCodePoint(...token.cps))}`;
 	let a = create_link(url);
 	a.target = '_blank';
@@ -1375,8 +1375,8 @@ document.querySelector('#confused_btn').addEventListener('click', e => {
 document.querySelector('#nf_btn').addEventListener('click', () => {
 	let s0 = input_field.value;
 	let s1 = replace_escapes(s0);
-	let s2 = apply_escapes(str_from_cps(nfd(explode_cp(s1))));
-	let s3 = apply_escapes(str_from_cps(nfc(explode_cp(s1))));
+	let s2 = apply_escapes(strFromCps(nfd(explodeCp(s1))));
+	let s3 = apply_escapes(strFromCps(nfc(explodeCp(s1))));
 	if (s2 === s3 && s2 === apply_escapes(s1)) return; // do nothing
 	input_field.value = s0 == s2 ? s3 : s2;
 	resolve();
@@ -1643,7 +1643,7 @@ function parse() {
 	make_exploded(row, name, false);
 	output_div.append(row, create_details_row(name, true));
 	try {
-		let norm = ens_normalize(name);
+		let norm = ensNormalize(name);
 		if (norm === name) {
 			make_normalized(row, norm);
 		} else {
@@ -1669,7 +1669,7 @@ function parse() {
 		stop_resolving();
 
 		// if there is a fully ignorable label
-		let collapsed = ens_split(name).filter(x => !x.tokens || x.tokens.length).map(x => str_from_cps(x.input)).join('.');
+		let collapsed = ensSplit(name).filter(x => !x.tokens || x.tokens.length).map(x => strFromCps(x.input)).join('.');
 		if (collapsed !== name) {
 			let btn = document.createElement('button');
 			btn.innerText = '💥️ Collapse Empty Labels';
@@ -1699,12 +1699,12 @@ function parse() {
 			[0xFF0E, 0x2E],
 			[0xFF61, 0x2E],
 		]);
-		let sloppy = str_from_cps(explode_cp(name).map(x => SLOPPY_MAP.get(x) || x))
+		let sloppy = strFromCps(explodeCp(name).map(x => SLOPPY_MAP.get(x) || x))
 		if (sloppy !== name) {
 			let btn = document.createElement('button');
 			btn.innerHTML = '💣️ Unsafe Replace';
 			btn.title = `Replace the following characters:` + [...SLOPPY_MAP.entries()].map(([a, b]) => {
-				return `\n"${safe_str_from_cps([a])}" ${hex_cp(a)} → "${safe_str_from_cps([b])}" ${hex_cp(b)}`
+				return `\n"${safe_strFromCps([a])}" ${hex_cp(a)} → "${safe_strFromCps([b])}" ${hex_cp(b)}`
 			}).join('');
 			btn.addEventListener('click', () => {
 				input_field.value = sloppy;
@@ -1713,14 +1713,14 @@ function parse() {
 			add_row_tag(row, btn);
 		}
 
-		let tokens = ens_tokenize(name); 
+		let tokens = ensTokenize(name); 
 
 		// if there are disallowed characters		
 		if (tokens.some(x => x.type === 'disallowed')) {
 			let btn = document.createElement('button');
 			btn.innerText = '❌ Remove Disallowed';
 			btn.addEventListener('click', () => {
-				input_field.value = str_from_cps(tokens.flatMap(t => t.type === 'nfc' ? t.tokens0 : t).flatMap(t => {
+				input_field.value = strFromCps(tokens.flatMap(t => t.type === 'nfc' ? t.tokens0 : t).flatMap(t => {
 					switch (t.type) {
 						case 'disallowed': return [];
 						case 'valid': return t.cps;
@@ -1738,7 +1738,7 @@ function parse() {
 			let btn = document.createElement('button');
 			btn.innerHTML = '💪️ Force Normalize';
 			btn.addEventListener('click', () => {
-				input_field.value = str_from_cps(tokens.flatMap(token => {
+				input_field.value = strFromCps(tokens.flatMap(token => {
 					switch (token.type) { 
 						case 'ignored': return []; // removes ignored (dangerous)
 						case 'mapped': // applies known mappings 
@@ -1761,7 +1761,7 @@ function add_detailed(row) {
 }
 
 function add_transformed_row(input) {
-	if (ens_tokenize(input).some(x => x.type === 'nfc' || x.type === 'mapped')) {
+	if (ensTokenize(input).some(x => x.type === 'nfc' || x.type === 'mapped')) {
 		let row = create_row('Transform');
 		row.classList.add('transform');
 		add_detailed(row);
@@ -1779,12 +1779,12 @@ function create_dns_row(name, replaced) {
 		const MAX_NAME = 253; 
 		const VALID_REGEX = /^[-0-9a-z]*$/;
 		let encoded = name.split('.').map(label => {
-			let cps = explode_cp(label);
+			let cps = explodeCp(label);
 			try {
 				let encoded = puny_encoded(cps).toLowerCase();
 				if (!VALID_REGEX.test(encoded)) {
 					let first = [...encoded].find(ch => !VALID_REGEX.test(ch));
-					throw new Error(`unsupported ASCII: "${safe_str_from_cps(explode_cp(first))}"`);
+					throw new Error(`unsupported ASCII: "${safe_strFromCps(explodeCp(first))}"`);
 				}
 				if (encoded === label) {
 					if (label.startsWith('xn--')) throw new Error('punycode literal');
@@ -1796,7 +1796,7 @@ function create_dns_row(name, replaced) {
 				if (encoded.length > MAX_LABEL) throw new Error(`too long: ${encoded.length} > ${MAX_LABEL}`);
 				return encoded;
 			} catch (err) {
-				throw new Error(`Invalid label "${safe_str_from_cps(cps)}": ${err.message}`);
+				throw new Error(`Invalid label "${safe_strFromCps(cps)}": ${err.message}`);
 			}
 		}).join('.');
 		if (encoded.length > MAX_NAME) {
@@ -1849,10 +1849,10 @@ function create_dns_row(name, replaced) {
 function add_alternative_btn(row, name) {
 	let alt = name;
 	try {
-		alt = ens_beautify(alt);
+		alt = ensBeautify(alt);
 	} catch (err) {
 	}
-	alt = str_from_cps(explode_cp(name).map(cp => {
+	alt = strFromCps(explodeCp(name).map(cp => {
 		if (cp >= 0x660 && cp <= 0x669) {
 			return cp + 0x90; // try other arabic digits
 		} else {
@@ -1871,7 +1871,7 @@ function add_alternative_btn(row, name) {
 
 function is_safe_ascii(cp) {
 	// same as:
-	//return !should_escape(cp) && cp != 0x20;
+	//return !shouldEscape(cp) && cp != 0x20;
 	return cp >= 0x21 && cp <= 0x7E;
 }
 function unicode_escape_cp(cp) {
@@ -1879,16 +1879,16 @@ function unicode_escape_cp(cp) {
 	return hex.length > 4 ? `\\u{${hex}}` : `\\u${hex.padStart(4, '0')}`; // be nice
 }
 function unicode_escape(s) {
-	return explode_cp(s).map(unicode_escape_cp).join('');
+	return explodeCp(s).map(unicode_escape_cp).join('');
 }
 function entity_escape(s) {
-	return explode_cp(s).map(cp => is_safe_ascii(cp) ? String.fromCodePoint(cp) : `&#x${hex_cp(cp)};`).join('');
+	return explodeCp(s).map(cp => is_safe_ascii(cp) ? String.fromCodePoint(cp) : `&#x${hex_cp(cp)};`).join('');
 }
 // escape where escape_fn is true (default: non-ascii)
 // unicode: use \u-format
 function apply_escapes(s, escape_fn, unicode) {
 	if (!escape_fn) escape_fn = cp => !is_safe_ascii(cp);
-	return explode_cp(s).map(cp => {
+	return explodeCp(s).map(cp => {
 		return escape_fn(cp) ? unicode ? unicode_escape_cp(cp) : quote_cp(cp) : String.fromCodePoint(cp);
 	}).join('');
 }
@@ -1963,7 +1963,7 @@ function create_copy_btn(raw, {explode} = {}) {
 		explode = !/^0x[0-9a-f]*$/i.test(raw);
 	}
 	if (explode) {
-		btn.title += '\n' + explode_cp(raw).map(hex_cp).join(' ');
+		btn.title += '\n' + explodeCp(raw).map(hex_cp).join(' ');
 	}
 	btn.title += `\n[ALT] Unicode Escaped\n[SHIFT] Entity Escaped`;
 	return btn;
@@ -1977,7 +1977,7 @@ function create_reverse_resolve_btn(addr) {
 function create_resolve_btn(name, html = '↩️ Resolve') {
 	let btn = document.createElement('button');
 	btn.innerHTML = html;
-	btn.title = `Resolve: ${name}\nHex: ${explode_cp(name).map(hex_cp).join(' ')}`;
+	btn.title = `Resolve: ${name}\nHex: ${explodeCp(name).map(hex_cp).join(' ')}`;
 	btn.addEventListener('click', () => {
 		input_field.value = name;
 		resolve();
@@ -2012,7 +2012,7 @@ function upgrade_split_type(info) {
 	let cps = info.tokens.flatMap(x => x.is_emoji ? [] : x);
 	if (cps.every(cp => cp < 0x80)) {
 		info.type = 'ASCII';	
-	} else if (/[ąçęşìíîïǐł]/u.test(str_from_cps(cps))) { // TODO: formalize this logic in ens-normalize
+	} else if (/[ąçęşìíîïǐł]/u.test(strFromCps(cps))) { // TODO: formalize this logic in ens-normalize
 		info.rare_latin = true;
 	}
 }
@@ -2022,7 +2022,7 @@ function make_normalized(row, name) {
 	let span = document.createElement('span');
 	span.title = 'Normalized Form';
 	span.innerHTML = `✅️`; 
-	let split = ens_split(name);
+	let split = ensSplit(name);
 	if (split.every(x => x.type === 'ASCII')) {
 		span.classList.add('clean');
 	} else {
@@ -2076,7 +2076,7 @@ function create_ethmoji_row(tokens, suffix) {
 	let tally = new Map();
 	let last;
 	for (let token of tokens) {
-		let form = str_from_cps(token.emoji);
+		let form = strFromCps(token.emoji);
 		let rec = tally.get(form);
 		if (!rec) {
 			rec = {form, count: 0, ...token};
@@ -2088,7 +2088,7 @@ function create_ethmoji_row(tokens, suffix) {
 	let formula = document.createElement('div');
 	formula.classList.add('formula');
 	for (let rec of tally.values()) {
-		formula.append(create_link(`./emoji.html#q=${str_from_cps(rec.cps)}`, `${rec.form}<sup>${rec.count}</sup>`));
+		formula.append(create_link(`./emoji.html#q=${strFromCps(rec.cps)}`, `${rec.form}<sup>${rec.count}</sup>`));
 	}
 	row.append(formula);
 	let span_grade = document.createElement('span');
@@ -2108,7 +2108,7 @@ function create_ethmoji_row(tokens, suffix) {
 			if (tally[0].count > 1) {
 				add_row_tag(row, create_typed_tag('second', 'Repeated'));
 			}
-			min_repeated = str_from_cps(tally[0].cps).repeat(repeat);
+			min_repeated = strFromCps(tally[0].cps).repeat(repeat);
 		}
 	} else {
 		add_row_tag(row, `Unique: ${tally.length}`);
@@ -2178,7 +2178,7 @@ function add_old_tag(row, name, is_norm) {
 		let norm0 = eth_ens_namehash.normalize(name);
 		let norm;
 		try {
-			norm = ens_normalize(name);
+			norm = ensNormalize(name);
 		} catch (err) {				
 		}
 		let html = OLD_NAME;
@@ -2273,7 +2273,7 @@ function utf8_from_bytes(v) {
 			cps.push(((x & 0x07) << 18) | (req_utf8_cont(v, i++) << 12) | (req_utf8_cont(v, i++) << 6) | req_utf8_cont(v, i++));
 		}
 	}
-	return str_from_cps(cps);
+	return strFromCps(cps);
 }
 function req_utf8_cont(v, i) {
 	let x = v[i];
@@ -2296,16 +2296,16 @@ function name_from_wrapper_bytes(v) {
 function make_tokens_div(name, before) {
 	// tokenize each label separately so we can show major/minor errors
 	// flatten non-errors tokens into wrapper
-	let split = ens_split(name);
+	let split = ensSplit(name);
 	let wrapper = document.createElement('div');
 	wrapper.classList.add('tokens');
 	let first = true;
 	for (let i = 0; i < split.length; i++) {
 		if (i > 0) {
-			wrapper.append(...dom_from_tokens(ens_tokenize('.')).children); 
+			wrapper.append(...dom_from_tokens(ensTokenize('.')).children); 
 		}
 		let {input, error} = split[i];
-		let tokens = dom_from_tokens(ens_tokenize(str_from_cps(input)), {
+		let tokens = dom_from_tokens(ensTokenize(strFromCps(input)), {
 			before, 
 			emoji_url,
 			components: show_components_check.checked,
@@ -2423,11 +2423,11 @@ function create_details_row(name, before) {
 	
 	let row = create_namehash_row(name);
 
-	let split = ens_split(name);	
+	let split = ensSplit(name);	
 
 	for (let info of split) {
 		info.cps = before || !info.output ? info.input : info.output;
-		info.label = str_from_cps(info.cps);
+		info.label = strFromCps(info.cps);
 	}
 
 	for (let i = 0; i < split.length; i++) {
@@ -2446,7 +2446,7 @@ function create_details_row(name, before) {
 
 			if (info.error) {
 				label_div.classList.add('error');
-			} else if (compare_arrays(info.input, info.output)) { 
+			} else if (compareArrays(info.input, info.output)) { 
 				label_div.classList.add('mapped');
 			} else {
 				upgrade_split_type(info);
@@ -2695,7 +2695,7 @@ function resolve() {
 		let lo = parseInt(match[1], 16);
 		let hi = parseInt(match[2], 16);
 		if (hi >= lo) {
-			input = str_from_cps(Array(1 + hi - lo).fill().map((_, i) => lo + i));
+			input = strFromCps(Array(1 + hi - lo).fill().map((_, i) => lo + i));
 		}
 	}
 	// input convenience: HEX HEX HEX => {HEX}{HEX}
@@ -2853,7 +2853,7 @@ async function resolve1(input, skip_norm) {
 		output_div.append(create_details_row(primary, true));
 			
 		try {
-			name_norm = ens_normalize(primary);
+			name_norm = ensNormalize(primary);
 		} catch (err) {
 			reverse_row.classList.add('error');
 			add_row_tag(reverse_row, create_typed_tag('norm', err));
@@ -2895,7 +2895,7 @@ async function resolve1(input, skip_norm) {
 		}
 
 		try {
-			name_norm = ens_normalize(input);
+			name_norm = ensNormalize(input);
 		} catch (err) {
 			input_row.classList.add('error');
 			add_row_tag(input_row, create_typed_tag('norm', err));
@@ -2937,10 +2937,10 @@ async function resolve1(input, skip_norm) {
 	if (sep_pos > 0) {
 		let prefix = name_norm.slice(0, sep_pos);
 		let suffix = name_norm.slice(sep_pos); 
-		let tokens = ens_tokenize(prefix);
+		let tokens = ensTokenize(prefix);
 		if (tokens.every(t => t.type === 'emoji')) {
 			input_row.after(create_ethmoji_row(tokens, suffix));
-			let negative = str_from_cps(tokens[0].emoji) == KEYCAP_MINUS;
+			let negative = strFromCps(tokens[0].emoji) == KEYCAP_MINUS;
 			if (negative) tokens = tokens.slice(1);
 			let values = tokens.map(x => x.emoji[0] - 0x30);
 			if (values.every(x => x >= 0 && x < 10)) {
@@ -2950,7 +2950,7 @@ async function resolve1(input, skip_norm) {
 			let negative = prefix.startsWith('-');
 			if (negative) prefix = prefix.slice(1);
 			if (prefix) {
-				let cps = explode_cp(prefix);
+				let cps = explodeCp(prefix);
 				let digits = cps.map(cp => DIGIT_MAP.get(cp));
 				if (digits.every(x => x)) {
 					let values = digits.map(x => x.i);
@@ -2976,7 +2976,7 @@ async function resolve1(input, skip_norm) {
 	}
 
 	if (!skip_norm && !norm_err) {
-		let pretty = ens_beautify(name_norm);
+		let pretty = ensBeautify(name_norm);
 		let row = create_row(`Beautified`);
 		row.classList.add('pretty');
 		row.append(create_main_span(pretty));
@@ -3502,7 +3502,7 @@ async function resolve1(input, skip_norm) {
 	// lets check if it's normalized
 	let primary_norm;
 	try {
-		primary_norm = ens_normalize(primary);
+		primary_norm = ensNormalize(primary);
 		if (primary === input) {
 			add_row_tag(primary_row, 'Same as Input');
 		} else if (primary === name_norm) {		

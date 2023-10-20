@@ -1,6 +1,6 @@
 import {Encoder, unsafe_btoa} from './encoder.js';
 import {readFileSync, writeFileSync} from 'node:fs';
-import {explode_cp} from './utils.js';
+import {explodeCp} from './utils.js';
 import {compute_spec_hash, compute_sha256} from './make-utils.js';
 
 /*
@@ -195,7 +195,7 @@ enc.write_member(ignored); // ~30B
 enc.write_member(cm); // ~600B
 enc.write_member(nsm.map(x => cm.indexOf(x))); // saves 300 bytes
 enc.write_member(escape); // ~60B
-enc.write_member(nfc_check); // ~320B for ens_tokenize (can probably be derived)
+enc.write_member(nfc_check); // ~320B for ensTokenize (can probably be derived)
 let chunks = find_shared_chunks(groups.flatMap(g => [g.primary, g.secondary]), {min_overlap: 0.9, min_size: 256});
 chunks.forEach(v => enc.write_member(v)); // 400B
 enc.write_member([]);
@@ -205,7 +205,7 @@ for (let g of groups) {
 	// (which can be auto-capitalized)
 	// for unrestricted, names are primary-script/language names
 	// for restricted, names are just script abbr
-	enc.array(explode_cp(g.name.toLowerCase()).map(cp => cp - 0x60));
+	enc.array(explodeCp(g.name.toLowerCase()).map(cp => cp - 0x60));
 	enc.unsigned(0);
 	for (let v of [g.primary, g.secondary]) {
 		let set = new Set(v);

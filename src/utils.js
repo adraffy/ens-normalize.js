@@ -1,17 +1,17 @@
-export function hex_cp(cp) {
+export function hexCp(cp) {
 	return cp.toString(16).toUpperCase().padStart(2, '0');
 }
 
-export function quote_cp(cp) {
-	return `{${hex_cp(cp)}}`; // raffy convention: like "\u{X}" w/o the "\u"
+export function quoteCp(cp) {
+	return `{${hexCp(cp)}}`; // raffy convention: like "\u{X}" w/o the "\u"
 }
 
 /*
-export function explode_cp(s) {
+export function explodeCp(s) {
 	return [...s].map(c => c.codePointAt(0));
 }
 */
-export function explode_cp(s) { // this is about 2x faster
+export function explodeCp(s) { // this is about 2x faster
 	let cps = [];
 	for (let pos = 0, len = s.length; pos < len; ) {
 		let cp = s.codePointAt(pos);
@@ -21,7 +21,7 @@ export function explode_cp(s) { // this is about 2x faster
 	return cps;
 }
 
-export function str_from_cps(cps) {
+export function strFromCps(cps) {
 	const chunk = 4096;
 	let len = cps.length;
 	if (len < chunk) return String.fromCodePoint(...cps);
@@ -32,18 +32,18 @@ export function str_from_cps(cps) {
 	return buf.join('');
 }
 
-export function compare_arrays(a, b) {
+export function compareArrays(a, b) {
 	let n = a.length;
 	let c = n - b.length;
 	for (let i = 0; c == 0 && i < n; i++) c = a[i] - b[i];
 	return c;
 }
 
-export function random_choice(v, rng = Math.random) {
+export function randomChoice(v, rng = Math.random) {
 	return v[rng() * v.length|0];
 }
 
-export function random_sample(v, n, rng = Math.random) {
+export function randomSample(v, n, rng = Math.random) {
 	v = v.slice(); // make copy
 	if (v.length > n) {
 		for (let i = 0; i < n; i++) { // shuffle prefix n
@@ -57,7 +57,7 @@ export function random_sample(v, n, rng = Math.random) {
 	return v;
 }
 
-export function run_tests(fn, tests) {
+export function runTests(fn, tests) {
 	let errors = [];
 	for (let test of tests) {
 		let {name, norm, error} = test;

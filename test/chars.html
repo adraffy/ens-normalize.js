@@ -111,7 +111,7 @@ footer {
 <tbody></tbody>
 </table>
 <script type="module">
-import {ens_tokenize, hex_cp, dom_from_tokens, use_default_style} from '../dist/all.min.js';
+import {ensTokenize, hex_cp, dom_from_tokens, use_default_style} from '../dist/all.min.js';
 use_default_style();
 
 const overlay_div = document.querySelector('#overlay');
@@ -284,7 +284,7 @@ function update_table() {
 				td.classList.add('nochar');
 			}
 
-			let tokens = ens_tokenize(String.fromCodePoint(cp));
+			let tokens = ensTokenize(String.fromCodePoint(cp));
 			if (tokens.length == 1) {
 				let abbr;
 				if (tokens[0].type === 'mapped') {

@@ -1,6 +1,6 @@
 import {writeFileSync} from 'node:fs';
 import {tt} from './utils.js';
-import {explode_cp} from '../../src/utils.js';
+import {explodeCp} from '../../src/utils.js';
 import {UNICODE} from '../../derive/unicode-version.js';
 import {
 	SCRIPT_GROUPS, 
@@ -30,7 +30,7 @@ lines.push(`| - | - | - | :-: | - |`);
 for (let g of SCRIPT_GROUPS.sort((a, b) => (ORDER.get(b)|0) - (ORDER.get(a)|0))) {
 	let extra = '';
 	if (g.extra) {
-		extra = tt(String.fromCodePoint(...g.extra.flat(Infinity).flatMap(x => typeof x === 'string' ? explode_cp(x) : x)));
+		extra = tt(String.fromCodePoint(...g.extra.flat(Infinity).flatMap(x => typeof x === 'string' ? explodeCp(x) : x)));
 	}
 	lines.push(`| ${tt(g.name)} | ${g.test.map(script_name).join(', ')} | ${(g.rest ?? []).map(script_name).join(', ')} | ${g.cm ? '✅️' : ''} | ${extra} |`);
 }

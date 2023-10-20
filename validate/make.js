@@ -1,8 +1,8 @@
 import {readFileSync, writeFileSync} from 'node:fs';
 import {UNICODE} from '../derive/unicode-version.js';
 import {parse_cp_sequence, mulberry32, print_section, print_checked} from '../derive/utils.js';
-import {ens_normalize, ens_emoji, ens_beautify, ens_split} from '../src/lib.js';
-import {random_sample, run_tests} from '../src/utils.js';
+import {ensNormalize, ensEmoji, ensBeautify, ensSplit} from '../src/lib.js';
+import {random_sample, runTests} from '../src/utils.js';
 import {read_labels, read_random, read_spec} from './data.js';
 import * as versions from '../src/include-versions.js';
 
@@ -13,7 +13,7 @@ const CUSTOM_TESTS = JSON.parse(readFileSync(new URL('./custom-tests.json', impo
 const SPEC = read_spec();
 
 // assert no failures
-let custom_errors = run_tests(ens_normalize, CUSTOM_TESTS);
+let custom_errors = runTests(ensNormalize, CUSTOM_TESTS);
 if (custom_errors.length) {
 	console.log(custom_errors);
 	console.log(`Errors: ${custom_errors.length}`);
@@ -23,7 +23,7 @@ console.log(`PASS custom`);
 
 // check that every emoji exists
 let emoji_map = new Map(SPEC.emoji.map(v => [String.fromCodePoint(...v), v]));
-for (let cps of ens_emoji()) {
+for (let cps of ensEmoji()) {
 	let form = String.fromCodePoint(...cps);
 	if (!emoji_map.delete(form)) {
 		console.log({form, cps});
@@ -34,7 +34,7 @@ if (emoji_map.size) {
 	console.log(emoji_map);
 	throw new Error('extra emoji');
 }
-console.log(`PASS ens_emoji()`);
+console.log(`PASS ensEmoji()`);
 
 const REQUIRE_PASS = new Set();
 const REQUIRE_FAIL = new Set();
@@ -43,12 +43,12 @@ const EXPECT_FAIL = new Set();
 const EXPECT_IGNORED = new Set();
 
 // make tests from library
-for (let cps of ens_emoji()) {
+for (let cps of ensEmoji()) {
 	let form = String.fromCodePoint(...cps);	
 	// qualified forms 
 	// (these should be the same)
 	REQUIRE_PASS.add(form); 
-	REQUIRE_PASS.add(ens_beautify(form));
+	REQUIRE_PASS.add(ensBeautify(form));
 	// 20230119: generate every combination of FE0F's
 	// (no change in validation results)
 	cps.reduce((a, cp) => {
@@ -130,7 +130,7 @@ function process(names) {
 	let error = [];
 	for (let name of names) {
 		try {
-			let norm = ens_normalize(name);
+			let norm = ensNormalize(name);
 			if (name === norm) {
 				valid.push({name});
 			} else {
@@ -183,7 +183,7 @@ for (let name of EXPECT_IGNORED) {
 	// 20220121: null labels are now invalid
 	/*
 	try {
-		let norm = ens_normalize(name);
+		let norm = ensNormalize(name);
 		if (norm.length) {
 			expect_ignore.push({name});
 		}
@@ -191,7 +191,7 @@ for (let name of EXPECT_IGNORED) {
 		expect_ignore.push(name, err);
 	}
 	*/
-	if (ens_split(name).some(x => !x.tokens || x.tokens.length)) { // failed to parse or !empty
+	if (ensSplit(name).some(x => !x.tokens || x.tokens.length)) { // failed to parse or !empty
 		expect_ignore.push({name});
 	}
 }

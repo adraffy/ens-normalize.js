@@ -1,6 +1,6 @@
 import {writeFileSync} from 'node:fs';
 import {read_labels} from '../validate/data.js';
-import {ens_emoji, ens_normalize, ens_tokenize} from '../src/lib.js';
+import {ensEmoji, ensNormalize, ensTokenize} from '../src/lib.js';
 
 let found = [];
 
@@ -19,7 +19,7 @@ function is_hyphen_token(t) {
 
 function is_normalized_label(s) {
 	try {
-		return ens_normalize(label) === label;
+		return ensNormalize(label) === label;
 	} catch (err) {		
 	}
 }
@@ -49,7 +49,7 @@ function is_disallowed_emoji(t) {
 
 function parse_art(label) {
 	//if (!is_normalized_label(label)) return;
-	let tokens = ens_tokenize(label);
+	let tokens = ensTokenize(label);
 	if (tokens.length < 36) return;
 
 

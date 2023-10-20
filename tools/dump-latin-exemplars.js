@@ -1,6 +1,6 @@
 import {PRINTER} from '../derive/unicode-version.js';
-import {explode_cp, hex_cp, print_table} from '../derive/utils.js';
-import {ens_normalize, ens_tokenize, nfc} from '../src/lib.js';
+import {explodeCp, hex_cp, print_table} from '../derive/utils.js';
+import {ensNormalize, ensTokenize, nfc} from '../src/lib.js';
 
 // https://unicode-org.github.io/cldr-staging/charts/latest/by_type/core_data.alphabetic_information.main.html
 // ALL latin exemplar characters
@@ -36,12 +36,12 @@ let chars = [
 ];
 
 print_table(['Norm', 'Hex', 'Form', 'Name'], chars.map(ch => {
-	let cps = nfc(explode_cp(ch));
+	let cps = nfc(explodeCp(ch));
 	let form = String.fromCodePoint(...cps);
-	let tokens = ens_tokenize(form);
+	let tokens = ensTokenize(form);
 	let norm;
 	try {
-		norm = ens_normalize(form);
+		norm = ensNormalize(form);
 		if (norm !== form) {
 			norm = false;
 		}

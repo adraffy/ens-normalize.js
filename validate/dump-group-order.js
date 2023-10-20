@@ -5,14 +5,14 @@
 
 import {writeFileSync} from 'node:fs';
 import {read_labels} from '../validate/data.js';
-import {ens_split} from '../src/lib.js';
+import {ensSplit} from '../src/lib.js';
 import {spec_hash} from '../src/include-versions.js';
 
 let labels = read_labels();
 
 let tally = new Map();
 for (let label of labels) {
-	let labels = ens_split(label);
+	let labels = ensSplit(label);
 	if (!labels.length) continue;
 	if (labels.length !== 1) throw new Error(`expected label: ${label}`);
 	let group = labels[0].type || '*** Error';

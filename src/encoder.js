@@ -1,4 +1,4 @@
-import {compare_arrays} from './utils.js'; 
+import {compareArrays} from './utils.js'; 
 
 // group list into collection
 // [1, 2, 2, 3] + odd => [odd:[1,3], even:[2,2]]
@@ -280,14 +280,14 @@ export class Encoder {
 			this.unsigned(dy);
 			linear.forEach(v => this.unsigned(v[1]));
 			this.unsigned(0);
-			this.write_transposed(linear.map(([x, _, ys]) => [x, ...ys]).sort(compare_arrays));
+			this.write_transposed(linear.map(([x, _, ys]) => [x, ...ys]).sort(compareArrays));
 		}
 		this.unsigned(0); // eol
 		mapped.forEach((m, w) => {
 			if (m.length == 0) return;
 			this.unsigned(1 + w);
 			this.positive(m.length);
-			this.write_transposed(m.map(([x, ys]) => [x, ...ys]).sort(compare_arrays));
+			this.write_transposed(m.map(([x, ys]) => [x, ...ys]).sort(compareArrays));
 		});
 		this.unsigned(0); // eol
 	}

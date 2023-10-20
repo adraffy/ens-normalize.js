@@ -1,4 +1,4 @@
-import {compare_arrays, explode_cp, permutations} from './utils.js';
+import {compareArrays, explodeCp, permutations} from './utils.js';
 
 // algorithmic hangul
 // https://www.unicode.org/versions/Unicode10.0.0/ch03.pdf (page 149) 
@@ -187,17 +187,17 @@ export function create_nf(unicode) {
 		is_composite(cp) {
 			return this.nfd([cp]).length > 1;
 		},
-		run_tests() {
+		runTests() {
 			let errors = [];
 			for (let [name, cases] of Object.entries(unicode.read_nf_tests())) {
 				for (let strs of cases) {
-					let [input, nfd0, nfc0] = strs.map(explode_cp);
+					let [input, nfd0, nfc0] = strs.map(explodeCp);
 					let nfd1 = this.nfd(input);
-					if (compare_arrays(nfd0, nfd1)) {
+					if (compareArrays(nfd0, nfd1)) {
 						errors.push({name, input, nfd0, nfd1});
 					}
 					let nfc1 = this.nfc(input);
-					if (compare_arrays(nfc0, nfc1)) {
+					if (compareArrays(nfc0, nfc1)) {
 						errors.push({name, input, nfc0, nfc1});
 					}
 				}
@@ -210,10 +210,10 @@ export function create_nf(unicode) {
 				for (let i = 0; i < len; i++) {
 					v[i] = Math.random() * 0x110000|0;
 				}
-				if (compare_arrays(this.nfc(v), this.nfc(this.nfd(v)))) {
+				if (compareArrays(this.nfc(v), this.nfc(this.nfd(v)))) {
 					throw new Error('random nfc');
 				}
-				if (compare_arrays(this.nfd(v), this.nfd(this.nfc(v)))) {
+				if (compareArrays(this.nfd(v), this.nfd(this.nfc(v)))) {
 					throw new Error('random nfd');
 				}
 			}

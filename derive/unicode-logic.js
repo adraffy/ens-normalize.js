@@ -1,4 +1,4 @@
-import {MAX_CP, parse_cp, parse_cp_range, parse_cp_sequence, hex_cp, hex_seq, explode_cp, quote_cp, require_cp} from './utils.js';
+import {MAX_CP, parse_cp, parse_cp_range, parse_cp_sequence, hex_cp, hex_seq, explodeCp, quote_cp, require_cp} from './utils.js';
 import {readFileSync} from 'node:fs';
 import UNPRINTABLES from './unprintables.js';
 
@@ -154,7 +154,7 @@ export class UnicodeSpec {
 		// since they are lost due to the stupid A..B syntax
 		// emoji sequences already have proper names
 		for (let [form, name] of Object.entries(this.read_short_names())) {
-			let cps = explode_cp(form);
+			let cps = explodeCp(form);
 			if (cps.length == 1) {
 				let info = this.char_map.get(cps[0]);
 				if (info) {
@@ -284,7 +284,7 @@ export class UnicodeSpec {
 	}
 	get_script_set(x) {
 		let ret = new Set();
-		for (let cp of explode_cp(x)) {
+		for (let cp of explodeCp(x)) {
 			let script = this.get_script(cp);
 			if (script) {
 				ret.add(script);
@@ -294,7 +294,7 @@ export class UnicodeSpec {
 	}
 	get_extended_script_set(x) {
 		let ret = new Set();
-		for (let cp of explode_cp(x)) {
+		for (let cp of explodeCp(x)) {
 			let info = this.char_map.get(cp);
 			if (!info) continue;
 			let {extended, script} = info;
@@ -313,7 +313,7 @@ export class UnicodeSpec {
 	}
 	get_resolved_script_set(x) {
 		// https://www.unicode.org/reports/tr39/#def-resolved-script-set
-		let cps = explode_cp(x);
+		let cps = explodeCp(x);
 		if (!cps.length) return new Set();
 		let resolved = this.get_augmented_script_set(cps[0]);
 		for (let i = 1; i < cps.length; i++) {
@@ -580,7 +580,7 @@ export class UnicodeSpec {
 		if (cps.length != 26) throw new Error('expected 26 regionals'); // meh
 		let dx = cps[0] - 0x41; // 'A'
 		return regions.map(region => {
-			let cps = explode_cp(region).map(x => x + dx);
+			let cps = explodeCp(region).map(x => x + dx);
 			let name = `Flag Sequence: ${region}`;
 			let type = 'DerivedFlagSequence';
 			return {cps, name, type};
@@ -702,7 +702,7 @@ export class UnicodeSpec {
 				let key = String.fromCodePoint(...parse_cp_sequence(target));
 				this.get_bucket(key).push(parse_cp(src));
 			}
-		})).map(([key, cps]) => [explode_cp(key), cps]);
+		})).map(([key, cps]) => [explodeCp(key), cps]);
 	}
 	read_intentional_confusables() { 
 		// returns list of pairs
@@ -811,7 +811,7 @@ export class UnicodePrinter {
 		return `${hex_cp(cp)} (${this.spec.get_display(cp)}) ${this.spec.get_name(cp)}`;
 	}
 	desc_for_cps(x) {
-		let cps = explode_cp(x);
+		let cps = explodeCp(x);
 		return `${hex_seq(cps)} (${this.spec.safe_str(cps)}) ${this.names(cps)}`;
 	}
 	desc_for_mapped(x, ys) {

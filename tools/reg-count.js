@@ -6,12 +6,12 @@
 // node tools/reg-count.js regex 0{445}*
 
 import {UNICODE, PRINTER, NF} from '../derive/unicode-version.js';
-import {parse_cp_range, explode_cp, print_section, group_by} from '../derive/utils.js';
+import {parse_cp_range, explodeCp, print_section, group_by} from '../derive/utils.js';
 import {read_labels} from '../validate/data.js';
-import {ens_normalize, ens_tokenize} from '../src/lib.js';
+import {ensNormalize, ensTokenize} from '../src/lib.js';
 
-//function ens_normalize(s) { return s; }
-//function ens_tokenize() { return []; }
+//function ensNormalize(s) { return s; }
+//function ensTokenize() { return []; }
 
 main(process.argv.slice(2));
 
@@ -56,7 +56,7 @@ function main(args) {
 		let found = [];
 		let tally = new Map();
 		for (let label of read_labels()) {
-			let cps = explode_cp(label);
+			let cps = explodeCp(label);
 			if (cps.some(cp => filter.has(cp))) {
 				let key = scripts_key(UNICODE.get_script_set(cps));
 				let bucket = tally.get(key);
@@ -89,7 +89,7 @@ function main(args) {
 		let found = [];
 		let tally = {};
 		for (let label of read_labels()) {
-			let cps = explode_cp(label);
+			let cps = explodeCp(label);
 			if (filters.every(f => cps.some(cp => f.has(cp)))) {
 				let key = scripts_key(UNICODE.get_script_set(cps));
 				tally[key] = (tally[key] ?? 0) + 1;
@@ -106,7 +106,7 @@ function main(args) {
 		let key0 = scripts_key(scripts);
 		let found = [];
 		for (let label of read_labels()) {
-			let cps = explode_cp(label);
+			let cps = explodeCp(label);
 			if (scripts_key(UNICODE.get_script_set(cps)) === key0) {
 				found.push(label);
 			}
@@ -120,7 +120,7 @@ function main(args) {
 		let found = 0;
 		let tally = {};
 		for (let label of read_labels()) {
-			let cps = explode_cp(label);
+			let cps = explodeCp(label);
 			let set = UNICODE.get_extended_script_set(cps);
 			if (set.has(abbr0)) {
 				let key = [...set].sort().join(',');
@@ -136,7 +136,7 @@ function main(args) {
 		let found = 0;
 		let tally = {};
 		for (let label of read_labels()) {
-			let cps = explode_cp(label);
+			let cps = explodeCp(label);
 			let set = UNICODE.get_augmented_script_set(cps);
 			if (set.has(script0)) {
 				let key = [...set].sort().join(',');
@@ -151,7 +151,7 @@ function main(args) {
 		let tally = new Map();
 		for (let label of read_labels()) {
 			let set = new Set();
-			for (let token of ens_tokenize(label, {nf: false})) {
+			for (let token of ensTokenize(label, {nf: false})) {
 				switch (token.type) {
 					//case 'valid': 
 					//case 'mapped': 
@@ -185,7 +185,7 @@ function main(args) {
 	} else if (args[0] === 'tally-max-cm') {
 		let tally = {};
 		for (let label of read_labels()) {			
-			let cps = transform(explode_cp(label));
+			let cps = transform(explodeCp(label));
 			let max = 0;
 			for (let i = 0; i < cps.length; i++) {
 				let first = i;
@@ -200,7 +200,7 @@ function main(args) {
 	} else if (args[0] === 'tally-cm-runs') {
 		let tally = {};
 		for (let label of read_labels()) {			
-			let cps = transform(explode_cp(label));
+			let cps = transform(explodeCp(label));
 			for (let i = 0; i < cps.length; i++) {
 				let first = i;
 				while (i < cps.length && UNICODE.cm.has(cps[i])) i++;
@@ -217,7 +217,7 @@ function main(args) {
 		console.log(`Min Run: ${min}`);
 		let found = [];
 		for (let label of read_labels()) {			
-			let cps = transform(explode_cp(label));
+			let cps = transform(explodeCp(label));
 			let max = 0;
 			for (let i = 0; i < cps.length; i++) {
 				let first = i;
@@ -250,7 +250,7 @@ function main(args) {
 		filters.forEach(dump_filter);
 		let found = [];
 		for (let label of read_labels()) {
-			let cps = transform(explode_cp(label));
+			let cps = transform(explodeCp(label));
 			if (filters.every(f => cps.some(cp => f.has(cp)))) {
 				found.push(label);
 			}
@@ -280,7 +280,7 @@ function dump_found(found) {
 			extra = rec.extra;
 		}
 		try {
-			let norm = ens_normalize(label);
+			let norm = ensNormalize(label);
 			if (norm === label) {
 				same.push({label, extra});
 			} else {

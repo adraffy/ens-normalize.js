@@ -1,10 +1,10 @@
-import {ens_normalize, ens_emoji} from '../src/lib.js';
+import {ensNormalize, ensEmoji} from '../src/lib.js';
 import {bytes_from_utf8} from '../derive/utils.js';
 
 let map = new Map();
-for (let cps of ens_emoji()) {
+for (let cps of ensEmoji()) {
 	let emoji = String.fromCodePoint(...cps);
-	let n = bytes_from_utf8(ens_normalize(emoji)).length;
+	let n = bytes_from_utf8(ensNormalize(emoji)).length;
 	let rec = map.get(n);
 	if (!rec) {
 		rec = {bucket: [], n};

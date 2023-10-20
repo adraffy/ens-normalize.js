@@ -104,7 +104,7 @@ export function hex_seq(cps) {
 	return `[${cps.map(hex_cp).join(' ')}]`;
 }
 
-export function explode_cp(x) {
+export function explodeCp(x) {
 	if (typeof x === 'string') {
 		return [...x].map(c => c.codePointAt(0));
 	} else if (Number.isInteger(x)) {
@@ -153,7 +153,7 @@ export function parse_cps(spec) {
 	throw new TypeError(`unknown character spec: ${spec}`);
 }
 
-export function compare_arrays(a, b) {
+export function compareArrays(a, b) {
 	let n = a.length;
 	let c = n - b.length;
 	for (let i = 0; c == 0 && i < n; i++) c = a[i] - b[i];

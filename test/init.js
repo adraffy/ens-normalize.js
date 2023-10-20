@@ -14,8 +14,8 @@
 const N = 10;
 const t0 = performance.now();
 for (let i = 0; i < N; i++) {
-	let {is_combining_mark} = await import(`../src/lib.js?${i}`); // cheat import cache
-	is_combining_mark(0);
+	let {isCombiningMark} = await import(`../src/lib.js?${i}`); // cheat import cache
+	isCombiningMark(0);
 }
 let t_avg = (performance.now() - t0) / N;
 

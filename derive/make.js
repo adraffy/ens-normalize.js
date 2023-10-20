@@ -1,6 +1,6 @@
 import {mkdirSync, writeFileSync, createWriteStream, readFileSync} from 'node:fs';
 import {deepStrictEqual} from 'node:assert';
-import {compare_arrays, explode_cp, parse_cp_sequence, print_section, print_checked, print_table} from './utils.js';
+import {compareArrays, explodeCp, parse_cp_sequence, print_section, print_checked, print_table} from './utils.js';
 import {UNICODE, NF, IDNA, PRINTER} from './unicode-version.js';
 import CHARS_VALID from './rules/chars-valid.js';
 import CHARS_DISALLOWED from './rules/chars-disallow.js';
@@ -43,7 +43,7 @@ console.log(`Unicode Version: ${version_str(UNICODE.unicode_version)}`);
 console.log(`CLDR Version: ${version_str(UNICODE.cldr_version)}`);
 
 // 20230214: moved from unicode-version.js
-if (NF.run_tests().length) throw new Error('nf implementation wrong');
+if (NF.runTests().length) throw new Error('nf implementation wrong');
 NF.run_random_tests(); 
 
 // these are our primary output structures
@@ -196,7 +196,7 @@ for (let {cps, group, subgroup} of UNICODE.read_emoji_test()) {
 print_section('Add Mapped Characters');
 for (let [x, ys] of CHARS_MAPPED) {
 	let old = mapped.get(x);
-	if (old && !compare_arrays(old, ys)) throw new Error(`Duplicate mapped: ${PRINTER.desc_for_mapped(x, ys)}`);
+	if (old && !compareArrays(old, ys)) throw new Error(`Duplicate mapped: ${PRINTER.desc_for_mapped(x, ys)}`);
 	disallow_char(x);
 	mapped.set(x, ys);
 	console.log(`Add Mapped: ${PRINTER.desc_for_mapped(x, ys)}`);
@@ -314,7 +314,7 @@ for (let config of SCRIPT_GROUPS) {
 		}
 		// there are no restrictions on extra
 		// we can enforce this later
-		let extra_set = new Set(extra.flat(Infinity).flatMap(x => typeof x === 'string' ? explode_cp(x) : x));
+		let extra_set = new Set(extra.flat(Infinity).flatMap(x => typeof x === 'string' ? explodeCp(x) : x));
 		let group = new ScriptGroup(name, test_set, rest_set, extra_set, cm);
 		script_groups.push(group);
 	} catch (err) {
@@ -364,7 +364,7 @@ print_table(['Valid', 'Name', 'Test', 'Rest', 'Extra'], script_groups.map(g => {
 print_section(`Compute CM Whitelist`);
 let cm_whitelist = new Set();
 for (let form of CM_WHITELIST) {
-	let cps = NF.nfc(explode_cp(form));
+	let cps = NF.nfc(explodeCp(form));
 	try {
 		let key = String.fromCodePoint(...cps); 
 		if (cm_whitelist.has(key)) {
@@ -703,10 +703,10 @@ print_checked('Emoji Boundaries');
 
 for (let info of valid_emoji.values()) {
 	let {cps} = info;
-	if (compare_arrays(cps, NF.nfc(cps))) {
+	if (compareArrays(cps, NF.nfc(cps))) {
 		throw new Error(`Emoji doesn't survive NFC: ${PRINTER.desc_for_emoji(info)}`);
 	}
-	if (compare_arrays(cps, NF.nfd(cps))) {
+	if (compareArrays(cps, NF.nfd(cps))) {
 		throw new Error(`Emoji doesn't survive NFD: ${PRINTER.desc_for_emoji(info)}`);
 	}
 }
@@ -823,7 +823,7 @@ for (let g of script_groups) {
 		cm = [];
 		for (let [cp, seqs] of g.cm_map) {
 			if (seqs.length == 1 && seqs[0].length == 0) continue; // just a valid char
-			seqs.sort(compare_arrays);
+			seqs.sort(compareArrays);
 			cm.push({cp, seqs});
 		}
 		cm.sort((a, b) => a.cp - b.cp);
@@ -908,7 +908,7 @@ write_json('spec.json', {
 	created,
 	unicode: version_str(UNICODE.unicode_version),
 	cldr: version_str(UNICODE.cldr_version),
-	emoji: [...valid_emoji.values()].map(x => x.cps).sort(compare_arrays),
+	emoji: [...valid_emoji.values()].map(x => x.cps).sort(compareArrays),
 	ignored: sorted(ignored),
 	mapped: [...mapped].sort((a, b) => a[0] - b[0]),
 	fenced: [...fenced_map].sort((a, b) => a[0] - b[0]),

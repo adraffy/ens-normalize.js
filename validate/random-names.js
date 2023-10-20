@@ -1,8 +1,8 @@
 // generate names using a distribution with custom weights
 
 import {writeFileSync} from 'node:fs';
-import {ens_normalize, nfd, is_combining_mark} from '../src/lib.js';
-import {explode_cp, random_choice, random_sample} from '../src/utils.js';
+import {ensNormalize, nfd, isCombiningMark} from '../src/lib.js';
+import {explodeCp, random_choice, random_sample} from '../src/utils.js';
 import {read_spec} from './data.js';
 
 const SPEC = read_spec();
@@ -11,7 +11,7 @@ const SPEC = read_spec();
 //let all_parts = [...new Set(all_valid.flatMap(cp => [cp, ...nfd([cp])]))];
 
 let all_emoji = SPEC.emoji.flatMap(cps => {
-	return [cps, explode_cp(ens_normalize(String.fromCodePoint(...cps)))];
+	return [cps, explodeCp(ensNormalize(String.fromCodePoint(...cps)))];
 });
 
 let reverse_map = new Map(SPEC.mapped.flatMap(([x, ys]) => {
@@ -31,8 +31,8 @@ let pass = SPEC.groups.flatMap(g => {
 	const t0 = performance.now();
 	let cps = [...g.primary, ...g.secondary];
 	let mapped = [...new Set(cps.flatMap(cp => reverse_map.get(cp) ?? []))];
-	let cm = cps.filter(cp => is_combining_mark(cp));
-	let valid = cps.filter(cp => !is_combining_mark(cp));
+	let cm = cps.filter(cp => isCombiningMark(cp));
+	let valid = cps.filter(cp => !isCombiningMark(cp));
 	let names =  make_random_names([
 		[10, valid],
 		[3, cm],
@@ -41,7 +41,7 @@ let pass = SPEC.groups.flatMap(g => {
 		[1, all_emoji],
 	], PER, name => {
 		try {
-			return name !== ens_normalize(name);
+			return name !== ensNormalize(name);
 		} catch (err) {
 		}
 	});
@@ -49,7 +49,7 @@ let pass = SPEC.groups.flatMap(g => {
 });
 
 let fail = pass.map(name0 => {
-	let cps = explode_cp(name0);
+	let cps = explodeCp(name0);
 	let pos = Math.random() * cps.length|0;	
 	let L = String.fromCodePoint(...cps.slice(0, pos));
 	let R = String.fromCodePoint(...cps.slice(pos));
@@ -57,7 +57,7 @@ let fail = pass.map(name0 => {
 	while (true) {
 		name = L + String.fromCodePoint(random_choice(random_choice(inject_samples))) + R;
 		try {
-			ens_normalize(name);
+			ensNormalize(name);
 		} catch (err) {
 			break;
 		}

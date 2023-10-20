@@ -549,8 +549,8 @@ footer span:hover {
 <footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
 <script type="module">
 import {
-	ens_normalize, ens_normalize_fragment, ens_beautify, ens_tokenize, ens_emoji,
-	hex_cp, explode_cp, compare_arrays,
+	ensNormalize, ensNormalizeFragment, ensBeautify, ensTokenize, ensEmoji,
+	hex_cp, explodeCp, compareArrays,
 	dom_from_tokens, use_default_style, versions
 } from '../dist/all.min.js';
 use_default_style();
@@ -625,7 +625,7 @@ top_btn.addEventListener('click', () => window.scrollTo(0, 0));
 		for (let info of data) {
 			info_map.set(info.form, info);
 			if (info.type === TYPE_DISABLED) {
-				disabled_emoji.push(explode_cp(info.form));
+				disabled_emoji.push(explodeCp(info.form));
 			} else {
 				info.short_type = info.type.replaceAll(/_?(emoji|sequence|rgi)_?/ig, '');
 			}
@@ -655,7 +655,7 @@ top_btn.addEventListener('click', () => window.scrollTo(0, 0));
 	}
 	emoji_versions = [...emoji_versions].sort((a, b) => a - b);
 
-	for (let cps of ens_emoji()) {
+	for (let cps of ensEmoji()) {
 		let rec = make_rec(cps);
 		all_emoji.push(rec);
 	}
@@ -811,13 +811,13 @@ function make_rec(cps) {
 	let norm;
 	let is_norm;
 	try {
-		norm = ens_normalize(form);
+		norm = ensNormalize(form);
 		is_norm = true;
 	} catch (err) {
 		norm = form;
 	}
 	let norm_length = [...norm].length;
-	let tokens = ens_tokenize(form);
+	let tokens = ensTokenize(form);
 	let is_emoji = !!tokens[0].emoji;
 	let info = info_map.get(form);	
 	let rec = {form, norm, cps, info, is_emoji, tokens, norm_length, is_norm};
@@ -943,7 +943,7 @@ function update_search() {
 				return s.split(',').map(x => x.trim()).filter(x => x).map(raw => {
 					let str = replace_escapes(raw);
 					try {
-						return ens_normalize_fragment(str);
+						return ensNormalizeFragment(str);
 					} catch (err) {
 					}
 					try {
@@ -970,7 +970,7 @@ function update_search() {
 			arg = replace_escapes(arg);
 			let norm;
 			try {
-				norm = ens_normalize_fragment(arg.trim());
+				norm = ensNormalizeFragment(arg.trim());
 			} catch (err) {			
 			}
 			results = results.filter(x => {
@@ -981,7 +981,7 @@ function update_search() {
 		}
 	}
 	stack.push(results);
-	setup_render([...new Set(stack.flat())].sort(compare_arrays));
+	setup_render([...new Set(stack.flat())].sort(compareArrays));
 }
 
 function create_empty_table() {
@@ -1382,7 +1382,7 @@ function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_e
 	cps_div.append(create_hex_code('Fully-Qualified', cps));
 	if (tokens.some(t => t.type === 'mapped')) {
 		cps_div.append('→')
-		cps_div.append(create_hex_code('Mapped', explode_cp(norm)));
+		cps_div.append(create_hex_code('Mapped', explodeCp(norm)));
 	}
 	info_div.append(cps_div);
 	

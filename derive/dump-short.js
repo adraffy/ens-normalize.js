@@ -1,5 +1,5 @@
 import {UNICODE} from './unicode-version.js';
-import {explode_cp, hex_cp} from './utils.js';
+import {explodeCp, hex_cp} from './utils.js';
 
 for (let info of UNICODE.char_map.values()) {
 	if (info.short) {
@@ -13,7 +13,7 @@ for (let info of UNICODE.char_map.values()) {
 let singles = [];
 let seqs = [];
 for (let [form, name] of UNICODE.short_names()) {
-	let cps = explode_cp(form);
+	let cps = explodeCp(form);
 	if (cps.length == 1) {
 		let [cp] = cps;
 		console.log(`${hex_cp(cps[0])} ${UNICODE.get_name(cp)} ${name}`);

@@ -238,20 +238,20 @@ function read_trie(next) {
 	}
 }
 
-function hex_cp(cp) {
+function hexCp(cp) {
 	return cp.toString(16).toUpperCase().padStart(2, '0');
 }
 
-function quote_cp(cp) {
-	return `{${hex_cp(cp)}}`; // raffy convention: like "\u{X}" w/o the "\u"
+function quoteCp(cp) {
+	return `{${hexCp(cp)}}`; // raffy convention: like "\u{X}" w/o the "\u"
 }
 
 /*
-export function explode_cp(s) {
+export function explodeCp(s) {
 	return [...s].map(c => c.codePointAt(0));
 }
 */
-function explode_cp(s) { // this is about 2x faster
+function explodeCp(s) { // this is about 2x faster
 	let cps = [];
 	for (let pos = 0, len = s.length; pos < len; ) {
 		let cp = s.codePointAt(pos);
@@ -261,7 +261,7 @@ function explode_cp(s) { // this is about 2x faster
 	return cps;
 }
 
-function str_from_cps(cps) {
+function strFromCps(cps) {
 	const chunk = 4096;
 	let len = cps.length;
 	if (len < chunk) return String.fromCodePoint(...cps);
@@ -272,18 +272,18 @@ function str_from_cps(cps) {
 	return buf.join('');
 }
 
-function compare_arrays(a, b) {
+function compareArrays(a, b) {
 	let n = a.length;
 	let c = n - b.length;
 	for (let i = 0; c == 0 && i < n; i++) c = a[i] - b[i];
 	return c;
 }
 
-function random_choice(v, rng = Math.random) {
+function randomChoice(v, rng = Math.random) {
 	return v[rng() * v.length|0];
 }
 
-function random_sample(v, n, rng = Math.random) {
+function randomSample(v, n, rng = Math.random) {
 	v = v.slice(); // make copy
 	if (v.length > n) {
 		for (let i = 0; i < n; i++) { // shuffle prefix n
@@ -297,7 +297,7 @@ function random_sample(v, n, rng = Math.random) {
 	return v;
 }
 
-function run_tests(fn, tests) {
+function runTests(fn, tests) {
 	let errors = [];
 	for (let test of tests) {
 		let {name, norm, error} = test;
@@ -554,7 +554,7 @@ function init() {
 	CM = new Set(CM);
 	
 	ESCAPE = read_sorted_set(); // characters that should not be printed
-	NFC_CHECK = read_sorted_set(); // only needed to illustrate ens_tokenize() transformations
+	NFC_CHECK = read_sorted_set(); // only needed to illustrate ensTokenize() transformations
 
 	let chunks = read_sorted_arrays(r);
 	let unrestricted = r();
@@ -573,7 +573,7 @@ function init() {
 		if (N.length) {
 			let R = i >= unrestricted; // unrestricted then restricted
 			N[0] -= 32; // capitalize
-			N = str_from_cps(N);
+			N = strFromCps(N);
 			if (R) N=`Restricted[${N}]`;
 			let P = read_chunked(); // primary
 			let Q = read_chunked(); // secondary
@@ -654,7 +654,7 @@ function init() {
 	
 	// decode emoji
 	// 20230719: emoji are now fully-expanded to avoid quirk logic 
-	EMOJI_LIST = read_trie(r).map(v => Emoji.from(v)).sort(compare_arrays);
+	EMOJI_LIST = read_trie(r).map(v => Emoji.from(v)).sort(compareArrays);
 	EMOJI_ROOT = new Map(); // this has approx 7K nodes (2+ per emoji)
 	for (let cps of EMOJI_LIST) {
 		// 20230719: change to *slightly* stricter algorithm which disallows 
@@ -691,7 +691,7 @@ function init() {
 // if escaped: {HEX}
 //       else: "x" {HEX}
 function quoted_cp(cp) {
-	return (should_escape(cp) ? '' : `${bidi_qq(safe_str_from_cps([cp]))} `) + quote_cp(cp);
+	return (shouldEscape(cp) ? '' : `${bidi_qq(safeStrFromCps([cp]))} `) + quoteCp(cp);
 }
 
 // 20230211: some messages can be mixed-directional and result in spillover
@@ -704,7 +704,7 @@ function bidi_qq(s) {
 
 function check_label_extension(cps) {
 	if (cps.length >= 4 && cps[2] == HYPHEN && cps[3] == HYPHEN) {
-		throw new Error(`invalid label extension: "${str_from_cps(cps.slice(0, 4))}"`); // this can only be ascii so cant be bidi
+		throw new Error(`invalid label extension: "${strFromCps(cps.slice(0, 4))}"`); // this can only be ascii so cant be bidi
 	}
 }
 function check_leading_underscore(cps) {
@@ -740,54 +740,54 @@ function check_fenced(cps) {
 // leading cm uses placeholder
 // quoter(cp) => string, eg. 3000 => "{3000}"
 // note: in html, you'd call this function then replace [<>&] with entities
-function safe_str_from_cps(cps, quoter = quote_cp) {
+function safeStrFromCps(cps, quoter = quoteCp) {
 	//if (Number.isInteger(cps)) cps = [cps];
 	//if (!Array.isArray(cps)) throw new TypeError(`expected codepoints`);
 	let buf = [];
-	if (is_combining_mark(cps[0])) buf.push('◌');
+	if (isCombiningMark(cps[0])) buf.push('◌');
 	let prev = 0;
 	let n = cps.length;
 	for (let i = 0; i < n; i++) {
 		let cp = cps[i];
-		if (should_escape(cp)) {
-			buf.push(str_from_cps(cps.slice(prev, i)));
+		if (shouldEscape(cp)) {
+			buf.push(strFromCps(cps.slice(prev, i)));
 			buf.push(quoter(cp));
 			prev = i + 1;
 		}
 	}
-	buf.push(str_from_cps(cps.slice(prev, n)));
+	buf.push(strFromCps(cps.slice(prev, n)));
 	return buf.join('');
 }
 
 // note: set(s) cannot be exposed because they can be modified
 // note: Object.freeze() doesn't work
-function is_combining_mark(cp) {
+function isCombiningMark(cp) {
 	init();
 	return CM.has(cp);
 }
-function should_escape(cp) {
+function shouldEscape(cp) {
 	init();
 	return ESCAPE.has(cp);
 }
 
 // return all supported emoji as fully-qualified emoji 
 // ordered by length then lexicographic 
-function ens_emoji() {
+function ensEmoji() {
 	init();
 	return EMOJI_LIST.map(x => x.slice()); // emoji are exposed so copy
 }
 
-function ens_normalize_fragment(frag, decompose) {
+function ensNormalizeFragment(frag, decompose) {
 	init();
 	let nf = decompose ? nfd : nfc;
-	return frag.split(STOP_CH).map(label => str_from_cps(tokens_from_str(explode_cp(label), nf, filter_fe0f).flat())).join(STOP_CH);
+	return frag.split(STOP_CH).map(label => strFromCps(tokens_from_str(explodeCp(label), nf, filter_fe0f).flat())).join(STOP_CH);
 }
 
-function ens_normalize(name) {
+function ensNormalize(name) {
 	return flatten(split(name, nfc, filter_fe0f));
 }
 
-function ens_beautify(name) {
+function ensBeautify(name) {
 	let labels = split(name, nfc, x => x); // emoji not exposed
 	for (let {type, output, error} of labels) {
 		if (error) break; // flatten will throw
@@ -829,7 +829,7 @@ function array_replace(v, a, b) {
 	}
 }
 
-function ens_split(name, preserve_emoji) {
+function ensSplit(name, preserve_emoji) {
 	return split(name, nfc, preserve_emoji ? x => x.slice() : filter_fe0f); // emoji are exposed so copy
 }
 
@@ -840,7 +840,7 @@ function split(name, nf, ef) {
 	// https://unicode.org/reports/tr46/#Validity_Criteria
 	// 4.) "The label must not contain a U+002E ( . ) FULL STOP."
 	return name.split(STOP_CH).map(label => {
-		let input = explode_cp(label);
+		let input = explodeCp(label);
 		let info = {
 			input,
 			offset, // codepoint, not substring!
@@ -880,7 +880,7 @@ function split(name, nf, ef) {
 						let cps = tokens[i];
 						if (!cps.is_emoji && CM.has(cps[0])) { // every text token has emoji neighbors, eg. EtEEEtEt...
 							// bidi_qq() not needed since emoji is LTR and cps is a CM
-							throw error_placement(`emoji + combining mark: "${str_from_cps(tokens[i-1])} + ${safe_str_from_cps([cps[0]])}"`); 
+							throw error_placement(`emoji + combining mark: "${strFromCps(tokens[i-1])} + ${safeStrFromCps([cps[0]])}"`); 
 						}
 					}
 					check_fenced(norm);
@@ -968,9 +968,9 @@ function flatten(split) {
 			// don't print label again if just a single label
 			let msg = error.message;
 			// bidi_qq() only necessary if msg is digits
-			throw new Error(split.length == 1 ? msg : `Invalid label ${bidi_qq(safe_str_from_cps(input))}: ${msg}`); 
+			throw new Error(split.length == 1 ? msg : `Invalid label ${bidi_qq(safeStrFromCps(input))}: ${msg}`); 
 		}
-		return str_from_cps(output);
+		return strFromCps(output);
 	}).join(STOP_CH);
 }
 
@@ -999,7 +999,7 @@ function check_group(g, cps) {
 			// for whitelisted scripts, this will throw illegal mixture on invalid cm, eg. "e{300}{300}"
 			// at the moment, it's unnecessary to introduce an extra error type
 			// until there exists a whitelisted multi-character
-			//   eg. if (M < 0 && is_combining_mark(cp)) { ... }
+			//   eg. if (M < 0 && isCombiningMark(cp)) { ... }
 			// there are 3 cases:
 			//   1. illegal cm for wrong group => mixture error
 			//   2. illegal cm for same group => cm error
@@ -1019,7 +1019,7 @@ function check_group(g, cps) {
 				let j = i + 1;
 				while (j < e && CM.has(decomposed[j])) j++;
 				if (j - i > M) {
-					throw new Error(`too many combining marks: ${g.N} ${bidi_qq(str_from_cps(decomposed.slice(i-1, j)))} (${j-i}/${M})`);
+					throw new Error(`too many combining marks: ${g.N} ${bidi_qq(strFromCps(decomposed.slice(i-1, j)))} (${j-i}/${M})`);
 				}
 				i = j;
 			}
@@ -1040,7 +1040,7 @@ function check_group(g, cps) {
 				// b. Forbid sequences of more than 4 nonspacing marks (gc=Mn or gc=Me).
 				if (j - i > NSM_MAX) {
 					// note: this slice starts with a base char or spacing-mark cm
-					throw new Error(`excessive non-spacing marks: ${bidi_qq(safe_str_from_cps(decomposed.slice(i-1, j)))} (${j-i}/${NSM_MAX})`);
+					throw new Error(`excessive non-spacing marks: ${bidi_qq(safeStrFromCps(decomposed.slice(i-1, j)))} (${j-i}/${NSM_MAX})`);
 				}
 				i = j;
 			}
@@ -1058,8 +1058,8 @@ function check_group(g, cps) {
 			let j = i;
 			while (j < e && CM.has(cps[j])) j++;
 			let cms = cps.slice(i, j);
-			let match = seqs.find(seq => !compare_arrays(seq, cms));
-			if (!match) throw new Error(`disallowed combining mark sequence: "${safe_str_from_cps([cp, ...cms])}"`);
+			let match = seqs.find(seq => !compareArrays(seq, cms));
+			if (!match) throw new Error(`disallowed combining mark sequence: "${safeStrFromCps([cp, ...cms])}"`);
 			i = j;
 		} else if (!V.has(cp)) {
 			// https://www.unicode.org/reports/tr39/#mixed_script_confusables
@@ -1085,7 +1085,7 @@ function check_group(g, cps) {
 				let j = i + 1;
 				while (j < e && CM.has(decomposed[j])) j++;
 				if (j - i > M) {
-					throw new Error(`too many combining marks: "${str_from_cps(decomposed.slice(i-1, j))}" (${j-i}/${M})`);
+					throw new Error(`too many combining marks: "${strFromCps(decomposed.slice(i-1, j))}" (${j-i}/${M})`);
 				}
 				i = j;
 			}
@@ -1096,7 +1096,7 @@ function check_group(g, cps) {
 
 // given a list of codepoints
 // returns a list of lists, where emoji are a fully-qualified (as Array subclass)
-// eg. explode_cp("abc💩d") => [[61, 62, 63], Emoji[1F4A9, FE0F], [64]]
+// eg. explodeCp("abc💩d") => [[61, 62, 63], Emoji[1F4A9, FE0F], [64]]
 // 20230818: rename for 'process' name collision h/t Javarome
 // https://github.com/adraffy/ens-normalize.js/issues/23
 function tokens_from_str(input, nf, ef) {
@@ -1156,7 +1156,7 @@ function consume_emoji_reversed(cps, eaten) {
 		let {V} = node;
 		if (V) { // this is a valid emoji (so far)
 			emoji = V;
-			if (eaten) eaten.push(...cps.slice(pos).reverse()); // (optional) copy input, used for ens_tokenize()
+			if (eaten) eaten.push(...cps.slice(pos).reverse()); // (optional) copy input, used for ensTokenize()
 			cps.length = pos; // truncate
 		}
 	}
@@ -1174,11 +1174,11 @@ const TY_EMOJI = 'emoji';
 const TY_NFC = 'nfc';
 const TY_STOP = 'stop';
 
-function ens_tokenize(name, {
+function ensTokenize(name, {
 	nf = true, // collapse unnormalized runs into a single token
 } = {}) {
 	init();
-	let input = explode_cp(name).reverse();
+	let input = explodeCp(name).reverse();
 	let eaten = [];
 	let tokens = [];
 	while (input.length) {
@@ -1228,13 +1228,13 @@ function ens_tokenize(name, {
 					let slice = tokens.slice(start, end);
 					let cps0 = slice.flatMap(x => is_valid_or_mapped(x.type) ? x.cps : []); // strip junk tokens
 					let cps = nfc(cps0);
-					if (compare_arrays(cps, cps0)) { // bundle into an nfc token
+					if (compareArrays(cps, cps0)) { // bundle into an nfc token
 						tokens.splice(start, end - start, {
 							type: TY_NFC, 
 							input: cps0, // there are 3 states: tokens0 ==(process)=> input ==(nfc)=> tokens/cps
 							cps, 
 							tokens0: collapse_valid_tokens(slice),
-							tokens: ens_tokenize(str_from_cps(cps), {nf: false})
+							tokens: ensTokenize(strFromCps(cps), {nf: false})
 						});
 						i = start;
 					} else { 
@@ -1272,7 +1272,7 @@ function collapse_valid_tokens(tokens) {
 }
 
 function hex_seq(cps) {
-	return cps.map(hex_cp).join(' ');
+	return cps.map(hexCp).join(' ');
 }
 
 function create_arrow_span() {
@@ -1302,11 +1302,11 @@ function span_from_cp(cp, in_emoji) {
 	} else if (cp == 0xE007F) { // tag end
 		span.classList.add('mod', 'tag', 'end');
 		span.innerText = '⌫'; // 🏷️
-	} else if (!in_emoji && should_escape(cp)) {
+	} else if (!in_emoji && shouldEscape(cp)) {
 		span.classList.add('code');
-		span.innerText = hex_cp(cp);
+		span.innerText = hexCp(cp);
 	} else {
-		span.innerText = safe_str_from_cps([cp]);
+		span.innerText = safeStrFromCps([cp]);
 	}
 	return span;
 }
@@ -1321,11 +1321,11 @@ function format_tooltip(obj, extra) {
 }
 
 function isolated_safe(cps) {
-	return cps.map(cp => safe_str_from_cps([cp])).join('\u{200B}')
+	return cps.map(cp => safeStrFromCps([cp])).join('\u{200B}')
 }
 
 // TODO: these options are shit, fix this
-function dom_from_tokens(tokens, {
+function domFromTokens(tokens, {
 	before = false, 
 	tld_class = true,
 	components = false, 
@@ -1370,14 +1370,14 @@ function dom_from_tokens(tokens, {
 				// get the cps from the original tokens
 				let cps0 = token.tokens0.flatMap(t => t.type === 'valid' ? t.cps : t.cp); // this can only be mapped/ignored/valid
 				// break every valid token into individual characters
-				let lhs = dom_from_tokens(token.tokens0.flatMap(t => t.type === 'valid' ? t.cps.map(cp => ({type: 'valid', cps: [cp]})) : t), {components, before, emoji_url, extra});
+				let lhs = domFromTokens(token.tokens0.flatMap(t => t.type === 'valid' ? t.cps.map(cp => ({type: 'valid', cps: [cp]})) : t), {components, before, emoji_url, extra});
 				lhs.title = format_tooltip({
 					Type: 'NFC (Unnormalized)',
 					Hex: hex_seq(cps0),
 				}, extra(token.type, cps0));
 				el.append(lhs);
 				if (!before) {
-					let rhs = dom_from_tokens(token.tokens, {components, emoji_url, extra});
+					let rhs = domFromTokens(token.tokens, {components, emoji_url, extra});
 					rhs.title = format_tooltip({
 						Type: 'NFC (Normalized)',
 						Hex: hex_seq(token.cps),
@@ -1388,7 +1388,7 @@ function dom_from_tokens(tokens, {
 			}
 			case 'valid': {
 				el = document.createElement('span');		
-				let form = safe_str_from_cps(token.cps);
+				let form = safeStrFromCps(token.cps);
 				if (tld_class && (tokens.length == 1 || (i === tokens.length-1 && tokens[i-1].type === 'stop')) && /[a-z]/.test(form)) { 
 					// theres just 1 token/or we're the last token with a stop before us
 					//el.classList.add(form);
@@ -1406,15 +1406,15 @@ function dom_from_tokens(tokens, {
 				el = document.createElement('div');
 				let span_src = document.createElement('span');
 				span_src.classList.add('before');
-				span_src.innerText = safe_str_from_cps([token.cp]);	// isolate ? isolated_safe([token.cp]) : 
+				span_src.innerText = safeStrFromCps([token.cp]);	// isolate ? isolated_safe([token.cp]) : 
 				span_src.title = format_tooltip({
 					Type: 'Mapped (Match)',
-					Hex: hex_cp(token.cp),
+					Hex: hexCp(token.cp),
 				}, extra(token.type, [token.cp]));
 				el.append(span_src);
 				if (!before) {
 					let span_dst = document.createElement('span');
-					span_dst.innerText = isolated_safe(token.cps); // safe_str_from_cps(token.cps);
+					span_dst.innerText = isolated_safe(token.cps); // safeStrFromCps(token.cps);
 					span_dst.title = format_tooltip({
 						Type: 'Mapped (Replacement)',
 						Hex: hex_seq(token.cps),
@@ -1429,7 +1429,7 @@ function dom_from_tokens(tokens, {
 				el = span_from_cp(token.cp);
 				el.title = format_tooltip({
 					Type: token.type,
-					Hex: hex_cp(token.cp),
+					Hex: hexCp(token.cp),
 				}, extra(token.type, [token.cp]));
 				break;
 			}
@@ -1441,7 +1441,7 @@ function dom_from_tokens(tokens, {
 	return div;
 }
 
-function use_default_style() {
+function useDefaultStyle() {
 	let style = document.createElement('style');
 	style.innerText = `
 	.tokens {
@@ -1598,4 +1598,4 @@ var includeVersions = /*#__PURE__*/Object.freeze({
 	version: version
 });
 
-export { compare_arrays, dom_from_tokens, ens_beautify, ens_emoji, ens_normalize, ens_normalize_fragment, ens_split, ens_tokenize, explode_cp, hex_cp, is_combining_mark, nfc, nfd, quote_cp, random_choice, random_sample, run_tests, safe_str_from_cps, should_escape, str_from_cps, use_default_style, includeVersions as versions };
+export { compareArrays, domFromTokens, ensBeautify, ensEmoji, ensNormalize, ensNormalizeFragment, ensSplit, ensTokenize, explodeCp, hexCp, isCombiningMark, nfc, nfd, quoteCp, randomChoice, randomSample, runTests, safeStrFromCps, shouldEscape, strFromCps, useDefaultStyle, includeVersions as versions };

@@ -1,5 +1,5 @@
 import {hex_cp} from '../../src/utils.js';
-import {is_combining_mark} from '../../src/lib.js';
+import {isCombiningMark} from '../../src/lib.js';
 import {UNICODE} from '../../derive/unicode-version.js';
 import {writeFileSync} from 'node:fs';
 
@@ -31,9 +31,9 @@ export function write_csv(name, recs, {form = true} = {}) {
 				case 'Name': return rec.name;
 				case 'Form': {
 					let form = String.fromCodePoint(...rec.cps);
-					if (is_combining_mark(rec.cps[0])) form = '◌' + form;
+					if (isCombiningMark(rec.cps[0])) form = '◌' + form;
 					return form;
-					//return safe_str_from_cps(rec.cps);
+					//return safe_strFromCps(rec.cps);
 				}
 				default: throw new Error(`unknown column: ${col}`);
 			}

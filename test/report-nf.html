@@ -107,7 +107,7 @@ tbody tr:nth-child(odd) {
 <script type="module">
 import {nfc as nfc_custom, nfd as nfd_custom} from '../dist/nf.min.js';
 import {nfc as nfc_native, nfd as nfd_native} from '../src/nf-native.js';
-import {hex_cp, explode_cp} from '../src/utils.js';
+import {hex_cp, explodeCp} from '../src/utils.js';
 
 main().catch(err => {
 	let div = document.createElement('div');
@@ -121,7 +121,7 @@ function html_escape(s) {
 }
 
 function hex_seq(s) {
-	return explode_cp(s).map(hex_cp).join(' ')
+	return explodeCp(s).map(hex_cp).join(' ')
 }
 
 function time_td(t) {
@@ -166,7 +166,7 @@ async function main() {
 		}
 		for (let args of cases) {
 			let [src, nfd0, nfc0] = args;
-			let cps = explode_cp(src);
+			let cps = explodeCp(src);
 			html += '<tr>' + [
 				`<td class="input">${html_escape(src)}</td>`,
 				`<td class="raw">${hex_seq(src)}</td>`,

@@ -1,8 +1,8 @@
-import {should_escape, safe_str_from_cps} from './lib.js';
-import {hex_cp} from './utils.js';
+import {shouldEscape, safeStrFromCps} from './lib.js';
+import {hexCp} from './utils.js';
 
 function hex_seq(cps) {
-	return cps.map(hex_cp).join(' ');
+	return cps.map(hexCp).join(' ');
 }
 
 function create_arrow_span() {
@@ -32,11 +32,11 @@ function span_from_cp(cp, in_emoji) {
 	} else if (cp == 0xE007F) { // tag end
 		span.classList.add('mod', 'tag', 'end');
 		span.innerText = '⌫'; // 🏷️
-	} else if (!in_emoji && should_escape(cp)) {
+	} else if (!in_emoji && shouldEscape(cp)) {
 		span.classList.add('code');
-		span.innerText = hex_cp(cp);
+		span.innerText = hexCp(cp);
 	} else {
-		span.innerText = safe_str_from_cps([cp]);
+		span.innerText = safeStrFromCps([cp]);
 	}
 	return span;
 }
@@ -51,11 +51,11 @@ function format_tooltip(obj, extra) {
 }
 
 function isolated_safe(cps) {
-	return cps.map(cp => safe_str_from_cps([cp])).join('\u{200B}')
+	return cps.map(cp => safeStrFromCps([cp])).join('\u{200B}')
 }
 
 // TODO: these options are shit, fix this
-export function dom_from_tokens(tokens, {
+export function domFromTokens(tokens, {
 	before = false, 
 	tld_class = true,
 	components = false, 
@@ -100,14 +100,14 @@ export function dom_from_tokens(tokens, {
 				// get the cps from the original tokens
 				let cps0 = token.tokens0.flatMap(t => t.type === 'valid' ? t.cps : t.cp); // this can only be mapped/ignored/valid
 				// break every valid token into individual characters
-				let lhs = dom_from_tokens(token.tokens0.flatMap(t => t.type === 'valid' ? t.cps.map(cp => ({type: 'valid', cps: [cp]})) : t), {components, before, emoji_url, extra});
+				let lhs = domFromTokens(token.tokens0.flatMap(t => t.type === 'valid' ? t.cps.map(cp => ({type: 'valid', cps: [cp]})) : t), {components, before, emoji_url, extra});
 				lhs.title = format_tooltip({
 					Type: 'NFC (Unnormalized)',
 					Hex: hex_seq(cps0),
 				}, extra(token.type, cps0));
 				el.append(lhs);
 				if (!before) {
-					let rhs = dom_from_tokens(token.tokens, {components, emoji_url, extra});
+					let rhs = domFromTokens(token.tokens, {components, emoji_url, extra});
 					rhs.title = format_tooltip({
 						Type: 'NFC (Normalized)',
 						Hex: hex_seq(token.cps),
@@ -118,7 +118,7 @@ export function dom_from_tokens(tokens, {
 			}
 			case 'valid': {
 				el = document.createElement('span');		
-				let form = safe_str_from_cps(token.cps);
+				let form = safeStrFromCps(token.cps);
 				if (tld_class && (tokens.length == 1 || (i === tokens.length-1 && tokens[i-1].type === 'stop')) && /[a-z]/.test(form)) { 
 					// theres just 1 token/or we're the last token with a stop before us
 					//el.classList.add(form);
@@ -136,15 +136,15 @@ export function dom_from_tokens(tokens, {
 				el = document.createElement('div');
 				let span_src = document.createElement('span');
 				span_src.classList.add('before');
-				span_src.innerText = safe_str_from_cps([token.cp]);	// isolate ? isolated_safe([token.cp]) : 
+				span_src.innerText = safeStrFromCps([token.cp]);	// isolate ? isolated_safe([token.cp]) : 
 				span_src.title = format_tooltip({
 					Type: 'Mapped (Match)',
-					Hex: hex_cp(token.cp),
+					Hex: hexCp(token.cp),
 				}, extra(token.type, [token.cp]));
 				el.append(span_src);
 				if (!before) {
 					let span_dst = document.createElement('span');
-					span_dst.innerText = isolated_safe(token.cps); // safe_str_from_cps(token.cps);
+					span_dst.innerText = isolated_safe(token.cps); // safeStrFromCps(token.cps);
 					span_dst.title = format_tooltip({
 						Type: 'Mapped (Replacement)',
 						Hex: hex_seq(token.cps),
@@ -159,7 +159,7 @@ export function dom_from_tokens(tokens, {
 				el = span_from_cp(token.cp);
 				el.title = format_tooltip({
 					Type: token.type,
-					Hex: hex_cp(token.cp),
+					Hex: hexCp(token.cp),
 				}, extra(token.type, [token.cp]));
 				break;
 			}
@@ -171,7 +171,7 @@ export function dom_from_tokens(tokens, {
 	return div;
 }
 
-export function use_default_style() {
+export function useDefaultStyle() {
 	let style = document.createElement('style');
 	style.innerText = `
 	.tokens {

@@ -1,14 +1,14 @@
 // compile all Emoji into a single regex
 // a more formal version (but not ENS-specific) of this idea: https://github.com/adraffy/emoji.js
 
-import {ens_emoji} from '../src/lib.js';
+import {ensEmoji} from '../src/lib.js';
 import {writeFileSync} from 'node:fs';
 
 // if (typeof gc === 'undefined') {
 // 	throw new Error(`node --expose-gc tools/emoji-regex.js`);
 // }
 
-const EMOJI = ens_emoji();
+const EMOJI = ensEmoji();
 
 function make_regex(emoji) {
 	return new RegExp(`^(${emoji.map(cps => String.fromCodePoint(...cps.flatMap(cp => {
