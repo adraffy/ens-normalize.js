@@ -1,7 +1,7 @@
 // print out all decimal digits
 
 import {UNICODE} from '../derive/unicode-version.js';
-import {ens_normalize} from '../src/lib.js';
+import {ensNormalize} from '../src/lib.js';
 
 let buckets = new Map();
 for (let char of UNICODE.char_map.values()) {
@@ -24,7 +24,7 @@ for (let [k, v] of buckets.entries()) {
 	}
 	try {
 		let name = String.fromCodePoint(...v.map(x => x.cp));
-		let norm = ens_normalize(name);
+		let norm = ensNormalize(name);
 		if (name !== norm) {
 			console.log(`[${k}] "${name}" => "${norm}"`);
 		}

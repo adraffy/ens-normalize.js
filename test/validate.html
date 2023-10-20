@@ -70,14 +70,14 @@ h1 {
 <div id="error"></div>
 <a id="download" class="hide" download="errors.json"><button>errors.json</button></a>
 <script type="module">
-import {ens_normalize, run_tests, versions} from '../dist/all.min.js';
+import {ensNormalize, runTests, versions} from '../dist/all.min.js';
 const state = document.querySelector('#state');
 document.querySelector('#version').innerText = `v${versions.version}`;
 document.querySelector('#hash').innerText = versions.spec_hash;
 document.querySelector('#built').innerText = `Built on ${new Date(versions.built).toLocaleString()}`;
 fetch('../validate/tests.json').then(r => r.json()).then(tests => {
 	const t0 = performance.now();
-	let errors = run_tests(ens_normalize, tests); // see: validate.js
+	let errors = runTests(ensNormalize, tests); // see: validate.js
 	document.querySelector('#time').innerHTML = `<b>${tests.length}</b> <a href="../validate/tests.json">tests</a> in <b>${performance.now() - t0}ms</b>`;
 	if (errors.length || window.location.hash === '#debug') {
 		show_error(`${errors.length} tests failed!`);

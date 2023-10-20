@@ -1,6 +1,6 @@
 
 import {read_labels} from '../validate/data.js';
-import {ens_normalize} from '../src/lib.js';
+import {ensNormalize} from '../src/lib.js';
 import eth_ens_namehash from '../test/eth-ens-namehash@2.0.15.min.js';
 
 // given: name
@@ -13,7 +13,7 @@ let case3 = 0; // a != name && b != name
 
 for (let label of read_labels()) {
 	try {
-		let a = ens_normalize(label);
+		let a = ensNormalize(label);
 		let b = eth_ens_namehash.normalize(label);
 		if (a === b) continue;
 		if (a === label) {

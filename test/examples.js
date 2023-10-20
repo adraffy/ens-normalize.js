@@ -1,8 +1,8 @@
 // code that is not included in the library 
 // but might be useful
 
-import {ens_normalize, ens_split, ens_tokenize} from '../src/lib.js';
-import {explode_cp, str_from_cps} from '../src/utils.js';
+import {ensNormalize, ensSplit, ensTokenize} from '../src/lib.js';
+import {explodeCp, strFromCps} from '../src/utils.js';
 
 function expect_fail(fn) {
 	try {
@@ -21,7 +21,7 @@ function expect_fail(fn) {
 // or undefined if not normalizable
 function is_normalized(name) {
 	try {
-		return ens_normalize(name) === name;
+		return ensNormalize(name) === name;
 	} catch (err) {		
 	}
 }
@@ -33,7 +33,7 @@ console.log(is_normalized('a')); // true
 // ********************************************************************************
 // is the name ascii?
 function is_ascii_name(name) {
-	return ens_split(name).every(label => label.type === 'ASCII');
+	return ensSplit(name).every(label => label.type === 'ASCII');
 }
 
 console.log(is_ascii_name);
@@ -44,7 +44,7 @@ console.log(is_ascii_name('xs')); // true
 // is the string a single emoji?
 // returns true if one emoji glyph
 function is_emoji(one_emoji) {
-	let tokens = ens_tokenize(one_emoji);
+	let tokens = ensTokenize(one_emoji);
 	return tokens.length == 1 && !!tokens[0].emoji; // or .type === 'emoji';
 }
 
@@ -68,7 +68,7 @@ console.log(get_min_length(5)); // 1
 // returns minimial normalized emoji string or throws
 function get_min_repeated(one_emoji) {
 	if (!is_emoji(one_emoji)) throw new TypeError('expected emoji');
-	let [{cps}] = ens_tokenize(one_emoji);
+	let [{cps}] = ensTokenize(one_emoji);
 	return String.fromCodePoint(...cps).repeat(get_min_length(cps.length));
 }
 
@@ -84,10 +84,10 @@ console.log(get_min_repeated('👩🏽‍⚕️')); // "👩🏽‍⚕️"
 // doesn't need to be normalized, but must normalize
 // returns [repeated count, beautifed single emoji] or throws
 function get_pure(name) {
-	let norm = ens_normalize(name);
+	let norm = ensNormalize(name);
 	if (norm.endsWith('.eth')) norm = norm.slice(0, -4);
 	if (norm.includes('.')) throw new Error('not 2LD');
-	let tokens = ens_tokenize(norm);
+	let tokens = ensTokenize(norm);
 	if (!tokens.every(t => t.emoji)) throw new TypeError('not ethmoji');
 	let {cps} = tokens[0];
 	for (let i = 1; i < tokens.length; i++) {
@@ -113,7 +113,7 @@ console.log(get_pure('👩🏽‍⚕️')); // [1, '👩🏽‍⚕️']
 // is valid?
 // returns true of the codepoint is "potentially" valid
 function is_valid(cp) {
-	return ens_tokenize(String.fromCodePoint(cp))[0].type === 'valid';
+	return ensTokenize(String.fromCodePoint(cp))[0].type === 'valid';
 }
 
 console.log(is_valid);
@@ -125,7 +125,7 @@ console.log(is_valid(0x20));
 // returns mapped characters for the codepoint 
 // or null if not mapped
 function get_mapped(cp) {
-	let [token] = ens_tokenize(String.fromCodePoint(cp));
+	let [token] = ensTokenize(String.fromCodePoint(cp));
 	return token.type === 'mapped' ? token.cps : null;
 }
 
@@ -144,7 +144,7 @@ function replace_sloppy(s) {
 		[0xFF0E, 0x2E], // FF0E (．) FULLWIDTH FULL STOP => 2E (.) FULL STOP
 		[0xFF61, 0x2E], // FF61 (｡) HALFWIDTH IDEOGRAPHIC FULL STOP => 2E (.) FULL STOP
 	]);
-	return str_from_cps(explode_cp(s).map(x => MAP.get(x) ?? x));
+	return strFromCps(explodeCp(s).map(x => MAP.get(x) ?? x));
 	// alternative:
 	//return s.replaceAll('/', '\u2044').replace(/(\u3002|\uFF0E|\uFF61)/gu, '.');
 }
@@ -156,7 +156,7 @@ console.log(replace_sloppy("1/4.eth")); // "1/4.eth" -> "1⁄4.eth"
 // make a best case attempt at normalizing a name
 // note: this is unsafe for general use
 function force_normalize(s) {
-	return str_from_cps(ens_tokenize(s).flatMap(token => {
+	return strFromCps(ensTokenize(s).flatMap(token => {
 		switch (token.type) { 
 			case 'ignored': return []; // removes ignored (dangerous)
 			case 'mapped': // applies known mappings 
@@ -176,7 +176,7 @@ console.log(force_normalize('A_B_C')); // "a_b_c"
 // leaves the rest of the string unchanged
 // note: this correctly collapses ".{ignored}."
 function collapse_null_labels(s) {
-	return ens_split(s).filter(x => !x.tokens || x.tokens.length).map(x => str_from_cps(x.input)).join('.');
+	return ensSplit(s).filter(x => !x.tokens || x.tokens.length).map(x => strFromCps(x.input)).join('.');
 }
 
 console.log(collapse_null_labels);
@@ -188,7 +188,7 @@ console.log(collapse_null_labels('....!...eth..')); // "!.eth"
 // filter emoji (optional FE0F)
 // tokenize, filter emoji, reassemble
 function filter_emoji(s) {
-	return str_from_cps(ens_tokenize(s).flatMap(token => {
+	return strFromCps(ensTokenize(s).flatMap(token => {
 		switch (token.type) { 
 			case 'emoji': return []; // ignore
 			case 'nfc': return token.input; // pre-nfc
@@ -207,7 +207,7 @@ console.log(filter_emoji('\u{1F4A9}\uFE0F\uFE0F') == '\uFE0F'); // true
 // ********************************************************************************
 // ascii with emoji removed
 function is_ascii_or_emoji(s) {
-	return ens_split(s).every(x => !x.error && x.tokens.every(cps => cps.is_emoji || cps.every(cp => cp < 0x80)));
+	return ensSplit(s).every(x => !x.error && x.tokens.every(cps => cps.is_emoji || cps.every(cp => cp < 0x80)));
 }
 
 console.log(is_ascii_or_emoji);

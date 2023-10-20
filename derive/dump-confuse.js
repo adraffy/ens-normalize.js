@@ -2,7 +2,7 @@
 // suggestion: if unicode changed, compute this file, then diff against original
 
 import {UNICODE, NF, IDNA, PRINTER} from './unicode-version.js';
-import {compare_arrays, hex_cp} from './utils.js';
+import {compareArrays, hex_cp} from './utils.js';
 
 let confusables = UNICODE.read_confusables();
 let valid_set = new Set(IDNA.valid);
@@ -30,8 +30,8 @@ console.log(`export default [`);
 for (let [target, cps] of confusables) {
 	let nfc = NF.nfc(target);
 	let nfd = NF.nfd(target);
-	let same_nfc = !compare_arrays(target, nfc);
-	let same_nfd = !compare_arrays(target, nfd);
+	let same_nfc = !compareArrays(target, nfc);
+	let same_nfd = !compareArrays(target, nfd);
 	let sameness;
 	if (same_nfc !== same_nfd) {
 		sameness = `NFC(${same_nfc}) NFD(${same_nfd})`;

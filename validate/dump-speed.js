@@ -1,12 +1,12 @@
 import {read_labels} from './data.js';
-import {ens_normalize} from '../src/lib.js';
+import {ensNormalize} from '../src/lib.js';
 
 const LABELS = read_labels();
 
 let t = performance.now();
 for (let label of LABELS) {
 	try {
-		ens_normalize(label);
+		ensNormalize(label);
 	} catch (err) {
 	}
 }

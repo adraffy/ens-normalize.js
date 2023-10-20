@@ -1,13 +1,13 @@
 // distribution of group types in labels
 
 import {read_labels} from './data.js';
-import {ens_split} from '../src/lib.js';
+import {ensSplit} from '../src/lib.js';
 
 const LABELS = read_labels();
 
 let tally = {};
 for (let label of LABELS) {
-	let split = ens_split(label);
+	let split = ensSplit(label);
 	if (split.length != 1) throw new Error('wtf');
 	split = split[0];
 	let type;

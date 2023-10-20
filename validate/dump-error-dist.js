@@ -1,14 +1,14 @@
 // distribution of error types in labels
 
 import {read_labels} from './data.js';
-import {ens_normalize} from '../src/lib.js';
+import {ensNormalize} from '../src/lib.js';
 
 const LABELS = read_labels();
 
 let tally = {};
 for (let label of LABELS) {
 	try {
-		let norm = ens_normalize(label);
+		let norm = ensNormalize(label);
 		if (norm != label) {
 			throw new Error('diff norm');
 		}

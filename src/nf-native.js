@@ -2,10 +2,10 @@
 // replace custom nf implementation with system implementation
 // (saves approximately 6KB)
 
-import {explode_cp, str_from_cps} from './utils.js';
+import {explodeCp, strFromCps} from './utils.js';
 
 function nf(cps, form) {
-	return explode_cp(str_from_cps(cps).normalize(form));
+	return explodeCp(strFromCps(cps).normalize(form));
 }
 
 export function nfc(cps) {

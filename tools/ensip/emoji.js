@@ -1,5 +1,5 @@
 import {readFileSync, writeFileSync} from 'node:fs';
-import {ens_emoji, ens_tokenize} from '../../src/lib.js';
+import {ensEmoji, ensTokenize} from '../../src/lib.js';
 import {tt, hex_cp, fmt_cp} from './utils.js';
 import {
 	EMOJI_DEMOTED,
@@ -12,7 +12,7 @@ const EMOJI_INFO = new Map(JSON.parse(readFileSync(new URL('../../derive/output/
 	return [info.form, info];
 }));
 
-const EMOJI = ens_emoji();
+const EMOJI = ensEmoji();
 
 let lines = [];
 let toc_index = 1;
@@ -54,7 +54,7 @@ for (let cp of EMOJI_DEMOTED.sort((a, b) => a - b)) {
 	let form = String.fromCodePoint(cp);
 	let info = EMOJI_INFO.get(form);
 	let line = `| ${tt(hex_cp(cp))} | ${tt(form)} | ${info.name}`;
-	let [token] = ens_tokenize(form);
+	let [token] = ensTokenize(form);
 	switch (token.type) {
 		case 'mapped': {
 			lines_mapped.push(`${line} | ${tt(String.fromCodePoint(...token.cps))} | ${token.cps.map(fmt_cp).join('<br>')} |`);

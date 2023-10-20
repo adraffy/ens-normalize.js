@@ -3,8 +3,8 @@
 // as it is effectively guaranteed by validate.js
 
 import {UNICODE, PRINTER} from '../derive/unicode-version.js';
-import {explode_cp, hex_seq, print_section} from '../derive/utils.js';
-import {ens_beautify, ens_normalize, ens_tokenize} from '../src/lib.js';
+import {explodeCp, hex_seq, print_section} from '../derive/utils.js';
+import {ensBeautify, ensNormalize, ensTokenize} from '../src/lib.js';
 
 let errors = [];
 let expected = [];
@@ -20,19 +20,19 @@ for (let test of UNICODE.read_emoji_test()) {
 	type_tally[test.type] = (type_tally[test.type]|0) + 1;
 	let form = String.fromCodePoint(...test.cps);
 	try {
-		let norm = ens_normalize(form);
+		let norm = ensNormalize(form);
 		if (test.type === 'fully-qualified') {
-			let nice = ens_beautify(norm);
+			let nice = ensBeautify(norm);
 			if (nice !== form) {
 				// might be forced emoji style
 				// (we put a FE0F on the end but it's not the default)
-				let nice_cps = explode_cp(nice);
-				if (nice_cps[nice_cps.length-1] === 0xFE0F && ens_beautify(String.fromCodePoint(nice_cps.slice(0, -1)))) {
+				let nice_cps = explodeCp(nice);
+				if (nice_cps[nice_cps.length-1] === 0xFE0F && ensBeautify(String.fromCodePoint(nice_cps.slice(0, -1)))) {
 					console.log(`Forced Emoji Presentation: ${form} ${hex_seq(test.cps)} => ${hex_seq(nice_cps)}`);
 					continue;
 				}
 				// might be idna mapped
-				let [token] = ens_tokenize(form);
+				let [token] = ensTokenize(form);
 				if (token.type === 'mapped') {
 					expected.push(`IDNA Mapped: ${PRINTER.desc_for_mapped(token.cp, token.cps)}`);
 					continue;

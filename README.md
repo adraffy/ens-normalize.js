@@ -28,12 +28,12 @@
 	* [Label Database](https://github.com/adraffy/ens-labels/)
 
 ```Javascript
-import {ens_normalize} from '@adraffy/ens-normalize'; // or require()
+import {ensNormalize} from '@adraffy/ens-normalize'; // or require()
 // npm i @adraffy/ens-normalize
 // browser: https://cdn.jsdelivr.net/npm/@adraffy/ens-normalize@latest/dist/index.min.mjs (or .cjs)
 
 // *** ALL errors thrown by this library are safe to print ***
-// - characters are shown as {HEX} if should_escape()
+// - characters are shown as {HEX} if shouldEscape()
 // - potentially different bidi directions inside "quotes"
 // - 200E is used near "quotes" to prevent spillover
 // - an "error type" can be extracted by slicing up to the first (:)
@@ -41,7 +41,7 @@ import {ens_normalize} from '@adraffy/ens-normalize'; // or require()
 // string -> string
 // throws on invalid names
 // output ready for namehash
-let normalized = ens_normalize('RaFFY🚴‍♂️.eTh');
+let normalized = ensNormalize('RaFFY🚴‍♂️.eTh');
 // => "raffy🚴‍♂.eth"
 
 // note: does not enforce .eth registrar 3-character minimum
@@ -49,29 +49,29 @@ let normalized = ens_normalize('RaFFY🚴‍♂️.eTh');
 
 Format names with fully-qualified emoji:
 ```Javascript
-// works like ens_normalize()
+// works like ensNormalize()
 // output ready for display
-let pretty = ens_beautify('1⃣2⃣.eth'); 
+let pretty = ensBeautify('1⃣2⃣.eth'); 
 // => "1️⃣2️⃣.eth"
 
 // note: normalization is unchanged:
-// ens_normalize(ens_beautify(x)) == ens_normalize(x)
+// ensNormalize(ensBeautify(x)) == ensNormalize(x)
 ```
 
 Normalize name fragments for [substring search](./test/fragment.js):
 ```Javascript
-// these fragments fail ens_normalize() 
+// these fragments fail ensNormalize() 
 // but will normalize fine as fragments
-let frag1 = ens_normalize_fragment('AB--');    // expected error: label ext
-let frag2 = ens_normalize_fragment('\u{303}'); // expected error: leading cm
-let frag3 = ens_normalize_fragment('οо');      // expected error: mixture
+let frag1 = ensNormalizeFragment('AB--');    // expected error: label ext
+let frag2 = ensNormalizeFragment('\u{303}'); // expected error: leading cm
+let frag3 = ensNormalizeFragment('οо');      // expected error: mixture
 ```
 
 Input-based tokenization:
 ```Javascript
 // string -> Token[]
 // never throws
-let tokens = ens_tokenize('_R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./');
+let tokens = ensTokenize('_R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./');
 // [
 //     { type: 'valid', cp: [ 95 ] }, // valid (as-is)
 //     {
@@ -104,16 +104,16 @@ let tokens = ens_tokenize('_R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./');
 // ]
 
 // note: if name is normalizable, then:
-// ens_normalize(ens_tokenize(name).map(token => {
+// ensNormalize(ensTokenize(name).map(token => {
 //     ** convert valid/mapped/nfc/stop to string **
-// }).join('')) == ens_normalize(name)
+// }).join('')) == ensNormalize(name)
 ```
 
 Output-based tokenization:
 ```Javascript
 // string -> Label[]
 // never throws
-let labels = ens_split('💩Raffy.eth_');
+let labels = ensSplit('💩Raffy.eth_');
 // [
 //   {
 //     input: [ 128169, 82, 97, 102, 102, 121 ],  
@@ -140,7 +140,7 @@ let labels = ens_split('💩Raffy.eth_');
 Generate a sorted array of supported emoji codepoints:
 ```Javascript
 // () -> number[][]
-let emojis = ens_emoji();
+let emojis = ensEmoji();
 // [
 //     [ 2764 ],
 //     [ 128169, 65039 ],
@@ -152,13 +152,13 @@ let emojis = ens_emoji();
 Determine if a character shouldn't be printed directly:
 ```Javascript
 // number -> bool
-should_escape(0x202E); // eg. RIGHT-TO-LEFT OVERRIDE => true
+shouldEscape(0x202E); // eg. RIGHT-TO-LEFT OVERRIDE => true
 ```
 
 Determine if a character is a combining mark:
 ```Javascript
 // number -> bool
-is_combining_mark(0x20E3); // eg. COMBINING ENCLOSING KEYCAP => true
+isCombiningMark(0x20E3); // eg. COMBINING ENCLOSING KEYCAP => true
 ```
 
 ## Build

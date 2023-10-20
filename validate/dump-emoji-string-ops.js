@@ -3,10 +3,10 @@
 // however they are nice to have when the version is known
 
 import {hex_seq} from '../derive/utils.js';
-import {ens_emoji} from '../src/lib.js';
+import {ensEmoji} from '../src/lib.js';
 
 console.log(`Node: ${process.version} / Unicode: ${process.versions.unicode}`);
-for (let emoji of ens_emoji()) {
+for (let emoji of ensEmoji()) {
 	try {
 		let form = String.fromCodePoint(...emoji);	
 		if (form !== form.toLowerCase()) {

@@ -1,6 +1,6 @@
 // find all valid cp+cm+cm names
 
-import {ens_normalize} from '../src/lib.js';
+import {ensNormalize} from '../src/lib.js';
 import {read_spec} from '../validate/data.js';
 import {writeFileSync} from 'node:fs';
 
@@ -21,7 +21,7 @@ for (let g of groups) {
 			for (let cm2 of valid_cms) {
 				let name = String.fromCodePoint(cp, cm1, cm2);
 				try {
-					let norm = ens_normalize(name);
+					let norm = ensNormalize(name);
 					if ([...norm].length >= 3) {
 						set.add(norm);
 					}

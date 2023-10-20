@@ -276,18 +276,18 @@ footer {
 <footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
 <script type="module">
 import {
-	ens_split, ens_tokenize, ens_emoji,
-	explode_cp, hex_cp, safe_str_from_cps, 
+	ensSplit, ensTokenize, ensEmoji,
+	explodeCp, hex_cp, safe_strFromCps, 
 	dom_from_tokens, use_default_style
 } from '../dist/all.min.js';
 use_default_style();
 
 function is_valid(cp) {
-	return ens_tokenize(String.fromCodePoint(cp)).every(t => t.type === 'valid');
+	return ensTokenize(String.fromCodePoint(cp)).every(t => t.type === 'valid');
 }
 
 // single character emoji
-const EMOJI_SET = new Set(ens_emoji().filter(cps => ens_tokenize(String.fromCodePoint(...cps))[0].cps.length == 1).map(cps => cps[0]));
+const EMOJI_SET = new Set(ensEmoji().filter(cps => ensTokenize(String.fromCodePoint(...cps))[0].cps.length == 1).map(cps => cps[0]));
 
 const input_field = document.querySelector('#input_field');
 const output_div = document.querySelector('#output');
@@ -501,7 +501,7 @@ async function create_grid(input) {
 		cps = Array(1 + hi - lo).fill().map((_, i) => lo + i).filter(is_valid);
 	} else {
 
-		let split = ens_split(input);
+		let split = ensSplit(input);
 		if (split.length != 1) throw new Error('multiple labels');
 		split = split[0];
 		matched_type = split.type;
@@ -509,7 +509,7 @@ async function create_grid(input) {
 		//  otherwise use input
 		cps = split.tokens ? split.tokens.filter(x => !x.is_emoji).flat() : split.input;
 
-		let tokens = ens_tokenize(input, {nf: false});
+		let tokens = ensTokenize(input, {nf: false});
 		exploded_div.innerHTML = '<b>Normalized:</b> ';
 		exploded_div.append(dom_from_tokens(tokens, {
 			emoji_url: './emoji.html#q=%s',
@@ -692,8 +692,8 @@ function add_td_for_cp(tr, cp) {
 
 	let td_info = document.createElement('td');
 	td_info.classList.add('form');
-	td_info.innerText = safe_str_from_cps([cp]);
-	//td_info.append(dom_from_tokens(ens_tokenize(String.fromCodePoint(cp)), {before: true}));
+	td_info.innerText = safe_strFromCps([cp]);
+	//td_info.append(dom_from_tokens(ensTokenize(String.fromCodePoint(cp)), {before: true}));
 	tr.append(td_info);
 
 	let char = char_map.get(cp);

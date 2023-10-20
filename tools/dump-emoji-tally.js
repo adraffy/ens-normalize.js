@@ -7,8 +7,8 @@
 
 import {writeFileSync} from 'node:fs';
 import {read_labels} from '../validate/data.js';
-import {ens_emoji, ens_normalize, ens_tokenize} from '../src/lib.js';
-import {hex_seq, explode_cp} from '../derive/utils.js';
+import {ensEmoji, ensNormalize, ensTokenize} from '../src/lib.js';
+import {hex_seq, explodeCp} from '../derive/utils.js';
 //import {random_sample} from '../src/utils.js';
 
 const MIN_LEN = 3;
@@ -16,7 +16,7 @@ const MAX_LEN = 128;
 
 let labels = read_labels();
 //let labels = JSON.parse(readFileSync(new URL('../../ens-labels/labels.json', import.meta.url)));
-let tally = new Map(ens_emoji().map(cps => {
+let tally = new Map(ensEmoji().map(cps => {
 	let form = String.fromCodePoint(...cps);
 	return [form, {form, names: []}];
 }));
@@ -24,14 +24,14 @@ let some = 0;
 let pure = 0;
 for (let label of labels) {
 	try {
-		let norm = ens_normalize(label);
+		let norm = ensNormalize(label);
 		if (norm !== label) continue; // not norm
 		if ([...norm].length < MIN_LEN) continue; // too short
- 		let tokens = ens_tokenize(label);
+ 		let tokens = ensTokenize(label);
 		if (!tokens.some(t => t.emoji)) continue; // no emoji
 		some++;
 		if (tokens.every(t => t.emoji)) pure++;
-		//label = ens_beautify(label); // make it purdy (2023012: nah, store normalized: ~15% reduction in file size)
+		//label = ensBeautify(label); // make it purdy (2023012: nah, store normalized: ~15% reduction in file size)
 		for (let form of new Set(tokens.filter(t => t.emoji).map(t => String.fromCodePoint(...t.emoji)))) {
 			tally.get(form).names.push(norm); // +1 per unique emoji per name
 		}
@@ -41,7 +41,7 @@ for (let label of labels) {
 
 /*
 for (let [key,x] of tally) {
-	//x.names = x.names.filter(x => [...ens_normalize(x)].length == 4);
+	//x.names = x.names.filter(x => [...ensNormalize(x)].length == 4);
 	x.names = x.names.filter(x => x.startsWith('0x'));
 	if (!x.names.length) {
 		tally.delete(key);
@@ -91,6 +91,6 @@ if (args[0] === 'save') {
 	let max = tally.reduce((a, rec) => Math.max(a, rec.names.length), 0);
 	let count_len = String(max).length;
 	for (let {names, form} of tally) {
-		console.log(String(names.length).padStart(count_len), form, hex_seq(explode_cp(form)));
+		console.log(String(names.length).padStart(count_len), form, hex_seq(explodeCp(form)));
 	}
 }
