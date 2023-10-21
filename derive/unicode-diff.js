@@ -42,6 +42,7 @@ function expand(unicode) {
 		'decompositions',
 		'read_confusables',
 		'read_intentional_confusables',
+		'read_script_kinds',
 
 		// [ignored]
 		//'get_unnamed_cps',

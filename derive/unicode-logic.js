@@ -2,14 +2,6 @@ import {MAX_CP, parse_cp, parse_cp_range, parse_cp_sequence, hex_cp, hex_seq, ex
 import {readFileSync} from 'node:fs';
 import UNPRINTABLES from './unprintables.js';
 
-export function read_excluded_scripts() {
-	 return JSON.parse(readFileSync(new URL('./data/scripts-excluded.json', import.meta.url)));
-}
-
-export function read_limited_scripts() {
-	return JSON.parse(readFileSync(new URL('./data/scripts-limited.json', import.meta.url)));
-}
-
 export const AUGMENTED_ALL = 'ALL';
 
 export const SCRIPT_TYPE_EXCLUDED = 'Excluded';
@@ -199,10 +191,11 @@ export class UnicodeSpec {
 			*/
 		}
 		script0.type = SCRIPT_TYPE_EXCLUDED;		
-		for (let abbr of read_excluded_scripts()) {
+		let {limited_use, excluded} = this.read_script_kinds();
+		for (let abbr of excluded) {
 			this.require_script(abbr).type = SCRIPT_TYPE_EXCLUDED;
 		}
-		for (let abbr of read_limited_scripts()) {
+		for (let abbr of limited_use) {
 			this.require_script(abbr).type = SCRIPT_TYPE_LIMITED_USE;
 		}
 	}
@@ -273,6 +266,9 @@ export class UnicodeSpec {
 		}
 		buf.push(String.fromCodePoint(...cps.slice(prev, n)));
 		return buf.join('');
+	}
+	read_script_kinds() {
+		return JSON.parse(readFileSync(new URL('./script-kinds.json', this.data_dir)));
 	}
 	require_script(abbr) {
 		let script = this.script_map.get(abbr);

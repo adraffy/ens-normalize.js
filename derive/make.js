@@ -822,7 +822,7 @@ for (let g of script_groups) {
 	if (g.cm_whitelisted) {
 		cm = [];
 		for (let [cp, seqs] of g.cm_map) {
-			if (seqs.length == 1 && seqs[0].length == 0) continue; // just a valid char
+			if (seqs.length == 1 && !seqs[0].length) continue; // just a valid char
 			seqs.sort(compare_arrays);
 			cm.push({cp, seqs});
 		}
@@ -845,7 +845,7 @@ print_section('Order Groups');
 script_groups.forEach(g => g.order = (1 + GROUP_ORDER.indexOf(g.name)) || Infinity);
 // sort them
 script_groups.sort((a, b) => {
-	let c = (a.restricted|0) - (b.restricted|0);
+	let c = +a.restricted - +b.restricted;
 	if (c == 0) c = a.order - b.order;
 	return c;
 });

@@ -1,5 +1,6 @@
 import {readFile, writeFile, mkdir} from 'node:fs/promises';
 import {parse_version} from './utils.js';
+import {fetch_UAX31_script_kinds} from './script-kinds.js';
 
 const FILES = [
 	// UCD
@@ -84,20 +85,7 @@ async function download({major, minor, patch}, files) {
 				return [i, Buffer.from(await res.arrayBuffer())];
 			}));
 			let name = urls[i].pathname.split('/').pop();
-			let file = new URL(name, dir);
-			let same;
-			try {
-				if (!Buffer.compare(await readFile(file), buf)) {
-					same = true;
-				}
-			} catch (ignored) {	
-			}
-			if (!same) {
-				changed++;
-				await mkdir(dir, {recursive: true});
-				await writeFile(file, buf);
-			}
-			console.log(`${same ? 'Same' : 'Downloaded'} <${urls[i]}> [${i+1}/${sources.length}]`);
+			await write(name, buf, `<${urls[i]}> [${i+1}/${sources.length}]`);
 		} catch (err) {
 			if (err instanceof AggregateError) {
 				for (let i = 0; i < sources.length; i++) {
@@ -110,10 +98,35 @@ async function download({major, minor, patch}, files) {
 			throw new Error(`Download failed`);
 		}
 	}
+	// 20231023: include excluded/limited/recommended
+	// shitty but these are now versioned with the spec
+	try {
+		let kinds = await fetch_UAX31_script_kinds(version);
+		let name = `script-kinds.json`;
+		await write(name, Buffer.from(JSON.stringify(kinds)), `<${name}>`);
+	} catch (err) {
+		console.log(err);
+		throw new Error(`Download failed`);
+	}
 	console.log(`Changes: ${changed}`);
 	if (changed) {
+		// only bump the version if something changed
 		let file = new URL('./version.json', dir);
 		await writeFile(file, JSON.stringify({version, major, minor, patch, date: new Date()}));	
 		console.log(`Wrote: ${file}`);
+	}
+	async function write(name, buf, desc) {
+		let file = new URL(name, dir);
+		let same;
+		try {
+			same = !Buffer.compare(await readFile(file), buf);
+		} catch (ignored) {	
+		}
+		if (!same) {
+			changed++;
+			await mkdir(dir, {recursive: true});
+			await writeFile(file, buf);
+		}
+		console.log(`${same ? 'Same' : 'Updated'} ${desc}`);
 	}
 }
