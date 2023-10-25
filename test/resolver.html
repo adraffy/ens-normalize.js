@@ -427,7 +427,7 @@ button.copy.copied {
 .tags.elapsed {
 	background: #f0f0f0;
 	font-size: 75%;
-	order: 20;
+	order: 50;
 }
 .tags.normalized { background: #8f8; }
 .tags.length {
@@ -3011,7 +3011,8 @@ async function resolve1(input, skip_norm) {
 	}
 	if (should_stop_resolving()) return;
 	if (resolver) {
-		is_wildcard = await resolver.supportsWildcard();
+		is_wildcard = await resolver.supportsWildcard().catch(() => {});
+		resolver._supportsEip2544 = !!is_wildcard; // ethers fix
 		if (should_stop_resolving()) return;
 		if (is_wildcard) { 
 			// ethers doesn't expose this information
