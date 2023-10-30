@@ -24,8 +24,10 @@
 	* [Emoji Frequency Explorer](https://raffy.antistupid.com/eth/ens-emoji-freq.html)
 	* [ENS+NFT Matcher](https://raffy.antistupid.com/eth/ens-nft-matcher.html)
 	* [Batch Resolver](https://raffy.antistupid.com/eth/ens-batch-resolver.html)
-	* [Punycode Coder](https://adraffy.github.io/punycode.js/test/demo.html)	
-	* [Label Database](https://github.com/adraffy/ens-labels/)
+	* [Label Database](https://github.com/adraffy/ens-labels/) • [Labelhash⁻¹](https://adraffy.github.io/ens-labels/demo.html)
+	* [adraffy/punycode.js](https://github.com/adraffy/punycode.js/) • [Punycode Coder](https://adraffy.github.io/punycode.js/test/demo.html)
+	* [adraffy/keccak.js](https://github.com/adraffy/keccak.js/) • [Keccak Hasher](https://adraffy.github.io/keccak.js/test/demo.html)
+	* [adraffy/emoji.js](https://github.com/adraffy/emoji.js/) • [Emoji Parser](https://adraffy.github.io/emoji.js/test/demo.html)
 
 ```Javascript
 import {ens_normalize} from '@adraffy/ens-normalize'; // or require()

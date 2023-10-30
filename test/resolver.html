@@ -746,7 +746,7 @@ footer span:hover {
 	<div id="provider"></div>
 	<div id="github">
 		<a href="https://github.com/adraffy/ens-normalize.js">adraffy/ens-normalize.js</a>
-		<a href="https://github.com/adraffy/ensip-15/blob/master/ens-improvement-proposals/ensip-15-normalization-standard.md">ENSIP-15</a>
+		<a href="https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard">ENSIP-15</a>
 	</div>
 </header>
 <div id="examples" class="hide">
@@ -1031,7 +1031,10 @@ Hebrew:
 		<button id="random_emoji_btn" title="Random Emoji&#10;[ALT] Only Use Singles">🎲</button>
 		<button id="find_emoji_btn">Emoji</button>
 	</div>
-	<button id="confused_btn">Confused</button>
+	<div class="segmented">
+		<button id="chars_btn" title="Show First/Selected Character">Chars</button>
+		<button id="confused_btn" title="Show Confusable Breakdown">Confused</button>
+	</div>
 	<div class="segmented">
 		<button id="nf_btn">NFD↔NFC</button>
 		<button id="escape_btn" title="[ALT] Unicode Escaped">Escape</button>
@@ -1117,6 +1120,9 @@ const readme_dom = [...output_div.childNodes]; // save initial ux
 const examples_div = document.querySelector('#examples');
 const examples_btn = document.querySelector('#examples_btn');
 const provider_div = document.querySelector('#provider');
+const nf_btn = document.querySelector('#nf_btn');
+const escape_btn = document.querySelector('#escape_btn');
+const parent_btn = document.querySelector('#parent_btn');
 
 const RESOLVE_MODE_IDLE = 'idle';
 const RESOLVE_MODE_EMPTY = 'empty';
@@ -1366,13 +1372,25 @@ document.querySelector('#find_emoji_btn').addEventListener('click', e => {
 	a.target = '_blank';
 	a.click();	
 });
+document.querySelector('#chars_btn').addEventListener('click', e => {
+	let url = './chars.html';
+	let {value, selectionStart, selectionEnd} = input_field;
+	if (selectionEnd > selectionStart) {
+		value = value.slice(selectionStart);
+	}
+	value = replace_escapes(value);
+	if (value) url += `#${value.codePointAt(0).toString(16)}`;
+	let a = create_link(url);
+	a.target = '_blank';
+	a.click();
+});
 document.querySelector('#confused_btn').addEventListener('click', e => {
 	let s = input_field.value;
 	let a = create_link(`./confused.html#${encode_uri_component_surrogate_escaped(s.replaceAll('.', ''))}`);
 	a.target = '_blank';
 	a.click();
 });
-document.querySelector('#nf_btn').addEventListener('click', () => {
+nf_btn.addEventListener('click', () => {
 	let s0 = input_field.value;
 	let s1 = replace_escapes(s0);
 	let s2 = apply_escapes(str_from_cps(nfd(explode_cp(s1))));
@@ -1381,13 +1399,13 @@ document.querySelector('#nf_btn').addEventListener('click', () => {
 	input_field.value = s0 == s2 ? s3 : s2;
 	resolve();
 });
-document.querySelector('#parent_btn').addEventListener('click', e => {
+parent_btn.addEventListener('click', e => {
 	let name = input_field.value;
 	let pos = name.indexOf('.');
 	input_field.value = pos >= 0 ? name.slice(pos+1) : '';
 	resolve();
 });
-document.querySelector('#escape_btn').addEventListener('click', e => {
+escape_btn.addEventListener('click', e => {
 	let s0 = input_field.value;
 	let s1 = replace_escapes(s0);
 	let s2 = apply_escapes(s1, undefined, e.altKey);
@@ -1620,6 +1638,9 @@ function parse() {
 	update_title();	
 	let input = input_field.value;
 	let skip = skip_norm_check.checked;
+	nf_btn.disabled = !input;
+	escape_btn.disabled = !input;
+	parent_btn.disabled = !input;	
 	if (!input) {
 		stop_resolving();
 		output_div.innerHTML = '';
@@ -1953,9 +1974,11 @@ function create_copy_btn(raw, {explode} = {}) {
 		} else if (e.shiftKey) {
 			copy = entity_escape(copy);
 		} 
+		const cls = 'copied';
+		document.querySelectorAll(`.${cls}`).forEach(x => x.classList.remove(cls));
 		navigator.clipboard.writeText(copy);
-		btn.classList.add('copied');
-		setTimeout(() => btn.classList.remove('copied'), 2000);
+		btn.classList.add(cls);
+		setTimeout(() => btn.classList.remove(cls), 2000);
 	});
 	btn.classList.add('copy');
 	btn.title = raw;
@@ -3011,8 +3034,10 @@ async function resolve1(input, skip_norm) {
 	}
 	if (should_stop_resolving()) return;
 	if (resolver) {
-		is_wildcard = await resolver.supportsWildcard().catch(() => {});
-		resolver._supportsEip2544 = !!is_wildcard; // ethers fix
+		try {
+			is_wildcard = await resolver.supportsWildcard(); // this can throw
+		} catch (err) {
+		}
 		if (should_stop_resolving()) return;
 		if (is_wildcard) { 
 			// ethers doesn't expose this information
