@@ -25,7 +25,7 @@
 * [CLDR data files](https://github.com/unicode-org/cldr)
 	* Download Latest: `node parse-cldr.js`
 	* To download older version: `node parse-cldr.js 42` 
-	* Already included: [CLDR 43.1](./data/CLDR-43.1/)
+	* Already included: [CLDR 42-44](./data/)
 	* Warning: versioned separately from Unicode!
 
 ## Instructions

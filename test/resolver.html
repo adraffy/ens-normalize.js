@@ -1032,8 +1032,8 @@ Hebrew:
 		<button id="find_emoji_btn">Emoji</button>
 	</div>
 	<div class="segmented">
-		<button id="chars_btn" title="Show First/Selected Character">Chars</button>
-		<button id="confused_btn" title="Show Confusable Breakdown">Confused</button>
+		<button id="chars_btn" title="Lookup First/Selected Character">Chars</button>
+		<button id="confused_btn" title="Explain Confusable Characters">Confused</button>
 	</div>
 	<div class="segmented">
 		<button id="nf_btn">NFD↔NFC</button>
@@ -1071,7 +1071,7 @@ Hebrew:
 <li><a class="internal" href="./confused.html">Confused Explainer</a></li>
 <li><a class="internal" href="./validate.html">Validation Test</a></li>
 <li><a class="internal" href="./report-nf.html">Unicode NormalizationTest</a></li>
-<li><a href="../../ens-norm-tests/test-breakdown/output/">ENSIP-1→15 Breakdown</a></li>
+<li><a href="../../ens-norm-tests/test-breakdown/output-20230226/">ENSIP-1→15 Breakdown</a></li>
 <li><a href="../../ens-labels/demo.html">Labelhash⁻¹</a></li>
 <li><a href="https://github.com/adraffy/ens-labels/">Label Database</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-regs.html">Recent Registrations</a></li>
@@ -1366,7 +1366,12 @@ document.querySelector('#random_emoji_btn').addEventListener('click', e => {
 });
 document.querySelector('#find_emoji_btn').addEventListener('click', e => {
 	let url = './emoji.html';
-	let token = ens_tokenize(input_field.value).find(x => x.emoji);
+	let {value, selectionStart, selectionEnd} = input_field;
+	if (selectionEnd > selectionStart) {
+		value = value.slice(selectionStart);
+	}
+	value = replace_escapes(value);
+	let token = ens_tokenize(value).find(x => x.emoji);
 	if (token) url += `#q=${encodeURIComponent(String.fromCodePoint(...token.cps))}`;
 	let a = create_link(url);
 	a.target = '_blank';
@@ -1424,23 +1429,23 @@ document.querySelector('#copy_example_btn').addEventListener('click', () => {
 	navigator.clipboard.writeText(url);
 });
 auto_resolve_check.addEventListener('input', () => {
-	localStorage[STORAGE_AUTO_RESOLVE] = !!auto_resolve_check.checked;	
+	localStorage[STORAGE_AUTO_RESOLVE] = auto_resolve_check.checked;	
 	if (auto_resolve_check.checked && input_field.value) {
 		resolve();
 	}
 });
 show_details_check.addEventListener('input', () => {	
-	localStorage[STORAGE_SHOW_DETAILS] = !!show_details_check.checked;	
+	localStorage[STORAGE_SHOW_DETAILS] = show_details_check.checked;	
 	for (let el of document.querySelectorAll('.detailed')) {
 		el.classList.toggle('hide', !show_details_check.checked);
 	}
 });
 show_components_check.addEventListener('input', () => {
-	localStorage[STORAGE_SHOW_COMPONENTS] = !!show_components_check.checked;
+	localStorage[STORAGE_SHOW_COMPONENTS] = show_components_check.checked;
 	update_exploded();
 });
 force_ltr_check.addEventListener('input', () => {
-	localStorage[STORAGE_FORCE_LTR] = !!force_ltr_check.checked;
+	localStorage[STORAGE_FORCE_LTR] = force_ltr_check.checked;
 	sync_force_ltr();
 });
 force_mainnet_check.addEventListener('input', async () => {
@@ -2031,12 +2036,17 @@ function create_pretty_tag() {
 }
 function upgrade_split_type(info) {
 	info.restricted = info.type.startsWith('Restricted[');
-	if (info.type !== 'Latin') return;
-	let cps = info.tokens.flatMap(x => x.is_emoji ? [] : x);
-	if (cps.every(cp => cp < 0x80)) {
-		info.type = 'ASCII';	
-	} else if (/[ąçęşìíîïǐł]/u.test(str_from_cps(cps))) { // TODO: formalize this logic in ens-normalize
-		info.rare_latin = true;
+	if (info.type === 'Latin') {
+		let cps = info.tokens.flatMap(x => x.is_emoji ? [] : x); // ascii+emoji
+		if (cps.every(cp => cp < 0x80)) {
+			info.type = 'ASCII';
+		} else if (/[ąçęşìíîïǐł]/u.test(str_from_cps(cps))) { // TODO: formalize this logic in ens-normalize
+			info.confusing = 'latin';
+		}
+	} else if (info.type === 'ASCII') {
+		if (/^0x[0-9a-f]{18,}$/i.test(str_from_cps(info.output))) {
+			info.confusing = 'address';
+		}
 	}
 }
 
@@ -2046,14 +2056,15 @@ function make_normalized(row, name) {
 	span.title = 'Normalized Form';
 	span.innerHTML = `✅️`; 
 	let split = ens_split(name);
-	if (split.every(x => x.type === 'ASCII')) {
+	let pure_ascii = split.every(x => x.type === 'ASCII');
+	split.forEach(upgrade_split_type);
+	if (pure_ascii) {
 		span.classList.add('clean');
 	} else {
 		span.classList.add('normalized');
 		if (split.every(x => x.type === 'Emoji')) {
 			span.innerHTML += ` Emoji`; 
 		} else {
-			split.forEach(upgrade_split_type);
 			let types = new Set(split.map(x => x.type));
 			if (types.has('Latin') && types.has('ASCII')) types.delete('ASCII');
 			types.delete('Emoji');
@@ -2061,19 +2072,19 @@ function make_normalized(row, name) {
 				types.add('Emoji');
 			}
 			span.innerHTML += ` ${[...types].sort().join('+')}`;
-			if (split.some(x => x.rare_latin)) { //|| x.restricted)) {
-				let span = document.createElement('span');
-				span.innerHTML = 'Possibly<br>Confusing';
-				span.style.cssText = `
-					color: #fff;
-					background-color: #d47;
-					margin: -8px 0;
-					text-align: center;
-					font-size: 75%;
-				`;
-				add_row_tag(row, span);
-			}
 		}
+	}
+	if (split.some(x => x.confusing)) {
+		let span = document.createElement('span');
+		span.innerHTML = 'Possibly<br>Confusing';
+		span.style.cssText = `
+			color: #fff;
+			background-color: #d47;
+			margin: -8px 0;
+			text-align: center;
+			font-size: 75%;
+		`;
+		add_row_tag(row, span);
 	}
 	add_row_tag(row, span);	
 }
@@ -2487,7 +2498,7 @@ function create_details_row(name, before) {
 					if (info.emoji && info.type !== 'Emoji') {
 						span.innerHTML += '+';
 					}
-					if (info.rare_latin) {
+					if (info.confusing) {
 						span.style.color = '#d47';
 					}
 					label_div.append(span);
@@ -3117,6 +3128,11 @@ async function resolve1(input, skip_norm) {
 					if (should_stop_resolving()) return;
 					premium = await price_oracle_contract.callStatic.premium(eth_label, expiry, 0);
 				}
+				let span = document.createElement('span');
+				span.classList.add('tag');
+				span.innerHTML = `Grace: ${format_dur(nft_contract.grace_period)}`;
+				span.style.order = 40;
+				add_row_tag(avail_row, span);
 			}
 		} catch (err) {
 			avail_err = err;

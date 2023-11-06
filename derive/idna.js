@@ -2,6 +2,8 @@ export function ens_idna_rules(unicode) {
 	return unicode.derive_idna_rules({
 		// because 2008 makes emoji invalid
 		// question: does anyone use 2008?
+		// 20231103: whatwg uses compat
+		// https://url.spec.whatwg.org/#idna
 		version: 2003, 
 		
 		// https://github.com/ethereum/EIPs/blob/master/EIPS/eip-137.md

@@ -7,7 +7,7 @@
 		* C# — [adraffy/ENSNormalize.cs](https://github.com/adraffy/ENSNormalize.cs)
 		* Java — [adraffy/ENSNormalize.java](https://github.com/adraffy/ENSNormalize.java)
 		* Javascript — [ensdomains/eth-ens-namehash](https://github.com/ensdomains/eth-ens-namehash)
-	* [Breakdown Reports from ENSIP-1](https://adraffy.github.io/ens-norm-tests/test-breakdown/output/)	
+	* [Breakdown Reports from ENSIP-1](https://adraffy.github.io/ens-norm-tests/test-breakdown/output-20230226/)	
 * ✅️ Passes **100%** [ENSIP-15 Validation Tests](https://adraffy.github.io/ens-normalize.js/test/validate.html)
 * ✅️ Passes **100%** [Unicode Normalization Tests](https://adraffy.github.io/ens-normalize.js/test/report-nf.html)
 * Minified File Sizes: 

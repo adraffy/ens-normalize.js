@@ -14,7 +14,8 @@ let valid = new Set(groups.flatMap(g => [...g.primary, ...g.secondary]));
 
 let tally = [];
 
-let valid_parts = new Set([...valid, NF.nfd(valid)].flat(Infinity));
+let all_inner = new Set();
+let valid_parts = new Set([...valid, ...NF.nfd(valid)]);
 for (let cp0 of valid) {
 	let parts = NF.inner_parts(cp0);
 	while (tally.length <= parts.length) tally.push(0);
@@ -22,12 +23,14 @@ for (let cp0 of valid) {
 	if (!parts.length) continue;
 	console.log(`${PRINTER.desc_for_cp(cp0)} (${parts.length})`);
 	for (let cp of parts) {
+		all_inner.add(cp);
 		console.log(`    ${PRINTER.desc_for_cp(cp)}`);
 		if (!valid_parts.has(cp)) {
 			throw new Error('missing part');
 		}
 	}
 }
+console.log(`Total: ${all_inner.size}`);
 
 console.log();
 print_section('Length Distribution');
@@ -39,6 +42,7 @@ function debug(cp) {
 	console.log(`  NFC: ${PRINTER.desc_for_cps(NF.nfc([cp]))}`);
 	console.log(`  NFD: ${PRINTER.desc_for_cps(NF.nfd([cp]))}`);
 	console.log(`Parts: ${PRINTER.desc_for_cps(NF.inner_parts(cp))}`);
+	console.log();
 }
 
 console.log();
