@@ -430,6 +430,11 @@ button.copy.copied {
 	order: 50;
 }
 .tags.normalized { background: #8f8; }
+.tags.normalized.ascii {
+	background: #00f;
+	color: #fff;
+	font-family: monospace;
+}
 .tags.length {
 	background: #f8eedd;
 }
@@ -1080,6 +1085,7 @@ Hebrew:
 <li><a href="../../keccak.js/test/demo.html">Keccak Hasher</a></li>
 <li><a href="../../punycode.js/test/demo.html">Punycode Coder</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-batch-resolver.html">Batch Resolver</a></li>
+<li><a href="https://raffy.antistupid.com/eth/ens-exp.html">Expirations</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-nft-matcher.html">ENS+NFT Matcher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/emoji-pixels.html">Emoji Pixel Maker</a></li>
 </ul>
@@ -2055,13 +2061,17 @@ function make_normalized(row, name) {
 	let span = document.createElement('span');
 	span.title = 'Normalized Form';
 	span.innerHTML = `✅️`; 
+	span.classList.add('normalized');
 	let split = ens_split(name);
+	if (split.length > 1 && split[split.length-1].type === 'ASCII') {
+		split.pop(); // remove ASCII TLD
+	}
 	let pure_ascii = split.every(x => x.type === 'ASCII');
 	split.forEach(upgrade_split_type);
 	if (pure_ascii) {
-		span.classList.add('clean');
+		span.classList.add('ascii');
+		span.innerHTML += ` ASCII`; 
 	} else {
-		span.classList.add('normalized');
 		if (split.every(x => x.type === 'Emoji')) {
 			span.innerHTML += ` Emoji`; 
 		} else {
@@ -3128,11 +3138,6 @@ async function resolve1(input, skip_norm) {
 					if (should_stop_resolving()) return;
 					premium = await price_oracle_contract.callStatic.premium(eth_label, expiry, 0);
 				}
-				let span = document.createElement('span');
-				span.classList.add('tag');
-				span.innerHTML = `Grace: ${format_dur(nft_contract.grace_period)}`;
-				span.style.order = 40;
-				add_row_tag(avail_row, span);
 			}
 		} catch (err) {
 			avail_err = err;
@@ -3179,6 +3184,11 @@ async function resolve1(input, skip_norm) {
 				}
 			}
 		}
+		if (nft_contract) {
+			let span = avail_row.querySelector('.row-label');
+			span.title = `Grace: ${format_dur(nft_contract.grace_period)}\nPremium: ${format_dur(price_oracle_contract.premium_period)}`;
+		}
+		
 		//add_row_tag(avail_row, create_etherscan_address_link(price_oracle_contract.address, {title: 'Price Oracle', contract: true}));
 	} else if (nft_backed) {
 		let label = name_norm.slice(0, sep_pos);		
@@ -3636,7 +3646,7 @@ function contract_for_price_oracle(address) {
 	price1 = BitShiftRight[price0, totalDays]
 	dur = 1814400;  // t /. First@Solve[price0*(1/2)^(t/86400) == price1, t, Reals]
 	*/
-	contract.premium_period = 1814400; // 21*86400;
+	contract.premium_period = 1814400000; // 21*86400*1000;
 	return contract;
 }
 async function ensure_wrapper() {
