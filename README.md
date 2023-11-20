@@ -20,7 +20,8 @@
 	* [Character Viewer](https://adraffy.github.io/ens-normalize.js/test/chars.html)
 	* [Confused Explainer](https://adraffy.github.io/ens-normalize.js/test/confused.html)
 * Related Projects:
-	* [Recent Registrations](https://raffy.antistupid.com/eth/ens-regs.html)
+	* [Recent .eth Registrations](https://raffy.antistupid.com/eth/ens-regs.html)
+	* [.eth Expirations](https://raffy.antistupid.com/eth/ens-exp.html)
 	* [Emoji Frequency Explorer](https://raffy.antistupid.com/eth/ens-emoji-freq.html)
 	* [ENS+NFT Matcher](https://raffy.antistupid.com/eth/ens-nft-matcher.html)
 	* [Batch Resolver](https://raffy.antistupid.com/eth/ens-batch-resolver.html)

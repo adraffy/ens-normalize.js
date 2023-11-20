@@ -1033,8 +1033,8 @@ Hebrew:
 	<div class="spinner"></div>
 	<div class="balloon"></div>
 	<div class="segmented">
-		<button id="random_emoji_btn" title="Random Emoji&#10;[ALT] Only Use Singles">🎲</button>
 		<button id="find_emoji_btn">Emoji</button>
+		<button id="random_emoji_btn" title="Random Emoji&#10;[ALT] Only Use Singles">🎲</button>
 	</div>
 	<div class="segmented">
 		<button id="chars_btn" title="Lookup First/Selected Character">Chars</button>
@@ -2706,6 +2706,7 @@ function resolve() {
 				let {data: {domains}} = await res.json();
 				if (!domains.length) throw new Error(`Unknown labelhash preimage: ${hash}`);
 				let label = domains[0].labelName;
+				if (!label) throw new Error(`Unknown labelhash preimage: ${hash}`);
 				let hash0 = labelhash(label);
 				if (hash0 !== hash) throw new Error(`Incorrect labelhash preimage: "${label}")\n\nExpected: ${hash}\nComputed: ${hash}`);
 				input_field.value = `${label}.eth`;
