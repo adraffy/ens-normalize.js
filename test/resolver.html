@@ -1033,8 +1033,8 @@ Hebrew:
 	<div class="spinner"></div>
 	<div class="balloon"></div>
 	<div class="segmented">
-		<button id="find_emoji_btn">Emoji</button>
 		<button id="random_emoji_btn" title="Random Emoji&#10;[ALT] Only Use Singles">🎲</button>
+		<button id="find_emoji_btn">Emoji</button>
 	</div>
 	<div class="segmented">
 		<button id="chars_btn" title="Lookup First/Selected Character">Chars</button>
@@ -3189,7 +3189,6 @@ async function resolve1(input, skip_norm) {
 			let span = avail_row.querySelector('.row-label');
 			span.title = `Grace: ${format_dur(nft_contract.grace_period)}\nPremium: ${format_dur(price_oracle_contract.premium_period)}`;
 		}
-		
 		//add_row_tag(avail_row, create_etherscan_address_link(price_oracle_contract.address, {title: 'Price Oracle', contract: true}));
 	} else if (nft_backed) {
 		let label = name_norm.slice(0, sep_pos);		
@@ -3244,7 +3243,7 @@ async function resolve1(input, skip_norm) {
 	
 	// get the owner
 	let is_wrapped, owner, nft_owner;
-	if (!is_wildcard || wildcard_domain === name_norm) {
+	if (resolver && (!nft_backed || available === false) && (!is_wildcard || wildcard_domain === name_norm)) {
 		let node = namehash(name_norm);
 		let wrapped_err;
 		let wrapped_row = create_row('Wrapper', true);
@@ -3376,12 +3375,24 @@ async function resolve1(input, skip_norm) {
 					await ensure_eth_nft();
 					nft_owner = await nft_contract.callStatic.ownerOf(nft_token);
 					if (is_null_hex(nft_owner)) nft_owner = false;
-				} catch (err) {				
+				} catch (err) {
 				}
 				if (should_stop_resolving()) return;
 				if (nft_owner && nft_owner !== owner) {
 					owner_row.querySelector('.row-label').innerText = 'Manager:';
-					nft_row.append(create_etherscan_address_link(nft_owner));
+					let a = create_etherscan_address_link(nft_owner);
+					nft_row.append(a);
+					try {
+						let norm = await get_safe_primary(nft_owner, owner);
+						if (should_stop_resolving()) return;
+						if (norm.endsWith('.' + name_norm)) { // proper subdomain
+							nft_owner = norm; // swap
+							let sub = norm.slice(0, -(name_norm.length + 1));
+							a.innerHTML = `<b>${ens_beautify(sub)}</b>.${ens_beautify(name_norm)}`;
+							add_row_tag(nft_row, create_typed_tag('good', 'Subdomain'));
+						}
+					} catch (err) {
+					}
 					add_row_tag(nft_row, create_copy_btn(nft_owner));
 					if (owner !== input) {
 						add_row_tag(nft_row, create_resolve_btn(nft_owner));
@@ -3447,6 +3458,7 @@ async function resolve1(input, skip_norm) {
 				add_row_tag(row, create_typed_tag('warn', err));
 			}
 		}
+		if (should_stop_resolving()) return;
 		if (discovered.size) {
 			remove_temporary(row);
 			add_row_tag(row, create_elapsed()); 
@@ -3454,7 +3466,6 @@ async function resolve1(input, skip_norm) {
 			row.remove();
 			NOT_IFACE_RESOLVER.add(resolver.address);
 		}
-		if (should_stop_resolving()) return;
 	}
 
 	// add address
@@ -3647,7 +3658,7 @@ function contract_for_price_oracle(address) {
 	price1 = BitShiftRight[price0, totalDays]
 	dur = 1814400;  // t /. First@Solve[price0*(1/2)^(t/86400) == price1, t, Reals]
 	*/
-	contract.premium_period = 1814400000; // 21*86400*1000;
+	contract.premium_period = 21*86400*1000;
 	return contract;
 }
 async function ensure_wrapper() {
@@ -3681,11 +3692,41 @@ async function ensure_eth_nft() {
 		'function ownerOf(uint256 id) external view returns (address)',
 		'function GRACE_PERIOD() external view returns (uint256)',
 	], active_provider);
-	const DAY = 86400000;
-	eth_nft_contract.grace_period = (await eth_nft_contract.callStatic.GRACE_PERIOD().then(x => 1000 * x.toNumber()).catch(() => DAY * 90));
+	eth_nft_contract.grace_period = (await eth_nft_contract.callStatic.GRACE_PERIOD().then(x => 1000 * x.toNumber()).catch(() => 90*86400*1000));
 	eth_nft_contract.warning_period = Math.round(eth_nft_contract.grace_period / 2); // when to show warning in interface
 	eth_controller_contract = contract_for_controller(await eth_resolver_contract.get_interface(IFACE_ETH_CONTROLLER));
 	price_oracle_contract = contract_for_price_oracle(await eth_controller_contract.callStatic.prices());
+}
+async function get_safe_primary(owner, alt_owner) {
+	// return normalized primary if resolve(reverse(owner)) is owner or alt_owner
+	let rev_name = reverse_name(owner);
+	let rev_node = namehash(rev_name);
+	let rev_resolver = await registry_contract.callStatic.resolver(rev_node);
+	if (!rev_resolver || is_null_hex(rev_resolver)) {
+		throw new Error('Primary not set');
+	}
+	let contract = new ethers.Contract(rev_resolver, [
+		`function name(bytes32 node) view returns (string)`
+	], active_provider);	
+	let primary = await contract.callStatic.name(rev_node);
+	if (!primary) {
+		throw new Error('Primary is Null');
+	}
+	let name = ens_normalize(primary);
+	let resolver = await active_provider.getResolver(name);
+	if (!resolver) {
+		throw new Error('Resolver not set');
+	}
+	let address = await resolver.getAddress();
+	if (!address || is_null_hex(address)) {
+		throw new Error('Address not set');
+	}
+	if (owner.localeCompare(address, undefined, {sensitivity: 'base'})) {
+		if (!alt_owner || alt_owner.localeCompare(address, undefined, {sensitivity: 'base'})) {
+			throw new Error(`Address mismatch`);
+		}
+	}
+	return name;
 }
 
 function is_checksum_address(s) {
