@@ -1196,9 +1196,9 @@ const IFACE_ETH_CONTROLLER = '0x612e8c09';
 const location0 = new URL(window.location.href);
 const entity_span = document.createElement('span');
 
-let infura_provider = new ethers.providers.WebSocketProvider('wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe');
-let active_provider = infura_provider;
+let infura_provider;
 let window_provider;
+let active_provider;
 let active_chain; // = CHAINS[0];
 let registry_contract;
 let eth_resolver_contract;
@@ -1481,14 +1481,16 @@ if (window.ethereum) {
 	let p = ethereum;
 	if (Array.isArray(ethereum.providers)) p = ethereum.providers[0]; // fix scuffed multi-provider
 	window_provider = new ethers.providers.Web3Provider(p, 'any');
+	let timer = setTimeout(update_network, 100); // avoid creating infura connection if possible
+	window_provider.once('network', () => clearTimeout(timer));
 	window_provider.on('network', update_network);
 	ethereum.on('connect', async () => update_network(await window_provider.getNetwork()));
 	ethereum.on('disconnect', () => update_network());
 } else {
 	force_mainnet_check.checked = false;
 	force_mainnet_check.classList.add('hide');
+	update_network();
 }
-update_network();
 
 sync_examples();
 sync_force_ltr();
@@ -1523,7 +1525,7 @@ async function switch_to_network(id) {
 function update_network(network) {
 	let chain0 = active_chain;
 	active_chain = CHAINS[0];
-	active_provider = infura_provider;
+	active_provider = null;
 	let window_online = window_provider && window_provider.provider.isConnected();
 	let registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
 	if (network && window_online) {
@@ -1537,6 +1539,17 @@ function update_network(network) {
 				network.ensAddress = registry; // force it into ethers
 			}
 		}
+	}
+	if (active_provider) {
+		if (infura_provider) {
+			infura_provider.destroy();
+			infura_provider = null;
+		}
+	} else {
+		if (!infura_provider) {
+			infura_provider = new ethers.providers.WebSocketProvider('wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe');
+		}
+		active_provider = infura_provider;
 	}
 	let using_window = active_provider === window_provider;
 	let provider_name = using_window ? 'window.ethereum' : 'Infura';
