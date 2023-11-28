@@ -1196,7 +1196,7 @@ const IFACE_ETH_CONTROLLER = '0x612e8c09';
 const location0 = new URL(window.location.href);
 const entity_span = document.createElement('span');
 
-let infura_provider;
+let infura_provider = new ethers.providers.InfuraProvider(CHAIN_ID_MAINNET, 'f36f6a8638134ac09f9400d3a7008dfe');
 let window_provider;
 let active_provider;
 let active_chain; // = CHAINS[0];
@@ -1525,7 +1525,7 @@ async function switch_to_network(id) {
 function update_network(network) {
 	let chain0 = active_chain;
 	active_chain = CHAINS[0];
-	active_provider = null;
+	active_provider = infura_provider;
 	let window_online = window_provider && window_provider.provider.isConnected();
 	let registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
 	if (network && window_online) {
@@ -1540,17 +1540,17 @@ function update_network(network) {
 			}
 		}
 	}
-	if (active_provider) {
-		if (infura_provider) {
-			infura_provider.destroy();
-			infura_provider = null;
-		}
-	} else {
-		if (!infura_provider) {
-			infura_provider = new ethers.providers.InfuraProvider(1, 'f36f6a8638134ac09f9400d3a7008dfe');
-		}
-		active_provider = infura_provider;
-	}
+	// if (active_provider) {
+	// 	if (infura_provider) {
+	// 		infura_provider.destroy();
+	// 		infura_provider = null;
+	// 	}
+	// } else {
+	// 	if (!infura_provider) {
+	// 		infura_provider = new ethers.providers.InfuraProvider(1, 'f36f6a8638134ac09f9400d3a7008dfe');
+	// 	}
+	// 	active_provider = infura_provider;
+	// }
 	let using_window = active_provider === window_provider;
 	let provider_name = using_window ? 'window.ethereum' : 'Infura';
 	document.body.classList.toggle('testnet', !active_chain.is_mainnet);	
