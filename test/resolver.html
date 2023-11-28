@@ -1547,7 +1547,8 @@ function update_network(network) {
 		}
 	} else {
 		if (!infura_provider) {
-			infura_provider = new ethers.providers.WebSocketProvider('wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe');
+			//infura_provider = new ethers.providers.WebSocketProvider('wss://mainnet.infura.io/ws/v3/f36f6a8638134ac09f9400d3a7008dfe');
+			infura_provider = new ethers.providers.JsonRpcProvider('https://mainnet.infura.io/v3/f36f6a8638134ac09f9400d3a7008dfe', 1);
 		}
 		active_provider = infura_provider;
 	}
