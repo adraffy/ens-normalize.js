@@ -2812,6 +2812,7 @@ async function resolve1(input, skip_norm) {
 		input_row.append(create_etherscan_address_link(input));
 		add_row_tag(input_row, create_copy_btn(input));
 		add_row_tag(input_row, create_reverse_resolve_btn(input));
+		add_owner_links(input_row, input);
 
 		// doesn't give enough information
 		// primary = await active_provider.lookupAddress(input);
@@ -2845,7 +2846,7 @@ async function resolve1(input, skip_norm) {
 			last_err = err;
 		} 
 		if (should_stop_resolving()) return;
-		remove_temporary(resolver_row);
+		remove_temporary(resolver_row);	
 		add_row_tag(resolver_row, create_elapsed());
 
 		try {
@@ -3377,6 +3378,7 @@ async function resolve1(input, skip_norm) {
 			}
 			if (owner !== input) {
 				add_row_tag(owner_row, create_resolve_btn(owner));
+				add_owner_links(owner_row, owner);
 			}
 			if (active_chain.is_mainnet && parent_domain === 'art') {
 				add_row_tag(avail_row, create_link(`https://protocol.art/account/${owner}`, 'Configure', 'external'));
@@ -3403,6 +3405,9 @@ async function resolve1(input, skip_norm) {
 							let sub = norm.slice(0, -(name_norm.length + 1));
 							a.innerHTML = `<b>${ens_beautify(sub)}</b>.${ens_beautify(name_norm)}`;
 							add_row_tag(nft_row, create_typed_tag('good', 'Subdomain'));
+						} else {
+							a.innerHTML = ens_beautify(norm);
+							add_row_tag(nft_row, create_typed_tag('good', 'Owned'));
 						}
 					} catch (err) {
 					}
@@ -3410,6 +3415,7 @@ async function resolve1(input, skip_norm) {
 					if (owner !== input) {
 						add_row_tag(nft_row, create_resolve_btn(nft_owner));
 					}
+					add_owner_links(nft_row, nft_owner);
 					add_row_tag(nft_row, create_elapsed());
 					remove_temporary(nft_row);
 					nft_row.classList.toggle('old', !!available);
@@ -3536,11 +3542,12 @@ async function resolve1(input, skip_norm) {
 						//add_row_tag(address_row, create_typed_tag('warn', 'Not Owner'));	
 						add_row_tag(address_row, create_typed_tag('fail', 'Owner'));	
 					}
+					add_owner_links(address_row, address);
 				}
 				// mainnet urls regardless of active_chain
-				add_row_tag(address_row, create_link(`https://opensea.io/${address}?tab=collected`, OPENSEA_NAME, 'external'));
-				add_row_tag(address_row, create_link(`https://ens.vision/0x/${address}`, VISION_NAME, 'external'));	
-				add_row_tag(address_row, create_link(`https://rainbow.me/${address}`, 'Rainbow', 'external'));
+				//add_row_tag(address_row, create_link(`https://opensea.io/${address}?tab=collected`, OPENSEA_NAME, 'external'));
+				//add_row_tag(address_row, create_link(`https://ens.vision/0x/${address}`, VISION_NAME, 'external'));	
+				//add_row_tag(address_row, create_link(`https://rainbow.me/${address}`, 'Rainbow', 'external'));
 			}
 		}
 		add_row_tag(address_row, create_elapsed());	
@@ -3631,6 +3638,13 @@ async function resolve1(input, skip_norm) {
 			add_row_tag(normed_row, create_typed_tag('good', 'Primary'));
 		}
 	}
+}
+
+function add_owner_links(row, owner) {	
+	add_row_tag(row, create_link(`${active_chain.is_mainnet ? 'https://opensea.io/' : 'https://testnets.opensea.io/'}${owner}?tab=collected`, OPENSEA_NAME, 'external'));
+	if (!active_chain.is_mainnet) return;
+	add_row_tag(row, create_link(`https://ens.vision/0x/${owner}`, VISION_NAME, 'external'));	
+	add_row_tag(row, create_link(`https://rainbow.me/${owner}`, 'Rainbow', 'external'));
 }
 
 async function ensure_eth_resolver() {
