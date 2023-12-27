@@ -208,6 +208,11 @@ export function use_default_style() {
 		background: #333;
 		border-color: #333;
 	}
+	.tokens [data-tld="box"].valid {
+		color: #fff;
+		background: #666;
+		border-color: #666;
+	}
 	.tokens [data-tld="com"].valid,
 	.tokens [data-tld="net"].valid,
 	.tokens [data-tld="org"].valid,

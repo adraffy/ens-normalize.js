@@ -52,7 +52,14 @@ for (let [key,x] of tally) {
 tally = [...tally.values()].sort((a, b) => b.names.length - a.names.length);
 
 let args = process.argv.slice(2);
-if (args[0] === 'save') {	
+if (args[0] === 'debug') {	
+	console.log(new Date().toJSON());
+	let max = tally.reduce((a, rec) => Math.max(a, rec.names.length), 0);
+	let count_len = String(max).length;
+	for (let {names, form} of tally) {
+		console.log(String(names.length).padStart(count_len), form, hex_seq(explode_cp(form)));
+	}
+} else {
 	for (let x of tally) {
 		// sort by length and then lexical
 		x.sample = x.names.filter(x => [...x].length <= MAX_LEN).sort((a, b) => {
@@ -86,11 +93,4 @@ if (args[0] === 'save') {
 		})
 	}));
 	console.log(`Wrote: ${out_file}`);
-} else {
-	console.log(new Date().toJSON());
-	let max = tally.reduce((a, rec) => Math.max(a, rec.names.length), 0);
-	let count_len = String(max).length;
-	for (let {names, form} of tally) {
-		console.log(String(names.length).padStart(count_len), form, hex_seq(explode_cp(form)));
-	}
 }
