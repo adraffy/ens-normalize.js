@@ -2430,10 +2430,11 @@ function make_exploded(row, name, is_norm, downgrade_disallowed) {
 
 function create_typed_tag(type, value) {
 	if (!value) return;
+	let span = document.createElement('span');
 	if (value instanceof Error) {
 		value = value.message;
+		span.classList.add('long');
 	}
-	let span = document.createElement('span');
 	switch (type) {
 		case 'second': 
 			value = `⭐️ ${value}`;

@@ -266,10 +266,11 @@ footer {
 <div id="exploded" class="hide"></div>
 <div id="output" class="hide">
 <ul class="readme">
-	<li>Only works on single-labels.</li>
+	<li>Only works on single-labels. <button>vitalik.eth</button></li>
 	<li>Only includes confusables for valid <a href="../derive/data/15.1.0/IdnaMappingTable.txt">IDNA 2003</a> characters.</li>
-	<li><b>Emoji</b> are never confusable.</li>
+	<li>Disallowed confusables are removed for increased compression. <button>e℮</button></li>
 	<li>Upper/lower ASCII confusables are merged.</li>
+	<li><b>Emoji</b> are never confusable.</li>
 </ul>
 </div>	
 </main>
@@ -421,7 +422,7 @@ let init = (async () => {
 	init = undefined;
 })();
 
-for (let btn of examples_div.querySelectorAll('button')) {
+for (let btn of document.querySelectorAll('#examples button, .readme button')) {
 	btn.addEventListener('click', e => {
 		e.preventDefault();
 		input_field.value = btn.innerText;
