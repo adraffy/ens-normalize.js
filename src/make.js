@@ -342,5 +342,6 @@ function write(name, vars = {}) {
 	].join('\n'));
 	console.log(`${name} [${data.length} bytes, ${symbols} symbols, ${encoded.length} base64] => ${buf.length} bytes`);
 	writeFileSync(new URL(`./${name}.js`, import.meta.url), buf);
+	//writeFileSync(new URL('./${name}.json', import.meta.url), JSON.stringify(data));
 	return {hash, data, encoded};
 }
