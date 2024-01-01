@@ -140,7 +140,7 @@ let labels = ens_split('💩Raffy.eth_');
 // ]
 ```
 
-Generate a sorted array of supported emoji codepoints:
+Generate a sorted array of (beautified) supported emoji codepoints:
 ```Javascript
 // () -> number[][]
 let emojis = ens_emoji();
