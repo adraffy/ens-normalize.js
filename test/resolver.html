@@ -1077,6 +1077,7 @@ Hebrew:
 <li><a class="internal" href="./validate.html">Validation Test</a></li>
 <li><a class="internal" href="./report-nf.html">Unicode NormalizationTest</a></li>
 <li><a href="../../ens-norm-tests/test-breakdown/output-20230226/">ENSIP-1→15 Breakdown</a></li>
+<li><a href="https://github.com/ensdomains/ens-contracts/tree/staging/deployments/">ENS Deployments</a></li>
 <li><a href="../../ens-labels/demo.html">Labelhash⁻¹</a></li>
 <li><a href="https://github.com/adraffy/ens-labels/">Label Database</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-regs.html">Recent Registrations</a></li>
@@ -1869,6 +1870,9 @@ function create_dns_row(name, replaced) {
 		} else {
 			add_row_tag(row, create_typed_tag('second', 'Punycode Compatible'));
 		}
+		if (name.includes('\u200D')) {
+			add_row_tag(row, create_typed_tag('warn', 'ZWJ'));
+		}
 		if (active_chain.is_mainnet) {
 			if (encoded.endsWith('.eth')) {
 				add_row_tag(row, create_link(`https://${encoded}.limo`, '.limo', 'external'));
@@ -2247,7 +2251,7 @@ function add_old_tag(row, name, is_norm) {
 		let norm;
 		try {
 			norm = ens_normalize(name);
-		} catch (err) {				
+		} catch (err) {
 		}
 		let html = OLD_NAME;
 		if (!is_norm && norm0 !== norm) { // diff-norm
@@ -3123,7 +3127,7 @@ async function resolve1(input, skip_norm) {
 		if (is_wildcard) {
 			add_row_tag(resolver_row, create_typed_tag('special', 'Wildcard'));
 			if (wildcard_domain === name_norm) {
-				add_row_tag(resolver_row, 'Root');
+				add_row_tag(resolver_row, 'Root Name');
 			} else if (wildcard_domain) {
 				add_row_tag(resolver_row, create_resolve_btn(wildcard_domain, `↩️ ${wildcard_domain}`));
 			} else {
@@ -3428,7 +3432,7 @@ async function resolve1(input, skip_norm) {
 							add_row_tag(nft_row, create_typed_tag('good', 'Subdomain'));
 						} else {
 							a.innerHTML = ens_beautify(norm);
-							add_row_tag(nft_row, create_typed_tag('good', 'Owned'));
+							//add_row_tag(nft_row, create_typed_tag('good', 'Owned'));
 						}
 					} catch (err) {
 					}
@@ -3577,6 +3581,7 @@ async function resolve1(input, skip_norm) {
 	output_div.append(primary_row);
 	try {
 		primary = await active_provider.lookupAddress(address);
+		//primary = primary.toUpperCase(); // debug: normalized primary
 	} catch (err) {
 		primary_err = err;
 	}
@@ -3603,11 +3608,18 @@ async function resolve1(input, skip_norm) {
 	let primary_norm;
 	try {
 		primary_norm = ens_normalize(primary);
+		if (primary === primary_norm) {
+			make_normalized(primary_row, primary_norm);
+		}
+		// note: dont add extra junk if its the same
 		if (primary === input) {
 			add_row_tag(primary_row, 'Same as Input');
 		} else if (primary === name_norm) {		
 			add_row_tag(primary_row, 'Same as Norm');
 		} else {
+			if (primary === ens_beautify(primary)) {
+				add_row_tag(primary_row, create_pretty_tag());
+			}
 			add_row_tag(primary_row, create_copy_btn(primary_norm));
 			add_row_tag(primary_row, create_resolve_btn(primary));
 			add_row_tag(primary_row, create_ens_link(primary_norm));
@@ -3622,24 +3634,23 @@ async function resolve1(input, skip_norm) {
 
 	add_old_tag(primary_row, primary);
 
-	// primary was normalized
-	if (primary === primary_norm) {
-		make_normalized(primary_row, primary_norm);
-
 	// primary was valid but not normalized
-	} else if (primary_norm) {
+	if (primary_norm && primary !== primary_norm) {
 		add_row_tag(primary_row, create_typed_tag('fail', 'Normalized'));
 		// create norm row
 		let row = create_row('Normalized Primary');
 		row.classList.toggle('old', !!available);
 		make_exploded(row, primary_norm, true);
 		make_normalized(row, primary_norm);
-		add_old_tag(primary_row, primary_norm, true);
+		add_old_tag(row, primary_norm, true);
 		add_row_tag(row, create_copy_btn(primary_norm));
 		add_row_tag(row, create_ens_link(primary_norm));
 		//add_nft_links(row, primary_norm);
 		if (name_norm !== primary_norm) {
 			add_row_tag(row, create_resolve_btn(primary_norm));
+		}
+		if (primary_norm === ens_beautify(primary_norm)) {
+			add_row_tag(row, create_pretty_tag());
 		}
 		output_div.append(row);
 		let details_row = create_details_row(primary_norm);
