@@ -661,6 +661,17 @@ button.glow {
 	background-color: #ffc;
 	outline: 2px dashed #cc0;
 }
+.row.contract {
+	position: relative;
+}
+.row.contract::before {
+	position: absolute;
+	top: 3px;
+	right: 6px;
+	content: 'Contract';
+	font: 11px monospace;
+	color: #999;
+}
 .transform {
 	background: #fffaf0;
 }
@@ -1161,6 +1172,8 @@ const INPUT_NAME = 'Input';
 const OPENSEA_NAME = 'OpenSea';
 const VISION_NAME = 'Vision';
 const PRETTY_NAME = '💖️';
+const MANAGER_NAME = 'Manager';
+const NFT_OWNER_NAME = 'NFT Owner';
 
 const emoji_url = './emoji.html#q=%s';
 
@@ -2138,8 +2151,8 @@ function make_normalized(row, name) {
 
 function make_contract(row) {
 	row.classList.add('contract');
-	let span = row.querySelector('.row-label');
-	span.innerHTML = span.innerHTML.replace('Address', 'Contract'); // meh
+	//let span = row.querySelector('.row-label');
+	//span.innerHTML = span.innerHTML.replace('Address', 'Contract'); // meh
 }
 
 function create_palindrome_tag() {
@@ -3412,7 +3425,7 @@ async function resolve1(input, skip_norm) {
 				add_row_tag(avail_row, create_link(`https://protocol.art/account/${owner}`, 'Configure', 'external'));
 			}
 			if (!is_wrapped && !available && !checked_nft && nft_contract) {
-				let nft_row = create_row(create_etherscan_address_link(nft_contract.address, {title: 'NFT Owner:', contract: true}), true);
+				let nft_row = create_row(create_etherscan_address_link(nft_contract.address, {title: `${NFT_OWNER_NAME}:`, contract: true}), true);
 				nft_row.classList.add('nft');
 				output_div.append(nft_row);
 				try {
@@ -3423,7 +3436,7 @@ async function resolve1(input, skip_norm) {
 				}
 				if (should_stop_resolving()) return;
 				if (nft_owner && nft_owner !== owner) {
-					owner_row.querySelector('.row-label').innerText = 'Manager:';
+					owner_row.querySelector('.row-label').innerText = `${MANAGER_NAME}:`;
 					owner_row.insertAdjacentElement('beforebegin', nft_row); // move up
 					let a = create_etherscan_address_link(nft_owner);
 					nft_row.append(create_jazz_icon(nft_owner));
@@ -3556,27 +3569,26 @@ async function resolve1(input, skip_norm) {
 					add_row_tag(address_row, create_resolve_btn(address));
 					add_row_tag(address_row, create_typed_tag('warn', 'Different from Owner'));	
 				}
-			} else {
-				if (owner === address) {
-					if (nft_owner && nft_owner !== address) {
-						add_row_tag(address_row, create_typed_tag('good', `Same as Manager`));	
-					} else {
-						add_row_tag(address_row, create_typed_tag('good', 'Same as Owner'));
-					}
-				} else if (nft_owner === address) {
-					add_row_tag(address_row, create_typed_tag('good', 'Same as NFT Owner'));
+			// } else if (owner !== address && nft_owner !== address) {
+			// 	add_row_tag(address_row, create_resolve_btn(address));
+			// 	if (owner) {
+			// 		add_row_tag(address_row, create_typed_tag('fail', 'Owner'));	
+			// 	}
+			// 	add_owner_links(address_row, address); 
+			} else if (owner === address) {
+				if (nft_owner && nft_owner !== address) {
+					add_row_tag(address_row, create_typed_tag('good', `Same as ${MANAGER_NAME}`));	
 				} else {
-					add_row_tag(address_row, create_resolve_btn(address));
-					if (owner) {
-						//add_row_tag(address_row, create_typed_tag('warn', 'Not Owner'));	
-						add_row_tag(address_row, create_typed_tag('fail', 'Owner'));	
-					}
-					add_owner_links(address_row, address);
+					add_row_tag(address_row, create_typed_tag('good', 'Same as Owner'));
 				}
-				// mainnet urls regardless of active_chain
-				//add_row_tag(address_row, create_link(`https://opensea.io/${address}?tab=collected`, OPENSEA_NAME, 'external'));
-				//add_row_tag(address_row, create_link(`https://ens.vision/0x/${address}`, VISION_NAME, 'external'));	
-				//add_row_tag(address_row, create_link(`https://rainbow.me/${address}`, 'Rainbow', 'external'));
+			} else if (nft_owner === address) {
+				add_row_tag(address_row, create_typed_tag('good', `Same as ${NFT_OWNER_NAME}`));
+			} else {
+				add_row_tag(address_row, create_resolve_btn(address));
+				if (owner) {
+					add_row_tag(address_row, create_typed_tag('fail', 'Owner'));	
+				}
+				add_owner_links(address_row, address);
 			}
 		}
 		remove_temporary(address_row);
@@ -3682,9 +3694,11 @@ async function resolve1(input, skip_norm) {
 
 function add_owner_links(row, owner) {	
 	add_row_tag(row, create_link(`${active_chain.is_mainnet ? 'https://opensea.io/' : 'https://testnets.opensea.io/'}${owner}?tab=collected`, OPENSEA_NAME, 'external'));
-	if (!active_chain.is_mainnet) return;
-	add_row_tag(row, create_link(`https://ens.vision/0x/${owner}`, VISION_NAME, 'external'));	
-	add_row_tag(row, create_link(`https://rainbow.me/${owner}`, 'Rainbow', 'external'));
+	if (active_chain.is_mainnet) {
+		add_row_tag(row, create_link(`https://ens.vision/0x/${owner}`, VISION_NAME, 'external'));	
+		add_row_tag(row, create_link(`https://rainbow.me/${owner}`, 'Rainbow', 'external'));
+	}
+	add_row_tag(row, create_link(`https://debank.com/profile/${owner}`, 'Debank', 'external'));
 }
 
 async function ensure_eth_resolver() {
