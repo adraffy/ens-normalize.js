@@ -108,6 +108,7 @@ h1 .count span {
 	pointer-events: none;
 	border: 3px solid #000;
 	margin: -2px;
+	color: #000;
 }
 #search {
 	display: flex;
@@ -366,6 +367,7 @@ td.info {
 .prop.length {
 	font: bold 12px monospace;
 }
+button[data-by="cost"] { background-color: #080; color: #fff; }
 button[data-by="length"], [data-by="length"] .title, .length { background-color: var(--length-color); }
 button[data-by="type"], [data-by="type"] .title, .type {  background-color: #ffe0c0; }
 button[data-by="group"], [data-by="group"] .title, .group { background-color: #ddf; }
@@ -529,11 +531,11 @@ footer span:hover {
 <div id="by">
 	<b>By:</b>
 	<button data-by="length">Length</button>
+	<button data-by="cost">Cost</button>
 	<button data-by="type">Type</button>
 	<button data-by="group">Group</button>
 	<button data-by="subgroup">Subgroup</button>
 	<button data-by="version">Version</button>
-	<button data-by="cost">Cost</button>
 	<button data-by="cp">Codepoint</button>
 	<span class="balloon"></span>
 	<button id="csv_btn" title="Download as CSV">
