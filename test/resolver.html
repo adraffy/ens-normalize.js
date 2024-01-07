@@ -9,6 +9,7 @@
 	--btn-fill-color: #eee;
 	--btn-hover-fill-color: #ccc;
 	--btn-border-color: #888;
+	--copied-color: #8f8;
 }
 .hide {
 	display: none !important;
@@ -240,7 +241,10 @@ body.testnet #provider a {
 #show_components_check:checked + label {
 	border-color: #0aa;
 	background-color: #cff;
-	content: 'Bidi';
+}
+#show_records_check:checked + label {
+	border-color: #aa0;
+	background-color: #ffa;
 }
 #skip_norm_check:checked + label {
 	border-color: #f00;
@@ -409,10 +413,10 @@ button.copy {
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' height='24' shape-rendering='geometricPrecision' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' viewBox='0 0 24 24' width='24' style='color:var(--geist-foreground)'%3E%3Cpath d='M6 17C4.89543 17 4 16.1046 4 15V5C4 3.89543 4.89543 3 6 3H13C13.7403 3 14.3866 3.4022 14.7324 4M11 21H18C19.1046 21 20 20.1046 20 19V9C20 7.89543 19.1046 7 18 7H11C9.89543 7 9 7.89543 9 9V19C9 20.1046 9.89543 21 11 21Z'/%3E%3C/svg%3E");
 }
 button.copy:hover {
-	background-color: #8f8;
+	background-color: var(--copied-color);
 }
 button.copy.copied {
-	background-color: #8f8;
+	background-color: var(--copied-color);
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' height='24' shape-rendering='geometricPrecision' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' viewBox='0 0 24 24' width='24' style='color:var(--geist-foreground)'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
 }
 .tags.long { order: 30; }
@@ -426,7 +430,7 @@ button.copy.copied {
 .tags.invalid { color: #f00; }
 .tags.elapsed {
 	background: #f0f0f0;
-	font-size: 75%;
+	font: 9pt sans-serif;
 	order: 50;
 }
 .tags.normalized { background: #8f8; }
@@ -651,6 +655,36 @@ button.glow {
 }
 .exploded > .error.first {
 	background: #f77;
+}
+.row.records {
+	background-color: #ffc;
+}
+.record {
+	display: flex;
+	color: #000;
+	font-size: 90%;
+	text-decoration: none;
+	align-items: center;
+	background: #fff;
+	padding: 4px 8px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	gap: 4px;
+}
+.record.copied {
+	background-color: var(--copied-color);
+}
+.record b {
+	font: 11px sans-serif;
+	color: #666;
+}
+.record:hover {
+	outline: 2px solid #00f;
+}
+.record img,
+.record svg {
+	width: 18px;
+	height: auto;
 }
 .row.error {
 	background: #fcc;
@@ -1041,8 +1075,10 @@ Hebrew:
 	<label for="show_details_check">Details</label>
 	<input type="checkbox" id="show_components_check" checked>
 	<label for="show_components_check">Emoji Components</label>
+	<input type="checkbox" id="show_records_check">
+	<label for="show_records_check" title="Include common text and address records">Records</label>
 	<input type="checkbox" id="skip_norm_check">
-	<label for="skip_norm_check"><svg data-testid="geist-icon" fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--geist-foreground);width:20px;height:20px"><circle cx="12" cy="12" r="10" fill="var(--geist-fill)"></circle><path d="M15 9L9 15" stroke="var(--geist-stroke)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M9 9L15 15" stroke="var(--geist-stroke)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>Norm</label>
+	<label for="skip_norm_check"  title="Use without normalization"><svg data-testid="geist-icon" fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--geist-foreground);width:20px;height:20px"><circle cx="12" cy="12" r="10" fill="var(--geist-fill)"></circle><path d="M15 9L9 15" stroke="var(--geist-stroke)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M9 9L15 15" stroke="var(--geist-stroke)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>Norm</label>
 	<input type="checkbox" id="force_mainnet_check">
 	<label for="force_mainnet_check" title="Use mainnet regardless of selected browser provider network"><svg data-testid="geist-icon" fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--geist-foreground);width:20px;height:20px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Mainnet</label>
 	<input type="checkbox" id="force_ltr_check">
@@ -1118,7 +1154,7 @@ Hebrew:
 <li><a href="https://raffy.antistupid.com/eth/emoji-pixels.html">Emoji Pixel Maker</a></li>
 </ul>
 </div>
-<footer>Created by <a href="https://twitter.com/adraffy">raffy.eth</a></footer>
+<footer>Created by <a href="https://x.com/adraffy">raffy.eth</a></footer>
 <script type="module">
 // to prepare this file for self-hosted deployment:
 // * replace infura_provider with a public provider, eg. new ethers.providers.CloudflareProvider();
@@ -1140,6 +1176,7 @@ const input_field = document.querySelector('#input_field');
 const resolve_btn = document.querySelector('#resolve_btn');
 const auto_resolve_check = document.querySelector('#auto_resolve_check');
 const show_components_check = document.querySelector('#show_components_check');
+const show_records_check = document.querySelector('#show_records_check');
 const skip_norm_check = document.querySelector('#skip_norm_check');
 const show_details_check = document.querySelector('#show_details_check');
 const force_ltr_check = document.querySelector('#force_ltr_check');
@@ -1164,6 +1201,7 @@ const RESOLVE_MODE_EMPTY = 'empty';
 const STORAGE_RECENT = 'recent';
 const STORAGE_AUTO_RESOLVE = 'auto_resolve';
 const STORAGE_SHOW_DETAILS = 'show_details';
+const STORAGE_SHOW_RECORDS = 'show_records';
 const STORAGE_SHOW_COMPONENTS = 'show_components';
 const STORAGE_FORCE_LTR = 'force_ltr';
 const STORAGE_HIDE_EXAMPLES = 'hide_examples';
@@ -1225,6 +1263,121 @@ const ADDRESS_MAP = new Map();
 const IFACE_ETH_CONTROLLER = '0x612e8c09';
 //const IFACE_ETH_NFT = '0x6ccb2df4'; // '0x80ac58cd'; // using registry owner() instead
 
+// https://docs.ens.domains/ens-improvement-proposals/ensip-5-text-records
+const RECORDS = [
+	{
+		type: 'text', 
+		key: 'name',
+	},
+	{
+		type: 'text', 
+		key: 'description',
+		icon: '<b>desc</b>',
+	},
+	{
+		type: 'text', 
+		key: 'notice',
+		icon: '⚠️',
+	},
+	{
+		type: 'text', 
+		key: 'url',
+		icon: '🌐️',
+		format(x) {
+			let match = x.match(/^https?:\/\/(.*)$/i);
+			return match ? match[1] : x;
+		},
+		url(x) { return x; }
+	},
+	{
+		type: 'text', 
+		key: 'location'
+	},	
+	{
+		type: 'text', 
+		key: 'phone',
+		icon: '☎️',
+		url(x) { return `tel:${x}`; }
+	},
+	{
+		type: 'text', 
+		key: 'email',
+		icon: '📧️',
+		url(x) { return `mailto:${x}`; }
+	},
+	{
+		type: 'text', 
+		key: 'com.twitter', 
+		icon: `<svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 22 20"><path fill="var(--geist-fill, currentColor)" stroke="none" d="M16.99 0H20.298L13.071 8.26L21.573 19.5H14.916L9.702 12.683L3.736 19.5H0.426L8.156 10.665L0 0H6.826L11.539 6.231L16.99 0ZM15.829 17.52H17.662L5.83 1.876H3.863L15.829 17.52Z"/></svg>`,
+		format(x) { return `@${x}`; },
+		url(x) { return `https://x.com/${encodeURIComponent(x)}`; }
+	},
+	{
+		type: 'text', 
+		key: 'farcaster', 
+		url(x) { return `https://warpcast.com/${encodeURIComponent(x)}`; }
+	},
+	{
+		type: 'text',
+		key: 'com.github', 
+		icon: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"><path d="M12 0.297134C5.37 0.297134 0 5.67014 0 12.2971C0 17.6001 3.438 22.0971 8.205 23.6821C8.805 23.7951 9.025 23.4241 9.025 23.1051C9.025 22.8201 9.015 22.0651 9.01 21.0651C5.672 21.7891 4.968 19.4551 4.968 19.4551C4.422 18.0701 3.633 17.7001 3.633 17.7001C2.546 16.9561 3.717 16.9711 3.717 16.9711C4.922 17.0551 5.555 18.2071 5.555 18.2071C6.625 20.0421 8.364 19.5121 9.05 19.2051C9.158 18.4291 9.467 17.9001 9.81 17.6001C7.145 17.3001 4.344 16.2681 4.344 11.6701C4.344 10.3601 4.809 9.29014 5.579 8.45014C5.444 8.14714 5.039 6.92714 5.684 5.27414C5.684 5.27414 6.689 4.95214 8.984 6.50414C9.944 6.23714 10.964 6.10513 11.984 6.09913C13.004 6.10513 14.024 6.23714 14.984 6.50414C17.264 4.95214 18.269 5.27414 18.269 5.27414C18.914 6.92714 18.509 8.14714 18.389 8.45014C19.154 9.29014 19.619 10.3601 19.619 11.6701C19.619 16.2801 16.814 17.2951 14.144 17.5901C14.564 17.9501 14.954 18.6861 14.954 19.8101C14.954 21.4161 14.939 22.7061 14.939 23.0961C14.939 23.4111 15.149 23.7861 15.764 23.6661C20.565 22.0921 24 17.5921 24 12.2971C24 5.67014 18.627 0.297134 12 0.297134Z"></path></svg>`,
+		url(x) { return `https://github.com/${encodeURIComponent(x)}`; }
+	},
+	{
+		type: 'text',
+		key: 'com.discord',
+		icon: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" fill="#5A57DD"><path d="M20.7273 5.45455C20.7273 5.45455 18.2264 3.49746 15.2727 3.27273L15.0065 3.80509C17.6771 4.45855 18.9022 5.39509 20.1818 6.54546C17.9755 5.41909 15.7969 4.36364 12 4.36364C8.20309 4.36364 6.02455 5.41909 3.81818 6.54546C5.09782 5.39509 6.55527 4.35546 8.99345 3.80509L8.72727 3.27273C5.62855 3.56564 3.27273 5.45455 3.27273 5.45455C3.27273 5.45455 0.479455 9.50455 0 17.4545C2.81564 20.7016 7.09091 20.7273 7.09091 20.7273L7.98491 19.5355C6.46745 19.008 4.75364 18.066 3.27273 16.3636C5.03891 17.7 7.70455 19.0909 12 19.0909C16.2955 19.0909 18.9611 17.7 20.7273 16.3636C19.2464 18.066 17.5325 19.008 16.0151 19.5355L16.9091 20.7273C16.9091 20.7273 21.1844 20.7016 24 17.4545C23.5205 9.50455 20.7273 5.45455 20.7273 5.45455ZM8.45455 15.2727C7.40018 15.2727 6.54545 14.2958 6.54545 13.0909C6.54545 11.886 7.40018 10.9091 8.45455 10.9091C9.50891 10.9091 10.3636 11.886 10.3636 13.0909C10.3636 14.2958 9.50891 15.2727 8.45455 15.2727ZM15.5455 15.2727C14.4911 15.2727 13.6364 14.2958 13.6364 13.0909C13.6364 11.886 14.4911 10.9091 15.5455 10.9091C16.5998 10.9091 17.4545 11.886 17.4545 13.0909C17.4545 14.2958 16.5998 15.2727 15.5455 15.2727Z"></path></svg>`,
+	},
+	{
+		type: 'text',
+		key: 'io.keybase',
+		icon: '<img src="https://keybase.io/images/icons/icon-keybase-logo-48.png">',
+		url(x) { return `https://keybase.io/${encodeURIComponent(x)}`; }
+	},
+	{
+		type: 'text',
+		key: 'org.telegram',
+		icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="#2BABEE" viewBox="0 0 24 24" role="img"><g fill="inherit" clip-path="url(#a)"><path fill="inherit" fill-rule="evenodd" d="M24 12c0 6.6274-5.3726 12-12 12-6.62742 0-12-5.3726-12-12C0 5.37258 5.37258 0 12 0c6.6274 0 12 5.37258 12 12ZM12.43 8.85893c-1.1672.48547-3.49987 1.49027-6.99812 3.01437-.56806.2259-.86563.4469-.89272.663-.04578.3652.41154.509 1.03431.7048.08471.0267.17248.0543.26246.0835.6127.1992 1.43689.4322 1.86535.4414.38865.0084.82244-.1518 1.30135-.4807 3.26847-2.2063 4.95577-3.32149 5.06167-3.34553.0747-.01696.1783-.03829.2485.02408.0701.06235.0632.18045.0558.21215-.0453.1931-1.8405 1.8621-2.7695 2.7258-.2896.2692-.495.4602-.537.5038-.0941.0978-.19.1902-.2821.279-.5692.5487-.9961.9602.0236 1.6322.49.3229.8821.59 1.2733.8564.4273.2909.8534.5811 1.4047.9425.1405.0921.2746.1877.4053.2808.4972.3545.9438.6729 1.4957.6221.3206-.0295.6519-.331.8201-1.2302.3975-2.1252 1.1789-6.7299 1.3595-8.62742.0158-.16625-.0041-.37901-.0201-.4724-.0159-.0934-.0493-.22647-.1707-.32498-.1438-.11666-.3658-.14126-.465-.13952-.4514.00796-1.1439.24874-4.4764 1.63485Z" clip-rule="evenodd"></path></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h24v24H0z"></path></clipPath></defs></svg>`,
+		url(x) { return `https://t.me/${encodeURIComponent(x)}`; }
+	},
+	{
+		type: 'text',
+		key: 'com.linkedin',
+		url(x) { return `https://www.linkedin.com/in/${encodeURIComponent(x)}`; }
+	},
+	{
+		type: 'addr',
+		coin: 0,
+		icon: `<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 500 500" role="img" class="sc-56a68b4b-0 nEsDk"><path fill="#F39321" d="M43.43 125.143c7.71-10.766 14.875-21.901 23.562-31.986 15.8-18.343 33.692-34.063 54.18-47.075 18.379-11.672 37.761-20.872 58.501-27.305 32.294-10.018 65.26-12.997 98.838-9.165 24.544 2.801 48.191 9.067 70.713 19.215 13.633 6.142 26.456 13.731 39.025 21.927 25.328 16.515 45.618 38.014 62.58 62.577 18.116 26.236 29.889 55.421 36.346 86.725 4.535 21.983 6.449 44.171 4.503 66.504-2.399 27.536-8.514 54.086-19.938 79.604-9.662 21.583-21.589 41.401-36.861 59.301-14.94 17.511-31.788 32.831-51.149 45.461-13.184 8.6-26.926 16.276-41.434 21.975-24.274 9.537-49.447 15.986-75.787 17.115-18.545.795-36.985.483-55.279-2.763-15.713-2.788-31.049-6.858-46.063-12.496-14.566-5.47-28.693-11.95-41.709-20.143-18.766-11.812-35.683-26.147-50.737-42.663-16.773-18.403-30.373-38.808-40.779-61.344-14.7-31.835-21.929-65.401-22.359-100.425-.162-13.173 1.349-26.244 3.105-39.283.126-.933-.002-1.899-.012-2.851 1.536-.952 1.4-2.618 1.677-4.071 3.906-20.483 10.494-40.059 19.418-58.906 3.162-6.674 7.525-12.764 9.659-19.928zm281.727 129.37c6.537-3.474 12.749-5.465 17.658-9.85 18.918-16.899 23.96-56.673-6.747-75.833-9.566-5.969-19.77-10.393-30.77-14.907 1.819-14.731 7.709-28.516 9.622-43.603-9.076-2.249-17.578-5.234-26.425-6.193l-10.674 41.837c-6.78-2.076-13.761-1.879-20.142-5.473 2.302-14.39 7.773-27.872 9.268-42.314-9.322-1.464-17.216-5.094-26.265-5.485l-10.586 42.215c-17.944-2.75-34.419-8.921-52.52-12.239-3.977 8.91-5.738 18.311-7.334 28.313 5.896 1.392 11.022 2.623 16.158 3.811 12.965 2.998 16.517 10.086 13.439 21.424-2.19 8.065-4.166 16.189-6.182 24.301-7.245 29.16-14.432 58.333-21.72 87.482-1.642 6.567-5.734 8.706-12.398 7.731-6.563-.96-12.757-3.907-19.99-3.693-3.136 10.032-9.378 18.871-11.588 29.946l51.344 13.08c-1.312 15.208-7.614 29.125-9.476 44.441l25.544 6.123c5.653-14.044 6.957-28.803 12.226-43.33 6.351 3.265 13.397 2.317 19.612 6.427l-10.178 42.077c8.986 3.216 17.753 4.528 26.758 6.77l10.578-42.386c2.123-1.091 3.676-.888 5.143-.574a132.886 132.886 0 0 0 42.676 2.14c12.368-1.373 23.343-6.088 32.148-15.372 9.791-10.323 14.71-22.952 17.078-36.535 1.93-11.065 1.436-22.277-5.06-32.071-5.091-7.674-12.084-13.53-21.197-18.26zM223.128 312.17c17.411 4.325 34.803 8.95 53.02 5.624 9.715-1.774 17.037-6.73 19.985-16.503 2.78-9.218 1.164-17.593-5.673-24.879-7.11-7.576-16.254-11.514-25.682-14.807-11.264-3.934-22.683-7.508-34.99-8.48l-13.972 56.788c2.981.929 5.117 1.712 7.312 2.257zm61.5-80.324c9.628-1.368 17.612-7.738 19.958-16.393 2.869-10.583-.337-19.865-8.902-26.178-9.718-7.163-20.908-10.807-32.47-13.337-4.307-.943-8.544-3.454-13.756-1.759l-12.599 51.209c16.457 4.155 31.611 8.753 47.769 6.458z"></path></svg>`,
+	},
+	{
+		type: 'addr',
+		coin: 2,
+		key: 'LTC',
+	},
+	{
+		type: 'addr',
+		coin: 3,
+		icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 2000" role="img" class="sc-56a68b4b-0 nEsDk"><g fill="#c2a633"><path d="M1024 659H881.12v281.69h224.79v117.94H881.12v281.67H1031c38.51 0 316.16 4.35 315.73-327.72S1077.44 659 1024 659z"></path><path d="M1000 0C447.71 0 0 447.71 0 1000s447.71 1000 1000 1000 1000-447.71 1000-1000S1552.29 0 1000 0zm39.29 1540.1H677.14v-481.46H549.48V940.7h127.65V459.21h310.82c73.53 0 560.56-15.27 560.56 549.48 0 574.09-509.21 531.41-509.21 531.41z"></path></g></svg>`,
+	},
+	{
+		type: 'text',
+		key: 'avatar',
+		cached: 'avatar',
+		format() { return ''; },
+		url(x) { return x; }
+	},
+	{
+		type: 'text',
+		key: 'banner',
+		format() { return ''; },
+		url(x) { return x; }
+	},
+	{
+		type: 'contenthash',
+	}
+];
+
 const location0 = new URL(window.location.href);
 const entity_span = document.createElement('span');
 
@@ -1242,6 +1395,7 @@ let eth_resolver_contract;
 let eth_nft_contract;
 let eth_controller_contract;
 let wrapper_contract;
+let multicall_contract;
 let price_oracle_contract;
 let reverse_registrar;
 let resolve_timer = RESOLVE_MODE_IDLE;
@@ -1277,9 +1431,10 @@ add_digits('Thai', '๐๑๒๓๔๕๖๗๘๙');
 //add_digits('Tamil', '௦௧௨௩௪௫௬௭௮௯'); 
 
 read_local_storage(STORAGE_HIDE_EXAMPLES, x => examples_div.classList.toggle('hide', x), true);
-read_local_storage(STORAGE_SHOW_DETAILS, x => show_details_check.checked = x);
 read_local_storage(STORAGE_AUTO_RESOLVE, x => auto_resolve_check.checked = x);
+read_local_storage(STORAGE_SHOW_DETAILS, x => show_details_check.checked = x);
 read_local_storage(STORAGE_SHOW_COMPONENTS, x => show_components_check.checked = x);
+read_local_storage(STORAGE_SHOW_RECORDS, x => show_records_check.checked = x);
 read_local_storage(STORAGE_FORCE_LTR, x => force_ltr_check.checked = x);
 
 sync_recent(localStorage[STORAGE_RECENT]);
@@ -1385,7 +1540,6 @@ function add_recent(name, save = true) {
 		}
 		recent_optgroup.prepend(option);
 	}
-	//recent_optgroup.label = `Recent Names (${recent_optgroup.childElementCount})`;
 	recent_select.selectedIndex = -1;
 	recent_select.classList.remove('hide');
 	if (save) {
@@ -1416,23 +1570,17 @@ document.querySelector('#find_emoji_btn').addEventListener('click', e => {
 	let value = get_selected_input();
 	let token = ens_tokenize(value).find(x => x.emoji);
 	if (token) url += `#q=${encodeURIComponent(String.fromCodePoint(...token.cps))}`;
-	let a = create_link(url);
-	a.target = '_blank';
-	a.click();	
+	create_link(url).click();	
 });
 document.querySelector('#chars_btn').addEventListener('click', e => {
 	let url = './chars.html';
 	let value = get_selected_input();
 	if (value) url += `#${value.codePointAt(0).toString(16)}`;
-	let a = create_link(url);
-	a.target = '_blank';
-	a.click();
+	create_link(url).click();
 });
 document.querySelector('#confused_btn').addEventListener('click', e => {
 	let s = input_field.value;
-	let a = create_link(`./confused.html#${encode_uri_component_surrogate_escaped(s.replaceAll('.', ''))}`);
-	a.target = '_blank';
-	a.click();
+	create_link(`./confused.html#${encode_uri_component_surrogate_escaped(s.replaceAll('.', ''))}`).click();
 });
 nf_btn.addEventListener('click', () => {
 	let s0 = input_field.value;
@@ -1477,6 +1625,15 @@ show_details_check.addEventListener('input', () => {
 	localStorage[STORAGE_SHOW_DETAILS] = show_details_check.checked;	
 	for (let el of document.querySelectorAll('.detailed')) {
 		el.classList.toggle('hide', !show_details_check.checked);
+	}
+});
+show_records_check.addEventListener('input', () => {
+	localStorage[STORAGE_SHOW_RECORDS] = show_records_check.checked;	
+	let records = document.querySelector('.row.records');
+	if (records) {
+		records.classList.toggle('hide', !show_records_check.checked);
+	} else if (show_records_check.checked) {
+		resolve();
 	}
 });
 show_components_check.addEventListener('input', () => {
@@ -1577,7 +1734,7 @@ function update_network(network) {
 	let provider_name = using_window ? 'window.ethereum' : 'Infura';
 	document.body.classList.toggle('testnet', !active_chain.is_mainnet);	
 	let network_div = document.createElement('div');
-	network_div.innerHTML = `using <b>${provider_name}</b> on <a href="${active_chain.explorer}/address/${registry}" target="_blank" title="Registry Contract">${active_chain.name}</a>`;
+	network_div.innerHTML = `using <b>${provider_name}</b> on <a target="_blank" href="${active_chain.explorer}/address/${registry}" title="Registry Contract">${active_chain.name}</a>`;
 	if (window_online && !using_window && network && network.chainId !== CHAIN_ID_MAINNET && !force_mainnet_check.checked) {
 		provider_div.innerHTML = `<div class="error">Unsupported Network (${network.chainId})</div>`;
 	} else {
@@ -1603,6 +1760,7 @@ function update_network(network) {
 	eth_nft_contract = null;
 	eth_controller_contract = null;
 	wrapper_contract = null;
+	multicall_contract = null;
 	reverse_registrar = null;
 	NOT_IFACE_RESOLVER.clear();
 	IS_CONTRACT.clear();
@@ -1990,6 +2148,7 @@ function encode_uri_component_surrogate_escaped(s) {
 function create_link(url, html, cls) {
 	let a = document.createElement('a');
 	a.href = url;
+	a.target = '_blank';
 	a.innerHTML = html || url;
 	if (cls) a.classList.add(cls);
 	try {
@@ -2025,9 +2184,8 @@ function create_jazz_icon(address) {
 	return span;
 }
 
-function create_copy_btn(raw) {
-	let btn = document.createElement('button');
-	btn.addEventListener('click', e => {
+function make_copier(el, raw) {
+	el.addEventListener('click', e => {
 		let copy = raw;
 		if (e.altKey) {
 			copy = unicode_escape(copy);
@@ -2037,9 +2195,14 @@ function create_copy_btn(raw) {
 		const cls = 'copied';
 		document.querySelectorAll(`.${cls}`).forEach(x => x.classList.remove(cls));
 		navigator.clipboard.writeText(copy);
-		btn.classList.add(cls);
-		setTimeout(() => btn.classList.remove(cls), 2000);
+		el.classList.add(cls);
+		setTimeout(() => el.classList.remove(cls), 2000);
 	});
+}
+
+function create_copy_btn(raw) {
+	let btn = document.createElement('button');
+	make_copier(btn, raw);
 	btn.classList.add('copy');
 	btn.title = raw;
 	if (!/^0x[0-9a-f]*$/i.test(raw)) {
@@ -2327,6 +2490,7 @@ async function add_avatar(row, resolver) {
 		a.target = '_blank';
 		a.append(img);
 		row.append(a);
+		resolver.avatar = url;
 	} catch (err) {
 		console.log('Avatar error', avatar, err);
 	}
@@ -2511,7 +2675,7 @@ function create_namehash_row(name) {
 	add_detailed(row);
 	let hash_span = document.createElement('span');
 	hash_span.classList.add('wide');
-	hash_span.innerHTML = `<a class="hashproof" href="../../keccak.js/test/demo.html#algo=namehash&s=${encode_uri_component_surrogate_escaped(name)}&escape=1" target="_blank">Namehash:</a> <code>${namehash(name)}</code>`;
+	hash_span.innerHTML = `<a target="_blank" class="hashproof" href="../../keccak.js/test/demo.html#algo=namehash&s=${encode_uri_component_surrogate_escaped(name)}&escape=1">Namehash:</a> <code>${namehash(name)}</code>`;
 	row.append(hash_span);
 	return row;
 }
@@ -2548,12 +2712,7 @@ function create_details_row(name, before) {
 			} else {
 				upgrade_split_type(info);
 				if (info.restricted) {
-					let script = info.type.slice(11, -1);
-					let a = document.createElement('a');
-					a.classList.add('restricted');
-					a.innerHTML = `<span>${script}</span>⚠️`;
-					a.href = `https://www.compart.com/en/unicode/scripts/${script}`;
-					label_div.append(a);
+					label_div.append(create_link(`https://www.compart.com/en/unicode/scripts/${script}`, `<span>${info.type.slice(11, -1)}</span>⚠️`, 'restricted'));
 				} else {
 					let span = document.createElement('span');
 					span.classList.add('group');
@@ -2610,7 +2769,7 @@ function create_details_row(name, before) {
 			footer_span.classList.add('sep');
 		}
 
-		let footer = [`<a class="hashproof" href="../../keccak.js/test/demo.html#algo=keccak-256&s=${encode_uri_component_surrogate_escaped(label)}&escape=1" target="_blank">Labelhash:</a> <code>${hash}</code>`];
+		let footer = [`<a target="_blank" class="hashproof" href="../../keccak.js/test/demo.html#algo=keccak-256&s=${encode_uri_component_surrogate_escaped(label)}&escape=1">Labelhash:</a> <code>${hash}</code>`];
 		
 		let domain = split.slice(i+1).map(x => x.label).join('.');
 		if (NFT_DOMAINS.has(domain)) {
@@ -3593,6 +3752,58 @@ async function resolve1(input, skip_norm) {
 		}
 		remove_temporary(address_row);
 		add_row_tag(address_row, create_elapsed());	
+
+		if (show_records_check.checked) {
+			let records_row = create_row(`Records`, true);
+			records_row.classList.add('records');
+			output_div.append(records_row);	
+			for (let {rec, data, error} of await fetch_records(resolver, is_wildcard)) {
+				if (!data) continue;
+				if (error) continue;
+				//if (error) return create_typed_tag('warn', error);
+				let a = document.createElement('a');
+				a.classList.add('record');
+				if (rec.url) {
+					a.href = rec.url(data);
+					a.target = '_blank';
+				} else {
+					make_copier(a, data);
+				}
+				switch (rec.type) {
+					case 'addr': {
+						a.title = `Encoded CoinType: ${rec.coin}`;
+						a.innerHTML = rec.icon || `<b>coin(${rec.coin})</b>`;
+						if (rec.format) {
+							let span = document.createElement('span');
+							span.innerText = rec.format(data);
+							a.append(span);
+						}
+						break;
+					}
+					case 'text': {
+						a.title = rec.key;
+						a.innerHTML = rec.icon || `<b>${rec.key}</b>`;
+						let text = rec.format ? rec.format(data) : data;
+						if (text) {
+							let span = document.createElement('span');
+							span.innerText = text;
+							a.append(span);
+						}
+						break;
+					}
+					case 'contenthash': {
+						a.innerHTML = `<b>${rec.type}</b>`;
+						a.title = 'Encoded Content Hash';
+						break;
+					}
+				}
+				//if (rec.customize) rec.customize(a);
+				records_row.append(a);
+			}
+			if (should_stop_resolving()) return;
+			remove_temporary(records_row);
+			add_row_tag(records_row, create_elapsed());	
+		}
 	}
 
 	if (input_is_address || !address) return; // nothing more to do
@@ -3699,6 +3910,59 @@ function add_owner_links(row, owner) {
 		add_row_tag(row, create_link(`https://rainbow.me/${owner}`, 'Rainbow', 'external'));
 	}
 	add_row_tag(row, create_link(`https://debank.com/profile/${owner}`, 'Debank', 'external'));
+}
+
+async function fetch_records(resolver, is_wildcard) {
+	if (!is_wildcard) { 
+		if (multicall_contract === null) {
+			const MULTICALL3 = '0xcA11bde05977b3631167028862bE2a173976CA11';
+			if (await is_contract(MULTICALL3)) {
+				multicall_contract = new ethers.Contract(MULTICALL3, [
+					`function tryAggregate(bool requireSuccess, tuple(address target, bytes data)[] memory calls) public returns (tuple(bool success, bytes data)[] memory returnData)`
+				], active_provider);
+			} else {
+				multicall_contract = false;
+			}
+		}
+		if (multicall_contract) {
+			const target = resolver.address;
+			const node = namehash(resolver.name);
+			try {
+				let res = await multicall_contract.callStatic.tryAggregate(false, RECORDS.map(rec => {
+					switch (rec.type) {
+						case 'text': return {target, data: ethers.utils.hexConcat([ethers.utils.id('text(bytes32,string)').slice(0, 10), ethers.utils.defaultAbiCoder.encode(['bytes32', 'string'], [node, rec.key])])};
+						case 'addr': return {target, data: ethers.utils.hexConcat([ethers.utils.id('addr(bytes32,uint256)').slice(0, 10), ethers.utils.defaultAbiCoder.encode(['bytes32', 'uint256'], [node, rec.coin])])};
+						case 'contenthash': return {target, data: ethers.utils.hexConcat([ethers.utils.id('contenthash(bytes32)').slice(0, 10), ethers.utils.defaultAbiCoder.encode(['bytes32'], [node])])};
+						default: new Error('bug');
+					}
+				}));
+				return RECORDS.map((rec, i) => {
+					let {success, data} = res[i];
+					if (!success) return {rec, error: 'eth_call failure'};
+					try {
+						if (rec.type === 'text') {
+							[data] = ethers.utils.defaultAbiCoder.decode(['string'], data);
+							if (data) return {rec, data};
+						} else {
+							[data] = ethers.utils.defaultAbiCoder.decode(['bytes'], data);
+							if (data !== '0x') return {rec, data};
+						}
+					} catch (err) {
+						return {rec, error: err.message};
+					}
+				}).filter(Boolean);
+			} catch (err) {				
+			}
+		}
+	}
+	return (await Promise.all(RECORDS.map(async rec => {
+		try {
+			let data = rec.cached ? resolver[rec.cached] : await resolver.getText(rec.key);
+			if (data) return {rec, data};
+		} catch (err) {
+			return {rec, error: err.message};
+		}
+	}))).filter(Boolean);
 }
 
 async function ensure_eth_resolver() {

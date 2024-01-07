@@ -41,10 +41,8 @@ export function version_ordinal(x) {
 	return x.major + (1 - 1/(1 + x.minor + (1 - 1/(1 + x.patch)))); // use continued fraction expansion
 }
 
-// warning: returns single reference since output can be large
-// [1,2,3] => [[1,2,3],[2,1,3],[3,1,2],[1,3,2],[2,3,1],[3,2,1]]
-// good: for (let v of permutations([1,2,3]))
-//  bad: [...permutations([1,2,3])]
+// generate permutations
+// always returns a copy
 export function* permutations(v) {
 	let n = v.length;
 	if (!n) return;
@@ -59,12 +57,31 @@ export function* permutations(v) {
 			let temp = v[swap];
 			v[swap] = v[i];
 			v[i] = temp;
-			yield v;
+			yield v.slice();
 			u[i]++;
 			i = 1;
 		} else {
 			u[i] = 0;
 			i++;
+		}
+	}
+}
+
+// generate powerset 
+// always returns a copy
+// if n is integer, makes m = n copies of m
+// otherwise, assumes m is array of arrays
+export function* tuples(m, n) {
+	if (Number.isInteger(n)) m = Array(n).fill(m);
+	n = m.length;
+	if (!n) return;
+	let u = Array(n).fill(0);
+	while (true) {
+		yield u.map((i, j) => m[j][i]);
+		let i = 0;
+		while (++u[i] === m[i].length) {
+			u[i] = 0;
+			if (++i === n) return;
 		}
 	}
 }
