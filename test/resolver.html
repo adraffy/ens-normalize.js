@@ -296,6 +296,8 @@ body.testnet #provider a {
 }
 .row.normalized {
 	background: #efe;
+	outline: 1px solid #cdc;
+	border-radius: 0;
 }
 .row.addr {
 	background: #fffff0;
@@ -692,7 +694,7 @@ button.glow {
 	border-radius: 0;
 }
 .row.contract:not(.error) {
-	background-color: #ffc;
+	background-color: #fffcf6;
 	outline: 2px dashed #cc0;
 }
 .row.contract {
@@ -2174,14 +2176,14 @@ function create_link(url, html, cls) {
 function create_ens_link(name, html = '<button>🛠️ ENS</button>') {
 	return create_link(`https://app.ens.domains/${encode_uri_component_ens_escaped(name)}`, html, 'ens');
 }
-function create_ens_metadata_link(contract, token, {title = 'Metadata', cls = 'metadata'} = {}) {
-	return create_link(`${active_chain.metadata}/${contract}/${token}`, title, cls);
+function create_ens_metadata_link(contract, token, {html = '<button class="code">🏷️ Metadata</button>'} = {}) {
+	return create_link(`${active_chain.metadata}/${contract}/${token}`, html, 'metadata');
 }
 function create_etherscan_address_link(addr, {title, anchor, contract} = {}) {
 	if (contract && !anchor) anchor = '#readContract';
 	return create_link(`${active_chain.explorer}/address/${addr}${anchor || ''}`, title || addr, title ? false : 'wide');
 }
-function create_etherscan_nft_link(contract, token, {title = 'Etherscan', cls = 'metadata'} = {}) {
+function create_etherscan_nft_link(contract, token, {title = 'Etherscan', cls = 'external'} = {}) {
 	return create_link(`${active_chain.explorer}/nft/${contract}/${ethers.BigNumber.from(token)}`, title, cls); 
 }
 function create_opensea_nft_link(contract, token, {title = OPENSEA_NAME, cls = 'external'} = {}) {
@@ -3413,7 +3415,7 @@ async function resolve1(input, skip_norm) {
 		}
 		//add_row_tag(avail_row, create_etherscan_address_link(price_oracle_contract.address, {title: 'Price Oracle', contract: true}));
 	} else if (nft_backed) {
-		let label = name_norm.slice(0, sep_pos);		
+		let label = name_norm.slice(0, sep_pos);
 		nft_token = ethers.utils.id(label);
 		let avail_url;
 		let avail_err;
@@ -3630,7 +3632,7 @@ async function resolve1(input, skip_norm) {
 					} catch (err) {
 					}
 					add_row_tag(nft_row, create_copy_btn(nft_owner));
-					if (owner !== input) {
+					if (nft_owner !== input) {
 						add_row_tag(nft_row, create_resolve_btn(nft_owner));
 					}
 					add_owner_links(nft_row, nft_owner);
@@ -3769,6 +3771,7 @@ async function resolve1(input, skip_norm) {
 		if (show_records_check.checked) {
 			let records_row = create_row(`Records`, true);
 			records_row.classList.add('records');
+			if (available) records_row.classList.add('old');
 			output_div.append(records_row);	
 			let any;
 			for (let {rec, data, error} of await fetch_records(resolver, is_wildcard)) {
@@ -3828,8 +3831,9 @@ async function resolve1(input, skip_norm) {
 
 	// lookup primary from eth address 
 	let primary, primary_err;
-	let primary_row = create_row('Primary', true);
+	let primary_row = create_row('Primary', true);	
 	output_div.append(primary_row);
+	primary_row.append(create_jazz_icon(address));
 	try {
 		primary = await active_provider.lookupAddress(address);
 		if (debug) primary = primary.toUpperCase();
@@ -3873,6 +3877,7 @@ async function resolve1(input, skip_norm) {
 			}
 			add_row_tag(primary_row, create_copy_btn(primary_norm));
 			add_row_tag(primary_row, create_resolve_btn(primary));
+			add_old_tag(primary_row, primary);
 			//add_row_tag(primary_row, create_ens_link(primary_norm));
 			let details_row = create_details_row(primary, true);
 			details_row.classList.toggle('old', !!available);
@@ -3881,9 +3886,8 @@ async function resolve1(input, skip_norm) {
 	} catch (err) {
 		primary_row.classList.add('error');
 		add_row_tag(primary_row, create_typed_tag('norm', err));
+		add_old_tag(primary_row, primary);
 	}
-
-	add_old_tag(primary_row, primary);
 
 	// primary was valid but not normalized
 	if (primary_norm && primary !== primary_norm) {
@@ -3893,18 +3897,19 @@ async function resolve1(input, skip_norm) {
 		row.classList.toggle('old', !!available);
 		make_exploded(row, primary_norm, true);
 		make_normalized(row, primary_norm);
-		add_old_tag(row, primary_norm, true);
-		add_row_tag(row, create_copy_btn(primary_norm));
 		//add_row_tag(row, create_ens_link(primary_norm));
 		//add_nft_links(row, primary_norm);
-		if (name_norm !== primary_norm) {
-			add_row_tag(row, create_resolve_btn(primary_norm));
-		}
-		if (primary_norm === ens_beautify(primary_norm)) {
-			add_row_tag(row, create_pretty_tag());
-		}
 		if (primary_norm === input) {
 			add_row_tag(row, 'Same as Input');
+		} else {
+			if (name_norm !== primary_norm) {
+				add_row_tag(row, create_resolve_btn(primary_norm));
+			}
+			add_row_tag(row, create_copy_btn(primary_norm));
+			add_old_tag(row, primary_norm, true);
+			if (primary_norm === ens_beautify(primary_norm)) {
+				add_row_tag(row, create_pretty_tag());
+			}
 		}
 		output_div.append(row);
 		let details_row = create_details_row(primary_norm);
