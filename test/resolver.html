@@ -728,8 +728,7 @@ button.glow {
 footer {
 	text-align: center;
 	color: #666;
-	margin-top: 16px;
-	margin-bottom: 8px;
+	margin: 8px 0 16px;
 }
 footer span {
 	cursor: help;
@@ -1261,9 +1260,9 @@ const IS_CONTRACT = new Map();
 const NOT_IFACE_RESOLVER = new Set();
 const ADDRESS_MAP = new Map();
 const IFACE_ETH_CONTROLLER = '0x612e8c09';
-//const IFACE_ETH_NFT = '0x6ccb2df4'; // '0x80ac58cd'; // using registry owner() instead
 
 // https://docs.ens.domains/ens-improvement-proposals/ensip-5-text-records
+// https://github.com/ensdomains/docs/blob/profile-text-records/ens-improvement-proposals/ensip-xx-profile-text-records.md
 const RECORDS = [
 	{
 		type: 'text', 
@@ -1274,6 +1273,15 @@ const RECORDS = [
 		key: 'description',
 		icon: '<b>desc</b>',
 	},
+	// {
+	// 	type: 'text', 
+	// 	key: 'language',
+	// },
+	// {
+	// 	type: 'text', 
+	// 	key: 'timezone',
+	// 	icon: '<b>tz</b>'
+	// },
 	{
 		type: 'text', 
 		key: 'notice',
@@ -1309,13 +1317,18 @@ const RECORDS = [
 		type: 'text', 
 		key: 'com.twitter', 
 		icon: `<svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 22 20"><path fill="var(--geist-fill, currentColor)" stroke="none" d="M16.99 0H20.298L13.071 8.26L21.573 19.5H14.916L9.702 12.683L3.736 19.5H0.426L8.156 10.665L0 0H6.826L11.539 6.231L16.99 0ZM15.829 17.52H17.662L5.83 1.876H3.863L15.829 17.52Z"/></svg>`,
-		format(x) { return `@${x}`; },
+		//format(x) { return `@${x}`; },
 		url(x) { return `https://x.com/${encodeURIComponent(x)}`; }
 	},
 	{
 		type: 'text', 
 		key: 'farcaster', 
 		url(x) { return `https://warpcast.com/${encodeURIComponent(x)}`; }
+	},
+	{
+		type: 'text', 
+		key: 'lens', 
+		url(x) { return `https://hey.xyz/u/${encodeURIComponent(x)}`; }
 	},
 	{
 		type: 'text',
@@ -3757,6 +3770,7 @@ async function resolve1(input, skip_norm) {
 			let records_row = create_row(`Records`, true);
 			records_row.classList.add('records');
 			output_div.append(records_row);	
+			let any;
 			for (let {rec, data, error} of await fetch_records(resolver, is_wildcard)) {
 				if (!data) continue;
 				if (error) continue;
@@ -3799,6 +3813,10 @@ async function resolve1(input, skip_norm) {
 				}
 				//if (rec.customize) rec.customize(a);
 				records_row.append(a);
+				any = true;
+			}
+			if (!any) {
+				add_row_tag(records_row, 'None');
 			}
 			if (should_stop_resolving()) return;
 			remove_temporary(records_row);

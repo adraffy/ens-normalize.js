@@ -67,14 +67,16 @@ export function* permutations(v) {
 	}
 }
 
-// generate powerset 
+console.log([...tuples([1,2])]);
+
+// generate all possible cross-product arrays
 // always returns a copy
 // if n is integer, makes m = n copies of m
 // otherwise, assumes m is array of arrays
 export function* tuples(m, n) {
 	if (Number.isInteger(n)) m = Array(n).fill(m);
 	n = m.length;
-	if (!n) return;
+	if (!n || m.some(x => !x.length)) return;
 	let u = Array(n).fill(0);
 	while (true) {
 		yield u.map((i, j) => m[j][i]);
