@@ -539,6 +539,10 @@ footer span:hover {
 	<button data-by="version">Version</button>
 	<button data-by="cp">Codepoint</button>
 	<span class="balloon"></span>
+	<button id="copy_btn" title="Copy Beaufied">
+		<svg xmlns='http://www.w3.org/2000/svg' fill='none' height='24' shape-rendering='geometricPrecision' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' viewBox='0 0 24 24' width='24' style='color:var(--geist-foreground)'><path d='M6 17C4.89543 17 4 16.1046 4 15V5C4 3.89543 4.89543 3 6 3H13C13.7403 3 14.3866 3.4022 14.7324 4M11 21H18C19.1046 21 20 20.1046 20 19V9C20 7.89543 19.1046 7 18 7H11C9.89543 7 9 7.89543 9 9V19C9 20.1046 9.89543 21 11 21Z'/></svg>
+		<span>Copy</span>
+	</button>
 	<button id="csv_btn" title="Download as CSV">
 		<svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color:var(--geist-foreground);width:24px;height:24px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
 		<span>CSV</span>
@@ -580,6 +584,7 @@ const main = document.querySelector('main');
 const hover_div = document.querySelector('#hover');
 const by_buttons = [...document.querySelectorAll('[data-by]')];
 const readme_dom = [...document.querySelectorAll('.readme')];
+const copy_btn = document.querySelector('#copy_btn');
 const csv_btn = document.querySelector('#csv_btn');
 const examples_div = document.querySelector('#examples');
 const none_div = document.querySelector('#none');
@@ -596,6 +601,7 @@ let type_map = new Map();
 let emoji_versions = new Set();
 let all_emoji = [];
 let disabled_emoji = [];
+let active_emoji;
 let emoji_count;
 let max_length;
 let by_mode;
@@ -725,6 +731,7 @@ top_btn.addEventListener('click', () => window.scrollTo(0, 0));
 	process_hash();
 	window.addEventListener('hashchange', process_hash);
 	search_field.addEventListener('input', search_soon);
+	search_field.focus();
 
 	top_btn.style.display = '';
 
@@ -785,10 +792,13 @@ function update_top() {
 	top_btn.style.opacity = window.scrollY < 50 ? 0 : 1;
 }
 
+copy_btn.addEventListener('click', () => {
+	navigator.clipboard.writeText(active_emoji.map(x => x.form).join('\n'));
+});
 csv_btn.addEventListener('click', async () => {
 	// note: utf8 csv is a little fucky in some boomer software
 	let lines = [`#Form,Hex,Norm,Length,MinLength,MinRepeat,Name,Type,Group,Subgroup,Version`];
-	for (let rec of all_emoji) {
+	for (let rec of active_emoji) {
 		if (!rec.is_emoji) continue;
 		let v = [rec.form, rec.cps.map(hex_cp).join(' '), rec.norm, rec.norm_length, rec.min_length, rec.min_repeat];
 		if (rec.info) {
@@ -1039,6 +1049,7 @@ function render() {
 	requestAnimationFrame(render);
 }
 function setup_render(results) {
+	active_emoji = results;
 	render_queue.length = 0;
 	main.innerHTML = '';
 	let jumps = [];		

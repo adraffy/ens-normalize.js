@@ -476,11 +476,8 @@ button.copy.copied {
 .tags.warn {
 	background: #ffc;
 }
-.tags.attn {
-	/* background: #fe0;
-	color: #000; */
-	background: #d47;
-	color: #fff;
+.tags.reg {
+	background-color: #def;
 }
 .tags.second {
 	background: #fff0dd;
@@ -828,11 +825,12 @@ footer span:hover {
 <a href="https://adraffy.github.io/punycode.js/test/demo.html"><b>Punycode:</b></a>
 <button>xn--ls8h</button>
 <button>xn--💩</button>
-<button>💷pound.eth</button>
+<button>💷pound</button>
 
 <a href="https://github.com/ensdomains/ens-contracts/tree/master/contracts/wrapper#namewrapper-docs"><b>Wrapped:</b></a>
-<button>firstwrappedname.eth</button>
+<button>firstwrappedname</button>
 <button>dessert3.menu.bestsushi7.eth</button>
+<button>loyal-eth-community</button>
 
 <b>Subdomain:</b>
 <button data-name="nowzad.loopring.eth">loopring</button>
@@ -841,7 +839,7 @@ footer span:hover {
 
 <a href="https://docs.ens.domains/ens-improvement-proposals/ensip-10-wildcard-resolution"><b>Wildcard:</b></a>
 <button>moo331.nft-owner.eth</button>
-<button>💎.gmcafe.art</button>
+<button>💎.gmcafe.eth</button>
 <button>1.offchainexample.eth</button>
 <button>barmstrong.cb.id</button>
 
@@ -1145,12 +1143,12 @@ Hebrew:
 <li><a href="https://github.com/adraffy/ens-labels/">Label Database</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-regs.html">Recent Registrations</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-renews.html">Recent Renews</a></li>
+<li><a href="https://raffy.antistupid.com/eth/ens-exp.html">Expirations</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-emoji-freq.html">Emoji Frequency Browser</a></li>
 <li><a href="../../emoji.js/test/demo.html">Emoji Parser</a></li>
 <li><a href="../../keccak.js/test/demo.html">Keccak Hasher</a></li>
 <li><a href="../../punycode.js/test/demo.html">Punycode Coder</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-batch-resolver.html">Batch Resolver</a></li>
-<li><a href="https://raffy.antistupid.com/eth/ens-exp.html">Expirations</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-nft-matcher.html">ENS+NFT Matcher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/emoji-pixels.html">Emoji Pixel Maker</a></li>
 </ul>
@@ -1263,7 +1261,6 @@ const NOT_IFACE_RESOLVER = new Set();
 const ADDRESS_MAP = new Map();
 const IFACE_ETH_CONTROLLER = '0x612e8c09';
 
-// https://docs.ens.domains/ens-improvement-proposals/ensip-5-text-records
 // https://github.com/ensdomains/docs/blob/profile-text-records/ens-improvement-proposals/ensip-xx-profile-text-records.md
 const RECORDS = [
 	{
@@ -1362,17 +1359,17 @@ const RECORDS = [
 	},
 	{
 		type: 'addr',
-		coin: 0,
+		coin: 0, // BTC
 		icon: `<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 500 500" role="img" class="sc-56a68b4b-0 nEsDk"><path fill="#F39321" d="M43.43 125.143c7.71-10.766 14.875-21.901 23.562-31.986 15.8-18.343 33.692-34.063 54.18-47.075 18.379-11.672 37.761-20.872 58.501-27.305 32.294-10.018 65.26-12.997 98.838-9.165 24.544 2.801 48.191 9.067 70.713 19.215 13.633 6.142 26.456 13.731 39.025 21.927 25.328 16.515 45.618 38.014 62.58 62.577 18.116 26.236 29.889 55.421 36.346 86.725 4.535 21.983 6.449 44.171 4.503 66.504-2.399 27.536-8.514 54.086-19.938 79.604-9.662 21.583-21.589 41.401-36.861 59.301-14.94 17.511-31.788 32.831-51.149 45.461-13.184 8.6-26.926 16.276-41.434 21.975-24.274 9.537-49.447 15.986-75.787 17.115-18.545.795-36.985.483-55.279-2.763-15.713-2.788-31.049-6.858-46.063-12.496-14.566-5.47-28.693-11.95-41.709-20.143-18.766-11.812-35.683-26.147-50.737-42.663-16.773-18.403-30.373-38.808-40.779-61.344-14.7-31.835-21.929-65.401-22.359-100.425-.162-13.173 1.349-26.244 3.105-39.283.126-.933-.002-1.899-.012-2.851 1.536-.952 1.4-2.618 1.677-4.071 3.906-20.483 10.494-40.059 19.418-58.906 3.162-6.674 7.525-12.764 9.659-19.928zm281.727 129.37c6.537-3.474 12.749-5.465 17.658-9.85 18.918-16.899 23.96-56.673-6.747-75.833-9.566-5.969-19.77-10.393-30.77-14.907 1.819-14.731 7.709-28.516 9.622-43.603-9.076-2.249-17.578-5.234-26.425-6.193l-10.674 41.837c-6.78-2.076-13.761-1.879-20.142-5.473 2.302-14.39 7.773-27.872 9.268-42.314-9.322-1.464-17.216-5.094-26.265-5.485l-10.586 42.215c-17.944-2.75-34.419-8.921-52.52-12.239-3.977 8.91-5.738 18.311-7.334 28.313 5.896 1.392 11.022 2.623 16.158 3.811 12.965 2.998 16.517 10.086 13.439 21.424-2.19 8.065-4.166 16.189-6.182 24.301-7.245 29.16-14.432 58.333-21.72 87.482-1.642 6.567-5.734 8.706-12.398 7.731-6.563-.96-12.757-3.907-19.99-3.693-3.136 10.032-9.378 18.871-11.588 29.946l51.344 13.08c-1.312 15.208-7.614 29.125-9.476 44.441l25.544 6.123c5.653-14.044 6.957-28.803 12.226-43.33 6.351 3.265 13.397 2.317 19.612 6.427l-10.178 42.077c8.986 3.216 17.753 4.528 26.758 6.77l10.578-42.386c2.123-1.091 3.676-.888 5.143-.574a132.886 132.886 0 0 0 42.676 2.14c12.368-1.373 23.343-6.088 32.148-15.372 9.791-10.323 14.71-22.952 17.078-36.535 1.93-11.065 1.436-22.277-5.06-32.071-5.091-7.674-12.084-13.53-21.197-18.26zM223.128 312.17c17.411 4.325 34.803 8.95 53.02 5.624 9.715-1.774 17.037-6.73 19.985-16.503 2.78-9.218 1.164-17.593-5.673-24.879-7.11-7.576-16.254-11.514-25.682-14.807-11.264-3.934-22.683-7.508-34.99-8.48l-13.972 56.788c2.981.929 5.117 1.712 7.312 2.257zm61.5-80.324c9.628-1.368 17.612-7.738 19.958-16.393 2.869-10.583-.337-19.865-8.902-26.178-9.718-7.163-20.908-10.807-32.47-13.337-4.307-.943-8.544-3.454-13.756-1.759l-12.599 51.209c16.457 4.155 31.611 8.753 47.769 6.458z"></path></svg>`,
 	},
 	{
 		type: 'addr',
-		coin: 2,
-		key: 'LTC',
+		coin: 2, // LTC
+		icon: `<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 500 500" role="img" class="sc-56a68b4b-0 nEsDk"><circle cx="249.8" cy="250.2" r="248.4" style="fill: rgb(51, 94, 159);"></circle><path d="m139.4 402.6 37-120.2-40.3 12.3 10.7-29.6 37-11.5 51.7-170.1c1.1-3.6 4.5-6.1 8.3-6.1h52.8c5.8 0 9.9 5.6 8.3 11.1l-42 140.4 37.9-10.7-6.9 28.6-39.1 11.8-27.3 87.2h139c4.2 0 7.2 4 6.1 8L360.5 398c-.8 2.7-3.2 4.6-6.1 4.6h-215z" style="fill: rgb(255, 255, 255);"></path></svg>`,
 	},
 	{
 		type: 'addr',
-		coin: 3,
+		coin: 3, // DOGE
 		icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 2000" role="img" class="sc-56a68b4b-0 nEsDk"><g fill="#c2a633"><path d="M1024 659H881.12v281.69h224.79v117.94H881.12v281.67H1031c38.51 0 316.16 4.35 315.73-327.72S1077.44 659 1024 659z"></path><path d="M1000 0C447.71 0 0 447.71 0 1000s447.71 1000 1000 1000 1000-447.71 1000-1000S1552.29 0 1000 0zm39.29 1540.1H677.14v-481.46H549.48V940.7h127.65V459.21h310.82c73.53 0 560.56-15.27 560.56 549.48 0 574.09-509.21 531.41-509.21 531.41z"></path></g></svg>`,
 	},
 	{
@@ -2635,6 +2632,18 @@ function make_exploded(row, name, is_norm, downgrade_disallowed) {
 	}
 }
 
+function add_reg_exp_tags(row, exp, now) {
+	let span = document.createElement('span');
+	span.classList.add('reg');
+	span.innerText = `✍️ Registered until ${new Date(exp).toLocaleDateString()}`;
+	add_row_tag(row, span);
+	if (exp - now < 45 * 86400) {
+		add_row_tag(row, create_typed_tag('warn', `Expires in ${format_dur(exp - now)}`));
+	} else {
+		span.innerHTML += ` (${format_dur(exp - now)})`;
+	}
+}
+
 function create_typed_tag(type, value) {
 	if (!value) return;
 	let span = document.createElement('span');
@@ -2657,9 +2666,9 @@ function create_typed_tag(type, value) {
 			//break;
 		//case 'error':
 		//	type = 'fail'
-		case 'attn': 
-			//desc = `👀️ ${desc}`;
-			//break;
+		case 'info': 
+			type = 'second';
+			break;
 		case 'warn': 
 			value = `⚠️ ${value}`;
 			break;
@@ -3398,15 +3407,7 @@ async function resolve1(input, skip_norm) {
 			if (now >= exp && now <= end) {
 				add_row_tag(avail_row, create_typed_tag('warn', `Grace period (${format_dur(eth_nft_contract.grace_period)}) ends in ${format_dur(end - now)}`));
 			} else {
-				let span_reg = document.createElement('span');
-				span_reg.innerText = `✍️ Registered until ${new Date(exp).toLocaleDateString()}`;
-				span_reg.style.backgroundColor = '#def';
-				add_row_tag(avail_row, span_reg);
-				if (exp - now < eth_nft_contract.warning_period) {
-					add_row_tag(avail_row, create_typed_tag('warn', `Expires in ${format_dur(exp - now)}`));
-				} else {
-					span_reg.innerHTML += ` (${format_dur(exp - now)})`;
-				}
+				add_reg_exp_tags(avail_row, exp, now);
 			}
 		}
 		if (nft_contract) {
@@ -3493,28 +3494,15 @@ async function resolve1(input, skip_norm) {
 				add_row_tag(wrapped_row, create_typed_tag('warn', wrapped_err));
 			} else if (unwrappable) {
 				add_row_tag(wrapped_row, create_typed_tag('warn', 'Unwrappable'));
-			} else {
-				add_row_tag(wrapped_row, is_wrapped ? create_typed_tag('good', '🎁 Wrapped') : '🎉 Unwrapped');
-				if (nft_backed && !is_wrapped) {
-					// let tag = document.createElement('span');
-					// tag.classList.add('tags', 'second');
-					// tag.innerHTML = '🪙️ ';
-					// tag.append(create_etherscan_address_link(nft_contract.address, {title: 'Tokenized', contract: true}));
-					add_row_tag(wrapped_row, create_typed_tag('second', `Tokenized`));
-				}
+			} else if (!is_wrapped) {
+				add_row_tag(wrapped_row, 'Unwrapped');
 			}
 			if (wrapper_contract) {
 				let label = wrapped_row.querySelector('.row-label');
-				let title = label.innerHTML;
-				label.innerHTML = '';
-				label.append(create_etherscan_address_link(wrapper_contract.address, {title, contract: true}));
+				label.replaceChildren(create_etherscan_address_link(wrapper_contract.address, {title: label.innerHTML, contract: true}));
 			}
 			if (is_wrapped) {
 				add_nft_links(normed_row, name_norm, wrapper_contract.address, node);
-				/*if (nft_contract) {
-					add_row_tag(wrapped_row, create_etherscan_nft_link(nft_contract.address, nft_token));
-					add_row_tag(wrapped_row, create_opensea_link(nft_contract.address, nft_token));
-				}*/
 			} else if (nft_contract) {
 				add_nft_links(normed_row, name_norm, nft_contract.address, nft_token);
 			}
@@ -3532,26 +3520,35 @@ async function resolve1(input, skip_norm) {
 				let data = await wrapper_contract.callStatic.getData(node);
 				if (should_stop_resolving()) return;
 				owner = data.owner;
+				let now = Date.now();
+				let exp = data.expiry * 1000;
 				let {fuses} = data;
-				if (!(fuses & (1 << 17))) { // eth
-					await ensure_eth_nft(); 
-					if (should_stop_resolving()) return;
-					let exp = data.expiry * 1000 - eth_nft_contract.grace_period; // includes grace
-					let now = Date.now();
-					if (exp > now) {
-						add_row_tag(wrapped_row, create_typed_tag('warn', `Expires in ${format_dur(exp - now)}`));
+				if ((fuses & 0x10000) || (exp > now)) { // PARENT_CANNOT_CONTROL 
+					if (fuses & 0x00001) { // CANNOT_UNWRAP 
+						add_row_tag(wrapped_row, create_typed_tag('good', '🔒️ Locked')); 
+					} else {
+						add_row_tag(wrapped_row, create_typed_tag('good', '🕊️ Emancipated'));
+					}
+					if (!(fuses & 0x20000)) { // !IS_DOT_ETH 
+						// note: this includes grace for .eth subs
+						add_reg_exp_tags(wrapped_row, exp, now);
+					}
+				} else {
+					add_row_tag(wrapped_row, create_typed_tag('info', '♾️ Eternal'));
+				}
+				if (exp) { 
+					if (fuses & 0x40000) { // CAN_EXTEND_EXPIRY => no approval needed
+						add_row_tag(wrapped_row, create_typed_tag('good', 'Extendable by anyone'));
+					} else {
+						add_row_tag(wrapped_row, create_typed_tag('warn', 'Extension requires approval'));
 					}
 				}
-				if (fuses == 0) add_row_tag(wrapped_row, '👊️ Can Do Everything');
-				if (fuses & 0x00001) add_row_tag(wrapped_row, '🚫️ Unwrap');
 				if (fuses & 0x00002) add_row_tag(wrapped_row, '🚫️ Burn Fuses');
 				if (fuses & 0x00004) add_row_tag(wrapped_row, '🚫️ Transfer');
 				if (fuses & 0x00008) add_row_tag(wrapped_row, '🚫️ Set Resolver');
 				if (fuses & 0x00010) add_row_tag(wrapped_row, '🚫️ Set TTL');
-				if (fuses & 0x00020) add_row_tag(wrapped_row, '🚫️ Subdomains');
+				if (fuses & 0x00020) add_row_tag(wrapped_row, '🚫️ Subdomain');
 				if (fuses & 0x00040) add_row_tag(wrapped_row, '🚫️ Approve');
-				if (fuses & 0x10000) add_row_tag(wrapped_row, create_typed_tag('warn', 'Parent Controlled'));
-				if (fuses & 0x40000) add_row_tag(wrapped_row, '☑️ Extend Expiry');
 			} else {
 				owner = await registry_contract.callStatic.owner(node);
 				if (should_stop_resolving()) return;
@@ -3769,7 +3766,7 @@ async function resolve1(input, skip_norm) {
 		add_row_tag(address_row, create_elapsed());	
 
 		if (show_records_check.checked) {
-			let records_row = create_row(`Records`, true);
+			let records_row = create_row(create_link('https://docs.ens.domains/ens-improvement-proposals/ensip-5-text-records', 'Records:'), true);
 			records_row.classList.add('records');
 			if (available) records_row.classList.add('old');
 			output_div.append(records_row);	
@@ -3833,7 +3830,7 @@ async function resolve1(input, skip_norm) {
 	let primary, primary_err;
 	let primary_row = create_row('Primary', true);	
 	output_div.append(primary_row);
-	primary_row.append(create_jazz_icon(address));
+	//primary_row.append(create_jazz_icon(address)); // only true in the forward direction
 	try {
 		primary = await active_provider.lookupAddress(address);
 		if (debug) primary = primary.toUpperCase();
@@ -4061,7 +4058,6 @@ async function ensure_eth_nft() {
 		'function GRACE_PERIOD() external view returns (uint256)',
 	], active_provider);
 	eth_nft_contract.grace_period = (await eth_nft_contract.callStatic.GRACE_PERIOD().then(x => 1000 * x.toNumber()).catch(() => 90*86400*1000));
-	eth_nft_contract.warning_period = Math.round(eth_nft_contract.grace_period / 2); // when to show warning in interface
 	eth_controller_contract = contract_for_controller(await eth_resolver_contract.get_interface(IFACE_ETH_CONTROLLER));
 	price_oracle_contract = contract_for_price_oracle(await eth_controller_contract.callStatic.prices());
 }
