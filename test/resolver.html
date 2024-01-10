@@ -282,6 +282,12 @@ body.testnet #provider a {
 .row-label a {	
 	color: #000;
 }
+.row.locked .row-label {
+	opacity: 65%;
+}
+.row.locked .row-label:before {
+	content: '🔒️';
+}
 .row {
 	padding: 8px;
 	background: #fff;
@@ -473,13 +479,13 @@ button.copy.copied {
 	color: #000;
 	background: #fdb;
 }
-.tags.warn {
+.tags.note {
 	background: #ffc;
 }
 .tags.reg {
 	background-color: #def;
 }
-.tags.second {
+.tags.attn {
 	background: #fff0dd;
 }
 .tags.fail {
@@ -827,10 +833,11 @@ footer span:hover {
 <button>xn--💩</button>
 <button>💷pound</button>
 
-<a href="https://github.com/ensdomains/ens-contracts/tree/master/contracts/wrapper#namewrapper-docs"><b>Wrapped:</b></a>
-<button>firstwrappedname</button>
-<button>dessert3.menu.bestsushi7.eth</button>
-<button>loyal-eth-community</button>
+<a href="https://github.com/ensdomains/ens-contracts/tree/master/contracts/wrapper#namewrapper-docs"><b>Wrapper:</b></a>
+<button data-name="firstwrappedname">Emanicpated 2LD</button>
+<button data-name="please.pumpdeezbags.eth">Emanicpated 3LD</button>
+<button data-name="dessert3.menu.bestsushi7.eth">Wrapped</button>
+<button data-name="loyal-eth-community">Locked</button>
 
 <b>Subdomain:</b>
 <button data-name="nowzad.loopring.eth">loopring</button>
@@ -1253,8 +1260,8 @@ const RESOLVER_NAMES = {
 	'0x1da022710dF5002339274AaDEe8D58218e9D6AB5': 'Old Public (v1)',
 	'0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41': 'Old Public (v2)',
 	'0x231b0Ee14048e9dCcD1d247744d114a4EB5E8E63': '✨️ Public (v3)',
-	'0x5fBb459C49BB06083C33109fA4f14810eC2Cf358': 'Old (v1)',
-	'0xA2C122BE93b0074270ebeE7f6b7292C7deB45047': '✨️ Newest (v2)',
+	'0x5fBb459C49BB06083C33109fA4f14810eC2Cf358': 'Old Reverse (v1)',
+	'0xA2C122BE93b0074270ebeE7f6b7292C7deB45047': 'Old Reverse (v2)',
 };
 const IS_CONTRACT = new Map();
 const NOT_IFACE_RESOLVER = new Set();
@@ -2060,7 +2067,7 @@ function create_dns_row(name, replaced) {
 				add_alternative_btn(row, name);
 			}
 		} else {
-			add_row_tag(row, create_typed_tag('second', 'Punycode Compatible'));
+			add_row_tag(row, create_typed_tag('star', 'Punycode Compatible'));
 		}
 		if (name.includes('\u200D')) {
 			add_row_tag(row, create_typed_tag('warn', 'ZWJ'));
@@ -2324,18 +2331,14 @@ function make_normalized(row, name) {
 	add_row_tag(row, span);	
 }
 
+function make_locked(row) {
+	row.classList.add('locked');
+}
+
 function make_contract(row) {
 	row.classList.add('contract');
 	//let span = row.querySelector('.row-label');
 	//span.innerHTML = span.innerHTML.replace('Address', 'Contract'); // meh
-}
-
-function create_palindrome_tag() {
-	// let span = document.createElement('span');
-	// span.classList.add('palindrome');
-	// span.innerHTML = '⇄ Palindrome';
-	// return span;
-	return create_typed_tag('good', '⇄')
 }
 
 function create_ethmoji_row(tokens, suffix) {
@@ -2366,7 +2369,7 @@ function create_ethmoji_row(tokens, suffix) {
 		if (tokens.length == 2) {
 			add_row_tag(row, create_typed_tag('fire', 'Shortest Keycaps'));
 		} else {
-			add_row_tag(row, create_typed_tag('second', 'Keycaps'));
+			add_row_tag(row, create_typed_tag('star', 'Keycaps'));
 		}
 	} else if (tally.length == 1) {
 		let ncp = tally[0].cps.length;
@@ -2375,7 +2378,7 @@ function create_ethmoji_row(tokens, suffix) {
 			add_row_tag(row, create_typed_tag('fire', repeat == 1 ? 'Single' : 'Shortest'));
 		} else {
 			if (tally[0].count > 1) {
-				add_row_tag(row, create_typed_tag('second', 'Repeated'));
+				add_row_tag(row, create_typed_tag('star', 'Repeated'));
 			}
 			min_repeated = str_from_cps(tally[0].cps).repeat(repeat);
 		}
@@ -2408,7 +2411,7 @@ function create_digits_row(norm, group, values, negative, suffix) {
 		add_row_tag(row, create_typed_tag('fire', 'Shortest'));
 	}
 	if (values.every((x, i) => x == values[0])) {
-		add_row_tag(row, create_typed_tag('second', `Repeated (${values.length})`));
+		add_row_tag(row, create_typed_tag('star', `Repeated (${values.length})`));
 	}
 	if (negative) {
 		add_row_tag(row, 'Negative');
@@ -2633,15 +2636,17 @@ function make_exploded(row, name, is_norm, downgrade_disallowed) {
 }
 
 function add_reg_exp_tags(row, exp, now) {
-	let span = document.createElement('span');
-	span.classList.add('reg');
-	span.innerText = `✍️ Registered until ${new Date(exp).toLocaleDateString()}`;
+	let span = create_typed_tag('reg', `✍️ Registered until ${new Date(exp).toLocaleDateString()}`);
 	add_row_tag(row, span);
 	if (exp - now < 45 * 86400) {
 		add_row_tag(row, create_typed_tag('warn', `Expires in ${format_dur(exp - now)}`));
 	} else {
 		span.innerHTML += ` (${format_dur(exp - now)})`;
 	}
+}
+
+function create_palindrome_tag() {
+	return create_typed_tag('good', '⇄');
 }
 
 function create_typed_tag(type, value) {
@@ -2652,32 +2657,17 @@ function create_typed_tag(type, value) {
 		span.classList.add('long');
 	}
 	switch (type) {
-		case 'second': 
+		case 'star': 
+			type = 'attn';
 			value = `⭐️ ${value}`;
 			break;
-		case 'fresh': {
-			type = 'second';
-			value = `🌻️ ${value}`;
-			break;
-		}
 		case 'norm':
-			//desc = `❌ ${desc}`;
-			type = 'warn';
-			//break;
-		//case 'error':
-		//	type = 'fail'
-		case 'info': 
-			type = 'second';
-			break;
 		case 'warn': 
+			type = 'note';
 			value = `⚠️ ${value}`;
 			break;
 		case 'fire':
 			value = `🔥️ ${value}`;
-			break;
-		case 'good': 
-			break;
-		case 'special':
 			break;
 		case 'fail': 
 			value = `❌️ ${value}`;
@@ -2686,7 +2676,6 @@ function create_typed_tag(type, value) {
 			type = 'fail';
 			value = `🛑️ ${value}`;
 			break;
-		//default: throw new TypeError(`unknown grade: ${type}`);
 	}
 	span.innerHTML = value;
 	span.classList.add(type);
@@ -3523,29 +3512,33 @@ async function resolve1(input, skip_norm) {
 				let now = Date.now();
 				let exp = data.expiry * 1000;
 				let {fuses} = data;
-				if ((fuses & 0x10000) || (exp > now)) { // PARENT_CANNOT_CONTROL 
+				if (debug) fuses = 0x7FFFF;
+				if (fuses & 0x10000) { // PARENT_CANNOT_CONTROL 
 					if (fuses & 0x00001) { // CANNOT_UNWRAP 
 						add_row_tag(wrapped_row, create_typed_tag('good', '🔒️ Locked')); 
 					} else {
 						add_row_tag(wrapped_row, create_typed_tag('good', '🕊️ Emancipated'));
 					}
 					if (!(fuses & 0x20000)) { // !IS_DOT_ETH 
-						// note: this includes grace for .eth subs
-						add_reg_exp_tags(wrapped_row, exp, now);
+						add_reg_exp_tags(wrapped_row, exp, now); // note: this includes grace for .eth subs
+						if (fuses & 0x40000) { // CAN_EXTEND_EXPIRY => no approval needed
+							add_row_tag(wrapped_row, create_typed_tag('note', '➡️ Extendable by anyone'));
+						} else {
+							add_row_tag(wrapped_row, create_typed_tag('warn', 'Extension requires approval'));
+						}
 					}
 				} else {
-					add_row_tag(wrapped_row, create_typed_tag('info', '♾️ Eternal'));
-				}
-				if (exp) { 
-					if (fuses & 0x40000) { // CAN_EXTEND_EXPIRY => no approval needed
-						add_row_tag(wrapped_row, create_typed_tag('good', 'Extendable by anyone'));
-					} else {
-						add_row_tag(wrapped_row, create_typed_tag('warn', 'Extension requires approval'));
-					}
+					add_row_tag(wrapped_row, create_typed_tag('good', '🎁️ Wrapped')); // ♾️
 				}
 				if (fuses & 0x00002) add_row_tag(wrapped_row, '🚫️ Burn Fuses');
-				if (fuses & 0x00004) add_row_tag(wrapped_row, '🚫️ Transfer');
-				if (fuses & 0x00008) add_row_tag(wrapped_row, '🚫️ Set Resolver');
+				if (fuses & 0x00004) {
+					add_row_tag(wrapped_row, '🚫️ Transfer');
+					make_locked(owner_row);
+				}
+				if (fuses & 0x00008) {
+					add_row_tag(wrapped_row, '🚫️ Set Resolver');
+					make_locked(resolver_row);
+				}
 				if (fuses & 0x00010) add_row_tag(wrapped_row, '🚫️ Set TTL');
 				if (fuses & 0x00020) add_row_tag(wrapped_row, '🚫️ Subdomain');
 				if (fuses & 0x00040) add_row_tag(wrapped_row, '🚫️ Approve');
@@ -3572,7 +3565,7 @@ async function resolve1(input, skip_norm) {
 			owner_row.append(create_typed_tag('warn', owner_err));
 		} else if (!owner) {
 			if (available) {
-				add_row_tag(owner_row, create_typed_tag('fresh', '<i>None</i>'));
+				add_row_tag(owner_row, create_typed_tag('reg', '🌻️ Not Set'));
 			} else {
 				add_row_tag(owner_row, create_typed_tag('warn', 'Not Set'));
 			}

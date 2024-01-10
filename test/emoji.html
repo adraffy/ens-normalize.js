@@ -484,7 +484,6 @@ footer span:hover {
 </div>
 <div id="examples">
 	<button style="background-color: #afa" data-query="v15.1">⭐️ New in 15.1</button>
-	<button style="background-color: #faa" data-query="Disabled">Disabled</button>
 	<b>People:</b>
 	<button style="background-color: #dff" data-query="=\bMan\b">Man</button>
 	<button style="background-color: #fdf" >Woman</button>
@@ -494,6 +493,10 @@ footer span:hover {
 	<button>Person</button>
 	<button data-query="=face!clock">Face</button>
 	<button>Finger</button>
+	<b>Kind:</b>
+	<button data-query="Basic_Emoji">Basic</button>
+	<button data-query="flag:">Flags</button>
+	<button style="background-color: #faa" data-query="Disabled">Disabled</button>
 	<b>Tone:</b>
 	<button style="background-color: #fe8" data-query="=\b(wo)?man\b,\bperson\b!’,[\u{1F3FB}-\u{1F3FF}],^flag:">Golden</button>
 	<button data-query="=[\u{1F3FB}-\u{1F3FF}]">Any</button>
@@ -657,7 +660,7 @@ top_btn.addEventListener('click', () => window.scrollTo(0, 0));
 		}
 		let parts = [name];
 		if (name0) parts.push(name0);
-		if (x.type) parts.push(x.type);
+		//if (x.type) parts.push(x.type);
 		if (x.group) parts.push(x.group);
 		if (x.subgroup) parts.push(x.subgroup);
 		x.query = searchize(parts.join(' '));
