@@ -7,7 +7,7 @@ export const AUGMENTED_ALL = 'ALL';
 export const SCRIPT_TYPE_EXCLUDED = 'Excluded';
 export const SCRIPT_TYPE_LIMITED_USE = 'LimitedUse';
 
-// https://www.unicode.org/reports/tr39/#Mixed_Script_Detection
+// https://www.unicode.org/reports/tr39/#def-augmented-script-set
 export function augment_script_set(set) {
 	if (set.has('Hani')) {
 		set.add('Hanb');
@@ -307,28 +307,22 @@ export class UnicodeSpec {
 	get_augmented_script_set(x) {
 		return augment_script_set(this.get_extended_script_set(x));
 	}
+	// https://www.unicode.org/reports/tr39/#def-resolved-script-set
 	get_resolved_script_set(x) {
-		// https://www.unicode.org/reports/tr39/#def-resolved-script-set
 		let cps = explode_cp(x);
 		if (!cps.length) return new Set();
 		let resolved = this.get_augmented_script_set(cps[0]);
 		for (let i = 1; i < cps.length; i++) {
-			let set = this.get_resolved_script_set(cps[i]);
-			if (set.has(AUGMENTED_ALL)) continue;
+			let set = this.get_augmented_script_set(cps[i]); // 20240111: this was get_resolved_script_set() by mistake
+			if (set.has(AUGMENTED_ALL)) continue;            // however it was the same logic just less efficient
 			if (resolved.has(AUGMENTED_ALL)) {
 				resolved = set;
 			} else {
-				for (let abbr of set) {
-					if (!resolved.has(abbr)) {
-						resolved.delete(abbr);
-					}
-				}
 				for (let abbr of resolved) {
 					if (!set.has(abbr)) {
 						resolved.delete(abbr);
 					}
 				}
-
 			}
 		}
 		return resolved;
@@ -583,6 +577,7 @@ export class UnicodeSpec {
 		});
 	}
 	*/
+	// https://unicode.org/reports/tr46/#Implementation_Notes
 	derive_idna_rules({version, use_STD3, valid_deviations}) {
 		switch (version) {
 			case 2003:

@@ -1,10 +1,8 @@
 # Derive Data Files
 
-## Resources
-
 * [Unicode Standard](https://www.unicode.org/versions/latest/)
 * [Unicode Technical Standard #46: IDNA](https://www.unicode.org/reports/tr46/)
-	* [unicode-logic.js/`derive_idna_rules()`](./unicode-logic.js) — [src](https://unicode.org/reports/tr46/#Implementation_Notes)
+	* [unicode-logic.js/`derive_idna_rules()`](./unicode-logic.js#L581) — [spec](https://unicode.org/reports/tr46/#Implementation_Notes)
 	* [idna.js/`ens_idna_rules()`](./idna.js)
 * [Unicode Technical Standard #51: Emoji](https://www.unicode.org/reports/tr51/)
 * [Unicode Standard Annex #15: Normalization Forms](https://unicode.org/reports/tr15/)
@@ -13,7 +11,8 @@
 * [Unicode Standard Annex #31: Identifier and Pattern Syntax](https://www.unicode.org/reports/tr31/)
 	* [script-kinds.json](./data/15.1.0/scripts-kinds.json) — [Excluded](https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers), [Recommended](https://www.unicode.org/reports/tr31/#Table_Recommended_Scripts), [Limited Use](https://www.unicode.org/reports/tr31/#Table_Limited_Use_Scripts)
 * [Unicode Technical Standard #39: Security Mechanisms](https://www.unicode.org/reports/tr39/)
-	* [unicode-logic.js/`get_augmented_script_set()`](./unicode-logic.js) — [src](https://www.unicode.org/reports/tr39/#Mixed_Script_Detection)
+	* [unicode-logic.js/`augmented_script_set()`](./unicode-logic.js#L11) — [spec](https://www.unicode.org/reports/tr39/#def-augmented-script-set)
+	* [unicode-logic.js/`get_resolved_script_set()`](./unicode-logic.js#L311) — [spec](https://www.unicode.org/reports/tr39/#def-resolved-script-set)
 * [RFC-3492: Punycode](https://datatracker.ietf.org/doc/html/rfc3492)
 * [RFC-5891: IDNA: Protocol](https://datatracker.ietf.org/doc/html/rfc5891) 
 * [RFC-5892: The Unicode Code Points and IDNA](https://datatracker.ietf.org/doc/html/rfc5892)
@@ -26,7 +25,7 @@
 	* Download Latest: `node parse-cldr.js`
 	* To download older version: `node parse-cldr.js 42` 
 	* Already included: [CLDR 42-44](./data/)
-	* Warning: versioned separately from Unicode!
+	* ⚠️ Versioned separately from Unicode!
 
 ## Instructions
 
