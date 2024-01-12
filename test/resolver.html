@@ -10,6 +10,7 @@
 	--btn-hover-fill-color: #ccc;
 	--btn-border-color: #888;
 	--copied-color: #8f8;
+	--confusing-color: #d47;
 }
 .hide {
 	display: none !important;
@@ -314,9 +315,6 @@ body.testnet #provider a {
 .row.old {
 	opacity: 65%;
 }
-.row.old:not(.details) {
-	outline: 1px solid #ccc;
-}
 .row.dns .main {
 	border-bottom-style: dotted;
 }
@@ -396,9 +394,6 @@ a.internal {
 a.wide {
 	line-break: anywhere;
 }
-sub {
-	user-select: none;
-}
 span.tags {
 	background: #ddd;
 	color: #555;
@@ -409,6 +404,7 @@ span.tags {
 	white-space: pre;
 }
 button.copy {
+	flex: 0 0 auto;
 	align-self: center;
 	padding: 0;
 	border: none;
@@ -420,10 +416,18 @@ button.copy {
 	background-repeat: no-repeat;
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' height='24' shape-rendering='geometricPrecision' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' viewBox='0 0 24 24' width='24' style='color:var(--geist-foreground)'%3E%3Cpath d='M6 17C4.89543 17 4 16.1046 4 15V5C4 3.89543 4.89543 3 6 3H13C13.7403 3 14.3866 3.4022 14.7324 4M11 21H18C19.1046 21 20 20.1046 20 19V9C20 7.89543 19.1046 7 18 7H11C9.89543 7 9 7.89543 9 9V19C9 20.1046 9.89543 21 11 21Z'/%3E%3C/svg%3E");
 }
+button.copy.small {
+	width: 20px;
+	height: 20px;
+	background-size: 18px;
+	opacity: 35%;
+}
 button.copy:hover {
+	opacity: 1;
 	background-color: var(--copied-color);
 }
 button.copy.copied {
+	opacity: 1;
 	background-color: var(--copied-color);
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' height='24' shape-rendering='geometricPrecision' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' viewBox='0 0 24 24' width='24' style='color:var(--geist-foreground)'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
 }
@@ -431,6 +435,12 @@ button.copy.copied {
 .tags.old {
 	background-color: #df8;
 	order: 8;
+}
+.tags.index {
+	font: 9pt monospace;
+	background-color: unset;
+	opacity: 50%;
+	user-select: none;
 }
 .tags.ens { order: 9; }
 .tags.metadata { order: 10; }
@@ -441,6 +451,15 @@ button.copy.copied {
 	font: 9pt sans-serif;
 	order: 50;
 }
+.tags.confusing {
+	color: #fff;
+	background-color: var(--confusing-color);
+	text-align: center;
+}
+.normalized .confusing {
+	margin: -8px 0;
+	font-size: 75%;
+}
 .tags.normalized { background: #8f8; }
 .tags.normalized.ascii {
 	background: #00f;
@@ -448,7 +467,17 @@ button.copy.copied {
 	font-family: monospace;
 }
 .tags.length {
-	background: #f8eedd;
+	background: #f8eedd;	
+}
+.tags.length:after {
+	content: 'ch';
+	padding-left: 1px;
+	font-size: 70%;
+}
+.tags.bytes:after {
+	content: 'bytes';
+	padding-left: 1px;
+	font-size: 70%;
 }
 .tags.iface {
 	display: flex;
@@ -491,6 +520,12 @@ button.copy.copied {
 .tags.fail {
 	background: #fcc;
 	color: #600;
+}
+.tags.type {
+	background: #cff;
+}
+.tags.emoji {
+	background-color: #fe0;
 }
 .tags.special {
 	background: #f84;
@@ -541,114 +576,81 @@ button.copy.copied {
 button.glow {
 	border: 2px solid #2c2;
 }
-.row.details {
-	display: grid;
-	background: none;
-	padding: 0;
-	grid-template-columns: 2fr min-content 3fr;
-	align-items: start;
-	gap: 4px;
+.breakdown {
 	font-size: 12pt;
-	box-sizing: border-box;
 }
-.details a.hashproof {
-	color: #000;
+.breakdown.reverse > * + * {
+	margin-top: 4px;
+	border-top: 2px solid #fff;	
+	padding-top: 4px;
+}
+.breakdown .tags {
+	padding: 2px 4px;
+	border-radius: 4px;
+	border: 1px solid #fff;
+}
+.breakdown .hash {
+	display: flex;
+	gap: 4px;
+	align-items: center;
+	justify-content: center;
+}
+.breakdown .hash code {
+	font-size: 90%;
+}
+.breakdown .hash :first-child {
+	white-space: pre;
+}
+.breakdown .hash a {
 	font-weight: bold;
+	color: #000;
 	text-decoration: none;
 }
-.details a.hashproof:hover {
+.breakdown .hash a:hover {
 	text-decoration: underline;
 }
-#output .details button {
-	white-space: pre;
-	font-size: 85%;
-	padding: 2px 4px;
-}
-.details .length {
-	color: #777;
-	background: #f8eedd;
-	border: 1px solid #ccc;
-	text-align: center;
-	padding: 2px 4px;
-	border-radius: 5px;
-	justify-self: center;
-}
-.details .label {
-	font-size: 14pt;
-	display: flex;
-	text-align: center;
-	background: linear-gradient(90deg, #cfc8, #0000);
-}
-.details .label br {
-	display: none;
-}
-.details .label .text {
-	flex: 1;
-}
-.details .label.error {
-	background: linear-gradient(90deg, #fcc, #0000);
-}
-.details .label.mapped {
-	background: linear-gradient(90deg, #ccf8, #0000);
-}
-.details code {
+.breakdown .hash.minor {
 	font-size: 90%;
-}
-.details code,
-.details .label {	
-	max-height: 10rem;
-	overflow-y: auto;
-}
-.details .group {
 	color: #666;
-	text-align: left;
-	font-style: italic;
-	padding-right: 10px;
-	font-size: 85%;
 }
-.details .restricted {
+.breakdown .label {
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
-	background: #ffc;
-	border: 1px solid #ddd;
-	padding: 1px 3px;
+	justify-content: center;
+	gap: 4px 8px;
+	margin: 2px 0;
+	border-top: 2px solid #fff;
+	padding: 3px 6px;
+	border-bottom: 1px dotted #aaa;
+}
+.breakdown .label.valid {
+	background: linear-gradient(90deg, #efea, #0000);
+}
+.breakdown .label.error {
+	background: linear-gradient(90deg, #fcca, #0000);
+}
+.breakdown .label.mapped {
+	background: linear-gradient(90deg, #ccf6, #0000);
+}
+.breakdown .name {
+	margin: 0 4px;
+	border: 1px solid #aaa;
+	border-radius: 4px;
+	padding: 1px 4px;
+	font: 13pt monospace;	
+  	color: #000;
+}
+.breakdown .restricted {
 	text-decoration: none;
-	font-size: 85%;
+	background-color: #fcf;
 	color: #000;
 }
-.details .restricted:hover {
-	background-color: #cff;
+.breakdown .restricted:hover {
+	outline: 2px solid #00f;
 }
-.details .disabled {
-	opacity: 50%;
-	user-select: none;
-}
-.details .wide {
-	grid-column: 1 / -1;
-	text-align: center;
-	line-break: anywhere;
-	padding-bottom: 2px;;
-	border-bottom: 3px solid #fff;
-} 
-.details .wide:first-child {
-	padding-bottom: 5px;
-}
-.details .wide:last-child {
-	border-bottom: none;
-}
-.details .footer {
-	font-size: 90%;
-	color: #666;
-	padding: 4px 0;
-}
-.details .footer .error {
-	color: #d00;
-	font-size: 11pt;
-	font-weight: bold;	
-	background: #fee;
-}
-.details .footer.sep {	
-	border-top: 1px dotted #aaa;
+.breakdown .error {
+	order: 1;
 }
 .tokens {
 	font-size: 16pt;
@@ -686,8 +688,12 @@ button.glow {
 	font: 11px sans-serif;
 	color: #666;
 }
+.record:not([href]):hover {
+	border-color: #000;
+}
 .record[href]:hover {
-	outline: 2px solid #00f;
+	border: 2px solid #00f;
+	margin: -1px;
 }
 .record img,
 .record svg {
@@ -777,22 +783,9 @@ footer span:hover {
 	.row {
 		justify-content: center;
 	}
-	.row.details .wide {
-		padding-left: 5px;
-		padding-right: 5px;
-	}
-	.row.details .label {
-		flex-direction: column-reverse;
-		align-items: center;
-		margin-left: 5px;
-	}
-	.row.details .group {
-		text-align: center;
-		padding-right: 0;
-	}
-	.row.details .restricted {
-		flex-direction: row-reverse;
-		font-size: 75%;
+	.breakdown .hash {
+		padding-left: 8px;
+		padding-right: 8px;
 	}
 	#examples_btn {
 		display: block;
@@ -992,7 +985,6 @@ Greek Keraia:
 Hebrew Geresh:
 <button data-name="{5D1}{5F3}"></button>
 
-
 <a href="https://www.rfc-editor.org/rfc/rfc5893.html#section-2"><b>CheckBidi:</b></a>
 <button>פעילותהבינאום</button>
 <button data-name="{0786}{07AE}{0782}{07B0}{0795}{07A9}{0793}{07A6}{0783}{07AA}">Dhivehi</button>
@@ -1167,8 +1159,9 @@ Hebrew:
 <script type="module">
 // to prepare this file for self-hosted deployment:
 // * replace infura_provider with a public provider, eg. new ethers.providers.CloudflareProvider();
-// * replace punycode.js import with 'https://cdn.jsdelivr.net/npm/@adraffy/punycode@latest/dist/index.min.js'
-// * replace "../../" with "https://adraffy.github.io/"
+// * replace "../../punycode.js" with https://cdn.jsdelivr.net/npm/@adraffy/punycode@latest/dist/index.min.js
+// * replace "../../cid.js" with https://cdn.jsdelivr.net/npm/@adraffy/cid@latest/dist/index.min.js
+// * replace "../../" with https://adraffy.github.io/
 import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.esm.min.js';
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
@@ -1181,6 +1174,7 @@ import eth_ens_namehash from './eth-ens-namehash@2.0.15.min.js';
 use_default_style();
 
 const EMOJI = ens_emoji();
+const emoji_url = './emoji.html#q=%s';
 
 const input_field = document.querySelector('#input_field');
 const resolve_btn = document.querySelector('#resolve_btn');
@@ -1222,8 +1216,6 @@ const VISION_NAME = 'Vision';
 const PRETTY_NAME = '💖️';
 const MANAGER_NAME = 'Manager';
 const NFT_OWNER_NAME = 'NFT Owner';
-
-const emoji_url = './emoji.html#q=%s';
 
 const CHAIN_ID_MAINNET = 1;
 const CHAIN_ID_GOERLI = 5;
@@ -1647,7 +1639,7 @@ auto_resolve_check.addEventListener('input', () => {
 show_details_check.addEventListener('input', () => {	
 	localStorage[STORAGE_SHOW_DETAILS] = show_details_check.checked;	
 	for (let el of document.querySelectorAll('.detailed')) {
-		el.classList.toggle('hide', !show_details_check.checked);
+		make_detailed(el);
 	}
 });
 show_records_check.addEventListener('input', () => {
@@ -1886,12 +1878,13 @@ function parse() {
 		return true;
 	}
 	let row = create_row(INPUT_NAME);
-	make_exploded(row, name, false);
-	output_div.append(row, create_details_row(name, true));
+	make_exploded(row, name, false); //, true);
+	output_div.append(row, create_breakdown_row(name, true));
 	try {
 		let norm = ens_normalize(name);
 		if (norm === name) {
 			make_normalized(row, norm);
+			//make_exploded(row, name, false);
 		} else {
 			add_row_tag(row, create_typed_tag('fail', 'Normalized'));
 			if (!skip) {
@@ -1900,7 +1893,7 @@ function parse() {
 				make_exploded(norm_row, norm, true);
 				make_normalized(norm_row, norm);
 				add_old_tag(norm_row, name, true);
-				output_div.append(norm_row, create_details_row(norm));
+				output_div.append(norm_row, create_breakdown_row(norm));
 			}
 		}		
 		add_old_tag(row, name);
@@ -1911,7 +1904,6 @@ function parse() {
 		add_row_tag(row, create_typed_tag('norm', err));
 		if (skip) return true;
 		add_old_tag(row, name);
-		make_exploded(row, name, false); // show the mapping during the error
 		stop_resolving();
 
 		// if there is a fully ignorable label
@@ -2006,16 +1998,18 @@ function parse() {
 	}
 }
 
-function add_detailed(row) {
-	row.classList.add('detailed');
-	row.classList.toggle('hide', !show_details_check.checked);
+function make_detailed(el) {
+	el.classList.add('detailed');
+	let hide = !show_details_check.checked;
+	if (el.dataset.reversed) hide = !hide;
+	el.classList.toggle('hide', hide);
 }
 
 function add_transformed_row(input) {
 	if (ens_tokenize(input).some(x => x.type === 'nfc' || x.type === 'mapped')) {
 		let row = create_row('Transform');
 		row.classList.add('transform');
-		add_detailed(row);
+		make_detailed(row);
 		make_exploded(row, input, true);
 		output_div.append(row);
 	}
@@ -2211,9 +2205,9 @@ function make_copier(el, raw) {
 	el.addEventListener('click', e => {
 		let copy = raw;
 		if (e.altKey) {
-			copy = unicode_escape(copy);
+			copy = explode_cp(copy).map(hex_cp).join(' ');
 		} else if (e.shiftKey) {
-			copy = entity_escape(copy);
+			copy = bytes_from_utf8(copy).map(hex_cp).join(' ');
 		} 
 		const cls = 'copied';
 		document.querySelectorAll(`.${cls}`).forEach(x => x.classList.remove(cls));
@@ -2223,19 +2217,21 @@ function make_copier(el, raw) {
 	});
 }
 
-function create_copy_btn(raw) {
+function create_copy_btn(raw, {small, value} = {}) {
 	let btn = document.createElement('button');
 	make_copier(btn, raw);
 	btn.classList.add('copy');
-	btn.title = raw;
-	if (!/^0x[0-9a-f]*$/i.test(raw)) {
-		btn.title += '\n' + explode_cp(raw).map(hex_cp).join(' ');
-	}
-	if (unicode_escape(raw) !== raw) {
-		btn.title += `\n[ALT] Unicode Escaped`;
-	}
-	if (entity_escape(raw) !== raw) {
-		btn.title += `[SHIFT] Entity Escaped`;
+	if (small) btn.classList.add('small');
+	if (value) {
+		btn.title = raw;
+	} else {
+		let cps = explode_cp(raw);
+		btn.title = [
+			raw,
+			cps.map(hex_cp).join(' '),
+			`[ALT] Codepoints (${cps.length})`,
+			`[SHIFT] UTF-8 Bytes (${bytes_from_utf8(raw).length})`,
+		].join('\n');
 	}
 	return btn;
 }
@@ -2256,12 +2252,6 @@ function create_resolve_btn(name, html = '↩️ Resolve') {
 	return btn;
 }
 
-function set_length(el, n, unit = 'ch') {
-	el.classList.add('length');
-	el.innerHTML = `${n}<sub>${unit}</sub>`;
-	return el;
-}
-
 function create_main_span(text) {
 	let inner = document.createElement('span');
 	inner.classList.add('main', 'long');
@@ -2278,17 +2268,60 @@ function create_pretty_tag() {
 	return span;
 }
 function upgrade_split_type(info) {
-	info.restricted = info.type.startsWith('Restricted[');
 	if (info.type === 'Latin') {
 		let cps = info.tokens.flatMap(x => x.is_emoji ? [] : x); // ascii+emoji
 		if (cps.every(cp => cp < 0x80)) {
 			info.type = 'ASCII';
-		} else if (/[ąçęşìíîïǐł]/u.test(str_from_cps(cps))) { // TODO: formalize this logic in ens-normalize
-			info.confusing = 'latin';
 		}
-	} else if (info.type === 'ASCII') {
-		if (/^0x[0-9a-f]{18,}$/i.test(str_from_cps(info.output))) {
-			info.confusing = 'address';
+	} 
+	info.confusing = determine_confusion(str_from_cps(info.input), flatten_tokens(info.tokens));
+}
+
+function flatten_tokens(tokens) {
+	return tokens.flatMap(t => t.is_emoji ? String.fromCodePoint(...t) : t);
+}
+
+// from https://raffy.antistupid.com/eth/ens-regs.html
+function determine_confusion(label, flat) {
+	let match;
+	if (/[ąçęşìíîïǐł]/u.test(label)) {
+		return 'Rare';
+	} else if (/l\d{2,}/i.test(label) || /\d{2,}l/i.test(label)) {
+		return 'Digits+L';
+	} else if (has_repeated_run(flat, 10)) {
+		return 'Many';
+	} else if (match = get_similar_emoji(flat)) {
+		return match;
+	} else if (/^0x[0-9a-f]{18,}/i.test(label)) {
+		return 'Address-like';
+	}
+}
+
+function has_repeated_run(flat, thres) {
+	let prev, count;
+	for (let x of flat) {
+		if (prev !== x) {
+			prev = x;
+			count = 1;
+		} else if(++count >= thres) {
+			return true;
+		}
+	}
+}
+
+function get_similar_emoji(flat) {
+	let set = new Set(flat.filter(x => typeof x === 'string'));
+	if (!set.size) return;
+	let conflicts = [
+		['🇺🇸', ['🇺🇲']]
+	];
+	for (let [primary, similar] of conflicts) {
+		let p = set.has(primary);
+		let n = similar.reduce((a, x) => a + +set.has(x), 0);
+		if (p && n || n > 1) {
+			return `Mixed ${primary}`;
+		} else if (!p && n) {
+			return `Uncommon ${primary}`;
 		}
 	}
 }
@@ -2321,16 +2354,7 @@ function make_normalized(row, name) {
 		span.innerHTML += ` ${[...types].sort().join('+')}`;
 	}
 	if (split.some(x => x.confusing)) {
-		let span = document.createElement('span');
-		span.innerHTML = 'Possibly<br>Confusing';
-		span.style.cssText = `
-			color: #fff;
-			background-color: #d47;
-			margin: -8px 0;
-			text-align: center;
-			font-size: 75%;
-		`;
-		add_row_tag(row, span);
+		add_row_tag(row, create_typed_tag('confusing', 'Possibly<br>Confusing'));
 	}
 	add_row_tag(row, span);	
 }
@@ -2348,7 +2372,7 @@ function make_contract(row) {
 function create_ethmoji_row(tokens, suffix) {
 	let row = create_row('Ethmoji');
 	row.classList.add('category', 'ethmoji');
-	add_detailed(row);
+	make_detailed(row);
 	let tally = new Map();
 	let last;
 	for (let token of tokens) {
@@ -2402,7 +2426,7 @@ function create_digits_row(norm, group, values, negative, suffix) {
 	//let row = create_row(`${name0} Digits`);
 	let row = create_row('Integer');
 	row.classList.add('category', 'integer');
-	add_detailed(row);
+	make_detailed(row);
 	let sign = negative ? '-' : '';
 	let form = sign + values.join('');
 	// if (norm !== form) {
@@ -2572,7 +2596,7 @@ function name_from_wrapper_bytes(v) {
 	return labels.join('.');
 }
 
-function make_tokens_div(name, before) {
+function make_tokens_div(name, before, components) {
 	// tokenize each label separately so we can show major/minor errors
 	// flatten non-errors tokens into wrapper
 	let split = ens_split(name);
@@ -2587,7 +2611,7 @@ function make_tokens_div(name, before) {
 		let tokens = dom_from_tokens(ens_tokenize(str_from_cps(input)), {
 			before, 
 			emoji_url,
-			components: show_components_check.checked,
+			components: components || show_components_check.checked,
 			tld_class: i == split.length-1
 		});
 		if (error) {
@@ -2604,16 +2628,17 @@ function make_tokens_div(name, before) {
 	wrapper.classList.add('exploded');
 	wrapper.dataset.name = name;
 	if (before) wrapper.dataset.before = 1;
+	if (components) wrapper.dataset.components = 1;
 	return wrapper;
 }
 
 function update_exploded() {
-	for (let exploded of output_div.querySelectorAll('.exploded')) {
-		let tokens_div = make_tokens_div(exploded.dataset.name, exploded.dataset.before);
-		if (exploded.dataset.downgraded) {
+	for (let x of output_div.querySelectorAll('.exploded')) {
+		let tokens_div = make_tokens_div(x.dataset.name, x.dataset.before, x.dataset.components);
+		if (x.dataset.downgraded) {
 			apply_downgrade(tokens_div);
 		}
-		exploded.replaceWith(tokens_div);
+		x.replaceWith(tokens_div);
 	}
 }
 
@@ -2625,12 +2650,9 @@ function apply_downgrade(tokens_div) {
 	}
 }
 
-function make_exploded(row, name, is_norm, downgrade_disallowed) {	
+function make_exploded(row, name, is_norm, components) {	
 	let before = !is_norm;
-	let tokens_div = make_tokens_div(name, before);
-	if (downgrade_disallowed) {
-		apply_downgrade(tokens_div);
-	}
+	let tokens_div = make_tokens_div(name, before, components);
 	let old = row.querySelector('.exploded');
 	if (old) {
 		old.replaceWith(tokens_div);
@@ -2653,6 +2675,13 @@ function create_palindrome_tag() {
 	return create_typed_tag('good', '⇄');
 }
 
+function apply_class(el, ...cls) {
+	for (let x of cls) {
+		if (x) el.classList.add(...x.trim().split(/\s+/));
+	}
+	return el;
+}
+
 function create_typed_tag(type, value) {
 	if (!value) return;
 	let span = document.createElement('span');
@@ -2667,7 +2696,9 @@ function create_typed_tag(type, value) {
 			value = `⭐️ ${value}`;
 			break;
 		case 'norm':
-		case 'warn': 
+			span.dataset.reversed = '1';
+			make_detailed(span);
+		case 'warn':
 			type = 'note';
 			value = `⚠️ ${value}`;
 			break;
@@ -2690,116 +2721,123 @@ function create_typed_tag(type, value) {
 function create_namehash_row(name) {
 	let row = create_row();
 	row.classList.add('details');
-	add_detailed(row);
+	make_detailed(row);
 	let hash_span = document.createElement('span');
 	hash_span.classList.add('wide');
-	hash_span.innerHTML = `<a target="_blank" class="hashproof" href="../../keccak.js/test/demo.html#algo=namehash&s=${encode_uri_component_surrogate_escaped(name)}&escape=1">Namehash:</a> <code>${namehash(name)}</code>`;
 	row.append(hash_span);
 	return row;
 }
 
-function create_details_row(name, before) {
+function create_namehash_breakdown(name) {
+	let node = namehash(name);
+	let div = document.createElement('div');
+	div.classList.add('hash');
+	div.append(create_link(`../../keccak.js/test/demo.html#algo=namehash&s=${encode_uri_component_surrogate_escaped(name)}&escape=1`, 'Namehash:'));
+	div.append(Object.assign(document.createElement('code'), {innerText: node, className: 'long'}));
+	div.append(create_copy_btn(node, {small: true, value: true}));
+	return div;
+}
+
+function create_breakdown_row(name, before) {
 	
-	let row = create_namehash_row(name);
+	let outer = document.createElement('div');
+	outer.classList.add('breakdown');
+	make_detailed(outer);
 
-	let split = ens_split(name);	
+	outer.append(create_namehash_breakdown(name));
 
-	for (let info of split) {
+	let split = ens_split(name);
+	for (let i = 0; i < split.length; i++) {
+		let info = split[i];
+		info.index = i;
 		info.cps = before || !info.output ? info.input : info.output;
 		info.label = str_from_cps(info.cps);
 	}
 
-	for (let i = 0; i < split.length; i++) {
+	for (let info of split) {
 
-		let info = split[i];
-		let {cps, label} = info;
-		let hash = labelhash(label);
+		let row = document.createElement('div');
+		row.classList.add('label');
+
+		row.append(create_typed_tag('index', info.index+1));
+
+		let span_name = document.createElement('span');
+		span_name.classList.add('name', 'long');
+		if (info.label) {
+			span_name.innerText = info.label;
+			row.append(span_name);
+			row.append(create_copy_btn(info.label, {small: true}));
+		}
 		
-		let footer_span = document.createElement('span');
-		footer_span.classList.add('wide', 'footer');
 
-		if (cps.length) {
+	
+		if (info.error) {
+			row.classList.add('error');
+			let span = document.createElement('span');
+			span.classList.add('error');
+			span.innerText = `❌️ ${info.error.message}`;
+			row.append(span);
+			//row.append(create_typed_tag('note', `❌️ ${info.error.message}`));
+		} else if (compare_arrays(info.input, info.output)) { // mapped
+			row.classList.add('mapped'); // or nfc
+			row.append(create_typed_tag('note', 'Unnormalized'));
 
-			let label_div = document.createElement('span');
-			label_div.classList.add('label');
+		} else {
+			row.classList.add('valid');
+			upgrade_split_type(info);
 
-			if (info.error) {
-				label_div.classList.add('error');
-			} else if (compare_arrays(info.input, info.output)) { 
-				label_div.classList.add('mapped');
-			} else {
-				upgrade_split_type(info);
-				if (info.restricted) {
-					label_div.append(create_link(`https://www.compart.com/en/unicode/scripts/${script}`, `<span>${info.type.slice(11, -1)}</span>⚠️`, 'restricted'));
-				} else {
-					let span = document.createElement('span');
-					span.classList.add('group');
-					span.innerHTML = info.type;
-					if (info.emoji && info.type !== 'Emoji') {
-						span.innerHTML += '+';
-					}
-					if (info.confusing) {
-						span.style.color = '#d47';
-					}
-					label_div.append(span);
-				}
+			if (info.confusing) {
+				row.append(create_typed_tag('confusing', info.confusing));
+			}
+			
+			if (info.type.startsWith('Restricted[')) {
+				let script = info.type.slice(11, -1);
+				let a = create_link(`https://www.compart.com/en/unicode/scripts/${script}`, `⚠️ ${script} (Restricted)`);
+				a.classList.add('tags', 'restricted');
+				row.append(a);
+			} else if (info.type !== 'Emoji') {
+				row.append(create_typed_tag('type', info.type));
+			}
+			if (info.emoji) {
+				row.append(create_typed_tag('emoji', 'Emoji'));
 			}
 
-			let label_span = document.createElement('span');
-			label_span.classList.add('text', 'long');
-			label_span.innerText = label; // this will <br> CR LF, disabled with css
-			label_div.append(label_span);
+		}
 
-			let code = document.createElement('code');
-			let len_span = document.createElement('span');
-
-			const update_code = () => {
-				let {mode} = code.dataset;
-				let text;
-				if (code.dataset.mode !== 'cp') {
-					code.dataset.mode = 'cp';
-					code.title = 'Unicode Codepoints';
-					text = cps.map(hex_cp).join(' ');
-					set_length(len_span, cps.length);
-				} else {
-					code.dataset.mode = 'byte';
-					code.title = 'Encoded UTF-8 Bytes';
-					let bytes = bytes_from_utf8(label);
-					text = [...bytes].map(hex_cp).join(' ');
-					set_length(len_span, bytes.length, 'bytes');
-				}
-				code.innerText = text + ' ';
-				code.append(swap_btn);
-			};
-
-			let swap_btn = document.createElement('button');
-			swap_btn.innerText = `⇄`;
-			swap_btn.title = `Swap Codepoints/Bytes`;
-			swap_btn.addEventListener('click', update_code);
-
-			update_code();
-			if (cps.every(cp => cp < 0x80)) {
-				swap_btn.remove();
+		if (info.label) {
+			row.append(create_typed_tag('length', info.cps.length));
+			if (info.emoji || info.type !== 'ASCII') {
+				let v = bytes_from_utf8(info.label);
+				row.append(create_typed_tag('bytes', v.length));
 			}
-
-			row.append(label_div, len_span, code);
-		
-			footer_span.classList.add('sep');
 		}
 
-		let footer = [`<a target="_blank" class="hashproof" href="../../keccak.js/test/demo.html#algo=keccak-256&s=${encode_uri_component_surrogate_escaped(label)}&escape=1">Labelhash:</a> <code>${hash}</code>`];
+
+
+		outer.append(row);
+
+		let hash = labelhash(info.label);
+		let hash_div = document.createElement('div');
+		hash_div.classList.add('hash', 'minor');
+		hash_div.append(create_link(`../../keccak.js/test/demo.html#algo=keccak-256&s=${encode_uri_component_surrogate_escaped(info.label)}&escape=1`, 'Labelhash:'));
+		hash_div.append(Object.assign(document.createElement('code'), {innerText: hash, className: 'long'}));
+		hash_div.append(create_copy_btn(hash, {small: true, value: true}));
+		outer.append(hash_div);
 		
-		let domain = split.slice(i+1).map(x => x.label).join('.');
-		if (NFT_DOMAINS.has(domain)) {
-			footer.push(`<b>Token:</b> <code>${ethers.BigNumber.from(labelhash(label))}</code>`);
+		let parent = split.slice(info.index + 1).map(x => x.label).join('.');
+		if (NFT_DOMAINS.has(parent)) {
+			let token = ethers.BigNumber.from(hash);
+			let token_div = document.createElement('div');
+			token_div.classList.add('hash', 'minor');
+			token_div.append(Object.assign(document.createElement('b'), {innerText: 'Token:'}));
+			token_div.append(Object.assign(document.createElement('code'), {innerText: token, className: 'long'}));
+			token_div.append(create_copy_btn(token, {small: true, value: true}));
+			outer.append(token_div);
 		}
-		if (info.error) { 
-			footer.unshift(`<span class="error">❌️ ${info.error}</span>`);
-		}
-		footer_span.innerHTML = footer.join('<br>');
-		row.append(footer_span);
+
 	}
-	return row;
+
+	return outer;
 }
 
 function create_row(label, waiting) {
@@ -2879,7 +2917,6 @@ function is_working() {
 function resolve() {
 	if (!registry_contract) return;
 	if (is_working()) {
-		//parse(); // is this needed?
 		resolve_timer = [0]; // ASAP
 		return;
 	}
@@ -3029,7 +3066,7 @@ async function resolve1(input, skip_norm) {
 		input_row = create_row('Address');
 		input_row.append(create_jazz_icon(input));
 		input_row.append(create_etherscan_address_link(input));
-		add_row_tag(input_row, create_copy_btn(input));
+		add_row_tag(input_row, create_copy_btn(input, {value: true}));
 		add_row_tag(input_row, create_reverse_resolve_btn(input));
 		add_owner_links(input_row, input);
 
@@ -3039,12 +3076,15 @@ async function resolve1(input, skip_norm) {
 		let rev_name = reverse_name(input);
 		let rev_node = namehash(rev_name);
 
-		let rev_details = create_namehash_row(rev_name);
-		let rev_name_span = document.createElement('span');
-		rev_name_span.classList.add('wide');
-		rev_name_span.innerHTML = `<b>Reverse Name:</b> ${rev_name}`;
-		rev_details.prepend(rev_name_span);
 
+		let rev_details = document.createElement('div');
+		rev_details.classList.add('breakdown', 'reverse');
+		make_detailed(rev_details);
+		let rev_div = document.createElement('div');
+		rev_div.classList.add('hash');
+		rev_div.innerHTML = `<b>Reverse Name:</b> <code class="long">${rev_name}</code>`;
+		rev_div.append(create_copy_btn(rev_name, true));
+		rev_details.append(rev_div, create_namehash_breakdown(rev_name));
 		output_div.append(input_row, rev_details);
 
 		let resolver_row = create_row('Reverse Resolver', true); // ↺ 
@@ -3097,7 +3137,7 @@ async function resolve1(input, skip_norm) {
 		resolver_row.append(create_etherscan_address_link(resolver, {contract: true}));
 		await add_contract_name(resolver_row, resolver);
 		if (should_stop_resolving()) return;
-		add_row_tag(resolver_row, create_copy_btn(resolver));
+		add_row_tag(resolver_row, create_copy_btn(resolver, {value: true}));
 
 		reverse_row = normed_row = create_row('Reverse', true);
 		output_div.append(reverse_row);
@@ -3127,7 +3167,7 @@ async function resolve1(input, skip_norm) {
 		add_row_tag(reverse_row, create_copy_btn(primary));
 		add_row_tag(reverse_row, create_ens_link(primary));
 		//add_nft_links(reverse_row, primary);
-		output_div.append(create_details_row(primary, true));
+		output_div.append(create_breakdown_row(primary, true));
 			
 		try {
 			name_norm = ens_normalize(primary);
@@ -3150,7 +3190,7 @@ async function resolve1(input, skip_norm) {
 				add_row_tag(row, create_resolve_btn(name_norm));
 				make_normalized(row, name_norm);
 				output_div.append(row);
-				output_div.append(create_details_row(name_norm));
+				output_div.append(create_breakdown_row(name_norm));
 			}	
 		}
 	} else {
@@ -3161,7 +3201,7 @@ async function resolve1(input, skip_norm) {
 		make_exploded(input_row, input, false);
 		add_row_tag(input_row, create_ens_link(input));
 		output_div.append(input_row);
-		output_div.append(create_details_row(input, true));
+		output_div.append(create_breakdown_row(input, true));
 		add_row_tag(input_row, create_copy_btn(input));
 
 		if (/^0x[0-9a-f]{40}$/i.test(input)) {
@@ -3181,12 +3221,10 @@ async function resolve1(input, skip_norm) {
 			norm_err = err;
 		}	
 
-		if (norm_err) {
-			//add_nft_links(input_row, input);
-		} else {
+		if (!norm_err) {
 			if (name_norm === input) {
 				make_normalized(input_row, name_norm);
-				//add_nft_links(input_row, input);
+				//make_exploded(input_row, input, false); 
 			} else  { 
 				add_row_tag(input_row, create_typed_tag('fail', 'Normalized'));
 				if (skip_norm) {
@@ -3202,7 +3240,7 @@ async function resolve1(input, skip_norm) {
 					//add_nft_links(row, name_norm);
 					add_old_tag(row, name_norm, true);
 					output_div.append(row);
-					output_div.append(create_details_row(name_norm));
+					output_div.append(create_breakdown_row(name_norm));
 				}
 			}
 		}
@@ -3324,7 +3362,7 @@ async function resolve1(input, skip_norm) {
 		add_row_tag(resolver_row, create_typed_tag('warn', resolver_err));
 	} else if (resolver) { 
 		resolver_row.append(create_etherscan_address_link(resolver.address, {contract: true}));
-		add_row_tag(resolver_row, create_copy_btn(resolver.address));
+		add_row_tag(resolver_row, create_copy_btn(resolver.address, {value: true}));
 		if (is_wildcard) {
 			add_row_tag(resolver_row, create_typed_tag('special', 'Wildcard'));
 			if (wildcard_domain === name_norm) {
@@ -3377,7 +3415,7 @@ async function resolve1(input, skip_norm) {
 		remove_temporary(avail_row);
 		if (should_stop_resolving()) return;
 		add_row_tag(avail_row, create_elapsed()); 
-		add_row_tag(avail_row, set_length(document.createElement('span'), len));
+		add_row_tag(avail_row, create_typed_tag('length', len));
 
 		if (avail_err) {
 			avail_row.classList.add('error');
@@ -3442,7 +3480,7 @@ async function resolve1(input, skip_norm) {
 		remove_temporary(avail_row);
 		if (should_stop_resolving()) return;
 		add_row_tag(avail_row, create_elapsed()); 
-		add_row_tag(avail_row, set_length(document.createElement('span'), Array.from(label).length));
+		add_row_tag(avail_row, create_typed_tag('length', Array.from(label).length));
 		if (nft_contract) {
 			let label = avail_row.querySelector('.row-label');
 			let title = label.innerHTML;
@@ -3577,7 +3615,7 @@ async function resolve1(input, skip_norm) {
 		} else {
 			owner_row.classList.add(available ? 'old' : 'owner');
 			owner_row.append(create_etherscan_address_link(owner));
-			add_row_tag(owner_row, create_copy_btn(owner));
+			add_row_tag(owner_row, create_copy_btn(owner, {value: true}));
 			//owner_row.classList.toggle('old', available);
 			// if the input was an address, we can validate
 			if (input_is_address) {
@@ -3626,7 +3664,7 @@ async function resolve1(input, skip_norm) {
 						}
 					} catch (err) {
 					}
-					add_row_tag(nft_row, create_copy_btn(nft_owner));
+					add_row_tag(nft_row, create_copy_btn(nft_owner, {value: true}));
 					if (nft_owner !== input) {
 						add_row_tag(nft_row, create_resolve_btn(nft_owner));
 					}
@@ -3729,7 +3767,7 @@ async function resolve1(input, skip_norm) {
 		} else {
 			address_row.append(create_jazz_icon(address));
 			address_row.append(create_etherscan_address_link(address));
-			address_row.append(create_copy_btn(address));
+			address_row.append(create_copy_btn(address, {value: true}));
 			if (input_is_address) {
 				if (address === input) {
 					add_row_tag(input_row, create_typed_tag('fire', 'Primary'));
@@ -3794,13 +3832,14 @@ async function resolve1(input, skip_norm) {
 						break;
 					}
 					case 'text': {
+						a.title = rec.key;
 						if (rec.url) {
 							a.target = '_blank';
 							a.href = rec.url(data);
 						} else {
 							make_copier(a, data);
+							a.title += `\n(Click to Copy)`;
 						}
-						a.title = rec.key;
 						a.innerHTML = rec.icon || `<b>${rec.key}</b>`;
 						let text = rec.format ? rec.format(data) : data;
 						if (text) {
@@ -3835,6 +3874,7 @@ async function resolve1(input, skip_norm) {
 								}
 								case 0xE5: { // IPNS
 									if (cid.codec !== 0x72) throw new Error('not libp2p-key');
+									decoded = cid.toString('k'); // base36 for urls
 									a.append(create_link(`https://cloudflare-ipfs.com/ipns/${decoded}`, `<button>↗️ IPNS</button>`));
 									a.title = `ipns://${decoded}`;
 									break;
@@ -3914,7 +3954,7 @@ async function resolve1(input, skip_norm) {
 			add_row_tag(primary_row, create_resolve_btn(primary));
 			add_old_tag(primary_row, primary);
 			//add_row_tag(primary_row, create_ens_link(primary_norm));
-			let details_row = create_details_row(primary, true);
+			let details_row = create_breakdown_row(primary, true);
 			details_row.classList.toggle('old', !!available);
 			output_div.append(details_row);
 		}
@@ -3947,7 +3987,7 @@ async function resolve1(input, skip_norm) {
 			}
 		}
 		output_div.append(row);
-		let details_row = create_details_row(primary_norm);
+		let details_row = create_breakdown_row(primary_norm);
 		details_row.classList.toggle('old', !!available);
 		output_div.append(details_row);
 	}	
