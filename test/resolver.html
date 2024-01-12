@@ -464,7 +464,7 @@ button.copy.copied {
 .tags.normalized.ascii {
 	background: #00f;
 	color: #fff;
-	font-family: monospace;
+	font: 11pt monospace;
 }
 .tags.length {
 	background: #f8eedd;	
@@ -1169,7 +1169,7 @@ import {
 	dom_from_tokens, use_default_style, versions, compare_arrays, should_escape,
 } from '../dist/all.min.js';
 import {puny_encoded, is_surrogate} from '../../punycode.js/dist/index.min.js'; 
-import {CID, uvarint} from '../../cid.js/dist/index.min.js';
+import {CID, uvarint, Base64URL, Base32, Base36} from '../../cid.js/dist/index.min.js';
 import eth_ens_namehash from './eth-ens-namehash@2.0.15.min.js';
 use_default_style();
 
@@ -1294,7 +1294,7 @@ const RECORDS = [
 		key: 'url',
 		icon: '🌐️',
 		format(x) {
-			let match = x.match(/^https?:\/\/(.*)$/i);
+			let match = x.match(/^https?:\/\/(.*?)\/?$/i);
 			return match ? match[1] : x;
 		},
 		url(x) { return x; }
@@ -2201,7 +2201,7 @@ function create_jazz_icon(address) {
 	return span;
 }
 
-function make_copier(el, raw) {
+function make_copy(el, raw) {
 	el.addEventListener('click', e => {
 		let copy = raw;
 		if (e.altKey) {
@@ -2215,12 +2215,13 @@ function make_copier(el, raw) {
 		el.classList.add(cls);
 		setTimeout(() => el.classList.remove(cls), 2000);
 	});
+	return el;
 }
 
 function create_copy_btn(raw, {small, value} = {}) {
 	let btn = document.createElement('button');
-	make_copier(btn, raw);
 	btn.classList.add('copy');
+	make_copy(btn, raw);
 	if (small) btn.classList.add('small');
 	if (value) {
 		btn.title = raw;
@@ -3819,7 +3820,7 @@ async function resolve1(input, skip_norm) {
 							a.target = '_blank';
 							a.href = rec.url(data);
 						} else {
-							make_copier(a, data);
+							make_copy(a, data);
 						}
 						a.title = `Encoded CoinType: ${rec.coin}`;
 						a.innerHTML = rec.icon || `<b>coin(${rec.coin})</b>`;
@@ -3837,8 +3838,7 @@ async function resolve1(input, skip_norm) {
 							a.target = '_blank';
 							a.href = rec.url(data);
 						} else {
-							make_copier(a, data);
-							a.title += `\n(Click to Copy)`;
+							make_copy(a, data);
 						}
 						a.innerHTML = rec.icon || `<b>${rec.key}</b>`;
 						let text = rec.format ? rec.format(data) : data;
@@ -3849,43 +3849,83 @@ async function resolve1(input, skip_norm) {
 						}
 						break;
 					}
-					case 'contenthash': { // https://docs.ens.domains/ens-improvement-proposals/ensip-7-contenthash-field
+					case 'contenthash': { 
+						// https://docs.ens.domains/ens-improvement-proposals/ensip-7-contenthash-field
+						// https://github.com/multiformats/multicodec/blob/master/table.csv
 						a.innerHTML = `<b>${rec.type}</b>`;
+						a.classList.add('rtrim');
 						let buf = ethers.utils.arrayify(data);
-						let [proto, pos] = uvarint.read(buf);
-						let decoded;
+						let decoded, url;
 						try {
-							let cid = CID.from(buf.subarray(pos));
-							decoded = cid.toString();
+							let [proto, pos] = uvarint.read(buf);
+							buf = buf.subarray(pos);
 							switch (proto) {
 								//case 0xE2: // IPLD
 								case 0xE3: { // IPFS
+									let cid = CID.from(buf);
+									decoded = cid.toString();
 									if (cid.codec !== 0x70) throw new Error('not dag-pb');
-									a.append(create_link(`https://cloudflare-ipfs.com/ipfs/${decoded}`, `<button>🕸️ IPFS</button>`));
-									a.title = `ipfs://${decoded}`;
-									break;
-								}
-								case 0xE4: { // Swarm
-									if (cid.codec !== 0xFA) throw new Error('not swarm-manifest');
-									// https://swarmscan.io/assets/favicon.1764cc.png
-									a.append(create_link(`https://gateway.ethswarm.org/access/${decoded}`, '<button>🕸️ Swarm</button>'));
-									a.title = `bzz://${decoded}`;
+									a.append(create_link(`https://${decoded}.ipfs2.eth.limo/`, `<button>🆔️ IPFS</button>`));
+									a.append(create_check_cid_btn(decoded));
+									url = `ipfs://${decoded}`;
 									break;
 								}
 								case 0xE5: { // IPNS
-									if (cid.codec !== 0x72) throw new Error('not libp2p-key');
+									let cid = CID.from(buf);
 									decoded = cid.toString('k'); // base36 for urls
-									a.append(create_link(`https://cloudflare-ipfs.com/ipns/${decoded}`, `<button>↗️ IPNS</button>`));
-									a.title = `ipns://${decoded}`;
+									if (cid.codec !== 0x72) throw new Error('not libp2p-key');
+									a.append(create_link(`https://${decoded}.ipfs2.eth.limo/`, `<button>↗️ IPNS</button>`));
+									a.append(create_check_cid_btn(decoded));
+									url = `ipns://${decoded}`;
+									break;
+								}
+								case 0xE4: { // Swarm
+									// https://docs.ethswarm.org/docs/develop/access-the-swarm/upload-and-download
+									// https://gateway.ethswarm.org/access/
+									let cid = CID.from(buf);
+									decoded = cid.toString();
+									if (cid.codec !== 0xFA) throw new Error('not swarm-manifest');
+									a.append(create_link(`https://${decoded}.bzz.link/`, '<button>Swarm</button>'));
+									a.append(create_check_cid_btn(decoded));
+									url = `bzz://${decoded}`;
+									break;
+								}
+								//case 0xE8: // DNSLink 
+								case 0x1BC:   // onion
+								case 0x1BD: { // onion v3 
+									// https://www.tor2web.org/
+									// https://blog.torproject.org/v3-onion-services-usage/
+									if (buf.length != 16 && buf.length != 56) throw new Error('bad length');
+									decoded = Base36.encode(buf);
+									a.append(create_link(`https://${decoded}.onion.to/`, `<button>Onion</button>`));
+									url = `onion://${decoded}`;
+									break;
+								}
+								case 0xB19910: { // skylink
+									// https://support.skynetlabs.com/key-concepts/skylinks
+									if (decoded.length != 46) throw new Error('bad length');
+									decoded = Base64URL.encode(buf);
+									a.append(create_link(`https://siasky.net/${decoded}`, `<button>Skylink</button`));
+									url = `sia://${decoded}`;
+									break;
+								}
+								case 0xB29910: { // arweave
+									// https://docs.arweave.org/developers/arweave-node-server/http-api
+									if (buf.length != 32) throw new Error('not sha256');
+									decoded = Base64URL.encode(buf);
+									a.append(create_link(`https://arweave.net/${decoded}`, '<button>Arweave</button>'));
+									a.append(create_link(`https://viewblock.io/arweave/tx/${decoded}`, '<button>✅️ Check</button>'));
+									url = `arweave://${decoded}`;
 									break;
 								}
 							}
-							a.append(create_link(`https://cid.ipfs.tech/#${decoded}`, '<button>✅️ Check</button>'));
-							a.append(create_copy_btn(decoded));
-							a.classList.add('rtrim');
+							a.append(create_copy_btn(url, {value: true}));
 						} catch (err) {
-							a.append(create_typed_tag('fail', err.message));
-							make_copier(a, decoded || data);
+							a.append(create_typed_tag('fail', err));
+							a.append(make_copy(Object.assign(document.createElement('button'), {innerText: 'Data', title: data}), data));
+							if (decoded) {
+								a.append(make_copy(Object.assign(document.createElement('button'), {innerText: 'Decoded', title: decoded}), decoded));
+							}
 						}
 						break;
 					}
@@ -3999,6 +4039,10 @@ async function resolve1(input, skip_norm) {
 			add_row_tag(normed_row, create_typed_tag('good', 'Primary'));
 		}
 	}
+}
+
+function create_check_cid_btn(cid) {
+	return create_link(`https://cid.ipfs.tech/#${cid}`, '<button>✅️ Check</button>');
 }
 
 function add_owner_links(row, owner) {	
