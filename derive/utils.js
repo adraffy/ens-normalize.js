@@ -67,8 +67,6 @@ export function* permutations(v) {
 	}
 }
 
-console.log([...tuples([1,2])]);
-
 // generate all possible cross-product arrays
 // always returns a copy
 // if n is integer, makes m = n copies of m

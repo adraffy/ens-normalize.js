@@ -4,7 +4,6 @@
 // (NameRegistered, NameRenewed, ReverseResolver scanning, etc.)
 // note: a very small percentage might not be registered
 // eg. "a.b".eth is invalid but results in ["a", "b"] fragments
-
 import {writeFileSync} from 'node:fs';
 import {read_labels} from '../validate/data.js';
 import {ens_emoji, ens_normalize, ens_tokenize} from '../src/lib.js';

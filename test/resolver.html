@@ -183,7 +183,6 @@ body.testnet #provider a {
 	justify-content: flex-end;
 	align-items: stretch;
 	gap: 8px;
-	margin-bottom: 4px;
 }
 .segmented {
 	display: flex;
@@ -296,7 +295,6 @@ body.testnet #provider a {
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 8px;
-	border-radius: 4px;
 }
 .row.display {
 	background: #eff;
@@ -304,7 +302,6 @@ body.testnet #provider a {
 .row.normalized {
 	background: #efe;
 	outline: 1px solid #cdc;
-	border-radius: 0;
 }
 .row.addr {
 	background: #fffff0;
@@ -358,7 +355,7 @@ body.testnet #provider a {
 	line-height: 130%;
 }
 ul.row {
-	margin: 4px 0;
+	margin: 0;
 	padding: 16px 16px 16px 36px;
 	flex-direction: column;
 	align-items: start;
@@ -391,8 +388,9 @@ a.internal {
 	background: #eff;
 	order: 100;
 }
-a.wide {
+a.addr {
 	line-break: anywhere;
+	font: 85% monospace;
 }
 span.tags {
 	background: #ddd;
@@ -473,6 +471,9 @@ button.copy.copied {
 	content: 'ch';
 	padding-left: 1px;
 	font-size: 70%;
+}
+.tags.bytes {
+	background-color: #e8e8e8;
 }
 .tags.bytes:after {
 	content: 'bytes';
@@ -740,9 +741,9 @@ button.glow {
 	background-color: var(--btn-hover-fill-color);
 }
 footer {
+	margin: 16px 0;
 	text-align: center;
 	color: #666;
-	margin: 8px 0 16px;
 }
 footer span {
 	cursor: help;
@@ -1071,7 +1072,7 @@ Hebrew:
 <div id="options">
 	<button id="examples_btn">👀 Examples</button>
 	<input type="checkbox" id="auto_resolve_check" checked>
-	<label for="auto_resolve_check"><svg data-testid="geist-icon" fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--geist-foreground);width:20px;height:20px"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> <i>on Input</i></label>
+	<label for="auto_resolve_check"><svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--geist-foreground);width:20px;height:20px"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> <i>on Input</i></label>
 	<input type="checkbox" id="show_details_check" checked>
 	<label for="show_details_check">Details</label>
 	<input type="checkbox" id="show_components_check" checked>
@@ -1079,9 +1080,9 @@ Hebrew:
 	<input type="checkbox" id="show_records_check">
 	<label for="show_records_check" title="Include common text and address records">Records</label>
 	<input type="checkbox" id="skip_norm_check">
-	<label for="skip_norm_check"  title="Use without normalization"><svg data-testid="geist-icon" fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--geist-foreground);width:20px;height:20px"><circle cx="12" cy="12" r="10" fill="var(--geist-fill)"></circle><path d="M15 9L9 15" stroke="var(--geist-stroke)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M9 9L15 15" stroke="var(--geist-stroke)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>Norm</label>
+	<label for="skip_norm_check"  title="When active, normalization is not applied"><svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--geist-foreground);width:20px;height:20px"><circle cx="12" cy="12" r="10" fill="var(--geist-fill)"></circle><path d="M15 9L9 15" stroke="var(--geist-stroke)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M9 9L15 15" stroke="var(--geist-stroke)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>Norm</label>
 	<input type="checkbox" id="force_mainnet_check">
-	<label for="force_mainnet_check" title="Use mainnet regardless of selected browser provider network"><svg data-testid="geist-icon" fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--geist-foreground);width:20px;height:20px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Mainnet</label>
+	<label for="force_mainnet_check" title="Use mainnet regardless of selected browser provider network"><svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--geist-foreground);width:20px;height:20px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Mainnet</label>
 	<input type="checkbox" id="force_ltr_check">
 	<label for="force_ltr_check" title="Override Bidi Handling with Left-to-Right Direction&#10;(Applies only to Input)">LTR!</label>
 </div>
@@ -2183,7 +2184,7 @@ function create_ens_metadata_link(contract, token, {html = '<button class="code"
 }
 function create_etherscan_address_link(addr, {title, anchor, contract} = {}) {
 	if (contract && !anchor) anchor = '#readContract';
-	return create_link(`${active_chain.explorer}/address/${addr}${anchor || ''}`, title || addr, title ? false : 'wide');
+	return create_link(`${active_chain.explorer}/address/${addr}${anchor || ''}`, title || addr, title ? null : 'addr');
 }
 function create_etherscan_nft_link(contract, token, {title = 'Etherscan', cls = 'external'} = {}) {
 	return create_link(`${active_chain.explorer}/nft/${contract}/${ethers.BigNumber.from(token)}`, title, cls); 
@@ -2717,16 +2718,6 @@ function create_typed_tag(type, value) {
 	span.innerHTML = value;
 	span.classList.add(type);
 	return span;
-}
-
-function create_namehash_row(name) {
-	let row = create_row();
-	row.classList.add('details');
-	make_detailed(row);
-	let hash_span = document.createElement('span');
-	hash_span.classList.add('wide');
-	row.append(hash_span);
-	return row;
 }
 
 function create_namehash_breakdown(name) {
@@ -3903,8 +3894,8 @@ async function resolve1(input, skip_norm) {
 								}
 								case 0xB19910: { // skylink
 									// https://support.skynetlabs.com/key-concepts/skylinks
-									if (decoded.length != 46) throw new Error('bad length');
 									decoded = Base64URL.encode(buf);
+									if (decoded.length != 46) throw new Error('bad length');
 									a.append(create_link(`https://siasky.net/${decoded}`, `<button>Skylink</button`));
 									url = `sia://${decoded}`;
 									break;

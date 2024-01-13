@@ -55,9 +55,6 @@ button:hover:active {
 body { 
 	margin: 3rem; 
 	background: #eee;
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
 	overflow-y: scroll;
 }
 header {
@@ -78,11 +75,20 @@ h1 .count {
 h1 .count span {
 	color: #a00;
 }
+#links {
+	margin-top: 4px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 8px;
+}
 #examples {
+	margin-top: 8px;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 4px;
+	padding-bottom: 8px;
+	border-bottom: 2px solid #fff;
 }
 #examples button {
 	font-size: 10pt;
@@ -91,18 +97,12 @@ h1 .count span {
 #examples .raw {
 	font-family: monospace;
 }
-#links {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 4px 8px;
-}
 #by {
+	margin-top: 8px;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 8px;
-	border-top: 2px solid #fff;
-	padding-top: 8px;
 }
 #by button.active {
 	background-color: #cff;
@@ -112,6 +112,7 @@ h1 .count span {
 	color: #000;
 }
 #search {
+	margin-top: 10px;
 	display: flex;
 	align-items: stretch;
 }
@@ -410,18 +411,16 @@ button[data-by="version"], [data-by="version"] .title, .version { background-col
 #none {
 	display: flex;
 	justify-content: center;
-	margin-top: 8px;
+	margin: 16px;
 }
 #none div {
 	padding: 8px 16px;
 	background: #ffc;
-	border: 1px solid #ccc;
-	border-radius: 4px;
 }
 footer {
+	margin-top: 16px;
 	text-align: center;
 	color: #666;
-	margin-top: 8px;
 }
 footer span {
 	cursor: help;

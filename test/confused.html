@@ -5,13 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Confused Explainer</title>
 <style>
-.hide {
-	display: none !important;
-}
-button, .control {
+.hide { display: none !important; }
+button {
 	cursor: pointer;
+	font-size: 100%;
+	padding: 4px 8px;
 }
 label {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	cursor: pointer;
 	user-select: none;
 }
 body { 
@@ -33,15 +37,29 @@ h1 {
 	margin: 0;
 }
 #links {
+	margin-top: 4px;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: 0.2rem 0.5rem;
+	gap: 4px 8px;
 }
 #links a.code {
 	font-family: monospace;
 }
+#examples {
+	margin-top: 8px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	padding-bottom: 8px;
+	border-bottom: 2px solid #fff;
+}
+#examples button {
+	font-size: 80%;
+	padding: 2px 4px;
+}
 #scrolled {
+	margin-top: 16px;
 	overflow-y: auto;
 }
 table {
@@ -127,53 +145,70 @@ td.name, td.script {
 .norm-valid {
 	font-weight: bold;
 }
-main > * {
-	margin-top: 1rem;
-}
-#options {
+#actions {
+	margin-top: 8px;
 	display: flex;
-	gap: 1rem;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 8px;
 }
-#input {
-	display: flex;
-	align-items: stretch;
+#actions select {
+	padding: 4px 8px;
+	font-size: 100%;
+	cursor: pointer;
+}
+#loader {
+	margin-top: 8px;
+	background-color: #ffc;
+	padding: 8px;
+	text-align: center;
 }
 #input_field {
+	margin-top: 10px;
 	display: block;
 	padding: 8px;
 	font-size: 20pt;
 	width: 100%;
 	box-sizing: border-box;
 }
-#input select {
-	margin-left: 0.5rem;
-	max-width: 50px;
-	-webkit-appearance: menulist-button;
-}
 #exploded {
+	margin-top: 16px;
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
 	font-size: 14pt;
-	gap: 4px;
+	gap: 8px;
+}
+#exploded:empty {
+	display: none;
 }
 #exploded .error {
 	color: #555;
 	background: #ffc;
-	padding: 0.3rem;
+	padding: 4px 8px;
 	font-size: 12pt;
-	border-radius: 0.5rem;
-	border: 1px solid #ccc;
 }
 #output.error {
+	text-align: center;
 	background: #fcc;
-	padding: 1rem;
-	outline: 3px dashed #d00;
+	padding: 8px
 }
-#output .readme {
+#readme {
+	margin: 16px 0;
+	padding: 16px 16px 16px 36px;
+	border-radius: 4px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
 	background: #ffc;
 	font-size: 14pt;
-	padding: 1rem 2rem;
+}
+#readme code {
+	background-color: #cff;
+	padding: 1px;
+}
+#readme button {
+	font-size: 12pt;
 }
 h2 {
 	font-size: 16pt;
@@ -182,39 +217,10 @@ h2 span {
 	font-size: 90%;
 	font-weight: normal;
 }
-#output li + li {
-	margin-top: 0.5rem;
-}
-#loader {
-	display: flex;
-	justify-content: center;
-}
-#loader > div { 
-	display: flex;
-	background: #ffc;
-	border-radius: 0.5rem;
-	padding: 1rem 2rem;
-	font-size: 20pt;
-	border: 1px solid #ccc;
-	gap: 1rem;
-	align-items: center;
-}
-@keyframes spin {
-	to { transform:rotate(360deg); }
-}
-#loader .spinner {
-	width: 2rem;
-	height: 2rem;
-	animation: spin 2s infinite linear;
-	border: 0.4rem solid #000;
-	border-bottom-color: transparent;
-	border-radius: 100%;
-}
 footer {
+	margin: 16px 0;
 	text-align: center;
 	color: #666;
-	margin-top: 1rem;
-	margin-bottom: 0.5rem;
 }
 @media only screen and (max-width: 800px) { 
 	body {
@@ -230,8 +236,10 @@ footer {
 </header>
 <div id="links">
 <a id="resolve_a" href="./resolver.html"><b>Resolver</b></a>
+<a href="./chars.html">Characters</a>
 <a class="code" href="https://github.com/adraffy/ens-normalize.js/blob/main/derive/rules/scripts.js">scripts.js</a>
 <a class="code" href="https://github.com/adraffy/ens-normalize.js/blob/main/derive/rules/confuse.js">confuse.js</a>
+<a class="code" href="https://github.com/adraffy/ens-normalize.js/blob/main/derive/rules/group-order.js">group-order.js</a>
 •
 <a href="https://www.unicode.org/reports/tr24/">UAX-24</a>
 <a href="https://www.unicode.org/reports/tr31/">UAX-31</a>
@@ -243,32 +251,26 @@ footer {
 <button>0х</button>
 <button>0о</button>
 <button>0ο</button>
+<button>e℮</button>
 <button>тӕ</button>
 <button>黑a8</button>
 <button>аррӏе</button>
 <button>ꓖꓳꓓ</button>
-<button>Group:<b>Greek</b></button>
-<button>Script:<b>Thai</b></button>
 <button>Range:<b>61..7A</b></button>
 </div>
-<div id="options">
-<!-- <label class="control"><input id="norm_check" type="checkbox" checked>Use Normalization</label> -->
-<label class="control"><input id="show_all_check" type="checkbox">Show <b>Full</b> Group/Script <i>(Warning: Slow)</i></label>
+<div id="loader">Downloading confusable database...</div>
+<div id="actions">
+<select id="group_select" disabled><option>Groups</option></select>
+<select id="script_select" disabled><option>Scripts</option></select>
+<label id="show_all_check" title="Warning: slow if there many characters"><input type="checkbox" disabled>All Characters</label>
 </div>
-<div id="input">
 <input id="input_field">
-<select id="input_select"></select>
-</div>
-<div id="loader"><div>
-	<div class="spinner"></div>
-	<span>Downloading...</span>
-</div></div>
-<div id="exploded" class="hide"></div>
-<div id="output" class="hide">
-<ul class="readme">
-	<li>Only works on single-labels. <button>vitalik.eth</button></li>
+<div id="exploded"></div>
+<div id="output">
+<ul id="readme">
+	<li>Only works on single-labels <button>vitalik.eth</button></li>
 	<li>Only includes confusables for valid <a href="../derive/data/15.1.0/IdnaMappingTable.txt">IDNA 2003</a> characters.</li>
-	<li>Disallowed confusables are removed for increased compression. <button>e℮</button></li>
+	<li>Disallowed confusables are removed for increased compression <button>e℮</button></li>
 	<li>Upper/lower ASCII confusables are merged.</li>
 	<li><b>Emoji</b> are never confusable.</li>
 </ul>
@@ -293,12 +295,14 @@ const EMOJI_SET = new Set(ens_emoji().filter(cps => ens_tokenize(String.fromCode
 const input_field = document.querySelector('#input_field');
 const output_div = document.querySelector('#output');
 const exploded_div = document.querySelector('#exploded');
-//const norm_check = document.querySelector('#norm_check');
-const show_all_check = document.querySelector('#show_all_check');
+const group_select = document.querySelector('#group_select');
+const script_select = document.querySelector('#script_select');
+const show_all_check = document.querySelector('#show_all_check input');
 const examples_div = document.querySelector('#examples');
 const resolve_a = document.querySelector('#resolve_a');
-const input_select = document.querySelector('#input_select');
 const readme_dom = [...output_div.childNodes];
+
+set_loaded(false);
 
 let wholes;
 let groups;
@@ -370,7 +374,6 @@ let init = (async () => {
 		// union of groups in any def
 		w.groups = [...new Set(w.defs.flatMap(def => def.groups))].sort((a, b) => a.index - b.index);
 		
-
 		// compute extents (only for the normalized characters)
 		let recs = [];
 		for (let def of w.defs) {
@@ -404,25 +407,27 @@ let init = (async () => {
 		s.confused = s.cps.reduce((a, cp) => a + whole_map.has(cp), 0);
 	}
 
-	input_select.innerHTML = `
-		<option selected disabled hidden>🔍️</option>
-		<optgroup label="Groups">
-			${groups.filter(g => [...g.valid_set].some(cp => whole_map.has(cp))).map(g => {
-				return `<option value="group:${g.name}">${g.name} (${g.confused}/${g.valid_set.size})</option>`; 
-			}).join('')}
-		</optgroup>
-		<optgroup label="Scripts">
-			${scripts.filter(s => s.cps.some(cp => whole_map.has(cp))).map(s => {
-				return `<option value="script:${s.abbr}">[${s.abbr}] ${s.name} (${s.confused}/${s.cps.length})</option>`;
-			}).join('')},
-		</optgroup>
-	`;
-	document.querySelector('#loader').remove();
-	output_div.classList.remove('hide');
+	group_select.innerHTML = `<option selected disabled hidden>Groups (${groups.length})</option>` + groups.filter(g => [...g.valid_set].some(cp => whole_map.has(cp))).map(g => {
+		return `<option value="${g.name}">${g.name} (${g.confused}/${g.valid_set.size})</option>`; 
+	}).join('');
+
+	script_select.innerHTML =  `<option selected disabled hidden>Scripts (${scripts.length})</option>` + scripts.filter(s => s.cps.some(cp => whole_map.has(cp))).map(s => {
+		return `<option value="${s.abbr}">[${s.abbr}] ${s.name} (${s.confused}/${s.cps.length})</option>`;
+	}).join('');
+
 	init = undefined;
+	document.querySelector('#loader').remove();
+	set_loaded(true);
+	update();
 })();
 
-for (let btn of document.querySelectorAll('#examples button, .readme button')) {
+function set_loaded(b) {
+	group_select.disabled = !b;
+	script_select.disabled = !b;
+	show_all_check.disabled = !b;
+}
+
+for (let btn of document.querySelectorAll('#examples button, #readme button')) {
 	btn.addEventListener('click', e => {
 		e.preventDefault();
 		input_field.value = btn.innerText;
@@ -430,8 +435,14 @@ for (let btn of document.querySelectorAll('#examples button, .readme button')) {
 	});
 }
 
-input_select.addEventListener('change', () => {
-	input_field.value = input_select.value;
+group_select.addEventListener('change', () => {
+	input_field.value = `group:${group_select.value}`;
+	group_select.selectedIndex = 0;
+	return update();
+});
+script_select.addEventListener('change', () => {
+	input_field.value = `script:${script_select.value}`;
+	script_select.selectedIndex = 0;
 	return update();
 });
 resolve_a.addEventListener('pointerdown', () => {
@@ -441,7 +452,6 @@ resolve_a.addEventListener('pointerdown', () => {
 	resolve_a.href = url;
 });
 input_field.addEventListener('input', update);
-//norm_check.addEventListener('input', update);
 show_all_check.addEventListener('input', update);
 window.addEventListener('hashchange', check_hash);
 check_hash();
@@ -452,29 +462,28 @@ async function check_hash(e) {
 }
 
 async function update() {
-	output_div.innerHTML = '';
 	output_div.classList.remove('error');
-	exploded_div.classList.add('hide');
-	input_select.selectedIndex = 0;
+	output_div.innerHTML = '';
+	exploded_div.innerHTML = '';
 	let input = replace_escapes(input_field.value);
 	window.history.replaceState(null, null, input ? `#${input}` : ' ');
 	input_field.focus();
 	try {
-		if (init) await init;
-		if (!input) {
+		if (!input || init) {
 			output_div.append(...readme_dom);
 			return;
 		}
+		await init;
 		await create_grid(input);
 	} catch (err) {
 		output_div.classList.add('error');
-		output_div.innerHTML = `⚠️ ${err.message}`;
+		output_div.innerText = `❌ ${err.message}`;
 		console.log(err);
 	}
 }
 
 async function create_grid(input) {
-	
+
 	let cps, match;
 	let matched_type;
 
@@ -498,36 +507,38 @@ async function create_grid(input) {
 	} else if (match = input.match(/^range:([0-9a-f]+)\.\.([0-9a-f]+)$/i)) {
 		let lo = parseInt(match[1], 16);
 		let hi = parseInt(match[2], 16);
-		if (hi < lo) throw new Error('Empty range');
-		cps = Array(1 + hi - lo).fill().map((_, i) => lo + i).filter(is_valid);
+		cps = Array(Math.max(0, 1 + hi - lo)).fill().map((_, i) => lo + i).filter(is_valid);
 	} else {
 
 		let split = ens_split(input);
-		if (split.length != 1) throw new Error('multiple labels');
-		split = split[0];
-		matched_type = split.type;
-		// use the normalized form without emoji if possible
-		//  otherwise use input
-		cps = split.tokens ? split.tokens.filter(x => !x.is_emoji).flat() : split.input;
+		if (split.length == 1) {
+			split = split[0];
+			matched_type = split.type;
+			// use the normalized form without emoji if possible
+			//  otherwise use input
+			cps = split.tokens ? split.tokens.filter(x => !x.is_emoji).flat() : split.input;
 
-		let tokens = ens_tokenize(input, {nf: false});
-		exploded_div.innerHTML = '<b>Normalized:</b> ';
-		exploded_div.append(dom_from_tokens(tokens, {
-			emoji_url: './emoji.html#q=%s',
-		}));
-		if (split.error) {
-			let error = document.createElement('div');
-			error.classList.add('error');
-			error.innerText = `⚠️ ${split.error.message}`;
-			exploded_div.append(error);
-			exploded_div.prepend('❌');
+			let tokens = ens_tokenize(input, {nf: false});
+			exploded_div.innerHTML = `${split.error ? '❌' : '✅️'} <b>Normalized:</b>`;
+			exploded_div.append(dom_from_tokens(tokens, {
+				emoji_url: './emoji.html#q=%s',
+			}));
+			if (split.error) {
+				let div = document.createElement('div');
+				div.classList.add('error');
+				div.innerText = `⚠️ ${split.error.message}`;
+				exploded_div.append(div);
+			}
 		} else {
-			exploded_div.prepend('✅️');
+			exploded_div.innerHTML = '❌ <b>Input Error:</b> <div class="error">⚠️ multiple labels</div>';
+			return;
 		}
-		exploded_div.classList.remove('hide');
 	}
 	cps = cps.filter(cp => char_map.has(cp));
-	if (!cps.length) return;
+	if (!cps.length) {
+		exploded_div.innerHTML = `<div class="error">⚠️ No characters match this criteria.</div>`;
+		return;
+	}
 
 	let order = [...new Set(cps.map(cp => whole_map.get(cp) || cp))];
 	let group_universe = [...new Set(order.flatMap(x => {
