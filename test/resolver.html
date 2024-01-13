@@ -356,9 +356,11 @@ body.testnet #provider a {
 }
 ul.row {
 	margin: 0;
+	margin-top: 4px;
 	padding: 16px 16px 16px 36px;
 	flex-direction: column;
 	align-items: start;
+	gap: 4px;
 }
 ul .tokens {
 	display: inline-flex;
@@ -376,7 +378,6 @@ a.internal {
 .row.legend {
 	background: #fff;
 	list-style: disclosure-closed;
-	gap: 8px;
 }
 .row.legend .tokens {
 	min-height: 32px;
@@ -812,7 +813,7 @@ footer span:hover {
 	<div id="provider"></div>
 	<div id="github">
 		<a href="https://github.com/adraffy/ens-normalize.js">adraffy/ens-normalize.js</a>
-		<a href="https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard">ENSIP-15</a>
+		<a href="https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard"><b>ENSIP-15</b></a>
 	</div>
 </header>
 <div id="examples" class="hide">
@@ -1115,7 +1116,7 @@ Hebrew:
 <div id="output">
 <ul class="row readme">
 <li>Click an <button data-name="👁️‍🗨️A{303}.Eth">Example</button> to see how it works.</li>
-<li><code>token:__</code> lookup the <a href="../../keccak.js/test/demo.html#algo=keccak-256&s=raffy&escape=1&encoding=utf8">labelhash</a> (if known) <button data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209" data-delay="1000">raffy.eth</button> or <a href="../../ens-labels/demo.html">search for it</a></li>
+<li><code>token:__</code> lookup the <a href="../../keccak.js/test/demo.html#algo=keccak-256&s=raffy&escape=1&encoding=utf8">labelhash</a> (if known) <button data-name="token:91842011529764390124322931916134555051359118325819011691525342013207339157209" data-delay="1000">raffy.eth</button> or <a href="../../ens-labels/demo.html">search for it</a>.</li>
 <li><code>wrapped:__</code> lookup the <a href="../../keccak.js/test/demo.html#algo=namehash&s=firstwrappedname.eth&escape=1&encoding=utf8">namehash</a> (if wrapped) <button data-name="wrapped:0xc44eec7fb870ae46d4ef4392d33fbbbdc164e7817a86289a1fe30e5f4d98ae85" data-delay="1000">firstwrappedname.eth</button></li>
 <li>Use <code>{FF}</code> or <code>[255]</code> to include codepoints <button data-raw data-name="a{61}[97].eth">aaa</button></li>
 <li><code>\uFFFF</code>, <code>\u{HEX}</code>, <code>&amp;#xFF;</code>, <code>&amp;#255;</code>, or <code>&amp;entity;</code> are shorthand for <code>{HEX}</code>.</li>
@@ -1159,11 +1160,11 @@ Hebrew:
 <footer>Created by <a href="https://x.com/adraffy">raffy.eth</a></footer>
 <script type="module">
 // to prepare this file for self-hosted deployment:
-// * replace infura_provider with a public provider, eg. new ethers.providers.CloudflareProvider();
+// * replace infura_provider with a public provider, eg. new ethers.CloudflareProvider();
 // * replace "../../punycode.js" with https://cdn.jsdelivr.net/npm/@adraffy/punycode@latest/dist/index.min.js
 // * replace "../../cid.js" with https://cdn.jsdelivr.net/npm/@adraffy/cid@latest/dist/index.min.js
 // * replace "../../" with https://adraffy.github.io/
-import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.esm.min.js';
+import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.10.0/ethers.min.js';
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
 	nfc, nfd, hex_cp, quote_cp, explode_cp, str_from_cps, safe_str_from_cps,
@@ -1266,6 +1267,8 @@ const ADDRESS_MAP = new Map();
 const IFACE_ETH_CONTROLLER = '0x612e8c09';
 
 // https://github.com/ensdomains/docs/blob/profile-text-records/ens-improvement-proposals/ensip-xx-profile-text-records.md
+// const RECORD_ADDR = '';
+// const RECORD_TEXT = 'text(bytes32,string)';
 const RECORDS = [
 	{
 		type: 'text', 
@@ -1365,6 +1368,9 @@ const RECORDS = [
 		type: 'contenthash',
 	},
 	{
+		type: 'pubkey',
+	},
+	{
 		type: 'addr',
 		coin: 0, // BTC
 		icon: `<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 500 500" role="img" class="sc-56a68b4b-0 nEsDk"><path fill="#F39321" d="M43.43 125.143c7.71-10.766 14.875-21.901 23.562-31.986 15.8-18.343 33.692-34.063 54.18-47.075 18.379-11.672 37.761-20.872 58.501-27.305 32.294-10.018 65.26-12.997 98.838-9.165 24.544 2.801 48.191 9.067 70.713 19.215 13.633 6.142 26.456 13.731 39.025 21.927 25.328 16.515 45.618 38.014 62.58 62.577 18.116 26.236 29.889 55.421 36.346 86.725 4.535 21.983 6.449 44.171 4.503 66.504-2.399 27.536-8.514 54.086-19.938 79.604-9.662 21.583-21.589 41.401-36.861 59.301-14.94 17.511-31.788 32.831-51.149 45.461-13.184 8.6-26.926 16.276-41.434 21.975-24.274 9.537-49.447 15.986-75.787 17.115-18.545.795-36.985.483-55.279-2.763-15.713-2.788-31.049-6.858-46.063-12.496-14.566-5.47-28.693-11.95-41.709-20.143-18.766-11.812-35.683-26.147-50.737-42.663-16.773-18.403-30.373-38.808-40.779-61.344-14.7-31.835-21.929-65.401-22.359-100.425-.162-13.173 1.349-26.244 3.105-39.283.126-.933-.002-1.899-.012-2.851 1.536-.952 1.4-2.618 1.677-4.071 3.906-20.483 10.494-40.059 19.418-58.906 3.162-6.674 7.525-12.764 9.659-19.928zm281.727 129.37c6.537-3.474 12.749-5.465 17.658-9.85 18.918-16.899 23.96-56.673-6.747-75.833-9.566-5.969-19.77-10.393-30.77-14.907 1.819-14.731 7.709-28.516 9.622-43.603-9.076-2.249-17.578-5.234-26.425-6.193l-10.674 41.837c-6.78-2.076-13.761-1.879-20.142-5.473 2.302-14.39 7.773-27.872 9.268-42.314-9.322-1.464-17.216-5.094-26.265-5.485l-10.586 42.215c-17.944-2.75-34.419-8.921-52.52-12.239-3.977 8.91-5.738 18.311-7.334 28.313 5.896 1.392 11.022 2.623 16.158 3.811 12.965 2.998 16.517 10.086 13.439 21.424-2.19 8.065-4.166 16.189-6.182 24.301-7.245 29.16-14.432 58.333-21.72 87.482-1.642 6.567-5.734 8.706-12.398 7.731-6.563-.96-12.757-3.907-19.99-3.693-3.136 10.032-9.378 18.871-11.588 29.946l51.344 13.08c-1.312 15.208-7.614 29.125-9.476 44.441l25.544 6.123c5.653-14.044 6.957-28.803 12.226-43.33 6.351 3.265 13.397 2.317 19.612 6.427l-10.178 42.077c8.986 3.216 17.753 4.528 26.758 6.77l10.578-42.386c2.123-1.091 3.676-.888 5.143-.574a132.886 132.886 0 0 0 42.676 2.14c12.368-1.373 23.343-6.088 32.148-15.372 9.791-10.323 14.71-22.952 17.078-36.535 1.93-11.065 1.436-22.277-5.06-32.071-5.091-7.674-12.084-13.53-21.197-18.26zM223.128 312.17c17.411 4.325 34.803 8.95 53.02 5.624 9.715-1.774 17.037-6.73 19.985-16.503 2.78-9.218 1.164-17.593-5.673-24.879-7.11-7.576-16.254-11.514-25.682-14.807-11.264-3.934-22.683-7.508-34.99-8.48l-13.972 56.788c2.981.929 5.117 1.712 7.312 2.257zm61.5-80.324c9.628-1.368 17.612-7.738 19.958-16.393 2.869-10.583-.337-19.865-8.902-26.178-9.718-7.163-20.908-10.807-32.47-13.337-4.307-.943-8.544-3.454-13.756-1.759l-12.599 51.209c16.457 4.155 31.611 8.753 47.769 6.458z"></path></svg>`,
@@ -1380,17 +1386,22 @@ const RECORDS = [
 		icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 2000" role="img" class="sc-56a68b4b-0 nEsDk"><g fill="#c2a633"><path d="M1024 659H881.12v281.69h224.79v117.94H881.12v281.67H1031c38.51 0 316.16 4.35 315.73-327.72S1077.44 659 1024 659z"></path><path d="M1000 0C447.71 0 0 447.71 0 1000s447.71 1000 1000 1000 1000-447.71 1000-1000S1552.29 0 1000 0zm39.29 1540.1H677.14v-481.46H549.48V940.7h127.65V459.21h310.82c73.53 0 560.56-15.27 560.56 549.48 0 574.09-509.21 531.41-509.21 531.41z"></path></g></svg>`,
 	},
 	{
+		type: 'addr',
+		coin: 966,
+		icon: '<b>polygon</b>',
+		evm: true,
+		url(x) { return `https://polygonscan.com/address/${x}`; },
+	},
+	{
 		type: 'text',
 		key: 'avatar',
-		cached: 'avatar',
 		format() { return ''; },
-		url(x) { return x; }
 	},
 	{
 		type: 'text',
 		key: 'banner',
 		format() { return ''; },
-		url(x) { return x; }
+		url(x) { return x; },
 	},
 ];
 
@@ -1402,7 +1413,7 @@ force_mainnet_check.checked = location0.searchParams.has('1');
 skip_norm_check.checked = location0.searchParams.has('skip');
 const debug = location0.searchParams.has('debug');
 
-let infura_provider = new ethers.providers.InfuraProvider(CHAIN_ID_MAINNET, 'f36f6a8638134ac09f9400d3a7008dfe');
+let infura_provider = new ethers.InfuraProvider(CHAIN_ID_MAINNET, 'f36f6a8638134ac09f9400d3a7008dfe');
 let window_provider;
 let active_provider;
 let active_chain; // = CHAINS[0];
@@ -1686,7 +1697,8 @@ if (input_field.value.endsWith('_!')) { // backwards compat
 if (window.ethereum) {
 	let p = ethereum;
 	if (Array.isArray(ethereum.providers)) p = ethereum.providers[0]; // fix scuffed multi-provider
-	window_provider = new ethers.providers.Web3Provider(p, 'any');
+	window_provider = new ethers.BrowserProvider(p, 'any');
+	window_provider._provider = p; // force into ethers
 	let timer = setTimeout(update_network, 100); // avoid creating infura connection if possible
 	window_provider.once('network', () => clearTimeout(timer));
 	window_provider.on('network', update_network);
@@ -1710,16 +1722,16 @@ function make_network_switcher(btn, id) {
 	btn.classList.add('chain');
 	btn.dataset.chain = id;
 	btn.title = `Chain: ${id} / 0x${id.toString(16)}`;
-	btn.addEventListener('click', () => switch_to_network(id).catch(() => {}));
+	btn.addEventListener('click', () => switch_to_network(id));
 }
 async function get_window_provider_network() {
 	if (!window_provider) throw new Error('no window');
-	if (!window_provider.provider.isConnected()) throw new Error('not connected');
+	if (!window_provider._provider.isConnected()) throw new Error('not connected');
 	return window_provider.getNetwork();
 }
 async function switch_to_network(id) {
 	let network = await get_window_provider_network();
-	if (network.chainId === id) {
+	if (Number(network.chainId) === id) {
 		if (active_provider === window_provider) return;
 		return update_network(network);
 	}
@@ -1732,17 +1744,18 @@ function update_network(network) {
 	let chain0 = active_chain;
 	active_chain = CHAINS[0];
 	active_provider = infura_provider;
-	let window_online = window_provider && window_provider.provider.isConnected();
+	let window_online = window_provider && window_provider._provider.isConnected();
 	let registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
 	if (network && window_online) {
-		let chain = CHAINS.find(x => x.id === network.chainId);
+		let chain = CHAINS.find(x => x.id === Number(network.chainId));
 		if (chain && (!force_mainnet_check.checked || chain.is_mainnet)) {
 			active_chain = chain;
 			active_provider = window_provider;
-			if (network.ensAddress) {
-				registry = network.ensAddress;
+			let plugin = network.plugins.find(x => x instanceof ethers.EnsPlugin);
+			if (plugin) {
+				registry = plugin.address;
 			} else {
-				network.ensAddress = registry; // force it into ethers
+				network.attachPlugin(new ethers.EnsPlugin(registry, chain));
 			}
 		}
 	}
@@ -1751,7 +1764,7 @@ function update_network(network) {
 	document.body.classList.toggle('testnet', !active_chain.is_mainnet);	
 	let network_div = document.createElement('div');
 	network_div.innerHTML = `using <b>${provider_name}</b> on <a target="_blank" href="${active_chain.explorer}/address/${registry}" title="Registry Contract">${active_chain.name}</a>`;
-	if (window_online && !using_window && network && network.chainId !== CHAIN_ID_MAINNET && !force_mainnet_check.checked) {
+	if (window_online && !using_window && network && Number(network.chainId) !== CHAIN_ID_MAINNET && !force_mainnet_check.checked) {
 		provider_div.innerHTML = `<div class="error">Unsupported Network (${network.chainId})</div>`;
 	} else {
 		provider_div.innerHTML = '';	
@@ -2177,21 +2190,26 @@ function create_link(url, html, cls) {
 	return a;
 }
 function create_ens_link(name, html = '<button>🛠️ ENS</button>') {
-	return create_link(`https://app.ens.domains/${encode_uri_component_ens_escaped(name)}`, html, 'ens');
+	try {
+		if (ens_normalize(name) === name) {
+			return create_link(`https://app.ens.domains/${encode_uri_component_ens_escaped(name)}`, html, 'ens');
+		}
+	} catch (err) {
+	}
 }
-function create_ens_metadata_link(contract, token, {html = '<button class="code">🏷️ Metadata</button>'} = {}) {
-	return create_link(`${active_chain.metadata}/${contract}/${token}`, html, 'metadata');
+function create_ens_metadata_link(contract, token) {
+	return create_link(`${active_chain.metadata}/${contract}/${token}`, '<button class="code">🏷️ Metadata</button>', 'metadata');
 }
 function create_etherscan_address_link(addr, {title, anchor, contract} = {}) {
 	if (contract && !anchor) anchor = '#readContract';
 	return create_link(`${active_chain.explorer}/address/${addr}${anchor || ''}`, title || addr, title ? null : 'addr');
 }
 function create_etherscan_nft_link(contract, token, {title = 'Etherscan', cls = 'external'} = {}) {
-	return create_link(`${active_chain.explorer}/nft/${contract}/${ethers.BigNumber.from(token)}`, title, cls); 
+	return create_link(`${active_chain.explorer}/nft/${contract}/${BigInt(token)}`, title, cls); 
 }
 function create_opensea_nft_link(contract, token, {title = OPENSEA_NAME, cls = 'external'} = {}) {
 	let {opensea} = active_chain;
-	return opensea && create_link(`${opensea}${contract}/${ethers.BigNumber.from(token)}`, title, cls);
+	return opensea && create_link(`${opensea}${contract}/${BigInt(token)}`, title, cls);
 }
 function create_jazz_icon(address) {
 	let i = ADDRESS_MAP.get(address);
@@ -2520,9 +2538,8 @@ function add_nft_links(row, name, contract, token) {
 
 async function add_avatar(row, resolver) {
 	try {
-		let avatar = await resolver.getAvatar();
-		if (!avatar || should_stop_resolving()) return;
-		let {url} = avatar;
+		let {url, linkage} = await resolver._getAvatar();
+		if (!url || should_stop_resolving()) return;
 		try {
 			url = new URL(url).toString().replaceAll('#', '%23');	
 		} catch (ignored) {
@@ -2535,7 +2552,8 @@ async function add_avatar(row, resolver) {
 		a.target = '_blank';
 		a.append(img);
 		row.append(a);
-		resolver.avatar = url;
+		let avatar = linkage.find(x => x.type === 'avatar');
+		resolver._avatar = avatar.value || url;
 	} catch (err) {
 		console.log('Avatar error', avatar, err);
 	}
@@ -2818,7 +2836,7 @@ function create_breakdown_row(name, before) {
 		
 		let parent = split.slice(info.index + 1).map(x => x.label).join('.');
 		if (NFT_DOMAINS.has(parent)) {
-			let token = ethers.BigNumber.from(hash);
+			let token = BigInt(hash).toString();
 			let token_div = document.createElement('div');
 			token_div.classList.add('hash', 'minor');
 			token_div.append(Object.assign(document.createElement('b'), {innerText: 'Token:'}));
@@ -2951,7 +2969,7 @@ function resolve() {
 	let match;
 	// replace token:XXX with ens subgraph label (or fail)
 	if (match = input.match(/^(?:labelhash|token):(0x[a-f0-9]+|[0-9]+)$/i)) {
-		let hash = ethers.BigNumber.from(match[1]).toHexString();
+		let hash = ethers.zeroPadValue(match[1], 32);
 		resolve_btn.disabled = true;
 		return (async() => {
 			try {
@@ -2978,12 +2996,12 @@ function resolve() {
 			resolve_btn.disabled = false;
 		})();
 	} else if (match = input.match(/^(?:namehash|wrapped):(0x[a-f0-9]+|[0-9]+)$/i)) {
+		let hash = ethers.zeroPadValue(match[1], 32);
 		resolve_btn.disabled = true;
 		return (async () => {
 			try {
 				await ensure_wrapper();
-				let hash = ethers.utils.hexZeroPad(ethers.BigNumber.from(match[1]).toHexString(), 32);
-				let bytes = ethers.utils.arrayify(await wrapper_contract.callStatic.names(hash));
+				let bytes = ethers.getBytes(await wrapper_contract.names(hash));
 				if (!bytes.length) throw new Error(`Unknown namehash preimage: ${hash}`);
 				input_field.value = name_from_wrapper_bytes(bytes);
 				resolve_btn.disabled = false;
@@ -3089,7 +3107,7 @@ async function resolve1(input, skip_norm) {
 
 		let resolver, last_err;
 		try {
-			resolver = await registry_contract.callStatic.resolver(rev_node);
+			resolver = await registry_contract.resolver(rev_node);
 			if (is_null_hex(resolver)) resolver = false;
 		} catch (err) {	
 			if (!is_address_type_error(err)) {
@@ -3102,7 +3120,7 @@ async function resolve1(input, skip_norm) {
 
 		if (reverse_registrar === null) {
 			try {
-				reverse_registrar = await registry_contract.callStatic.owner(namehash(REVERSE_DOMAIN));
+				reverse_registrar = await registry_contract.owner(namehash(REVERSE_DOMAIN));
 			} catch (err) {
 				reverse_registrar = false;
 			}
@@ -3139,7 +3157,7 @@ async function resolve1(input, skip_norm) {
 			let contract = new ethers.Contract(resolver, [
 				`function name(bytes32 node) view returns (string)`
 			], active_provider);
-			primary = await contract.callStatic.name(rev_node);
+			primary = await contract.name(rev_node);
 		} catch (err) {	
 			last_err = err;
 		} 
@@ -3197,7 +3215,7 @@ async function resolve1(input, skip_norm) {
 		add_row_tag(input_row, create_copy_btn(input));
 
 		if (/^0x[0-9a-f]{40}$/i.test(input)) {
-			add_row_tag(input_row, create_resolve_btn(ethers.utils.getAddress(input.toLowerCase()), '🛠️ Fix Checksum'));
+			add_row_tag(input_row, create_resolve_btn(ethers.getAddress(input.toLowerCase()), '🛠️ Fix Checksum'));
 		}
 		if (!input.includes('.')) {
 			add_row_tag(input_row, create_resolve_btn(`${input}.eth`, '🔄️ Add <b>".eth"</b>'));
@@ -3307,12 +3325,11 @@ async function resolve1(input, skip_norm) {
 
 	// at this point, we have a name
 	// lookup the name
-	let resolver, resolver_err;
-	let is_wildcard, wildcard_domain;
+	let resolver, resolver_err, is_wildcard;
 	let resolver_row = create_row('Resolver', true);
 	output_div.append(resolver_row);
 	try {
-		resolver = await active_provider.getResolver(name_norm);
+		resolver = await get_resolver(name_norm);
 	} catch (err) {
 		if (!is_address_type_error(err)) {
 			resolver_err = err;
@@ -3320,31 +3337,9 @@ async function resolve1(input, skip_norm) {
 	}
 	if (should_stop_resolving()) return;
 	if (resolver) {
-		try {
-			is_wildcard = await resolver.supportsWildcard(); // this can throw
-		} catch (err) {
-		}
-		if (should_stop_resolving()) return;
-		if (is_wildcard) { 
-			// ethers doesn't expose this information
-			// https://github.com/ethers-io/ethers.js/issues/3398
-			let v = name_norm.split('.');
-			try {
-				while (true) {
-					let parent = v.join('.');
-					let address = await registry_contract.callStatic.resolver(namehash(parent));
-					if (should_stop_resolving()) return;
-					if (address === resolver.address) {
-						wildcard_domain = parent;
-						break;
-					}	
-					v.shift();
-				}
-			} catch (ignored) {
-			}
-		}
-		await add_avatar(normed_row, resolver);	
-		if (should_stop_resolving()) return;
+		is_wildcard = await resolver.supportsWildcard().catch(() => {});
+		if (should_stop_resolving()) return;	
+		await add_avatar(normed_row, resolver);
 	}
 	remove_temporary(resolver_row);	
 	add_row_tag(resolver_row, create_elapsed());
@@ -3357,12 +3352,10 @@ async function resolve1(input, skip_norm) {
 		add_row_tag(resolver_row, create_copy_btn(resolver.address, {value: true}));
 		if (is_wildcard) {
 			add_row_tag(resolver_row, create_typed_tag('special', 'Wildcard'));
-			if (wildcard_domain === name_norm) {
+			if (resolver._basename === name_norm) {
 				add_row_tag(resolver_row, 'Basename');
-			} else if (wildcard_domain) {
-				add_row_tag(resolver_row, create_resolve_btn(wildcard_domain, `↩️ ${wildcard_domain}`));
 			} else {
-				add_row_tag(resolver_row, create_typed_tag('warn', 'Unknown Parent'));
+				add_row_tag(resolver_row, create_resolve_btn(resolver._basename, `↩️ ${resolver._basename}`));
 			}
 		} else {
 			add_contract_name(resolver_row, resolver.address);
@@ -3381,7 +3374,7 @@ async function resolve1(input, skip_norm) {
 	let available;	
 	if (parent_domain === 'eth') {
 		let eth_label = name_norm.slice(0, sep_pos);
-		nft_token = ethers.utils.id(eth_label);
+		nft_token = labelhash(eth_label);
 		let avail_err;
 		let expiry;
 		let len = Array.from(eth_label).length;
@@ -3393,12 +3386,12 @@ async function resolve1(input, skip_norm) {
 			if (should_stop_resolving()) return;
 			nft_contract = eth_nft_contract;
 			if (len >= MIN_ETH_LENGTH) {
-				available = await eth_nft_contract.callStatic.available(nft_token);
+				available = await eth_nft_contract.available(nft_token);
 				if (should_stop_resolving()) return;
-				expiry = (await eth_nft_contract.callStatic.nameExpires(nft_token)).toNumber();
+				expiry = Number(await eth_nft_contract.nameExpires(nft_token));
 				if (available) {
 					if (should_stop_resolving()) return;
-					premium = await price_oracle_contract.callStatic.premium(eth_label, expiry, 0);
+					premium = await price_oracle_contract.premium(eth_label, expiry, 0);
 				}
 			}
 		} catch (err) {
@@ -3418,7 +3411,7 @@ async function resolve1(input, skip_norm) {
 			add_row_tag(avail_row, create_resolve_btn(`${padded}.eth`, '↩️ Repeat until 3+'));
 		} else if (available) {
 			add_row_tag(avail_row, create_ens_link(name_norm, '<button class="glow">👌️ Available to Register</button>'));
-			let ether = parseFloat(ethers.utils.formatEther(premium));
+			let ether = parseFloat(ethers.formatEther(premium));
 			if (ether) {
 				add_row_tag(avail_row, create_typed_tag('warn', `${ether.toFixed(ether < 1 ? 4 : 2)}Ξ Premium`));
 			}
@@ -3447,14 +3440,14 @@ async function resolve1(input, skip_norm) {
 		avail_row = create_row('Availability', true);
 		output_div.append(avail_row);
 		try {
-			let address = await registry_contract.callStatic.owner(namehash(parent_domain));
+			let address = await registry_contract.owner(namehash(parent_domain));
 			if (should_stop_resolving()) return;
 			if (is_null_hex(address)) throw new Error('Missing backing contract');
 			nft_contract = new ethers.Contract(address, [
 				'function available(uint256 id) external view returns(bool)',
 				'function ownerOf(uint256 id) external view returns (address)',
 			], active_provider);
-			available = await nft_contract.callStatic.available(nft_token); //.catch(() => {});
+			available = await nft_contract.available(nft_token); //.catch(() => {});
 			if (active_chain.is_mainnet && parent_domain === 'art') {
 				avail_url = `https://protocol.art/api/art-tokens?exact=${encodeURIComponent(label)}`;
 				if (available) {
@@ -3492,7 +3485,7 @@ async function resolve1(input, skip_norm) {
 	
 	// get the owner
 	let is_wrapped, owner, nft_owner;
-	if ((!nft_backed || available !== undefined) && (!is_wildcard || wildcard_domain === name_norm)) { 
+	if (resolver && resolver._basename === name_norm && (!nft_backed || available !== undefined)) { 
 		let node = namehash(name_norm);
 		let wrapped_row = create_row('Wrapper', true);
 
@@ -3505,7 +3498,7 @@ async function resolve1(input, skip_norm) {
 				await ensure_wrapper();
 				if (should_stop_resolving()) return;
 				if (!unwrappable) {
-					is_wrapped = await wrapper_contract.callStatic.isWrapped(node);
+					is_wrapped = await wrapper_contract.isWrapped(node);
 				}
 			} catch (err) {
 				wrapped_err = err;
@@ -3541,7 +3534,7 @@ async function resolve1(input, skip_norm) {
 		output_div.append(owner_row);
 		try {
 			if (is_wrapped) {
-				let data = await wrapper_contract.callStatic.getData(node);
+				let data = await wrapper_contract.getData(node);
 				if (should_stop_resolving()) return;
 				owner = data.owner;
 				let now = Date.now();
@@ -3578,12 +3571,12 @@ async function resolve1(input, skip_norm) {
 				if (fuses & 0x00020) add_row_tag(wrapped_row, '🚫️ Subdomain');
 				if (fuses & 0x00040) add_row_tag(wrapped_row, '🚫️ Approve');
 			} else {
-				owner = await registry_contract.callStatic.owner(node);
+				owner = await registry_contract.owner(node);
 				if (should_stop_resolving()) return;
 				if (is_null_hex(owner)) owner = false;
 				if (!owner && nft_contract) {
 					checked_nft = true;
-					owner = await nft_contract.callStatic.ownerOf(nft_token).catch(() => {});
+					owner = await nft_contract.ownerOf(nft_token).catch(() => {});
 					if (is_null_hex(owner)) owner = false;
 				}
 			}
@@ -3629,7 +3622,7 @@ async function resolve1(input, skip_norm) {
 				output_div.append(nft_row);
 				try {
 					await ensure_eth_nft();
-					nft_owner = await nft_contract.callStatic.ownerOf(nft_token);
+					nft_owner = await nft_contract.ownerOf(nft_token);
 					if (is_null_hex(nft_owner)) nft_owner = false;
 				} catch (err) {
 				}
@@ -3699,7 +3692,7 @@ async function resolve1(input, skip_norm) {
 		}
 		try {
 			// https://github.com/ensdomains/ens-contracts/blob/dev/contracts/resolvers/profiles/IInterfaceResolver.sol
-			if (!await contract.callStatic.supportsInterface('0x124a319c')) {
+			if (!await contract.supportsInterface('0x124a319c')) {
 				throw new Error('not EIP-165');
 			}
 			for (let {iface, title} of interfaces) {
@@ -3711,11 +3704,11 @@ async function resolve1(input, skip_norm) {
 				add_iface(`${title} <code>${iface.slice(2)}</code>`, addr);
 				if (iface === IFACE_ETH_CONTROLLER) {
 					let controller = contract_for_controller(addr);
-					let oracle = contract_for_price_oracle(await controller.callStatic.prices());
+					let oracle = contract_for_price_oracle(await controller.prices());
 					add_iface('<b>Price Oracle</b>', oracle.address);
-					add_iface('<b>USD Oracle</b>', await oracle.callStatic.usdOracle());
-					add_iface(TITLE_WRAPPER, await controller.callStatic.nameWrapper());
-					//add_iface('DAO Wallet', await contract.callStatic.owner().catch(() => ''));
+					add_iface('<b>USD Oracle</b>', await oracle.usdOracle());
+					add_iface(TITLE_WRAPPER, await controller.nameWrapper());
+					//add_iface('DAO Wallet', await contract.owner().catch(() => ''));
 				}
 			}
 		} catch (err) {
@@ -3794,42 +3787,57 @@ async function resolve1(input, skip_norm) {
 		add_row_tag(address_row, create_elapsed());	
 
 		if (show_records_check.checked) {
-			let records_row = create_row(create_link('https://docs.ens.domains/ens-improvement-proposals/ensip-5-text-records', 'Records:'), true);
+			let records_row = create_row(create_link('https://docs.ens.domains/contract-api-reference/publicresolver', 'Records:'), true);
 			records_row.classList.add('records');
 			if (available) records_row.classList.add('old');
 			output_div.append(records_row);	
 			let old = records_row.childElementCount;
-			for (let {rec, data, error} of await fetch_records(resolver, is_wildcard)) {
+			for (let {rec, data, error} of await fetch_records(resolver, RECORDS)) {
 				if (!data) continue;
 				if (error) continue;
 				//if (error) return create_typed_tag('warn', error);
 				let a = document.createElement('a');
-				a.classList.add('record');
+				a.classList.add('record', rec.type);
 				switch (rec.type) {
+					// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IAddressResolver.sol
+					// https://docs.ens.domains/ens-improvement-proposals/ensip-9-multichain-address-resolution
 					case 'addr': {
-						if (rec.url) {
-							a.target = '_blank';
-							a.href = rec.url(data);
+						if (is_null_hex(data))  continue;
+						a.innerHTML = rec.icon || `<b>coin(${rec.coin})</b>`;
+						let address;
+						if (rec.evm) {
+							address = ethers.getAddress(data);
+						} else if (rec.decode) {
+							address = rec.decode(data);
+						}
+						if (address) {
+							let span = document.createElement('span');
+							span.innerText = address;
+							a.append(span);
+							if (rec.url) {
+								a.target = '_blank';
+								a.href = rec.url(address);
+							} else {
+								make_copy(a, address);
+								a.title = `CoinType(${rec.coin}): ${address}`;
+							}
 						} else {
 							make_copy(a, data);
-						}
-						a.title = `Encoded CoinType: ${rec.coin}`;
-						a.innerHTML = rec.icon || `<b>coin(${rec.coin})</b>`;
-						if (rec.format) {
-							let span = document.createElement('span');
-							span.innerText = rec.format(data);
-							a.append(span);
+							a.title = `Encoded CoinType(${rec.coin}): ${data}`;
 						}
 						records_row.append(a);
 						break;
 					}
+					// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/ITextResolver.sol
 					case 'text': {
-						a.title = rec.key;
+						data = data.trim();
+						if (!data) continue;
 						if (rec.url) {
 							a.target = '_blank';
 							a.href = rec.url(data);
 						} else {
 							make_copy(a, data);
+							a.title = data;
 						}
 						a.innerHTML = rec.icon || `<b>${rec.key}</b>`;
 						let text = rec.format ? rec.format(data) : data;
@@ -3840,12 +3848,23 @@ async function resolve1(input, skip_norm) {
 						}
 						break;
 					}
+					// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IPubkeyResolver.sol
+					case 'pubkey': {
+						let [x, y] = data;
+						if (is_null_hex(x)) continue;
+						a.innerHTML = `<b>pubkey</b>`;
+						a.append(make_copy(Object.assign(document.createElement('button'), {innerText: 'x', title: x}), x));
+						a.append(make_copy(Object.assign(document.createElement('button'), {innerText: 'y', title: y}), y));
+						break;
+					}
+					// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IContentHashResolver.sol
+					// https://docs.ens.domains/ens-improvement-proposals/ensip-7-contenthash-field
+					// https://github.com/multiformats/multicodec/blob/master/table.csv
 					case 'contenthash': { 
-						// https://docs.ens.domains/ens-improvement-proposals/ensip-7-contenthash-field
-						// https://github.com/multiformats/multicodec/blob/master/table.csv
+						if (is_null_hex(data))  continue;
 						a.innerHTML = `<b>${rec.type}</b>`;
 						a.classList.add('rtrim');
-						let buf = ethers.utils.arrayify(data);
+						let buf = ethers.getBytes(data);
 						let decoded, url;
 						try {
 							let [proto, pos] = uvarint.read(buf);
@@ -3921,7 +3940,6 @@ async function resolve1(input, skip_norm) {
 						break;
 					}
 				}
-				//if (rec.customize) rec.customize(a);
 				records_row.append(a);
 			}
 			if (records_row.childElementCount === old) {
@@ -4045,63 +4063,65 @@ function add_owner_links(row, owner) {
 	add_row_tag(row, create_link(`https://debank.com/profile/${owner}`, 'Debank', 'external'));
 }
 
-async function fetch_records(resolver, is_wildcard) {
-	if (!is_wildcard) { 
-		if (multicall_contract === null) {
-			const MULTICALL3 = '0xcA11bde05977b3631167028862bE2a173976CA11';
-			if (await is_contract(MULTICALL3)) {
-				multicall_contract = new ethers.Contract(MULTICALL3, [
-					`function tryAggregate(bool requireSuccess, tuple(address target, bytes data)[] memory calls) public returns (tuple(bool success, bytes data)[] memory returnData)`
-				], active_provider);
-			} else {
-				multicall_contract = false;
-			}
-		}
-		if (multicall_contract) {
-			const target = resolver.address;
-			const node = namehash(resolver.name);
-			try {
-				let res = await multicall_contract.callStatic.tryAggregate(false, RECORDS.map(rec => {
-					switch (rec.type) {
-						case 'text': return {target, data: ethers.utils.hexConcat([ethers.utils.id('text(bytes32,string)').slice(0, 10), ethers.utils.defaultAbiCoder.encode(['bytes32', 'string'], [node, rec.key])])};
-						case 'addr': return {target, data: ethers.utils.hexConcat([ethers.utils.id('addr(bytes32,uint256)').slice(0, 10), ethers.utils.defaultAbiCoder.encode(['bytes32', 'uint256'], [node, rec.coin])])};
-						case 'contenthash': return {target, data: ethers.utils.hexConcat([ethers.utils.id('contenthash(bytes32)').slice(0, 10), ethers.utils.defaultAbiCoder.encode(['bytes32'], [node])])};
-						default: new Error('bug');
-					}
-				}));
-				return RECORDS.map((rec, i) => {
-					let {success, data} = res[i];
-					if (!success) return {rec, error: 'eth_call failure'};
-					try {
-						if (rec.type === 'text') {
-							[data] = ethers.utils.defaultAbiCoder.decode(['string'], data);
-							if (data) return {rec, data};
-						} else {
-							[data] = ethers.utils.defaultAbiCoder.decode(['bytes'], data);
-							if (data !== '0x') return {rec, data};
-						}
-					} catch (err) {
-						return {rec, error: err.message};
-					}
-				}).filter(Boolean);
-			} catch (err) {				
-			}
+async function fetch_records(resolver, records) {
+	let contract = contract_for_resolver(resolver);
+	let is_wildcard = await resolver.supportsWildcard();
+	if (!is_wildcard && await can_multicall()) {
+		try {
+			let res = await multicall_contract.tryAggregate(false, records.map(rec => {
+				let frag = contract.interface.getFunction(rec.type);
+				let params = [contract._node];
+				switch (rec.type) {
+					case 'text': params.push(rec.key); break;
+					case 'addr': params.push(rec.coin); break;
+				}
+				return {target: resolver.address, data: contract.interface.encodeFunctionData(frag, params)};
+			}));
+			return records.map((rec, i) => {
+				let {success, data} = res[i];
+				if (!success) return {rec, error: 'eth_call failure'};
+				try {
+					let frag = contract.interface.getFunction(rec.type);
+					data = contract.interface.decodeFunctionResult(frag, data);
+					if (frag.outputs.length === 1) data = data[0];
+					return {rec, data};
+				} catch (err) {
+					return {rec, error: err.message};
+				}
+			});
+		} catch (err) {
 		}
 	}
-	return (await Promise.all(RECORDS.map(async rec => {
+	const options = {enableCcipRead: true};
+	return Promise.all(records.map(async rec => {
+		if (rec.key === 'avatar' && resolver._avatar) {
+			return {rec, data: resolver._avatar};
+		}
+		let params = [contract._node];
+		switch (rec.type) {
+			case 'text': params.push(rec.key); break;
+			case 'addr': params.push(rec.coin); break;
+		}
 		try {
-			let data = rec.cached ? resolver[rec.cached] : await resolver.getText(rec.key);
-			if (data) return {rec, data};
+			let data;
+			if (is_wildcard) {
+				let frag = contract.interface.getFunction(rec.type);
+				data = await contract.resolve(ethers.dnsEncode(resolver.name), contract.interface.encodeFunctionData(frag, params), options);
+				data = contract.interface.decodeFunctionResult(frag, data);
+				if (frag.outputs.length === 1) data = data[0];
+			} else {
+				data = await contract[rec.type](...params, options);
+			}
+			return {rec, data};
 		} catch (err) {
 			return {rec, error: err.message};
 		}
-	}))).filter(Boolean);
+	}));
 }
-
 async function ensure_eth_resolver() {
 	if (eth_resolver_contract) return;
 	if (eth_resolver_contract === false) throw new Error(`No "eth" resolver`);	
-	let resolver = await active_provider.getResolver('eth');
+	let resolver = await get_resolver('eth');
 	if (!resolver) {
 		eth_resolver_contract = false;
 		return ensure_eth_resolver(); 
@@ -4112,9 +4132,15 @@ function contract_for_resolver(resolver) {
 	let contract = new ethers.Contract(resolver.address, [
 		'function supportsInterface(bytes4 interfaceID) external view returns (bool)',
 		'function interfaceImplementer(bytes32 node, bytes4 interfaceID) external view returns (address)',
+		'function resolve(bytes, bytes) view returns (bytes)',
+		'function addr(bytes32, uint) view returns (bytes)',
+		'function text(bytes32, string) view returns (string)',
+		'function contenthash(bytes32) view returns (bytes)',
+		'function pubkey(bytes32) view returns (bytes32, bytes32)',
+		'function name(bytes32 node) view returns (string)',
 	], active_provider);
-	contract.node = namehash(resolver.name);
-	contract.get_interface = hash => contract.callStatic.interfaceImplementer(contract.node, hash);
+	contract._node = namehash(resolver.name);
+	contract.get_interface = hash => contract.interfaceImplementer(contract._node, hash);
 	return contract;
 }
 function contract_for_controller(address) {
@@ -4158,7 +4184,7 @@ async function ensure_eth_nft() {
 	if (eth_nft_contract) return;
 	if (eth_nft_contract === false) throw new Error(`Not implemented`);
 	await ensure_eth_resolver();
-	let nft_address = await registry_contract.callStatic.owner(eth_resolver_contract.node);
+	let nft_address = await registry_contract.owner(eth_resolver_contract._node);
 	//let nft_address = await eth_resolver_contract.get_interface(IFACE_ETH_NFT);
 	if (is_null_hex(nft_address)) {
 		eth_nft_contract = false;
@@ -4170,27 +4196,56 @@ async function ensure_eth_nft() {
 		'function ownerOf(uint256 id) external view returns (address)',
 		'function GRACE_PERIOD() external view returns (uint256)',
 	], active_provider);
-	eth_nft_contract.grace_period = (await eth_nft_contract.callStatic.GRACE_PERIOD().then(x => 1000 * x.toNumber()).catch(() => 90*86400*1000));
+	eth_nft_contract.grace_period = 1000 * (await eth_nft_contract.GRACE_PERIOD().then(Number).catch(() => 90*86400));
 	eth_controller_contract = contract_for_controller(await eth_resolver_contract.get_interface(IFACE_ETH_CONTROLLER));
-	price_oracle_contract = contract_for_price_oracle(await eth_controller_contract.callStatic.prices());
+	price_oracle_contract = contract_for_price_oracle(await eth_controller_contract.prices());
+}
+async function can_multicall() {
+	if (multicall_contract === null) {
+		const MULTICALL3 = '0xcA11bde05977b3631167028862bE2a173976CA11';
+		if (await is_contract(MULTICALL3)) {
+			multicall_contract = new ethers.Contract(MULTICALL3, [
+				`function tryAggregate(bool requireSuccess, tuple(address target, bytes data)[] memory calls) public view returns (tuple(bool success, bytes data)[] memory returnData)`
+			], active_provider);
+		} else {
+			multicall_contract = false;
+		}
+	}
+	return multicall_contract;
+}
+
+// https://docs.ens.domains/ens-improvement-proposals/ensip-10-wildcard-resolution
+async function get_resolver(name) {
+	let v = name.split('.');
+	while (v.length) {
+		let basename = v.join('.');
+		if (name !== basename && basename === 'eth') break; // mimic ethers
+		let address = await registry_contract.resolver(namehash(basename));
+		if (should_stop_resolving()) break;
+		if (!is_null_hex(address)) {
+			let resolver = new ethers.EnsResolver(active_provider, address, name);
+			resolver._basename = basename; // remember
+			if (name !== basename) {
+				if (!await resolver.supportsWildcard()) break;
+			}
+			return resolver;
+		}
+		v.shift();
+	}
 }
 async function get_safe_primary(owner, alt_owner) {
 	// return normalized primary if resolve(reverse(owner)) is owner or alt_owner
-	let rev_name = reverse_name(owner);
-	let rev_node = namehash(rev_name);
-	let rev_resolver = await registry_contract.callStatic.resolver(rev_node);
-	if (!rev_resolver || is_null_hex(rev_resolver)) {
+	let rev_resolver = await get_resolver(reverse_name(owner));
+	if (!rev_resolver) {
 		throw new Error('Primary not set');
 	}
-	let contract = new ethers.Contract(rev_resolver, [
-		`function name(bytes32 node) view returns (string)`
-	], active_provider);	
-	let primary = await contract.callStatic.name(rev_node);
+	let contract = contract_for_resolver(rev_resolver);
+	let [{data: primary}] = await fetch_records(rev_resolver, [{type: 'name'}]);
 	if (!primary) {
 		throw new Error('Primary is Null');
 	}
 	let name = ens_normalize(primary);
-	let resolver = await active_provider.getResolver(name);
+	let resolver = await get_resolver(name);
 	if (!resolver) {
 		throw new Error('Resolver not set');
 	}
@@ -4223,7 +4278,7 @@ function is_address_type_error(err) {
 }
 function is_checksum_address(s) {
 	try {
-		return s === ethers.utils.getAddress(s);
+		return s.startsWith('0x') && s === ethers.getAddress(s);
 	} catch (ignored) {
 	}
 }
@@ -4231,13 +4286,12 @@ function is_null_hex(s) {
 	return !s || /^0x0*$/.test(s);
 }
 function labelhash(s) {
-	//return ethers.utils.id(s);
-	return ethers.utils.keccak256(bytes_from_utf8(s));
+	return ethers.keccak256(bytes_from_utf8(s));
 }
 function namehash(s) {
 	const N = 66;
 	let hash = '0x'.padEnd(N, '0');
-	if (s) hash = s.split('.').reduceRight((h, x) => ethers.utils.keccak256(h + labelhash(x).slice(2)), hash);
+	if (s) hash = s.split('.').reduceRight((h, x) => ethers.keccak256(h + labelhash(x).slice(2)), hash);
 	return hash.slice(0, N);
 }
 
