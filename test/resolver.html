@@ -1706,6 +1706,7 @@ if (window.ethereum) {
 	window_provider = new ethers.BrowserProvider(p, 'any');
 	window_provider._provider = p;
 	let timer = setTimeout(update_network, 100); // avoid creating infura connection if possible
+	window_provider.getNetwork().then(update_network).catch(() => {});
 	window_provider.once('network', () => clearTimeout(timer));
 	window_provider.on('network', update_network);
 	ethereum.on('connect', async () => update_network(await window_provider.getNetwork()));
