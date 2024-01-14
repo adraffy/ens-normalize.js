@@ -493,7 +493,7 @@ button.copy.copied {
 	color: #000;
 }
 .tags.iface:hover {
-	background-color: #bbd;
+	outline: 2px solid #00f;
 }
 .tags.iface code {
 	font-size: 13px;
@@ -2381,8 +2381,6 @@ function make_locked(row) {
 }
 function make_contract(row) {
 	row.classList.add('contract');
-	//let span = row.querySelector('.row-label');
-	//span.innerHTML = span.innerHTML.replace('Address', 'Contract'); // meh
 }
 function make_exploded(row, name, is_norm, components) {	
 	let before = !is_norm;
@@ -3611,9 +3609,7 @@ async function resolve1(input, skip_norm) {
 			if (discovered.has(addr)) return;
 			discovered.add(addr);
 			html += ` <code class="prefix">${addr.slice(0, 6)}</code>`;
-			let a = create_etherscan_address_link(addr, {title: html, contract: true});
-			a.classList.add('iface');
-			add_row_tag(row, a);
+			add_row_tag(row, create_etherscan_address_link(addr, {innerHTML: html, contract: true, className: 'iface'}));
 		}
 		try {
 			// https://github.com/ensdomains/ens-contracts/blob/dev/contracts/resolvers/profiles/IInterfaceResolver.sol
