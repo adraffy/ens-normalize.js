@@ -3463,8 +3463,8 @@ async function resolve1(input, skip_norm) {
 				if (should_stop_resolving()) return;
 				owner = data.owner;
 				let now = Date.now();
-				let exp = data.expiry * 1000;
-				let {fuses} = data;
+				let exp = Number(data.expiry) * 1000;
+				let fuses = Number(data.fuses);
 				if (debug) fuses = 0x7FFFF;
 				if (fuses & 0x10000) { // PARENT_CANNOT_CONTROL 
 					if (fuses & 0x00001) { // CANNOT_UNWRAP 
