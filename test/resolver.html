@@ -3412,7 +3412,7 @@ async function resolve1(input, skip_norm) {
 	
 	// get the owner
 	let is_wrapped, owner, nft_owner;
-	if (resolver && resolver._basename === name_norm && (!nft_backed || available !== undefined)) { 
+	if ((!resolver || resolver._basename === name_norm) && (!nft_backed || available !== undefined)) { 
 		let node = namehash(name_norm);
 		let wrapped_row = create_row('Wrapper', true);
 
