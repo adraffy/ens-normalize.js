@@ -3738,12 +3738,12 @@ async function resolve1(input, skip_norm) {
 							} else if (rec.btc) {
 								let n = v.length;
 								// P2PKH: OP_DUP OP_HASH160 <pubKeyHash> OP_EQUALVERIFY OP_CHECKSIG
-								if (rec.btc.p2pkh && n >= 5 && v[0] == 0x76 && v[1] == 0xA9 && v[2] === n-5 && v[n-2] == 0x88 && v[n-1] == 0xAC) {
+								if (Number.isInteger(rec.btc.p2pkh) && n >= 5 && v[0] == 0x76 && v[1] == 0xA9 && v[2] === n-5 && v[n-2] == 0x88 && v[n-1] == 0xAC) {
 									v[2] = rec.btc.p2pkh;
 									address = base58check(v.slice(2, -2));
 								}
 								// P2SH: OP_HASH160 <scriptHash> OP_EQUAL
-								else if (rec.btc.p2sh && n >= 3 && v[0] == 0xA9 && v[1] == n-3 && v[n-1] == 0x87) {
+								else if (Number.isInteger(rec.btc.p2sh) && n >= 3 && v[0] == 0xA9 && v[1] == n-3 && v[n-1] == 0x87) {
 									v[1] = rec.btc.p2sh;
 									address = base58check(v.slice(1, -1));
 								}
