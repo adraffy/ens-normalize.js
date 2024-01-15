@@ -1080,11 +1080,11 @@ Hebrew:
 	<button id="examples_btn">👀 Examples</button>
 	<input type="checkbox" id="auto_resolve_check" checked>
 	<label for="auto_resolve_check"><svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--geist-foreground);width:20px;height:20px"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> <i>on Input</i></label>
-	<input type="checkbox" id="show_details_check" checked>
+	<input type="checkbox" id="show_details_check">
 	<label for="show_details_check">Details</label>
 	<input type="checkbox" id="show_components_check" checked>
 	<label for="show_components_check">Emoji Components</label>
-	<input type="checkbox" id="show_records_check">
+	<input type="checkbox" id="show_records_check" checked>
 	<label for="show_records_check" title="Include common text and address records">Records</label>
 	<input type="checkbox" id="skip_norm_check">
 	<label for="skip_norm_check"  title="When active, normalization is not applied"><svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--geist-foreground);width:20px;height:20px"><circle cx="12" cy="12" r="10" fill="var(--geist-fill)"></circle><path d="M15 9L9 15" stroke="var(--geist-stroke)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M9 9L15 15" stroke="var(--geist-stroke)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>Norm</label>
@@ -2435,7 +2435,7 @@ function create_ethmoji_row(tokens, suffix) {
 	tally = [...tally.values()];
 	let formula = create('div', {className: 'formula'});
 	for (let rec of tally.values()) {
-		formula.append(create_link(`./emoji.html#q=${str_from_cps(rec.cps)}`, `${rec.form}<sup>${rec.count}</sup>`));
+		formula.append(create_link(`./emoji.html#q=${str_from_cps(rec.cps)}`, {innerHTML: `${rec.form}<sup>${rec.count}</sup>`}));
 	}
 	row.append(formula);
 	let span_grade = create('span');
