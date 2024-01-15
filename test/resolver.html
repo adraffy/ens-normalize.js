@@ -20,7 +20,7 @@
 }
 .long {
 	white-space: pre-wrap !important;
-	line-break: anywhere;
+	word-break: break-word;
 }
 .force-ltr {
 	direction: ltr;
@@ -1170,7 +1170,7 @@ Hebrew:
 // * replace "../../punycode.js" with https://cdn.jsdelivr.net/npm/@adraffy/punycode@latest/dist/index.min.js
 // * replace "../../cid.js" with https://cdn.jsdelivr.net/npm/@adraffy/cid@latest/dist/index.min.js
 // * replace "../../" with https://adraffy.github.io/
-import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.10.0/ethers.min.js';
+import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.10.0/ethers.js';
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
 	nfc, nfd, hex_cp, quote_cp, explode_cp, str_from_cps, safe_str_from_cps,
@@ -2119,7 +2119,7 @@ function create_dns_row(name, replaced, contenthash) {
 				add_row_tag(row, create_link(`https://${encoded}.xyz`,  {innerHTML: '.xyz',  className: 'external'}));
 				add_row_tag(row, create_link(`https://${encoded}.co`,   {innerHTML: '.co',   className: 'external'}));
 			} else {
-				add_row_tag(row, create_link(`https://${encoded}`, 'Website', 'external'));
+				add_row_tag(row, create_link(`https://${encoded}`, {button: '↗️ Website', className: 'external'}));
 			}
 		}
 		add_row_tag(row, create_link(`../../punycode.js/test/demo.html#${encoded?'p':'u'}=${encoded || name}`, {button: '✅️ Check'}));
@@ -3262,7 +3262,7 @@ async function resolve1(input, skip_norm) {
 
 	// at this point, we have a name
 	// lookup the name
-	let resolver, resolver_err, is_wildcard;
+	let resolver, resolver_err;
 	let resolver_row = create_row('Resolver', true);
 	output_div.append(resolver_row);
 	try {
@@ -3273,11 +3273,6 @@ async function resolve1(input, skip_norm) {
 		}
 	}
 	if (should_stop_resolving()) return;
-	if (resolver) {
-		is_wildcard = await safe_supports_wildcard(resolver);
-		if (should_stop_resolving()) return;	
-		add_avatar(normed_row, resolver); 
-	}
 	remove_temporary(resolver_row);	
 	add_row_tag(resolver_row, create_elapsed());
 	
@@ -3285,9 +3280,10 @@ async function resolve1(input, skip_norm) {
 		resolver_row.classList.add('error');
 		add_row_tag(resolver_row, create_tag('warn', resolver_err));
 	} else if (resolver) { 
+		add_avatar(normed_row, resolver); 
 		resolver_row.append(create_etherscan_address_link(resolver.address, {contract: true}));
 		add_row_tag(resolver_row, create_copy_btn(resolver.address, {value: true}));
-		if (is_wildcard) {
+		if (resolver._wildcard) {
 			add_row_tag(resolver_row, create_tag('special', 'Wildcard'));
 			if (resolver._basename === name_norm) {
 				add_row_tag(resolver_row, 'Basename');
@@ -3370,7 +3366,7 @@ async function resolve1(input, skip_norm) {
 		}
 	} else if (nft_backed) {
 		let label = name_norm.slice(0, sep_pos);
-		nft_token = ethers.utils.id(label);
+		nft_token = labelhash(label);
 		let avail_url;
 		let avail_err;
 		avail_row = create_row('Availability', true);
@@ -3412,7 +3408,7 @@ async function resolve1(input, skip_norm) {
 		} else {
 			add_row_tag(avail_row, create_tag(available ? 'good' : 'fail', 'Available'));
 			if (avail_url) {
-				add_row_tag(avail_row, create_link(avail_url, 'Details', 'external'));
+				add_row_tag(avail_row, create_link(avail_url, {button: '🔍️ Details', className: 'external'}));
 			}
 		}
 	}
@@ -3424,7 +3420,7 @@ async function resolve1(input, skip_norm) {
 		let wrapped_row = create_row('Wrapper', true);
 		let unwrappable;
 		try {
-			encoded_dns_from_labels(name_norm.split('.'));
+			encoded_dns_from_labels(name_norm);
 		} catch (err) {
 			unwrappable = true;
 		}
@@ -3555,7 +3551,7 @@ async function resolve1(input, skip_norm) {
 				add_owner_links(owner_row, owner);
 			}
 			if (active_chain.is_mainnet && parent_domain === 'art') {
-				add_row_tag(avail_row, create_link(`https://protocol.art/account/${owner}`, 'Configure', 'external'));
+				add_row_tag(avail_row, create_link(`https://protocol.art/account/${owner}`, {button: '🛠️ Configure', className: 'external'}));
 			}
 			if (!is_wrapped && !available && !checked_nft && nft_contract) {
 				let nft_row = create_row(create_etherscan_address_link(nft_contract.target, {innerHTML: `${NFT_OWNER_NAME}:`, contract: true}), true);
@@ -3673,9 +3669,8 @@ async function resolve1(input, skip_norm) {
 		try {
 			address = await fetch_addr60(resolver);
 		} catch (err) {
-			if (!is_address_type_error(err)) {
-				address_err = err;
-			}
+			address_err = err;
+			console.log(err);
 		}
 		if (should_stop_resolving()) return;
 		if (await is_contract(address)) make_contract(address_row);
@@ -4011,9 +4006,9 @@ async function fetch_addr60(resolver) {
 	if (!is_null_hex(address)) return ethers.getAddress(address);
 }
 async function fetch_records(resolver, records) {
+	if (resolver._wildcard && !resolver._dns) return []; // unreachable
 	const options = {enableCcipRead: true};
 	let contract = contract_for_resolver(resolver);
-	let is_wildcard = await safe_supports_wildcard(resolver);
 	if (records.length > 1) {
 		let encoded = records.map(rec => {
 			let frag = contract.interface.getFunction(rec.type);
@@ -4026,7 +4021,7 @@ async function fetch_records(resolver, records) {
 		});
 		try {
 			let res;
-			if (is_wildcard) { // optimistic CCIP-multicall
+			if (resolver._wildcard) { // optimistic CCIP-multicall
 				let frag = contract.interface.getFunction('multicallWithNodeCheck');
 				res = await contract.resolve(resolver._dns, contract.interface.encodeFunctionData(frag, [contract._node, encoded]), options);
 				[res] = contract.interface.decodeFunctionResult(frag, res);
@@ -4051,10 +4046,10 @@ async function fetch_records(resolver, records) {
 		}
 	}
 	return Promise.all(records.map(async rec => {
-		if (rec.key === 'avatar' && resolver._avatar) {
-			return {rec, data: resolver._avatar}; // we (probably) already got this
-		}
-		if (!is_wildcard && rec.type === TYPE_ADDR && rec.coin === 60) { // try boomer method first
+		if (rec.key === 'avatar' && resolver._avatar) { // add_avatar() probably already computed
+			return {rec, data: resolver._avatar}; 
+		}		
+		if (!resolver._wildcard && rec.type === TYPE_ADDR && rec.coin === 60) { // try boomer method first
 			try {
 				let data = await contract.addr(contract._node);
 				return {rec, data};
@@ -4068,7 +4063,7 @@ async function fetch_records(resolver, records) {
 		}
 		try {
 			let data;
-			if (is_wildcard) {
+			if (resolver._wildcard) {
 				let frag = contract.interface.getFunction(rec.type);
 				data = await contract.resolve(resolver._dns, contract.interface.encodeFunctionData(frag, params), options);
 				data = contract.interface.decodeFunctionResult(frag, data);
@@ -4099,7 +4094,7 @@ function contract_for_resolver(resolver) {
 		'function interfaceImplementer(bytes32 node, bytes4 interfaceID) external view returns (address)',
 		'function resolve(bytes name, bytes data) view returns (bytes)',
 		'function addr(bytes32 node, uint coinType) view returns (bytes)',
-		'function addr(bytes32 node) view returns (bytes)',
+		'function addr(bytes32 node) view returns (address)',
 		'function text(bytes32 node, string key) view returns (string)',
 		'function contenthash(bytes32 node) view returns (bytes)',
 		'function pubkey(bytes32 node) view returns (bytes32 x, bytes32 y)',
@@ -4217,17 +4212,19 @@ async function get_resolver(name) {
 		if (!is_null_hex(address)) {
 			let resolver = new ethers.EnsResolver(active_provider, address, name);
 			resolver._basename = basename; // remember
-			if (i) {
-				if (!await safe_supports_wildcard(resolver)) break;
-				resolver._dns = encoded_dns_from_labels(v);
+			let wild = await resolver.supportsWildcard().catch(() => {}); // can throw
+			if (i && !wild) break;
+			if (wild) {
+				resolver._wildcard = true;
+				try {
+					resolver._dns = encoded_dns_from_labels(v);
+				} catch (err) {
+				}
 			}
 			return resolver;
 		}
 		if (basename === 'eth') break; // mimic ethers
 	}
-}
-async function safe_supports_wildcard(resolver) {
-	return resolver.supportsWildcard().catch(() => {});
 }
 async function get_safe_primary(owner, alt_owner) {
 	// return normalized primary if resolve(reverse(owner)) is owner or alt_owner
