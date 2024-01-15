@@ -1718,6 +1718,7 @@ if (window.ethereum) {
 	window_provider = new ethers.BrowserProvider(p, 'any');
 	window_provider._provider = p;
 	let timer = setTimeout(update_network, 100); // avoid creating infura connection if possible
+	window_provider.getNetwork().finally(() => clearTimeout(timer)).then(update_network).catch(() => {});
 	ethereum.on('connect', ({chainId}) => {
 		clearTimeout(timer);
 		update_network(ethers.Network.from(parseInt(chainId)));
@@ -2051,11 +2052,11 @@ function create_dns_row(name, replaced, contenthash) {
 	try {
 		const MAX_LABEL = 63;
 		const MAX_NAME = 253; 
-		const VALID_REGEX = /^[-0-9a-z]*$/;
+		const VALID_REGEX = /^[-0-9a-z]*$/i;
 		let encoded = name.split('.').map(label => {
 			let cps = explode_cp(label);
 			try {
-				let encoded = puny_encoded(cps).toLowerCase();
+				let encoded = puny_encoded(cps);//.toLowerCase();
 				if (!VALID_REGEX.test(encoded)) {
 					let first = [...encoded].find(ch => !VALID_REGEX.test(ch));
 					throw new Error(`unsupported ASCII: "${safe_str_from_cps(explode_cp(first))}"`);
@@ -2084,9 +2085,16 @@ function create_dns_row(name, replaced, contenthash) {
 		row.append(create_main_span(encoded));
 		add_row_tag(row, create_copy_btn(encoded));
 		if (encoded === name) {
-			add_row_tag(row, create_tag('good', 'Verbatim'));
+			if (encoded === browser) {
+				add_row_tag(row, create_tag('good', 'Verbatim'));
+			} else {
+				add_row_tag(row, create_tag('warn', 'Mangled'));
+				if (encoded) {
+					// TODO: decide what to show
+				}
+			}
 		} else if (!browser || browser !== encoded) {
-			add_row_tag(row, create_tag('stop', 'Pre-IDNA Punycode Required'));
+			add_row_tag(row, create_tag('stop', 'Incompatible'));
 			if (browser) {
 				add_row_tag(row, create_copy_btn(browser));
 			}
@@ -2094,7 +2102,7 @@ function create_dns_row(name, replaced, contenthash) {
 				add_alternative_btn(row, name);
 			}
 		} else {
-			add_row_tag(row, create_tag('star', 'Punycode Compatible'));
+			add_row_tag(row, create_tag('star', 'Compatible'));
 		}
 		if (name.includes('\u200D')) {
 			add_row_tag(row, create_tag('warn', 'ZWJ'));
@@ -2114,7 +2122,7 @@ function create_dns_row(name, replaced, contenthash) {
 				add_row_tag(row, create_link(`https://${encoded}`, 'Website', 'external'));
 			}
 		}
-		add_row_tag(row, create_link(`../../punycode.js/test/demo.html#${browser?'p':'u'}=${browser || name}`, {button: '✅️ Check'}));
+		add_row_tag(row, create_link(`../../punycode.js/test/demo.html#${encoded?'p':'u'}=${encoded || name}`, {button: '✅️ Check'}));
 	} catch (err) {
 		row.classList.add('invalid');
 		add_row_tag(row, create_tag('fail', err));
