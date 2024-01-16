@@ -2084,25 +2084,24 @@ function create_dns_row(name, replaced, contenthash) {
 		}
 		row.append(create_main_span(encoded));
 		add_row_tag(row, create_copy_btn(encoded));
-		if (encoded === name) {
+		if (browser) {
 			if (encoded === browser) {
-				add_row_tag(row, create_tag('good', 'Verbatim'));
-			} else {
-				add_row_tag(row, create_tag('warn', 'Mangled'));
-				if (encoded) {
-					// TODO: decide what to show
+				if (encoded === name) {
+					add_row_tag(row, create_tag('good', 'Verbatim'));
+				} else {
+					add_row_tag(row, create_tag('star', 'Punycoded'));
 				}
-			}
-		} else if (!browser || browser !== encoded) {
-			add_row_tag(row, create_tag('stop', 'Incompatible'));
-			if (browser) {
+			} else if (encoded.toLowerCase() === browser) {
+				add_row_tag(row, create_tag('warn', 'Uppercase'));
+			} else {
+				add_row_tag(row, create_tag('stop', 'Mangled'));
 				add_row_tag(row, create_copy_btn(browser));
 			}
-			if (!replaced) {
-				add_alternative_btn(row, name);
-			}
 		} else {
-			add_row_tag(row, create_tag('star', 'Compatible'));
+			add_row_tag(row, create_tag('stop', 'Incompatible'));
+		}
+		if (!replaced) {
+			add_alternative_btn(row, name);
 		}
 		if (name.includes('\u200D')) {
 			add_row_tag(row, create_tag('warn', 'ZWJ'));
@@ -2122,7 +2121,7 @@ function create_dns_row(name, replaced, contenthash) {
 				add_row_tag(row, create_link(`https://${encoded}`, {button: '↗️ Website', className: 'external'}));
 			}
 		}
-		add_row_tag(row, create_link(`../../punycode.js/test/demo.html#${encoded?'p':'u'}=${encoded || name}`, {button: '✅️ Check'}));
+		add_row_tag(row, create_link(`../../punycode.js/test/demo.html#u=${encode_uri_component_surrogate_escaped(name)}`, {button: '✅️ Check'}));
 	} catch (err) {
 		row.classList.add('invalid');
 		add_row_tag(row, create_tag('fail', err));
