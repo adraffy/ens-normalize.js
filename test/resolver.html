@@ -2936,7 +2936,7 @@ function resolve() {
 	let match;
 	// replace token:XXX with ens subgraph label (or fail)
 	if (match = input.match(/^(?:labelhash|token):(0x[a-f0-9]+|[0-9]+)$/i)) {
-		let hash = bytes32_parseInt(match[1]);
+		let hash = bytes32_from(match[1]);
 		resolve_btn.disabled = true;
 		return (async() => {
 			try {
@@ -2963,7 +2963,7 @@ function resolve() {
 			resolve_btn.disabled = false;
 		})();
 	} else if (match = input.match(/^(?:namehash|wrapped):(0x[a-f0-9]+|[0-9]+)$/i)) {
-		let hash = bytes32_parseInt(match[1]);
+		let hash = bytes32_from(match[1]);
 		resolve_btn.disabled = true;
 		return (async () => {
 			try {
@@ -4337,8 +4337,8 @@ function namehash(s) {
 	if (s) hash = s.split('.').reduceRight((h, x) => ethers.keccak256(h + labelhash(x).slice(2)), hash);
 	return hash;
 }
-function bytes32_parseInt(s) {
-	return '0x' + BigInt(s).toString(16).padStart(64, '0').slice(-64);
+function bytes32_from(x) {
+	return '0x' + BigInt(x).toString(16).padStart(64, '0').slice(-64);
 }
 function read_local_storage(key, fn, def) {
 	let value = localStorage[key];
