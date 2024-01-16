@@ -281,6 +281,13 @@ body.testnet #provider a {
 }
 .row-label a {	
 	color: #000;
+	text-decoration: none;
+}
+.row-label:after {
+	content: ':';
+}
+.row-label a:hover {
+	text-decoration: underline;
 }
 .row.locked .row-label {
 	opacity: 65%;
@@ -1170,7 +1177,7 @@ Hebrew:
 // * replace "../../punycode.js" with https://cdn.jsdelivr.net/npm/@adraffy/punycode@latest/dist/index.min.js
 // * replace "../../cid.js" with https://cdn.jsdelivr.net/npm/@adraffy/cid@latest/dist/index.min.js
 // * replace "../../" with https://adraffy.github.io/
-import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.10.0/ethers.js';
+import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.10.0/ethers.min.js';
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
 	nfc, nfd, hex_cp, quote_cp, explode_cp, str_from_cps, safe_str_from_cps,
@@ -1719,13 +1726,8 @@ if (window.ethereum) {
 	window_provider._provider = p;
 	let timer = setTimeout(update_network, 100); // avoid creating infura connection if possible
 	window_provider.getNetwork().finally(() => clearTimeout(timer)).then(update_network).catch(() => {});
-	ethereum.on('connect', ({chainId}) => {
-		clearTimeout(timer);
-		update_network(ethers.Network.from(parseInt(chainId)));
-	});
-	ethereum.on('chainChanged', chainId => {
-		update_network(ethers.Network.from(parseInt(chainId)));
-	});
+	ethereum.on('connect', ({chainId}) => update_network(ethers.Network.from(parseInt(chainId))));
+	ethereum.on('chainChanged', chainId => update_network(ethers.Network.from(parseInt(chainId))));
 	ethereum.on('disconnect', () => update_network());
 } else {
 	force_mainnet_check.checked = false;
@@ -1759,10 +1761,10 @@ async function switch_to_network(id) {
 		if (active_provider === window_provider) return;
 		return update_network(network);
 	}
-	await window_provider.send('wallet_switchEthereumChain', [{chainId: `0x${id.toString(16)}`}]);
-	for (let btn of document.querySelectorAll('.chain')) {
-		btn.disabled = true;
-	}
+	await window_provider.send('wallet_switchEthereumChain', [{chainId: `0x${id.toString(16)}`}]); // throws on cancel request
+	// for (let btn of document.querySelectorAll('.chain')) {
+	// 	btn.disabled = true;
+	// }
 }
 function update_network(network) {
 	let chain0 = active_chain;
@@ -2211,7 +2213,14 @@ function create_link(url, {button, ...args} = {}) {
 		innerText: url,
 		...args
 	});
-	if (button) a.replaceChildren(create('button', {innerHTML: button}));
+	if (button) {
+		a.replaceChildren(create('button', {
+			innerHTML: button,
+			click(e) {
+				e.stopPropagation(); // prevent copy
+			}
+		}));
+	}
 	try {
 		new URL(url, window.location.href);
 	} catch (err) {
@@ -2816,13 +2825,11 @@ function create_breakdown_row(name, before) {
 }
 
 function create_row(label, waiting) {
-	let row = document.createElement('div');
-	row.classList.add('row');
+	let row = create('div', {className: 'row'});
 	if (label) {
-		let span = document.createElement('span');
-		span.classList.add('row-label');
+		let span = create('span', {className: 'row-label'});
 		if (typeof label === 'string') {
-			span.innerHTML = `${label}:`;
+			span.innerHTML = label;
 		} else {
 			span.append(label);
 		}
@@ -2929,7 +2936,7 @@ function resolve() {
 	let match;
 	// replace token:XXX with ens subgraph label (or fail)
 	if (match = input.match(/^(?:labelhash|token):(0x[a-f0-9]+|[0-9]+)$/i)) {
-		let hash = ethers.zeroPadValue(match[1], 32);
+		let hash = bytes32_parseInt(match[1]);
 		resolve_btn.disabled = true;
 		return (async() => {
 			try {
@@ -2956,7 +2963,7 @@ function resolve() {
 			resolve_btn.disabled = false;
 		})();
 	} else if (match = input.match(/^(?:namehash|wrapped):(0x[a-f0-9]+|[0-9]+)$/i)) {
-		let hash = ethers.zeroPadValue(match[1], 32);
+		let hash = bytes32_parseInt(match[1]);
 		resolve_btn.disabled = true;
 		return (async () => {
 			try {
@@ -3267,9 +3274,7 @@ async function resolve1(input, skip_norm) {
 	try {
 		resolver = await get_resolver(name_norm);
 	} catch (err) {
-		if (!is_address_type_error(err)) {
-			resolver_err = err;
-		}
+		resolver_err = err;
 	}
 	if (should_stop_resolving()) return;
 	remove_temporary(resolver_row);	
@@ -3302,15 +3307,14 @@ async function resolve1(input, skip_norm) {
 	let nft_contract;
 	let nft_token;
 
-	let avail_row;
+	let avail_row = create_row('Availability', true);
 	let available;	
 	if (parent_domain === 'eth') {
-		let eth_label = name_norm.slice(0, sep_pos);
-		nft_token = labelhash(eth_label);
+		let label = name_norm.slice(0, sep_pos);
+		nft_token = labelhash(label);
 		let avail_err;
 		let expiry;
-		let len = Array.from(eth_label).length;
-		avail_row = create_row('Availability', true);
+		let len = Array.from(label).length;
 		let premium;
 		output_div.append(avail_row);
 		try {
@@ -3323,7 +3327,7 @@ async function resolve1(input, skip_norm) {
 				expiry = Number(await eth_nft_contract.nameExpires(nft_token));
 				if (available) {
 					if (should_stop_resolving()) return;
-					premium = await price_oracle_contract.premium(eth_label, expiry, 0);
+					premium = await price_oracle_contract.premium(label, expiry, 0);
 				}
 			}
 		} catch (err) {
@@ -3339,7 +3343,7 @@ async function resolve1(input, skip_norm) {
 			add_row_tag(avail_row, create_tag('warn', avail_err));
 		} else if (available === undefined) {
 			add_row_tag(avail_row, create_tag('fail', `Too Short`));
-			let padded = Array(1 + Math.max(0, MIN_ETH_LENGTH - len)).fill(eth_label).join('');
+			let padded = Array(1 + Math.max(0, MIN_ETH_LENGTH - len)).fill(label).join('');
 			add_row_tag(avail_row, create_resolve_btn(`${padded}.eth`, '↩️ Repeat until 3+'));
 		} else if (available) {
 			add_row_tag(avail_row, create_ens_link(name_norm, '<button class="glow">👌️ Available to Register</button>'));
@@ -3360,15 +3364,13 @@ async function resolve1(input, skip_norm) {
 			}
 		}
 		if (nft_contract) {
-			let span = avail_row.querySelector('.row-label');
-			span.title = `Grace: ${format_dur(nft_contract.grace_period)}\nPremium: ${format_dur(price_oracle_contract.premium_period)}`;
+			avail_row.querySelector('.row-label').title = `Grace: ${format_dur(nft_contract.grace_period)}\nPremium: ${format_dur(price_oracle_contract.premium_period)}`;
 		}
 	} else if (nft_backed) {
 		let label = name_norm.slice(0, sep_pos);
 		nft_token = labelhash(label);
 		let avail_url;
 		let avail_err;
-		avail_row = create_row('Availability', true);
 		output_div.append(avail_row);
 		try {
 			let address = await registry_contract.owner(namehash(parent_domain));
@@ -3553,7 +3555,7 @@ async function resolve1(input, skip_norm) {
 				add_row_tag(avail_row, create_link(`https://protocol.art/account/${owner}`, {button: '🛠️ Configure', className: 'external'}));
 			}
 			if (!is_wrapped && !available && !checked_nft && nft_contract) {
-				let nft_row = create_row(create_etherscan_address_link(nft_contract.target, {innerHTML: `${NFT_OWNER_NAME}:`, contract: true}), true);
+				let nft_row = create_row(create_etherscan_address_link(nft_contract.target, {innerHTML: NFT_OWNER_NAME, contract: true}), true);
 				nft_row.classList.add('nft');
 				output_div.append(nft_row);
 				try {
@@ -3564,7 +3566,7 @@ async function resolve1(input, skip_norm) {
 				}
 				if (should_stop_resolving()) return;
 				if (nft_owner && nft_owner !== owner) {
-					owner_row.querySelector('.row-label').innerText = `${MANAGER_NAME}:`;
+					owner_row.querySelector('.row-label').innerHTML = MANAGER_NAME;
 					owner_row.insertAdjacentElement('beforebegin', nft_row); // move up
 					nft_row.append(create_jazz_icon(nft_owner));
 					let a = create_etherscan_address_link(nft_owner);
@@ -3669,7 +3671,6 @@ async function resolve1(input, skip_norm) {
 			address = await fetch_addr60(resolver);
 		} catch (err) {
 			address_err = err;
-			console.log(err);
 		}
 		if (should_stop_resolving()) return;
 		if (await is_contract(address)) make_contract(address_row);
@@ -3717,7 +3718,7 @@ async function resolve1(input, skip_norm) {
 		add_row_tag(address_row, create_elapsed());	
 
 		if (show_records_check.checked) {
-			let records_row = create_row(create_link('https://docs.ens.domains/contract-api-reference/publicresolver', {innerHTML: 'Records:'}), true);
+			let records_row = create_row(create_link('https://docs.ens.domains/contract-api-reference/publicresolver', {innerHTML: 'Records'}), true);
 			records_row.classList.add('records');
 			if (available) records_row.classList.add('old');
 			output_div.append(records_row);	
@@ -4317,12 +4318,9 @@ function create(tag, args, ...a) {
 	el.append(...a);
 	return el;	
 }
-function is_address_type_error(err) {
-	return err.code === 'INVALID_ARGUMENT' && err.argument === 'value' && err.value === '0x';
-}
 function is_checksum_address(s) {
 	try {
-		return s.startsWith('0x') && s === ethers.getAddress(s);
+		return /^0x[0-9a-f]{40}$/i.test(s) && s === ethers.getAddress(s);
 	} catch (ignored) {
 	}
 }
@@ -4330,12 +4328,17 @@ function is_null_hex(s) {
 	return !s || /^0x0*$/.test(s);
 }
 function labelhash(s) {
+	// TODO: consider [hash] form
+	//if (/^\[[0-9a-f]{64}\]$/i.test(s)) {
 	return s ? ethers.keccak256(bytes_from_utf8(s)) : ethers.ZeroHash;
 }
 function namehash(s) {
 	let hash = labelhash();
 	if (s) hash = s.split('.').reduceRight((h, x) => ethers.keccak256(h + labelhash(x).slice(2)), hash);
 	return hash;
+}
+function bytes32_parseInt(s) {
+	return '0x' + BigInt(s).toString(16).padStart(64, '0').slice(-64);
 }
 function read_local_storage(key, fn, def) {
 	let value = localStorage[key];
