@@ -581,6 +581,31 @@ for (let cp of valid) {
 	}
 }
 
+/*
+// print characters that aren't valid by themselves
+// but are parts of something that is valid
+// example:  {6C1} is invalid but {6C1}{FE0F}{654} => {6C2} is valid
+// example: {3099} is invalid but {304B}{FF9E} => [FF9E => 3099] => {304B}{3099} => {304C} is valid
+for (let cp of valid) {
+	if (!script_groups.some(g => g.valid_set.has(cp))) { //} && !CM.has(cp)) {
+		console.log();
+		console.log(PRINTER.desc_for_cp(cp));
+		for (let [x, ys] of mapped) {
+			if (ys.includes(cp)) {
+				console.log(' ', PRINTER.desc_for_mapped(x, ys));
+			}
+		}
+		for (let x of valid) {
+			if (x === cp) continue;
+			let v = NF.nfd([x]);
+			if (v.includes(cp)) {
+				console.log('   ', PRINTER.desc_for_cp(x), PRINTER.desc_for_cps(v))
+			}
+		}
+	}
+}
+*/
+
 // this should be last so we dont need to recover toggled mappings
 // TODO: add another section like this lower in the process that
 // can account for examples like "İ" [130] => "i + ◌̇ " [69 307]
@@ -845,7 +870,7 @@ print_section('Order Groups');
 script_groups.forEach(g => g.order = (1 + GROUP_ORDER.indexOf(g.name)) || Infinity);
 // sort them
 script_groups.sort((a, b) => {
-	let c = +a.restricted - +b.restricted;
+	let c = (a.restricted|0) - (b.restricted|0);
 	if (c == 0) c = a.order - b.order;
 	return c;
 });

@@ -493,7 +493,7 @@ button.copy.copied {
 	align-items: center;
 	gap: 4px;
 	text-decoration: none;
-	background-color: #dde;
+	background-color: #ddf;
 	padding: 4px 8px;
 	border-radius: 4px;
 	white-space: pre;
@@ -3426,7 +3426,7 @@ async function resolve1(input, skip_norm) {
 			unwrappable = true;
 		}
 		if (!available) {
-			output_div.append(wrapped_row);			
+			output_div.append(wrapped_row);
 			let wrapped_err;
 			try {
 				await ensure_wrapper();
@@ -3574,7 +3574,6 @@ async function resolve1(input, skip_norm) {
 					add_row_tag(nft_row, create_copy_btn(nft_owner, {value: true}));
 					try {
 						let norm = await get_safe_primary(nft_owner, owner);
-						if (should_stop_resolving()) return;
 						if (norm.endsWith('.' + name_norm)) { // proper subdomain
 							nft_owner = norm; // swap
 							let sub = norm.slice(0, -(name_norm.length + 1));
@@ -3600,20 +3599,19 @@ async function resolve1(input, skip_norm) {
 			owner_row.append(create_jazz_icon(owner));
 		}
 	}
-
+	if (should_stop_resolving()) return;
 	if (resolver && !NOT_IFACE_RESOLVER.has(resolver.address)) {
-		let row = create_row(create_link('https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar#discovery', {innerHTML: 'Interfaces:'}), true);
+		let row = create_row(create_link('https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar#discovery', {innerHTML: 'Interfaces'}), true);
 		output_div.append(row);	
 		let contract = contract_for_resolver(resolver);
 		// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar	
 		const TITLE_WRAPPER = '<b>Wrapper</b> ERC-1155';
-		const TITLE_NFT = '<b>NFT</b> ERC-721';
 		let interfaces = [
 			//{iface: IFACE_ETH_NFT, name: 'NFT'},  
 			{iface: '0x019a38fe', title: TITLE_WRAPPER},
 			{iface: IFACE_ETH_CONTROLLER, title: '<b>Controller</b>'},
 			{iface: '0x018fac06', title: '<b>Old Controller</b>'},
-			{iface: '0x6ccb2df4', name: TITLE_NFT},
+			{iface: '0x6ccb2df4', name: '<b>NFT</b> ERC-721'},
 			{iface: '0x7ba18ba1', title: '<b>Migration</b>'},
 		];
 		let discovered = new Set();
@@ -3630,18 +3628,18 @@ async function resolve1(input, skip_norm) {
 				throw new Error('not EIP-165');
 			}
 			for (let {iface, title} of interfaces) {
+				if (should_stop_resolving()) return;
 				let addr = await contract.get_interface(iface);
 				if (is_null_hex(addr)) continue;
-				if (!discovered.size) {
-					add_iface(TITLE_NFT, owner);
-				}
 				add_iface(`${title} <code>${iface.slice(2)}</code>`, addr);
 				if (iface === IFACE_ETH_CONTROLLER) {
 					let controller = contract_for_controller(addr);
-					let oracle = contract_for_price_oracle(await controller.prices());
-					add_iface('<b>Price Oracle</b>', oracle.address);
-					add_iface('<b>USD Oracle</b>', await oracle.usdOracle());
-					add_iface(TITLE_WRAPPER, await controller.nameWrapper());
+					let oracle = await controller.prices().catch(() => {});
+					if (!is_null_hex(oracle)) {
+						add_iface('<b>Price Oracle</b>', oracle);
+						add_iface('<b>USD Oracle</b>', await contract_for_price_oracle(oracle).usdOracle().catch(() => {}));
+					}
+					add_iface(TITLE_WRAPPER, await controller.nameWrapper().catch(() => {}));
 					//add_iface('DAO Wallet', await contract.owner().catch(() => ''));
 				}
 			}
@@ -3650,7 +3648,6 @@ async function resolve1(input, skip_norm) {
 				add_row_tag(row, create_tag('warn', err));
 			}
 		}
-		if (should_stop_resolving()) return;
 		if (discovered.size) {
 			remove_temporary(row);
 			add_row_tag(row, create_elapsed()); 
@@ -3861,10 +3858,8 @@ async function resolve1(input, skip_norm) {
 								}
 							}
 							a.append(create_copy_btn(url, {value: true}));
-
-							// upgrade the limo link
+							// upgrade the decentralized website link
 							document.querySelector('.row.dns').replaceWith(create_dns_row(name_norm, false, true));
-
 						} catch (err) {
 							a.append(create_tag('fail', err));
 							a.append(make_click_copy(create('button', {innerText: 'Data', title: data}), data));
@@ -3902,8 +3897,8 @@ async function resolve1(input, skip_norm) {
 	} catch (err) {
 		primary_err = err;
 	}
-	remove_temporary(primary_row);
 	if (should_stop_resolving()) return;
+	remove_temporary(primary_row);
 	add_row_tag(primary_row, create_elapsed());
 
 	primary_row.classList.toggle('old', !!available);
@@ -4046,9 +4041,12 @@ async function fetch_records(resolver, records) {
 		}
 	}
 	return Promise.all(records.map(async rec => {
+		if (should_stop_resolving()) {
+			return {rec, error: new Error('aborted')};
+		}
 		if (rec.key === 'avatar' && resolver._avatar) { // add_avatar() probably already computed
 			return {rec, data: resolver._avatar}; 
-		}		
+		}	
 		if (!resolver._wildcard && rec.type === TYPE_ADDR && rec.coin === 60) { // try boomer method first
 			try {
 				let data = await contract.addr(contract._node);
@@ -4079,13 +4077,22 @@ async function fetch_records(resolver, records) {
 }
 async function ensure_eth_resolver() {
 	if (eth_resolver_contract) return;
-	if (eth_resolver_contract === false) throw new Error(`No "eth" resolver`);	
-	let resolver = await get_resolver('eth');
-	if (!resolver) {
-		eth_resolver_contract = false;
-		return ensure_eth_resolver(); 
+	if (eth_resolver_contract === false) throw new Error(`No "eth" resolver`);
+	try {
+		let resolver = await get_resolver('eth');
+		if (resolver) {
+			eth_resolver_contract = contract_for_resolver(resolver);
+		} else {
+			eth_resolver_contract = false;
+			return ensure_eth_resolver();
+		}
+	} catch (err) {
+		console.log(err);
+		if (!should_stop_resolving()) {
+			eth_resolver_contract = false;
+		}
+		throw err;
 	}
-	eth_resolver_contract = contract_for_resolver(resolver);
 }
 function contract_for_resolver(resolver) {
 	// https://github.com/ensdomains/ens-contracts/tree/staging/contracts/resolvers/profiles
@@ -4181,11 +4188,11 @@ function labels_from_encoded_dns(v) {
 	let pos = 0;
 	while (true) {
 		let n = v[pos++];
-		if (!n) {
-			if (pos !== v.length) break;
+		if (!n) { // empty
+			if (pos !== v.length) break; // must be last
 			return labels;
 		}
-		if (v.length < pos+n) break;
+		if (v.length < pos+n) break; // overflow
 		labels.push(utf8_from_bytes(v.subarray(pos, pos += n)));
 	}
 	throw new Error('invalid encoded name');
@@ -4208,12 +4215,12 @@ async function get_resolver(name) {
 	for (let i = 0; i < v.length; i++) {
 		let basename = v.slice(i).join('.');
 		let address = await registry_contract.resolver(namehash(basename));
-		if (should_stop_resolving()) break;
+		if (should_stop_resolving()) throw new Error('aborted');
 		if (!is_null_hex(address)) {
 			let resolver = new ethers.EnsResolver(active_provider, address, name);
 			resolver._basename = basename; // remember
 			let wild = await resolver.supportsWildcard().catch(() => {}); // can throw
-			if (i && !wild) break;
+			if (i && !wild) break; // ancestor but not wildcard
 			if (wild) {
 				resolver._wildcard = true;
 				try {
@@ -4254,7 +4261,7 @@ async function get_safe_primary(owner, alt_owner) {
 	return name;
 }
 async function is_contract(address) {
-	if (typeof address !== 'string') return;
+	if (!is_address(address)) return;
 	address = address.toLowerCase();
 	let is = IS_CONTRACT.get(address);
 	if (typeof is === 'boolean') return is;
@@ -4318,9 +4325,12 @@ function create(tag, args, ...a) {
 	el.append(...a);
 	return el;	
 }
+function is_address(s) {
+	return typeof s === 'string' && /^0x[0-9a-f]{40}$/i.test(s);
+}
 function is_checksum_address(s) {
 	try {
-		return /^0x[0-9a-f]{40}$/i.test(s) && s === ethers.getAddress(s);
+		return is_address(s) && s === ethers.getAddress(s);
 	} catch (ignored) {
 	}
 }
