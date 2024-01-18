@@ -11,6 +11,7 @@
 	--btn-border-color: #888;
 	--copied-color: #8f8;
 	--confusing-color: #d47;
+	--testnet-color: #fef;
 }
 .hide {
 	display: none !important;
@@ -105,7 +106,7 @@ h1 {
 	white-space: pre;
 }
 body.testnet {
-	background: #fef;
+	background: var(--testnet-color);
 }
 body.testnet #provider a {
 	background: #f3f;
@@ -699,6 +700,9 @@ button.glow {
 .record b {
 	font: 11px sans-serif;
 	color: #666;
+}
+.record.testnet {
+	background-color: var(--testnet-color);
 }
 .record:not([href]):hover {
 	border-color: #000;
@@ -1294,7 +1298,7 @@ const RECORDS = [
 	// {
 	// 	type: TYPE_TEXT, 
 	// 	key: 'timezone',
-	// 	icon: '<b>tz</b>'
+	// 	ioc<b>tz</b>'
 	// },
 	{
 		type: TYPE_TEXT, 
@@ -1356,6 +1360,12 @@ const RECORDS = [
 		icon: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" fill="#5A57DD"><path d="M20.7273 5.45455C20.7273 5.45455 18.2264 3.49746 15.2727 3.27273L15.0065 3.80509C17.6771 4.45855 18.9022 5.39509 20.1818 6.54546C17.9755 5.41909 15.7969 4.36364 12 4.36364C8.20309 4.36364 6.02455 5.41909 3.81818 6.54546C5.09782 5.39509 6.55527 4.35546 8.99345 3.80509L8.72727 3.27273C5.62855 3.56564 3.27273 5.45455 3.27273 5.45455C3.27273 5.45455 0.479455 9.50455 0 17.4545C2.81564 20.7016 7.09091 20.7273 7.09091 20.7273L7.98491 19.5355C6.46745 19.008 4.75364 18.066 3.27273 16.3636C5.03891 17.7 7.70455 19.0909 12 19.0909C16.2955 19.0909 18.9611 17.7 20.7273 16.3636C19.2464 18.066 17.5325 19.008 16.0151 19.5355L16.9091 20.7273C16.9091 20.7273 21.1844 20.7016 24 17.4545C23.5205 9.50455 20.7273 5.45455 20.7273 5.45455ZM8.45455 15.2727C7.40018 15.2727 6.54545 14.2958 6.54545 13.0909C6.54545 11.886 7.40018 10.9091 8.45455 10.9091C9.50891 10.9091 10.3636 11.886 10.3636 13.0909C10.3636 14.2958 9.50891 15.2727 8.45455 15.2727ZM15.5455 15.2727C14.4911 15.2727 13.6364 14.2958 13.6364 13.0909C13.6364 11.886 14.4911 10.9091 15.5455 10.9091C16.5998 10.9091 17.4545 11.886 17.4545 13.0909C17.4545 14.2958 16.5998 15.2727 15.5455 15.2727Z"></path></svg>`,
 	},
 	{
+		type: TYPE_TEXT, 
+		key: 'com.reddit', 
+		icon: '<img src="https://www.redditstatic.com/desktop2x/img/favicon/apple-icon-60x60.png">',
+		url(x) { return `https://reddit.com/u/${encodeURIComponent(x)}`; }
+	},
+	{
 		type: TYPE_TEXT,
 		key: 'io.keybase',
 		icon: '<img src="https://keybase.io/images/icons/icon-keybase-logo-48.png">',
@@ -1407,11 +1417,130 @@ const RECORDS = [
 		bech32: {hrp: 'xch', type: Bech32.M},
 		url(x) { return `https://xchscan.com/address/${x}`; }
 	},
+	{
+		type: TYPE_ADDR,
+		evm: 137,
+		name: 'polygon',
+		icon: '<img src="https://assets-global.website-files.com/637359c81e22b715cec245ad/63f775c741010796d62770fd_polygon-favicon.png">',
+		url(x) { return `https://polygonscan.com/address/${x}`; },
+		bonus: true,
+	},
+	{	
+		type: TYPE_ADDR,
+		evm: 10,
+		name: 'op',
+		icon: '<img src="https://assets-global.website-files.com/611dbb3c82ba72fbc285d4e2/612d2f8f988b5f801bd0cf1e_favicon.png">',
+		url(x) { return `https://optimistic.ethereum.io/address/${x}`; },
+		bonus: true,
+	},
+	{
+		type: TYPE_ADDR,
+		evm: 42161,
+		name: 'arb',
+		icon: '<img src="https://arbitrum.foundation/favicon.ico">',
+		url(x) { return `https://arbiscan.io/address/${x}`; },
+		bonus: true,
+	},
+	{
+		type: TYPE_ADDR,
+		evm: 43114,
+		name: 'avax',
+		icon: '<img src="https://assets-global.website-files.com/632993e1d1acbfa5635afd0b/63515267b3214c6dda03ea97_Favicon.png">',
+		url(x) { return `https://snowtrace.dev/address/${x}`; },
+		bonus: true,
+	},
+	{
+		type: TYPE_ADDR,
+		evm: 84532,
+		name: 'base',
+		icon: '<img src="https://base.org/document/favicon-32x32.png">',
+		url(x) { return `https://basescan.org/address/${x}`; },
+		bonus: true,
+	},
+	{
+		type: TYPE_ADDR,
+		evm: 100,
+		legacy: 700,
+		name: 'gnosis', // xdai
+		url(x) { return `https://gnosisscan.io/address/${x}`; },
+		bonus: true,
+	},
+	{
+		type: TYPE_ADDR,
+		evm: 534352,
+		name: 'scroll',
+		url(x) { return `https://scrollscan.com/address/${x}`; },
+		bonus: true,
+	},
+	{
+		type: TYPE_ADDR,
+		evm: 7777777,
+		name: 'zora',
+		url(x) { return `https://explorer.zora.energy/address/${x}`; },
+		bonus: true,
+	},
+	{
+		type: TYPE_ADDR,
+		coin: 714,
+		name: 'bnb',
+		bech32: {hrp: 'bnb', type: 1},
+		url(x) { return `https://explorer.bnbchain.org/address/${x}`; },
+		bonus: true,
+	},
+	{
+		type: TYPE_ADDR,
+		coin: 118,
+		name: 'atom',
+		bech32: {hrp: 'cosmos', type: 1},
+		url(x) { return `https://atomscan.com/account/`; },
+		bonus: true
+	},
+	{
+		type: TYPE_ADDR,
+		coin: 501,
+		name: 'sol',
+		base58: true,
+		url(x) { return `https://explorer.solana.com/address/${x}`; },
+		bonus: true,
+	},
+	{
+		type: TYPE_ADDR,
+		evm: 56,
+		name: 'bsc',
+		url(x) { return `https://bscscan.com/address/${x}`; },
+		bonus: true,
+	},
+	{
+		type: TYPE_ADDR,
+		evm: 250,
+		legacy: 1007,
+		name: 'ftm',
+		url(x) { return `https://explorer.fantom.network/address/${x}`; },
+		bonus: true,
+	},
+	{
+		type: TYPE_ADDR,
+		evm: 42220,
+		legacy: 52752,
+		name: 'celo',
+		url(x) { return `https://explorer.celo.org/mainnet/address/${x}`; },
+		bonus: true,
+	},
 	// {
 	// 	type: TYPE_ADDR,
-	// 	coin: 137 | 0x80000000,
-	// 	icon: '<b>polygon</b>',
-	// 	url(x) { return `https://polygonscan.com/address/${x}`; },
+	// 	evm: 5,
+	// 	name: 'goerli',
+	// 	url(x) { return `https://goerli.etherscan.io/address/${x}`; },
+	// 	bonus: true,
+	// 	testnet: true,
+	// },
+	// {
+	// 	type: TYPE_ADDR,
+	// 	evm: 11155111 ,
+	// 	name: 'sepolia',
+	// 	url(x) { return `https://sepolia.etherscan.io/address/${x}`; },
+	// 	bonus: true,
+	// 	testnet: true,
 	// },
 	{
 		type: TYPE_TEXT, 
@@ -1430,6 +1559,13 @@ const RECORDS = [
 		url(x) { return x; },
 	},
 ];
+for (let rec of RECORDS) {
+	if (rec.type === TYPE_ADDR) {
+		// https://docs.ens.domains/ens-improvement-proposals/ensip-11-evmchain-address-resolution
+		if (rec.evm && !rec.coin) rec.coin = rec.evm + 0x80000000;
+		//if (!Number.isInteger(rec.coin)) window.alert(`Missing coin type: ${JSON.stringify(rec)}`);
+	}
+}
 
 const location0 = new URL(window.location.href);
 const entity_span = create('span');
@@ -1438,6 +1574,7 @@ input_field.value = decodeURIComponent(location0.hash.slice(1));
 force_mainnet_check.checked = location0.searchParams.has('1');
 skip_norm_check.checked = location0.searchParams.has('skip');
 const debug = location0.searchParams.has('debug');
+const bonus = location0.searchParams.has('bonus');
 
 let infura_provider = new ethers.InfuraProvider(CHAIN_ID_MAINNET, 'f36f6a8638134ac09f9400d3a7008dfe');
 let window_provider;
@@ -1742,11 +1879,13 @@ window.addEventListener('hashchange', () => {
 	input_field.value = decodeURIComponent(window.location.hash.slice(1));
 	resolve();
 });
-
+function format_chain(id) {
+	return `Chain: ${id} / 0x${id.toString(16)}`;
+}
 function make_network_switcher(btn, id) {
 	btn.classList.add('chain');
 	btn.dataset.chain = id;
-	btn.title = `Chain: ${id} / 0x${id.toString(16)}`;
+	btn.title = format_chain(id);
 	btn.addEventListener('click', () => switch_to_network(id));
 	return btn;
 }
@@ -1867,6 +2006,7 @@ function update_title() {
 	let url = new URL(location0);
 	let args = [];
 	if (debug) args.push('debug');
+	if (bonus) args.push('bonus');
 	if (force_mainnet_check.checked) args.push('1');
 	if (skip_norm_check.checked) args.push('skip');
 	url.search = args.join('&');
@@ -3720,7 +3860,7 @@ async function resolve1(input, skip_norm) {
 			if (available) records_row.classList.add('old');
 			output_div.append(records_row);	
 			let old = records_row.childElementCount;
-			for (let {rec, data, error} of await fetch_records(resolver, RECORDS)) {
+			for (let {rec, data, error} of await fetch_records(resolver, RECORDS.filter(x => bonus || !x.bonus))) {
 				if (error) continue;
 				//if (error) return create_typed_tag('warn', error);
 				let a = document.createElement('a');
@@ -3728,29 +3868,34 @@ async function resolve1(input, skip_norm) {
 				switch (rec.type) {
 					// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IAddressResolver.sol
 					// https://docs.ens.domains/ens-improvement-proposals/ensip-9-multichain-address-resolution
-					// https://docs.ens.domains/ens-improvement-proposals/ensip-11-evmchain-address-resolution
 					case TYPE_ADDR: {
 						if (is_null_hex(data))  continue;
 						a.classList.add('rtrim');
-						a.innerHTML = rec.icon || `<b>coin(${rec.coin})</b>`;
+						a.innerHTML = rec.icon || `<b>${rec.name}</b>`;
 						try {
 							let v = ethers.getBytes(data);
+							let lines = [`CoinType: ${rec.coin}`];
 							let address;
 							if (rec.evm) {
 								address = ethers.getAddress(data);
+								lines.push(format_chain(rec.evm));
 							} else if (rec.btc) {
 								address = format_btc_address(v, rec.btc);
 							} else if (rec.bech32) {
 								address = new Bech32(rec.bech32.hrp, convert(v, 8, 5, true), rec.bech32.type).toString();
+							} else if (rec.base58) {
+								address = Base58BTC.encode(v);
 							} else {
-								address = rec.decode(v);
+								throw new Error('nyi');
 							}
+							lines.unshift(address);
 							a.append(create('span', {innerHTML: address, className: ['addr', 'long']}));
 							if (rec.url) {
 								a.append(create_link(rec.url(address), {button: '🔍️'}));
 							}
+							if (rec.testnet) a.classList.add('testnet');
 							make_click_copy(a, address);
-							a.title = `${address}\nCoinType: ${rec.coin}`;
+							a.title = lines.join('\n');
 						} catch (err) {
 							a.append(create_tag('fail', err));
 							a.append(create_copy_btn(data));
@@ -3829,14 +3974,18 @@ async function resolve1(input, skip_norm) {
 									break;
 								}
 								//case 0xE8: // DNSLink 
-								case 0x1BC:   // onion
+								case 0x1BC:   // onion v2
 								case 0x1BD: { // onion v3 
 									// https://www.tor2web.org/
 									// https://blog.torproject.org/v3-onion-services-usage/
-									if (buf.length != 16 && buf.length != 56) throw new Error('bad length');
 									decoded = Base36.encode(buf);
+									const V2 = 16;
+									if (decoded.length != V2 && decoded.length != 56) throw new Error('bad length');
 									a.append(create_link(`https://${decoded}.onion.to/`, {button: 'Onion'}));
 									url = `onion://${decoded}`;
+									if (decoded.length == V2) {
+										a.append(create_tag('warn', 'Deprecated'));
+									}
 									break;
 								}
 								case 0xB19910: { // skylink
@@ -3876,7 +4025,7 @@ async function resolve1(input, skip_norm) {
 				add_row_tag(records_row, 'None');
 			}
 			if (resolver._multicall) {
-				add_row_tag(records_row, create_tag('good', 'Multicall'));
+				add_row_tag(records_row, create_tag('good', `Multicall (${resolver._multicall})`));
 			}
 			if (should_stop_resolving()) return;
 			remove_temporary(records_row);
@@ -4025,7 +4174,7 @@ async function fetch_records(resolver, records) {
 				res = res.map(({success, data}) => success ? data : null);
 			}
 			if (res && res.length === records.length) {
-				resolver._multicall = true;
+				resolver._multicall = records.length;
 				return records.map((rec, i) => {
 					try {
 						let frag = contract.interface.getFunction(rec.type);
