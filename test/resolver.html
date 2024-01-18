@@ -1862,10 +1862,11 @@ if (window.ethereum) {
 	window_provider = new ethers.BrowserProvider(p, 'any');
 	window_provider._provider = p;
 	let timer = setTimeout(update_network, 100); // avoid creating infura connection if possible
-	window_provider.getNetwork().finally(() => clearTimeout(timer)).then(update_network).catch(() => {});
-	ethereum.on('connect', ({chainId}) => update_network(ethers.Network.from(parseInt(chainId))));
-	ethereum.on('chainChanged', chainId => update_network(ethers.Network.from(parseInt(chainId))));
-	ethereum.on('disconnect', () => update_network());
+	get_window_provider_network().finally(() => clearTimeout(timer)).then(update_network).catch(() => {});
+	p.on('connect', ({chainId}) => update_network(ethers.Network.from(parseInt(chainId))));
+	p.on('chainChanged', chainId => update_network(ethers.Network.from(parseInt(chainId))));
+	p.on('disconnect', () => update_network());
+	
 } else {
 	force_mainnet_check.checked = false;
 	force_mainnet_check.classList.add('hide');
@@ -1892,7 +1893,7 @@ function make_network_switcher(btn, id) {
 async function get_window_provider_network() {
 	if (!window_provider) throw new Error('no window');
 	if (!window_provider._provider.isConnected()) throw new Error('not connected');
-	return window_provider.getNetwork();
+	return window_provider._detectNetwork();
 }
 async function switch_to_network(id) {
 	let network = await get_window_provider_network();
@@ -4236,7 +4237,6 @@ async function ensure_eth_resolver() {
 			return ensure_eth_resolver();
 		}
 	} catch (err) {
-		console.log(err);
 		if (!should_stop_resolving()) {
 			eth_resolver_contract = false;
 		}
@@ -4448,7 +4448,6 @@ function format_btc_address(v, {p2pkh, p2sh, hrp, p2wpkh, p2tr}) {
 			return new Bech32(hrp, [version, ...v32], Bech32.M).toString();
 		}
 	} catch (err) {
-		console.log(err);
 	}
 	throw new Error('invalid');
 }
