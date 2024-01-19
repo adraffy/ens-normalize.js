@@ -422,11 +422,11 @@ button.copy {
 	background-position: center;
 	background-repeat: no-repeat;
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' height='24' shape-rendering='geometricPrecision' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' viewBox='0 0 24 24' width='24' style='color:var(--geist-foreground)'%3E%3Cpath d='M6 17C4.89543 17 4 16.1046 4 15V5C4 3.89543 4.89543 3 6 3H13C13.7403 3 14.3866 3.4022 14.7324 4M11 21H18C19.1046 21 20 20.1046 20 19V9C20 7.89543 19.1046 7 18 7H11C9.89543 7 9 7.89543 9 9V19C9 20.1046 9.89543 21 11 21Z'/%3E%3C/svg%3E");
+	background-size: 85%;	
 }
 button.copy.small {
 	width: 20px;
 	height: 20px;
-	background-size: 18px;
 	opacity: 35%;
 }
 button.copy:hover {
@@ -691,6 +691,14 @@ button.glow {
 .record button {
 	white-space: pre;
 }
+.record.notice {
+	background-color: #dff;
+	font-weight: bold;
+}
+.record button.copy {
+	width: 24px;
+	height: 24px;
+}
 .record.rtrim {
 	padding-right: 4px;
 }
@@ -705,7 +713,8 @@ button.glow {
 	background-color: var(--testnet-color);
 }
 .record:not([href]):hover {
-	border-color: #000;
+	border: 2px solid #0a0;
+	margin: -1px;
 }
 .record[href]:hover {
 	border: 2px solid #00f;
@@ -1291,19 +1300,21 @@ const RECORDS = [
 		type: TYPE_TEXT, 
 		key: 'name',
 	},
-	// {
-	// 	type: TYPE_TEXT, 
-	// 	key: 'language',
-	// },
-	// {
-	// 	type: TYPE_TEXT, 
-	// 	key: 'timezone',
-	// 	ioc<b>tz</b>'
-	// },
+	{
+		type: TYPE_TEXT, 
+		key: 'language',
+		bonus: true,
+	},
+	{
+		type: TYPE_TEXT, 
+		key: 'timezone',
+		icon: '<b>tz</b>',
+		bonus: true,
+	},
 	{
 		type: TYPE_TEXT, 
 		key: 'notice',
-		icon: '🚨️', //'⚠️',
+		class: 'notice'
 	},
 	{
 		type: TYPE_TEXT, 
@@ -1388,6 +1399,7 @@ const RECORDS = [
 	},
 	{
 		type: 'pubkey',
+		bonus: true,
 	},
 	{
 		type: TYPE_ADDR,
@@ -1415,7 +1427,8 @@ const RECORDS = [
 		coin:  8444, // CHIA
 		icon: '🌱️',
 		bech32: {hrp: 'xch', type: Bech32.M},
-		url(x) { return `https://xchscan.com/address/${x}`; }
+		url(x) { return `https://xchscan.com/address/${x}`; },
+		bonus: true
 	},
 	{
 		type: TYPE_ADDR,
@@ -1574,7 +1587,6 @@ input_field.value = decodeURIComponent(location0.hash.slice(1));
 force_mainnet_check.checked = location0.searchParams.has('1');
 skip_norm_check.checked = location0.searchParams.has('skip');
 const debug = location0.searchParams.has('debug');
-const bonus = location0.searchParams.has('bonus');
 
 let infura_provider = new ethers.InfuraProvider(CHAIN_ID_MAINNET, 'f36f6a8638134ac09f9400d3a7008dfe');
 let window_provider;
@@ -2007,7 +2019,6 @@ function update_title() {
 	let url = new URL(location0);
 	let args = [];
 	if (debug) args.push('debug');
-	if (bonus) args.push('bonus');
 	if (force_mainnet_check.checked) args.push('1');
 	if (skip_norm_check.checked) args.push('skip');
 	url.search = args.join('&');
@@ -2377,9 +2388,6 @@ function create_ens_link(name, innerHTML = '<button>🛠️ ENS</button>') {
 	} catch (err) {
 	}
 }
-function create_ens_metadata_link(contract, token) {
-	return create_link(`${active_chain.metadata}/${contract}/${token}`, {button: '🏷️ Metadata', className: 'metadata'});
-}
 function create_etherscan_address_link(addr, {innerHTML, anchor = '', contract, className} = {}) {
 	if (!innerHTML) {
 		innerHTML = addr;
@@ -2396,6 +2404,8 @@ function create_jazz_icon(address) {
 
 function make_click_copy(el, raw) {
 	el.addEventListener('click', e => {
+		e.preventDefault();
+		e.stopPropagation();
 		let copy = raw;
 		if (e.altKey) {
 			copy = explode_cp(copy).map(hex_cp).join(' ');
@@ -2691,7 +2701,7 @@ function add_old_tag(row, name, is_norm) {
 }
 
 function add_nft_links(row, name, contract, token) {
-	add_row_tag(row, create_ens_metadata_link(contract, token));
+	add_row_tag(row, create_link(`${active_chain.metadata}/${contract}/${token}`, {button: '🏷️ Metadata', className: 'metadata'}));
 	add_row_tag(row, create_link(`${active_chain.explorer}/nft/${contract}/${BigInt(token)}`, {innerHTML: 'Etherscan', className: 'external'}));
 	if (active_chain.opensea) {
 		add_row_tag(row, create_link(`${active_chain.opensea}${contract}/${BigInt(token)}`, {innerHTML: OPENSEA_NAME, className: 'external'}));
@@ -2888,7 +2898,15 @@ function create_namehash_breakdown(name) {
 	div.append(create_copy_btn(node, {small: true, value: true}));
 	return div;
 }
-
+function create_namehash_button(name) {
+	let node = namehash(name);
+	let btn = create('button', {innerHTML: '🆔️', className: 'metadata'});
+	btn.title = `Namehash: ${node}`;
+	btn.dataset.reversed = true;
+	make_detailed(btn);
+	make_click_copy(btn, node);
+	return btn;
+}
 function create_breakdown_row(name, before) {
 	let outer = create('div', {className: 'breakdown'});
 	make_detailed(outer);
@@ -2905,8 +2923,7 @@ function create_breakdown_row(name, before) {
 
 		row.append(create_tag('index', info.index+1));
 
-		let span_name = document.createElement('span');
-		span_name.classList.add('name', 'long');
+		let span_name = create('span', {className: ['name', 'long']});
 		if (info.label) {
 			span_name.innerText = info.label;
 			row.append(span_name);
@@ -2944,8 +2961,7 @@ function create_breakdown_row(name, before) {
 		outer.append(row);
 
 		let hash = labelhash(info.label);
-		let hash_div = document.createElement('div');
-		hash_div.classList.add('hash', 'minor');
+		let hash_div = create('div', {className: ['hash', 'minor']});
 		hash_div.append(create_link(`../../keccak.js/test/demo.html#algo=keccak-256&s=${encode_uri_component_surrogate_escaped(info.label)}&escape=1`, {innerHTML: 'Labelhash:'}));
 		hash_div.append(create('code', {innerText: hash, className: 'long'}));
 		hash_div.append(create_copy_btn(hash, {small: true, value: true}));
@@ -2954,8 +2970,7 @@ function create_breakdown_row(name, before) {
 		let parent = split.slice(info.index + 1).map(x => x.label).join('.');
 		if (NFT_DOMAINS.has(parent)) {
 			let token = BigInt(hash).toString();
-			let token_div = document.createElement('div');
-			token_div.classList.add('hash', 'minor');
+			let token_div = create('div', {className: ['hash', 'minor']});
 			token_div.append(create('b', {innerText: 'Token:'}));
 			token_div.append(create('code', {innerText: token, className: 'long'}));
 			token_div.append(create_copy_btn(token, {small: true, value: true}));
@@ -3187,8 +3202,7 @@ async function resolve1(input, skip_norm) {
 
 		let rev_name = reverse_name(input);
 
-		let rev_details = document.createElement('div');
-		rev_details.classList.add('breakdown', 'reverse');
+		let rev_details = create('div', {className: ['breakdown', 'reverse']});
 		make_detailed(rev_details);
 		let rev_div = create('div', {innerHTML: `<b>Reverse Name:</b> <code class="long">${rev_name}</code>`, className: 'hash'});
 		rev_div.append(create_copy_btn(rev_name, {small: true, value: true}));
@@ -3259,8 +3273,8 @@ async function resolve1(input, skip_norm) {
 
 		make_exploded(reverse_row, primary, false);
 		add_row_tag(reverse_row, create_copy_btn(primary));
-		add_row_tag(reverse_row, create_ens_link(primary));
-		//add_nft_links(reverse_row, primary);
+		add_row_tag(reverse_row, create_ens_link(primary));		
+		add_row_tag(reverse_row, create_namehash_button(primary));
 		output_div.append(create_breakdown_row(primary, true));
 			
 		try {
@@ -3282,6 +3296,7 @@ async function resolve1(input, skip_norm) {
 				make_exploded(row, name_norm, true);
 				add_row_tag(row, create_copy_btn(name_norm));
 				add_row_tag(row, create_resolve_btn(name_norm));
+				add_row_tag(row, create_namehash_button(name_norm));
 				make_normalized(row, name_norm);
 				output_div.append(row);
 				output_div.append(create_breakdown_row(name_norm));
@@ -3304,6 +3319,7 @@ async function resolve1(input, skip_norm) {
 		if (!input.includes('.')) {
 			add_row_tag(input_row, create_resolve_btn(`${input}.eth`, '🔄️ Add <b>".eth"</b>'));
 		}
+		add_row_tag(input_row, create_namehash_button(input));
 
 		try {
 			name_norm = ens_normalize(input);
@@ -3331,7 +3347,7 @@ async function resolve1(input, skip_norm) {
 					add_row_tag(row, create_copy_btn(name_norm));
 					add_row_tag(row, create_resolve_btn(name_norm));
 					add_row_tag(row, create_ens_link(name_norm));
-					//add_nft_links(row, name_norm);
+					add_row_tag(row, create_namehash_button(name_norm));
 					add_old_tag(row, name_norm, true);
 					output_div.append(row);
 					output_div.append(create_breakdown_row(name_norm));
@@ -3861,11 +3877,10 @@ async function resolve1(input, skip_norm) {
 			if (available) records_row.classList.add('old');
 			output_div.append(records_row);	
 			let old = records_row.childElementCount;
-			for (let {rec, data, error} of await fetch_records(resolver, RECORDS.filter(x => bonus || !x.bonus))) {
+			for (let {rec, data, error} of await fetch_records(resolver, RECORDS)) {
 				if (error) continue;
 				//if (error) return create_typed_tag('warn', error);
-				let a = document.createElement('a');
-				a.classList.add('record');
+				let a = create('a', {className: 'record', target: '_blank'});
 				switch (rec.type) {
 					// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IAddressResolver.sol
 					// https://docs.ens.domains/ens-improvement-proposals/ensip-9-multichain-address-resolution
@@ -3875,7 +3890,7 @@ async function resolve1(input, skip_norm) {
 						a.innerHTML = rec.icon || `<b>${rec.name}</b>`;
 						try {
 							let v = ethers.getBytes(data);
-							let lines = [`CoinType: ${rec.coin}`];
+							let lines = [`Address: ${rec.coin}`];
 							let address;
 							if (rec.evm) {
 								address = ethers.getAddress(data);
@@ -3891,11 +3906,9 @@ async function resolve1(input, skip_norm) {
 							}
 							lines.unshift(address);
 							a.append(create('span', {innerHTML: address, className: ['addr', 'long']}));
-							if (rec.url) {
-								a.append(create_link(rec.url(address), {button: '🔍️'}));
-							}
-							if (rec.testnet) a.classList.add('testnet');
-							make_click_copy(a, address);
+							a.href = rec.url(address);
+							//if (rec.testnet) a.classList.add('testnet');
+							a.append(create_copy_btn(address, {value: true}));
 							a.title = lines.join('\n');
 						} catch (err) {
 							a.append(create_tag('fail', err));
@@ -3908,17 +3921,21 @@ async function resolve1(input, skip_norm) {
 					case TYPE_TEXT: {
 						data = data.trim();
 						if (!data) continue;
-						if (rec.url) {
-							a.target = '_blank';
-							a.href = rec.url(data);
-						} else {
-							make_click_copy(a, data);
-							a.title = data;
-						}
 						a.innerHTML = rec.icon || `<b>${rec.key}</b>`;
 						let text = rec.format ? rec.format(data) : data;
 						if (text) {
 							a.append(create('span', {innerText: text, className: text.length > 32 ? 'long' : null}));
+						}
+						if (rec.url) {
+							a.href = rec.url(data);
+							a.classList.add('rtrim');
+							a.append(create_copy_btn(data));
+						} else {
+							make_click_copy(a, data);
+						}
+						a.title = `${data}\nText: ${rec.key}`;
+						if (rec.class) {
+							a.classList.add(rec.class);
 						}
 						break;
 					}
@@ -3927,6 +3944,7 @@ async function resolve1(input, skip_norm) {
 						let [x, y] = data;
 						if (is_null_hex(x)) continue;
 						a.innerHTML = `<b>pubkey</b>`;
+						a.classList.add('rtrim');
 						a.append(make_click_copy(create('button', {innerText: 'x', title: x}), x));
 						a.append(make_click_copy(create('button', {innerText: 'y', title: y}), y));
 						break;
@@ -3942,35 +3960,33 @@ async function resolve1(input, skip_norm) {
 						let decoded, url;
 						try {
 							let [proto, pos] = uvarint.read(buf);
+							let cid;
 							buf = buf.subarray(pos);
 							switch (proto) {
 								//case 0xE2: // IPLD
 								case 0xE3: { // IPFS
-									let cid = CID.from(buf);
+									cid = CID.from(buf);
 									decoded = cid.toString();
-									if (cid.codec !== 0x70) throw new Error('not dag-pb');
-									a.append(create_link(`https://${decoded}.ipfs2.eth.limo/`, {button: '🆔️ IPFS'}));
-									a.append(create_check_cid_btn(decoded));
+									//if (cid.codec !== 0x70) throw new Error('not dag-pb');
 									url = `ipfs://${decoded}`;
+									a.append(create_link(`https://${decoded}.ipfs2.eth.limo/`, {button: '🆔️ IPFS'}));
 									break;
 								}
 								case 0xE5: { // IPNS
-									let cid = CID.from(buf);
+									cid = CID.from(buf);
 									decoded = cid.toString('k'); // base36 for urls
-									if (cid.codec !== 0x72) throw new Error('not libp2p-key');
-									a.append(create_link(`https://${decoded}.ipfs2.eth.limo/`, {button: '↗️ IPNS'}));
-									a.append(create_check_cid_btn(decoded));
+									//if (cid.codec !== 0x72) throw new Error('not libp2p-key');
 									url = `ipns://${decoded}`;
+									a.append(create_link(`https://${decoded}.ipfs2.eth.limo/`, {button: '↗️ IPNS'}));
 									break;
 								}
 								case 0xE4: { // Swarm
 									// https://docs.ethswarm.org/docs/develop/access-the-swarm/upload-and-download
 									// https://gateway.ethswarm.org/access/
-									let cid = CID.from(buf);
+									cid = CID.from(buf);
 									decoded = cid.toString();
-									if (cid.codec !== 0xFA) throw new Error('not swarm-manifest');
+									//if (cid.codec !== 0xFA) throw new Error('not swarm-manifest');
 									a.append(create_link(`https://${decoded}.bzz.link/`, {button: 'Swarm'}));
-									a.append(create_check_cid_btn(decoded));
 									url = `bzz://${decoded}`;
 									break;
 								}
@@ -3982,8 +3998,8 @@ async function resolve1(input, skip_norm) {
 									decoded = Base36.encode(buf);
 									const V2 = 16;
 									if (decoded.length != V2 && decoded.length != 56) throw new Error('bad length');
-									a.append(create_link(`https://${decoded}.onion.to/`, {button: 'Onion'}));
 									url = `onion://${decoded}`;
+									a.append(create_link(`https://${decoded}.onion.to/`, {button: 'Onion'}));
 									if (decoded.length == V2) {
 										a.append(create_tag('warn', 'Deprecated'));
 									}
@@ -3993,26 +4009,32 @@ async function resolve1(input, skip_norm) {
 									// https://support.skynetlabs.com/key-concepts/skylinks
 									decoded = Base64URL.encode(buf);
 									if (decoded.length != 46) throw new Error('bad length');
-									a.append(create_link(`https://siasky.net/${decoded}`, {button: 'Skylink'}));
 									url = `sia://${decoded}`;
+									a.append(create_link(`https://siasky.net/${decoded}`, {button: 'Skylink'}));
 									break;
 								}
 								case 0xB29910: { // arweave
 									// https://docs.arweave.org/developers/arweave-node-server/http-api
 									if (buf.length != 32) throw new Error('not sha256');
 									decoded = Base64URL.encode(buf);
+									url = `arweave://${decoded}`;
 									a.append(create_link(`https://arweave.net/${decoded}`, {button: 'Arweave'}));
 									a.append(create_link(`https://viewblock.io/arweave/tx/${decoded}`, {button: '✅️ Check'}));
-									url = `arweave://${decoded}`;
 									break;
 								}
 							}
-							a.append(create_copy_btn(url, {value: true}));
+							make_click_copy(a, url);
+							let lines = [data, `Protocol: ${proto}`, url];
+							if (cid) {
+								lines.push(`CID: Version: ${cid.version} / Codec: ${cid.codec} / Hash Codec: ${cid.hash.codec}`);
+								a.append(create_link(`https://cid.ipfs.tech/#${cid}`, {button: '✅️ Check'}));
+							}
+							a.title = lines.join('\n');
 							// upgrade the decentralized website link
 							document.querySelector('.row.dns').replaceWith(create_dns_row(name_norm, false, true));
 						} catch (err) {
 							a.append(create_tag('fail', err));
-							a.append(make_click_copy(create('button', {innerText: 'Data', title: data}), data));
+							make_click_copy(a, data);
 							if (decoded) {
 								a.append(make_click_copy(create('button', {innerText: 'Decoded', title: decoded}), decoded));
 							}
@@ -4133,10 +4155,6 @@ async function resolve1(input, skip_norm) {
 	}
 }
 
-function create_check_cid_btn(cid) {
-	return create_link(`https://cid.ipfs.tech/#${cid}`, {button: '✅️ Check'});
-}
-
 function add_owner_links(row, owner) {	
 	add_row_tag(row, create_link(`${active_chain.is_mainnet ? 'https://opensea.io/' : 'https://testnets.opensea.io/'}${owner}?tab=collected`, {innerHTML: OPENSEA_NAME, className: 'external'}));
 	if (active_chain.is_mainnet) {
@@ -4189,6 +4207,7 @@ async function fetch_records(resolver, records) {
 			}
 		} catch (err) {
 		}
+		records = records.filter(x => !x.bonus); // remove bonus records
 	}
 	return Promise.all(records.map(async rec => {
 		if (should_stop_resolving()) {
