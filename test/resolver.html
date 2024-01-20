@@ -485,7 +485,7 @@ button.copy.copied {
 }
 .tags.normalized { background: #8f8; }
 .tags.normalized.ascii {
-	background: #00f;
+	background: #6df;
 	color: #fff;
 	font: 11pt monospace;
 }
@@ -2614,7 +2614,7 @@ function make_normalized(row, name) {
 	split.forEach(upgrade_split_type);
 	if (pure_ascii) {
 		span.classList.add('ascii');
-		span.innerHTML += ` ASCII`; 
+		span.innerHTML = 'ASCII'; 
 	} else {
 		let types = new Set(split.map(x => x.type));
 		if (types.has('Latin') && types.has('ASCII')) {
