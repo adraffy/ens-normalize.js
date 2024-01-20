@@ -30,8 +30,13 @@
 a, button {
 	cursor: pointer;
 }
+a.button {
+	text-decoration: none;	
+}
 button {
 	appearance: none;
+	display: inline-flex;
+	align-items: center;
 	margin: 0;
 	padding: 4px 8px;
 	border: 1px solid var(--btn-border-color);
@@ -39,6 +44,7 @@ button {
 	background-color: var(--btn-fill-color);
 	color: #000;
 	font-size: 100%;
+	gap: 4px;
 }
 button:disabled {
 	opacity: 50%;
@@ -50,6 +56,9 @@ button:hover {
 button:hover:active {
 	background-color: #aaa;
 	/*transform: translate(0px, 1px);*/
+}
+.rtrim {
+	padding-right: 4px !important;
 }
 body { 
 	margin: 3rem; 
@@ -278,7 +287,7 @@ body.testnet #provider a {
 	order: -10;
 	text-align: right;
 	font-weight: bold;
-	white-space: pre-wrap;
+	white-space: pre;
 }
 .row-label a {	
 	color: #000;
@@ -400,6 +409,13 @@ a.internal {
 a.addr {
 	line-break: anywhere;
 	font: 85% monospace;
+}
+span.key {
+	padding: 2px 4px;
+	border-radius: 4px;
+	background-color: #999;
+	color: #fff;
+	font: 10px sans-serif;
 }
 span.tags {
 	background: #ddd;
@@ -597,7 +613,7 @@ button.glow {
 .breakdown .tags {
 	padding: 2px 4px;
 	border-radius: 4px;
-	border: 1px solid #fff;
+	border: 1px solid #ddd;
 }
 .breakdown .hash {
 	display: flex;
@@ -628,7 +644,7 @@ button.glow {
 	flex-wrap: wrap;
 	align-items: center;
 	justify-content: center;
-	gap: 4px 8px;
+	gap: 4px 6px;
 	margin: 2px 0;
 	border-top: 2px solid #fff;
 	padding: 3px 6px;
@@ -665,6 +681,11 @@ button.glow {
 .tokens {
 	font-size: 16pt;
 }
+.maxh {
+	max-height: 10rem;
+	overflow-y: auto;
+	padding-bottom: 1px;
+}
 .exploded > .error {
 	background-color: #f97;
 	padding: 3px;
@@ -688,19 +709,12 @@ button.glow {
 	border: 1px solid #ccc;
 	gap: 4px;
 }
-.record button {
-	white-space: pre;
-}
 .record.notice {
-	background-color: #dff;
 	font-weight: bold;
 }
 .record button.copy {
 	width: 24px;
 	height: 24px;
-}
-.record.rtrim {
-	padding-right: 4px;
 }
 .record.copied {
 	background-color: var(--copied-color);
@@ -727,6 +741,11 @@ button.glow {
 }
 .record span.addr {
 	font: 80% monospace;
+}
+.record .changed {
+	font: 11px sans-serif;
+	background-color: #fdb;
+	order: 10;
 }
 .row.error {
 	background: #fcc;
@@ -769,14 +788,28 @@ button.glow {
 }
 footer {
 	margin: 16px 0;
-	text-align: center;
+	display: flex;
+	gap: 10px;
+	align-items: baseline;
+	justify-content: center;
 	color: #666;
 }
-footer span {
+#clock {
+	font: 9pt sans-serif;
+	background-color: #e0e0e0;
+	border-radius: 4px;
+	padding: 3px 6px;
+}
+#clock:empty {
+	display: none;
+}
+#version {
+	font-family: monospace;
 	cursor: help;
 }
-footer span:hover {	
+#version:hover {	
 	color: #000;
+	text-decoration: underline;
 }
 @media only screen and (max-width: 800px) { 
 	body {
@@ -1183,7 +1216,11 @@ Hebrew:
 <li><a href="https://raffy.antistupid.com/eth/emoji-pixels.html">Emoji Pixel Maker</a></li>
 </ul>
 </div>
-<footer>Created by <a href="https://x.com/adraffy">raffy.eth</a></footer>
+<footer>
+	<span>Created by <a href="https://x.com/adraffy">raffy.eth</a></span>
+	<span id="clock"></span>
+	<span id="version"></span>
+</footer>
 <script type="module">
 // to prepare this file for self-hosted deployment:
 // * replace infura_provider with a public provider, eg. new ethers.CloudflareProvider();
@@ -1226,6 +1263,8 @@ const provider_div = document.querySelector('#provider');
 const nf_btn = document.querySelector('#nf_btn');
 const escape_btn = document.querySelector('#escape_btn');
 const parent_btn = document.querySelector('#parent_btn');
+const version_span = document.querySelector('#version');
+const clock_span = document.querySelector('#clock');
 
 const RESOLVE_MODE_IDLE = 'idle';
 const RESOLVE_MODE_EMPTY = 'empty';
@@ -1346,53 +1385,55 @@ const RECORDS = [
 		type: TYPE_TEXT, 
 		key: 'com.twitter', 
 		icon: `<svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 22 20"><path fill="var(--geist-fill, currentColor)" stroke="none" d="M16.99 0H20.298L13.071 8.26L21.573 19.5H14.916L9.702 12.683L3.736 19.5H0.426L8.156 10.665L0 0H6.826L11.539 6.231L16.99 0ZM15.829 17.52H17.662L5.83 1.876H3.863L15.829 17.52Z"/></svg>`,
-		//format(x) { return `@${x}`; },
-		url(x) { return `https://x.com/${encodeURIComponent(x)}`; }
+		url(x) { return `https://twitter.com/${x}`; },
+		fix: repair_social,
 	},
 	{
 		type: TYPE_TEXT, 
 		key: 'farcaster', 
-		url(x) { return `https://warpcast.com/${encodeURIComponent(x)}`; }
+		icon: '<img src="https://warpcast.com/favicon.png">',
+		url(x) { return `https://warpcast.com/${x}`; },
+		fix: repair_social
 	},
 	{
 		type: TYPE_TEXT, 
 		key: 'lens', 
-		url(x) { return `https://hey.xyz/u/${encodeURIComponent(x)}`; }
+		url(x) { return `https://hey.xyz/u/${x}`; }
 	},
 	{
 		type: TYPE_TEXT,
 		key: 'com.github', 
-		icon: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"><path d="M12 0.297134C5.37 0.297134 0 5.67014 0 12.2971C0 17.6001 3.438 22.0971 8.205 23.6821C8.805 23.7951 9.025 23.4241 9.025 23.1051C9.025 22.8201 9.015 22.0651 9.01 21.0651C5.672 21.7891 4.968 19.4551 4.968 19.4551C4.422 18.0701 3.633 17.7001 3.633 17.7001C2.546 16.9561 3.717 16.9711 3.717 16.9711C4.922 17.0551 5.555 18.2071 5.555 18.2071C6.625 20.0421 8.364 19.5121 9.05 19.2051C9.158 18.4291 9.467 17.9001 9.81 17.6001C7.145 17.3001 4.344 16.2681 4.344 11.6701C4.344 10.3601 4.809 9.29014 5.579 8.45014C5.444 8.14714 5.039 6.92714 5.684 5.27414C5.684 5.27414 6.689 4.95214 8.984 6.50414C9.944 6.23714 10.964 6.10513 11.984 6.09913C13.004 6.10513 14.024 6.23714 14.984 6.50414C17.264 4.95214 18.269 5.27414 18.269 5.27414C18.914 6.92714 18.509 8.14714 18.389 8.45014C19.154 9.29014 19.619 10.3601 19.619 11.6701C19.619 16.2801 16.814 17.2951 14.144 17.5901C14.564 17.9501 14.954 18.6861 14.954 19.8101C14.954 21.4161 14.939 22.7061 14.939 23.0961C14.939 23.4111 15.149 23.7861 15.764 23.6661C20.565 22.0921 24 17.5921 24 12.2971C24 5.67014 18.627 0.297134 12 0.297134Z"></path></svg>`,
-		url(x) { return `https://github.com/${encodeURIComponent(x)}`; }
+		icon: '<img src="https://github.githubassets.com/favicons/favicon.png">',
+		url(x) { return `https://github.com/${x}`; }
 	},
 	{
 		type: TYPE_TEXT,
 		key: 'com.discord',
-		icon: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" fill="#5A57DD"><path d="M20.7273 5.45455C20.7273 5.45455 18.2264 3.49746 15.2727 3.27273L15.0065 3.80509C17.6771 4.45855 18.9022 5.39509 20.1818 6.54546C17.9755 5.41909 15.7969 4.36364 12 4.36364C8.20309 4.36364 6.02455 5.41909 3.81818 6.54546C5.09782 5.39509 6.55527 4.35546 8.99345 3.80509L8.72727 3.27273C5.62855 3.56564 3.27273 5.45455 3.27273 5.45455C3.27273 5.45455 0.479455 9.50455 0 17.4545C2.81564 20.7016 7.09091 20.7273 7.09091 20.7273L7.98491 19.5355C6.46745 19.008 4.75364 18.066 3.27273 16.3636C5.03891 17.7 7.70455 19.0909 12 19.0909C16.2955 19.0909 18.9611 17.7 20.7273 16.3636C19.2464 18.066 17.5325 19.008 16.0151 19.5355L16.9091 20.7273C16.9091 20.7273 21.1844 20.7016 24 17.4545C23.5205 9.50455 20.7273 5.45455 20.7273 5.45455ZM8.45455 15.2727C7.40018 15.2727 6.54545 14.2958 6.54545 13.0909C6.54545 11.886 7.40018 10.9091 8.45455 10.9091C9.50891 10.9091 10.3636 11.886 10.3636 13.0909C10.3636 14.2958 9.50891 15.2727 8.45455 15.2727ZM15.5455 15.2727C14.4911 15.2727 13.6364 14.2958 13.6364 13.0909C13.6364 11.886 14.4911 10.9091 15.5455 10.9091C16.5998 10.9091 17.4545 11.886 17.4545 13.0909C17.4545 14.2958 16.5998 15.2727 15.5455 15.2727Z"></path></svg>`,
+		icon: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#5A57DD"><path d="M20.7273 5.45455C20.7273 5.45455 18.2264 3.49746 15.2727 3.27273L15.0065 3.80509C17.6771 4.45855 18.9022 5.39509 20.1818 6.54546C17.9755 5.41909 15.7969 4.36364 12 4.36364C8.20309 4.36364 6.02455 5.41909 3.81818 6.54546C5.09782 5.39509 6.55527 4.35546 8.99345 3.80509L8.72727 3.27273C5.62855 3.56564 3.27273 5.45455 3.27273 5.45455C3.27273 5.45455 0.479455 9.50455 0 17.4545C2.81564 20.7016 7.09091 20.7273 7.09091 20.7273L7.98491 19.5355C6.46745 19.008 4.75364 18.066 3.27273 16.3636C5.03891 17.7 7.70455 19.0909 12 19.0909C16.2955 19.0909 18.9611 17.7 20.7273 16.3636C19.2464 18.066 17.5325 19.008 16.0151 19.5355L16.9091 20.7273C16.9091 20.7273 21.1844 20.7016 24 17.4545C23.5205 9.50455 20.7273 5.45455 20.7273 5.45455ZM8.45455 15.2727C7.40018 15.2727 6.54545 14.2958 6.54545 13.0909C6.54545 11.886 7.40018 10.9091 8.45455 10.9091C9.50891 10.9091 10.3636 11.886 10.3636 13.0909C10.3636 14.2958 9.50891 15.2727 8.45455 15.2727ZM15.5455 15.2727C14.4911 15.2727 13.6364 14.2958 13.6364 13.0909C13.6364 11.886 14.4911 10.9091 15.5455 10.9091C16.5998 10.9091 17.4545 11.886 17.4545 13.0909C17.4545 14.2958 16.5998 15.2727 15.5455 15.2727Z"></path></svg>`,
 	},
 	{
 		type: TYPE_TEXT, 
 		key: 'com.reddit', 
 		icon: '<img src="https://www.redditstatic.com/desktop2x/img/favicon/apple-icon-60x60.png">',
-		url(x) { return `https://reddit.com/u/${encodeURIComponent(x)}`; }
+		url(x) { return `https://reddit.com/u/${x}`; }
 	},
 	{
 		type: TYPE_TEXT,
 		key: 'io.keybase',
 		icon: '<img src="https://keybase.io/images/icons/icon-keybase-logo-48.png">',
-		url(x) { return `https://keybase.io/${encodeURIComponent(x)}`; }
+		url(x) { return `https://keybase.io/${x}`; }
 	},
 	{
 		type: TYPE_TEXT,
 		key: 'org.telegram',
-		icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="#2BABEE" viewBox="0 0 24 24" role="img"><g fill="inherit" clip-path="url(#a)"><path fill="inherit" fill-rule="evenodd" d="M24 12c0 6.6274-5.3726 12-12 12-6.62742 0-12-5.3726-12-12C0 5.37258 5.37258 0 12 0c6.6274 0 12 5.37258 12 12ZM12.43 8.85893c-1.1672.48547-3.49987 1.49027-6.99812 3.01437-.56806.2259-.86563.4469-.89272.663-.04578.3652.41154.509 1.03431.7048.08471.0267.17248.0543.26246.0835.6127.1992 1.43689.4322 1.86535.4414.38865.0084.82244-.1518 1.30135-.4807 3.26847-2.2063 4.95577-3.32149 5.06167-3.34553.0747-.01696.1783-.03829.2485.02408.0701.06235.0632.18045.0558.21215-.0453.1931-1.8405 1.8621-2.7695 2.7258-.2896.2692-.495.4602-.537.5038-.0941.0978-.19.1902-.2821.279-.5692.5487-.9961.9602.0236 1.6322.49.3229.8821.59 1.2733.8564.4273.2909.8534.5811 1.4047.9425.1405.0921.2746.1877.4053.2808.4972.3545.9438.6729 1.4957.6221.3206-.0295.6519-.331.8201-1.2302.3975-2.1252 1.1789-6.7299 1.3595-8.62742.0158-.16625-.0041-.37901-.0201-.4724-.0159-.0934-.0493-.22647-.1707-.32498-.1438-.11666-.3658-.14126-.465-.13952-.4514.00796-1.1439.24874-4.4764 1.63485Z" clip-rule="evenodd"></path></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h24v24H0z"></path></clipPath></defs></svg>`,
-		url(x) { return `https://t.me/${encodeURIComponent(x)}`; }
+		icon: '<img src="https://telegram.org/img/favicon-32x32.png">',
+		url(x) { return `https://t.me/${x}`; }
 	},
 	{
 		type: TYPE_TEXT,
 		key: 'com.linkedin',
-		icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>`,
-		url(x) { return `https://www.linkedin.com/in/${encodeURIComponent(x)}`; }
+		icon: '<img src="https://static.licdn.com/scds/common/u/images/logos/favicons/v1/favicon.ico">',
+		url(x) { return `https://www.linkedin.com/in/${x}`; }
 	},
 	{
 		type: 'contenthash',
@@ -1496,6 +1537,7 @@ const RECORDS = [
 		type: TYPE_ADDR,
 		coin: 714,
 		name: 'bnb',
+		icon: '<img src="https://explorer.bnbchain.org/static/images/favicon.ico">',
 		bech32: {hrp: 'bnb', type: 1},
 		url(x) { return `https://explorer.bnbchain.org/address/${x}`; },
 		bonus: true,
@@ -1504,6 +1546,7 @@ const RECORDS = [
 		type: TYPE_ADDR,
 		coin: 118,
 		name: 'atom',
+		icon: '<img src="https://atomscan.com/img/icons/chains/atom.svg">',
 		bech32: {hrp: 'cosmos', type: 1},
 		url(x) { return `https://atomscan.com/account/`; },
 		bonus: true
@@ -1563,7 +1606,22 @@ const RECORDS = [
 	{
 		type: TYPE_TEXT,
 		key: 'avatar',
+		class: 'avatar',
 		format() { return ''; },
+		then(a, resolver) {
+			let {_linkage, _avatar} = resolver;
+			if (_linkage && !_avatar) {
+				let avatar = _linkage.find(x => x.type === 'avatar');	
+				if (avatar) {
+					a.append(create('span', {
+						className: ['tags', 'changed'], 
+						innerHTML: '❌️ Failed', 
+						title: _linkage.map((x, i) => `[${i+1}] ${x.type}: ${x.value}`).join('\n'),
+					}));
+					a.classList.add('rtrim');
+				}
+			}
+		}
 	},
 	{
 		type: TYPE_TEXT,
@@ -1575,8 +1633,13 @@ const RECORDS = [
 for (let rec of RECORDS) {
 	if (rec.type === TYPE_ADDR) {
 		// https://docs.ens.domains/ens-improvement-proposals/ensip-11-evmchain-address-resolution
-		if (rec.evm && !rec.coin) rec.coin = rec.evm + 0x80000000;
-		//if (!Number.isInteger(rec.coin)) window.alert(`Missing coin type: ${JSON.stringify(rec)}`);
+		if (rec.evm && !rec.coin) rec.coin = rec.evm + 0x80000000;	
+		// try {
+		// 	if (!rec.url) throw 'explorer';
+		// 	if (!Number.isInteger(rec.coin)) throw 'coin type';
+		// } catch (err) {
+		// 	console.log(err, rec);
+		// }
 	}
 }
 
@@ -1601,11 +1664,11 @@ let multicall_contract;
 let price_oracle_contract;
 let reverse_registrar;
 let resolve_timer = RESOLVE_MODE_IDLE;
-let resolve_t0;
+let resolve_last;
 
 console.log(versions);
-document.querySelector('footer').innerHTML += ` — <span>v${versions.version}</span>`;
-document.querySelector('footer span').addEventListener('click', () => {
+version_span.innerHTML = `v${versions.version}`;
+version_span.addEventListener('click', () => {
 	window.alert(JSON.stringify(versions, null, ' '));
 });
 // TODO: add more 
@@ -1654,7 +1717,7 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 	} catch (err) {
 		btn.classList.add('error');
 	}	
-	if (!meta && !name.includes('.')) name += '.eth';
+	if (!meta) name = add_dot_eth(name);
 	if (typeof btn.dataset.escape === 'string') name = apply_escapes_where(name);
 	if (!btn.title) btn.title = meta ? name : `${name}\n${explode_cp(name).map(hex_cp).join(' ')}`;
 	btn.addEventListener('click', () => {
@@ -1678,9 +1741,10 @@ for (let x of document.querySelectorAll('[data-tokenize]')) {
 	}));
 }
 
-resolve_btn.addEventListener('click', () => resolve());
+resolve_btn.addEventListener('click', resolve);
 input_field.addEventListener('keydown', e => {
 	if (e.key === 'Enter') {
+		if (e.shiftKey) input_field.value = add_dot_eth(input_field.value.trim());	
 		e.stopPropagation();
 		resolve();
 	}
@@ -1756,7 +1820,7 @@ document.querySelector('#random_emoji_btn').addEventListener('click', e => {
 	while (Array.from(name).length < MIN_ETH_LENGTH) {
 		name += ens_normalize(str_from_cps(pool[Math.random() * pool.length|0]));
 	}
-	input_field.value = `${name}.eth`;
+	input_field.value = add_dot_eth(name);
 	skip_norm_check.checked = false;
 	resolve();
 });
@@ -2050,15 +2114,15 @@ function parse() {
 	nf_btn.disabled = !input;
 	escape_btn.disabled = !input;
 	parent_btn.disabled = !input;	
+	output_div.innerHTML = '';
+	clock_span.innerHTML = '';
 	if (!input) {
 		stop_resolving();
-		output_div.innerHTML = '';
 		output_div.append(...readme_dom);	
 		return;
 	}
 	// TODO: conslidate this code with resolve()
 	let name = replace_name(replace_escapes(input));
-	output_div.innerHTML = '';
 	if (resolve_timer === RESOLVE_MODE_EMPTY) {
 		resolve_timer = RESOLVE_MODE_IDLE;
 	}
@@ -2071,6 +2135,7 @@ function parse() {
 	}
 	let row = create_row(INPUT_NAME);
 	make_exploded(row, name, false); //, true);
+	add_row_tag(row, create_dot_eth_button(name));
 	output_div.append(row, create_breakdown_row(name, true));
 	try {
 		let norm = ens_normalize(name);
@@ -2200,7 +2265,7 @@ function add_transformed_row(input) {
 	}
 }
 
-function create_dns_row(name, replaced, contenthash) {
+function create_dns_row(name, {replaced, contenthash} = {}) {
 	let row = create_row(replaced ? 'Alternative DNS' : 'DNS');
 	row.classList.add('dns');
 	try {
@@ -2225,7 +2290,7 @@ function create_dns_row(name, replaced, contenthash) {
 				if (encoded.length > MAX_LABEL) throw new Error(`too long: ${encoded.length} > ${MAX_LABEL}`);
 				return encoded;
 			} catch (err) {
-				throw new Error(`Invalid label "${safe_str_from_cps(cps)}": ${err.message}`);
+				throw new Error(`Invalid label "${safe_str_from_cps(cps, 63)}": ${err.message}`);
 			}
 		}).join('.');
 		if (encoded.length > MAX_NAME) {
@@ -2305,7 +2370,7 @@ function add_alternative_btn(row, name) {
 		add_row_tag(row, create('button', {
 			innerText: '🥈️ Try Alternative',
 			click() {
-				row.replaceWith(create_dns_row(alt, true));
+				row.replaceWith(create_dns_row(alt, {replaced: true}));
 			}
 		}));
 	}
@@ -2366,6 +2431,7 @@ function create_link(url, {button, ...args} = {}) {
 		...args
 	});
 	if (button) {
+		a.classList.add('button');
 		a.replaceChildren(create('button', {
 			innerHTML: button,
 			click(e) {
@@ -2402,7 +2468,8 @@ function create_jazz_icon(address) {
 	return create('span', {innerHTML: i, className: ['jazz', `addr${i}`]});
 }
 
-function make_click_copy(el, raw) {
+function make_click_copy(el, raw, {hint} = {}) {
+	if (hint) el.title += `\n(Click to Copy)`;
 	el.addEventListener('click', e => {
 		e.preventDefault();
 		e.stopPropagation();
@@ -2410,7 +2477,7 @@ function make_click_copy(el, raw) {
 		if (e.altKey) {
 			copy = explode_cp(copy).map(hex_cp).join(' ');
 		} else if (e.shiftKey) {
-			copy = bytes_from_utf8(copy).map(hex_cp).join(' ');
+			copy = '0x' + Array.from(bytes_from_utf8(copy), hex_cp).join('');
 		} 
 		const cls = 'copied';
 		document.querySelectorAll(`.${cls}`).forEach(x => x.classList.remove(cls));
@@ -2423,7 +2490,6 @@ function make_click_copy(el, raw) {
 
 function create_copy_btn(raw, {small, value} = {}) {
 	let btn = create('button', {className: 'copy'});
-	make_click_copy(btn, raw);
 	if (small) btn.classList.add('small');
 	if (value) {
 		btn.title = raw;
@@ -2436,6 +2502,7 @@ function create_copy_btn(raw, {small, value} = {}) {
 			`[SHIFT] UTF-8 Bytes (${bytes_from_utf8(raw).length})`,
 		].join('\n');
 	}
+	make_click_copy(btn, raw);	
 	return btn;
 }
 function reverse_name(addr) {
@@ -2447,7 +2514,7 @@ function create_reverse_resolve_btn(addr) {
 function create_resolve_btn(name, innerHTML = '↩️ Resolve') {
 	return create('button', {
 		innerHTML,
-		title: name,
+		title: `Resolve: ${name}`,
 		click() {
 			input_field.value = name;
 			resolve();
@@ -2455,10 +2522,7 @@ function create_resolve_btn(name, innerHTML = '↩️ Resolve') {
 	});
 }
 function create_main_span(text) {
-	return create('span', null, create('span', {innerText: text, className: ['main', 'long']}));
-}
-function create_pretty_tag() {
-	return create('span', {innerHTML: PRETTY_NAME, title: 'Beautified Form', className: 'clean'});
+	return create('span', {className: 'maxh'}, create('span', {innerText: text, className: ['main', 'long']}));
 }
 function upgrade_split_type(info) {
 	if (info.type === 'Latin') {
@@ -2467,7 +2531,9 @@ function upgrade_split_type(info) {
 			info.type = 'ASCII';
 		}
 	} 
-	info.confusing = determine_confusion(str_from_cps(info.input), flatten_tokens(info.tokens));
+	let flat = flatten_tokens(info.tokens);
+	info.confusing = determine_confusion(str_from_cps(info.input), flat);
+	info.style = determine_style(flat);
 }
 
 function flatten_tokens(tokens) {
@@ -2487,6 +2553,20 @@ function determine_confusion(label, flat) {
 		return match;
 	} else if (/^0x[0-9a-f]{18,}/i.test(label)) {
 		return 'Address-like';
+	}
+}
+function determine_style(flat) {
+	if (flat.length < 2) return;
+	let palindrome = true;
+	for (let a = 0, b = flat.length - 1; palindrome && a < b; a++, b--) {
+		palindrome = flat[a] === flat[b];
+	}
+	if (palindrome) {
+		if (flat.every(x => flat[0] === x)) {
+			return `Repeated (${flat.length})`;
+		} else {
+			return 'Palindrome';
+		}
 	}
 }
 
@@ -2599,29 +2679,17 @@ function create_ethmoji_row(tokens, suffix) {
 	row.append(formula);
 	let span_grade = create('span');
 	let min_repeated;
-	if (tokens.every(t => t.emoji[2] == 0x20E3)) {
-		if (tokens.length == 2) {
-			add_row_tag(row, create_tag('fire', 'Shortest Keycaps'));
-		} else {
-			add_row_tag(row, create_tag('star', 'Keycaps'));
-		}
-	} else if (tally.length == 1) {
+	if (tally.length == 1) {
 		let ncp = tally[0].cps.length;
 		let repeat = 1 + Math.max(0, MIN_ETH_LENGTH - ncp);
 		if (tally[0].count === repeat) {
 			add_row_tag(row, create_tag('fire', repeat == 1 ? 'Single' : 'Shortest'));
 		} else {
-			if (tally[0].count > 1) {
-				add_row_tag(row, create_tag('star', 'Repeated'));
-			}
 			min_repeated = str_from_cps(tally[0].cps).repeat(repeat);
 		}
 	} else {
-		add_row_tag(row, `Unique: ${tally.length}`);
+		add_row_tag(row, `Unique (${tally.length})`);
 	}
-	// if (tokens.every((x, i) => x.form == tokens[tokens.length-1-i].form)) {
-	// 	add_row_tag(row, create_palindrome_tag());
-	// }
 	if (min_repeated) {
 		add_row_tag(row, create_resolve_btn(min_repeated + suffix, '↩️ Shortest'));
 	}
@@ -2638,19 +2706,11 @@ function create_digits_row(norm, group, values, negative, suffix) {
 	if (values.length == (negative ? 2 : 3)) {
 		add_row_tag(row, create_tag('fire', 'Shortest'));
 	}
-	if (values.every((x, i) => x == values[0])) {
-		add_row_tag(row, create_tag('star', `Repeated (${values.length})`));
-	}
-	if (negative) {
-		add_row_tag(row, 'Negative');
-	} else if (values.length > 1 && values.every((x, i) => x == values[values.length-1-i])) {
-		add_row_tag(row, create_palindrome_tag());
-	}	
-	let pad = 0;
-	while (values[pad] === 0) pad++;
-	if (pad) {
-		add_row_tag(row, `Zero Pad (${pad})`);
-	}
+	// let pad = 0;
+	// while (values[pad] === 0) pad++;
+	// if (pad) {
+	// 	add_row_tag(row, `Zero Pad (${pad})`);
+	// }
 	let btn = create_resolve_btn((negative ? KEYCAP_MINUS : '') + values.map(keycap).join('') + suffix, KEYCAP_NAME);
 	btn.disabled = group === KEYCAP_NAME;
 	add_row_tag(row, btn);
@@ -2720,20 +2780,23 @@ function add_nft_links(row, name, contract, token) {
 async function add_avatar(row, resolver) {
 	try {
 		let {url, linkage} = await resolver._getAvatar();
+		resolver._linkage = linkage;
 		if (!url) return;
-		try {
-			url = new URL(url).toString().replaceAll('#', '%23'); // i forget why im doing this
-		} catch (ignored) {
-		}
+		resolver._avatar = url;
+		// try {
+		// 	url = new URL(url).toString().replaceAll('#', '%23'); // i forget why im doing this
+		// } catch (ignored) {
+		// }
 		let img = new Image();
 		img.src = url;
 		let a = create_link(url, {className: 'avatar'});
 		a.replaceChildren(img);
 		row.append(a);
-		let avatar = linkage.find(x => x.type === 'avatar');
-		resolver._avatar = avatar.value || url;
 	} catch (err) {
 		console.log('Avatar error', avatar, err);
+	} finally {
+		let a = row.parentNode.querySelector('.record.avatar');
+		if (a) RECORDS.find(x => x.key === 'avatar').then(a, resolver);
 	}
 }
 
@@ -2785,7 +2848,7 @@ function create_tokens_div(name, before, components) {
 	// tokenize each label separately so we can show major/minor errors
 	// flatten non-errors tokens into wrapper
 	let split = ens_split(name);
-	let wrapper = create('div', {className: ['tokens', 'exploded']});
+	let wrapper = create('div', {className: ['tokens', 'exploded', 'maxh']});
 	let first = true;
 	for (let i = 0; i < split.length; i++) {
 		if (i > 0) {
@@ -2843,20 +2906,27 @@ function add_reg_exp_tags(row, exp, now) {
 	}
 }
 
-function create_palindrome_tag() {
-	return create_tag('good', '⇄');
-}
-
-function apply_class(el, ...cls) {
-	for (let x of cls) {
-		if (x) el.classList.add(...x.trim().split(/\s+/));
+function create_dot_eth_button(name) {
+	let added = add_dot_eth(name);
+	if (added !== name) {
+		let btn = create_resolve_btn(added, '<b>.eth</b> <span class="key">shift+enter</span>');
+		btn.classList.add('rtrim');
+		return btn;
 	}
-	return el;
 }
-
-function create_tag(type, value) {
+function create_elapsed() {
+	let now = Date.now();
+	let delta = now - resolve_last;
+	if (!delta) return; // 0ms is stupid
+	resolve_last = now;
+	return create_tag('elapsed', format_dur(delta));
+}
+function create_pretty_tag() {
+	return create_tag('clean', PRETTY_NAME, 'Beautified Form');
+}
+function create_tag(type, value, title) {
 	if (!value) return;
-	let span = create('span', {className: 'tags'});
+	let span = create('span', {className: 'tags', title});
 	if (value instanceof Error) {
 		value = value.message;
 		span.classList.add('long');
@@ -2889,6 +2959,15 @@ function create_tag(type, value) {
 	span.classList.add(type);
 	return span;
 }
+function add_row_tag(row, tag) {
+	if (!tag) return;
+	if (typeof tag === 'string') {
+		tag = create('span', {innerHTML: tag});
+	}
+	tag.classList.add('tags');
+	row.append(tag);
+	return tag;
+}
 
 function create_namehash_breakdown(name) {
 	let node = namehash(name);
@@ -2904,7 +2983,7 @@ function create_namehash_button(name) {
 	btn.title = `Namehash: ${node}`;
 	btn.dataset.reversed = true;
 	make_detailed(btn);
-	make_click_copy(btn, node);
+	make_click_copy(btn, node, {hint: true});
 	return btn;
 }
 function create_breakdown_row(name, before) {
@@ -2921,13 +3000,20 @@ function create_breakdown_row(name, before) {
 	for (let info of split) {
 		let row = create('div', {className: 'label'});
 
-		row.append(create_tag('index', info.index+1));
+		//row.append(create_tag('index', info.index+1));
 
 		let span_name = create('span', {className: ['name', 'long']});
 		if (info.label) {
 			span_name.innerText = info.label;
 			row.append(span_name);
 			row.append(create_copy_btn(info.label, {small: true}));
+		}
+		if (info.label) {
+			row.append(create_tag('length', info.cps.length));
+			if (info.emoji || info.type !== 'ASCII') {
+				let v = bytes_from_utf8(info.label);
+				row.append(create_tag('bytes', v.length));
+			}
 		}
 		if (info.error) {
 			row.classList.add('error');
@@ -2938,9 +3024,6 @@ function create_breakdown_row(name, before) {
 		} else {
 			row.classList.add('valid');
 			upgrade_split_type(info);
-			if (info.confusing) {
-				row.append(create_tag('confusing', info.confusing));
-			}
 			if (info.type.startsWith('Restricted[')) {
 				let script = info.type.slice(11, -1);
 				row.append(create_link(`https://www.compart.com/en/unicode/scripts/${script}`, {innerHTML: `⚠️ ${script} (Restricted)`, className: ['tags', 'restricted']}));
@@ -2950,12 +3033,11 @@ function create_breakdown_row(name, before) {
 			if (info.emoji) {
 				row.append(create_tag('emoji', 'Emoji'));
 			}
-		}
-		if (info.label) {
-			row.append(create_tag('length', info.cps.length));
-			if (info.emoji || info.type !== 'ASCII') {
-				let v = bytes_from_utf8(info.label);
-				row.append(create_tag('bytes', v.length));
+			if (info.confusing) {
+				row.append(create_tag('confusing', info.confusing));
+			}
+			if (info.style) {
+				row.append(create_tag('good', info.style));
 			}
 		}
 		outer.append(row);
@@ -3003,20 +3085,10 @@ function remove_temporary(row) {
 	}
 }
 
-function add_row_tag(row, tag) {
-	if (!tag) return;
-	if (typeof tag === 'string') {
-		tag = create('span', {innerHTML: tag});
-	}
-	tag.classList.add('tags');
-	row.append(tag);
-	return tag;
-}
-
 function trim_trailing_decimal_zeros(s) {
 	return s.includes('.') ? s.replace(/\.?0*$/, '') : s;
 }
-function format_dur(t) {
+function format_dur(t, n = 1) {
 	if (t < 1000) return `${Math.ceil(t)}ms`;
 	t /= 1000;
 	let unit;
@@ -3041,7 +3113,7 @@ function format_dur(t) {
 			}
 		}
 	}
-	return trim_trailing_decimal_zeros(t.toFixed(1)) + unit;
+	return trim_trailing_decimal_zeros(t.toFixed(n)) + unit;
 }
 
 function is_working() {
@@ -3066,9 +3138,7 @@ function resolve() {
 				// https://ens.vision/name/%F0%9F%91%A9%F0%9F%8F%BC%E2%80%8D%F0%9F%A6%BC%E2%80%8D%E2%AC%85
 				let v = url.pathname.toLowerCase().split('/').filter(x => x);
 				if (v.length >= 2 && v[0] === 'name') {
-					input = decodeURIComponent(v[1]);
-					if (!input.endsWith('.eth')) input += '.eth';
-					input_field.value = input;
+					input_field.value = input = add_dot_eth(decodeURIComponent(v[1]));
 				}
 			} else { 
 				// generalized handler
@@ -3110,7 +3180,7 @@ function resolve() {
 				if (!label) throw new Error(`Unknown labelhash preimage: ${hash}`);
 				let hash0 = labelhash(label);
 				if (hash0 !== hash) throw new Error(`Incorrect labelhash preimage: "${label}")\n\nExpected: ${hash}\nComputed: ${hash}`);
-				input_field.value = `${label}.eth`;
+				input_field.value = add_dot_eth(label);
 				setTimeout(resolve, 0);
 			} catch (err) {
 				window.alert(err.message);
@@ -3162,8 +3232,9 @@ function resolve() {
 	}
 	resolve_btn.disabled = true;
 	primary_loader.classList.remove('hide');
-	resolve_t0 = Date.now();
+	const t0 = resolve_last = Date.now();
 	resolve1(name, skip).then(() => {
+		clock_span.innerHTML = format_dur(resolve_last - t0, 2);
 		resolve_btn.disabled = false;
 		if (Array.isArray(resolve_timer)) {
 			setTimeout(resolve, Math.max(0, resolve_timer[0] - Date.now()));
@@ -3171,14 +3242,6 @@ function resolve() {
 			primary_loader.classList.add('hide');
 		}
 	});
-}
-
-function create_elapsed() {
-	let now = Date.now();
-	let delta = now - resolve_t0;
-	if (!delta) return; // 0ms is stupid
-	resolve_t0 = now;
-	return create('span', {innerHTML: format_dur(delta), className: 'elapsed'});
 }
 
 async function resolve1(input, skip_norm) {
@@ -3316,9 +3379,7 @@ async function resolve1(input, skip_norm) {
 		if (/^0x[0-9a-f]{40}$/i.test(input)) {
 			add_row_tag(input_row, create_resolve_btn(ethers.getAddress(input.toLowerCase()), '🛠️ Fix Checksum'));
 		}
-		if (!input.includes('.')) {
-			add_row_tag(input_row, create_resolve_btn(`${input}.eth`, '🔄️ Add <b>".eth"</b>'));
-		}
+		add_row_tag(input_row, create_dot_eth_button(input));
 		add_row_tag(input_row, create_namehash_button(input));
 
 		try {
@@ -3406,17 +3467,16 @@ async function resolve1(input, skip_norm) {
 		row.classList.add('pretty');
 		row.append(create_main_span(pretty));
 		add_row_tag(row, create_copy_btn(pretty));
-		if (input !== pretty) {
-			add_row_tag(row, create_resolve_btn(pretty));
-		}
-		add_row_tag(row, create_pretty_tag());
 		if (input === pretty) { 
 			add_row_tag(input_row, create_pretty_tag());
 			add_row_tag(row, create_tag('good', 'Same as Input'));
 		} else if (name_norm === pretty) {			
 			add_row_tag(normed_row, create_pretty_tag());
 			add_row_tag(row, create_tag('good', 'Same as Norm'));
+		} else {
+			add_row_tag(row, create_resolve_btn(pretty));
 		}
+		add_row_tag(row, create_pretty_tag());
 		add_old_tag(row, pretty);
 		output_div.append(row);
 	}
@@ -3501,7 +3561,7 @@ async function resolve1(input, skip_norm) {
 		} else if (available === undefined) {
 			add_row_tag(avail_row, create_tag('fail', `Too Short`));
 			let padded = Array(1 + Math.max(0, MIN_ETH_LENGTH - len)).fill(label).join('');
-			add_row_tag(avail_row, create_resolve_btn(`${padded}.eth`, '↩️ Repeat until 3+'));
+			add_row_tag(avail_row, create_resolve_btn(add_dot_eth(padded), '↩️ Repeat until 3+'));
 		} else if (available) {
 			add_row_tag(avail_row, create_ens_link(name_norm, '<button class="glow">👌️ Available to Register</button>'));
 			let ether = parseFloat(ethers.formatEther(premium));
@@ -3645,7 +3705,7 @@ async function resolve1(input, skip_norm) {
 					if (!(fuses & 0x20000)) { // !IS_DOT_ETH 
 						add_reg_exp_tags(wrapped_row, exp, now); // note: this includes grace for .eth subs
 						if (fuses & 0x40000) { // CAN_EXTEND_EXPIRY => no approval needed
-							add_row_tag(wrapped_row, create_tag('note', '➡️ Extendable by anyone'));
+							add_row_tag(wrapped_row, create_tag('warn', 'Public Extendable'));
 						} else {
 							add_row_tag(wrapped_row, create_tag('warn', 'Extension requires approval'));
 						}
@@ -3890,7 +3950,7 @@ async function resolve1(input, skip_norm) {
 						a.innerHTML = rec.icon || `<b>${rec.name}</b>`;
 						try {
 							let v = ethers.getBytes(data);
-							let lines = [`Address: ${rec.coin}`];
+							let lines = [`CoinType: ${rec.coin}`];
 							let address;
 							if (rec.evm) {
 								address = ethers.getAddress(data);
@@ -3906,7 +3966,7 @@ async function resolve1(input, skip_norm) {
 							}
 							lines.unshift(address);
 							a.append(create('span', {innerHTML: address, className: ['addr', 'long']}));
-							a.href = rec.url(address);
+							a.href = rec.url(encodeURIComponent(address));
 							//if (rec.testnet) a.classList.add('testnet');
 							a.append(create_copy_btn(address, {value: true}));
 							a.title = lines.join('\n');
@@ -3922,10 +3982,21 @@ async function resolve1(input, skip_norm) {
 						data = data.trim();
 						if (!data) continue;
 						a.innerHTML = rec.icon || `<b>${rec.key}</b>`;
+						if (rec.fix) {
+							let fixed = rec.fix(data);
+							if (fixed !== data) {
+								a.append(create('span', {
+									className: ['tags', 'changed'],
+									innerHTML: '⚠️ Changed', 
+									title: `Original: ${data}\nChange: ${fixed}`}));
+								data = fixed;
+							}
+						}
 						let text = rec.format ? rec.format(data) : data;
 						if (text) {
 							a.append(create('span', {innerText: text, className: text.length > 32 ? 'long' : null}));
 						}
+						a.title = `${data}\nText: ${rec.key}`;
 						if (rec.url) {
 							a.href = rec.url(data);
 							a.classList.add('rtrim');
@@ -3933,9 +4004,11 @@ async function resolve1(input, skip_norm) {
 						} else {
 							make_click_copy(a, data);
 						}
-						a.title = `${data}\nText: ${rec.key}`;
 						if (rec.class) {
 							a.classList.add(rec.class);
+						}
+						if (rec.then) {
+							rec.then(a, resolver);
 						}
 						break;
 					}
@@ -3945,8 +4018,8 @@ async function resolve1(input, skip_norm) {
 						if (is_null_hex(x)) continue;
 						a.innerHTML = `<b>pubkey</b>`;
 						a.classList.add('rtrim');
-						a.append(make_click_copy(create('button', {innerText: 'x', title: x}), x));
-						a.append(make_click_copy(create('button', {innerText: 'y', title: y}), y));
+						a.append(make_click_copy(create('button', {innerText: 'x', title: x}), x, {hint: true}));
+						a.append(make_click_copy(create('button', {innerText: 'y', title: y}), y, {hint: true}));
 						break;
 					}
 					// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IContentHashResolver.sol
@@ -3957,7 +4030,7 @@ async function resolve1(input, skip_norm) {
 						a.innerHTML = `<b>${rec.type}</b>`;
 						a.classList.add('rtrim');
 						let buf = ethers.getBytes(data);
-						let decoded, url;
+						let rep, url;
 						try {
 							let [proto, pos] = uvarint.read(buf);
 							let cid;
@@ -3966,28 +4039,28 @@ async function resolve1(input, skip_norm) {
 								//case 0xE2: // IPLD
 								case 0xE3: { // IPFS
 									cid = CID.from(buf);
-									decoded = cid.toString();
+									rep = cid.toString();
 									//if (cid.codec !== 0x70) throw new Error('not dag-pb');
-									url = `ipfs://${decoded}`;
-									a.append(create_link(`https://${decoded}.ipfs2.eth.limo/`, {button: '🆔️ IPFS'}));
+									url = `ipfs://${rep}`;
+									a.append(create_link(`https://${rep}.ipfs2.eth.limo/`, {button: '🆔️ IPFS'}));
 									break;
 								}
 								case 0xE5: { // IPNS
 									cid = CID.from(buf);
-									decoded = cid.toString('k'); // base36 for urls
+									rep = cid.toString('k'); // base36 for urls
 									//if (cid.codec !== 0x72) throw new Error('not libp2p-key');
-									url = `ipns://${decoded}`;
-									a.append(create_link(`https://${decoded}.ipfs2.eth.limo/`, {button: '↗️ IPNS'}));
+									url = `ipns://${rep}`;
+									a.append(create_link(`https://${rep}.ipfs2.eth.limo/`, {button: '↗️ IPNS'}));
 									break;
 								}
 								case 0xE4: { // Swarm
 									// https://docs.ethswarm.org/docs/develop/access-the-swarm/upload-and-download
 									// https://gateway.ethswarm.org/access/
 									cid = CID.from(buf);
-									decoded = cid.toString();
+									rep = cid.toString();
 									//if (cid.codec !== 0xFA) throw new Error('not swarm-manifest');
-									a.append(create_link(`https://${decoded}.bzz.link/`, {button: 'Swarm'}));
-									url = `bzz://${decoded}`;
+									a.append(create_link(`https://${rep}.bzz.link/`, {button: 'Swarm'}));
+									url = `bzz://${rep}`;
 									break;
 								}
 								//case 0xE8: // DNSLink 
@@ -3995,48 +4068,49 @@ async function resolve1(input, skip_norm) {
 								case 0x1BD: { // onion v3 
 									// https://www.tor2web.org/
 									// https://blog.torproject.org/v3-onion-services-usage/
-									decoded = Base36.encode(buf);
+									rep = Base36.encode(buf);
 									const V2 = 16;
-									if (decoded.length != V2 && decoded.length != 56) throw new Error('bad length');
-									url = `onion://${decoded}`;
-									a.append(create_link(`https://${decoded}.onion.to/`, {button: 'Onion'}));
-									if (decoded.length == V2) {
+									if (rep.length != V2 && rep.length != 56) throw new Error('bad length');
+									url = `onion://${rep}`;
+									a.append(create_link(`https://${rep}.onion.to/`, {button: 'Onion'}));
+									if (rep.length == V2) {
 										a.append(create_tag('warn', 'Deprecated'));
 									}
 									break;
 								}
 								case 0xB19910: { // skylink
 									// https://support.skynetlabs.com/key-concepts/skylinks
-									decoded = Base64URL.encode(buf);
-									if (decoded.length != 46) throw new Error('bad length');
-									url = `sia://${decoded}`;
-									a.append(create_link(`https://siasky.net/${decoded}`, {button: 'Skylink'}));
+									rep = Base64URL.encode(buf);
+									if (rep.length != 46) throw new Error('bad length');
+									url = `sia://${rep}`;
+									a.append(create_link(`https://siasky.net/${rep}`, {button: 'Skylink'}));
 									break;
 								}
 								case 0xB29910: { // arweave
 									// https://docs.arweave.org/developers/arweave-node-server/http-api
 									if (buf.length != 32) throw new Error('not sha256');
-									decoded = Base64URL.encode(buf);
-									url = `arweave://${decoded}`;
-									a.append(create_link(`https://arweave.net/${decoded}`, {button: 'Arweave'}));
-									a.append(create_link(`https://viewblock.io/arweave/tx/${decoded}`, {button: '✅️ Check'}));
+									rep = Base64URL.encode(buf);
+									url = `arweave://${rep}`;
+									a.append(create_link(`https://arweave.net/${rep}`, {button: 'Arweave'}));
+									a.append(create_link(`https://viewblock.io/arweave/tx/${rep}`, {button: '✅️ Check'}));
 									break;
 								}
 							}
-							make_click_copy(a, url);
 							let lines = [data, `Protocol: ${proto}`, url];
 							if (cid) {
-								lines.push(`CID: Version: ${cid.version} / Codec: ${cid.codec} / Hash Codec: ${cid.hash.codec}`);
+								lines.push(`CID: Version: ${cid.version} / Codec: ${cid.codec} / Bytes: ${buf.length}`);
+								lines.push(`Hash: Codec: ${cid.hash.codec} / Bytes: ${cid.hash.data.length}`);
 								a.append(create_link(`https://cid.ipfs.tech/#${cid}`, {button: '✅️ Check'}));
 							}
 							a.title = lines.join('\n');
+							make_click_copy(a, url);
 							// upgrade the decentralized website link
-							document.querySelector('.row.dns').replaceWith(create_dns_row(name_norm, false, true));
+							document.querySelector('.row.dns').replaceWith(create_dns_row(name_norm, {replaced: false, contenthash: rep}));
 						} catch (err) {
 							a.append(create_tag('fail', err));
 							make_click_copy(a, data);
-							if (decoded) {
-								a.append(make_click_copy(create('button', {innerText: 'Decoded', title: decoded}), decoded));
+							if (rep) {
+								a.append(make_click_copy(create('button', {innerText: 'Decoded', title: rep}), rep, {hint: true}));
 							}
 						}
 						break;
@@ -4440,7 +4514,20 @@ async function is_contract(address) {
 	} catch (err) {
 	}	
 }
-
+function first_path_component(url) {
+	return url.pathname.split('/')[1];
+}
+function repair_social(value, {prefix = '@', url = first_path_component} = {}) {
+	if (prefix && value.startsWith(prefix)) return value.slice(prefix.length);
+	if (url) {
+		try {
+			let fix = url(new URL(value));
+			if (fix) return fix;
+		} catch (err) {
+		}
+	}
+	return value;
+}
 function base58check(v) {
 	return Base58BTC.encode([...v, ...ethers.getBytes(ethers.sha256(ethers.sha256(v))).slice(0, 4)]);
 }
@@ -4491,6 +4578,16 @@ function create(tag, args, ...a) {
 	}
 	el.append(...a);
 	return el;	
+}
+function add_dot_eth(name) {
+	let pos = name.indexOf('.') + 1;
+	if (!pos) {
+		return `${name}.eth`;
+	} else if (pos === name.length) {
+		return `${name}eth`;
+	} else {
+		return name;
+	}
 }
 function is_address(s) {
 	return typeof s === 'string' && /^0x[0-9a-f]{40}$/i.test(s);

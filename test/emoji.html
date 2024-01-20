@@ -470,6 +470,7 @@ footer span:hover {
 </header>
 <div id="links">
 	<a href="./resolver.html"><b>Resolver</b></a>
+	<a href="https://raffy.antistupid.com/eth/ens-exp.html">Expirations</a>
 	<a href="https://raffy.antistupid.com/eth/ens-emoji-freq.html">Emoji Frequency</a>
 	<a href="../derive/output/emoji-info.json"><code>emoji-info.json</code></a>
 	•
@@ -541,7 +542,7 @@ footer span:hover {
 	<button data-by="version">Version</button>
 	<button data-by="cp">Codepoint</button>
 	<span class="balloon"></span>
-	<button id="copy_btn" title="Copy Beaufied">
+	<button id="copy_btn" title="Copy Beaufied&#10;[ALT] Min-repeated">
 		<svg xmlns='http://www.w3.org/2000/svg' fill='none' height='24' shape-rendering='geometricPrecision' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' viewBox='0 0 24 24' width='24' style='color:var(--geist-foreground)'><path d='M6 17C4.89543 17 4 16.1046 4 15V5C4 3.89543 4.89543 3 6 3H13C13.7403 3 14.3866 3.4022 14.7324 4M11 21H18C19.1046 21 20 20.1046 20 19V9C20 7.89543 19.1046 7 18 7H11C9.89543 7 9 7.89543 9 9V19C9 20.1046 9.89543 21 11 21Z'/></svg>
 		<span>Copy</span>
 	</button>
@@ -794,14 +795,14 @@ function update_top() {
 	top_btn.style.opacity = window.scrollY < 50 ? 0 : 1;
 }
 
-copy_btn.addEventListener('click', () => {
-	navigator.clipboard.writeText(active_emoji.map(x => x.form).join('\n'));
+copy_btn.addEventListener('click', e => {
+	navigator.clipboard.writeText(active_emoji.map(x => e.altKey && x.min_repeat ? x.form.repeat(x.min_repeat) : x.form).join('\n'));
 });
 csv_btn.addEventListener('click', async () => {
 	// note: utf8 csv is a little fucky in some boomer software
 	let lines = [`#Form,Hex,Norm,Length,MinLength,MinRepeat,Name,Type,Group,Subgroup,Version`];
 	for (let rec of active_emoji) {
-		if (!rec.is_emoji) continue;
+		if (!rec.min_repeat) continue;
 		let v = [rec.form, rec.cps.map(hex_cp).join(' '), rec.norm, rec.norm_length, rec.min_length, rec.min_repeat];
 		if (rec.info) {
 			v.push(rec.info.name, rec.info.type, rec.info.group, rec.info.subgroup, rec.info.version);
@@ -833,13 +834,11 @@ function make_rec(cps) {
 	}
 	let norm_length = [...norm].length;
 	let tokens = ens_tokenize(form);
-	let is_emoji = !!tokens[0].emoji;
 	let info = info_map.get(form);	
-	let rec = {form, norm, cps, info, is_emoji, tokens, norm_length, is_norm};
-	if (is_emoji) {
-		let min = Math.min(5, norm_length * (1 + Math.max(0, 3 - norm_length))); 
-		rec.min_length = min;
-		rec.min_repeat = Math.ceil(min / norm_length);
+	let rec = {form, norm, cps, info, tokens, norm_length, is_norm};
+	if (tokens[0].emoji) {
+		rec.min_repeat = Math.ceil(3 / norm_length);
+		rec.min_length = rec.min_repeat * norm_length;
 	}
 	return rec;
 }
@@ -904,11 +903,11 @@ function update_search() {
 			continue;
 		}
 		if (arg === 'normalized' || arg === 'is-norm') {
-			results = results.filter(x => x.is_emoji);
+			results = results.filter(x => x.min_repeat);
 		} else if (arg === 'needs-norm' || arg === 'gets-normed') {
-			results = results.filter(x => x.is_emoji && x.form !== x.norm);
+			results = results.filter(x => x.min_repeat && x.form !== x.norm);
 		} else if (arg === 'already-norm') {
-			results = results.filter(x => x.is_emoji && x.form === x.norm);	
+			results = results.filter(x => x.min_repeat && x.form === x.norm);	
 		} else if (arg === 'ascii') {
 			results = results.filter(x => /[\x00-\x7F]/.test(x.form));
 		} else if (arg === 'singles') {
@@ -1043,7 +1042,7 @@ function create_jump(heading_future, {count = 0, disabled = 0, title} = {}) {
 	return a;
 }
 function count_disabled(v) {
-	return v.reduce((a, x) => a + +!x.is_emoji, 0);;
+	return v.reduce((a, x) => a + +!x.min_repeat, 0);
 }
 function render() {
 	if (!render_queue.length) return;
@@ -1152,7 +1151,7 @@ function setup_render(results) {
 		}
 	} else if (by_mode === BY_COST) {
 		for (let {length, cost, length_ge} of COSTS) {
-			let match_length = results.filter(x => x.min_length === length && x.is_emoji);
+			let match_length = results.filter(x => x.min_length === length && x.min_repeat);
 			if (!match_length.length) continue;
 			let section;
 			for (let repeat = 1; repeat <= length; repeat++) {
@@ -1188,7 +1187,7 @@ function setup_render(results) {
 	} else if (results.length) {
 		let section = create_empty_table();
 		let tbody = section.querySelector('tbody');
-		let disabled = results.reduce((a, x) => a + (x.is_emoji?0:1), 0);
+		let disabled = count_disabled(results);
 		main.append(create_heading({
 			section,
 			disabled,
@@ -1204,7 +1203,7 @@ function setup_render(results) {
 	if (jumps.length > 1) {
 		let jumps_div = document.createElement('div');
 		jumps_div.id = 'jumps';
-		let disabled = results.reduce((a, x) => a + (x.is_emoji?0:1), 0);
+		let disabled = count_disabled(results);
 		let count = results.length - disabled;
 		let span = document.createElement('span');
 		span.classList.add('summary');
@@ -1302,10 +1301,10 @@ function toggle_shade(heading, b) {
 	heading.classList.toggle('shaded', b);
 }
 
-function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_emoji, is_norm}) {
+function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_norm}) {
 	let tr = document.createElement('tr');
 	tr.dataset.name = form;
-	if (!is_emoji) {
+	if (!min_repeat) {
 		tr.classList.add('error');
 	}
 
@@ -1316,24 +1315,24 @@ function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_e
 	td_form.classList.add('form');
 	td_form.innerHTML = form;
 	td_form.dataset.copy = form;
-	td_form.title = `${is_emoji ? 'Beautified' : 'Input'} Form\n(Click to Copy)`;
+	td_form.title = `${min_repeat ? 'Beautified' : 'Input'} Form\n(Click to Copy)`;
 
 	let td_part = document.createElement('td');
 	td_part.classList.add('part');
-	td_part.append(dom_from_tokens(tokens, {components: true, before: is_emoji, emoji_url: false}));
+	td_part.append(dom_from_tokens(tokens, {components: true, before: min_repeat, emoji_url: false}));
 
 	let td_norm = document.createElement('td');
 	td_norm.classList.add('norm');
 	if (is_norm) {
 		td_norm.innerHTML = norm;
 		td_norm.dataset.copy = norm;
-		if (is_emoji && form === norm) {
+		if (min_repeat && form === norm) {
 			td_norm.classList.add('same');
 			td_norm.title = 'Normalized Form\n[Same as Beautified]\n(Click to Copy)';
 		} else {
 			td_norm.title = 'Normalized Form\n(Click to Copy)';
 		}
-		if (!is_emoji) {
+		if (!min_repeat) {
 			td_norm.classList.add('text');
 		}
 	} else {
@@ -1410,7 +1409,7 @@ function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_e
 	td_resolve.classList.add('resolve');
 	let a_resolve = document.createElement('a');
 	a_resolve.innerHTML = '↩️';
-	a_resolve.href = `./resolver.html#${is_emoji ? norm.repeat(min_repeat) : form}.eth`;
+	a_resolve.href = `./resolver.html#${min_repeat ? norm.repeat(min_repeat) : form}.eth`;
 	a_resolve.title = 'Open in Resolver';
 	td_resolve.append(a_resolve);
 

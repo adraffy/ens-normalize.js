@@ -524,13 +524,18 @@ function check_fenced(cps) {
 // create a safe to print string 
 // invisibles are escaped
 // leading cm uses placeholder
+// if cps exceed max, middle truncate with ellipsis
 // quoter(cp) => string, eg. 3000 => "{3000}"
 // note: in html, you'd call this function then replace [<>&] with entities
-function safe_str_from_cps(cps, quoter = quote_cp) {
+function safe_str_from_cps(cps, max = Infinity, quoter = quote_cp) {
 	//if (Number.isInteger(cps)) cps = [cps];
 	//if (!Array.isArray(cps)) throw new TypeError(`expected codepoints`);
 	let buf = [];
 	if (is_combining_mark(cps[0])) buf.push('◌');
+	if (cps.length > max) {
+		max >>= 1;
+		cps = [...cps.slice(0, max), 0x2026, ...cps.slice(-max)];
+	}
 	let prev = 0;
 	let n = cps.length;
 	for (let i = 0; i < n; i++) {
@@ -754,7 +759,7 @@ function flatten(split) {
 			// don't print label again if just a single label
 			let msg = error.message;
 			// bidi_qq() only necessary if msg is digits
-			throw new Error(split.length == 1 ? msg : `Invalid label ${bidi_qq(safe_str_from_cps(input))}: ${msg}`); 
+			throw new Error(split.length == 1 ? msg : `Invalid label ${bidi_qq(safe_str_from_cps(input, 63))}: ${msg}`); 
 		}
 		return str_from_cps(output);
 	}).join(STOP_CH);

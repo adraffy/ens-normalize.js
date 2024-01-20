@@ -33,7 +33,6 @@ export function write_csv(name, recs, {form = true} = {}) {
 					let form = String.fromCodePoint(...rec.cps);
 					if (is_combining_mark(rec.cps[0])) form = '◌' + form;
 					return form;
-					//return safe_str_from_cps(rec.cps);
 				}
 				default: throw new Error(`unknown column: ${col}`);
 			}
