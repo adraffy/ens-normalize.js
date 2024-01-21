@@ -71,6 +71,7 @@ body {
 header {
 	display: flex;
 	flex-wrap: wrap;
+	align-items: end;
 	justify-content: space-between;
 	gap: 4px 8px;
 }
@@ -85,7 +86,6 @@ h1 {
 	flex-direction: column;
 	flex-wrap: wrap;
 	align-items: start;
-	align-self: end;
 }
 #provider button {
 	margin-left: 5px;
@@ -485,7 +485,7 @@ button.copy.copied {
 }
 .tags.normalized { background: #8f8; }
 .tags.normalized.ascii {
-	background: #6df;
+	background: #7ce;
 	color: #fff;
 	font: 11pt monospace;
 }
@@ -1147,7 +1147,7 @@ Hebrew:
 	<label for="force_ltr_check" title="Override Bidi Handling with Left-to-Right Direction&#10;(Applies only to Input)">LTR!</label>
 </div>
 <div id="input">
-	<input id="input_field" size="20" placeholder="Name or Address or URL">
+	<input id="input_field" size="20" placeholder="Name or Address">
 	<select id="recent_select" title="Recent Names" class="hide">
 		<option value="reset">🗑️ Clear History</option>
 		<optgroup label="Recent Names"></optgroup>
@@ -1185,6 +1185,7 @@ Hebrew:
 <li>Many elements have tooltips with additional information.</li>
 <li>Follows <a class="internal" href="https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard">ENSIP-15</a> and <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
 <li class="req-window">Supports <button id="add_goerli_btn" class="chain">Goerli</button> and <button id="add_sepolia_btn" class="chain">Sepolia</button> testnets.</li>
+<li>Clear the input to return to this page.</li>
 </ul>
 <ul class="row legend">
 <li>This is a <b>valid</b> sequence of characters: <span data-tokenize="abc"></span> and <b>.eth</b> name: <span data-tokenize="abc.eth"></span></li>
