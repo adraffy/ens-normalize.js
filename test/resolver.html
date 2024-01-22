@@ -185,6 +185,14 @@ body.testnet #provider a {
 	width: 100%;
 	padding: 8px;
 	font-size: 20pt;
+	line-height: 24pt;
+	transition: font-size .5s ease-in-out;
+}
+#input input.small {
+	font-size: 15pt;
+}
+#input input.smaller {
+	font-size: 12pt;
 }
 #actions {
 	min-height: 32px; /* spinner */
@@ -2115,6 +2123,8 @@ function replace_name(name) {
 function parse() {
 	update_title();	
 	let input = input_field.value;
+	input_field.classList.toggle('small', input.length > 21);
+	input_field.classList.toggle('smaller', input.length > 36);
 	let skip = skip_norm_check.checked;
 	nf_btn.disabled = !input;
 	escape_btn.disabled = !input;
@@ -4317,14 +4327,23 @@ async function fetch_records(resolver, records) {
 		if (rec.key === 'avatar' && resolver._avatar) { // add_avatar() probably already computed
 			return {rec, data: resolver._avatar}; 
 		}	
-		if (!resolver._wildcard && rec.type === TYPE_ADDR && rec.coin === 60) { // try boomer method first
+		let params = [contract._node];
+		if (rec.type === TYPE_ADDR && rec.coin === 60) { // try boomer method first
+			const method = 'addr(bytes32)';
 			try {
-				let data = await contract.addr(contract._node);
+				let data;
+				if (resolver._wildcard) {
+					let frag = contract.interface.getFunction(method);
+					data = await contract.resolve(resolver._rle_name, contract.interface.encodeFunctionData(frag, params), options);
+					[data] = contract.interface.decodeFunctionResult(frag, data);
+					if (data.length != 42) throw new Error('expected address');
+				} else {
+					data = await contract[method](contract._node);
+				}
 				return {rec, data};
 			} catch (err) {
 			}
 		} 
-		let params = [contract._node];
 		switch (rec.type) {
 			case TYPE_TEXT: params.push(rec.key); break;
 			case TYPE_ADDR: params.push(rec.coin); break;
@@ -4337,7 +4356,7 @@ async function fetch_records(resolver, records) {
 				data = contract.interface.decodeFunctionResult(frag, data);
 				if (frag.outputs.length === 1) data = data[0];
 			} else {
-				data = await contract[rec.type](...params, options);
+				data = await contract[rec.type](...params);
 			}
 			return {rec, data};
 		} catch (error) {
