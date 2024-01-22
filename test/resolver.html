@@ -583,7 +583,7 @@ button.copy.copied {
 .jazz.addr1 { background-color: #66f; }
 .jazz.addr2 { background-color: #c4c; }
 .jazz.addr3 { background-color: #0a8; }
-.jazz.addr4 { background-color: #0a8; }
+.jazz.addr4 { background-color: #a80; }
 .avatar {
 	order: -1;
 } 
@@ -605,21 +605,20 @@ button.glow {
 .breakdown {
 	font-size: 12pt;
 }
-.breakdown.reverse > * + * {
-	margin-top: 4px;
-	border-top: 2px solid #fff;	
-	padding-top: 4px;
-}
 .breakdown .tags {
 	padding: 2px 4px;
 	border-radius: 4px;
 	border: 1px solid #ddd;
 }
 .breakdown .hash {
+	padding: 1px 8px;
 	display: flex;
 	gap: 4px;
 	align-items: center;
 	justify-content: center;
+}
+.breakdown .hash :first-child {
+	white-space: pre;
 }
 .breakdown .hash code {
 	font-size: 90%;
@@ -848,10 +847,6 @@ footer {
 	}
 	.row {
 		justify-content: center;
-	}
-	.breakdown .hash {
-		padding-left: 8px;
-		padding-right: 8px;
 	}
 	#examples_btn {
 		display: block;
@@ -2518,7 +2513,7 @@ function reverse_name(addr) {
 	return `${addr.slice(2).toLowerCase()}.${REVERSE_DOMAIN}`;
 }
 function create_reverse_resolve_btn(addr) {
-	return create_resolve_btn(reverse_name(addr), '↩️ Reverse Record');
+	return create_resolve_btn(reverse_name(addr), '↩️ Reverse Name');
 }
 function create_resolve_btn(name, innerHTML = '↩️ Resolve') {
 	return create('button', {
@@ -3007,13 +3002,12 @@ function create_namehash_breakdown(name) {
 }
 function create_rle_breakdown(name) {
 	let div = create('div', {className: 'hash'});
-	div.append(create('b', {className: 'dynamic', dataset: {normal: 'Run-length encoded:', compact: 'RLE:'}}));
+	div.append(create('b', {innerText: 'Run-length encoded:'}));
 	try {
 		let rle = ethers.hexlify(rle_name_from(name));
-		div.append(create('code', {innerText: rle, className: 'long'}));
 		div.append(create_copy_btn(rle, {small: true, value: true}));
 	} catch (err) {
-		div.append(create('span', {innerText: 'Incompatible'}));
+		div.append(create('span', {innerText: '🚫️', title: err.message}));
 	}
 	return div;
 }
@@ -3296,12 +3290,11 @@ async function resolve1(input, skip_norm) {
 
 		let rev_name = reverse_name(input);
 
-		let rev_details = create('div', {className: ['breakdown', 'reverse']});
+		let rev_details = create('div', {className: ['breakdown']});
 		make_detailed(rev_details);
 		let rev_div = create('div', {innerHTML: `<b>Reverse Name:</b> <code class="long">${rev_name}</code>`, className: 'hash'});
 		rev_div.append(create_copy_btn(rev_name, {small: true, value: true}));
-		rev_details.append(rev_div, create_namehash_breakdown(rev_name));
-		//rev_details.append(create_rle_breakdown(rev_name));
+		rev_details.append(rev_div, create_namehash_breakdown(rev_name), create_rle_breakdown(rev_name));
 		output_div.append(input_row, rev_details);
 
 		let resolver_row = create_row('Reverse Resolver', true);
@@ -4477,9 +4470,9 @@ function rle_name_from(labels) {
 	const MAX_LABEL = 255;
 	let v = [];
 	for (let label of labels) {
-		if (!label) throw new Error('run-length encoded name: invalid empty label');
+		if (!label) throw new Error('invalid empty label');
 		let u = bytes_from_utf8(label);
-		if (u.length > MAX_LABEL) throw new Error(`run-length encoded name: too long: ${u.length} > ${MAX_LABEL}`);
+		if (u.length > MAX_LABEL) throw new Error(`too long: ${u.length} > ${MAX_LABEL}`);
 		v.push(u.length, ...u);
 	}
 	v.push(0);
