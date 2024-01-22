@@ -4,7 +4,7 @@ import {inspect} from 'node:util';
 import {
 	ens_beautify, ens_normalize, ens_normalize_fragment, 
 	ens_tokenize, ens_split, ens_emoji, 
-	should_escape, is_combining_mark
+	should_escape, is_combining_mark, safe_str_from_cps
 } from '../src/lib.js';
 
 function debug(x) {
@@ -38,3 +38,6 @@ debug_frag('οо');
 
 console.log(should_escape(0x202E));
 console.log(is_combining_mark(0x20E3));
+
+console.log(safe_str_from_cps([0x300, 0, 32, 97]));
+console.log(safe_str_from_cps(Array(100).fill(97), 4));

@@ -2751,7 +2751,7 @@ function add_old_tag(row, name, is_norm) {
 			html += `: ⚠️<b>Diff Norm</b>`;
 		}
 		if (norm0 === name) {
-			span.innerHTML = `✅️ ${html}`;
+			span.innerHTML = html; // `✓ ${html}`; //`✅️ ${html}`;
 		} else {
 			if (norm === norm0) throw new Error('not normalized');
 			add_row_tag(row, create_resolve_btn(norm0, `❌️ ${html}`));

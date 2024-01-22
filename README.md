@@ -30,7 +30,7 @@
 	* [adraffy/keccak.js](https://github.com/adraffy/keccak.js/) • [Keccak Hasher](https://adraffy.github.io/keccak.js/test/demo.html)
 	* [adraffy/emoji.js](https://github.com/adraffy/emoji.js/) • [Emoji Parser](https://adraffy.github.io/emoji.js/test/demo.html)
 
-```Javascript
+```js
 import {ens_normalize} from '@adraffy/ens-normalize'; // or require()
 // npm i @adraffy/ens-normalize
 // browser: https://cdn.jsdelivr.net/npm/@adraffy/ens-normalize@latest/dist/index.min.mjs (or .cjs)
@@ -40,6 +40,7 @@ import {ens_normalize} from '@adraffy/ens-normalize'; // or require()
 // - potentially different bidi directions inside "quotes"
 // - 200E is used near "quotes" to prevent spillover
 // - an "error type" can be extracted by slicing up to the first (:)
+// - labels are middle-truncated with ellipsis (…) at 63 cps
 
 // string -> string
 // throws on invalid names
@@ -51,7 +52,7 @@ let normalized = ens_normalize('RaFFY🚴‍♂️.eTh');
 ```
 
 Format names with fully-qualified emoji:
-```Javascript
+```js
 // works like ens_normalize()
 // output ready for display
 let pretty = ens_beautify('1⃣2⃣.eth'); 
@@ -62,7 +63,7 @@ let pretty = ens_beautify('1⃣2⃣.eth');
 ```
 
 Normalize name fragments for [substring search](./test/fragment.js):
-```Javascript
+```js
 // these fragments fail ens_normalize() 
 // but will normalize fine as fragments
 let frag1 = ens_normalize_fragment('AB--');    // expected error: label ext
@@ -71,7 +72,7 @@ let frag3 = ens_normalize_fragment('οо');      // expected error: mixture
 ```
 
 Input-based tokenization:
-```Javascript
+```js
 // string -> Token[]
 // never throws
 let tokens = ens_tokenize('_R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./');
@@ -113,7 +114,7 @@ let tokens = ens_tokenize('_R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./');
 ```
 
 Output-based tokenization:
-```Javascript
+```js
 // string -> Label[]
 // never throws
 let labels = ens_split('💩Raffy.eth_');
@@ -141,7 +142,7 @@ let labels = ens_split('💩Raffy.eth_');
 ```
 
 Generate a sorted array of (beautified) supported emoji codepoints:
-```Javascript
+```js
 // () -> number[][]
 let emojis = ens_emoji();
 // [
@@ -153,15 +154,22 @@ let emojis = ens_emoji();
 ```
 
 Determine if a character shouldn't be printed directly:
-```Javascript
+```js
 // number -> bool
 should_escape(0x202E); // eg. RIGHT-TO-LEFT OVERRIDE => true
 ```
 
 Determine if a character is a combining mark:
-```Javascript
+```js
 // number -> bool
 is_combining_mark(0x20E3); // eg. COMBINING ENCLOSING KEYCAP => true
+```
+
+Format codepoints as print-safe string:
+```js
+// number[] -> string
+safe_str_from_cps([0x300, 0, 32, 97]); // "◌̀{00} a"
+safe_str_from_cps(Array(100).fill(97), 4); // "aa…aa" => middle-truncated
 ```
 
 ## Build
