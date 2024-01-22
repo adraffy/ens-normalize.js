@@ -747,6 +747,7 @@ button.glow {
 .record svg {
 	width: 18px;
 	height: auto;
+	user-select: none;
 }
 .record span.addr {
 	font: 80% monospace;
@@ -2489,8 +2490,7 @@ function make_click_copy(el, raw, {hint} = {}) {
 	el.addEventListener('click', e => {
 		e.preventDefault();
 		e.stopPropagation();
-		let {target} = e;
-		let {copy, alt, shift} = target.dataset;
+		let {copy, alt, shift} = el.dataset;
 		if (e.altKey) {
 			copy = alt || explode_cp(copy).map(hex_cp).join(' ');
 		} else if (e.shiftKey) {
@@ -2499,8 +2499,8 @@ function make_click_copy(el, raw, {hint} = {}) {
 		const cls = 'copied';
 		document.querySelectorAll(`.${cls}`).forEach(x => x.classList.remove(cls));
 		navigator.clipboard.writeText(copy);
-		target.classList.add(cls);
-		setTimeout(() => target.classList.remove(cls), 2000);
+		el.classList.add(cls);
+		setTimeout(() => el.classList.remove(cls), 2000);
 	});
 	return el;
 }
@@ -4034,7 +4034,6 @@ async function resolve1(input, skip_norm) {
 						if (text) {
 							a.append(create('span', {innerText: text, className: text.length > 32 ? 'long' : null}));
 						}
-						a.title = `${data}\nText: ${rec.key}`;
 						if (rec.url) {
 							a.href = rec.url(data);
 							a.classList.add('rtrim');
@@ -4042,6 +4041,7 @@ async function resolve1(input, skip_norm) {
 						} else {
 							make_click_copy(a, data);
 						}
+						a.title = `${data}\nText: ${rec.key}`;
 						if (rec.class) {
 							a.classList.add(rec.class);
 						}
@@ -4336,14 +4336,14 @@ async function fetch_records(resolver, records) {
 					let frag = contract.interface.getFunction(method);
 					data = await contract.resolve(resolver._rle_name, contract.interface.encodeFunctionData(frag, params), options);
 					[data] = contract.interface.decodeFunctionResult(frag, data);
-					if (data.length != 42) throw new Error('expected address');
+					if (data.length !== 42) throw new Error('expected address');
 				} else {
 					data = await contract[method](contract._node);
 				}
 				return {rec, data};
 			} catch (err) {
 			}
-		} 
+		}
 		switch (rec.type) {
 			case TYPE_TEXT: params.push(rec.key); break;
 			case TYPE_ADDR: params.push(rec.coin); break;
