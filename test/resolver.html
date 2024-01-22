@@ -671,6 +671,9 @@ button.glow {
 .breakdown .restricted:hover {
 	outline: 2px solid #00f;
 }
+.breakdown .confusing {
+	border: none;
+}
 .breakdown .error {
 	order: 1;
 }
@@ -2977,7 +2980,7 @@ function add_row_tag(row, tag) {
 
 function create_namehash_button(name) {
 	let node = namehash(name);
-	let btn = create('button', {innerHTML: '🆔️', className: 'metadata'});
+	let btn = create('button', {innerHTML: '🆔️'});
 	btn.dataset.reversed = true;
 	make_detailed(btn);
 	make_click_copy(btn, node);
@@ -3046,10 +3049,13 @@ function create_breakdown_row(name, before) {
 			row.append(create('span', {innerText: `❌️ ${info.error.message}`, className: 'error'}));
 		} else if (compare_arrays(info.input, info.output)) { // mapped or nfc
 			row.classList.add('mapped');
-			row.append(create_tag('note', 'Unnormalized'));
+			row.append(create_tag('note', 'Normalizable'));
 		} else {
 			row.classList.add('valid');
 			upgrade_split_type(info);
+			if (info.confusing) {
+				row.append(create_tag('confusing', info.confusing));
+			}
 			if (info.type.startsWith('Restricted[')) {
 				let script = info.type.slice(11, -1);
 				row.append(create_link(`https://www.compart.com/en/unicode/scripts/${script}`, {innerHTML: `⚠️ ${script} (Restricted)`, className: ['tags', 'restricted']}));
@@ -3058,9 +3064,6 @@ function create_breakdown_row(name, before) {
 			}
 			if (info.emoji) {
 				row.append(create_tag('emoji', 'Emoji'));
-			}
-			if (info.confusing) {
-				row.append(create_tag('confusing', info.confusing));
 			}
 			if (info.style) {
 				row.append(create_tag('good', info.style));
