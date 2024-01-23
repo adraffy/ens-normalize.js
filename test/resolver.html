@@ -1624,7 +1624,7 @@ const RECORDS = [
 	{
 		type: TYPE_TEXT,
 		key: 'avatar',
-		class: 'avatar',
+		class: 'ava',
 		format() { return ''; },
 		then(a, resolver) {
 			let {_linkage, _avatar} = resolver;
@@ -2827,7 +2827,7 @@ async function add_avatar(row, resolver) {
 		console.log('Avatar error', avatar, err);
 	} finally {
 		if (!row.isConnected) return;
-		let a = row.parentNode.querySelector('.record.avatar');
+		let a = row.parentNode.querySelector('.record.ava');
 		if (a) RECORDS.find(x => x.key === 'avatar').then(a, resolver);
 	}
 }
