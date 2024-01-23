@@ -334,7 +334,7 @@ body.testnet #provider a {
 .row.dns {
 	background:#f5faff; 
 }
-.row.old {
+.available {
 	opacity: 65%;
 }
 .row.dns .main {
@@ -463,7 +463,7 @@ button.copy.copied {
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' height='24' shape-rendering='geometricPrecision' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' viewBox='0 0 24 24' width='24' style='color:var(--geist-foreground)'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
 }
 .tags.long { order: 30; }
-.tags.old {
+.tags.ensip1 {
 	background-color: #df8;
 	order: 8;
 }
@@ -643,16 +643,18 @@ button.glow {
 	font-size: 90%;
 	color: #666;
 }
+.breakdown .hash.minor.first {
+	border-top: 1px dotted #ccc;
+}
 .breakdown .label {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
 	justify-content: center;
 	gap: 4px 6px;
-	margin: 2px 0;
+	margin-top: 4px;
 	border-top: 2px solid #fff;
 	padding: 3px 6px;
-	border-bottom: 1px dotted #aaa;
 }
 .breakdown .label.valid {
 	background: linear-gradient(90deg, #efea, #0000);
@@ -906,7 +908,7 @@ footer {
 <button data-name="firstwrappedname">Emanicpated 2LD</button>
 <button data-name="please.pumpdeezbags.eth">Emanicpated 3LD</button>
 <button data-name="dessert3.menu.bestsushi7.eth">Wrapped</button>
-<button data-name="loyal-eth-community">Locked</button>
+<button data-name="millionaire">Locked</button>
 
 <b>Subdomain:</b>
 <button data-name="nowzad.loopring.eth">loopring</button>
@@ -1170,17 +1172,17 @@ Hebrew:
 	<div class="balloon"></div>
 	<div class="segmented">
 		<button id="random_emoji_btn" title="Random Emoji&#10;[ALT] Only Use Singles">🎲</button>
-		<button id="find_emoji_btn">Emoji</button>
+		<button id="find_emoji_btn" title="Lookup Selected/First Emoji">Emoji</button>
 	</div>
 	<div class="segmented">
-		<button id="chars_btn" title="Lookup First/Selected Character">Chars</button>
+		<button id="chars_btn" title="Lookup Selected/First Character">Chars</button>
 		<button id="confused_btn" title="Explain Confusable Characters">Confused</button>
 	</div>
 	<div class="segmented">
 		<button id="nf_btn">NFD↔NFC</button>
 		<button id="escape_btn" title="[ALT] Unicode Escaped">Escape</button>
 	</div>
-	<button id="parent_btn" title="Drop the leading label">Parent</button>
+	<button id="parent_btn" title="Drop the leading label&#10;[ALT] Clear input">Parent</button>
 	<button id="copy_link_btn">Copy Link</button>
 	<button id="resolve_btn">Resolve</button>
 </div>
@@ -1197,7 +1199,7 @@ Hebrew:
 <li>Many elements have tooltips with additional information.</li>
 <li>Follows <a class="internal" href="https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard">ENSIP-15</a> and <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
 <li class="req-window">Supports <button id="add_goerli_btn" class="chain">Goerli</button> and <button id="add_sepolia_btn" class="chain">Sepolia</button> testnets.</li>
-<li>Clear the input to return to this page.</li>
+<li>Clear input to return to this page.</li>
 </ul>
 <ul class="row legend">
 <li>This is a <b>valid</b> sequence of characters: <span data-tokenize="abc"></span> and <b>.eth</b> name: <span data-tokenize="abc.eth"></span></li>
@@ -1297,6 +1299,8 @@ const PRETTY_NAME = '💖️';
 const MANAGER_NAME = 'Manager';
 const NFT_OWNER_NAME = 'NFT Owner';
 const CLICK_TO_COPY = '(Click to Copy)';
+const SAME_AS_INPUT = 'Same as Input';
+const SAME_AS_NORM = 'Same as Norm';
 
 const CHAIN_ID_MAINNET = 1;
 const CHAIN_ID_GOERLI = 5;
@@ -1679,27 +1683,27 @@ let price_oracle_contract;
 let reverse_registrar;
 let resolve_timer = RESOLVE_MODE_IDLE;
 let resolve_last;
+let available;
 
 console.log(versions);
 version_span.innerHTML = `v${versions.version}`;
 version_span.addEventListener('click', () => {
 	window.alert(JSON.stringify(versions, null, ' '));
 });
-// TODO: add more 
+
 function keycap(i) {
 	return String.fromCodePoint(0x30+i, 0xFE0F, 0x20E3);
 }
 const KEYCAP_MINUS = '➖️';
 const KEYCAP_NAME = 'Keycap';
-const DIGIT_MAP = new Map();
+const DIGIT_MAP = new Map(Array.from({length: 10}, (_, i) => [keycap(i), i]));
 const DIGITS_MAP = new Map();
-for (let i = 0; i < 10; i++) DIGIT_MAP.set(keycap(i), i);
 function add_digits(name, digits, extra = {}) {
 	explode_cp(digits).forEach((cp, i) => DIGIT_MAP.set(cp, {name, i, ...extra}));
 	DIGITS_MAP.set(name, digits);
 }
 add_digits('ASCII', '0123456789');
-add_digits('Arabic', '٠١٢٣٤٥٦٧٨٩', {mixed: 1}); //, reversed: true
+add_digits('Arabic', '٠١٢٣٤٥٦٧٨٩', {mixed: 1});
 [[0x6F4, 4], [0x6F5, 5], [0x6F6, 6]].forEach(([cp, i]) => {
 	DIGIT_MAP.set(cp, {name: 'Extended Arabic', i, mixed: 1});
 });
@@ -1873,7 +1877,7 @@ nf_btn.addEventListener('click', () => {
 parent_btn.addEventListener('click', e => {
 	let name = input_field.value;
 	let pos = name.indexOf('.');
-	input_field.value = pos >= 0 ? name.slice(pos+1) : '';
+	input_field.value = !e.altKey && pos >= 0 ? name.slice(pos+1) : '';
 	resolve();
 });
 escape_btn.addEventListener('click', e => {
@@ -2132,6 +2136,7 @@ function parse() {
 	parent_btn.disabled = !input;	
 	output_div.innerHTML = '';
 	clock_span.innerHTML = '';
+	available = undefined;
 	if (!input) {
 		stop_resolving();
 		output_div.append(...readme_dom);	
@@ -2165,18 +2170,18 @@ function parse() {
 				let norm_row = create_row('Normalized');
 				make_exploded(norm_row, norm, true);
 				make_normalized(norm_row, norm);
-				add_old_tag(norm_row, name, true);
+				add_ensip1_tag(norm_row, name, true);
 				output_div.append(norm_row, create_breakdown_row(norm));
 			}
 		}		
-		add_old_tag(row, name);
+		add_ensip1_tag(row, name);
 		//output_div.append(create_dns_row(norm));
 		return true;
 	} catch (err) {
 		row.classList.add('error');
 		add_row_tag(row, create_tag('norm', err));
 		if (skip) return true;
-		add_old_tag(row, name);
+		add_ensip1_tag(row, name);
 		stop_resolving();
 
 		// if there is a fully ignorable label
@@ -2647,7 +2652,13 @@ function make_normalized(row, name) {
 	if (split.some(x => x.confusing)) {
 		add_row_tag(row, create_tag('confusing', 'Possibly<br>Confusing'));
 	}
-	add_row_tag(row, span);	
+	add_row_tag(row, span);
+	try {
+		if (name === ens_beautify(name)) {
+			add_row_tag(row, create_pretty_tag());
+		}
+	} catch (err) {
+	}
 }
 
 function make_detailed(el) {
@@ -2749,24 +2760,27 @@ async function add_contract_name(row, address) {
 	}
 }
 
-function add_old_tag(row, name, is_norm) {
+function add_ensip1_tag(row, input, is_norm) {
 	const OLD_NAME = 'ENSIP-1';
-	let span = create('span', {className: ['tags', 'old']});
+	let span = create('span', {className: ['tags', 'ensip1']});
 	try {
-		let norm0 = eth_ens_namehash.normalize(name);
+		let norm0 = eth_ens_namehash.normalize(input);
 		let norm;
 		try {
-			norm = ens_normalize(name);
+			norm = ens_normalize(input);
 		} catch (err) {
 		}
 		let html = OLD_NAME;
-		if (!is_norm && norm0 !== norm) { // diff-norm
+		if (norm !== input && norm0 !== norm) { // change + disagree
 			html += `: ⚠️<b>Diff Norm</b>`;
 		}
-		if (norm0 === name) {
+		if (norm0 === input) {
 			span.innerHTML = html; // `✓ ${html}`; //`✅️ ${html}`;
 		} else {
-			if (norm === norm0) throw new Error('not normalized');
+			// norm0 isn't the input:
+			// if we agree, we are "not normalized" in ensip-1
+			if (norm0 === norm) throw new Error('not normalized');
+			// we disagree, there's another possibility
 			add_row_tag(row, create_resolve_btn(norm0, `❌️ ${html}`));
 			return;
 		}
@@ -2996,9 +3010,9 @@ function create_namehash_button(name) {
 	make_click_copy(btn, node);
 	let lines = [`Namehash: ${node}`];
 	try {
-		let rle = ethers.hexlify(rle_name_from(name));
+		let rle = ethers.hexlify(dns_name_from(name));
 		btn.dataset.alt = rle;
-		lines.push(`[ALT] Run-length encoded: ${rle}`);
+		lines.push(`[ALT] DNS-encoded: ${rle}`);
 	} catch (err) {
 	}
 	lines.push('(Click to Copy)');
@@ -3015,9 +3029,9 @@ function create_namehash_breakdown(name) {
 }
 function create_rle_breakdown(name) {
 	let div = create('div', {className: 'hash'});
-	div.append(create('b', {innerText: 'Run-length encoded:'}));
+	div.append(create('b', {innerText: 'DNS-encoded:'}));
 	try {
-		let rle = ethers.hexlify(rle_name_from(name));
+		let rle = ethers.hexlify(dns_name_from(name));
 		div.append(create_copy_btn(rle, {small: true, value: true}));
 	} catch (err) {
 		div.append(create('span', {innerText: '🚫️', title: err.message}));
@@ -3026,6 +3040,7 @@ function create_rle_breakdown(name) {
 }
 function create_breakdown_row(name, before) {
 	let outer = create('div', {className: 'breakdown'});
+	if (available) outer.classList.add('available');
 	make_detailed(outer);
 	outer.append(create_namehash_breakdown(name));
 	outer.append(create_rle_breakdown(name));
@@ -3081,21 +3096,23 @@ function create_breakdown_row(name, before) {
 		}
 		outer.append(row);
 
-		let hash = labelhash(info.label);
-		let hash_div = create('div', {className: ['hash', 'minor']});
-		hash_div.append(create_link(`../../keccak.js/test/demo.html#algo=keccak-256&s=${encode_uri_component_surrogate_escaped(info.label)}&escape=1`, {innerHTML: 'Labelhash:'}));
-		hash_div.append(create('code', {innerText: hash, className: 'long'}));
-		hash_div.append(create_copy_btn(hash, {small: true, value: true}));
-		outer.append(hash_div);
-		
-		let parent = split.slice(info.index + 1).map(x => x.label).join('.');
-		if (NFT_DOMAINS.has(parent)) {
-			let token = BigInt(hash).toString();
-			let token_div = create('div', {className: ['hash', 'minor']});
-			token_div.append(create('b', {innerText: 'Token:'}));
-			token_div.append(create('code', {innerText: token, className: 'long'}));
-			token_div.append(create_copy_btn(token, {small: true, value: true}));
-			outer.append(token_div);
+		if (info.label) {
+			let hash = labelhash(info.label);
+			let hash_div = create('div', {className: ['hash', 'minor', 'first']});
+			hash_div.append(create_link(`../../keccak.js/test/demo.html#algo=keccak-256&s=${encode_uri_component_surrogate_escaped(info.label)}&escape=1`, {innerHTML: 'Labelhash:'}));
+			hash_div.append(create('code', {innerText: hash, className: 'long'}));
+			hash_div.append(create_copy_btn(hash, {small: true, value: true}));
+			outer.append(hash_div);
+			
+			let parent = split.slice(info.index + 1).map(x => x.label).join('.');
+			if (NFT_DOMAINS.has(parent)) {
+				let token = BigInt(hash).toString();
+				let token_div = create('div', {className: ['hash', 'minor']});
+				token_div.append(create('b', {innerText: 'Token:'}));
+				token_div.append(create('code', {innerText: token, className: 'long'}));
+				token_div.append(create_copy_btn(token, {small: true, value: true}));
+				outer.append(token_div);
+			}
 		}
 	}
 	return outer;
@@ -3103,6 +3120,7 @@ function create_breakdown_row(name, before) {
 
 function create_row(label, waiting) {
 	let row = create('div', {className: 'row'});
+	if (available) row.classList.add('available');
 	if (label) {
 		let span = create('span', {className: 'row-label'});
 		if (typeof label === 'string') {
@@ -3169,6 +3187,7 @@ function resolve() {
 	ADDRESS_MAP.clear();
 	let input = input_field.value;
 	let skip = skip_norm_check.checked;
+	available = undefined;
 	// replace marketplace URL with token:XXX
 	if (input.includes('://')) {
 		try {	
@@ -3235,7 +3254,7 @@ function resolve() {
 				await ensure_wrapper();
 				let v = ethers.getBytes(await wrapper_contract.names(hash));
 				if (!v.length) throw new Error(`Unknown namehash preimage: ${hash}`);
-				input_field.value = labels_from_rle_name(v).join('.');
+				input_field.value = labels_from_dns_name(v).join('.');
 				resolve_btn.disabled = false;
 				setTimeout(resolve, 0);
 			} catch (err) {
@@ -3447,13 +3466,12 @@ async function resolve1(input, skip_norm) {
 					add_row_tag(row, create_resolve_btn(name_norm));
 					add_row_tag(row, create_ens_link(name_norm));
 					add_row_tag(row, create_namehash_button(name_norm));
-					add_old_tag(row, name_norm, true);
-					output_div.append(row);
-					output_div.append(create_breakdown_row(name_norm));
+					add_ensip1_tag(row, name_norm, true);
+					output_div.append(row, create_breakdown_row(name_norm));
 				}
 			}
 		}
-		add_old_tag(input_row, input);
+		add_ensip1_tag(input_row, input);
 	}
 
 	let sep_pos = name_norm.indexOf('.');
@@ -3480,12 +3498,11 @@ async function resolve1(input, skip_norm) {
 					let values = digits.map(x => x.i);
 					let name0 = digits[0].name;
 					if (digits.every(x => x.name === name0)) {
-						//if (digits[0].reversed) values.reverse(); // LTR
 						input_row.after(create_digits_row(name_norm, name0, values, negative, suffix));
 					} else {
 						let first = digits[0].mixed;
 						if (first && digits.every(x => x.mixed == first)) {
-							let row = create_digits_row(name_norm, 'Arabic', values, negative, suffix); //values.reverse()); // LTR
+							let row = create_digits_row(name_norm, 'Arabic', values, negative, suffix);
 							add_row_tag(row, create_tag('warn', 'Mixed Digits'));
 							input_row.after(row);
 						} else {
@@ -3506,16 +3523,14 @@ async function resolve1(input, skip_norm) {
 		row.append(create_main_span(pretty));
 		add_row_tag(row, create_copy_btn(pretty));
 		if (input === pretty) { 
-			add_row_tag(input_row, create_pretty_tag());
-			add_row_tag(row, create_tag('good', 'Same as Input'));
-		} else if (name_norm === pretty) {			
-			add_row_tag(normed_row, create_pretty_tag());
-			add_row_tag(row, create_tag('good', 'Same as Norm'));
+			add_row_tag(row, create_tag('good', SAME_AS_INPUT));
+		} else if (name_norm === pretty) {
+			add_row_tag(row, create_tag('good', SAME_AS_NORM));
 		} else {
 			add_row_tag(row, create_resolve_btn(pretty));
 		}
 		add_row_tag(row, create_pretty_tag());
-		add_old_tag(row, pretty);
+		add_ensip1_tag(row, pretty);
 		output_div.append(row);
 	}
 
@@ -3563,7 +3578,6 @@ async function resolve1(input, skip_norm) {
 	let nft_token;
 
 	let avail_row = create_row('Availability', true);
-	let available;	
 	if (parent_domain === 'eth') {
 		let label = name_norm.slice(0, sep_pos);
 		nft_token = labelhash(label);
@@ -3668,7 +3682,6 @@ async function resolve1(input, skip_norm) {
 			}
 		}
 	}
-	
 	// get the owner
 	let is_wrapped, owner, nft_owner;
 	if ((!resolver || resolver._basename === name_norm) && (!nft_backed || available !== undefined)) { 
@@ -3676,7 +3689,7 @@ async function resolve1(input, skip_norm) {
 		let wrapped_row = create_row('Wrapper', true);
 		let unwrappable;
 		try {
-			rle_name_from(name_norm);
+			dns_name_from(name_norm);
 		} catch (err) {
 			unwrappable = true;
 		}
@@ -3791,15 +3804,13 @@ async function resolve1(input, skip_norm) {
 				add_row_tag(owner_row, create_tag('warn', 'Not Set'));
 			}
 		} else {
-			owner_row.classList.add(available ? 'old' : 'owner');
 			owner_row.append(create_etherscan_address_link(owner));
 			add_row_tag(owner_row, create_copy_btn(owner, {value: true}));
-			//owner_row.classList.toggle('old', available);
 			// if the input was an address, we can validate
 			if (input_is_address) {
 				add_row_tag(reverse_row, create_tag(owner === input ? 'good' : 'fail', 'Owned'));
 				if (owner === input) {
-					add_row_tag(owner_row, 'Same as Input');
+					add_row_tag(owner_row, SAME_AS_INPUT);
 				}
 			}
 			if (owner !== input) {
@@ -3846,7 +3857,6 @@ async function resolve1(input, skip_norm) {
 					add_owner_links(nft_row, nft_owner);
 					add_row_tag(nft_row, create_elapsed());
 					remove_temporary(nft_row);
-					nft_row.classList.toggle('old', !!available);
 				} else {
 					nft_row.remove();
 				}
@@ -3917,7 +3927,7 @@ async function resolve1(input, skip_norm) {
 	if (resolver) {
 		let address_err;
 		let address_row = create_row(`ETH Address`, true);
-		address_row.classList.add(available ? 'old' : 'addr');
+		address_row.classList.add('addr');
 		output_div.append(address_row);	
 		try {
 			address = await fetch_addr60(resolver);
@@ -3939,7 +3949,7 @@ async function resolve1(input, skip_norm) {
 			if (input_is_address) {
 				if (address === input) {
 					add_row_tag(input_row, create_tag('fire', 'Primary'));
-					add_row_tag(address_row, 'Same as Input');
+					add_row_tag(address_row, SAME_AS_INPUT);
 				} else if (address) {
 					add_row_tag(address_row, create_resolve_btn(address));
 					add_row_tag(address_row, create_tag('warn', 'Different from Owner'));	
@@ -3972,7 +3982,7 @@ async function resolve1(input, skip_norm) {
 		if (show_records_check.checked) {
 			let records_row = create_row(create_link('https://docs.ens.domains/contract-api-reference/publicresolver', {innerHTML: 'Records'}), true);
 			records_row.classList.add('records');
-			if (available) records_row.classList.add('old');
+			//make_available(records_row);
 			output_div.append(records_row);	
 			let old = records_row.childElementCount;
 			for (let {rec, data, error} of await fetch_records(resolver, RECORDS)) {
@@ -4172,20 +4182,25 @@ async function resolve1(input, skip_norm) {
 	// lookup primary from eth address 
 	let primary, primary_err;
 	let primary_row = create_row('Primary', true);	
+	let rev_resolver;
 	output_div.append(primary_row);
 	//primary_row.append(create_jazz_icon(address)); // only true in the forward direction
 	try {
-		primary = await active_provider.lookupAddress(address);
-		if (debug) primary = primary.toUpperCase();
+		rev_resolver = await get_resolver(reverse_name(address));
+		if (rev_resolver) {
+			if (should_stop_resolving()) return;
+			let [{data, error}] = await fetch_records(rev_resolver, [{type: 'name'}]);
+			if (error) throw error;
+			if (debug) data = data.toUpperCase();
+			primary = data;
+		}
 	} catch (err) {
 		primary_err = err;
 	}
 	if (should_stop_resolving()) return;
 	remove_temporary(primary_row);
 	add_row_tag(primary_row, create_elapsed());
-
-	primary_row.classList.toggle('old', !!available);
-	
+	//make_available(primary_row);
 	if (primary_err) {
 		primary_row.classList.add('error');
 		add_row_tag(primary_row, create_tag('warn', primary_err));
@@ -4195,75 +4210,64 @@ async function resolve1(input, skip_norm) {
 		add_row_tag(primary_row, create_tag('warn', 'Not Set'));
 		return;
 	}
+	make_exploded(primary_row, primary, false);	
 
-	// primary exists
-	make_exploded(primary_row, primary, false);
-
+	// 🤽🏽‍♀.eth
 	// lets check if it's normalized
 	let primary_norm;
 	try {
 		primary_norm = ens_normalize(primary);
-		if (primary === primary_norm) {
-			make_normalized(primary_row, primary_norm);
-		}
-		// note: dont add extra junk if its the same
-		if (primary === input) {
-			add_row_tag(primary_row, 'Same as Input');
-		} else if (primary === name_norm) {		
-			add_row_tag(primary_row, 'Same as Norm');
-		} else {
-			if (primary === ens_beautify(primary)) {
-				add_row_tag(primary_row, create_pretty_tag());
+		if (primary_norm === name_norm) {
+			if (owner === address) {
+				add_row_tag(normed_row, create_tag('fire', 'Primary Owner'));
+			} else {
+				add_row_tag(normed_row, create_tag('good', 'Primary'));
 			}
-			add_row_tag(primary_row, create_copy_btn(primary_norm));
-			add_row_tag(primary_row, create_resolve_btn(primary));
-			add_old_tag(primary_row, primary);
-			//add_row_tag(primary_row, create_ens_link(primary_norm));
-			let details_row = create_breakdown_row(primary, true);
-			details_row.classList.toggle('old', !!available);
-			output_div.append(details_row);
-		}
+		}	
 	} catch (err) {
 		primary_row.classList.add('error');
 		add_row_tag(primary_row, create_tag('norm', err));
-		add_old_tag(primary_row, primary);
 	}
-
-	// primary was valid but not normalized
-	if (primary_norm && primary !== primary_norm) {
-		add_row_tag(primary_row, create_tag('fail', 'Normalized'));
-		// create norm row
-		let row = create_row('Normalized Primary');
-		row.classList.toggle('old', !!available);
-		make_exploded(row, primary_norm, true);
-		make_normalized(row, primary_norm);
-		//add_row_tag(row, create_ens_link(primary_norm));
-		//add_nft_links(row, primary_norm);
-		if (primary_norm === input) {
-			add_row_tag(row, 'Same as Input');
-		} else {
-			if (name_norm !== primary_norm) {
-				add_row_tag(row, create_resolve_btn(primary_norm));
-			}
-			add_row_tag(row, create_copy_btn(primary_norm));
-			add_old_tag(row, primary_norm, true);
-			if (primary_norm === ens_beautify(primary_norm)) {
-				add_row_tag(row, create_pretty_tag());
-			}
-		}
-		output_div.append(row);
-		let details_row = create_breakdown_row(primary_norm);
-		details_row.classList.toggle('old', !!available);
-		output_div.append(details_row);
+	
+	if (primary === input) {
+		add_row_tag(primary_row, SAME_AS_INPUT);
+	} else if (primary === name_norm) {
+		add_row_tag(primary_row, SAME_AS_NORM);
+	} else {
+		add_row_tag(primary_row, create_copy_btn(primary));
+		add_row_tag(primary_row, create_resolve_btn(primary));
+		add_ensip1_tag(primary_row, primary);
+	}
+	if (primary === name_norm) {
+		primary_row.classList.add('normalized');
+		return;
 	}	
-
-	if (primary_norm && name_norm === primary_norm) {
-		if (owner === address) {
-			add_row_tag(normed_row, create_tag('fire', 'Primary Owner'));
-		} else {
-			add_row_tag(normed_row, create_tag('good', 'Primary'));
-		}
+	output_div.append(create_breakdown_row(primary, true));
+	if (primary === primary_norm) {
+		make_normalized(primary_row, primary_norm);
+		return;
 	}
+	if (!primary_norm) return;
+	add_row_tag(primary_row, create_tag('fail', 'Normalized'));
+	
+	let primary_norm_row = create_row('Normalized Primary');
+	make_exploded(primary_norm_row, primary_norm, true);
+	output_div.append(primary_norm_row);
+	if (primary_norm === input) {
+		add_row_tag(primary_norm_row, SAME_AS_INPUT);
+		primary_norm_row.classList.add('normalized'); 
+		return;
+	} 
+	if (name_norm === primary_norm) {
+		add_row_tag(primary_norm_row, SAME_AS_NORM);
+		primary_norm_row.classList.add('normalized'); 
+	} else {
+		add_row_tag(primary_norm_row, create_copy_btn(primary_norm));
+		add_ensip1_tag(primary_norm_row, primary_norm, true);
+		add_row_tag(primary_norm_row, create_resolve_btn(primary_norm));
+		make_normalized(primary_norm_row, primary_norm);
+	}
+	output_div.append(create_breakdown_row(primary_norm));
 }
 
 function add_owner_links(row, owner) {	
@@ -4280,7 +4284,7 @@ async function fetch_addr60(resolver) {
 	if (!is_null_hex(address)) return ethers.getAddress(address);
 }
 async function fetch_records(resolver, records) {
-	if (resolver._wildcard && !resolver._rle_name) return []; // unreachable
+	if (resolver._wildcard && !resolver._dns_name) return []; // unreachable
 	const options = {enableCcipRead: true};
 	let contract = contract_for_resolver(resolver);
 	if (records.length > 1) {
@@ -4297,7 +4301,7 @@ async function fetch_records(resolver, records) {
 			let res;
 			if (resolver._wildcard) { // optimistic CCIP-multicall
 				let frag = contract.interface.getFunction('multicall');
-				res = await contract.resolve(resolver._rle_name, contract.interface.encodeFunctionData(frag, [encoded]), options);
+				res = await contract.resolve(resolver._dns_name, contract.interface.encodeFunctionData(frag, [encoded]), options);
 				[res] = contract.interface.decodeFunctionResult(frag, res);
 			} else if (await can_multicall()) {
 				res = await multicall_contract.tryAggregate(false, encoded.map(data => ({target: resolver.address, data})));
@@ -4334,7 +4338,7 @@ async function fetch_records(resolver, records) {
 				let data;
 				if (resolver._wildcard) {
 					let frag = contract.interface.getFunction(method);
-					data = await contract.resolve(resolver._rle_name, contract.interface.encodeFunctionData(frag, params), options);
+					data = await contract.resolve(resolver._dns_name, contract.interface.encodeFunctionData(frag, params), options);
 					[data] = contract.interface.decodeFunctionResult(frag, data);
 					if (data.length !== 42) throw new Error('expected address');
 				} else {
@@ -4352,7 +4356,7 @@ async function fetch_records(resolver, records) {
 			let data;
 			if (resolver._wildcard) {
 				let frag = contract.interface.getFunction(rec.type);
-				data = await contract.resolve(resolver._rle_name, contract.interface.encodeFunctionData(frag, params), options);
+				data = await contract.resolve(resolver._dns_name, contract.interface.encodeFunctionData(frag, params), options);
 				data = contract.interface.decodeFunctionResult(frag, data);
 				if (frag.outputs.length === 1) data = data[0];
 			} else {
@@ -4471,7 +4475,7 @@ async function can_multicall() {
 	}
 	return multicall_contract;
 }
-function labels_from_rle_name(v) {
+function labels_from_dns_name(v) {
 	let labels = [];
 	let pos = 0;
 	while (true) {
@@ -4483,9 +4487,9 @@ function labels_from_rle_name(v) {
 		if (v.length < pos+n) break; // overflow
 		labels.push(utf8_from_bytes(v.subarray(pos, pos += n)));
 	}
-	throw new Error('invalid run-length encoded name');
+	throw new Error('invalid DNS-encoded name');
 }
-function rle_name_from(labels) {
+function dns_name_from(labels) {
 	if (typeof labels === 'string') {
 		labels = labels ? labels.split('.') : [];
 	}
@@ -4506,7 +4510,7 @@ async function get_resolver(name) {
 	for (let i = 0; i < v.length; i++) {
 		let basename = v.slice(i).join('.');
 		let address = await registry_contract.resolver(namehash(basename));
-		if (should_stop_resolving()) throw new Error('aborted');
+		if (should_stop_resolving()) return;
 		if (!is_null_hex(address)) {
 			let resolver = new ethers.EnsResolver(active_provider, address, name);
 			resolver._basename = basename; // remember
@@ -4515,7 +4519,7 @@ async function get_resolver(name) {
 			if (wild) {
 				resolver._wildcard = true;
 				try {
-					resolver._rle_name = rle_name_from(v);
+					resolver._dns_name = dns_name_from(v);
 				} catch (err) {
 				}
 			}
@@ -4530,16 +4534,19 @@ async function get_safe_primary(owner, alt_owner) {
 	if (!rev_resolver) {
 		throw new Error('Primary not set');
 	}
-	let contract = contract_for_resolver(rev_resolver);
-	let [{data: primary}] = await fetch_records(rev_resolver, [{type: 'name'}]);
+	if (should_stop_resolving()) return;
+	let [{data: primary, error}] = await fetch_records(rev_resolver, [{type: 'name'}]);
+	if (error) throw error;
 	if (!primary) {
 		throw new Error('Primary is Null');
 	}
 	let name = ens_normalize(primary);
+	if (should_stop_resolving()) return;
 	let resolver = await get_resolver(name);
 	if (!resolver) {
 		throw new Error('Resolver not set');
 	}
+	if (should_stop_resolving()) return;
 	let address = await fetch_addr60(resolver);
 	if (!address) {
 		throw new Error('Address not set');
@@ -4635,7 +4642,7 @@ function create(el, args, ...a) {
 function add_dot_eth(name, append) {
 	const suffix = '.eth';
 	if (name.endsWith('.')) name = name.slice(0, -1);
-	if (!name.includes('.') || (append && !name.endsWith(suffix))) name += suffix;
+	if (name && (!name.includes('.') || (append && !name.endsWith(suffix)))) name += suffix;
 	return name;
 }
 function is_address(s) {
@@ -4653,10 +4660,10 @@ function is_null_hex(s) {
 function labelhash(s) {
 	// TODO: consider [hash] form
 	//if (/^\[[0-9a-f]{64}\]$/i.test(s)) {
-	return s ? ethers.keccak256(bytes_from_utf8(s)) : ethers.ZeroHash;
+	return ethers.keccak256(bytes_from_utf8(s));
 }
 function namehash(s) {
-	let hash = labelhash();
+	let hash = ethers.ZeroHash;
 	if (s) hash = s.split('.').reduceRight((h, x) => ethers.keccak256(h + labelhash(x).slice(2)), hash);
 	return hash;
 }
