@@ -1295,6 +1295,7 @@ const STORAGE_HIDE_EXAMPLES = 'hide_examples';
 const INPUT_NAME = 'Input';
 const OPENSEA_NAME = 'OpenSea';
 const VISION_NAME = 'Vision';
+const VISION_HOST = 'vision.io';
 const PRETTY_NAME = '💖️';
 const MANAGER_NAME = 'Manager';
 const NFT_OWNER_NAME = 'NFT Owner';
@@ -2801,7 +2802,7 @@ function add_nft_links(row, name, contract, token) {
 	try {
 		let encoded = encodeURIComponent(name);
 		if (encoded.endsWith('.eth')) {
-			add_row_tag(row, create_link(`https://www.ens.vision/name/${encoded.slice(0, -4)}`, {innerHTML: VISION_NAME, className: 'external'}));
+			add_row_tag(row, create_link(`https://${VISION_HOST}/name/${encoded.slice(0, -4)}`, {innerHTML: VISION_NAME, className: 'external'}));
 		}
 		add_row_tag(row, create_link(`http://predomain.eth.limo/#/domain/${encoded}`, {innerHTML: 'Predomain', className: 'external'}));
 	} catch (err) {
@@ -3192,8 +3193,8 @@ function resolve() {
 	if (input.includes('://')) {
 		try {	
 			let url = new URL(input);
-			if (url.host === 'ens.vision' || url.host === 'www.ens.vision') {
-				// https://ens.vision/name/%F0%9F%91%A9%F0%9F%8F%BC%E2%80%8D%F0%9F%A6%BC%E2%80%8D%E2%AC%85
+			if ([VISION_HOST, 'ens.vision', 'www.ens.vision'].some(x => x === url.host)) {
+				// /name/%F0%9F%91%A9%F0%9F%8F%BC%E2%80%8D%F0%9F%A6%BC%E2%80%8D%E2%AC%85
 				let v = url.pathname.toLowerCase().split('/').filter(x => x);
 				if (v.length >= 2 && v[0] === 'name') {
 					input_field.value = input = add_dot_eth(decodeURIComponent(v[1]));
@@ -4273,7 +4274,7 @@ async function resolve1(input, skip_norm) {
 function add_owner_links(row, owner) {	
 	add_row_tag(row, create_link(`${active_chain.is_mainnet ? 'https://opensea.io/' : 'https://testnets.opensea.io/'}${owner}?tab=collected`, {innerHTML: OPENSEA_NAME, className: 'external'}));
 	if (active_chain.is_mainnet) {
-		add_row_tag(row, create_link(`https://ens.vision/0x/${owner}`, {innerHTML: VISION_NAME, className: 'external'}));	
+		add_row_tag(row, create_link(`https://${VISION_HOST}/0x/${owner}`, {innerHTML: VISION_NAME, className: 'external'}));	
 	}	
 	add_row_tag(row, create_link(`https://rainbow.me/${owner}`, {innerHTML: 'Rainbow', className: 'external'}));
 	add_row_tag(row, create_link(`https://debank.com/profile/${owner}`, {innerHTML: 'Debank', className: 'external'}));

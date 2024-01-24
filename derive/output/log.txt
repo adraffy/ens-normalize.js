@@ -1,6 +1,6 @@
-Build Date: 2023-09-25T01:01:50.733Z
+Build Date: 2024-01-24T01:26:48.153Z
 Unicode Version: 15.1.0 (2023-09-06T02:58:19.261Z)
-CLDR Version: 43.1 (2023-09-03T21:58:22.687Z)
+CLDR Version: 44 (2023-10-31T21:30:02.123Z)
 ==== RGI Emoji ZWJ Sequences ====
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -14872,9 +14872,9 @@ Optimized: 2110 => 541
 CM(2450) => NSM(1998) => 1050
 Per Group Max: 61
 ==== Write Output ====
-Unchanged: spec.json
+Wrote: spec.json [3137694]
 Unchanged: nf.json
 Unchanged: nf-tests.json
-Unchanged: emoji-info.json
+Wrote: emoji-info.json [730511]
 Unchanged: names.json
 Unchanged: confused.json

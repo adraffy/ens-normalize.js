@@ -1,6 +1,6 @@
 import {mkdirSync, writeFileSync, createWriteStream, readFileSync} from 'node:fs';
 import {deepStrictEqual} from 'node:assert';
-import {compare_arrays, explode_cp, parse_cp_sequence, print_section, print_checked, print_table} from './utils.js';
+import {compare_arrays, explode_cp, parse_cp_sequence, print_section, print_checked, print_table, group_by} from './utils.js';
 import {UNICODE, NF, IDNA, PRINTER} from './unicode-version.js';
 import CHARS_VALID from './rules/chars-valid.js';
 import CHARS_DISALLOWED from './rules/chars-disallow.js';
@@ -183,14 +183,25 @@ for (let def of EMOJI_SEQ_BLACKLIST) {
 }
 
 // 20230903: added, is there a better official source for this stuff?
+// 20240123: fixed to deal with FE0F and multiple types per match
 // TODO: check CLDR
 print_section('Assign Emoji Groups');
-for (let {cps, group, subgroup} of UNICODE.read_emoji_test()) {
-	let key = String.fromCodePoint(...cps);
-	let info = valid_emoji.get(key) || disabled_emoji.get(key);
-	if (!info) continue;
-	if (group) info.group = group;
-	if (subgroup) info.subgroup = subgroup; //capitalize(subgroup);
+{
+	let map = new Map();
+	function strip_fe0f(s) {
+		return s.replaceAll('\uFE0F', '');
+	}
+	for (let [k, v] of valid_emoji)    map.set(strip_fe0f(k), v);
+	for (let [k, v] of disabled_emoji) map.set(strip_fe0f(k), v);
+	for (let [key, tests] of group_by(UNICODE.read_emoji_test(), x => strip_fe0f(String.fromCodePoint(...x.cps)))) {
+		let info = map.get(key);
+		if (!info) continue;
+		let test = tests.find(x => x.type === 'fully-qualified' || x.type === 'component'); // exclusive
+		if (!test) throw new Error(`Expected emoji group: ${PRINTER.desc_for_emoji(info)}`);
+		info.group = test.group;
+		info.subgroup = test.subgroup;
+		if (test.type === 'component') info.component = true;
+	}
 }
 
 print_section('Add Mapped Characters');
@@ -909,9 +920,9 @@ print_section('Write Output');
 
 const created = new Date().toJSON();
 mkdirSync(out_dir, {recursive: true});	
-function write_json(name, json) {
+function write_json(name, json, indent) {
 	let file = new URL(name, out_dir);
-	let str = JSON.stringify(json);
+	let str = JSON.stringify(json, null, indent ? '\t' : null); // 20240123: added optional indent for better diffs
 	try {
 		// 20230220: dont bump the file if nothing has changed
 		deepStrictEqual(...[readFileSync(file), str].map(x => {
@@ -961,9 +972,9 @@ write_json('nf-tests.json', UNICODE.read_nf_tests());
 
 // for emoji.html
 write_json('emoji-info.json', [...valid_emoji.values(), ...disabled_emoji.values()].map(info => {
-	let {cp, same, cps, ...rest} = info;
+	let {cp, same, cps, used, ...rest} = info;
 	return {form: String.fromCodePoint(...cps), ...rest};
-}));
+}), true);
 
 // for chars.html
 write_json('names.json', {

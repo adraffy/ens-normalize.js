@@ -617,7 +617,8 @@ top_btn.addEventListener('click', () => window.scrollTo(0, 0));
 	const store_key = 'emoji-info';
 	try {
 		let data;
-		let {built} = versions;
+		//let {built} = versions;
+		let built = '2024-01-24T01:27:34.595Z';
 		try {
 			let cache = JSON.parse(localStorage[store_key]);
 			if (cache.built === built) {
@@ -1338,7 +1339,7 @@ function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_n
 
 	let info_div = document.createElement('div');
 	if (info) {
-		let {name, name0, version, short_type, group, subgroup} = info;
+		let {name, name0, version, short_type, group, subgroup, component} = info;
 		let a_name = document.createElement('a');
 		a_name.innerText = name;
 		// 20230926: emojipedia doesn't like trailing fe0f
@@ -1379,6 +1380,11 @@ function create_tr({cps, form, norm, info, tokens, norm_length, min_repeat, is_n
 			a.innerText = subgroup;
 			a.href = hash_for_query(subgroup);
 			info_div.append(a);
+		}
+		if (component) {
+			let span = document.createElement('span');
+			span.classList.add('prop', 'component');
+			info_div.append(span);
 		}
 		if (version) {
 			let a = document.createElement('a');
