@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" sizes="32x32" href="https://app.ens.domains/favicon-32x32.png">
 <title>ENS Resolver</title>
 <style>
 :root {
@@ -1237,11 +1238,6 @@ Hebrew:
 	<span id="version"></span>
 </footer>
 <script type="module">
-// to prepare this file for self-hosted deployment:
-// * replace infura_provider with a public provider, eg. new ethers.CloudflareProvider();
-// * replace "../../punycode.js" with https://cdn.jsdelivr.net/npm/@adraffy/punycode@latest/dist/index.min.js
-// * replace "../../cid.js" with https://cdn.jsdelivr.net/npm/@adraffy/cid@latest/dist/index.min.js
-// * replace "../../" with https://adraffy.github.io/
 import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.10.0/ethers.min.js';
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
@@ -1417,7 +1413,7 @@ const RECORDS = [
 	{
 		type: TYPE_TEXT, 
 		key: 'lens', 
-		url(x) { return `https://hey.xyz/u/${x}`; }
+		url(x) { return `https://hey.xyz/u/${x}`; },
 	},
 	{
 		type: TYPE_TEXT,
@@ -1434,19 +1430,21 @@ const RECORDS = [
 		type: TYPE_TEXT, 
 		key: 'com.reddit', 
 		icon: '<img src="https://www.redditstatic.com/desktop2x/img/favicon/apple-icon-60x60.png">',
-		url(x) { return `https://reddit.com/u/${x}`; }
+		url(x) { return `https://reddit.com/u/${x}`; },
 	},
 	{
 		type: TYPE_TEXT,
 		key: 'io.keybase',
 		icon: '<img src="https://keybase.io/images/icons/icon-keybase-logo-48.png">',
-		url(x) { return `https://keybase.io/${x}`; }
+		url(x) { return `https://keybase.io/${x}`; },
+		fix: repair_social
 	},
 	{
 		type: TYPE_TEXT,
 		key: 'org.telegram',
 		icon: '<img src="https://telegram.org/img/favicon-32x32.png">',
-		url(x) { return `https://t.me/${x}`; }
+		url(x) { return `https://t.me/${x}`; },
+		fix: repair_social
 	},
 	{
 		type: TYPE_TEXT,
@@ -1663,12 +1661,12 @@ for (let rec of RECORDS) {
 }
 
 const location0 = new URL(window.location.href);
-const entity_span = create('span');
+const entity_span = document.createElement('span');
 
-input_field.value = decodeURIComponent(location0.hash.slice(1));
-force_mainnet_check.checked = location0.searchParams.has('1');
-skip_norm_check.checked = location0.searchParams.has('skip');
 const debug = location0.searchParams.has('debug');
+skip_norm_check.checked = location0.searchParams.has('skip');
+force_mainnet_check.checked = location0.searchParams.has('1');
+input_field.value = decodeURIComponent(location0.hash.slice(1));
 
 let infura_provider = new ethers.InfuraProvider(CHAIN_ID_MAINNET, 'f36f6a8638134ac09f9400d3a7008dfe');
 let window_provider;
@@ -1975,13 +1973,13 @@ window.addEventListener('hashchange', () => {
 	input_field.value = decodeURIComponent(window.location.hash.slice(1));
 	resolve();
 });
-function format_chain(id) {
-	return `Chain: ${id} / 0x${id.toString(16)}`;
+function format_dec_hex(id) {
+	return id < 10 ? id : `${id} (0x${id.toString(16)})`;
 }
 function make_network_switcher(btn, id) {
 	btn.classList.add('chain');
 	btn.dataset.chain = id;
-	btn.title = format_chain(id);
+	btn.title = `Network: ${format_dec_hex(id)}`;
 	btn.addEventListener('click', () => switch_to_network(id));
 	return btn;
 }
@@ -2029,7 +2027,7 @@ function update_network(network) {
 	if (window_online && !using_window && network && Number(network.chainId) !== CHAIN_ID_MAINNET && !force_mainnet_check.checked) {
 		provider_div.innerHTML = `<div class="error">Unsupported Network (${network.chainId})</div>`;
 	} else {
-		provider_div.innerHTML = '';	
+		provider_div.innerHTML = '';
 	}
 	provider_div.append(network_div);
 	for (let btn of document.querySelectorAll('.chain')) {
@@ -3185,10 +3183,10 @@ function resolve() {
 	}
 	clearTimeout(resolve_timer);
 	resolve_timer = RESOLVE_MODE_IDLE;
+	available = undefined;
 	ADDRESS_MAP.clear();
 	let input = input_field.value;
 	let skip = skip_norm_check.checked;
-	available = undefined;
 	// replace marketplace URL with token:XXX
 	if (input.includes('://')) {
 		try {	
@@ -3999,11 +3997,11 @@ async function resolve1(input, skip_norm) {
 						a.innerHTML = rec.icon || `<b>${rec.name}</b>`;
 						try {
 							let v = ethers.getBytes(data);
-							let lines = [`CoinType: ${rec.coin}`];
+							let lines = [`CoinType: ${format_dec_hex(rec.coin)}`];
 							let address;
 							if (rec.evm) {
 								address = ethers.getAddress(data);
-								lines.push(format_chain(rec.evm));
+								lines.push(`Network: ${format_dec_hex(rec.evm)}`);
 							} else if (rec.btc) {
 								address = format_btc_address(v, rec.btc);
 							} else if (rec.bech32) {
@@ -4031,15 +4029,22 @@ async function resolve1(input, skip_norm) {
 						data = data.trim();
 						if (!data) continue;
 						a.innerHTML = rec.icon || `<b>${rec.key}</b>`;
-						if (rec.fix) {
-							let fixed = rec.fix(data);
-							if (fixed !== data) {
-								a.append(create('span', {
-									className: ['tags', 'changed'],
-									innerHTML: '⚠️ Changed', 
-									title: `Original: ${data}\nChange: ${fixed}`}));
-								data = fixed;
+						let fixed = data;
+						if (rec.url) {
+							let prefix = rec.url('');
+							if (data.startsWith(prefix)) {
+								fixed = fixed.slice(prefix.length);
 							}
+						}
+						if (rec.fix) {
+							fixed = rec.fix(fixed);
+						}
+						if (fixed !== data) {
+							a.append(create('span', {
+								className: ['tags', 'changed'],
+								innerHTML: '⚠️ Changed', 
+								title: `Original: ${data}\nChange: ${fixed}`}));
+							data = fixed;
 						}
 						let text = rec.format ? rec.format(data) : data;
 						if (text) {
@@ -4144,10 +4149,10 @@ async function resolve1(input, skip_norm) {
 								default: throw new Error(`unknown protocol: ${proto}`);
 							}
 							make_click_copy(a, url);
-							let lines = [data, `Protocol: ${proto}`, url];
+							let lines = [data, `Protocol: ${format_dec_hex(proto)}`, url];
 							if (cid) {
-								lines.push(`CID: Version: ${cid.version} / Codec: ${cid.codec} / Bytes: ${buf.length}`);
-								lines.push(`Hash: Codec: ${cid.hash.codec} / Bytes: ${cid.hash.data.length}`);
+								lines.push(`CID: Version: ${format_dec_hex(cid.version)} / Codec: ${format_dec_hex(cid.codec)} / Bytes: ${buf.length}`);
+								lines.push(`Hash: Codec: ${format_dec_hex(cid.hash.codec)} / Bytes: ${cid.hash.data.length}`);
 								a.append(create_link(`https://cid.ipfs.tech/#${cid}`, {button: '✅️ Check'}));
 							}
 							a.title = lines.join('\n');
@@ -4571,13 +4576,14 @@ async function is_contract(address) {
 	} catch (err) {
 	}	
 }
-function first_path_component(url) {
-	return url.pathname.split('/')[1];
-}
-function repair_social(value, {prefix = '@', url = first_path_component} = {}) {
+function repair_social(value, {prefix = '@', url = 1} = {}) {
 	if (prefix && value.startsWith(prefix)) return value.slice(prefix.length);
 	if (url) {
 		try {
+			if (Number.isInteger(url)) {
+				const i = url;
+				url = u => u.pathname.split('/')[i];
+			}
 			let fix = url(new URL(value));
 			if (fix) return fix;
 		} catch (err) {
@@ -4672,12 +4678,9 @@ function bytes32_from(x) {
 	return '0x' + BigInt(x).toString(16).padStart(64, '0').slice(-64);
 }
 function read_local_storage(key, fn, def) {
-	let value = localStorage[key];
-	if (typeof value === 'string') {
-		try {
-			return fn(JSON.parse(value));
-		} catch (err) {
-		}
+	try {
+		return fn(JSON.parse(localStorage[key]));
+	} catch (err) {
 	}
 	if (def !== undefined) {
 		fn(def);
