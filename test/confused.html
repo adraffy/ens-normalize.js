@@ -130,7 +130,7 @@ tr.free {
 .replace {
 	border-right: 2px solid #888;	
 }
-td.replace:hover {
+td.replace:not(:empty):hover {
 	cursor: pointer;
 	background-color: #aaf;
 }
@@ -306,7 +306,7 @@ footer {
 <script type="module">
 import {
 	ens_split, ens_tokenize,
-	hex_cp, safe_str_from_cps, compare_arrays, explode_cp,
+	hex_cp, safe_str_from_cps, compare_arrays,
 	dom_from_tokens, use_default_style
 } from '../dist/all.min.js';
 use_default_style();
@@ -584,13 +584,15 @@ function create_grid(input) {
 	}
 	maker = new Set(maker.filter(g => shared.every(cp => g.valid_set.has(cp))));
 
+	input = String.fromCodePoint(...cps);
+
 	let table = create('table');	
 	let added = Infinity;
 	for (let w of order) {
 		if (Number.isInteger(w)) {
 			let first = !add_rows(1);
 			let tr = create('tr', {className: ['free', first ? 'first' : null]});
-			add_td_for_cp(tr, w);
+			add_td_for_cp(tr, w, true);
 			for (let g of group_universe) {
 				let td = create('td');
 				if (g.valid_set.has(w)) {
@@ -609,12 +611,13 @@ function create_grid(input) {
 					tr.classList.add('first');
 					first = false;
 				}
-				if (cps.includes(def.cp)) {
+				let active = cps.includes(def.cp);
+				if (active) {
 					tr.classList.add('active');
 				} else if (active_valid_set.has(def.cp)) {
 					tr.classList.add('alternative');
 				}
-				add_td_for_cp(tr, def.cp, w, input);
+				add_td_for_cp(tr, def.cp, active, w, cps);
 				for (let g of group_universe) {
 					let td = create('td', {className: 'cell'});
 					if (def.groups.includes(g)) {
@@ -685,7 +688,7 @@ function make_tag(i) {
 	}
 }
 
-function add_td_for_cp(tr, cp, whole, input) {
+function add_td_for_cp(tr, cp, active, whole, cps) {
 	let char = char_map.get(cp);
 	tr.append(create('td', {className: 'hex', innerText: hex_cp(cp)}));
 	let td_form = create('td', {className: 'form', innerText: safe_str_from_cps([cp])});
@@ -696,10 +699,10 @@ function add_td_for_cp(tr, cp, whole, input) {
 	tr.append(create('td', {className: 'name', innerText: char.name}));
 	tr.append(create('td', {className: 'script', innerHTML: `<a href="#script:${char.script.abbr}">${char.script.name}</a>`}));
 	let td_replace = create('td', {className: 'replace'});
-	if (whole) {
-		td_replace.innerText = '↔️';
+	if (whole && !active) {
+		td_replace.innerText = '🔀️';
 		td_replace.addEventListener('click', () => {
-			let replaced = String.fromCodePoint(...explode_cp(input).map(x => {
+			let replaced = String.fromCodePoint(...cps.map(x => {
 				return whole.valid.includes(x) || whole.confused.includes(x) ? cp : x;
 			}));
 			input_field.value = replaced;
