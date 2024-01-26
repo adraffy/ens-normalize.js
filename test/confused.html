@@ -56,7 +56,7 @@ h1 {
 }
 #examples button {
 	font-size: 80%;
-	padding: 2px 4px;
+	padding: 4px 8px;
 }
 #scrolled {
 	margin-top: 16px;
@@ -103,10 +103,13 @@ tr.valid {
 	background: #eef;
 }
 tr.active {
-	background: #ffc;
+	background-color: #7fd;
 }
-tr.first {
-	border-top: 2px solid #888;
+tr.alternative {
+	background-color: #ffa;
+}
+tr.header:nth-child(n+2), tr.first {
+	border-top: 3px solid #000;
 }
 tr.free {
 	background: #dff;
@@ -124,8 +127,12 @@ tr.free {
 .name {
 	text-align: left;
 }
-.script {
-	border-right: 2px solid #888;
+.replace {
+	border-right: 2px solid #888;	
+}
+td.replace:hover {
+	cursor: pointer;
+	background-color: #aaf;
 }
 td.name, td.script {
 	font-size: 12px;
@@ -141,9 +148,6 @@ td.name, td.script {
 }	
 .unknown {
 	background: #fc0;
-}
-.active {
-	background: #0fa;
 }
 .invalid {
 	background: #fcc;
@@ -241,6 +245,12 @@ footer {
 	body {
 		margin: 1rem;
 	}
+	table {
+		width: 100%;
+	}
+	.name, .script {
+		display: none;
+	}
 }
 </style>
 </head>
@@ -288,7 +298,7 @@ footer {
 	<li>Only includes confusables for valid <a href="../derive/data/15.1.0/IdnaMappingTable.txt">IDNA 2003</a> characters.</li>
 	<li>Disallowed confusables are removed for increased compression <button>e℮</button></li>
 	<li>Upper/lower ASCII confusables are merged.</li>
-	<li><b>Emoji</b> are never confusable.</li>
+	<li><a href="./emoji.html">Emoji</a> are never confusable.</li>
 </ul>
 </div>	
 </main>
@@ -296,7 +306,7 @@ footer {
 <script type="module">
 import {
 	ens_split, ens_tokenize,
-	hex_cp, safe_str_from_cps, compare_arrays, 
+	hex_cp, safe_str_from_cps, compare_arrays, explode_cp,
 	dom_from_tokens, use_default_style
 } from '../dist/all.min.js';
 use_default_style();
@@ -322,7 +332,7 @@ let groups;
 let scripts;
 let char_map;
 let whole_map;
-let form_header, cp_header, ascii_header;
+let form_header, cp_header, replace_header, ascii_header;
 let init = (async () => {
 
 	let chars, ranges;
@@ -358,6 +368,7 @@ let init = (async () => {
 	let headerer = make_rotated_headerer(groups.map(g => g.name));
 	form_header = headerer('Form');
 	cp_header = headerer('Codepoint');
+	replace_header = headerer('Replace');
 	ascii_header = headerer('ASCII');
 	groups.forEach((g, i) => {
 		g.index = i;
@@ -382,7 +393,7 @@ let init = (async () => {
 			if (!def.type) {
 				def.type = decided ? 'invalid' : 'unknown';
 			}
-		}
+		}		
 
 		// union of groups in any def
 		w.groups = [...new Set(w.defs.flatMap(def => def.groups))].sort((a, b) => a.index - b.index);
@@ -444,19 +455,19 @@ for (let btn of document.querySelectorAll('#examples button, #readme button')) {
 	btn.addEventListener('click', e => {
 		e.preventDefault();
 		input_field.value = btn.dataset.name || btn.innerText;
-		return update();
+		update();
 	});
 }
 
 group_select.addEventListener('change', () => {
 	input_field.value = `group:${group_select.value}`;
 	group_select.selectedIndex = 0;
-	return update();
+	update();
 });
 script_select.addEventListener('change', () => {
 	input_field.value = `script:${script_select.value}`;
 	script_select.selectedIndex = 0;
-	return update();
+	update();
 });
 resolve_a.addEventListener('pointerdown', () => {
 	let url = './resolver.html';
@@ -476,18 +487,17 @@ async function check_hash(e) {
 
 async function update() {
 	output_div.classList.remove('error');
-	output_div.innerHTML = '';
 	exploded_div.innerHTML = '';
 	let input = replace_escapes(input_field.value);
 	window.history.replaceState(null, null, input ? `#${input}` : ' ');
 	input_field.focus();
 	try {
 		if (!input || init) {
-			output_div.append(...readme_dom);
+			output_div.replaceChildren(...readme_dom);
 			return;
 		}
 		await init;
-		await create_grid(input);
+		create_grid(input);
 	} catch (err) {
 		output_div.classList.add('error');
 		output_div.innerText = `❌ ${err.message}`;
@@ -495,7 +505,7 @@ async function update() {
 	}
 }
 
-async function create_grid(input) {
+function create_grid(input) {
 
 	let cps, match;
 	let matched_type;
@@ -576,14 +586,14 @@ async function create_grid(input) {
 
 	let table = create('table');	
 	let added = Infinity;
-	for (let ch of order) {
-		if (Number.isInteger(ch)) {
-			add_rows(1);
-			let tr = create('tr', {className: ['first', 'free']});
-			add_td_for_cp(tr, ch, active_valid_set.has(ch));
+	for (let w of order) {
+		if (Number.isInteger(w)) {
+			let first = !add_rows(1);
+			let tr = create('tr', {className: ['free', first ? 'first' : null]});
+			add_td_for_cp(tr, w);
 			for (let g of group_universe) {
 				let td = create('td');
-				if (g.valid_set.has(ch)) {
+				if (g.valid_set.has(w)) {
 					td.classList.add('cell', 'primary', 'norm-valid');
 					td.innerText = make_tag(0);
 				}
@@ -591,9 +601,8 @@ async function create_grid(input) {
 			}
 			table.append(tr);
 		} else {
-			let {defs, valid, confused} = ch;
-			add_rows(defs.length);
-			let first = true;
+			let {defs, valid, confused} = w;
+			let first = !add_rows(defs.length);
 			for (let def of defs) {
 				let tr = create('tr');
 				if (first) {
@@ -602,8 +611,10 @@ async function create_grid(input) {
 				}
 				if (cps.includes(def.cp)) {
 					tr.classList.add('active');
+				} else if (active_valid_set.has(def.cp)) {
+					tr.classList.add('alternative');
 				}
-				add_td_for_cp(tr, def.cp, active_valid_set.has(def.cp));
+				add_td_for_cp(tr, def.cp, w, input);
 				for (let g of group_universe) {
 					let td = create('td', {className: 'cell'});
 					if (def.groups.includes(g)) {
@@ -624,22 +635,25 @@ async function create_grid(input) {
 			}
 		}
 	}
-	output_div.append(create('div', {id: 'scrolled'}, table));
+	output_div.replaceChildren(create('div', {id: 'scrolled'}, table));
 
-	function add_rows(n) {		
-		added += n;
-		if (added > 20) {
+	function add_rows(n) {
+		if (added >= 20) {
 			added = n;
 			table.append(header());
+			return true;
+		} else {
+			added += n;
 		}
 	}
 
 	function header() {
-		return create('tr', {className: 'first'}, 
+		return create('tr', {className: 'header'}, 
 			create_th(cp_header),
 			create_th(form_header),
 			create_th('Character Name', false, 'name'),
 			create_th('Script', false, 'script'),
+			create_th(replace_header, false , 'replace'),
 			...group_universe.map(g => {
 				let {name, header} = g;
 				if (matched_type === 'ASCII' && name === 'Latin') { // hack
@@ -671,18 +685,28 @@ function make_tag(i) {
 	}
 }
 
-function add_td_for_cp(tr, cp, active_valid) {
+function add_td_for_cp(tr, cp, whole, input) {
 	let char = char_map.get(cp);
 	tr.append(create('td', {className: 'hex', innerText: hex_cp(cp)}));
 	let td_form = create('td', {className: 'form', innerText: safe_str_from_cps([cp])});
-	if (active_valid) {
-		td_form.classList.add('active');
-	} else if (!is_possibly_valid(cp)) { // could still be valid but not by itself
+	if (!is_possibly_valid(cp)) { // could still be valid but not by itself
 		td_form.classList.add('invalid');
 	}
 	tr.append(td_form);
 	tr.append(create('td', {className: 'name', innerText: char.name}));
 	tr.append(create('td', {className: 'script', innerHTML: `<a href="#script:${char.script.abbr}">${char.script.name}</a>`}));
+	let td_replace = create('td', {className: 'replace'});
+	if (whole) {
+		td_replace.innerText = '↔️';
+		td_replace.addEventListener('click', () => {
+			let replaced = String.fromCodePoint(...explode_cp(input).map(x => {
+				return whole.valid.includes(x) || whole.confused.includes(x) ? cp : x;
+			}));
+			input_field.value = replaced;
+			create_grid(replaced);
+		});
+	}
+	tr.append(td_replace);
 }
 
 async function fetch_json(url) {

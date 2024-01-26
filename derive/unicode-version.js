@@ -2,9 +2,10 @@ import {UnicodeSpec, UnicodePrinter} from './unicode-logic.js';
 import {ens_idna_rules} from './idna.js';
 import {create_nf} from './nf.js';
 
+// 20240125: update to CLDR-44+ for Unicode 16
 export const UNICODE = new UnicodeSpec(
 	new URL('./data/15.1.0/', import.meta.url), 
-	new URL('./data/CLDR-44/', import.meta.url)
+	new URL('./data/CLDR-43.1/', import.meta.url)
 );
 
 export const NF = create_nf(UNICODE);

@@ -2022,7 +2022,7 @@ function update_network(network) {
 	let provider_name = using_window ? 'window.ethereum' : 'Infura';
 	document.body.classList.toggle('testnet', !active_chain.is_mainnet);	
 	let network_div = create('div', {
-		innerHTML: `using <b>${provider_name}</b> on <a target="_blank" href="${active_chain.explorer}/address/${registry}" title="Registry Contract">${active_chain.name}</a>`
+		innerHTML: `using <b>${provider_name}</b> on <a target="_blank" href="${active_chain.explorer}/address/${registry}" title="Registry Contract\nNetwork: ${format_dec_hex(active_chain.id)}">${active_chain.name}</a>`
 	});
 	if (window_online && !using_window && network && Number(network.chainId) !== CHAIN_ID_MAINNET && !force_mainnet_check.checked) {
 		provider_div.innerHTML = `<div class="error">Unsupported Network (${network.chainId})</div>`;
