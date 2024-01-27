@@ -93,8 +93,8 @@ h1 {
 	font-size: 9pt;
 	padding: 2px 6px;
 }
-#provider .error {
-	background-color: #fcc;
+#provider .notice {
+	background-color: #fff;
 	color: #000;
 	padding: 1px 4px;
 	border-radius: 4px;
@@ -898,7 +898,7 @@ footer {
 <button data-name="firstwrappedname">Emanicpated 2LD</button>
 <button data-name="please.pumpdeezbags.eth">Emanicpated 3LD</button>
 <button data-name="dessert3.menu.bestsushi7.eth">Wrapped</button>
-<button data-name="millionaire">Locked</button>
+<button data-name="david">Locked</button>
 
 <b>Subdomain:</b>
 <button data-name="nowzad.loopring.eth">loopring</button>
@@ -2052,12 +2052,11 @@ function update_network() {
 	let changed;
 	let chain_id = parseInt(chain_select.value);
 	let chain = CHAINS.find(x => x.id === chain_id) || CHAINS[0];
-	let provider;
 	if (window_provider && window_provider.__chain === chain) {
 		active_provider = window_provider;
 	} else {
 		let old = active_provider;
-		if (active_chain !== chain) {
+		if (old === window_provider || active_chain !== chain) {
 			if (chain.rpc) {
 				active_provider = new ethers.JsonRpcProvider(chain.rpc, chain.id, {staticNetwork: true});
 			} else {
@@ -2111,7 +2110,11 @@ function update_network() {
 				}
 			}));
 		} else {
-			provider_div.innerHTML = `<div class="error">Browser Network: ${format_dec_hex(window_provider.__network.chainId)}</div>`;
+			let {name} = window_provider.__network;
+			if (name === 'unknown') {
+				name = format_dec_hex(window_provider.__network.chainId);
+			}
+			provider_div.innerHTML = `<div class="notice">🚫️ Browser: ${name}</div>`;
 		}
 	}
 	provider_div.append(network_div);
