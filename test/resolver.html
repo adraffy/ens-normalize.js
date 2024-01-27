@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" type="image/png" sizes="32x32" href="https://app.ens.domains/favicon-32x32.png">
+<link rel="icon" type="image/png" href="./favicon.png">
 <title>ENS Resolver</title>
 <style>
 :root {
@@ -12,7 +12,7 @@
 	--btn-border-color: #888;
 	--copied-color: #8f8;
 	--confusing-color: #d47;
-	--testnet-color: #fef;
+	--testnet-color: #fdf;
 }
 .hide {
 	display: none !important;
@@ -28,7 +28,7 @@
 	direction: ltr;
 	unicode-bidi: bidi-override;
 }
-a, button {
+a, button, select {
 	cursor: pointer;
 }
 a.button {
@@ -117,14 +117,6 @@ h1 {
 }
 body.testnet {
 	background: var(--testnet-color);
-}
-body.testnet #provider a {
-	background: #f3f;
-	color: #fff;
-	border-radius: 4px;
-	padding: 2px 4px;
-	margin: -2px 0;
-	text-decoration: none;
 }
 .spinner {
 	width: 32px;
@@ -275,10 +267,8 @@ body.testnet #provider a {
 	background-color: #555;
 	color: #fff;
 }
-#force_mainnet_check:checked + label {
-	border-color: #58f;
-	background-color: #58f;
-	color: #fff;
+#chain_select:empty {
+	display: none;
 }
 #resolve_btn {
 	font-weight: bold;
@@ -499,19 +489,19 @@ button.copy.copied {
 	font: 11pt monospace;
 }
 .tags.length {
-	background: #f8eedd;	
+	background: #f8eedd;
 }
 .tags.length:after {
 	content: 'ch';
-	padding-left: 1px;
+	padding-left: 2px;
 	font-size: 70%;
 }
 .tags.bytes {
-	background-color: #e8e8e8;
+	background-color: #eee;
 }
-.tags.bytes:after {
+.bytes:after {
 	content: 'bytes';
-	padding-left: 1px;
+	padding-left: 2px;
 	font-size: 70%;
 }
 .tags.iface {
@@ -790,7 +780,6 @@ button.glow {
 	margin: 0;
 	border: 1px solid var(--btn-border-color);
 	border-radius: 4px;
-	cursor: pointer;
 	font-size: 100%;
 	appearance: none;
 	background: no-repeat center url("data:image/svg+xml,%3Csvg height='21' width='20' version='1.1' viewBox='0 0 20 21' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10.5,0 C7,0 3.9,1.9 2.3,4.8 L0,2.5 L0,9 L6.5,9 L3.7,6.2 C5,3.7 7.5,2 10.5,2 C14.6,2 18,5.4 18,9.5 C18,13.6 14.6,17 10.5,17 C7.2,17 4.5,14.9 3.4,12 L1.3,12 C2.4,16 6.1,19 10.5,19 C15.8,19 20,14.7 20,9.5 C20,4.3 15.7,0 10.5,0 L10.5,0 Z M9,5 L9,10.1 L13.7,12.9 L14.5,11.6 L10.5,9.2 L10.5,5 L9,5 L9,5 Z'/%3E%3C/svg%3E"), no-repeat bottom 3px right 2px url("data:image/svg+xml,%3Csvg style='fill: currentColor' width='8' height='4' viewBox='0 0 8 4' version='1.1' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h8l-4 4Z' /%3E%3C/svg%3E") var(--btn-fill-color);
@@ -1156,10 +1145,10 @@ Hebrew:
 	<label for="show_records_check" title="Include common text and address records">Records</label>
 	<input type="checkbox" id="skip_norm_check">
 	<label for="skip_norm_check"  title="When active, normalization is not applied"><svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--geist-foreground);width:20px;height:20px"><circle cx="12" cy="12" r="10" fill="var(--geist-fill)"></circle><path d="M15 9L9 15" stroke="var(--geist-stroke)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M9 9L15 15" stroke="var(--geist-stroke)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>Norm</label>
-	<input type="checkbox" id="force_mainnet_check">
-	<label for="force_mainnet_check" title="Use mainnet regardless of selected browser provider network"><svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--geist-foreground);width:20px;height:20px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Mainnet</label>
 	<input type="checkbox" id="force_ltr_check">
 	<label for="force_ltr_check" title="Override Bidi Handling with Left-to-Right Direction&#10;(Applies only to Input)">LTR!</label>
+	<select id="chain_select"></select>
+	<button id="mainnet_btn" class="hide">↪ Mainnet</button>
 </div>
 <div id="input">
 	<input id="input_field" size="20" placeholder="Name or Address">
@@ -1199,7 +1188,6 @@ Hebrew:
 <li><button id="copy_example_btn">Copy Link</button></a> to get a URL that resolves on page-load.</li>
 <li>Many elements have tooltips with additional information.</li>
 <li>Follows <a class="internal" href="https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard">ENSIP-15</a> and <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
-<li class="req-window">Supports <button id="add_goerli_btn" class="chain">Goerli</button> and <button id="add_sepolia_btn" class="chain">Sepolia</button> testnets.</li>
 <li>Clear input to return to this page.</li>
 </ul>
 <ul class="row legend">
@@ -1249,44 +1237,41 @@ import {CID, uvarint, convert, Bech32, Base36, Base58BTC, Base64URL} from '../..
 import eth_ens_namehash from './eth-ens-namehash@2.0.15.min.js';
 use_default_style();
 
+const $ = x => document.querySelector(x);
 const EMOJI = ens_emoji();
 const emoji_url = './emoji.html#q=%s';
 
-const input_field = document.querySelector('#input_field');
-const resolve_btn = document.querySelector('#resolve_btn');
-const auto_resolve_check = document.querySelector('#auto_resolve_check');
-const show_components_check = document.querySelector('#show_components_check');
-const show_records_check = document.querySelector('#show_records_check');
-const skip_norm_check = document.querySelector('#skip_norm_check');
-const show_details_check = document.querySelector('#show_details_check');
-const force_ltr_check = document.querySelector('#force_ltr_check');
-const force_mainnet_check = document.querySelector('#force_mainnet_check');
-const recent_select = document.querySelector('#recent_select');
-const recent_optgroup = document.querySelector('#recent_select optgroup');
-const options_div = document.querySelector('#options');
-const actions_div = document.querySelector('#actions');
-const primary_loader = document.querySelector('#actions .spinner');
-const output_div = document.querySelector('#output');
+const input_field = $('#input_field');
+const resolve_btn = $('#resolve_btn');
+const auto_resolve_check = $('#auto_resolve_check');
+const show_components_check = $('#show_components_check');
+const show_records_check = $('#show_records_check');
+const skip_norm_check = $('#skip_norm_check');
+const show_details_check = $('#show_details_check');
+const force_ltr_check = $('#force_ltr_check');
+const chain_select = $('#chain_select');
+const mainnet_btn = $('#mainnet_btn');
+const recent_select = $('#recent_select');
+const recent_optgroup = $('#recent_select optgroup');
+const options_div = $('#options');
+const actions_div = $('#actions');
+const primary_loader = $('#actions .spinner');
+const output_div = $('#output');
+const examples_div = $('#examples');
+const examples_btn = $('#examples_btn');
+const provider_div = $('#provider');
+const nf_btn = $('#nf_btn');
+const escape_btn = $('#escape_btn');
+const parent_btn = $('#parent_btn');
+const version_span = $('#version');
+const clock_span = $('#clock');
 const readme_dom = [...output_div.childNodes]; // save initial ux
-const examples_div = document.querySelector('#examples');
-const examples_btn = document.querySelector('#examples_btn');
-const provider_div = document.querySelector('#provider');
-const nf_btn = document.querySelector('#nf_btn');
-const escape_btn = document.querySelector('#escape_btn');
-const parent_btn = document.querySelector('#parent_btn');
-const version_span = document.querySelector('#version');
-const clock_span = document.querySelector('#clock');
 
 const RESOLVE_MODE_IDLE = 'idle';
 const RESOLVE_MODE_EMPTY = 'empty';
 
-const STORAGE_RECENT = 'recent';
-const STORAGE_AUTO_RESOLVE = 'auto_resolve';
-const STORAGE_SHOW_DETAILS = 'show_details';
-const STORAGE_SHOW_RECORDS = 'show_records';
-const STORAGE_SHOW_COMPONENTS = 'show_components';
-const STORAGE_FORCE_LTR = 'force_ltr';
-const STORAGE_HIDE_EXAMPLES = 'hide_examples';
+const STORAGE_RECENT = 'ens-norm.recent';
+const STORAGE_SETTINGS = 'ens-norm.settings';
 
 const INPUT_NAME = 'Input';
 const OPENSEA_NAME = 'OpenSea';
@@ -1302,12 +1287,10 @@ const SAME_AS_NORM = 'Same as Norm';
 const CHAIN_ID_MAINNET = 1;
 const CHAIN_ID_GOERLI = 5;
 const CHAIN_ID_SEPOLIA = 11155111;
+const CHAIN_ID_HOLESKY = 17000;
 const CHAINS = [
-	// https://chainlist.wtf/
-	//case 3: return 'https://ropsten.etherscan.io';
-	//case 4: return 'https://rinkeby.etherscan.io';
-	//case 139: return 'https://polygonscan.io';	
 	{
+		// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-1.json
 		id: CHAIN_ID_MAINNET,
 		name: 'Mainnet',
 		explorer: 'https://etherscan.io',
@@ -1316,6 +1299,7 @@ const CHAINS = [
 		is_mainnet: true,
 	},
 	{
+		// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-5.json
 		id: CHAIN_ID_GOERLI,
 		name: 'Goerli',
 		explorer: 'https://goerli.etherscan.io',
@@ -1323,13 +1307,26 @@ const CHAINS = [
 		opensea: 'https://testnets.opensea.io/assets/goerli/'
 	},
 	{
+		// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-11155111.json
 		id: CHAIN_ID_SEPOLIA,
 		name: 'Sepolia',
 		explorer: 'https://sepolia.etherscan.io',
 		metadata: 'https://metadata.ens.domains/sepolia',
 		opensea: 'https://testnets.opensea.io/assets/sepolia/',
+	},
+	{
+		// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-17000.json
+		id: CHAIN_ID_HOLESKY,
+		name: 'Holesky',
+		explorer: 'https://holesky.etherscan.io',
+		metadata: 'https://metadata.ens.domains/holesky',
+		//opensea: 'https://testnets.opensea.io/assets/holesky/',
+		rpc: 'https://rpc.holesky.ethpandaops.io'
 	}
 ];
+CHAINS.forEach(chain => {
+	if (!chain.slug) chain.slug = chain.name.toLowerCase();
+});
 
 const MIN_ETH_LENGTH = 3;
 const NFT_DOMAINS = new Set(['eth', 'art']); //, 'box']);
@@ -1626,14 +1623,14 @@ const RECORDS = [
 		class: 'ava',
 		format() { return ''; },
 		then(a, resolver) {
-			let {_linkage, _avatar} = resolver;
-			if (_linkage && !_avatar) {
-				let avatar = _linkage.find(x => x.type === 'avatar');	
+			let {__linkage, __avatar} = resolver;
+			if (__linkage && !__avatar) {
+				let avatar = __linkage.find(x => x.type === 'avatar');	
 				if (avatar) {
 					a.append(create('span', {
 						className: ['tags', 'changed'], 
 						innerHTML: '❌️ Failed', 
-						title: _linkage.map((x, i) => `[${i+1}] ${x.type}: ${x.value}`).join('\n'),
+						title: __linkage.map((x, i) => `[${i+1}] ${x.type}: ${x.value}`).join('\n'),
 					}));
 					a.classList.add('rtrim');
 				}
@@ -1663,15 +1660,10 @@ for (let rec of RECORDS) {
 const location0 = new URL(window.location.href);
 const entity_span = document.createElement('span');
 
-const debug = location0.searchParams.has('debug');
-skip_norm_check.checked = location0.searchParams.has('skip');
-force_mainnet_check.checked = location0.searchParams.has('1');
-input_field.value = decodeURIComponent(location0.hash.slice(1));
-
-let infura_provider = new ethers.InfuraProvider(CHAIN_ID_MAINNET, 'f36f6a8638134ac09f9400d3a7008dfe');
+let debug_mode;
 let window_provider;
 let active_provider;
-let active_chain; // = CHAINS[0];
+let active_chain;
 let registry_contract;
 let eth_resolver_contract;
 let eth_nft_contract;
@@ -1711,15 +1703,6 @@ add_digits('Devangari', '०१२३४५६७८९');
 add_digits('Thai', '๐๑๒๓๔๕๖๗๘๙');
 //add_digits('Bengali', '০১২৩৪৫৬৭৮৯');
 //add_digits('Tamil', '௦௧௨௩௪௫௬௭௮௯'); 
-
-read_local_storage(STORAGE_HIDE_EXAMPLES, x => examples_div.classList.toggle('hide', x), true);
-read_local_storage(STORAGE_AUTO_RESOLVE, x => auto_resolve_check.checked = x);
-read_local_storage(STORAGE_SHOW_DETAILS, x => show_details_check.checked = x);
-read_local_storage(STORAGE_SHOW_COMPONENTS, x => show_components_check.checked = x);
-read_local_storage(STORAGE_SHOW_RECORDS, x => show_records_check.checked = x);
-read_local_storage(STORAGE_FORCE_LTR, x => force_ltr_check.checked = x);
-
-sync_recent(localStorage[STORAGE_RECENT]);
 
 for (let btn of document.querySelectorAll('#examples button:not([id]), button[data-name]')) {
 	let name = btn.innerText;
@@ -1829,9 +1812,8 @@ function add_recent(name, save = true) {
 		localStorage[STORAGE_RECENT] = JSON.stringify([...recent_optgroup.children].map(x => x.value));
 	} 
 }
-make_network_switcher(document.querySelector('#add_goerli_btn'), CHAIN_ID_GOERLI);
-make_network_switcher(document.querySelector('#add_sepolia_btn'), CHAIN_ID_SEPOLIA);
-document.querySelector('#random_emoji_btn').addEventListener('click', e => {
+
+$('#random_emoji_btn').addEventListener('click', e => {
 	let name = '';
 	let pool = e.altKey ? EMOJI.filter(cps => cps.length == 1 || (cps.length == 2 && cps[1] === 0xFE0F)) : EMOJI;
 	while (Array.from(name).length < MIN_ETH_LENGTH) {
@@ -1848,20 +1830,20 @@ function get_selected_input() {
 	}
 	return replace_escapes(value);
 }
-document.querySelector('#find_emoji_btn').addEventListener('click', e => {
+$('#find_emoji_btn').addEventListener('click', e => {
 	let url = './emoji.html';
 	let value = get_selected_input();
 	let token = ens_tokenize(value).find(x => x.emoji);
 	if (token) url += `#q=${encodeURIComponent(String.fromCodePoint(...token.cps))}`;
 	create_link(url).click();	
 });
-document.querySelector('#chars_btn').addEventListener('click', e => {
+$('#chars_btn').addEventListener('click', e => {
 	let url = './chars.html';
 	let value = get_selected_input();
 	if (value) url += `#${value.codePointAt(0).toString(16)}`;
 	create_link(url).click();
 });
-document.querySelector('#confused_btn').addEventListener('click', e => {
+$('#confused_btn').addEventListener('click', e => {
 	create_link(`./confused.html#${encode_uri_component_surrogate_escaped(input_field.value.replaceAll('.', ''))}`).click();
 });
 nf_btn.addEventListener('click', () => {
@@ -1887,31 +1869,32 @@ escape_btn.addEventListener('click', e => {
 	let set = [...new Set([s1, s2, s3])];
 	let pos = set.indexOf(s0);	
 	input_field.value = set[(pos + 1) % set.length];
-	update_title();
+	update_location();
 });
-document.querySelector('#copy_link_btn').addEventListener('click', () => {
-	navigator.clipboard.writeText(window.location.href);
+$('#copy_link_btn').addEventListener('click', () => {
+	navigator.clipboard.writeText(get_page_url());
 });
-document.querySelector('#copy_example_btn').addEventListener('click', () => {
-	let url = new URL(window.location.href);
+$('#copy_example_btn').addEventListener('click', () => {
+	let url = get_page_url();
 	url.hash = '#vitalik.eth';
 	navigator.clipboard.writeText(url);
 });
+
 auto_resolve_check.addEventListener('input', () => {
-	localStorage[STORAGE_AUTO_RESOLVE] = auto_resolve_check.checked;	
+	save_settings();
 	if (auto_resolve_check.checked && input_field.value) {
 		resolve();
 	}
 });
 show_details_check.addEventListener('input', () => {	
-	localStorage[STORAGE_SHOW_DETAILS] = show_details_check.checked;	
+	save_settings();
 	for (let el of document.querySelectorAll('.detailed')) {
 		make_detailed(el);
 	}
 });
 show_records_check.addEventListener('input', () => {
-	localStorage[STORAGE_SHOW_RECORDS] = show_records_check.checked;	
-	let records = document.querySelector('.row.records');
+	save_settings();
+	let records = $('.row.records');
 	if (records) {
 		records.classList.toggle('hide', !show_records_check.checked);
 	} else if (show_records_check.checked) {
@@ -1919,146 +1902,18 @@ show_records_check.addEventListener('input', () => {
 	}
 });
 show_components_check.addEventListener('input', () => {
-	localStorage[STORAGE_SHOW_COMPONENTS] = show_components_check.checked;
+	save_settings();
 	update_exploded();
 });
+skip_norm_check.addEventListener('input', resolve);
+
+function sync_force_ltr() {
+	input_field.classList.toggle('force-ltr', force_ltr_check.checked);
+}
 force_ltr_check.addEventListener('input', () => {
-	localStorage[STORAGE_FORCE_LTR] = force_ltr_check.checked;
+	save_settings();
 	sync_force_ltr();
 });
-force_mainnet_check.addEventListener('input', async () => {
-	update_title();
-	if (!window_provider) return;
-	force_mainnet_check.disabled = true;
-	if (update_network(await get_window_provider_network().catch(() => {}))) {
-		resolve();
-	}
-	force_mainnet_check.disabled = false;
-});
-skip_norm_check.addEventListener('input', () => {
-	resolve();
-}); 
-examples_btn.addEventListener('click', () => {
-	let b = !examples_div.classList.contains('hide');
-	examples_div.classList.toggle('hide', b);
-	localStorage[STORAGE_HIDE_EXAMPLES] = b;
-	sync_examples();
-});
-
-if (input_field.value.endsWith('_!')) { // backwards compat
-	input_field.value = input_field.value.slice(0, -2);
-	skip_norm_check.checked = true;
-}
-if (window.ethereum) {
-	let p = ethereum;
-	if (Array.isArray(ethereum.providers)) p = ethereum.providers[0]; // fix scuffed multi-provider
-	window_provider = new ethers.BrowserProvider(p, 'any');
-	window_provider._provider = p;
-	let timer = setTimeout(update_network, 100); // avoid creating infura connection if possible
-	get_window_provider_network().finally(() => clearTimeout(timer)).then(update_network).catch(() => {});
-	p.on('connect', ({chainId}) => update_network(ethers.Network.from(parseInt(chainId))));
-	p.on('chainChanged', chainId => update_network(ethers.Network.from(parseInt(chainId))));
-	p.on('disconnect', () => update_network());
-	
-} else {
-	force_mainnet_check.checked = false;
-	force_mainnet_check.classList.add('hide');
-	update_network();
-}
-
-sync_examples();
-sync_force_ltr();
-input_field.focus();
-window.addEventListener('hashchange', () => {
-	input_field.value = decodeURIComponent(window.location.hash.slice(1));
-	resolve();
-});
-function format_dec_hex(id) {
-	return id < 10 ? id : `${id} (0x${id.toString(16)})`;
-}
-function make_network_switcher(btn, id) {
-	btn.classList.add('chain');
-	btn.dataset.chain = id;
-	btn.title = `Network: ${format_dec_hex(id)}`;
-	btn.addEventListener('click', () => switch_to_network(id));
-	return btn;
-}
-async function get_window_provider_network() {
-	if (!window_provider) throw new Error('no window');
-	if (!window_provider._provider.isConnected()) throw new Error('not connected');
-	return window_provider._detectNetwork();
-}
-async function switch_to_network(id) {
-	let network = await get_window_provider_network();
-	if (Number(network.chainId) === id) {
-		if (active_provider === window_provider) return;
-		return update_network(network);
-	}
-	await window_provider.send('wallet_switchEthereumChain', [{chainId: `0x${id.toString(16)}`}]); // throws on cancel request
-	// for (let btn of document.querySelectorAll('.chain')) {
-	// 	btn.disabled = true;
-	// }
-}
-function update_network(network) {
-	let chain0 = active_chain;
-	active_chain = CHAINS[0];
-	active_provider = infura_provider;
-	let window_online = window_provider && window_provider._provider.isConnected();
-	let registry = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
-	if (network && window_online) {
-		let chain = CHAINS.find(x => x.id === Number(network.chainId));
-		if (chain && (!force_mainnet_check.checked || chain.is_mainnet)) {
-			active_chain = chain;
-			active_provider = window_provider;
-			let plugin = network.plugins.find(x => x instanceof ethers.EnsPlugin);
-			if (plugin) {
-				registry = plugin.address;
-			} else {
-				network.attachPlugin(new ethers.EnsPlugin(registry, chain));
-			}
-		}
-	}
-	let using_window = active_provider === window_provider;
-	let provider_name = using_window ? 'window.ethereum' : 'Infura';
-	document.body.classList.toggle('testnet', !active_chain.is_mainnet);	
-	let network_div = create('div', {
-		innerHTML: `using <b>${provider_name}</b> on <a target="_blank" href="${active_chain.explorer}/address/${registry}" title="Registry Contract\nNetwork: ${format_dec_hex(active_chain.id)}">${active_chain.name}</a>`
-	});
-	if (window_online && !using_window && network && Number(network.chainId) !== CHAIN_ID_MAINNET && !force_mainnet_check.checked) {
-		provider_div.innerHTML = `<div class="error">Unsupported Network (${network.chainId})</div>`;
-	} else {
-		provider_div.innerHTML = '';
-	}
-	provider_div.append(network_div);
-	for (let btn of document.querySelectorAll('.chain')) {
-		btn.disabled = !window_online || active_chain.id == btn.dataset.chain;
-	}
-	if (!active_chain.is_mainnet || (window_online && active_provider !== window_provider)) {
-		network_div.append(make_network_switcher(create('button', {
-			innerHTML: active_chain.is_mainnet ? 'Use Browser' : '↪ Mainnet'
-		}), CHAIN_ID_MAINNET));
-	}
-	if (chain0 === active_chain) return; // no change	
-	let init = !registry_contract;
-	registry_contract = new ethers.Contract(registry, [
-		'function resolver(bytes32 node) external view returns (address)',
-		'function owner(bytes32 node) external view returns (address)',
-	], active_provider);
-	eth_resolver_contract = null;
-	eth_nft_contract = null;
-	eth_controller_contract = null;
-	wrapper_contract = null;
-	multicall_contract = null;
-	reverse_registrar = null;
-	NOT_IFACE_RESOLVER.clear();
-	IS_CONTRACT.clear();
-	if (input_field.value) {
-		schedule_resolve(0);
-	} else if (init) {
-		parse();
-	}
-	return true; // changed
-}
 
 function sync_examples() {
 	if (examples_div.classList.contains('hide')) {
@@ -2069,9 +1924,198 @@ function sync_examples() {
 		examples_div.prepend(examples_btn);
 	}
 }
+examples_btn.addEventListener('click', () => {
+	examples_div.classList.toggle('hide');
+	save_settings();
+	sync_examples();
+});
 
-function sync_force_ltr() {
-	input_field.classList.toggle('force-ltr', force_ltr_check.checked);
+chain_select.replaceChildren(...CHAINS.map(x => create('option', {value: x.id}, x.name)));
+chain_select.addEventListener('change', () => update_network());
+mainnet_btn.addEventListener('click', e => {
+	chain_select.value = 1;
+	update_network();
+});
+
+function set_page_url(url) {
+	apply_page_url(url);
+	if (!update_network()) {
+		resolve();
+	}
+}
+window.addEventListener('popstate', e => set_page_url(new URL(e.state)));
+window.addEventListener('hashchange', e => set_page_url(new URL(e.newURL)));
+window.addEventListener('unload', () => {}); // prevent weird restore behavior 
+
+// cleanup non-namespaced keys
+// TODO: remove me
+for (let k of Object.keys(localStorage)) {
+	if (!k.includes('.')) {
+		localStorage.removeItem(k);
+	}
+}
+
+function save_settings() {
+	localStorage[STORAGE_SETTINGS] = JSON.stringify({
+		hide_examples: examples_div.classList.contains('hide'),
+		auto_resolve: auto_resolve_check.checked,
+		show_details: show_details_check.checked,
+		show_components: show_components_check.checked,
+		show_records: show_records_check.checked,
+		force_ltr: force_ltr_check.checked,
+	});
+}
+
+try {
+	let settings = JSON.parse(localStorage[STORAGE_SETTINGS]);
+	examples_div.classList.toggle('hide', !!settings.hide_examples);
+	auto_resolve_check.checked = settings.auto_resolve;
+	show_details_check.checked = settings.show_details;
+	show_components_check.checked = settings.show_components;
+	show_records_check.checked = settings.show_records;
+	force_ltr_check.checked.checked = settings.force_ltr;
+} catch (err) {
+}
+sync_recent(localStorage[STORAGE_RECENT]);
+sync_force_ltr();
+sync_examples();
+apply_page_url(location0);
+input_field.focus();
+
+if (window.ethereum) {
+	let p = ethereum;
+	if (Array.isArray(ethereum.providers)) p = ethereum.providers[0]; // fix scuffed multi-provider
+	window_provider = new ethers.BrowserProvider(p, 'any');
+	window_provider.__provider = p;
+	let timer = setTimeout(set_window_network, 100);
+	window_provider._detectNetwork().catch(() => {}).then(network => {
+		clearTimeout(timer);
+		set_window_network(network);
+	});
+	p.on('connect', ({chainId}) => set_window_network(ethers.Network.from(parseInt(chainId))));
+	p.on('chainChanged', chainId => set_window_network(ethers.Network.from(parseInt(chainId))));
+	p.on('disconnect', () => set_window_network(null));
+} else {
+	update_network();
+}
+
+async function change_window_to_chain(chain) {	
+	let chainId = `0x${chain.id.toString(16)}`;	
+	try {
+		await window_provider.send('wallet_switchEthereumChain', [{chainId}]); 
+		// throws on cancel request
+		// throws on unknown provider
+	} catch (err) {
+		if (is_user_rejection(err)) return;
+		if (err.error && err.error.code === 4902) { // unrecognized chain
+			let {rpc} = chain;
+			if (!rpc) throw new Error(`Unknown RPC for ${chain.name}\nNetwork: ${format_dec_hex(chain.id)}`);
+			try {
+				// https://eips.ethereum.org/EIPS/eip-3085
+				await window_provider.send('wallet_addEthereumChain', [{
+					chainId, 
+					chainName: chain.name,
+					blockExplorerUrls: [chain.explorer],
+					nativeCurrency: {
+						name: `${chain.name} ETH`,
+						symbol: 'ETH',
+						decimals: 18
+					},
+					rpcUrls: [rpc]
+				}]);
+				set_window_network(await window_provider._detectNetwork());
+				return;
+			} catch (err2) {
+				if (is_user_rejection(err2)) return;
+				err = err2;
+			}
+		}
+		throw err;
+	}
+}
+function is_user_rejection(err) {
+	return err.shortMessage === 'user rejected action';
+}
+function set_window_network(network) {
+	window_provider.__network = network;
+	window_provider.__chain = null;
+	if (network) {
+		let chain_id = Number(network.chainId); // BigInt
+		let chain = CHAINS.find(x => x.id === chain_id);
+		if (chain) {
+			window_provider.__chain = chain;
+		}
+	}
+	update_network();
+}
+function update_network() {
+	let changed;
+	let chain_id = parseInt(chain_select.value);
+	let chain = CHAINS.find(x => x.id === chain_id) || CHAINS[0];
+	let provider;
+	if (window_provider && window_provider.__chain === chain) {
+		active_provider = window_provider;
+	} else {
+		let old = active_provider;
+		if (active_chain !== chain) {
+			if (chain.rpc) {
+				active_provider = new ethers.JsonRpcProvider(chain.rpc, chain.id, {staticNetwork: true});
+			} else {
+				active_provider = new ethers.InfuraProvider(chain.id, 'f36f6a8638134ac09f9400d3a7008dfe');
+			}
+		}
+		if (old && old !== window_provider && old !== active_provider) {
+			setTimeout(() => old.destroy(), 0);
+		}
+	}
+	if (active_chain !== chain) {
+		changed = true;
+		active_chain = chain;
+		let init = !registry_contract;
+		registry_contract = new ethers.Contract('0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e', [
+			'function resolver(bytes32 node) external view returns (address)',
+			'function owner(bytes32 node) external view returns (address)',
+		], active_provider);
+		eth_resolver_contract = null;
+		eth_nft_contract = null;
+		eth_controller_contract = null;
+		wrapper_contract = null;
+		multicall_contract = null;
+		reverse_registrar = null;
+		NOT_IFACE_RESOLVER.clear();
+		IS_CONTRACT.clear();
+		if (input_field.value) {
+			schedule_resolve(0);
+		} else if (init) {
+			parse();
+		}
+	}
+	update_location();
+	document.body.classList.toggle('testnet', !active_chain.is_mainnet);
+	chain_select.title = `Network: ${format_dec_hex(active_chain.id)}`;
+	mainnet_btn.classList.toggle('hide', !!active_chain.is_mainnet);
+	let using_window = active_provider === window_provider;
+	let network_div = create('div', null, 'using ', create_etherscan_address_link(registry_contract.target, {
+		innerHTML: using_window ? 'Browser' : active_chain.rpc ? 'Public RPC' : 'Infura', 
+		title: 'ENS Registry Contract',
+		contract: true
+	}));
+	provider_div.innerHTML = '';
+	if (!using_window && window_provider && window_provider.__network) {
+		if (window_provider.__chain) {
+			network_div.append(create('button', {
+				innerHTML: 'Switch Browser',
+				title: `Change Browser to ${active_chain.name}`,
+				click() {
+					change_window_to_chain(active_chain);
+				}
+			}));
+		} else {
+			provider_div.innerHTML = `<div class="error">Browser Network: ${format_dec_hex(window_provider.__network.chainId)}</div>`;
+		}
+	}
+	provider_div.append(network_div);
+	return changed;
 }
 
 function should_stop_resolving() {
@@ -2094,38 +2138,55 @@ function stop_resolving() {
 	primary_loader.classList.add('hide');
 }
 
-function update_title() {
-	let title = 'ENS Resolver';
+
+function apply_page_url(url) {
+	debug_mode = url.searchParams.has('debug');
+	chain_select.value = (CHAINS.find(x => url.searchParams.has(x.slug)) || CHAINS[0]).id;
+	skip_norm_check.checked = url.searchParams.has('skip');
+	input_field.value = decodeURIComponent(url.hash.slice(1));
+	if (input_field.value.endsWith('_!')) { // backwards compat
+		input_field.value = input_field.value.slice(0, -2);
+		skip_norm_check.checked = true;
+	}
+}
+function get_page_url() {
 	let input = input_field.value;
 	let url = new URL(location0);
 	let args = [];
-	if (debug) args.push('debug');
-	if (force_mainnet_check.checked) args.push('1');
+	if (debug_mode) args.push('debug');
+	if (!active_chain.is_mainnet) args.push(active_chain.slug);
 	if (skip_norm_check.checked) args.push('skip');
 	url.search = args.join('&');
+	url.hash = input ? '#' + encode_uri_component_surrogate_escaped(input) : '';
+	return url;
+}
+function get_page_title() {
+	let title = 'ENS Resolver';
+	let input = input_field.value;
 	if (input) {
 		title += `: “${input}”`;
 		if (skip_norm_check.checked) {
 			title += ' (!)';
 		}
-		url.hash = '#' + encode_uri_component_surrogate_escaped(input);
-	} else {
-		url.hash = '';	
 	}
 	if (!active_chain.is_mainnet) {
-		title += ` / ${active_chain.name}`;
+		title += ` @ ${active_chain.name}`;
 	}
-	window.history.replaceState(null, null, url); 
-	document.title = title;
+	return title;
 }
-
-function replace_name(name) {
-	//if (name === '[root]') return '';
-	return name;
+function update_location() {	
+	let url = get_page_url();
+	if (window.history.state) {
+		if (window.history.state != url) {
+			window.history.pushState(null, null, url);
+		}
+	} else {
+		window.history.replaceState(null, null, url);
+	}
+	document.title = get_page_title();
 }
-
 function parse() {
-	update_title();	
+	update_location();	
 	let input = input_field.value;
 	input_field.classList.toggle('small', input.length > 21);
 	input_field.classList.toggle('smaller', input.length > 36);
@@ -2142,7 +2203,7 @@ function parse() {
 		return;
 	}
 	// TODO: conslidate this code with resolve()
-	let name = replace_name(replace_escapes(input));
+	let name = replace_escapes(input);
 	if (resolve_timer === RESOLVE_MODE_EMPTY) {
 		resolve_timer = RESOLVE_MODE_IDLE;
 	}
@@ -2348,7 +2409,7 @@ function create_dns_row(name, {replaced, contenthash} = {}) {
 		if (active_chain.is_mainnet) {
 			if (encoded.endsWith('.eth')) {
 				if (contenthash) {
-					add_row_tag(row, create_link(`https://${encoded}.limo`, {button: '↗️ Website', className: 'external'}));
+					add_row_tag(row, create_link(`https://${encoded}.limo`, {button: '↗️ Website', buttonClass: 'glow', className: 'external'}));
 				} else {
 					add_row_tag(row, create_link(`https://${encoded}.limo`, {innerHTML: '.limo', className: 'external'}));
 				}
@@ -2443,7 +2504,7 @@ function encode_uri_component_ens_escaped(s) {
 function encode_uri_component_surrogate_escaped(s) {
 	return encodeURIComponent(apply_escapes_where(s, is_surrogate));
 }
-function create_link(url, {button, ...args} = {}) {
+function create_link(url, {button, buttonClass, ...args} = {}) {
 	let a = create('a', {
 		href: url,
 		target: '_blank',
@@ -2454,13 +2515,14 @@ function create_link(url, {button, ...args} = {}) {
 		a.classList.add('button');
 		a.replaceChildren(create('button', {
 			innerHTML: button,
+			className: buttonClass,
 			click(e) {
 				e.stopPropagation(); // prevent copy
 			}
 		}));
 	}
 	try {
-		new URL(url, window.location.href);
+		new URL(url, location0);
 	} catch (err) {
 		a.classList.add('invalid');
 	}
@@ -2474,17 +2536,17 @@ function create_ens_link(name, innerHTML = '<button>🛠️ ENS</button>') {
 	} catch (err) {
 	}
 }
-function create_etherscan_address_link(addr, {innerHTML, anchor = '', contract, className} = {}) {
+function create_etherscan_address_link(addr, {innerHTML, anchor = '', contract, className, ...a} = {}) {
 	if (!innerHTML) {
 		innerHTML = addr;
 		className = 'addr';
 	}
 	if (contract && !anchor) anchor = '#readContract';
-	return create_link(`${active_chain.explorer}/address/${addr}${anchor}`, {innerHTML, className});
+	return create_link(`${active_chain.explorer}/address/${addr}${anchor}`, {innerHTML, className, ...a});
 }
 function create_jazz_icon(address) {
 	let i = ADDRESS_MAP.get(address);
-	if (!i || debug) ADDRESS_MAP.set(address, i = ADDRESS_MAP.size + 1);
+	if (!i || debug_mode) ADDRESS_MAP.set(address, i = ADDRESS_MAP.size + 1);
 	return create('span', {innerHTML: i, className: ['jazz', `addr${i}`]});
 }
 
@@ -2810,9 +2872,9 @@ function add_nft_links(row, name, contract, token) {
 async function add_avatar(row, resolver) {
 	try {
 		let {url, linkage} = await resolver._getAvatar();
-		resolver._linkage = linkage;
+		resolver.__linkage = linkage;
 		if (!url) return;
-		resolver._avatar = url;
+		resolver.__avatar = url;
 		// try {
 		// 	url = new URL(url).toString().replaceAll('#', '%23'); // i forget why im doing this
 		// } catch (ignored) {
@@ -3030,8 +3092,9 @@ function create_rle_breakdown(name) {
 	let div = create('div', {className: 'hash'});
 	div.append(create('b', {innerText: 'DNS-encoded:'}));
 	try {
-		let rle = ethers.hexlify(dns_name_from(name));
-		div.append(create_copy_btn(rle, {small: true, value: true}));
+		let v = dns_name_from(name);
+		let dns_name = ethers.hexlify(v);
+		div.append(create('span', {className: 'bytes', innerText: v.length}), create_copy_btn(dns_name, {small: true, value: true}));
 	} catch (err) {
 		div.append(create('span', {innerText: '🚫️', title: err.message}));
 	}
@@ -3280,8 +3343,8 @@ function resolve() {
 		entity_span.innerHTML = x;
 		return apply_escapes_where(entity_span.innerText);
 	});
-	input_field.value = input;
-	let name = replace_name(replace_escapes(input));
+	input_field.value = input;	
+	let name = replace_escapes(input);
 	add_recent(name);
 	if (!parse() && (!input || !skip)) {
 		primary_loader.classList.add('hide');
@@ -3289,6 +3352,7 @@ function resolve() {
 	}
 	resolve_btn.disabled = true;
 	primary_loader.classList.remove('hide');
+	const url = get_page_url();
 	const t0 = resolve_last = Date.now();
 	resolve1(name, skip).then(() => {
 		clock_span.innerHTML = format_dur(resolve_last - t0, 2);
@@ -3297,6 +3361,10 @@ function resolve() {
 			setTimeout(resolve, Math.max(0, resolve_timer[0] - Date.now()));
 		} else {
 			primary_loader.classList.add('hide');
+			window.history.replaceState(url.toString(), null, url);
+			console.log(`Added History: ${input}`);
+			// TODO: change this to idle() for 2sec or something
+			// so it works on errors, but not partial input
 		}
 	});
 }
@@ -3556,12 +3624,12 @@ async function resolve1(input, skip_norm) {
 		add_avatar(normed_row, resolver); 
 		resolver_row.append(create_etherscan_address_link(resolver.address, {contract: true}));
 		add_row_tag(resolver_row, create_copy_btn(resolver.address, {value: true}));
-		if (resolver._wildcard) {
+		if (resolver.__wildcard) {
 			add_row_tag(resolver_row, create_tag('special', 'Wildcard'));
-			if (resolver._basename === name_norm) {
+			if (resolver.__basename === name_norm) {
 				add_row_tag(resolver_row, 'Basename');
 			} else {
-				add_row_tag(resolver_row, create_resolve_btn(resolver._basename, `↩️ ${resolver._basename}`));
+				add_row_tag(resolver_row, create_resolve_btn(resolver.__basename, `↩️ ${resolver.__basename}`));
 			}
 		} else {
 			add_contract_name(resolver_row, resolver.address);
@@ -3683,7 +3751,7 @@ async function resolve1(input, skip_norm) {
 	}
 	// get the owner
 	let is_wrapped, owner, nft_owner;
-	if ((!resolver || resolver._basename === name_norm) && (!nft_backed || available !== undefined)) { 
+	if ((!resolver || resolver.__basename === name_norm) && (!nft_backed || available !== undefined)) { 
 		let node = namehash(name_norm);
 		let wrapped_row = create_row('Wrapper', true);
 		let unwrappable;
@@ -3745,7 +3813,7 @@ async function resolve1(input, skip_norm) {
 				let now = Date.now();
 				let exp = Number(data.expiry) * 1000;
 				let fuses = Number(data.fuses);
-				if (debug) fuses = 0x7FFFF;
+				if (debug_mode) fuses = 0x7FFFF;
 				if (fuses & 0x10000) { // PARENT_CANNOT_CONTROL 
 					if (fuses & 0x00001) { // CANNOT_UNWRAP 
 						add_row_tag(wrapped_row, create_tag('good', '🔒️ Locked')); 
@@ -4157,7 +4225,7 @@ async function resolve1(input, skip_norm) {
 							}
 							a.title = lines.join('\n');
 							// upgrade the decentralized website link
-							document.querySelector('.row.dns').replaceWith(create_dns_row(name_norm, {replaced: false, contenthash: rep}));
+							$('.row.dns').replaceWith(create_dns_row(name_norm, {replaced: false, contenthash: rep}));
 						} catch (err) {
 							a.append(create_tag('fail', err));
 							a.title = data;
@@ -4174,8 +4242,8 @@ async function resolve1(input, skip_norm) {
 			if (records_row.childElementCount === old) {
 				add_row_tag(records_row, 'None');
 			}
-			if (resolver._multicall) {
-				add_row_tag(records_row, create_tag('good', `Multicall (${resolver._multicall})`));
+			if (resolver.__multicall) {
+				add_row_tag(records_row, create_tag('good', `Multicall (${resolver.__multicall})`));
 			}
 			if (should_stop_resolving()) return;
 			remove_temporary(records_row);
@@ -4197,7 +4265,7 @@ async function resolve1(input, skip_norm) {
 			if (should_stop_resolving()) return;
 			let [{data, error}] = await fetch_records(rev_resolver, [{type: 'name'}]);
 			if (error) throw error;
-			if (debug) data = data.toUpperCase();
+			if (debug_mode) data = data.toUpperCase();
 			primary = data;
 		}
 	} catch (err) {
@@ -4290,13 +4358,13 @@ async function fetch_addr60(resolver) {
 	if (!is_null_hex(address)) return ethers.getAddress(address);
 }
 async function fetch_records(resolver, records) {
-	if (resolver._wildcard && !resolver._dns_name) return []; // unreachable
+	if (resolver.__wildcard && !resolver.__dns_name) return []; // unreachable
 	const options = {enableCcipRead: true};
 	let contract = contract_for_resolver(resolver);
 	if (records.length > 1) {
 		let encoded = records.map(rec => {
 			let frag = contract.interface.getFunction(rec.type);
-			let params = [contract._node];
+			let params = [contract.__node];
 			switch (rec.type) {
 				case TYPE_TEXT: params.push(rec.key); break;
 				case TYPE_ADDR: params.push(rec.coin); break;
@@ -4305,16 +4373,16 @@ async function fetch_records(resolver, records) {
 		});
 		try {
 			let res;
-			if (resolver._wildcard) { // optimistic CCIP-multicall
+			if (resolver.__wildcard) { // optimistic CCIP-multicall
 				let frag = contract.interface.getFunction('multicall');
-				res = await contract.resolve(resolver._dns_name, contract.interface.encodeFunctionData(frag, [encoded]), options);
+				res = await contract.resolve(resolver.__dns_name, contract.interface.encodeFunctionData(frag, [encoded]), options);
 				[res] = contract.interface.decodeFunctionResult(frag, res);
 			} else if (await can_multicall()) {
 				res = await multicall_contract.tryAggregate(false, encoded.map(data => ({target: resolver.address, data})));
 				res = res.map(({success, data}) => success ? data : null);
 			}
 			if (res && res.length === records.length) {
-				resolver._multicall = records.length;
+				resolver.__multicall = records.length;
 				return records.map((rec, i) => {
 					try {
 						let frag = contract.interface.getFunction(rec.type);
@@ -4334,21 +4402,21 @@ async function fetch_records(resolver, records) {
 		if (should_stop_resolving()) {
 			return {rec, error: new Error('aborted')};
 		}
-		if (rec.key === 'avatar' && resolver._avatar) { // add_avatar() probably already computed
-			return {rec, data: resolver._avatar}; 
+		if (rec.key === 'avatar' && resolver.__avatar) { // add_avatar() probably already computed
+			return {rec, data: resolver.__avatar}; 
 		}	
-		let params = [contract._node];
+		let params = [contract.__node];
 		if (rec.type === TYPE_ADDR && rec.coin === 60) { // try boomer method first
 			const method = 'addr(bytes32)';
 			try {
 				let data;
-				if (resolver._wildcard) {
+				if (resolver.__wildcard) {
 					let frag = contract.interface.getFunction(method);
-					data = await contract.resolve(resolver._dns_name, contract.interface.encodeFunctionData(frag, params), options);
+					data = await contract.resolve(resolver.__dns_name, contract.interface.encodeFunctionData(frag, params), options);
 					[data] = contract.interface.decodeFunctionResult(frag, data);
 					if (data.length !== 42) throw new Error('expected address');
 				} else {
-					data = await contract[method](contract._node);
+					data = await contract[method](contract.__node);
 				}
 				return {rec, data};
 			} catch (err) {
@@ -4360,9 +4428,9 @@ async function fetch_records(resolver, records) {
 		}
 		try {
 			let data;
-			if (resolver._wildcard) {
+			if (resolver.__wildcard) {
 				let frag = contract.interface.getFunction(rec.type);
-				data = await contract.resolve(resolver._dns_name, contract.interface.encodeFunctionData(frag, params), options);
+				data = await contract.resolve(resolver.__dns_name, contract.interface.encodeFunctionData(frag, params), options);
 				data = contract.interface.decodeFunctionResult(frag, data);
 				if (frag.outputs.length === 1) data = data[0];
 			} else {
@@ -4407,8 +4475,8 @@ function contract_for_resolver(resolver) {
 		'function recordVersions(bytes32 node) external view returns (uint64)',
 		'function multicall(bytes[] calldata data) external returns (bytes[] memory results)',
 	], active_provider);
-	contract._node = namehash(resolver.name);
-	contract.get_interface = hash => contract.interfaceImplementer(contract._node, hash);
+	contract.__node = namehash(resolver.name);
+	contract.get_interface = hash => contract.interfaceImplementer(contract.__node, hash);
 	return contract;
 }
 function contract_for_controller(address) {
@@ -4452,7 +4520,7 @@ async function ensure_eth_nft() {
 	if (eth_nft_contract) return;
 	if (eth_nft_contract === false) throw new Error(`Not implemented`);
 	await ensure_eth_resolver();
-	let nft_address = await registry_contract.owner(eth_resolver_contract._node);
+	let nft_address = await registry_contract.owner(eth_resolver_contract.__node);
 	//let nft_address = await eth_resolver_contract.get_interface(IFACE_ETH_NFT);
 	if (is_null_hex(nft_address)) {
 		eth_nft_contract = false;
@@ -4519,13 +4587,13 @@ async function get_resolver(name) {
 		if (should_stop_resolving()) return;
 		if (!is_null_hex(address)) {
 			let resolver = new ethers.EnsResolver(active_provider, address, name);
-			resolver._basename = basename; // remember
+			resolver.__basename = basename; // remember
 			let wild = await resolver.supportsWildcard().catch(() => {}); // can throw
 			if (i && !wild) break; // ancestor but not wildcard
 			if (wild) {
-				resolver._wildcard = true;
+				resolver.__wildcard = true;
 				try {
-					resolver._dns_name = dns_name_from(v);
+					resolver.__dns_name = dns_name_from(v);
 				} catch (err) {
 				}
 			}
@@ -4652,6 +4720,9 @@ function add_dot_eth(name, append) {
 	if (name && (!name.includes('.') || (append && !name.endsWith(suffix)))) name += suffix;
 	return name;
 }
+function format_dec_hex(id) {
+	return id < 10 ? id : `${id} (0x${id.toString(16).toUpperCase()})`;
+}
 function is_address(s) {
 	return typeof s === 'string' && /^0x[0-9a-f]{40}$/i.test(s);
 }
@@ -4676,15 +4747,6 @@ function namehash(s) {
 }
 function bytes32_from(x) {
 	return '0x' + BigInt(x).toString(16).padStart(64, '0').slice(-64);
-}
-function read_local_storage(key, fn, def) {
-	try {
-		return fn(JSON.parse(localStorage[key]));
-	} catch (err) {
-	}
-	if (def !== undefined) {
-		fn(def);
-	}
 }
 </script>
 </body>

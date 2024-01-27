@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="./favicon.png">
 <title>ENS Emoji</title>
 <style>
 :root {
@@ -573,6 +574,8 @@ const BY_SUBGROUP = 'subgroup';
 
 const TYPE_DISABLED = 'Disabled';
 
+const STORAGE_EMOJI_INFO = 'ens-norm.emoji-info';
+
 const COSTS = [
 	{length: 3, cost: 640},
 	{length: 4, cost: 160},
@@ -615,13 +618,12 @@ document.querySelector('footer span').addEventListener('click', () => {
 top_btn.addEventListener('click', () => window.scrollTo(0, 0));
 
 (async () => {
-	const store_key = 'emoji-info';
 	try {
 		let data;
 		//let {built} = versions;
 		let built = '2024-01-24T01:27:34.595Z';
 		try {
-			let cache = JSON.parse(localStorage[store_key]);
+			let cache = JSON.parse(localStorage[STORAGE_EMOJI_INFO]);
 			if (cache.built === built) {
 				data = cache.data;
 			}
@@ -631,7 +633,7 @@ top_btn.addEventListener('click', () => window.scrollTo(0, 0));
 			let res = await fetch('../derive/output/emoji-info.json');
 			if (!res.ok) throw new Error(`HTTP ${res.statusCode}`);
 			data = await res.json();
-			localStorage[store_key] = JSON.stringify({data, built});
+			localStorage[STORAGE_EMOJI_INFO] = JSON.stringify({data, built});
 			console.log('Updated Cache');
 		}
 		for (let info of data) {
