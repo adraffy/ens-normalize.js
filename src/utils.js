@@ -57,6 +57,16 @@ export function random_sample(v, n, rng = Math.random) {
 	return v;
 }
 
+export function array_replace(v, a, b) {
+	let prev = 0;
+	while (true) {
+		let next = v.indexOf(a, prev);
+		if (next < 0) break;
+		v[next] = b; 
+		prev = next + 1;
+	}
+}
+
 export function run_tests(fn, tests) {
 	let errors = [];
 	for (let test of tests) {

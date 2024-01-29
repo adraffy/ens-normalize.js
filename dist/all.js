@@ -297,6 +297,16 @@ function random_sample(v, n, rng = Math.random) {
 	return v;
 }
 
+function array_replace(v, a, b) {
+	let prev = 0;
+	while (true) {
+		let next = v.indexOf(a, prev);
+		if (next < 0) break;
+		v[next] = b; 
+		prev = next + 1;
+	}
+}
+
 function run_tests(fn, tests) {
 	let errors = [];
 	for (let test of tests) {
@@ -766,9 +776,9 @@ function safe_str_from_cps(cps, max = Infinity, quoter = quote_cp) {
 
 // note: set(s) cannot be exposed because they can be modified
 // note: Object.freeze() doesn't work
-function is_combining_mark(cp) {
+function is_combining_mark(cp, only_nsm) { // 20240127: add extra argument
 	init();
-	return CM.has(cp);
+	return only_nsm ? NSM.has(cp) : CM.has(cp);
 }
 function should_escape(cp) {
 	init();
@@ -822,16 +832,6 @@ function ens_beautify(name) {
 		//output.splice(0, 0, 0x200E);
 	}
 	return flatten(labels);
-}
-
-function array_replace(v, a, b) {
-	let prev = 0;
-	while (true) {
-		let next = v.indexOf(a, prev);
-		if (next < 0) break;
-		v[next] = b; 
-		prev = next + 1;
-	}
 }
 
 function ens_split(name, preserve_emoji) {
@@ -1332,7 +1332,6 @@ function isolated_safe(cps) {
 // TODO: these options are shit, fix this
 function dom_from_tokens(tokens, {
 	before = false, 
-	tld_class = true,
 	components = false, 
 	emoji_url = 'https://emojipedia.org/%s',
 	extra = () => {},
@@ -1394,12 +1393,6 @@ function dom_from_tokens(tokens, {
 			case 'valid': {
 				el = document.createElement('span');		
 				let form = safe_str_from_cps(token.cps);
-				if (tld_class && (tokens.length == 1 || (i === tokens.length-1 && tokens[i-1].type === 'stop')) && /[a-z]/.test(form)) { 
-					// theres just 1 token/or we're the last token with a stop before us
-					//el.classList.add(form);
-					// 20230909: this triggered for stupid things
-					el.dataset.tld = form;	
-				}
 				el.innerText = form;
 				el.title = format_tooltip({
 					Type: 'Valid',
@@ -1472,31 +1465,6 @@ function use_default_style() {
 		background: #cfc;
 		border: 2px solid #0a0;
 		line-break: anywhere;
-	}
-	.tokens [data-tld="eth"].valid {
-		color: #fff;
-		background: #58f;
-		border-color: #58f;
-	}
-	.tokens [data-tld="art"].valid {
-		color: #fff;
-		background: #333;
-		border-color: #333;
-	}
-	.tokens [data-tld="box"].valid {
-		color: #fff;
-		background: #666;
-		border-color: #666;
-	}
-	.tokens [data-tld="com"].valid,
-	.tokens [data-tld="net"].valid,
-	.tokens [data-tld="org"].valid,
-	.tokens [data-tld="io"].valid,
-	.tokens [data-tld="cash"].valid,
-	.tokens [data-tld="xyz"].valid {
-		color: #fff;
-		background: #0a0;
-		border-color: #0a0;
 	}
 	.tokens .ignored {
 		color: #fff;
@@ -1590,22 +1558,22 @@ function use_default_style() {
 const derived = "2023-09-06T06:00:29.074Z";
 const unicode = "15.1.0 (2023-09-06T02:58:19.261Z)";
 const cldr = "43.1 (2023-09-03T21:58:22.687Z)";
-const base64_ens_hash = "0565ed049b9cf1614bb9e11ba7d8ac6a6fb96c893253d890f7e2b2884b9ded32";
-const base64_nf_hash = "a974b6f8541fc29d919bc85118af0a44015851fab5343f8679cb31be2bdb209e";
+const ens_hash_base64 = "0565ed049b9cf1614bb9e11ba7d8ac6a6fb96c893253d890f7e2b2884b9ded32";
+const nf_hash_base64 = "a974b6f8541fc29d919bc85118af0a44015851fab5343f8679cb31be2bdb209e";
 const spec_hash = "1f6d3bdb7a724fe3b91f6d73ab14defcb719e0f4ab79022089c940e7e9c56b9c";
 const built = "2023-09-25T01:01:55.148Z";
 const version = "1.10.1";
 
 var includeVersions = /*#__PURE__*/Object.freeze({
 	__proto__: null,
-	base64_ens_hash: base64_ens_hash,
-	base64_nf_hash: base64_nf_hash,
 	built: built,
 	cldr: cldr,
 	derived: derived,
+	ens_hash_base64: ens_hash_base64,
+	nf_hash_base64: nf_hash_base64,
 	spec_hash: spec_hash,
 	unicode: unicode,
 	version: version
 });
 
-export { compare_arrays, dom_from_tokens, ens_beautify, ens_emoji, ens_normalize, ens_normalize_fragment, ens_split, ens_tokenize, explode_cp, hex_cp, is_combining_mark, nfc, nfd, quote_cp, random_choice, random_sample, run_tests, safe_str_from_cps, should_escape, str_from_cps, use_default_style, includeVersions as versions };
+export { array_replace, compare_arrays, dom_from_tokens, ens_beautify, ens_emoji, ens_normalize, ens_normalize_fragment, ens_split, ens_tokenize, explode_cp, hex_cp, is_combining_mark, nfc, nfd, quote_cp, random_choice, random_sample, run_tests, safe_str_from_cps, should_escape, str_from_cps, use_default_style, includeVersions as versions };

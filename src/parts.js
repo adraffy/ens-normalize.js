@@ -57,7 +57,6 @@ function isolated_safe(cps) {
 // TODO: these options are shit, fix this
 export function dom_from_tokens(tokens, {
 	before = false, 
-	tld_class = true,
 	components = false, 
 	emoji_url = 'https://emojipedia.org/%s',
 	extra = () => {},
@@ -119,12 +118,6 @@ export function dom_from_tokens(tokens, {
 			case 'valid': {
 				el = document.createElement('span');		
 				let form = safe_str_from_cps(token.cps);
-				if (tld_class && (tokens.length == 1 || (i === tokens.length-1 && tokens[i-1].type === 'stop')) && /[a-z]/.test(form)) { 
-					// theres just 1 token/or we're the last token with a stop before us
-					//el.classList.add(form);
-					// 20230909: this triggered for stupid things
-					el.dataset.tld = form;	
-				}
 				el.innerText = form;
 				el.title = format_tooltip({
 					Type: 'Valid',
@@ -197,31 +190,6 @@ export function use_default_style() {
 		background: #cfc;
 		border: 2px solid #0a0;
 		line-break: anywhere;
-	}
-	.tokens [data-tld="eth"].valid {
-		color: #fff;
-		background: #58f;
-		border-color: #58f;
-	}
-	.tokens [data-tld="art"].valid {
-		color: #fff;
-		background: #333;
-		border-color: #333;
-	}
-	.tokens [data-tld="box"].valid {
-		color: #fff;
-		background: #666;
-		border-color: #666;
-	}
-	.tokens [data-tld="com"].valid,
-	.tokens [data-tld="net"].valid,
-	.tokens [data-tld="org"].valid,
-	.tokens [data-tld="io"].valid,
-	.tokens [data-tld="cash"].valid,
-	.tokens [data-tld="xyz"].valid {
-		color: #fff;
-		background: #0a0;
-		border-color: #0a0;
 	}
 	.tokens .ignored {
 		color: #fff;

@@ -279,7 +279,7 @@ encode_emoji(enc, root, sorted_emoji_map); // ~2KB
 const built = new Date().toJSON();
 
 //write('include-only'); // only saves 300 bytes
-let {hash: base64_ens_hash} = write('include-ens', {
+let {hash: ens_hash_base64} = write('include-ens', {
 	FENCED: new Map(fenced),
 	NSM_MAX: nsm_max,
 });
@@ -295,15 +295,15 @@ enc.write_mapped([
 	[1, 1, 1],
 ], decomp);
 enc.write_member(qc);
-let {hash: base64_nf_hash} = write('include-nf');
+let {hash: nf_hash_base64} = write('include-nf');
 
 // write version info
 const versions = {
 	derived: spec.created,
 	unicode: spec.unicode,
 	cldr: spec.cldr,
-	base64_ens_hash, // 20230608: added for https://github.com/adraffy/ens-normalize.js/issues/20
-	base64_nf_hash,
+	ens_hash_base64, // 20230608: added for https://github.com/adraffy/ens-normalize.js/issues/20
+	nf_hash_base64,
 	spec_hash: compute_spec_hash(spec_file),
 	built,
 	version

@@ -2,8 +2,8 @@
 	{
 		"name": "version",
 		"validated": "2023-09-25T01:02:04.053Z",
-		"base64_ens_hash": "0565ed049b9cf1614bb9e11ba7d8ac6a6fb96c893253d890f7e2b2884b9ded32",
-		"base64_nf_hash": "a974b6f8541fc29d919bc85118af0a44015851fab5343f8679cb31be2bdb209e",
+		"ens_hash_base64": "0565ed049b9cf1614bb9e11ba7d8ac6a6fb96c893253d890f7e2b2884b9ded32",
+		"nf_hash_base64": "a974b6f8541fc29d919bc85118af0a44015851fab5343f8679cb31be2bdb209e",
 		"built": "2023-09-25T01:01:55.148Z",
 		"cldr": "43.1 (2023-09-03T21:58:22.687Z)",
 		"derived": "2023-09-06T06:00:29.074Z",

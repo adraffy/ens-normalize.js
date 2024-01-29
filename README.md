@@ -202,5 +202,5 @@ This project uses `.js` instead of `.mjs` so [package.json](./package.json) uses
 
 * [Build](#build) and compare against [include-versions.js](./src/include-versions.js)
 	* `spec_hash` — SHA-256 of [spec.json](./derive/output/spec.json) bytes
-	* `base64_ens_hash` — SHA-256 of [include-ens.js](./src/include-ens.js) base64 literal
-	* `base64_nf_hash` — SHA-256 of [include-nf.js](./src/include-nf.js) base64 literal
+	* `ens_hash_base64` — SHA-256 of [include-ens.js](./src/include-ens.js) base64 literal
+	* `nf_hash_base64` — SHA-256 of [include-nf.js](./src/include-nf.js) base64 literal

@@ -281,6 +281,16 @@ function compare_arrays(a, b) {
 	return c;
 }
 
+function array_replace(v, a, b) {
+	let prev = 0;
+	while (true) {
+		let next = v.indexOf(a, prev);
+		if (next < 0) break;
+		v[next] = b; 
+		prev = next + 1;
+	}
+}
+
 // created 2023-09-25T01:01:55.148Z
 // compressed base64-encoded blob for include-nf data
 // source: https://github.com/adraffy/ens-normalize.js/blob/main/src/make.js
@@ -729,9 +739,9 @@ function safe_str_from_cps(cps, max = Infinity, quoter = quote_cp) {
 
 // note: set(s) cannot be exposed because they can be modified
 // note: Object.freeze() doesn't work
-function is_combining_mark(cp) {
+function is_combining_mark(cp, only_nsm) { // 20240127: add extra argument
 	init();
-	return CM.has(cp);
+	return only_nsm ? NSM.has(cp) : CM.has(cp);
 }
 function should_escape(cp) {
 	init();
@@ -785,16 +795,6 @@ function ens_beautify(name) {
 		//output.splice(0, 0, 0x200E);
 	}
 	return flatten(labels);
-}
-
-function array_replace(v, a, b) {
-	let prev = 0;
-	while (true) {
-		let next = v.indexOf(a, prev);
-		if (next < 0) break;
-		v[next] = b; 
-		prev = next + 1;
-	}
 }
 
 function ens_split(name, preserve_emoji) {

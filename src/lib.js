@@ -1,6 +1,6 @@
 import COMPRESSED, {FENCED, NSM_MAX} from './include-ens.js';
 import {read_compressed_payload, read_sorted, read_sorted_arrays, read_mapped, read_trie, read_array_while} from './decoder.js';
-import {explode_cp, str_from_cps, quote_cp, compare_arrays} from './utils.js';
+import {explode_cp, str_from_cps, quote_cp, compare_arrays, array_replace} from './utils.js';
 import {nfc, nfd} from './nf.js';
 //import {nfc, nfd} from './nf-native.js'; // replaced by rollup
 export {nfc, nfd}; 
@@ -262,9 +262,9 @@ export function safe_str_from_cps(cps, max = Infinity, quoter = quote_cp) {
 
 // note: set(s) cannot be exposed because they can be modified
 // note: Object.freeze() doesn't work
-export function is_combining_mark(cp) {
+export function is_combining_mark(cp, only_nsm) { // 20240127: add extra argument
 	init();
-	return CM.has(cp);
+	return only_nsm ? NSM.has(cp) : CM.has(cp);
 }
 export function should_escape(cp) {
 	init();
@@ -318,16 +318,6 @@ export function ens_beautify(name) {
 		//output.splice(0, 0, 0x200E);
 	}
 	return flatten(labels);
-}
-
-function array_replace(v, a, b) {
-	let prev = 0;
-	while (true) {
-		let next = v.indexOf(a, prev);
-		if (next < 0) break;
-		v[next] = b; 
-		prev = next + 1;
-	}
 }
 
 export function ens_split(name, preserve_emoji) {
