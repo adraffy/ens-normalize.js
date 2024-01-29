@@ -82,7 +82,7 @@ export function dom_from_tokens(tokens, {
 				el = document.createElement(emoji_url ? 'a' : 'span');
 				if (emoji_url) el.href = emoji_url.replace('%s', String.fromCodePoint(...token.emoji));
 				let cps = before ? token.input : token.cps;
-				if (components) {
+				if (components && cps.length > 1) {
 					el.dataset.components='1';
 					el.append(...cps.map(cp => span_from_cp(cp, true)));
 				} else {
@@ -238,10 +238,6 @@ export function use_default_style() {
 		border: 2px solid #0aa;
 		background: #cff;
 		color: #000;
-	}
-	.tokens .emoji[data-components] {
-		border-style: double;
-		border-width: 4px;
 	}
 	.tokens .mod {
 		color: #fff;
