@@ -4611,7 +4611,7 @@ async function get_resolver(name) {
 	for (let i = 0; i < v.length; i++) {
 		let basename = v.slice(i).join('.');
 		let address = await registry_contract.resolver(namehash(basename));
-		if (should_stop_resolving()) return;
+		if (should_stop_resolving()) throw new Error('aborted');
 		if (!is_null_hex(address)) {
 			let resolver = new ethers.EnsResolver(active_provider, address, name);
 			resolver.__basename = basename; // remember
