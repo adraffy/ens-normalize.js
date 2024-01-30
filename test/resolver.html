@@ -111,7 +111,7 @@ h1 {
 	white-space: pre;
 }
 body.testnet {
-	background: linear-gradient(135deg, #fdf, #eee);
+	background: #ffe0ff;
 }
 .spinner {
 	width: 32px;
@@ -412,7 +412,7 @@ span.key {
 	border-radius: 4px;
 	background-color: #999;
 	color: #fff;
-	font: 10px sans-serif;
+	font: 11px sans-serif;
 }
 span.tags {
 	background: #ddd;
@@ -757,6 +757,10 @@ button.glow {
 }
 .record span.addr {
 	font: 80% monospace;
+}
+.record .minor {
+	pointer-events: none;
+	font: 12px sans-serif;
 }
 .record .changed {
 	font: 11px sans-serif;
@@ -1153,7 +1157,7 @@ Hebrew:
 	<input type="checkbox" id="show_details_check">
 	<label for="show_details_check">Details</label>
 	<input type="checkbox" id="show_components_check" checked>
-	<label for="show_components_check">Emoji Components</label>
+	<label for="show_components_check" title="Reveal internal emoji codepoints">Emoji 🧬️</label>
 	<input type="checkbox" id="show_records_check" checked>
 	<label for="show_records_check" title="Include common text and address records">Records</label>
 	<input type="checkbox" id="skip_norm_check">
@@ -1353,6 +1357,7 @@ const RESOLVER_NAMES = {
 	'0x231b0Ee14048e9dCcD1d247744d114a4EB5E8E63': '✨️ Public (v3)',
 	'0x5fBb459C49BB06083C33109fA4f14810eC2Cf358': 'Old Reverse (v1)',
 	'0xA2C122BE93b0074270ebeE7f6b7292C7deB45047': 'Old Reverse (v2)',
+	'0xF142B308cF687d4358410a4cB885513b30A42025': 'Offchain DNS'
 };
 const IS_CONTRACT = new Map();
 const NOT_IFACE_RESOLVER = new Set();
@@ -1636,22 +1641,7 @@ const RECORDS = [
 	{
 		type: TYPE_TEXT,
 		key: 'avatar',
-		class: 'ava',
 		format() { return ''; },
-		then(a, resolver) {
-			let {__linkage, __avatar} = resolver;
-			if (__linkage && !__avatar) {
-				let avatar = __linkage.find(x => x.type === 'avatar');	
-				if (avatar) {
-					a.append(create('span', {
-						className: ['tags', 'changed'], 
-						innerHTML: '❌️ Failed', 
-						title: __linkage.map((x, i) => `[${i+1}] ${x.type}: ${x.value}`).join('\n'),
-					}));
-					a.classList.add('rtrim');
-				}
-			}
-		}
 	},
 	{
 		type: TYPE_TEXT,
@@ -1910,9 +1900,11 @@ show_details_check.addEventListener('input', () => {
 });
 show_records_check.addEventListener('input', () => {
 	save_settings();
-	let records = $('.row.records');
-	if (records) {
-		records.classList.toggle('hide', !show_records_check.checked);
+	let row = $('.row.records');
+	if (row) {
+		row.classList.toggle('hide', !show_records_check.checked);
+		let avatar = $('.avatar');
+		if (avatar) avatar.classList.toggle('hide', !show_records_check.checked);
 	} else if (show_records_check.checked) {
 		resolve();
 	}
@@ -2091,15 +2083,20 @@ function update_network() {
 		changed = true;
 		active_chain = chain;
 		let init = !registry_contract;
+		// registry contract address is static on all supported chains
 		registry_contract = new ethers.Contract('0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e', [
 			'function resolver(bytes32 node) external view returns (address)',
 			'function owner(bytes32 node) external view returns (address)',
+		], active_provider);
+		// multicall3 contract address is static on all supported chains
+		// https://www.multicall3.com/deployments
+		multicall_contract = new ethers.Contract('0xcA11bde05977b3631167028862bE2a173976CA11', [
+			`function tryAggregate(bool requireSuccess, tuple(address target, bytes data)[] memory calls) public view returns (tuple(bool success, bytes data)[] memory returnData)`
 		], active_provider);
 		eth_resolver_contract = null;
 		eth_nft_contract = null;
 		eth_controller_contract = null;
 		wrapper_contract = null;
-		multicall_contract = null;
 		reverse_registrar = null;
 		NOT_IFACE_RESOLVER.clear();
 		IS_CONTRACT.clear();
@@ -2143,7 +2140,7 @@ function should_stop_resolving() {
 	return resolve_timer !== RESOLVE_MODE_IDLE;
 }
 
-function schedule_resolve(delay = 500) {
+function schedule_resolve(delay = 1000) {
 	clearTimeout(resolve_timer);
 	if (is_working()) {
 		resolve_timer = [Date.now() + delay]; // encode as future time
@@ -2158,7 +2155,6 @@ function stop_resolving() {
 	resolve_timer = RESOLVE_MODE_EMPTY;
 	primary_loader.classList.add('hide');
 }
-
 
 function apply_page_url(url) {
 	debug_mode = url.searchParams.has('debug');
@@ -2837,11 +2833,11 @@ function create_digits_row(norm, group, values, negative, suffix) {
 	return row;
 }
 
-async function add_contract_name(row, address) {
+async function add_contract_name(row, address, check) {
 	let name = RESOLVER_NAMES[address];
 	if (active_chain.is_mainnet && name) {
 		add_row_tag(row, create_tag('good', name));
-	} else if (!await is_contract(address)) {
+	} else if (check && !await is_contract(address)) {
 		add_row_tag(row, create_tag('fail', 'Not a Contract'));
 	}
 }
@@ -2891,30 +2887,6 @@ function add_nft_links(row, name, contract, token) {
 		}
 		add_row_tag(row, create_link(`http://predomain.eth.limo/#/domain/${encoded}`, {innerHTML: 'Predomain', className: 'external'}));
 	} catch (err) {
-	}
-}
-
-async function add_avatar(row, resolver) {
-	try {
-		let {url, linkage} = await resolver._getAvatar();
-		resolver.__linkage = linkage;
-		if (!url) return;
-		resolver.__avatar = url;
-		// try {
-		// 	url = new URL(url).toString().replaceAll('#', '%23'); // i forget why im doing this
-		// } catch (ignored) {
-		// }
-		let img = new Image();
-		img.src = url;
-		let a = create_link(url, {className: 'avatar'});
-		a.replaceChildren(img);
-		row.append(a);
-	} catch (err) {
-		console.log('Avatar error', avatar, err);
-	} finally {
-		if (!row.isConnected) return;
-		let a = row.parentNode.querySelector('.record.ava');
-		if (a) RECORDS.find(x => x.key === 'avatar').then(a, resolver);
 	}
 }
 
@@ -3099,9 +3071,9 @@ function create_namehash_button(name) {
 	make_click_copy(btn, node);
 	let lines = [`Namehash: ${node}`];
 	try {
-		let rle = ethers.hexlify(dns_name_from(name));
-		btn.dataset.alt = rle;
-		lines.push(`[ALT] DNS-encoded: ${rle}`);
+		let hex = ethers.hexlify(dns_name_from(name));
+		btn.dataset.alt = hex;
+		lines.push(`[ALT] DNS-encoded: ${hex}`);
 	} catch (err) {
 	}
 	lines.push('(Click to Copy)');
@@ -3116,13 +3088,13 @@ function create_namehash_breakdown(name) {
 	div.append(create_copy_btn(node, {small: true, value: true}));
 	return div;
 }
-function create_rle_breakdown(name) {
+function create_dns_breakdown(name) {
 	let div = create('div', {className: 'hash'});
 	div.append(create('b', {innerText: 'DNS-encoded:'}));
 	try {
 		let v = dns_name_from(name);
-		let dns_name = ethers.hexlify(v);
-		div.append(create('span', {className: 'bytes', innerText: v.length}), create_copy_btn(dns_name, {small: true, value: true}));
+		let hex = ethers.hexlify(v);
+		div.append(create('span', {className: 'bytes', innerText: v.length}), create_copy_btn(hex, {small: true, value: true}));
 	} catch (err) {
 		div.append(create('span', {innerText: '🚫️', title: err.message}));
 	}
@@ -3133,7 +3105,7 @@ function create_breakdown_row(name, before) {
 	if (available) outer.classList.add('available');
 	make_detailed(outer);
 	outer.append(create_namehash_breakdown(name));
-	outer.append(create_rle_breakdown(name));
+	outer.append(create_dns_breakdown(name));
 	let split = ens_split(name);
 	for (let i = 0; i < split.length; i++) {
 		let info = split[i];
@@ -3420,7 +3392,7 @@ async function resolve1(input, skip_norm) {
 		make_detailed(rev_details);
 		let rev_div = create('div', {innerHTML: `<b>Reverse Name:</b> <code class="long">${rev_name}</code>`, className: 'hash'});
 		rev_div.append(create_copy_btn(rev_name, {small: true, value: true}));
-		rev_details.append(rev_div, create_namehash_breakdown(rev_name), create_rle_breakdown(rev_name));
+		rev_details.append(rev_div, create_namehash_breakdown(rev_name), create_dns_breakdown(rev_name));
 		output_div.append(input_row, rev_details);
 
 		let resolver_row = create_row('Reverse Resolver', true);
@@ -3443,9 +3415,9 @@ async function resolve1(input, skip_norm) {
 			try {
 				reverse_registrar = await registry_contract.owner(namehash(REVERSE_DOMAIN));
 			} catch (err) {
-				reverse_registrar = false;
 			}
 			if (should_stop_resolving()) return;
+			if (!reverse_registrar) reverse_registrar = false;
 		}
 		if (reverse_registrar) {
 			add_row_tag(input_row, create_etherscan_address_link(reverse_registrar, {
@@ -3464,9 +3436,9 @@ async function resolve1(input, skip_norm) {
 			return;
 		}
 		
-		resolver_row.append(create_etherscan_address_link(resolver.address, {contract: true}));
-		add_row_tag(resolver_row, create_copy_btn(resolver.address, {value: true}));
-		await add_contract_name(resolver_row, resolver.address);
+		resolver_row.append(create_etherscan_address_link(resolver.target, {contract: true}));
+		add_row_tag(resolver_row, create_copy_btn(resolver.target, {value: true}));
+		await add_contract_name(resolver_row, resolver.target, !resolver.__wildcard);
 		if (should_stop_resolving()) return;
 
 		reverse_row = normed_row = create_row('Reverse', true);
@@ -3610,21 +3582,30 @@ async function resolve1(input, skip_norm) {
 		}
 	}
 
-	if (!skip_norm && !norm_err) {
-		let pretty = ens_beautify(name_norm);
-		let row = create_row(`Beautified`);
-		row.classList.add('pretty');
-		row.append(create_main_span(pretty));
-		add_row_tag(row, create_copy_btn(pretty));
-		if (input === pretty) { 
-			add_row_tag(row, create_tag('good', SAME_AS_INPUT));
-		} else if (name_norm === pretty) {
-			add_row_tag(row, create_tag('good', SAME_AS_NORM));
-		} else {
-			add_row_tag(row, create_resolve_btn(pretty));
+	if (name_norm) {
+		let form, pretty;
+		try {
+			form = ens_beautify(name_norm);	
+			pretty = true;
+		} catch (err) {
 		}
-		add_row_tag(row, create_pretty_tag());
-		add_ensip1_tag(row, pretty);
+		if (skip_norm && form !== name_norm) {
+			form = name_norm;
+			pretty = false;
+		}
+		let row = create_row(pretty ? 'Beautified' : 'Unnormalized');
+		if (pretty) row.classList.add('pretty');
+		row.append(create_main_span(form));
+		add_row_tag(row, create_copy_btn(form));
+		if (input === form) { 
+			add_row_tag(row, skip_norm ? SAME_AS_INPUT : create_tag('good', SAME_AS_INPUT));
+		} else if (name_norm === form) {
+			add_row_tag(row, create_tag('good', SAME_AS_NORM));
+		} else if (pretty) {
+			add_row_tag(row, create_resolve_btn(form));
+			add_row_tag(row, create_pretty_tag());
+		}
+		add_ensip1_tag(row, form);
 		output_div.append(row);
 	}
 
@@ -3648,19 +3629,18 @@ async function resolve1(input, skip_norm) {
 		resolver_row.classList.add('error');
 		add_row_tag(resolver_row, create_tag('warn', resolver_err));
 	} else if (resolver) { 
-		add_avatar(normed_row, resolver); 
-		resolver_row.append(create_etherscan_address_link(resolver.address, {contract: true}));
-		add_row_tag(resolver_row, create_copy_btn(resolver.address, {value: true}));
+		//add_avatar(normed_row, resolver); 
+		resolver_row.append(create_etherscan_address_link(resolver.target, {contract: true}));
+		add_row_tag(resolver_row, create_copy_btn(resolver.target, {value: true}));
+		await add_contract_name(resolver_row, resolver.target, !resolver.__wildcard);
+		if (should_stop_resolving()) return;
 		if (resolver.__wildcard) {
 			add_row_tag(resolver_row, create_tag('special', 'Wildcard'));
-			if (resolver.__basename === name_norm) {
-				add_row_tag(resolver_row, 'Basename');
-			} else {
+			if (resolver.__dropped) {
 				add_row_tag(resolver_row, create_resolve_btn(resolver.__basename, `↩️ ${resolver.__basename}`));
+			} else {
+				add_row_tag(resolver_row, 'Basename');
 			}
-		} else {
-			add_contract_name(resolver_row, resolver.address);
-			if (should_stop_resolving()) return;
 		}
 	} else {
 		add_row_tag(resolver_row, create_tag('warn', `Not Set`));	
@@ -3718,16 +3698,16 @@ async function resolve1(input, skip_norm) {
 			//add_row_tag(avail_row, create_ens_link(name_norm, {title: 'Register'}));
 		} else {
 			let exp = expiry * 1000;
-			let end = exp + eth_nft_contract.grace_period;
+			let end = exp + eth_nft_contract.__grace_period;
 			let now = Date.now();
 			if (now >= exp && now <= end) {
-				add_row_tag(avail_row, create_tag('warn', `Grace period (${format_dur(eth_nft_contract.grace_period)}) ends in ${format_dur(end - now)}`));
+				add_row_tag(avail_row, create_tag('warn', `Grace period (${format_dur(eth_nft_contract.__grace_period)}) ends in ${format_dur(end - now)}`));
 			} else {
 				add_reg_exp_tags(avail_row, exp, now);
 			}
 		}
 		if (nft_contract) {
-			avail_row.querySelector('.row-label').title = `Grace: ${format_dur(nft_contract.grace_period)}\nPremium: ${format_dur(price_oracle_contract.premium_period)}`;
+			avail_row.querySelector('.row-label').title = `Grace: ${format_dur(nft_contract.__grace_period)}\nPremium: ${format_dur(price_oracle_contract.__premium_period)}`;
 		}
 	} else if (nft_backed) {
 		let label = name_norm.slice(0, sep_pos);
@@ -3778,7 +3758,7 @@ async function resolve1(input, skip_norm) {
 	}
 	// get the owner
 	let is_wrapped, owner, nft_owner;
-	if ((!resolver || resolver.__basename === name_norm) && (!nft_backed || available !== undefined)) { 
+	if ((!resolver || !resolver.__dropped) && (!nft_backed || available !== undefined)) { 
 		let node = namehash(name_norm);
 		let wrapped_row = create_row('Wrapper', true);
 		let unwrappable;
@@ -3959,10 +3939,9 @@ async function resolve1(input, skip_norm) {
 		}
 	}
 	if (should_stop_resolving()) return;
-	if (resolver && !NOT_IFACE_RESOLVER.has(resolver.address)) {
+	if (resolver && !NOT_IFACE_RESOLVER.has(resolver.target)) {
 		let row = create_row(create_link('https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar#discovery', {innerHTML: 'Interfaces'}), true);
 		output_div.append(row);	
-		let contract = contract_for_resolver(resolver);
 		// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar	
 		const TITLE_WRAPPER = '<b>Wrapper</b> ERC-1155';
 		let interfaces = [
@@ -3983,12 +3962,12 @@ async function resolve1(input, skip_norm) {
 		}
 		try {
 			// https://github.com/ensdomains/ens-contracts/blob/dev/contracts/resolvers/profiles/IInterfaceResolver.sol
-			if (!await contract.supportsInterface('0x124a319c')) {
+			if (!await resolver.supportsInterface('0x124a319c')) {
 				throw new Error('not EIP-165');
 			}
 			for (let {iface, title} of interfaces) {
 				if (should_stop_resolving()) return;
-				let addr = await contract.get_interface(iface);
+				let addr = await resolver.__get_interface(iface);
 				if (is_null_hex(addr)) continue;
 				add_iface(`${title} <code>${iface.slice(2)}</code>`, addr);
 				if (iface === IFACE_ETH_CONTROLLER) {
@@ -4012,7 +3991,7 @@ async function resolve1(input, skip_norm) {
 			add_row_tag(row, create_elapsed()); 
 		} else {
 			row.remove();
-			NOT_IFACE_RESOLVER.add(resolver.address);
+			NOT_IFACE_RESOLVER.add(resolver.target);
 		}
 	}
 
@@ -4156,8 +4135,34 @@ async function resolve1(input, skip_norm) {
 						if (rec.class) {
 							a.classList.add(rec.class);
 						}
-						if (rec.then) {
-							rec.then(a, resolver);
+						if (rec.key === 'avatar') {
+							let spinner = create('div', {className: ['avatar', 'spinner']});
+							if (!show_records_check.checked) spinner.classList.add('hide');
+							normed_row.append(spinner);
+							fetch_resource_url(data, owner).then(avatar => {
+								if (!normed_row.isConnected) return;
+								if (avatar.error) {
+									a.append(create('span', {
+										className: ['tags', 'changed'], 
+										innerHTML: '❌️ Failed', 
+										title: avatar.error
+									}));
+									spinner.replaceWith(create('span', {className: 'avatar', innerText: '❌️'}));
+								} else {
+									a.append(create('span', {className: ['tags', 'minor'], innerText: avatar.type}));
+									if (avatar.fixed) {
+										a.append(create('span', {
+											className: ['tags', 'changed'],
+											innerHTML: '⚠️ Changed', 
+											title: avatar.fixed
+										}));
+									}
+									let img = new Image();
+									img.src = avatar.url;
+									spinner.replaceWith(create('a', {className: 'avatar', target: '_blank', href: avatar.url}, img));
+								}
+								a.classList.add('rtrim');
+							});
 						}
 						break;
 					}
@@ -4190,7 +4195,7 @@ async function resolve1(input, skip_norm) {
 									cid = CID.from(buf);
 									rep = cid.toString();
 									url = `ipfs://${rep}`;
-									a.append(create_link(`https://${rep}.ipfs2.eth.limo/`, {button: '🆔️ IPFS'}));
+									a.append(create_link(url_from_ipfs_path(rep), {button: '🆔️ IPFS'}));
 									break;
 								}
 								case 0xE5: { // IPNS
@@ -4387,35 +4392,37 @@ async function fetch_addr60(resolver) {
 	if (!is_null_hex(address)) return ethers.getAddress(address);
 }
 async function fetch_records(resolver, records) {
-	if (resolver.__wildcard && !resolver.__dns_name) return []; // unreachable
+	if (resolver.__wildcard && !resolver.__dns_name) {
+		return records.map(rec => ({rec, error: new Error('unreachable')})); 
+	}
 	const options = {enableCcipRead: true};
-	let contract = contract_for_resolver(resolver);
 	if (records.length > 1) {
 		let encoded = records.map(rec => {
-			let frag = contract.interface.getFunction(rec.type);
-			let params = [contract.__node];
+			let frag = resolver.interface.getFunction(rec.type);
+			let params = [resolver.__node];
 			switch (rec.type) {
 				case TYPE_TEXT: params.push(rec.key); break;
 				case TYPE_ADDR: params.push(rec.coin); break;
 			}
-			return contract.interface.encodeFunctionData(frag, params);
+			return resolver.interface.encodeFunctionData(frag, params);
 		});
 		try {
 			let res;
 			if (resolver.__wildcard) { // optimistic CCIP-multicall
-				let frag = contract.interface.getFunction('multicall');
-				res = await contract.resolve(resolver.__dns_name, contract.interface.encodeFunctionData(frag, [encoded]), options);
-				[res] = contract.interface.decodeFunctionResult(frag, res);
-			} else if (await can_multicall()) {
-				res = await multicall_contract.tryAggregate(false, encoded.map(data => ({target: resolver.address, data})));
+				let frag = resolver.interface.getFunction('multicall');
+				res = await resolver.resolve(resolver.__dns_name, resolver.interface.encodeFunctionData(frag, [encoded]), options);
+				[res] = resolver.interface.decodeFunctionResult(frag, res);
+			} else {
+				let {target} = resolver;
+				res = await multicall_contract.tryAggregate(false, encoded.map(data => ({target, data})));
 				res = res.map(({success, data}) => success ? data : null);
 			}
 			if (res && res.length === records.length) {
 				resolver.__multicall = records.length;
 				return records.map((rec, i) => {
 					try {
-						let frag = contract.interface.getFunction(rec.type);
-						let data = contract.interface.decodeFunctionResult(frag, res[i]);
+						let frag = resolver.interface.getFunction(rec.type);
+						let data = resolver.interface.decodeFunctionResult(frag, res[i]);
 						if (frag.outputs.length === 1) data = data[0];
 						return {rec, data};
 					} catch (error) {
@@ -4431,21 +4438,18 @@ async function fetch_records(resolver, records) {
 		if (should_stop_resolving()) {
 			return {rec, error: new Error('aborted')};
 		}
-		if (rec.key === 'avatar' && resolver.__avatar) { // add_avatar() probably already computed
-			return {rec, data: resolver.__avatar}; 
-		}	
-		let params = [contract.__node];
+		let params = [resolver.__node];
 		if (rec.type === TYPE_ADDR && rec.coin === 60) { // try boomer method first
 			const method = 'addr(bytes32)';
 			try {
 				let data;
 				if (resolver.__wildcard) {
-					let frag = contract.interface.getFunction(method);
-					data = await contract.resolve(resolver.__dns_name, contract.interface.encodeFunctionData(frag, params), options);
-					[data] = contract.interface.decodeFunctionResult(frag, data);
+					let frag = resolver.interface.getFunction(method);
+					data = await resolver.resolve(resolver.__dns_name, resolver.interface.encodeFunctionData(frag, params), options);
+					[data] = resolver.interface.decodeFunctionResult(frag, data);
 					if (data.length !== 42) throw new Error('expected address');
 				} else {
-					data = await contract[method](contract.__node);
+					data = await resolver[method](resolver.__node);
 				}
 				return {rec, data};
 			} catch (err) {
@@ -4458,12 +4462,12 @@ async function fetch_records(resolver, records) {
 		try {
 			let data;
 			if (resolver.__wildcard) {
-				let frag = contract.interface.getFunction(rec.type);
-				data = await contract.resolve(resolver.__dns_name, contract.interface.encodeFunctionData(frag, params), options);
-				data = contract.interface.decodeFunctionResult(frag, data);
+				let frag = resolver.interface.getFunction(rec.type);
+				data = await resolver.resolve(resolver.__dns_name, resolver.interface.encodeFunctionData(frag, params), options);
+				data = resolver.interface.decodeFunctionResult(frag, data);
 				if (frag.outputs.length === 1) data = data[0];
 			} else {
-				data = await contract[rec.type](...params);
+				data = await resolver[rec.type](...params);
 			}
 			return {rec, data};
 		} catch (error) {
@@ -4472,42 +4476,115 @@ async function fetch_records(resolver, records) {
 		}
 	}));
 }
+async function fetch_resource_url(avatar, owner) {
+	let pos = avatar.indexOf('://');
+	if (pos >= 0) {
+		let proto = avatar.slice(0, pos).toLowerCase();
+		if (proto === 'ipfs') {
+			let path = avatar.slice(pos + 3).replace(/^ipfs\//, '');
+			try {
+				CID.from(path.split('/', 1)[0]);
+			} catch (err) {
+				return {error: err.message};
+			}
+			avatar = url_from_ipfs_path(path);
+		}
+		let type;
+		switch (proto) {
+			case 'data': type = 'On-chain'; break;
+			case 'ipfs':
+			case 'http':
+			case 'https': type = 'URL'; break;
+		}
+		if (type) {
+			try {
+				return {url: new URL(avatar).toString(), type, proto};
+			} catch (err) {
+				return {error: 'invalid url'};
+			}
+		}
+	}
+	if (owner && avatar.startsWith('eip155:')) {
+		let match = avatar.toLowerCase().match(/^eip155:([0-9]+)\/erc(721|1155):(0x[0-9a-f]{40})\/(0x[0-9a-f]+|[0-9]+)$/i);
+		if (!match) {
+			return {error: 'invalid avatar string'};
+		}
+		let chain_id = parseInt(match[1]);
+		let erc = match[2];
+		let address = match[3];
+		let token = BigInt(match[4]);
+		// TODO: check known chains
+		if (chain_id !== active_chain.id) {
+			return {error: `wrong chain: ${format_dec_hex(chain_id)}`};
+		}
+		switch (erc) {
+			case '721': {
+				let contract = new ethers.Contract(address, [
+					`function tokenURI(uint256) view returns (string)`,
+					`function ownerOf(uint256) view returns (address)`,
+				], active_provider);
+				let nft_owner = await contract.ownerOf(token);
+				if (nft_owner !== owner) {
+					return {error: 'not owner'};
+				}
+				return {address, token, ...await fetch_nft_image(await contract.tokenURI(token))};
+			}
+			case '1155': {
+				let contract = new ethers.Contract(address, [
+					`function uri(uint256) view returns (string)`,
+					`function balanceOf(address, uint256) view returns (uint256)`,
+				], active_provider);
+				let balance = await contract.balanceOf(owner, token);
+				if (!balance) {
+					return {error: 'not owner'};
+				}
+				return {address, token, ...await fetch_nft_image(await contract.uri(token).then(url => url.replace('{id}', token.toString(16).padStart(64, '0'))))};
+			}
+			default: return {error: `unknown ERC-${erc}`};
+		}
+	}
+	return {error: 'unknown format'};
+}
+async function fetch_nft_image(url0) {
+	let {error, url: meta_url} = await fetch_resource_url(url0);
+	if (error) {
+		return {error: 'expected metadata url'};
+	}
+	// fix opensea bullshit
+	let fixed;
+	const opensea_v1 = 'https://api.opensea.io/api/v1/metadata/';
+	if (meta_url.startsWith(opensea_v1)) {
+		meta_url = `https://api.opensea.io/api/v2/metadata/ethereum/${meta_url.slice(opensea_v1.length)}`;
+		fixed = `${OPENSEA_NAME} v1 → v2`;
+	}
+	try {
+		let res = await fetch(meta_url);
+		if (res.ok) {
+			let {image} = await res.json();
+			if (typeof image !== 'string') {
+				return {error: 'expected metadata "image"'};
+			}
+			let {url, error} = await fetch_resource_url(image);
+			if (error) {
+				return {error};
+			}
+			return {type: 'NFT', url, meta_url, fixed};
+		} else {
+			return {error: `HTTP ${res.status}: ${meta_url}}`};
+		}
+	} catch (err) {
+		return {error: `fetch failure`};
+	}
+}
+
 async function ensure_eth_resolver() {
 	if (eth_resolver_contract) return;
 	if (eth_resolver_contract === false) throw new Error(`No "eth" resolver`);
-	try {
-		let resolver = await get_resolver('eth');
-		if (resolver) {
-			eth_resolver_contract = contract_for_resolver(resolver);
-		} else {
-			eth_resolver_contract = false;
-			return ensure_eth_resolver();
-		}
-	} catch (err) {
-		if (!should_stop_resolving()) {
-			eth_resolver_contract = false;
-		}
-		throw err;
+	eth_resolver_contract = await get_resolver('eth');
+	if (!eth_resolver_contract) {
+		eth_resolver_contract = false;
+		return ensure_eth_resolver();
 	}
-}
-function contract_for_resolver(resolver) {
-	// https://github.com/ensdomains/ens-contracts/tree/staging/contracts/resolvers/profiles
-	let contract = new ethers.Contract(resolver.address, [
-		'function supportsInterface(bytes4 interfaceID) external view returns (bool)',
-		'function interfaceImplementer(bytes32 node, bytes4 interfaceID) external view returns (address)',
-		'function resolve(bytes name, bytes data) view returns (bytes)',
-		'function addr(bytes32 node, uint coinType) view returns (bytes)',
-		'function addr(bytes32 node) view returns (address)',
-		'function text(bytes32 node, string key) view returns (string)',
-		'function contenthash(bytes32 node) view returns (bytes)',
-		'function pubkey(bytes32 node) view returns (bytes32 x, bytes32 y)',
-		'function name(bytes32 node) view returns (string)',
-		'function recordVersions(bytes32 node) external view returns (uint64)',
-		'function multicall(bytes[] calldata data) external returns (bytes[] memory results)',
-	], active_provider);
-	contract.__node = namehash(resolver.name);
-	contract.get_interface = hash => contract.interfaceImplementer(contract.__node, hash);
-	return contract;
 }
 function contract_for_controller(address) {
 	return new ethers.Contract(address, [
@@ -4522,20 +4599,14 @@ function contract_for_price_oracle(address) {
 		'function price(string calldata name, uint256 expires, uint256 duration) external view returns (uint256)',
 		'function usdOracle() external view returns (address)',
 	], active_provider);
-	/*
-	totalDays = 21; // FromDigits["15"]
-	price0 = 10^(8 + 18) // FromDigits["52b7d2dcc80cd2e4000000", 16]
-	price1 = BitShiftRight[price0, totalDays]
-	dur = 1814400;  // t /. First@Solve[price0*(1/2)^(t/86400) == price1, t, Reals]
-	*/
-	contract.premium_period = 21*86400*1000;
+	contract.__premium_period = 21*86400*1000;
 	return contract;
 }
 async function ensure_wrapper() {
 	if (wrapper_contract) return;
 	if (wrapper_contract === false) throw new Error(`Not implementated`);
 	await ensure_eth_resolver();
-	let wrapper_address = await eth_resolver_contract.get_interface('0x019a38fe');
+	let wrapper_address = await eth_resolver_contract.__get_interface('0x019a38fe');
 	if (is_null_hex(wrapper_address)) {
 		wrapper_contract = false;
 		return ensure_wrapper();
@@ -4551,7 +4622,6 @@ async function ensure_eth_nft() {
 	if (eth_nft_contract === false) throw new Error(`Not implemented`);
 	await ensure_eth_resolver();
 	let nft_address = await registry_contract.owner(eth_resolver_contract.__node);
-	//let nft_address = await eth_resolver_contract.get_interface(IFACE_ETH_NFT);
 	if (is_null_hex(nft_address)) {
 		eth_nft_contract = false;
 		return ensure_eth_nft();
@@ -4562,22 +4632,10 @@ async function ensure_eth_nft() {
 		'function ownerOf(uint256 id) external view returns (address)',
 		'function GRACE_PERIOD() external view returns (uint256)',
 	], active_provider);
-	eth_nft_contract.grace_period = 1000 * (await eth_nft_contract.GRACE_PERIOD().then(Number).catch(() => 90*86400));
-	eth_controller_contract = contract_for_controller(await eth_resolver_contract.get_interface(IFACE_ETH_CONTROLLER));
+	// TODO: make this abortable
+	eth_nft_contract.__grace_period = 1000 * (await eth_nft_contract.GRACE_PERIOD().then(Number).catch(() => 90*86400));
+	eth_controller_contract = contract_for_controller(await eth_resolver_contract.__get_interface(IFACE_ETH_CONTROLLER));
 	price_oracle_contract = contract_for_price_oracle(await eth_controller_contract.prices());
-}
-async function can_multicall() {
-	if (multicall_contract === null) {
-		const MULTICALL3 = '0xcA11bde05977b3631167028862bE2a173976CA11';
-		if (await is_contract(MULTICALL3)) {
-			multicall_contract = new ethers.Contract(MULTICALL3, [
-				`function tryAggregate(bool requireSuccess, tuple(address target, bytes data)[] memory calls) public view returns (tuple(bool success, bytes data)[] memory returnData)`
-			], active_provider);
-		} else {
-			multicall_contract = false;
-		}
-	}
-	return multicall_contract;
 }
 function labels_from_dns_name(v) {
 	let labels = [];
@@ -4608,18 +4666,38 @@ function dns_name_from(labels) {
 	v.push(0);
 	return Uint8Array.from(v);
 }
-// https://docs.ens.domains/ens-improvement-proposals/ensip-10-wildcard-resolution
 async function get_resolver(name) {
+	// returns resolver | undefined | throws
+	// https://docs.ens.domains/ens-improvement-proposals/ensip-10-wildcard-resolution
 	let v = name.split('.');
 	for (let i = 0; i < v.length; i++) {
 		let basename = v.slice(i).join('.');
-		let address = await registry_contract.resolver(namehash(basename));
+		let basenode = namehash(basename);
+		let address = await registry_contract.resolver(basenode);
 		if (should_stop_resolving()) throw new Error('aborted');
-		if (!is_null_hex(address)) {
-			let resolver = new ethers.EnsResolver(active_provider, address, name);
-			resolver.__basename = basename; // remember
-			let wild = await resolver.supportsWildcard().catch(() => {}); // can throw
+		if (!is_null_hex(address)) { // first non null
+			// https://github.com/ensdomains/ens-contracts/tree/staging/contracts/resolvers/profiles
+			let resolver = new ethers.Contract(address, [
+				'function supportsInterface(bytes4 interfaceID) external view returns (bool)',
+				'function interfaceImplementer(bytes32 node, bytes4 interfaceID) external view returns (address)',
+				'function resolve(bytes name, bytes data) view returns (bytes)',
+				'function addr(bytes32 node, uint coinType) view returns (bytes)',
+				'function addr(bytes32 node) view returns (address)',
+				'function text(bytes32 node, string key) view returns (string)',
+				'function contenthash(bytes32 node) view returns (bytes)',
+				'function pubkey(bytes32 node) view returns (bytes32 x, bytes32 y)',
+				'function name(bytes32 node) view returns (string)',
+				'function recordVersions(bytes32 node) external view returns (uint64)',
+				'function multicall(bytes[] calldata data) external returns (bytes[] memory results)',
+			], active_provider);
+			let wild = await resolver.supportsInterface('0x9061b923').catch(() => {});
 			if (i && !wild) break; // ancestor but not wildcard
+			resolver.__name = name;
+			resolver.__node = namehash(name);
+			resolver.__dropped = i; // truthy => virtual
+			resolver.__basename = basename;
+			resolver.__basenode = basenode;
+			resolver.__get_interface = hash => resolver.interfaceImplementer(resolver.__basenode, hash);
 			if (wild) {
 				resolver.__wildcard = true;
 				try {
@@ -4749,6 +4827,9 @@ function add_dot_eth(name, append) {
 	if (name.endsWith('.')) name = name.slice(0, -1);
 	if (name && !(append ? name.endsWith(suffix) : name.includes('.'))) name += suffix;
 	return name;
+}
+function url_from_ipfs_path(s) {
+	return `https://cloudflare-ipfs.com/ipfs/${s}`;
 }
 function format_dec_hex(id) {
 	return id < 10 ? id : `${id} (0x${id.toString(16).toUpperCase()})`;
