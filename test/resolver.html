@@ -1157,7 +1157,7 @@ Hebrew:
 	<input type="checkbox" id="show_details_check">
 	<label for="show_details_check">Details</label>
 	<input type="checkbox" id="show_components_check" checked>
-	<label for="show_components_check" title="Reveal internal emoji codepoints">Emoji 🧬️</label>
+	<label class="hide" for="show_components_check" title="Reveal internal emoji codepoints">Emoji 🧬️</label>
 	<input type="checkbox" id="show_records_check" checked>
 	<label for="show_records_check" title="Include common text and address records">Records</label>
 	<input type="checkbox" id="skip_norm_check">
@@ -1209,7 +1209,7 @@ Hebrew:
 <li>Clear input to return to this page.</li>
 </ul>
 <ul class="row legend">
-<li>This is a <b>valid</b> sequence of characters: <span data-tokenize="abc"></span> and <b>.eth</b> name: <span data-tokenize="abc.eth"></span></li>
+<li>This is a <b>valid</b> sequence of characters: <span data-tokenize="abc"></span> and domain name: <span data-tokenize="abc.eth"></span></li>
 <li>This is an <b>emoji</b>: <span data-tokenize="👩🏽‍⚕️"></span> and its corresponding <b>components</b>: <span data-tokenize="👩🏽‍⚕️" data-parts="1"></span></li>
 <li>This is a <b>mapped</b> token: <span data-tokenize="™"></span> which transforms into a <b>valid</b> sequence: <span data-tokenize="tm"></span></li>
 <li>Characters not in canonical form require <b>NFC</b>: <span data-tokenize="a{303}"></span></li>
@@ -1258,12 +1258,12 @@ use_default_style();
 
 const $ = x => document.querySelector(x);
 const EMOJI = ens_emoji();
-const emoji_url = './emoji.html#q=%s';
 
 const input_field = $('#input_field');
 const resolve_btn = $('#resolve_btn');
 const auto_resolve_check = $('#auto_resolve_check');
 const show_components_check = $('#show_components_check');
+const show_components_label = $('label[for="show_components_check"]');
 const show_records_check = $('#show_records_check');
 const skip_norm_check = $('#skip_norm_check');
 const show_details_check = $('#show_details_check');
@@ -1360,9 +1360,14 @@ const RESOLVER_NAMES = {
 	'0xF142B308cF687d4358410a4cB885513b30A42025': 'Offchain DNS'
 };
 const IS_CONTRACT = new Map();
+const IS_WILD = new Map();
 const NOT_IFACE_RESOLVER = new Set();
-const ADDRESS_MAP = new Map();
 const IFACE_ETH_CONTROLLER = '0x612e8c09';
+const ADDRESS_MAP = new Map();
+
+const ERROR_ABI = new ethers.Interface([
+	'error InvalidLabelCount(bytes dns, uint256 count)',
+]);
 
 // TODO: https://github.com/ensdomains/docs/blob/profile-text-records/ens-improvement-proposals/ensip-xx-profile-text-records.md
 const TYPE_ADDR = 'addr(bytes32,uint256)';
@@ -1742,11 +1747,13 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 }
 for (let x of document.querySelectorAll('[data-tokenize]')) {
 	x.replaceWith(dom_from_tokens(ens_tokenize(replace_escapes(x.dataset.tokenize)), {
-		emoji_url,
-		components: x.dataset.parts
+		components: x.dataset.parts,
+		emoji(a, {emoji}) {
+			a.href = `#${encodeURIComponent(String.fromCodePoint(...emoji))}`;
+		},
+		tld: true
 	}));
 }
-
 resolve_btn.addEventListener('click', resolve);
 input_field.addEventListener('keydown', e => {
 	if (e.key === 'Enter') {
@@ -1955,7 +1962,7 @@ function set_page_url(url) {
 		resolve();
 	}
 }
-window.addEventListener('popstate', e => set_page_url(new URL(e.state)));
+window.addEventListener('popstate', e => set_page_url(new URL(e.state || '', location0)));
 window.addEventListener('hashchange', e => set_page_url(new URL(e.newURL)));
 window.addEventListener('unload', () => {}); // prevent weird restore behavior 
 
@@ -2100,6 +2107,7 @@ function update_network() {
 		reverse_registrar = null;
 		NOT_IFACE_RESOLVER.clear();
 		IS_CONTRACT.clear();
+		IS_WILD.clear();		
 		if (input_field.value) {
 			schedule_resolve(0);
 		} else if (init) {
@@ -2203,6 +2211,7 @@ function update_location() {
 	document.title = get_page_title();
 }
 function parse() {
+	if (!active_chain) return; // wait for init
 	update_location();	
 	let input = input_field.value;
 	let width = ens_tokenize(input, {nf: false}).reduce((a, x) => {
@@ -2215,12 +2224,14 @@ function parse() {
 	nf_btn.disabled = !input;
 	escape_btn.disabled = !input;
 	parent_btn.disabled = !input;	
+	show_components_label.classList.add('hide');
 	output_div.innerHTML = '';
 	clock_span.innerHTML = '';
 	available = undefined;
 	if (!input) {
 		stop_resolving();
-		output_div.append(...readme_dom);	
+		show_components_check
+		output_div.append(...readme_dom);
 		return;
 	}
 	// TODO: conslidate this code with resolve()
@@ -2236,6 +2247,8 @@ function parse() {
 		return true;
 	}
 	let row = create_row(INPUT_NAME);
+	let tokens = ens_tokenize(name); 
+	if (tokens.some(x => x.emoji)) show_components_label.classList.remove('hide');
 	make_exploded(row, name, false); //, true);
 	add_row_tag(row, create_dot_eth_button(name));
 	output_div.append(row, create_breakdown_row(name, true));
@@ -2309,8 +2322,6 @@ function parse() {
 				}
 			}));
 		}
-
-		let tokens = ens_tokenize(name); 
 
 		// if there are disallowed characters
 		if (tokens.some(x => x.type === 'disallowed')) {
@@ -2757,7 +2768,7 @@ function make_contract(row) {
 }
 function make_exploded(row, name, is_norm, components) {	
 	let before = !is_norm;
-	let tokens_div = create_tokens_div(name, before, components);
+	let tokens_div = create_exploded(name, before, components);
 	let old = row.querySelector('.exploded');
 	if (old) {
 		old.replaceWith(tokens_div);
@@ -2934,7 +2945,7 @@ function req_utf8_cont(v, i) {
 	if ((x & 0xC0) != 0x80) throw new Error(`malformed utf8 at ${i}: expected continuation`);
 	return x & 0x3F;
 }
-function create_tokens_div(name, before, components) {
+function create_exploded(name, before, components) {
 	// tokenize each label separately so we can show major/minor errors
 	// flatten non-errors tokens into wrapper
 	let split = ens_split(name);
@@ -2948,8 +2959,12 @@ function create_tokens_div(name, before, components) {
 		let label = str_from_cps(input);
 		let tokens = dom_from_tokens(ens_tokenize(label), {
 			before, 
-			emoji_url,
-			components: components || show_components_check.checked
+			tld: i === split.length-1,
+			components: components || show_components_check.checked,
+			emoji(a, {emoji}) {
+				a.href = `./emoji.html#q=${encodeURIComponent(String.fromCodePoint(...emoji))}`;
+				a.target = '_blank';
+			},
 		});
 		if (error) {
 			tokens.classList.add('error');
@@ -2959,9 +2974,6 @@ function create_tokens_div(name, before, components) {
 			}
 			wrapper.append(tokens);
 		} else {
-			if (i === split.length-1 && /^[a-z]+$/.test(label)) { // tld?
-				tokens.firstChild.dataset.tld = label;
-			}
 			wrapper.append(...tokens.children);
 		}
 	}
@@ -2970,10 +2982,9 @@ function create_tokens_div(name, before, components) {
 	if (components) wrapper.dataset.components = 1;
 	return wrapper;
 }
-
 function update_exploded() {
 	for (let x of output_div.querySelectorAll('.exploded')) {
-		let tokens_div = create_tokens_div(x.dataset.name, x.dataset.before, x.dataset.components);
+		let tokens_div = create_exploded(x.dataset.name, x.dataset.before, x.dataset.components);
 		if (x.dataset.downgraded) {
 			apply_downgrade(tokens_div);
 		}
@@ -3071,7 +3082,7 @@ function create_namehash_button(name) {
 	make_click_copy(btn, node);
 	let lines = [`Namehash: ${node}`];
 	try {
-		let hex = ethers.hexlify(dns_name_from(name));
+		let hex = ethers.hexlify(dns_encoded_from(name));
 		btn.dataset.alt = hex;
 		lines.push(`[ALT] DNS-encoded: ${hex}`);
 	} catch (err) {
@@ -3092,7 +3103,7 @@ function create_dns_breakdown(name) {
 	let div = create('div', {className: 'hash'});
 	div.append(create('b', {innerText: 'DNS-encoded:'}));
 	try {
-		let v = dns_name_from(name);
+		let v = dns_encoded_from(name);
 		let hex = ethers.hexlify(v);
 		div.append(create('span', {className: 'bytes', innerText: v.length}), create_copy_btn(hex, {small: true, value: true}));
 	} catch (err) {
@@ -3316,7 +3327,7 @@ function resolve() {
 				await ensure_wrapper();
 				let v = ethers.getBytes(await wrapper_contract.names(hash));
 				if (!v.length) throw new Error(`Unknown namehash preimage: ${hash}`);
-				input_field.value = labels_from_dns_name(v).join('.');
+				input_field.value = labels_from_dns_encoded(v).join('.');
 				setTimeout(resolve, 0);
 			} catch (err) {
 				window.alert(err.message);
@@ -3361,7 +3372,6 @@ function resolve() {
 		} else {
 			primary_loader.classList.add('hide');
 			window.history.replaceState(url.toString(), null, url);
-			console.log(`Added History: ${input}`);
 			// TODO: change this to idle() for 2sec or something
 			// so it works on errors, but not partial input
 		}
@@ -3438,7 +3448,7 @@ async function resolve1(input, skip_norm) {
 		
 		resolver_row.append(create_etherscan_address_link(resolver.target, {contract: true}));
 		add_row_tag(resolver_row, create_copy_btn(resolver.target, {value: true}));
-		await add_contract_name(resolver_row, resolver.target, !resolver.__wildcard);
+		await add_contract_name(resolver_row, resolver.target, !resolver.__wild);
 		if (should_stop_resolving()) return;
 
 		reverse_row = normed_row = create_row('Reverse', true);
@@ -3632,9 +3642,9 @@ async function resolve1(input, skip_norm) {
 		//add_avatar(normed_row, resolver); 
 		resolver_row.append(create_etherscan_address_link(resolver.target, {contract: true}));
 		add_row_tag(resolver_row, create_copy_btn(resolver.target, {value: true}));
-		await add_contract_name(resolver_row, resolver.target, !resolver.__wildcard);
+		await add_contract_name(resolver_row, resolver.target, !resolver.__wild);
 		if (should_stop_resolving()) return;
-		if (resolver.__wildcard) {
+		if (resolver.__wild) {
 			add_row_tag(resolver_row, create_tag('special', 'Wildcard'));
 			if (resolver.__dropped) {
 				add_row_tag(resolver_row, create_resolve_btn(resolver.__basename, `↩️ ${resolver.__basename}`));
@@ -3763,7 +3773,7 @@ async function resolve1(input, skip_norm) {
 		let wrapped_row = create_row('Wrapper', true);
 		let unwrappable;
 		try {
-			dns_name_from(name_norm);
+			dns_encoded_from(name_norm);
 		} catch (err) {
 			unwrappable = true;
 		}
@@ -3927,7 +3937,7 @@ async function resolve1(input, skip_norm) {
 					}
 					if (nft_owner !== input) {
 						add_row_tag(nft_row, create_resolve_btn(nft_owner));
-					}					
+					}
 					add_owner_links(nft_row, nft_owner);
 					add_row_tag(nft_row, create_elapsed());
 					remove_temporary(nft_row);
@@ -4058,226 +4068,230 @@ async function resolve1(input, skip_norm) {
 			//make_available(records_row);
 			output_div.append(records_row);	
 			let old = records_row.childElementCount;
-			for (let {rec, data, error} of await fetch_records(resolver, RECORDS)) {
-				if (error) continue;
-				//if (error) return create_typed_tag('warn', error);
-				let a = create('a', {className: 'record', target: '_blank'});
-				switch (rec.type) {
-					// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IAddressResolver.sol
-					// https://docs.ens.domains/ens-improvement-proposals/ensip-9-multichain-address-resolution
-					case TYPE_ADDR: {
-						if (is_null_hex(data))  continue;
-						a.classList.add('rtrim');
-						a.innerHTML = rec.icon || `<b>${rec.name}</b>`;
-						try {
-							let v = ethers.getBytes(data);
-							let lines = [`CoinType: ${format_dec_hex(rec.coin)}`];
-							let address;
-							if (rec.evm) {
-								address = ethers.getAddress(data);
-								lines.push(`Network: ${format_dec_hex(rec.evm)}`);
-							} else if (rec.btc) {
-								address = format_btc_address(v, rec.btc);
-							} else if (rec.bech32) {
-								address = new Bech32(rec.bech32.hrp, convert(v, 8, 5, true), rec.bech32.type).toString();
-							} else if (rec.base58) {
-								address = Base58BTC.encode(v);
-							} else {
-								throw new Error('nyi');
-							}
-							lines.unshift(address);
-							a.append(create('span', {innerHTML: address, className: ['addr', 'long']}));
-							a.href = rec.url(encodeURIComponent(address));
-							//if (rec.testnet) a.classList.add('testnet');
-							a.append(create_copy_btn(address, {value: true}));
-							a.title = lines.join('\n');
-						} catch (err) {
-							a.append(create_tag('fail', err));
-							a.append(create_copy_btn(data));
-						}
-						records_row.append(a);
-						break;
-					}
-					// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/ITextResolver.sol
-					case TYPE_TEXT: {
-						data = data.trim();
-						if (!data) continue;
-						a.innerHTML = rec.icon || `<b>${rec.key}</b>`;
-						let fixed = data;
-						if (rec.url) {
-							let prefix = rec.url('');
-							if (data.startsWith(prefix)) {
-								fixed = fixed.slice(prefix.length);
-							}
-						}
-						if (rec.fix) {
-							fixed = rec.fix(fixed);
-						}
-						if (fixed !== data) {
-							a.append(create('span', {
-								className: ['tags', 'changed'],
-								innerHTML: '⚠️ Changed', 
-								title: `Original: ${data}\nChange: ${fixed}`}));
-							data = fixed;
-						}
-						let text = rec.format ? rec.format(data) : data;
-						if (text) {
-							a.append(create('span', {innerText: text, className: text.length > 32 ? 'long' : null}));
-						}
-						if (rec.url) {
-							a.href = rec.url(data);
+			if (resolver.__unreachable) {
+				add_row_tag(records_row, create_tag('fail', 'Unreachable'));
+			} else {
+				for (let {rec, data, error} of await fetch_records(resolver, RECORDS)) {
+					if (error) continue;
+					//if (error) return create_typed_tag('warn', error);
+					let a = create('a', {className: 'record', target: '_blank'});
+					switch (rec.type) {
+						// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IAddressResolver.sol
+						// https://docs.ens.domains/ens-improvement-proposals/ensip-9-multichain-address-resolution
+						case TYPE_ADDR: {
+							if (is_null_hex(data))  continue;
 							a.classList.add('rtrim');
-							a.append(create_copy_btn(data));
-						} else {
-							make_click_copy(a, data);
-						}
-						a.title = `${data}\nText: ${rec.key}`;
-						if (rec.class) {
-							a.classList.add(rec.class);
-						}
-						if (rec.key === 'avatar') {
-							let spinner = create('div', {className: ['avatar', 'spinner']});
-							if (!show_records_check.checked) spinner.classList.add('hide');
-							normed_row.append(spinner);
-							fetch_resource_url(data, owner).then(avatar => {
-								if (!normed_row.isConnected) return;
-								if (avatar.error) {
-									a.append(create('span', {
-										className: ['tags', 'changed'], 
-										innerHTML: '❌️ Failed', 
-										title: avatar.error
-									}));
-									spinner.replaceWith(create('span', {className: 'avatar', innerText: '❌️'}));
+							a.innerHTML = rec.icon || `<b>${rec.name}</b>`;
+							try {
+								let v = ethers.getBytes(data);
+								let lines = [`CoinType: ${format_dec_hex(rec.coin)}`];
+								let address;
+								if (rec.evm) {
+									address = ethers.getAddress(data);
+									lines.push(`Network: ${format_dec_hex(rec.evm)}`);
+								} else if (rec.btc) {
+									address = format_btc_address(v, rec.btc);
+								} else if (rec.bech32) {
+									address = new Bech32(rec.bech32.hrp, convert(v, 8, 5, true), rec.bech32.type).toString();
+								} else if (rec.base58) {
+									address = Base58BTC.encode(v);
 								} else {
-									a.append(create('span', {className: ['tags', 'minor'], innerText: avatar.type}));
-									if (avatar.fixed) {
-										a.append(create('span', {
-											className: ['tags', 'changed'],
-											innerHTML: '⚠️ Changed', 
-											title: avatar.fixed
-										}));
-									}
-									let img = new Image();
-									img.src = avatar.url;
-									spinner.replaceWith(create('a', {className: 'avatar', target: '_blank', href: avatar.url}, img));
+									throw new Error('nyi');
 								}
+								lines.unshift(address);
+								a.append(create('span', {innerHTML: address, className: ['addr', 'long']}));
+								a.href = rec.url(encodeURIComponent(address));
+								//if (rec.testnet) a.classList.add('testnet');
+								a.append(create_copy_btn(address, {value: true}));
+								a.title = lines.join('\n');
+							} catch (err) {
+								a.append(create_tag('fail', err));
+								a.append(create_copy_btn(data));
+							}
+							records_row.append(a);
+							break;
+						}
+						// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/ITextResolver.sol
+						case TYPE_TEXT: {
+							data = data.trim();
+							if (!data) continue;
+							a.innerHTML = rec.icon || `<b>${rec.key}</b>`;
+							let fixed = data;
+							if (rec.url) {
+								let prefix = rec.url('');
+								if (data.startsWith(prefix)) {
+									fixed = fixed.slice(prefix.length);
+								}
+							}
+							if (rec.fix) {
+								fixed = rec.fix(fixed);
+							}
+							if (fixed !== data) {
+								a.append(create('span', {
+									className: ['tags', 'changed'],
+									innerHTML: '⚠️ Changed', 
+									title: `Original: ${data}\nChange: ${fixed}`}));
+								data = fixed;
+							}
+							let text = rec.format ? rec.format(data) : data;
+							if (text) {
+								a.append(create('span', {innerText: text, className: text.length > 32 ? 'long' : null}));
+							}
+							if (rec.url) {
+								a.href = rec.url(data);
 								a.classList.add('rtrim');
-							});
-						}
-						break;
-					}
-					// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IPubkeyResolver.sol
-					case 'pubkey': {
-						let [x, y] = data;
-						if (is_null_hex(x)) continue;
-						a.innerHTML = `<b>pubkey</b>`;
-						a.classList.add('rtrim');
-						a.append(make_click_copy(create('button', {innerText: 'x', title: x}), x));
-						a.append(make_click_copy(create('button', {innerText: 'y', title: y}), y));
-						break;
-					}
-					// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IContentHashResolver.sol
-					// https://docs.ens.domains/ens-improvement-proposals/ensip-7-contenthash-field
-					// https://github.com/multiformats/multicodec/blob/master/table.csv
-					case 'contenthash': { 
-						if (is_null_hex(data))  continue;
-						a.innerHTML = `<b>${rec.type}</b>`;
-						a.classList.add('rtrim');
-						let buf = ethers.getBytes(data);
-						let rep, url;
-						try {
-							let [proto, pos] = uvarint.read(buf);
-							let cid;
-							buf = buf.subarray(pos);
-							switch (proto) {
-								//case 0xE2: // IPLD
-								case 0xE3: { // IPFS
-									cid = CID.from(buf);
-									rep = cid.toString();
-									url = `ipfs://${rep}`;
-									a.append(create_link(url_from_ipfs_path(rep), {button: '🆔️ IPFS'}));
-									break;
-								}
-								case 0xE5: { // IPNS
-									cid = CID.from(buf);
-									rep = cid.toString('k'); // base36 for urls
-									url = `ipns://${rep}`;
-									a.append(create_link(`https://${rep}.ipfs2.eth.limo/`, {button: '↗️ IPNS'}));
-									break;
-								}
-								case 0xE4: { // Swarm
-									// https://docs.ethswarm.org/docs/develop/access-the-swarm/upload-and-download
-									// https://gateway.ethswarm.org/access/
-									cid = CID.from(buf);
-									rep = cid.toString();
-									a.append(create_link(`https://${rep}.bzz.link/`, {button: 'Swarm'}));
-									url = `bzz://${rep}`;
-									break;
-								}
-								//case 0xE8: // DNSLink 
-								case 0x1BC:   // onion v2
-								case 0x1BD: { // onion v3 
-									// https://www.tor2web.org/
-									// https://blog.torproject.org/v3-onion-services-usage/
-									rep = Base36.encode(buf);
-									const V2 = 16;
-									if (rep.length != V2 && rep.length != 56) throw new Error('bad length');
-									url = `onion://${rep}`;
-									a.append(create_link(`https://${rep}.onion.to/`, {button: 'Onion'}));
-									if (rep.length == V2) {
-										a.append(create_tag('warn', 'Deprecated'));
+								a.append(create_copy_btn(data));
+							} else {
+								make_click_copy(a, data);
+							}
+							a.title = `${data}\nText: ${rec.key}`;
+							if (rec.class) {
+								a.classList.add(rec.class);
+							}
+							if (rec.key === 'avatar') {
+								let spinner = create('div', {className: ['avatar', 'spinner']});
+								if (!show_records_check.checked) spinner.classList.add('hide');
+								normed_row.append(spinner);
+								fetch_resource_url(data, owner).then(avatar => {
+									if (!normed_row.isConnected) return;
+									if (avatar.error) {
+										a.append(create('span', {
+											className: ['tags', 'changed'], 
+											innerHTML: '❌️ Failed', 
+											title: avatar.error
+										}));
+										spinner.replaceWith(create('span', {className: 'avatar', innerText: '❌️'}));
+									} else {
+										a.append(create('span', {className: ['tags', 'minor'], innerText: avatar.type}));
+										if (avatar.fixed) {
+											a.append(create('span', {
+												className: ['tags', 'changed'],
+												innerHTML: '⚠️ Changed', 
+												title: avatar.fixed
+											}));
+										}
+										let img = new Image();
+										img.src = avatar.url;
+										spinner.replaceWith(create('a', {className: 'avatar', target: '_blank', href: avatar.url}, img));
 									}
-									break;
-								}
-								case 0xB19910: { // skylink
-									// https://support.skynetlabs.com/key-concepts/skylinks
-									rep = Base64URL.encode(buf);
-									if (rep.length != 46) throw new Error('bad length');
-									url = `sia://${rep}`;
-									a.append(create_link(`https://siasky.net/${rep}`, {button: 'Skylink'}));
-									break;
-								}
-								case 0xB29910: { // arweave
-									// https://docs.arweave.org/developers/arweave-node-server/http-api
-									if (buf.length != 32) throw new Error('not sha256');
-									rep = Base64URL.encode(buf);
-									url = `arweave://${rep}`;
-									a.append(create_link(`https://arweave.net/${rep}`, {button: 'Arweave'}));
-									a.append(create_link(`https://viewblock.io/arweave/tx/${rep}`, {button: '✅️ Check'}));
-									break;
-								}
-								default: throw new Error(`unknown protocol: ${proto}`);
+									a.classList.add('rtrim');
+								});
 							}
-							make_click_copy(a, url);
-							let lines = [data, `Protocol: ${format_dec_hex(proto)}`, url];
-							if (cid) {
-								lines.push(`CID: Version: ${format_dec_hex(cid.version)} / Codec: ${format_dec_hex(cid.codec)} / Bytes: ${buf.length}`);
-								lines.push(`Hash: Codec: ${format_dec_hex(cid.hash.codec)} / Bytes: ${cid.hash.data.length}`);
-								a.append(create_link(`https://cid.ipfs.tech/#${cid}`, {button: '✅️ Check'}));
-							}
-							lines.push(`[ALT] Copy Raw Data`);
-							a.dataset.alt = data;
-							a.title = lines.join('\n');
-							// upgrade the decentralized website link
-							$('.row.dns').replaceWith(create_dns_row(name_norm, {replaced: false, contenthash: rep}));
-						} catch (err) {
-							a.append(create_tag('fail', err));
-							a.title = data;
-							make_click_copy(a, data);
-							if (rep) {
-								a.append(make_click_copy(create('button', {innerText: 'Decoded', title: rep}), rep));
-							}
+							break;
 						}
-						break;
+						// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IPubkeyResolver.sol
+						case 'pubkey': {
+							let [x, y] = data;
+							if (is_null_hex(x)) continue;
+							a.innerHTML = `<b>pubkey</b>`;
+							a.classList.add('rtrim');
+							a.append(make_click_copy(create('button', {innerText: 'x', title: x}), x));
+							a.append(make_click_copy(create('button', {innerText: 'y', title: y}), y));
+							break;
+						}
+						// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IContentHashResolver.sol
+						// https://docs.ens.domains/ens-improvement-proposals/ensip-7-contenthash-field
+						// https://github.com/multiformats/multicodec/blob/master/table.csv
+						case 'contenthash': { 
+							if (is_null_hex(data))  continue;
+							a.innerHTML = `<b>${rec.type}</b>`;
+							a.classList.add('rtrim');
+							let buf = ethers.getBytes(data);
+							let rep, url;
+							try {
+								let [proto, pos] = uvarint.read(buf);
+								let cid;
+								buf = buf.subarray(pos);
+								switch (proto) {
+									//case 0xE2: // IPLD
+									case 0xE3: { // IPFS
+										cid = CID.from(buf);
+										rep = cid.toString();
+										url = `ipfs://${rep}`;
+										a.append(create_link(url_from_ipfs_path(rep), {button: '🆔️ IPFS'}));
+										break;
+									}
+									case 0xE5: { // IPNS
+										cid = CID.from(buf);
+										rep = cid.toString('k'); // base36 for urls
+										url = `ipns://${rep}`;
+										a.append(create_link(`https://${rep}.ipfs2.eth.limo/`, {button: '↗️ IPNS'}));
+										break;
+									}
+									case 0xE4: { // Swarm
+										// https://docs.ethswarm.org/docs/develop/access-the-swarm/upload-and-download
+										// https://gateway.ethswarm.org/access/
+										cid = CID.from(buf);
+										rep = cid.toString();
+										a.append(create_link(`https://${rep}.bzz.link/`, {button: 'Swarm'}));
+										url = `bzz://${rep}`;
+										break;
+									}
+									//case 0xE8: // DNSLink 
+									case 0x1BC:   // onion v2
+									case 0x1BD: { // onion v3 
+										// https://www.tor2web.org/
+										// https://blog.torproject.org/v3-onion-services-usage/
+										rep = Base36.encode(buf);
+										const V2 = 16;
+										if (rep.length != V2 && rep.length != 56) throw new Error('bad length');
+										url = `onion://${rep}`;
+										a.append(create_link(`https://${rep}.onion.to/`, {button: 'Onion'}));
+										if (rep.length == V2) {
+											a.append(create_tag('warn', 'Deprecated'));
+										}
+										break;
+									}
+									case 0xB19910: { // skylink
+										// https://support.skynetlabs.com/key-concepts/skylinks
+										rep = Base64URL.encode(buf);
+										if (rep.length != 46) throw new Error('bad length');
+										url = `sia://${rep}`;
+										a.append(create_link(`https://siasky.net/${rep}`, {button: 'Skylink'}));
+										break;
+									}
+									case 0xB29910: { // arweave
+										// https://docs.arweave.org/developers/arweave-node-server/http-api
+										if (buf.length != 32) throw new Error('not sha256');
+										rep = Base64URL.encode(buf);
+										url = `arweave://${rep}`;
+										a.append(create_link(`https://arweave.net/${rep}`, {button: 'Arweave'}));
+										a.append(create_link(`https://viewblock.io/arweave/tx/${rep}`, {button: '✅️ Check'}));
+										break;
+									}
+									default: throw new Error(`unknown protocol: ${proto}`);
+								}
+								make_click_copy(a, url);
+								let lines = [data, `Protocol: ${format_dec_hex(proto)}`, url];
+								if (cid) {
+									lines.push(`CID: Version: ${format_dec_hex(cid.version)} / Codec: ${format_dec_hex(cid.codec)} / Bytes: ${buf.length}`);
+									lines.push(`Hash: Codec: ${format_dec_hex(cid.hash.codec)} / Bytes: ${cid.hash.data.length}`);
+									a.append(create_link(`https://cid.ipfs.tech/#${cid}`, {button: '✅️ Check'}));
+								}
+								lines.push(`[ALT] Copy Raw Data`);
+								a.dataset.alt = data;
+								a.title = lines.join('\n');
+								// upgrade the decentralized website link
+								$('.row.dns').replaceWith(create_dns_row(name_norm, {replaced: false, contenthash: rep}));
+							} catch (err) {
+								a.append(create_tag('fail', err));
+								a.title = data;
+								make_click_copy(a, data);
+								if (rep) {
+									a.append(make_click_copy(create('button', {innerText: 'Decoded', title: rep}), rep));
+								}
+							}
+							break;
+						}
 					}
+					records_row.append(a);
 				}
-				records_row.append(a);
-			}
-			if (records_row.childElementCount === old) {
-				add_row_tag(records_row, 'None');
-			}
-			if (resolver.__multicall) {
-				add_row_tag(records_row, create_tag('good', `Multicall (${resolver.__multicall})`));
+				if (records_row.childElementCount === old) {
+					add_row_tag(records_row, 'None');
+				}
+				if (resolver.__multicall) {
+					add_row_tag(records_row, create_tag('good', `Multicall (${resolver.__multicall})`));
+				}
 			}
 			if (should_stop_resolving()) return;
 			remove_temporary(records_row);
@@ -4386,13 +4400,23 @@ function add_owner_links(row, owner) {
 	add_row_tag(row, create_link(`https://rainbow.me/${owner}`, {innerHTML: 'Rainbow', className: 'external'}));
 	add_row_tag(row, create_link(`https://debank.com/profile/${owner}`, {innerHTML: 'Debank', className: 'external'}));
 }
+function parse_custom_error(err) {
+	if (err.code === 'CALL_EXCEPTION' && err.data) {
+		let error = ERROR_ABI.parseError(err.data);
+		if (error) {
+			let temp = new Error(`Contract error: ${error.signature} <a href="https://www.4byte.directory/signatures/?bytes4_signature=${error.selector}" target="_blank"><code>${error.selector}</code></a>`);
+			temp.custom = error;
+			return temp;
+		}
+	}
+}
 async function fetch_addr60(resolver) {
 	let [{data: address, error}] = await fetch_records(resolver, [{type: TYPE_ADDR, coin: 60}]);
 	if (error) throw error;
 	if (!is_null_hex(address)) return ethers.getAddress(address);
 }
 async function fetch_records(resolver, records) {
-	if (resolver.__wildcard && !resolver.__dns_name) {
+	if (resolver.__unreachable) {
 		return records.map(rec => ({rec, error: new Error('unreachable')})); 
 	}
 	const options = {enableCcipRead: true};
@@ -4408,9 +4432,9 @@ async function fetch_records(resolver, records) {
 		});
 		try {
 			let res;
-			if (resolver.__wildcard) { // optimistic CCIP-multicall
+			if (resolver.__wild) { // optimistic CCIP-multicall
 				let frag = resolver.interface.getFunction('multicall');
-				res = await resolver.resolve(resolver.__dns_name, resolver.interface.encodeFunctionData(frag, [encoded]), options);
+				res = await resolver.resolve(resolver.__dns_encoded, resolver.interface.encodeFunctionData(frag, [encoded]), options);
 				[res] = resolver.interface.decodeFunctionResult(frag, res);
 			} else {
 				let {target} = resolver;
@@ -4443,16 +4467,28 @@ async function fetch_records(resolver, records) {
 			const method = 'addr(bytes32)';
 			try {
 				let data;
-				if (resolver.__wildcard) {
+				if (resolver.__wild) {
 					let frag = resolver.interface.getFunction(method);
-					data = await resolver.resolve(resolver.__dns_name, resolver.interface.encodeFunctionData(frag, params), options);
+					data = await resolver.resolve(resolver.__dns_encoded, resolver.interface.encodeFunctionData(frag, params), options);
 					[data] = resolver.interface.decodeFunctionResult(frag, data);
 					if (data.length !== 42) throw new Error('expected address');
 				} else {
-					data = await resolver[method](resolver.__node);
+					data = await resolver[method](resolver.__node, options);
 				}
 				return {rec, data};
 			} catch (err) {
+				if (err instanceof TypeError) { // fetch() network error? 
+					resolver.__unreachable = 'network';
+					return {rec, error: err};
+				} else {
+					let error = parse_custom_error(err);
+					if (error) {
+						if (error.custom.selector === '0xe861b2bd') {
+							resolver.__unreachable = 'contract';
+						}
+						return {rec, error};
+					}
+				}
 			}
 		}
 		switch (rec.type) {
@@ -4461,17 +4497,18 @@ async function fetch_records(resolver, records) {
 		}
 		try {
 			let data;
-			if (resolver.__wildcard) {
+			if (resolver.__wild) {
 				let frag = resolver.interface.getFunction(rec.type);
-				data = await resolver.resolve(resolver.__dns_name, resolver.interface.encodeFunctionData(frag, params), options);
+				data = await resolver.resolve(resolver.__dns_encoded, resolver.interface.encodeFunctionData(frag, params), options);
 				data = resolver.interface.decodeFunctionResult(frag, data);
 				if (frag.outputs.length === 1) data = data[0];
 			} else {
-				data = await resolver[rec.type](...params);
+				data = await resolver[rec.type](...params, options);
 			}
 			return {rec, data};
-		} catch (error) {
-			if (error.code === 'BAD_DATA' && error.value === '0x') return {rec};
+		} catch (err) {
+			if (err.code === 'BAD_DATA' && err.value === '0x') return {rec};
+			let error = parse_custom_error(err) || err;
 			return {rec, error};
 		}
 	}));
@@ -4637,7 +4674,7 @@ async function ensure_eth_nft() {
 	eth_controller_contract = contract_for_controller(await eth_resolver_contract.__get_interface(IFACE_ETH_CONTROLLER));
 	price_oracle_contract = contract_for_price_oracle(await eth_controller_contract.prices());
 }
-function labels_from_dns_name(v) {
+function labels_from_dns_encoded(v) {
 	let labels = [];
 	let pos = 0;
 	while (true) {
@@ -4651,7 +4688,7 @@ function labels_from_dns_name(v) {
 	}
 	throw new Error('invalid DNS-encoded name');
 }
-function dns_name_from(labels) {
+function dns_encoded_from(labels) {
 	if (typeof labels === 'string') {
 		labels = labels ? labels.split('.') : [];
 	}
@@ -4675,39 +4712,44 @@ async function get_resolver(name) {
 		let basenode = namehash(basename);
 		let address = await registry_contract.resolver(basenode);
 		if (should_stop_resolving()) throw new Error('aborted');
-		if (!is_null_hex(address)) { // first non null
-			// https://github.com/ensdomains/ens-contracts/tree/staging/contracts/resolvers/profiles
-			let resolver = new ethers.Contract(address, [
-				'function supportsInterface(bytes4 interfaceID) external view returns (bool)',
-				'function interfaceImplementer(bytes32 node, bytes4 interfaceID) external view returns (address)',
-				'function resolve(bytes name, bytes data) view returns (bytes)',
-				'function addr(bytes32 node, uint coinType) view returns (bytes)',
-				'function addr(bytes32 node) view returns (address)',
-				'function text(bytes32 node, string key) view returns (string)',
-				'function contenthash(bytes32 node) view returns (bytes)',
-				'function pubkey(bytes32 node) view returns (bytes32 x, bytes32 y)',
-				'function name(bytes32 node) view returns (string)',
-				'function recordVersions(bytes32 node) external view returns (uint64)',
-				'function multicall(bytes[] calldata data) external returns (bytes[] memory results)',
-			], active_provider);
-			let wild = await resolver.supportsInterface('0x9061b923').catch(() => {});
-			if (i && !wild) break; // ancestor but not wildcard
-			resolver.__name = name;
-			resolver.__node = namehash(name);
-			resolver.__dropped = i; // truthy => virtual
-			resolver.__basename = basename;
-			resolver.__basenode = basenode;
-			resolver.__get_interface = hash => resolver.interfaceImplementer(resolver.__basenode, hash);
-			if (wild) {
-				resolver.__wildcard = true;
-				try {
-					resolver.__dns_name = dns_name_from(v);
-				} catch (err) {
-				}
+		if (is_null_hex(address)) continue;
+		// https://github.com/ensdomains/ens-contracts/tree/staging/contracts/resolvers/profiles
+		let resolver = new ethers.Contract(address, [
+			'function supportsInterface(bytes4 interfaceID) external view returns (bool)',
+			'function interfaceImplementer(bytes32 node, bytes4 interfaceID) external view returns (address)',
+			'function resolve(bytes name, bytes data) view returns (bytes)',
+			'function addr(bytes32 node, uint coinType) view returns (bytes)',
+			'function addr(bytes32 node) view returns (address)',
+			'function text(bytes32 node, string key) view returns (string)',
+			'function contenthash(bytes32 node) view returns (bytes)',
+			'function pubkey(bytes32 node) view returns (bytes32 x, bytes32 y)',
+			'function name(bytes32 node) view returns (string)',
+			'function recordVersions(bytes32 node) external view returns (uint64)',
+			'function multicall(bytes[] calldata data) external returns (bytes[] memory results)',
+		], active_provider);
+		let wild = IS_WILD.get(address);
+		if (wild === undefined) {
+			wild = await resolver.supportsInterface('0x9061b923').catch(() => {});
+			if (wild !== undefined) {
+				IS_WILD.set(address, wild);
 			}
-			return resolver;
 		}
-		if (basename === 'eth') break; // mimic ethers
+		if (i && !wild) break; // ancestor but not wildcard
+		resolver.__name = name;
+		resolver.__node = namehash(name);
+		resolver.__dropped = i; // truthy => virtual
+		resolver.__basename = basename;
+		resolver.__basenode = basenode;
+		resolver.__get_interface = hash => resolver.interfaceImplementer(resolver.__basenode, hash);
+		if (wild) {
+			resolver.__wild = true;
+			try {
+				resolver.__dns_encoded = dns_encoded_from(v);
+			} catch (err) {
+				resolver.__unreachable = 'name too long';
+			}
+		}
+		return resolver;
 	}
 }
 async function get_safe_primary(owner, alt_owner) {

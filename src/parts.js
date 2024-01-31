@@ -1,19 +1,23 @@
 import {should_escape, safe_str_from_cps} from './lib.js';
 import {hex_cp} from './utils.js';
 
+function create(tag) {
+	return document.createElement(tag);
+}
+
 function hex_seq(cps) {
 	return cps.map(hex_cp).join(' ');
 }
 
 function create_arrow_span() {
-	let span = document.createElement('span');
+	let span = create('span');
 	span.classList.add('arrow');
 	span.innerHTML = '➔'; // '→'; 
 	return span;
 }
 
 function span_from_cp(cp, in_emoji) {
-	let span = document.createElement('span');
+	let span = create('span');
 	if (cp == 0x200D) {
 		span.classList.add('mod', 'zwj');
 		span.innerText = 'ZWJ';
@@ -56,31 +60,20 @@ function isolated_safe(cps) {
 
 // TODO: these options are shit, fix this
 export function dom_from_tokens(tokens, {
-	before = false, 
-	components = false, 
-	emoji_url = 'https://emojipedia.org/%s',
+	before,
+	components,
+	emoji,
+	tld,
 	extra = () => {},
 } = {}) {
-	let div = document.createElement('div');
+	let div = create('div');
 	div.classList.add('tokens');
-	/*
-	if (before) {
-		// dont use normalized form unless its simple
-		tokens = tokens.flatMap(token => {
-			if (token.type === 'nfc' && !token.tokens.every(t => t.type == 'valid')) {
-				return token.tokens;
-			} else {
-				return token;
-			}
-		});
-	}
-	*/
 	div.append(...tokens.map((token, i) => {
 		let el;
 		switch (token.type) {
 			case 'emoji': {
-				el = document.createElement(emoji_url ? 'a' : 'span');
-				if (emoji_url) el.href = emoji_url.replace('%s', String.fromCodePoint(...token.emoji));
+				el = create('a');
+				if (emoji) emoji(el, token);
 				let cps = before ? token.input : token.cps;
 				if (components && cps.length > 1) {
 					el.dataset.components='1';
@@ -96,18 +89,18 @@ export function dom_from_tokens(tokens, {
 				break;
 			}
 			case 'nfc': {
-				el = document.createElement('div');
+				el = create('div');
 				// get the cps from the original tokens
 				let cps0 = token.tokens0.flatMap(t => t.type === 'valid' ? t.cps : t.cp); // this can only be mapped/ignored/valid
 				// break every valid token into individual characters
-				let lhs = dom_from_tokens(token.tokens0.flatMap(t => t.type === 'valid' ? t.cps.map(cp => ({type: 'valid', cps: [cp]})) : t), {components, before, emoji_url, extra});
+				let lhs = dom_from_tokens(token.tokens0.flatMap(t => t.type === 'valid' ? t.cps.map(cp => ({type: 'valid', cps: [cp]})) : t), {components, before, emoji, extra});
 				lhs.title = format_tooltip({
 					Type: 'NFC (Unnormalized)',
 					Hex: hex_seq(cps0),
 				}, extra(token.type, cps0));
 				el.append(lhs);
 				if (!before) {
-					let rhs = dom_from_tokens(token.tokens, {components, emoji_url, extra});
+					let rhs = dom_from_tokens(token.tokens, {components, emoji, extra});
 					rhs.title = format_tooltip({
 						Type: 'NFC (Normalized)',
 						Hex: hex_seq(token.cps),
@@ -117,8 +110,11 @@ export function dom_from_tokens(tokens, {
 				break;
 			}
 			case 'valid': {
-				el = document.createElement('span');		
+				el = create('span');
 				let form = safe_str_from_cps(token.cps);
+				if (tld && i === tokens.length-1 && (!i || tokens[i-1].type === 'stop') && /^[a-z]+$/.test(form)) {
+					el.dataset.tld = form;
+				}
 				el.innerText = form;
 				el.title = format_tooltip({
 					Type: 'Valid',
@@ -127,8 +123,8 @@ export function dom_from_tokens(tokens, {
 				break;
 			}
 			case 'mapped': {
-				el = document.createElement('div');
-				let span_src = document.createElement('span');
+				el = create('div');
+				let span_src = create('span');
 				span_src.classList.add('before');
 				span_src.innerText = safe_str_from_cps([token.cp]);	// isolate ? isolated_safe([token.cp]) : 
 				span_src.title = format_tooltip({
@@ -137,7 +133,7 @@ export function dom_from_tokens(tokens, {
 				}, extra(token.type, [token.cp]));
 				el.append(span_src);
 				if (!before) {
-					let span_dst = document.createElement('span');
+					let span_dst = create('span');
 					span_dst.innerText = isolated_safe(token.cps); // safe_str_from_cps(token.cps);
 					span_dst.title = format_tooltip({
 						Type: 'Mapped (Replacement)',
@@ -166,7 +162,7 @@ export function dom_from_tokens(tokens, {
 }
 
 export function use_default_style() {
-	let style = document.createElement('style');
+	let style = create('style');
 	style.innerText = `
 	.tokens {
 		display: flex;
@@ -184,7 +180,7 @@ export function use_default_style() {
 	.tokens a {
 		text-decoration: none;
 	}
-	.tokens a:hover {
+	.tokens a[href]:hover {
 		border-color: #00f;
 	}
 	.tokens .valid {
