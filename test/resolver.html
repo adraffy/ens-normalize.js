@@ -830,13 +830,29 @@ footer {
 	color: #000;
 	text-decoration: underline;
 }
-.dynamic::before {
-	content: attr(data-normal);
+#enable_debug_btn {
+	border-radius: 4px;
+	user-select: none;
+	padding: 3px;
+	cursor: pointer;
+}
+#enable_debug_btn:hover {
+	background-color: #fff;
+}
+#debug_header {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	margin: 8px 0;
+}
+#debug textarea {
+	box-sizing: border-box;
+	width: 100%;
+	resize: vertical;
+	font-family: monospace;
 }
 @media only screen and (max-width: 800px) { 
-	.dynamic::before {
-		content: attr(data-compact);
-	}
 	body {
 		margin: 0;
 	}
@@ -878,6 +894,9 @@ footer {
 	}
 	#output {
 		font-size: 13pt;
+	}
+	#debug_header {
+		margin: 8px;
 	}
 }
 @media only screen and (max-width: 400px) { 
@@ -1238,10 +1257,20 @@ Hebrew:
 <li><a href="https://raffy.antistupid.com/eth/emoji-pixels.html">Emoji Pixel Maker</a></li>
 </ul>
 </div>
+<div id="debug" class="hide">
+<div id="debug_header">
+	<b>🛠️ Debug Settings:</b>
+	<span class="balloon"></span>
+	<button id="apply_debug_btn">🔄️ <span class="key">shift+enter</span></button>
+	<button id="disable_debug_btn">🛑️</button>
+</div>
+<textarea rows="20"></textarea>
+</div>
 <footer>
 	<span>Created by <a href="https://x.com/adraffy">raffy.eth</a></span>
 	<span id="clock"></span>
 	<span id="version"></span>
+	<span id="enable_debug_btn" title="Enable Debugging">🛠️</span>
 </footer>
 <script type="module">
 import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.10.0/ethers.min.js';
@@ -1285,11 +1314,17 @@ const escape_btn = $('#escape_btn');
 const parent_btn = $('#parent_btn');
 const version_span = $('#version');
 const clock_span = $('#clock');
+const enable_debug_btn = $('#enable_debug_btn');
+const debug_div = $('#debug');
+const debug_ta = $('#debug textarea');
+
 const readme_dom = [...output_div.childNodes]; // save initial ux
+const entity_span = document.createElement('span');
+
+const DEBUG_INDENT = '    ';
 
 const RESOLVE_MODE_IDLE = 'idle';
 const RESOLVE_MODE_EMPTY = 'empty';
-
 const STORAGE_RECENT = 'ens-norm.recent';
 const STORAGE_SETTINGS = 'ens-norm.settings';
 
@@ -1372,29 +1407,26 @@ const ERROR_ABI = new ethers.Interface([
 // TODO: https://github.com/ensdomains/docs/blob/profile-text-records/ens-improvement-proposals/ensip-xx-profile-text-records.md
 const TYPE_ADDR = 'addr(bytes32,uint256)';
 const TYPE_TEXT = 'text';
+const TYPE_PUBKEY = 'pubkey';
+const TYPE_CONTENTHASH = 'contenthash';
 const RECORDS = [
 	{
-		type: TYPE_TEXT, 
 		key: 'name',
 	},
 	{
-		type: TYPE_TEXT, 
 		key: 'language',
 		bonus: true,
 	},
 	{
-		type: TYPE_TEXT, 
 		key: 'timezone',
 		icon: '<b>tz</b>',
 		bonus: true,
 	},
 	{
-		type: TYPE_TEXT, 
 		key: 'notice',
 		class: 'notice'
 	},
 	{
-		type: TYPE_TEXT, 
 		key: 'url',
 		icon: '🌐️',
 		format(x) {
@@ -1404,107 +1436,91 @@ const RECORDS = [
 		url(x) { return x; }
 	},
 	{
-		type: TYPE_TEXT, 
 		key: 'location'
 	},	
 	{
-		type: TYPE_TEXT, 
 		key: 'phone',
 		icon: '☎️',
 		url(x) { return `tel:${x}`; }
 	},
 	{
-		type: TYPE_TEXT, 
 		key: 'email',
 		icon: '📧️',
 		url(x) { return `mailto:${x}`; }
 	},
 	{
-		type: TYPE_TEXT, 
 		key: 'com.twitter', 
 		icon: `<svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 22 20"><path fill="var(--geist-fill, currentColor)" stroke="none" d="M16.99 0H20.298L13.071 8.26L21.573 19.5H14.916L9.702 12.683L3.736 19.5H0.426L8.156 10.665L0 0H6.826L11.539 6.231L16.99 0ZM15.829 17.52H17.662L5.83 1.876H3.863L15.829 17.52Z"/></svg>`,
 		url(x) { return `https://twitter.com/${x}`; },
 		fix: repair_social,
 	},
 	{
-		type: TYPE_TEXT, 
 		key: 'farcaster', 
 		icon: '<img src="https://warpcast.com/favicon.png">',
 		url(x) { return `https://warpcast.com/${x}`; },
 		fix: repair_social
 	},
 	{
-		type: TYPE_TEXT, 
 		key: 'lens', 
 		url(x) { return `https://hey.xyz/u/${x}`; },
 	},
 	{
-		type: TYPE_TEXT,
 		key: 'com.github', 
 		icon: '<img src="https://github.githubassets.com/favicons/favicon.png">',
 		url(x) { return `https://github.com/${x}`; }
 	},
 	{
-		type: TYPE_TEXT,
 		key: 'com.discord',
 		icon: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#5A57DD"><path d="M20.7273 5.45455C20.7273 5.45455 18.2264 3.49746 15.2727 3.27273L15.0065 3.80509C17.6771 4.45855 18.9022 5.39509 20.1818 6.54546C17.9755 5.41909 15.7969 4.36364 12 4.36364C8.20309 4.36364 6.02455 5.41909 3.81818 6.54546C5.09782 5.39509 6.55527 4.35546 8.99345 3.80509L8.72727 3.27273C5.62855 3.56564 3.27273 5.45455 3.27273 5.45455C3.27273 5.45455 0.479455 9.50455 0 17.4545C2.81564 20.7016 7.09091 20.7273 7.09091 20.7273L7.98491 19.5355C6.46745 19.008 4.75364 18.066 3.27273 16.3636C5.03891 17.7 7.70455 19.0909 12 19.0909C16.2955 19.0909 18.9611 17.7 20.7273 16.3636C19.2464 18.066 17.5325 19.008 16.0151 19.5355L16.9091 20.7273C16.9091 20.7273 21.1844 20.7016 24 17.4545C23.5205 9.50455 20.7273 5.45455 20.7273 5.45455ZM8.45455 15.2727C7.40018 15.2727 6.54545 14.2958 6.54545 13.0909C6.54545 11.886 7.40018 10.9091 8.45455 10.9091C9.50891 10.9091 10.3636 11.886 10.3636 13.0909C10.3636 14.2958 9.50891 15.2727 8.45455 15.2727ZM15.5455 15.2727C14.4911 15.2727 13.6364 14.2958 13.6364 13.0909C13.6364 11.886 14.4911 10.9091 15.5455 10.9091C16.5998 10.9091 17.4545 11.886 17.4545 13.0909C17.4545 14.2958 16.5998 15.2727 15.5455 15.2727Z"></path></svg>`,
 	},
 	{
-		type: TYPE_TEXT, 
 		key: 'com.reddit', 
 		icon: '<img src="https://www.redditstatic.com/desktop2x/img/favicon/apple-icon-60x60.png">',
 		url(x) { return `https://reddit.com/u/${x}`; },
 	},
 	{
-		type: TYPE_TEXT,
 		key: 'io.keybase',
 		icon: '<img src="https://keybase.io/images/icons/icon-keybase-logo-48.png">',
 		url(x) { return `https://keybase.io/${x}`; },
 		fix: repair_social
 	},
 	{
-		type: TYPE_TEXT,
 		key: 'org.telegram',
 		icon: '<img src="https://telegram.org/img/favicon-32x32.png">',
 		url(x) { return `https://t.me/${x}`; },
 		fix: repair_social
 	},
 	{
-		type: TYPE_TEXT,
 		key: 'com.linkedin',
 		icon: '<img src="https://static.licdn.com/scds/common/u/images/logos/favicons/v1/favicon.ico">',
 		url(x) { return `https://www.linkedin.com/in/${x}`; }
 	},
 	{
-		type: 'contenthash',
+		type: TYPE_CONTENTHASH,
 	},
 	{
-		type: 'pubkey',
+		type: TYPE_PUBKEY,
 		bonus: true,
 	},
 	{
-		type: TYPE_ADDR,
 		coin: 0, // BTC
 		icon: `<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 500 500" role="img" class="sc-56a68b4b-0 nEsDk"><path fill="#F39321" d="M43.43 125.143c7.71-10.766 14.875-21.901 23.562-31.986 15.8-18.343 33.692-34.063 54.18-47.075 18.379-11.672 37.761-20.872 58.501-27.305 32.294-10.018 65.26-12.997 98.838-9.165 24.544 2.801 48.191 9.067 70.713 19.215 13.633 6.142 26.456 13.731 39.025 21.927 25.328 16.515 45.618 38.014 62.58 62.577 18.116 26.236 29.889 55.421 36.346 86.725 4.535 21.983 6.449 44.171 4.503 66.504-2.399 27.536-8.514 54.086-19.938 79.604-9.662 21.583-21.589 41.401-36.861 59.301-14.94 17.511-31.788 32.831-51.149 45.461-13.184 8.6-26.926 16.276-41.434 21.975-24.274 9.537-49.447 15.986-75.787 17.115-18.545.795-36.985.483-55.279-2.763-15.713-2.788-31.049-6.858-46.063-12.496-14.566-5.47-28.693-11.95-41.709-20.143-18.766-11.812-35.683-26.147-50.737-42.663-16.773-18.403-30.373-38.808-40.779-61.344-14.7-31.835-21.929-65.401-22.359-100.425-.162-13.173 1.349-26.244 3.105-39.283.126-.933-.002-1.899-.012-2.851 1.536-.952 1.4-2.618 1.677-4.071 3.906-20.483 10.494-40.059 19.418-58.906 3.162-6.674 7.525-12.764 9.659-19.928zm281.727 129.37c6.537-3.474 12.749-5.465 17.658-9.85 18.918-16.899 23.96-56.673-6.747-75.833-9.566-5.969-19.77-10.393-30.77-14.907 1.819-14.731 7.709-28.516 9.622-43.603-9.076-2.249-17.578-5.234-26.425-6.193l-10.674 41.837c-6.78-2.076-13.761-1.879-20.142-5.473 2.302-14.39 7.773-27.872 9.268-42.314-9.322-1.464-17.216-5.094-26.265-5.485l-10.586 42.215c-17.944-2.75-34.419-8.921-52.52-12.239-3.977 8.91-5.738 18.311-7.334 28.313 5.896 1.392 11.022 2.623 16.158 3.811 12.965 2.998 16.517 10.086 13.439 21.424-2.19 8.065-4.166 16.189-6.182 24.301-7.245 29.16-14.432 58.333-21.72 87.482-1.642 6.567-5.734 8.706-12.398 7.731-6.563-.96-12.757-3.907-19.99-3.693-3.136 10.032-9.378 18.871-11.588 29.946l51.344 13.08c-1.312 15.208-7.614 29.125-9.476 44.441l25.544 6.123c5.653-14.044 6.957-28.803 12.226-43.33 6.351 3.265 13.397 2.317 19.612 6.427l-10.178 42.077c8.986 3.216 17.753 4.528 26.758 6.77l10.578-42.386c2.123-1.091 3.676-.888 5.143-.574a132.886 132.886 0 0 0 42.676 2.14c12.368-1.373 23.343-6.088 32.148-15.372 9.791-10.323 14.71-22.952 17.078-36.535 1.93-11.065 1.436-22.277-5.06-32.071-5.091-7.674-12.084-13.53-21.197-18.26zM223.128 312.17c17.411 4.325 34.803 8.95 53.02 5.624 9.715-1.774 17.037-6.73 19.985-16.503 2.78-9.218 1.164-17.593-5.673-24.879-7.11-7.576-16.254-11.514-25.682-14.807-11.264-3.934-22.683-7.508-34.99-8.48l-13.972 56.788c2.981.929 5.117 1.712 7.312 2.257zm61.5-80.324c9.628-1.368 17.612-7.738 19.958-16.393 2.869-10.583-.337-19.865-8.902-26.178-9.718-7.163-20.908-10.807-32.47-13.337-4.307-.943-8.544-3.454-13.756-1.759l-12.599 51.209c16.457 4.155 31.611 8.753 47.769 6.458z"></path></svg>`,
 		btc: {p2pkh: 0, p2sh: 5, hrp: 'bc', p2wpkh: 0, p2tr: 1},
 		url(x) { return `https://blockstream.info/address/${x}`; },
 	},
 	{
-		type: TYPE_ADDR,
 		coin: 2, // LTC
 		icon: `<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 500 500" role="img" class="sc-56a68b4b-0 nEsDk"><circle cx="249.8" cy="250.2" r="248.4" style="fill: rgb(51, 94, 159);"></circle><path d="m139.4 402.6 37-120.2-40.3 12.3 10.7-29.6 37-11.5 51.7-170.1c1.1-3.6 4.5-6.1 8.3-6.1h52.8c5.8 0 9.9 5.6 8.3 11.1l-42 140.4 37.9-10.7-6.9 28.6-39.1 11.8-27.3 87.2h139c4.2 0 7.2 4 6.1 8L360.5 398c-.8 2.7-3.2 4.6-6.1 4.6h-215z" style="fill: rgb(255, 255, 255);"></path></svg>`,
 		btc: {p2pkh: 0x30, p2sh: 0x32, hrp: 'ltc', p2wpkh: 0},
 		url(x) { return `https://litecoinspace.org/address/${x}`; }
 	},
 	{
-		type: TYPE_ADDR,
 		coin: 3, // DOGE
 		icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 2000" role="img" class="sc-56a68b4b-0 nEsDk"><g fill="#c2a633"><path d="M1024 659H881.12v281.69h224.79v117.94H881.12v281.67H1031c38.51 0 316.16 4.35 315.73-327.72S1077.44 659 1024 659z"></path><path d="M1000 0C447.71 0 0 447.71 0 1000s447.71 1000 1000 1000 1000-447.71 1000-1000S1552.29 0 1000 0zm39.29 1540.1H677.14v-481.46H549.48V940.7h127.65V459.21h310.82c73.53 0 560.56-15.27 560.56 549.48 0 574.09-509.21 531.41-509.21 531.41z"></path></g></svg>`,
 		btc: {p2pkh: 0x1E, p2sh: 0x16},
 		url(x) { return `https://dogechain.info/address/${x}`; }
 	},
 	{
-		type: TYPE_ADDR,
 		coin:  8444, // CHIA
 		icon: '🌱️',
 		bech32: {hrp: 'xch', type: Bech32.M},
@@ -1512,7 +1528,6 @@ const RECORDS = [
 		bonus: true
 	},
 	{
-		type: TYPE_ADDR,
 		evm: 137,
 		name: 'polygon',
 		icon: '<img src="https://assets-global.website-files.com/637359c81e22b715cec245ad/63f775c741010796d62770fd_polygon-favicon.png">',
@@ -1520,7 +1535,6 @@ const RECORDS = [
 		bonus: true,
 	},
 	{	
-		type: TYPE_ADDR,
 		evm: 10,
 		name: 'op',
 		icon: '<img src="https://assets-global.website-files.com/611dbb3c82ba72fbc285d4e2/612d2f8f988b5f801bd0cf1e_favicon.png">',
@@ -1528,7 +1542,6 @@ const RECORDS = [
 		bonus: true,
 	},
 	{
-		type: TYPE_ADDR,
 		evm: 42161,
 		name: 'arb',
 		icon: '<img src="https://arbitrum.foundation/favicon.ico">',
@@ -1536,7 +1549,6 @@ const RECORDS = [
 		bonus: true,
 	},
 	{
-		type: TYPE_ADDR,
 		evm: 43114,
 		name: 'avax',
 		icon: '<img src="https://assets-global.website-files.com/632993e1d1acbfa5635afd0b/63515267b3214c6dda03ea97_Favicon.png">',
@@ -1544,7 +1556,6 @@ const RECORDS = [
 		bonus: true,
 	},
 	{
-		type: TYPE_ADDR,
 		evm: 84532,
 		name: 'base',
 		icon: '<img src="https://base.org/document/favicon-32x32.png">',
@@ -1552,7 +1563,6 @@ const RECORDS = [
 		bonus: true,
 	},
 	{
-		type: TYPE_ADDR,
 		evm: 100,
 		legacy: 700,
 		name: 'gnosis', // xdai
@@ -1560,21 +1570,18 @@ const RECORDS = [
 		bonus: true,
 	},
 	{
-		type: TYPE_ADDR,
 		evm: 534352,
 		name: 'scroll',
 		url(x) { return `https://scrollscan.com/address/${x}`; },
 		bonus: true,
 	},
 	{
-		type: TYPE_ADDR,
 		evm: 7777777,
 		name: 'zora',
 		url(x) { return `https://explorer.zora.energy/address/${x}`; },
 		bonus: true,
 	},
 	{
-		type: TYPE_ADDR,
 		coin: 714,
 		name: 'bnb',
 		icon: '<img src="https://explorer.bnbchain.org/static/images/favicon.ico">',
@@ -1583,7 +1590,6 @@ const RECORDS = [
 		bonus: true,
 	},
 	{
-		type: TYPE_ADDR,
 		coin: 118,
 		name: 'atom',
 		icon: '<img src="https://atomscan.com/img/icons/chains/atom.svg">',
@@ -1592,7 +1598,6 @@ const RECORDS = [
 		bonus: true
 	},
 	{
-		type: TYPE_ADDR,
 		coin: 501,
 		name: 'sol',
 		base58: true,
@@ -1600,14 +1605,12 @@ const RECORDS = [
 		bonus: true,
 	},
 	{
-		type: TYPE_ADDR,
 		evm: 56,
 		name: 'bsc',
 		url(x) { return `https://bscscan.com/address/${x}`; },
 		bonus: true,
 	},
 	{
-		type: TYPE_ADDR,
 		evm: 250,
 		legacy: 1007,
 		name: 'ftm',
@@ -1615,7 +1618,6 @@ const RECORDS = [
 		bonus: true,
 	},
 	{
-		type: TYPE_ADDR,
 		evm: 42220,
 		legacy: 52752,
 		name: 'celo',
@@ -1639,39 +1641,38 @@ const RECORDS = [
 	// 	testnet: true,
 	// },
 	{
-		type: TYPE_TEXT, 
 		key: 'description',
 		icon: '<b>desc</b>',
 	},
 	{
-		type: TYPE_TEXT,
 		key: 'avatar',
 		format() { return ''; },
 	},
 	{
-		type: TYPE_TEXT,
 		key: 'banner',
 		format() { return ''; },
 		url(x) { return x; },
 	},
-];
-for (let rec of RECORDS) {
-	if (rec.type === TYPE_ADDR) {
+].map(prepare_record);
+function prepare_record(rec) {
+	if (typeof rec.key === 'string') {
+		rec.type = TYPE_TEXT;
+	} else if (Number.isInteger(rec.coin)) {
+		rec.type = TYPE_ADDR;
+	} else if (Number.isInteger(rec.evm)) {
 		// https://docs.ens.domains/ens-improvement-proposals/ensip-11-evmchain-address-resolution
-		if (rec.evm && !rec.coin) rec.coin = rec.evm + 0x80000000;	
-		// try {
-		// 	if (!rec.url) throw 'explorer';
-		// 	if (!Number.isInteger(rec.coin)) throw 'coin type';
-		// } catch (err) {
-		// 	console.log(err, rec);
-		// }
+		rec.type = TYPE_ADDR;
+		rec.coin = rec.evm + 0x80000000;
+	} else if (!rec.type) {
+		throw new Error(`invalid record: ${JSON.stringify(rec)}`);
 	}
+	return rec;
 }
 
 const location0 = new URL(window.location.href);
-const entity_span = document.createElement('span');
 
-let debug_mode;
+let debug_enabled;
+let debug_settings;
 let window_provider;
 let active_provider;
 let active_chain;
@@ -1685,6 +1686,7 @@ let price_oracle_contract;
 let reverse_registrar;
 let resolve_timer = RESOLVE_MODE_IDLE;
 let resolve_last;
+let resolve_debug;
 let available;
 
 console.log(versions);
@@ -1956,6 +1958,82 @@ browser_btn.addEventListener('click', () => {
 	update_network();
 });
 
+function sync_debug() {
+	debug_div.classList.toggle('hide', !debug_enabled);
+	enable_debug_btn.classList.toggle('hide', !!debug_enabled);
+	if (debug_enabled) {
+		debug_ta.value = Object.keys(debug_settings).length ? JSON.stringify(debug_settings, null, DEBUG_INDENT) : '';
+	}
+}
+enable_debug_btn.addEventListener('click', () => {
+	debug_enabled = true;
+	save_settings();
+	sync_debug();
+	debug_ta.scrollIntoView();
+});
+$('#disable_debug_btn').addEventListener('click', () => {
+	debug_enabled = false;
+	save_settings();
+	sync_debug();
+	if (resolve_debug) resolve();
+});
+$('#apply_debug_btn').addEventListener('click', apply_debug);
+function apply_debug() {
+	try {
+		let settings = JSON.parse(debug_ta.value.trim() || '{}');
+		if (!is_object(settings)) throw new Error('expected object');
+		let {ccip, records, resolver} = settings;
+		if (ccip) {
+			if (!is_object(ccip)) throw new Error('expected "ccip" {address: endpoint}');
+			settings.ccip = Object.fromEntries(Object.entries(ccip).map(([k, v]) => [ethers.getAddress(k), new URL(v).toString()])); // validate and format
+		}
+		if (resolver) {
+			if (!is_object(resolver)) throw new Error('expected "resolver" {name: address}');
+			settings.resolver = Object.fromEntries(Object.entries(resolver).map(([k, v]) => [ens_normalize(k), ethers.getAddress(v)])); // validate and format
+		}
+		if (records) {
+			if (!Array.isArray(records)) throw new Error('expected "records" array');
+			records.forEach(x => prepare_record({...x})); // only validate
+		}
+		let dirty = JSON.stringify(debug_settings) !== JSON.stringify(settings);
+		if (dirty) {
+			debug_settings = settings;
+			save_settings();
+		}
+		sync_debug(); // pretty
+		if (debug_settings !== resolve_debug) resolve();
+	} catch (err) {
+		window.alert(err.message);
+	}
+}
+debug_ta.addEventListener('keydown', e => {
+	if (e.key === 'Enter' && e.shiftKey) {
+		e.preventDefault();
+		apply_debug();
+	} else if (e.key === 'Tab') {
+		e.preventDefault();	
+		document.execCommand('insertText', false, DEBUG_INDENT);
+	}
+});
+debug_ta.placeholder = `{
+	"jazz": false,    // debug jazz icons
+	"fuzes": false,   // debug wrapper fuses interface
+	"primary": false, // debug primary normalization
+	"resolvers": {
+		// name -> contract
+		"domain.fake": "0x32aC8A721A0d9Ce85F88599228297BBa8E183044"
+	},
+	"ccip": {
+		// contract -> endpoint
+		"0x32aC8A721A0d9Ce85F88599228297BBa8E183044": "https://localhost:80/"
+	},
+	"records": [
+		{"key": "primary-contact"}, // text()
+		{"coin": 1234},             // coin()
+		{"evm": 5}                  // coin() via ENSIP-11
+	]
+}`.replaceAll('\t', DEBUG_INDENT);
+
 function set_page_url(url) {
 	apply_page_url(url);
 	if (!update_network()) {
@@ -1982,9 +2060,10 @@ function save_settings() {
 		show_components: show_components_check.checked,
 		show_records: show_records_check.checked,
 		force_ltr: force_ltr_check.checked,
+		debug_enabled,
+		debug_settings
 	});
 }
-
 try {
 	let settings = JSON.parse(localStorage[STORAGE_SETTINGS]);
 	examples_div.classList.toggle('hide', !!settings.hide_examples);
@@ -1992,14 +2071,29 @@ try {
 	show_details_check.checked = settings.show_details;
 	show_components_check.checked = settings.show_components;
 	show_records_check.checked = settings.show_records;
-	force_ltr_check.checked.checked = settings.force_ltr;
+	force_ltr_check.checked = settings.force_ltr;
+	({debug_enabled, debug_settings} = settings);
 } catch (err) {
 }
+if (!debug_settings) debug_settings = {};
 sync_recent(localStorage[STORAGE_RECENT]);
 sync_force_ltr();
 sync_examples();
+sync_debug();
 apply_page_url(location0);
 input_field.focus();
+
+const ccipReadFetchOld = ethers.AbstractProvider.prototype.ccipReadFetch;
+ethers.AbstractProvider.prototype.ccipReadFetch = function(tx, calldata, urls) {
+	if (resolve_debug) {
+		try {
+			let url = resolve_debug.ccip[tx.to];
+			if (url) urls = [url];
+		} catch (err) {
+		}
+	}
+	return ccipReadFetchOld.call(this, tx, calldata, urls);
+}
 
 if (window.ethereum) {
 	let p = ethereum;
@@ -2053,6 +2147,7 @@ async function change_window_to_chain(chain) {
 	}
 }
 function is_user_rejection(err) {
+	console.log(err, {...err});
 	return err.shortMessage === 'user rejected action';
 }
 function set_window_network(network) {
@@ -2165,7 +2260,6 @@ function stop_resolving() {
 }
 
 function apply_page_url(url) {
-	debug_mode = url.searchParams.has('debug');
 	chain_select.value = (CHAINS.find(x => url.searchParams.has(x.slug)) || CHAINS[0]).id;
 	skip_norm_check.checked = url.searchParams.has('skip');
 	input_field.value = decodeURIComponent(url.hash.slice(1));
@@ -2178,7 +2272,6 @@ function get_page_url() {
 	let input = input_field.value;
 	let url = new URL(location0);
 	let args = [];
-	if (debug_mode) args.push('debug');
 	if (!active_chain.is_mainnet) args.push(active_chain.slug);
 	if (skip_norm_check.checked) args.push('skip');
 	url.search = args.join('&');
@@ -2578,7 +2671,7 @@ function create_etherscan_address_link(addr, {innerHTML, anchor = '', contract, 
 }
 function create_jazz_icon(address) {
 	let i = ADDRESS_MAP.get(address);
-	if (!i || debug_mode) ADDRESS_MAP.set(address, i = ADDRESS_MAP.size + 1);
+	if (!i || (resolve_debug && resolve_debug.jazz)) ADDRESS_MAP.set(address, i = ADDRESS_MAP.size + 1);
 	return create('span', {innerHTML: i, className: ['jazz', `addr${i}`]});
 }
 
@@ -2701,15 +2794,16 @@ function get_similar_emoji(flat) {
 	let set = new Set(flat.filter(x => typeof x === 'string'));
 	if (!set.size) return;
 	let conflicts = [
-		['🇺🇸', ['🇺🇲']]
+		['🇺🇸', '🇺🇲'],
+		['❤', '♥'],
 	];
-	for (let [primary, similar] of conflicts) {
+	for (let [primary, ...similar] of conflicts) {
 		let p = set.has(primary);
 		let n = similar.reduce((a, x) => a + +set.has(x), 0);
-		if (p && n || n > 1) {
-			return `Mixed ${primary}`;
+		if (p && n) {
+			return `Mixed ${ens_beautify(primary)}`;
 		} else if (!p && n) {
-			return `Uncommon ${primary}`;
+			return `Similar ${ens_beautify(primary)}`;
 		}
 	}
 }
@@ -2903,7 +2997,6 @@ function add_nft_links(row, name, contract, token) {
 
 // https://github.com/adraffy/keccak.js/blob/main/src/utils.js#L96
 function bytes_from_utf8(s) {
-	if (typeof s !== 'string') throw new TypeError('expected string');
 	let v = [];
 	for (let pos = 0, len = s.length; pos < len; ) {
 		let cp = s.codePointAt(pos++);
@@ -3257,6 +3350,7 @@ function resolve() {
 	}
 	clearTimeout(resolve_timer);
 	resolve_timer = RESOLVE_MODE_IDLE;
+	resolve_debug = debug_enabled ? debug_settings : null;
 	available = undefined;
 	ADDRESS_MAP.clear();
 	let input = input_field.value;
@@ -3830,7 +3924,7 @@ async function resolve1(input, skip_norm) {
 				let now = Date.now();
 				let exp = Number(data.expiry) * 1000;
 				let fuses = Number(data.fuses);
-				if (debug_mode) fuses = 0x7FFFF;
+				if (resolve_debug && resolve_debug.fuses) fuses = 0x7FFFF;
 				if (fuses & 0x10000) { // PARENT_CANNOT_CONTROL 
 					if (fuses & 0x00001) { // CANNOT_UNWRAP 
 						add_row_tag(wrapped_row, create_tag('good', '🔒️ Locked')); 
@@ -4016,6 +4110,7 @@ async function resolve1(input, skip_norm) {
 			address = await fetch_addr60(resolver);
 		} catch (err) {
 			address_err = err;
+			console.log(err);
 		}
 		if (should_stop_resolving()) return;
 		if (await is_contract(address)) make_contract(address_row);
@@ -4071,7 +4166,17 @@ async function resolve1(input, skip_norm) {
 			if (resolver.__unreachable) {
 				add_row_tag(records_row, create_tag('fail', 'Unreachable'));
 			} else {
-				for (let {rec, data, error} of await fetch_records(resolver, RECORDS)) {
+				let records = RECORDS;
+				if (resolve_debug && Array.isArray(resolve_debug.records)) {
+					records = records.slice();
+					for (let rec of resolve_debug.records) {
+						try {
+							records.push(prepare_record({...rec}));
+						} catch (err) {
+						}
+					}
+				}
+				for (let {rec, data, error} of await fetch_records(resolver, records)) {
 					if (error) continue;
 					//if (error) return create_typed_tag('warn', error);
 					let a = create('a', {className: 'record', target: '_blank'});
@@ -4180,7 +4285,7 @@ async function resolve1(input, skip_norm) {
 							break;
 						}
 						// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IPubkeyResolver.sol
-						case 'pubkey': {
+						case TYPE_PUBKEY: {
 							let [x, y] = data;
 							if (is_null_hex(x)) continue;
 							a.innerHTML = `<b>pubkey</b>`;
@@ -4192,7 +4297,7 @@ async function resolve1(input, skip_norm) {
 						// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IContentHashResolver.sol
 						// https://docs.ens.domains/ens-improvement-proposals/ensip-7-contenthash-field
 						// https://github.com/multiformats/multicodec/blob/master/table.csv
-						case 'contenthash': { 
+						case TYPE_CONTENTHASH: { 
 							if (is_null_hex(data))  continue;
 							a.innerHTML = `<b>${rec.type}</b>`;
 							a.classList.add('rtrim');
@@ -4313,7 +4418,7 @@ async function resolve1(input, skip_norm) {
 			if (should_stop_resolving()) return;
 			let [{data, error}] = await fetch_records(rev_resolver, [{type: 'name'}]);
 			if (error) throw error;
-			if (debug_mode) data = data.toUpperCase();
+			if (resolve_debug && resolve_debug.primary) data = data.toUpperCase();
 			primary = data;
 		}
 	} catch (err) {
@@ -4408,6 +4513,11 @@ function parse_custom_error(err) {
 			temp.custom = error;
 			return temp;
 		}
+	} else if (err.code === 'OFFCHAIN_FAULT') {
+		let {reason, errorMessages = []} = err.info;
+		if (reason) {
+			return new Error(`CCIP error: ${errorMessages.join(' ')} <code>${reason}</code>`);
+		}
 	}
 }
 async function fetch_addr60(resolver) {
@@ -4483,7 +4593,7 @@ async function fetch_records(resolver, records) {
 				} else {
 					let error = parse_custom_error(err);
 					if (error) {
-						if (error.custom.selector === '0xe861b2bd') {
+						if (error.custom && error.custom.selector === '0xe861b2bd') {
 							resolver.__unreachable = 'contract';
 						}
 						return {rec, error};
@@ -4710,7 +4820,9 @@ async function get_resolver(name) {
 	for (let i = 0; i < v.length; i++) {
 		let basename = v.slice(i).join('.');
 		let basenode = namehash(basename);
-		let address = await registry_contract.resolver(basenode);
+		let address;
+		if (resolve_debug && is_object(resolve_debug.resolver)) address = resolve_debug.resolver[basename];
+		if (!address) address = await registry_contract.resolver(basenode);
 		if (should_stop_resolving()) throw new Error('aborted');
 		if (is_null_hex(address)) continue;
 		// https://github.com/ensdomains/ens-contracts/tree/staging/contracts/resolvers/profiles
@@ -4775,10 +4887,8 @@ async function get_safe_primary(owner, alt_owner) {
 	if (!address) {
 		throw new Error('Address not set');
 	}
-	if (owner.localeCompare(address, undefined, {sensitivity: 'base'})) {
-		if (!alt_owner || alt_owner.localeCompare(address, undefined, {sensitivity: 'base'})) {
-			throw new Error(`Address mismatch`);
-		}
+	if (owner !== address && alt_owner !== address) {
+		throw new Error(`Address mismatch`);
 	}
 	return name;
 }
@@ -4838,7 +4948,9 @@ function format_btc_address(v, {p2pkh, p2sh, hrp, p2wpkh, p2tr}) {
 	}
 	throw new Error('invalid');
 }
-
+function strncmp(a, b) {
+	return a ? a.localeCompare(b, undefined, {sensitivity: 'base'}) : a === b;
+}
 function create(el, args, ...a) {
 	if (typeof el === 'string') el = document.createElement(el);
 	if (args) {
@@ -4900,6 +5012,9 @@ function namehash(s) {
 }
 function bytes32_from(x) {
 	return '0x' + BigInt(x).toString(16).padStart(64, '0').slice(-64);
+}
+function is_object(x) {
+	return x && x.constructor === Object;
 }
 </script>
 </body>
