@@ -133,6 +133,8 @@ tr.free {
 }
 .replace {
 	border-right: 2px solid #888;	
+	font-size: 120%;
+	padding: 0;
 }
 td.replace:not(:empty):hover {
 	cursor: pointer;
@@ -239,6 +241,10 @@ h2 {
 h2 span {
 	font-size: 90%;
 	font-weight: normal;
+}
+.combos {
+	margin-top: 8px;
+	text-align: center;
 }
 footer {
 	margin: 16px 0;
@@ -375,7 +381,7 @@ let init = (async () => {
 	let headerer = make_rotated_headerer(groups.map(g => g.name));
 	form_header = headerer('Form');
 	cp_header = headerer('Codepoint');
-	replace_header = headerer('Replace');
+	replace_header = headerer('Change');
 	ascii_header = headerer('ASCII');
 	groups.forEach((g, i) => {
 		g.index = i;
@@ -595,11 +601,12 @@ function create_grid(input) {
 
 	let table = create('table');	
 	let added = Infinity;
+	let combos = 1n;
 	for (let w of order) {
 		if (Number.isInteger(w)) {
 			let first = !add_rows(1);
 			let tr = create('tr', {className: ['free', first ? 'first' : null]});
-			add_td_for_cp(tr, w, true);
+			add_td_for_cp(tr, cps, w, true);
 			for (let g of group_universe) {
 				let td = create('td');
 				if (g.valid_set.has(w)) {
@@ -618,13 +625,14 @@ function create_grid(input) {
 					tr.classList.add('first');
 					first = false;
 				}
-				let active = cps.includes(def.cp);
+				let active = cps.reduce((a, x) => a + +(x === def.cp), 0);
 				if (active) {
 					tr.classList.add('active');
+					combos *= BigInt(defs.length) ** BigInt(active);
 				} else if (active_valid_set.has(def.cp)) {
 					tr.classList.add('alternative');
 				}
-				add_td_for_cp(tr, def.cp, active, w, cps);
+				add_td_for_cp(tr, cps, def.cp, active, w);
 				for (let g of group_universe) {
 					let td = create('td', {className: 'cell'});
 					if (def.groups.includes(g)) {
@@ -646,6 +654,7 @@ function create_grid(input) {
 		}
 	}
 	output_div.replaceChildren(create('div', {id: 'scrolled'}, table));
+	output_div.append(create('div', {className: 'combos', innerHTML: `<b>Combinations:</b> ${combos.toLocaleString()}`}));
 
 	function add_rows(n) {
 		if (added >= 20) {
@@ -695,7 +704,7 @@ function make_tag(i) {
 	}
 }
 
-function add_td_for_cp(tr, cp, active, whole, cps) {
+function add_td_for_cp(tr, cps, cp, active, whole) {
 	let char = char_map.get(cp);
 	tr.append(create('td', {className: 'hex', innerText: hex_cp(cp)}));
 	let td_form = create('td', {className: 'form', innerText: safe_str_from_cps([cp])});
@@ -714,6 +723,13 @@ function add_td_for_cp(tr, cp, active, whole, cps) {
 			}));
 			input_field.value = replaced;
 			create_grid(replaced);
+		});
+	} else {
+		td_replace.innerText = '❌️';
+		td_replace.addEventListener('click', () => {
+			let replaced = String.fromCodePoint(...cps.filter(x => x !== cp));
+			input_field.value = replaced;
+			update();
 		});
 	}
 	tr.append(td_replace);

@@ -1387,9 +1387,10 @@ const MIN_ETH_LENGTH = 3;
 const NFT_DOMAINS = new Set(['eth', 'art']); //, 'box']);
 const REVERSE_DOMAIN = 'addr.reverse';
 const RESOLVER_NAMES = {
-	'0x1da022710dF5002339274AaDEe8D58218e9D6AB5': 'Old Public (v1)',
-	'0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41': 'Old Public (v2)',
-	'0x231b0Ee14048e9dCcD1d247744d114a4EB5E8E63': '✨️ Public (v3)',
+	'0x1da022710dF5002339274AaDEe8D58218e9D6AB5': 'Old Public (v0)',  // 3648359: just addr()
+	'0xDaaF96c344f63131acadD0Ea35170E7892d3dfBA': 'Old Public (v1)',  // 9380387: addr(coinType)
+	'0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41': 'Old Public (v2)',  // 9412610: same as v1?
+	'0x231b0Ee14048e9dCcD1d247744d114a4EB5E8E63': '✨️ Public (v3)',  // 16925619: wrapper support, versioned, name()
 	'0x5fBb459C49BB06083C33109fA4f14810eC2Cf358': 'Old Reverse (v1)',
 	'0xA2C122BE93b0074270ebeE7f6b7292C7deB45047': 'Old Reverse (v2)',
 	'0xF142B308cF687d4358410a4cB885513b30A42025': 'Offchain DNS'
@@ -1409,6 +1410,7 @@ const TYPE_ADDR = 'addr(bytes32,uint256)';
 const TYPE_TEXT = 'text';
 const TYPE_PUBKEY = 'pubkey';
 const TYPE_CONTENTHASH = 'contenthash';
+const TYPE_NAME = 'name';
 const RECORDS = [
 	{
 		key: 'name',
@@ -2016,22 +2018,24 @@ debug_ta.addEventListener('keydown', e => {
 	}
 });
 debug_ta.placeholder = `{
-	"jazz": false,    // debug jazz icons
-	"fuzes": false,   // debug wrapper fuses interface
-	"primary": false, // debug primary normalization
+	// resolver overrides: name -> contract
 	"resolvers": {
-		// name -> contract
 		"domain.fake": "0x32aC8A721A0d9Ce85F88599228297BBa8E183044"
 	},
+	// endpoint overrides: contract -> endpoint
 	"ccip": {
-		// contract -> endpoint
 		"0x32aC8A721A0d9Ce85F88599228297BBa8E183044": "https://localhost:80/"
 	},
+	// additional records
 	"records": [
 		{"key": "primary-contact"}, // text()
 		{"coin": 1234},             // coin()
 		{"evm": 5}                  // coin() via ENSIP-11
-	]
+	],
+	// misc interface stuff
+	"jazz": false,    // debug jazz icons
+	"fuzes": false,   // debug wrapper fuses interface
+	"primary": false, // debug primary normalization	
 }`.replaceAll('\t', DEBUG_INDENT);
 
 function set_page_url(url) {
@@ -3548,7 +3552,7 @@ async function resolve1(input, skip_norm) {
 		reverse_row = normed_row = create_row('Reverse', true);
 		output_div.append(reverse_row);
 		let primary;
-		[{data: primary, error: last_err}] = await fetch_records(resolver, [{type: 'name'}]);
+		[{data: primary, error: last_err}] = await fetch_records(resolver, [{type: TYPE_NAME}]);
 		if (should_stop_resolving()) return;
 		remove_temporary(reverse_row);
 		add_row_tag(reverse_row, create_elapsed());
@@ -4167,6 +4171,9 @@ async function resolve1(input, skip_norm) {
 				add_row_tag(records_row, create_tag('fail', 'Unreachable'));
 			} else {
 				let records = RECORDS;
+				if (name_norm.endsWith(REVERSE_DOMAIN)) {
+					records = [{type: TYPE_NAME}];
+				}
 				if (resolve_debug && Array.isArray(resolve_debug.records)) {
 					records = records.slice();
 					for (let rec of resolve_debug.records) {
@@ -4181,10 +4188,26 @@ async function resolve1(input, skip_norm) {
 					//if (error) return create_typed_tag('warn', error);
 					let a = create('a', {className: 'record', target: '_blank'});
 					switch (rec.type) {
+						case TYPE_NAME: {
+							if (is_null_hex(data)) continue;
+							a.innerHTML =`<b>name</b>`;
+							make_click_copy(a, data);							
+							a.append(dom_from_tokens(ens_tokenize(data), {components: false, before: true, tld: true}));
+							try {
+								if (ens_beautify(data) === data) {
+									a.append(create_pretty_tag());
+								}
+							} catch (err) {
+								a.append(create_tag('fail', err));
+							}
+							a.append(create_resolve_btn(data));
+							a.classList.add('rtrim');
+							break;
+						}
 						// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IAddressResolver.sol
 						// https://docs.ens.domains/ens-improvement-proposals/ensip-9-multichain-address-resolution
 						case TYPE_ADDR: {
-							if (is_null_hex(data))  continue;
+							if (is_null_hex(data)) continue;
 							a.classList.add('rtrim');
 							a.innerHTML = rec.icon || `<b>${rec.name}</b>`;
 							try {
@@ -4213,7 +4236,6 @@ async function resolve1(input, skip_norm) {
 								a.append(create_tag('fail', err));
 								a.append(create_copy_btn(data));
 							}
-							records_row.append(a);
 							break;
 						}
 						// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/ITextResolver.sol
@@ -4416,7 +4438,7 @@ async function resolve1(input, skip_norm) {
 		rev_resolver = await get_resolver(reverse_name(address));
 		if (rev_resolver) {
 			if (should_stop_resolving()) return;
-			let [{data, error}] = await fetch_records(rev_resolver, [{type: 'name'}]);
+			let [{data, error}] = await fetch_records(rev_resolver, [{type: TYPE_NAME}]);
 			if (error) throw error;
 			if (resolve_debug && resolve_debug.primary) data = data.toUpperCase();
 			primary = data;
@@ -4871,7 +4893,7 @@ async function get_safe_primary(owner, alt_owner) {
 		throw new Error('Primary not set');
 	}
 	if (should_stop_resolving()) return;
-	let [{data: primary, error}] = await fetch_records(rev_resolver, [{type: 'name'}]);
+	let [{data: primary, error}] = await fetch_records(rev_resolver, [{type: TYPE_NAME}]);
 	if (error) throw error;
 	if (!primary) {
 		throw new Error('Primary is Null');
