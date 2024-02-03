@@ -463,6 +463,11 @@ button.copy.copied {
 	user-select: none;
 }
 .tags.ens { order: 9; }
+.ens button {
+	border-color: #04f;
+	background-color: #58f;
+	color: #fff;
+}
 .tags.metadata { order: 10; }
 .tags.external { order: 11; font-size: 80%; }
 .tags.invalid { color: #f00; }
@@ -2704,7 +2709,7 @@ function make_click_copy(el, raw, {hint} = {}) {
 function create_copy_btn(raw, {small, value} = {}) {
 	let btn = create('button', {className: 'copy'});
 	if (small) btn.classList.add('small');
-	make_click_copy(btn, raw);	
+	make_click_copy(btn, raw);
 	if (value) {
 		btn.title = raw;
 	} else {
@@ -3798,7 +3803,7 @@ async function resolve1(input, skip_norm) {
 			let padded = Array(1 + Math.max(0, MIN_ETH_LENGTH - len)).fill(label).join('');
 			add_row_tag(avail_row, create_resolve_btn(add_dot_eth(padded), '↩️ Repeat until 3+'));
 		} else if (available) {
-			add_row_tag(avail_row, create_ens_link(name_norm, '<button class="glow">👌️ Available to Register</button>'));
+			add_row_tag(avail_row, create_ens_link(name_norm, '<button>👌️ Available to Register</button>'));
 			let ether = parseFloat(ethers.formatEther(premium));
 			if (ether) {
 				add_row_tag(avail_row, create_tag('warn', `${ether.toFixed(ether < 1 ? 4 : 2)}Ξ Premium`));
