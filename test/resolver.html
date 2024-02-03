@@ -1252,6 +1252,7 @@ Hebrew:
 <li><a href="../../emoji.js/test/demo.html">Emoji Parser</a></li>
 <li><a href="../../keccak.js/test/demo.html">Keccak Hasher</a></li>
 <li><a href="../../punycode.js/test/demo.html">Punycode Coder</a></li>
+<li><a href="../../cid.js/test/demo.html">CID Tool</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-batch-resolver.html">Batch Resolver</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-nft-matcher.html">ENS+NFT Matcher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/emoji-pixels.html">Emoji Pixel Maker</a></li>
@@ -1281,7 +1282,7 @@ import {
 	dom_from_tokens, use_default_style,
 } from '../dist/all.min.js';
 import {puny_encoded, is_surrogate} from '../../punycode.js/dist/index.min.js'; 
-import {CID, uvarint, convert, Bech32, Base36, Base58BTC, Base64URL} from '../../cid.js/dist/index.min.js';
+import {CID, uvarint, convert, Bech32, Base32, Base58BTC, Base64URL} from '../../cid.js/dist/index.min.js';
 import eth_ens_namehash from './eth-ens-namehash@2.0.15.min.js';
 use_default_style();
 
@@ -2682,10 +2683,10 @@ function create_jazz_icon(address) {
 function make_click_copy(el, raw, {hint} = {}) {
 	if (el.title) el.title += `\n${CLICK_TO_COPY}`;
 	el.dataset.copy = raw;
-	el.addEventListener('click', e => {
+	el.addEventListener('click', function(e) {
 		e.preventDefault();
 		e.stopPropagation();
-		let {copy, alt, shift} = el.dataset;
+		let {copy, alt, shift} = this.dataset;
 		if (e.altKey) {
 			copy = alt || explode_cp(copy).map(hex_cp).join(' ');
 		} else if (e.shiftKey) {
@@ -2694,8 +2695,8 @@ function make_click_copy(el, raw, {hint} = {}) {
 		const cls = 'copied';
 		document.querySelectorAll(`.${cls}`).forEach(x => x.classList.remove(cls));
 		navigator.clipboard.writeText(copy);
-		el.classList.add(cls);
-		setTimeout(() => el.classList.remove(cls), 2000);
+		this.classList.add(cls);
+		setTimeout(() => this.classList.remove(cls), 2000);
 	});
 	return el;
 }
@@ -2764,7 +2765,7 @@ function determine_confusion(label, flat) {
 	} else if (match = get_similar_emoji(flat)) {
 		return match;
 	} else if (/^0x[0-9a-f]{18,}/i.test(label)) {
-		return 'Address-like';
+		return is_address(label) ? 'Address' : 'Address-like';
 	}
 }
 function determine_style(flat) {
@@ -4355,18 +4356,22 @@ async function resolve1(input, skip_norm) {
 										break;
 									}
 									//case 0xE8: // DNSLink 
-									case 0x1BC:   // onion v2
-									case 0x1BD: { // onion v3 
+									case 0x1BC: { // onion v2
+										// https://support.torproject.org/onionservices/v2-deprecation/
+										rep = Base32.encode(buf);
+										if (rep.length !== 16) throw new Error('bad length');
+										url = `http://${rep}.onion`;
+										a.append(create_link(`http://${rep}.onion.to/`, {button: 'Onion'}));
+										a.append(create_tag('warn', 'Deprecated'));
+										break;
+									}
+									case 0x1BD: { // onion v3
 										// https://www.tor2web.org/
-										// https://blog.torproject.org/v3-onion-services-usage/
-										rep = Base36.encode(buf);
-										const V2 = 16;
-										if (rep.length != V2 && rep.length != 56) throw new Error('bad length');
-										url = `onion://${rep}`;
-										a.append(create_link(`https://${rep}.onion.to/`, {button: 'Onion'}));
-										if (rep.length == V2) {
-											a.append(create_tag('warn', 'Deprecated'));
-										}
+										rep = Base32.encode(buf);
+										if (rep.length !== 56) throw new Error('bad length');
+										url = `http://${rep}.onion`;
+										a.append(create_link(`http://${rep}.onion.to/`, {button: 'Onion'}));
+										a.append(create('span', {className: ['tags', 'minor'], innerText: 'v3'}));
 										break;
 									}
 									case 0xB19910: { // skylink
@@ -4381,33 +4386,30 @@ async function resolve1(input, skip_norm) {
 										// https://docs.arweave.org/developers/arweave-node-server/http-api
 										if (buf.length != 32) throw new Error('not sha256');
 										rep = Base64URL.encode(buf);
-										url = `arweave://${rep}`;
+										url = `ar://${rep}`;
 										a.append(create_link(`https://arweave.net/${rep}`, {button: 'Arweave'}));
-										a.append(create_link(`https://viewblock.io/arweave/tx/${rep}`, {button: '✅️ Check'}));
+										a.append(create_link(`https://viewblock.io/arweave/tx/${rep}`, {button: '🔍️ Inspect'}));
 										break;
 									}
 									default: throw new Error(`unknown protocol: ${proto}`);
 								}
 								make_click_copy(a, url);
-								let lines = [data, `Protocol: ${format_dec_hex(proto)}`, url];
+								let lines = [url, `Protocol: ${format_dec_hex(proto)}`];
 								if (cid) {
 									lines.push(`CID: Version: ${format_dec_hex(cid.version)} / Codec: ${format_dec_hex(cid.codec)} / Bytes: ${buf.length}`);
 									lines.push(`Hash: Codec: ${format_dec_hex(cid.hash.codec)} / Bytes: ${cid.hash.data.length}`);
-									a.append(create_link(`https://cid.ipfs.tech/#${cid}`, {button: '✅️ Check'}));
+									a.append(create_link(`https://cid.ipfs.tech/#${cid}`, {button: '🔍️ Inspect'}));
 								}
-								lines.push(`[ALT] Copy Raw Data`);
+								lines.push(`Raw: ${data}`, `[ALT] Copy Raw`);
 								a.dataset.alt = data;
 								a.title = lines.join('\n');
 								// upgrade the decentralized website link
 								$('.row.dns').replaceWith(create_dns_row(name_norm, {replaced: false, contenthash: rep}));
 							} catch (err) {
 								a.append(create_tag('fail', err));
-								a.title = data;
-								make_click_copy(a, data);
-								if (rep) {
-									a.append(make_click_copy(create('button', {innerText: 'Decoded', title: rep}), rep));
-								}
+								make_click_copy(a, data, {hint: true});
 							}
+							a.append(create_link(`../../cid.js/test/demo.html#${data}`, {button: '✅️ Check'}));
 							break;
 						}
 					}

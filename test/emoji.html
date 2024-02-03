@@ -489,8 +489,8 @@ footer span:hover {
 <div id="examples">
 	<button style="background-color: #afa" data-query="v15.1">⭐️ New in 15.1</button>
 	<b>People:</b>
-	<button style="background-color: #dff" data-query="/\bMan\b/">Man</button>
-	<button style="background-color: #fdf" >Woman</button>
+	<button data-query="/\bman/ !woman">Man</button>
+	<button data-query="woman !/\bman/">Woman</button>
 	<button data-query="{2642}">♂️</button>
 	<button data-query="{2640}">♀️</button>
 	<button>Family</button>
@@ -1159,7 +1159,7 @@ function setup_render(results) {
 					subheading.classList.add('subheading');
 					subheading.innerHTML = `<b>${get_repeat_word(repeat)}</b> — ${match_repeat.length} (${fmt_perc(match_repeat.length / emoji_count)})`;
 					section.append(subheading);
-					if (match_repeat.length > 10) {
+					if (match_repeat.length > 5) {
 						let emojis_div = document.createElement('div');
 						emojis_div.classList.add('emojis');
 						emojis_div.append(...match_repeat.map(rec => {
