@@ -147,6 +147,7 @@ h1 .count span {
 }
 #jumps a:hover {
 	border-color: #00f;
+	cursor: pointer;
 }
 #jumps .summary {
 	border: 1px solid #ccc;
@@ -388,7 +389,7 @@ button[data-by="version"], [data-by="version"] .title, .version { background-col
 	display: none;
 }
 [data-by="type"] .title,
-[data-by="subgroup"] .title {
+[data-by="version"] .title {
 	font-family: monospace;
 }
 [data-by="type"] #jumps .title,
@@ -1022,10 +1023,10 @@ function create_jump(heading_future, {count = 0, disabled = 0, title} = {}) {
 	let a = document.createElement('a');
 	let valid = count - +disabled;
 	if (valid) {
-		a.append(create_span(valid, 'count'));
+		a.append(create_span(valid.toLocaleString(), 'count'));
 	}
 	if (disabled) {
-		a.append(create_span(disabled, 'disabled'));
+		a.append(create_span(disabled.toLocaleString(), 'disabled'));
 	}
 	if (title) {
 		a.append(create_span(title, 'title'));
@@ -1264,7 +1265,7 @@ function create_count_span(i, n) {
 	// let span = document.createElement('span');
 	// span.classList.add('count');
 	// span.innerHTML = `<b>${i}</b>`;
-	let span = create_span(i, 'count');
+	let span = create_span(i.toLocaleString(), 'count');
 	if (i) span.append(` (${fmt_perc(i / n)})`);
 	return span;
 }
@@ -1285,7 +1286,7 @@ function create_heading({title, section, length, length_ge, cost, count, disable
 		heading.append(create_count_span(valid, emoji_count));
 	}
 	if (disabled) {
-		heading.append(create_span(disabled, 'disabled'));
+		heading.append(create_span(disabled.toLocaleString(), 'disabled'));
 	}
 	if (title) {
 		heading.append(create_span(title, 'title'));
