@@ -30,7 +30,7 @@ function init() {
 	
 	let r = read_compressed_payload(COMPRESSED);
 	const read_sorted_array = () => read_sorted(r);
-	const read_sorted_set = () => new Set(read_sorted_array(r));
+	const read_sorted_set = () => new Set(read_sorted_array());
 	const set_add_many = (set, v) => v.forEach(x => set.add(x));
 
 	MAPPED = new Map(read_mapped(r)); 

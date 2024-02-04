@@ -221,6 +221,7 @@ body.testnet {
 	user-select: none;
 	color: #666;
 	background-color: #fff;
+	white-space: pre;
 }
 #options :disabled + label {
 	opacity: 0.5;
@@ -237,6 +238,7 @@ body.testnet {
 #auto_resolve_check:checked + label {
 	border-color: #5c5;
 	background: linear-gradient(90deg, #fff, #cfc);
+	font-style: italic;
 }
 #show_details_check:checked + label {
 	border-color: #ca4;
@@ -1177,7 +1179,7 @@ Hebrew:
 <div id="options">
 	<button id="examples_btn">👀 Examples</button>
 	<input type="checkbox" id="auto_resolve_check" checked>
-	<label for="auto_resolve_check"><svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--geist-foreground);width:20px;height:20px"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> <i>on Input</i></label>
+	<label for="auto_resolve_check"><svg width="20" fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>on Input</label>
 	<input type="checkbox" id="show_details_check">
 	<label for="show_details_check">Details</label>
 	<input type="checkbox" id="show_components_check" checked>
@@ -1185,7 +1187,7 @@ Hebrew:
 	<input type="checkbox" id="show_records_check" checked>
 	<label for="show_records_check" title="Include common text and address records">Records</label>
 	<input type="checkbox" id="skip_norm_check">
-	<label for="skip_norm_check"  title="When active, normalization is not applied"><svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--geist-foreground);width:20px;height:20px"><circle cx="12" cy="12" r="10" fill="var(--geist-fill)"></circle><path d="M15 9L9 15" stroke="var(--geist-stroke)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M9 9L15 15" stroke="var(--geist-stroke)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>Norm</label>
+	<label for="skip_norm_check"  title="When active, normalization is not applied"><svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="var(--geist-fill)"></circle><path d="M15 9L9 15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M9 9L15 15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>Norm</label>
 	<input type="checkbox" id="force_ltr_check">
 	<label for="force_ltr_check" title="Override Bidi Handling with Left-to-Right Direction&#10;(Applies only to Input)">LTR!</label>
 	<select id="chain_select"></select>
@@ -1194,6 +1196,7 @@ Hebrew:
 </div>
 <div id="input">
 	<input id="input_field" size="20" placeholder="Name or Address">
+	<button id="parent_btn" class="hide" title="Resolve parent domain&#10;[ESC] Clear input"><svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 16 24" width="16"><path d="M8 22V2"/><path d="M1 9l7-7 7 7"/></svg></button>
 	<select id="recent_select" title="Recent Names" class="hide">
 		<option value="reset">🗑️ Clear History</option>
 		<optgroup label="Recent Names"></optgroup>
@@ -1214,7 +1217,6 @@ Hebrew:
 		<button id="nf_btn">NFD↔NFC</button>
 		<button id="escape_btn" title="[ALT] Unicode Escaped">Escape</button>
 	</div>
-	<button id="parent_btn" title="Drop the leading label&#10;[ALT] Clear input">Parent</button>
 	<button id="copy_link_btn">Copy Link</button>
 	<button id="resolve_btn">Resolve</button>
 </div>
@@ -1767,8 +1769,12 @@ for (let x of document.querySelectorAll('[data-tokenize]')) {
 resolve_btn.addEventListener('click', resolve);
 input_field.addEventListener('keydown', e => {
 	if (e.key === 'Enter') {
-		if (e.shiftKey) input_field.value = add_dot_eth(input_field.value.trim(), true);
 		e.stopPropagation();
+		if (e.shiftKey) input_field.value = add_dot_eth(input_field.value.trim(), true);
+		resolve();
+	} else if (e.key === 'Escape') {
+		e.preventDefault();
+		input_field.value = '';
 		resolve();
 	}
 });
@@ -1881,7 +1887,7 @@ nf_btn.addEventListener('click', () => {
 parent_btn.addEventListener('click', e => {
 	let name = input_field.value;
 	let pos = name.indexOf('.');
-	input_field.value = !e.altKey && pos >= 0 ? name.slice(pos+1) : '';
+	input_field.value = pos >= 0 ? name.slice(pos+1) : '';
 	resolve();
 });
 escape_btn.addEventListener('click', e => {
@@ -2326,7 +2332,7 @@ function parse() {
 	let skip = skip_norm_check.checked;
 	nf_btn.disabled = !input;
 	escape_btn.disabled = !input;
-	parent_btn.disabled = !input;	
+	parent_btn.classList.toggle('hide', !input);
 	show_components_label.classList.add('hide');
 	output_div.innerHTML = '';
 	clock_span.innerHTML = '';

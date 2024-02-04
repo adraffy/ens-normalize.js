@@ -152,7 +152,7 @@ h1 .count span {
 	border: 1px solid #ccc;
 }
 #jumps .summary .count {
-	background-color: #fff;
+	font-weight: bold;
 }
 #jumps .title {
 	align-self: stretch;
@@ -374,6 +374,7 @@ td.info {
 	font: bold 12px monospace;
 }
 button[data-by="cost"] { background-color: #080; color: #fff; }
+button[data-by="emoji"] { background-color: #fe0;  }
 button[data-by="length"], [data-by="length"] .title, .length { background-color: var(--length-color); }
 button[data-by="type"], [data-by="type"] .title, .type {  background-color: #ffe0c0; }
 button[data-by="group"], [data-by="group"] .title, .group { background-color: #ddf; }
@@ -541,6 +542,7 @@ footer span:hover {
 <div id="by">
 	<b>By:</b>
 	<button data-by="length">Length</button>
+	<button data-by="emoji">😀</button>
 	<button data-by="cost">Cost</button>
 	<button data-by="type">Type</button>
 	<button data-by="group">Group</button>
@@ -573,14 +575,7 @@ use_default_style();
 
 const PER_CHUNK = 128;
 const BY_LENGTH = 'length';
-const BY_TYPE = 'type';
-const BY_COST = 'cost';
-const BY_VERSION = 'version';
-const BY_GROUP = 'group';
-const BY_SUBGROUP = 'subgroup';
-
 const TYPE_DISABLED = 'Disabled';
-
 const STORAGE_EMOJI_INFO = 'ens-norm.emoji-info';
 
 const COSTS = [
@@ -931,9 +926,14 @@ function update_search() {
 			test_fn = x => x.min_repeat === 2;
 		} else if (arg === 'triples') {
 			test_fn = x => x.min_repeat === 3;
-		} else if (match = arg.match(/^v(\d+\.?\d*)(\+?)$/i)) {
+		} else if (match = arg.match(/^v(\d+\.?\d*)((?:\-|\+)?)$/i)) {
 			let version = parseFloat(match[1]);
-			let compare = match[2] ? (a, b) => a >= b : (a, b) => a == b;
+			let compare;
+			switch (match[2]) {
+				case '+': compare = (a, b) => a >= b; break;
+				case '-': compare = (a, b) => a <= b; break;
+				default:  compare = (a, b) => a == b;
+			}
 			test_fn = x => x.info && compare(parseFloat(x.info.version), version);
 		} else if (match = type_map.get(arg)) {
 			test_fn = x => x.info && x.info.type === match;
@@ -1045,7 +1045,7 @@ function setup_render(results) {
 	active_emoji = results;
 	render_queue.length = 0;
 	main.innerHTML = '';
-	let jumps = [];		
+	let jumps = [];
 	if (by_mode === BY_LENGTH) {
 		for (let length = 1; length <= max_length; length++) {
 			let matched = results.filter(x => x.norm_length === length);
@@ -1070,7 +1070,7 @@ function setup_render(results) {
 				render_queue.push(() => heading.scrollIntoView());
 			}
 		}
-	} else if (by_mode === BY_VERSION) {
+	} else if (by_mode === 'version') {
 		for (let version of emoji_versions) {
 			let matched = results.filter(x => (x.info && x.info.version) === version);
 			if (!matched.length) continue;
@@ -1087,7 +1087,7 @@ function setup_render(results) {
 				main.append(heading, section);
 			});
 		}
-	} else if (by_mode === BY_TYPE) {
+	} else if (by_mode === 'type') {
 		let groups = new Set(type_map.values());
 		groups.delete(TYPE_DISABLED);
 		groups = Array.from(groups).sort();
@@ -1107,7 +1107,7 @@ function setup_render(results) {
 				main.append(heading, section);
 			});
 		}
-	} else if (by_mode === BY_GROUP) {
+	} else if (by_mode === 'group') {
 		let groups = [...new Set(results.map(x => x.info && x.info.group))].sort();
 		for (let group of groups) {
 			let matched = results.filter(x => (x.info && x.info.group) === group);
@@ -1124,7 +1124,7 @@ function setup_render(results) {
 				main.append(heading, section);
 			});
 		}
-	} else if (by_mode === BY_SUBGROUP) {
+	} else if (by_mode === 'subgroup') {
 		let groups = [...new Set(results.map(x => x.info && x.info.subgroup))].sort();
 		for (let group of groups) {
 			let matched = results.filter(x => (x.info && x.info.subgroup) === group);
@@ -1133,7 +1133,7 @@ function setup_render(results) {
 			let count = matched.length;
 			let heading;
 			let title = group || 'Unknown';
-			//jumps.push(create_jump(() => heading, {count, disabled, title}));
+			jumps.push(create_jump(() => heading, {count, disabled, title}));
 			render_queue.push(() => {
 				let section = create_empty_table();
 				heading = create_heading({title, section, disabled, count});
@@ -1141,7 +1141,23 @@ function setup_render(results) {
 				main.append(heading, section);
 			});
 		}
-	} else if (by_mode === BY_COST) {
+	} else if (by_mode === 'emoji') {
+		
+		let emojis_div = document.createElement('div');
+		emojis_div.classList.add('emojis');
+		
+		main.append(emojis_div);
+
+		for (let i = 0, step = 500; i < results.length; i += step) {
+			render_queue.push(() => {
+				emojis_div.append(...results.slice(i, i + step).map(rec => {
+					let dom = dom_from_tokens(rec.tokens, {emoji: a => a.href = `#q=${encodeURIComponent(rec.norm)}`});
+					dom.dataset.name = rec.form;
+					return dom;
+				}));
+			});
+		}
+	} else if (by_mode === 'cost') {
 		for (let {length, cost, length_ge} of COSTS) {
 			let match_length = results.filter(x => x.min_length === length && x.min_repeat);
 			if (!match_length.length) continue;
@@ -1192,20 +1208,23 @@ function setup_render(results) {
 			});
 		}
 	}
-	if (jumps.length) {
-		let jumps_div = document.createElement('div');
-		jumps_div.id = 'jumps';
-		let disabled = count_disabled(results);
-		let count = results.length - disabled;
-		let span = document.createElement('span');
-		span.classList.add('summary');
-		span.append(create_count_span(results.length - disabled, emoji_count));
-		if (disabled) {
-			span.innerHTML += `<span class="disabled">${disabled}</span>`;
-		}
-		jumps_div.append(span, '⏬️', ...jumps);
-		main.append(jumps_div);
+	
+	let jumps_div = document.createElement('div');
+	jumps_div.id = 'jumps';
+	let disabled = count_disabled(results);
+	let count = results.length - disabled;
+	let span = document.createElement('span');
+	span.classList.add('summary');
+	span.append(create_count_span(results.length - disabled, emoji_count));
+	if (disabled) {
+		span.innerHTML += `<span class="disabled">${disabled}</span>`;
 	}
+	jumps_div.append(span);
+	if (jumps.length) {
+		jumps_div.append('⏬️', ...jumps);
+	}
+	main.prepend(jumps_div);
+
 	none_div.classList.toggle('hide', render_queue.length);
 	jump_to_length = undefined;
 	render();
