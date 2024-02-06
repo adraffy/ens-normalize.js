@@ -225,8 +225,6 @@ h1 .count span {
 	transform: rotate(45deg);
 }
 .heading > span {
-	display: flex;
-	align-items: center;
 	padding: 4px 8px;
 	border-radius: 4px;
 }
@@ -267,9 +265,9 @@ section {
 	padding: 4px 8px;
 	font-size: 16pt;
 	text-align: center;
+	margin-bottom: 8px;
 }
 .emojis {
-	padding: 8px 0;
 	display: flex;
 	flex-wrap: wrap;
 	gap: 4px;
@@ -449,6 +447,10 @@ footer span:hover {
 	}
 	.part {
 		display: none;
+	}
+	.emojis {
+		padding-left: 16px;
+		padding-right: 16px;
 	}
 }
 @media only screen and (max-width: 640px) { 	
@@ -1044,8 +1046,10 @@ function render() {
 }
 function setup_render(results) {
 	active_emoji = results;
+	none_div.classList.toggle('hide', !!results.length);
 	render_queue.length = 0;
 	main.innerHTML = '';
+	if (!results.length) return;
 	let jumps = [];
 	if (by_mode === BY_LENGTH) {
 		for (let length = 1; length <= max_length; length++) {
@@ -1143,12 +1147,9 @@ function setup_render(results) {
 			});
 		}
 	} else if (by_mode === 'emoji') {
-		
 		let emojis_div = document.createElement('div');
 		emojis_div.classList.add('emojis');
-		
 		main.append(emojis_div);
-
 		for (let i = 0, step = 500; i < results.length; i += step) {
 			render_queue.push(() => {
 				emojis_div.append(...results.slice(i, i + step).map(rec => {
@@ -1162,20 +1163,27 @@ function setup_render(results) {
 		for (let {length, cost, length_ge} of COSTS) {
 			let match_length = results.filter(x => x.min_length === length && x.min_repeat);
 			if (!match_length.length) continue;
-			let section;
+			//let section;
 			for (let repeat = 1; repeat <= length; repeat++) {
 				let match_repeat = match_length.filter(x => x.min_repeat === repeat);
 				if (!match_repeat.length) continue;
 				render_queue.push(() => {
-					if (!section) {
-						section = document.createElement('section');
-						let heading = create_heading({section, length, length_ge, cost, count: match_length.length});
-						main.append(heading, section);
-					}
-					let subheading = document.createElement('div');
-					subheading.classList.add('subheading');
-					subheading.innerHTML = `<b>${get_repeat_word(repeat)}</b> — ${match_repeat.length} (${fmt_perc(match_repeat.length / emoji_count)})`;
-					section.append(subheading);
+					// if (!section) {
+					// 	section = document.createElement('section');
+					// 	let heading = create_heading({section, length, length_ge, cost, count: match_length.length});
+					// 	main.append(heading, section);
+					// }
+					// let subheading = document.createElement('div');
+					// subheading.classList.add('subheading');
+					// subheading.innerHTML = `<b>${get_repeat_word(repeat)}</b> — ${match_repeat.length} (${fmt_perc(match_repeat.length / emoji_count)})`;
+					// section.append(subheading);
+
+					
+					let section = document.createElement('section');
+					let heading = create_heading({section, length: `${repeat}×${length/repeat}`, title: get_repeat_word(repeat), cost, count: match_repeat.length});
+					main.append(heading, section);
+					
+
 					if (match_repeat.length > 5) {
 						let emojis_div = document.createElement('div');
 						emojis_div.classList.add('emojis');
@@ -1209,7 +1217,6 @@ function setup_render(results) {
 			});
 		}
 	}
-	
 	let jumps_div = document.createElement('div');
 	jumps_div.id = 'jumps';
 	let disabled = count_disabled(results);
@@ -1225,8 +1232,6 @@ function setup_render(results) {
 		jumps_div.append('⏬️', ...jumps);
 	}
 	main.prepend(jumps_div);
-
-	none_div.classList.toggle('hide', render_queue.length);
 	jump_to_length = undefined;
 	render();
 }
@@ -1292,7 +1297,7 @@ function create_heading({title, section, length, length_ge, cost, count, disable
 		heading.append(create_span(title, 'title'));
 	}
 	if (section && shade) {
-		heading.dataset.shade = title || cost || length;
+		heading.dataset.shade = title + cost + length;
 		heading.classList.add('shade');
 		if (shaded[heading.dataset.shade]) {
 			heading.classList.add('shaded');
