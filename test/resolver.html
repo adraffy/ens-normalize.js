@@ -279,6 +279,11 @@ body.testnet {
 	gap: 8px;
 	font-size: 14pt;
 }
+#output.hide-recs .avatar,
+#output.hide-recs .row.records,
+#output.hide-recs .row.impls {
+	display: none;
+}
 .row button {
 	font-size: 11pt;
 }
@@ -477,6 +482,10 @@ button.copy.copied {
 	background: #f0f0f0;
 	font: 9pt sans-serif;
 	order: 50;
+}
+.tags.raw {
+	font: 80% monospace;
+	background-color: #cff;
 }
 .tags.confusing {
 	color: #fff;
@@ -954,10 +963,8 @@ footer {
 <button>1.offchainexample.eth</button>
 <button>barmstrong.cb.id</button>
 
-<!--
-<a href="./display.html"><b>Display:</b></a>
-<button>ADRaffy</button>
--->
+<a href="https://blog.ens.domains/post/gasless-dnssec"><b>Offchain DNS:</b></a>
+<button>nick.onew3.com</button>
 
 <b>Address:</b>
 <button data-name="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045">d8dA..6045</button>
@@ -1076,6 +1083,7 @@ ZWNJ:
 <button data-name="a{200C}b"></button>
 
 ZWJ:
+<button data-name="eth{200D}{200D}{200D}.eth">eth</button>
 <button data-name="ണ്‍"></button>
 <button data-name="a{200D}b"></button>
 
@@ -1392,8 +1400,9 @@ CHAINS.forEach(chain => {
 });
 
 const MIN_ETH_LENGTH = 3;
-const NFT_DOMAINS = new Set(['eth', 'art']); //, 'box']);
+const IFACE_ETH_CONTROLLER = '0x612e8c09';
 const REVERSE_DOMAIN = 'addr.reverse';
+const NFT_DOMAINS = new Set(['eth', 'art']); //, 'box']);
 const RESOLVER_NAMES = {
 	'0x1da022710dF5002339274AaDEe8D58218e9D6AB5': 'Old Public (v0)',  // 3648359: just addr()
 	'0xDaaF96c344f63131acadD0Ea35170E7892d3dfBA': 'Old Public (v1)',  // 9380387: addr(coinType)
@@ -1401,19 +1410,19 @@ const RESOLVER_NAMES = {
 	'0x231b0Ee14048e9dCcD1d247744d114a4EB5E8E63': '✨️ Public (v3)',  // 16925619: wrapper support, versioned, name()
 	'0x5fBb459C49BB06083C33109fA4f14810eC2Cf358': 'Old Reverse (v1)',
 	'0xA2C122BE93b0074270ebeE7f6b7292C7deB45047': 'Old Reverse (v2)',
-	'0xF142B308cF687d4358410a4cB885513b30A42025': 'Offchain DNS'
 };
 const IS_CONTRACT = new Map();
-const IS_WILD = new Map();
-const NOT_IFACE_RESOLVER = new Set();
-const IFACE_ETH_CONTROLLER = '0x612e8c09';
-const ADDRESS_MAP = new Map();
-
+const RESOLVER_INFO = new Map();
 const ERROR_ABI = new ethers.Interface([
+	'error Error(string)',
+	'error NotImplemented()',
+	'error InvalidAddressFormat()',
 	'error InvalidLabelCount(bytes dns, uint256 count)',
 ]);
 
-// TODO: https://github.com/ensdomains/docs/blob/profile-text-records/ens-improvement-proposals/ensip-xx-profile-text-records.md
+// https://github.com/ensdomains/docs/blob/profile-text-records/ens-improvement-proposals/ensip-xx-profile-text-records.md
+// https://docs.ens.domains/ens-improvement-proposals/ensip-9-multichain-address-resolution
+// https://github.com/satoshilabs/slips/blob/master/slip-0044.md
 const TYPE_ADDR = 'addr(bytes32,uint256)';
 const TYPE_TEXT = 'text';
 const TYPE_PUBKEY = 'pubkey';
@@ -1468,11 +1477,13 @@ const RECORDS = [
 		key: 'farcaster', 
 		icon: '<img src="https://warpcast.com/favicon.png">',
 		url(x) { return `https://warpcast.com/${x}`; },
-		fix: repair_social
+		fix: repair_social,
+		ens: true,
 	},
 	{
-		key: 'lens', 
+		key: 'lens',
 		url(x) { return `https://hey.xyz/u/${x}`; },
+		ens: true,
 	},
 	{
 		key: 'com.github', 
@@ -1513,25 +1524,29 @@ const RECORDS = [
 		bonus: true,
 	},
 	{
-		coin: 0, // BTC
+		coin: 0,
+		name: 'btc',
 		icon: `<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 500 500" role="img" class="sc-56a68b4b-0 nEsDk"><path fill="#F39321" d="M43.43 125.143c7.71-10.766 14.875-21.901 23.562-31.986 15.8-18.343 33.692-34.063 54.18-47.075 18.379-11.672 37.761-20.872 58.501-27.305 32.294-10.018 65.26-12.997 98.838-9.165 24.544 2.801 48.191 9.067 70.713 19.215 13.633 6.142 26.456 13.731 39.025 21.927 25.328 16.515 45.618 38.014 62.58 62.577 18.116 26.236 29.889 55.421 36.346 86.725 4.535 21.983 6.449 44.171 4.503 66.504-2.399 27.536-8.514 54.086-19.938 79.604-9.662 21.583-21.589 41.401-36.861 59.301-14.94 17.511-31.788 32.831-51.149 45.461-13.184 8.6-26.926 16.276-41.434 21.975-24.274 9.537-49.447 15.986-75.787 17.115-18.545.795-36.985.483-55.279-2.763-15.713-2.788-31.049-6.858-46.063-12.496-14.566-5.47-28.693-11.95-41.709-20.143-18.766-11.812-35.683-26.147-50.737-42.663-16.773-18.403-30.373-38.808-40.779-61.344-14.7-31.835-21.929-65.401-22.359-100.425-.162-13.173 1.349-26.244 3.105-39.283.126-.933-.002-1.899-.012-2.851 1.536-.952 1.4-2.618 1.677-4.071 3.906-20.483 10.494-40.059 19.418-58.906 3.162-6.674 7.525-12.764 9.659-19.928zm281.727 129.37c6.537-3.474 12.749-5.465 17.658-9.85 18.918-16.899 23.96-56.673-6.747-75.833-9.566-5.969-19.77-10.393-30.77-14.907 1.819-14.731 7.709-28.516 9.622-43.603-9.076-2.249-17.578-5.234-26.425-6.193l-10.674 41.837c-6.78-2.076-13.761-1.879-20.142-5.473 2.302-14.39 7.773-27.872 9.268-42.314-9.322-1.464-17.216-5.094-26.265-5.485l-10.586 42.215c-17.944-2.75-34.419-8.921-52.52-12.239-3.977 8.91-5.738 18.311-7.334 28.313 5.896 1.392 11.022 2.623 16.158 3.811 12.965 2.998 16.517 10.086 13.439 21.424-2.19 8.065-4.166 16.189-6.182 24.301-7.245 29.16-14.432 58.333-21.72 87.482-1.642 6.567-5.734 8.706-12.398 7.731-6.563-.96-12.757-3.907-19.99-3.693-3.136 10.032-9.378 18.871-11.588 29.946l51.344 13.08c-1.312 15.208-7.614 29.125-9.476 44.441l25.544 6.123c5.653-14.044 6.957-28.803 12.226-43.33 6.351 3.265 13.397 2.317 19.612 6.427l-10.178 42.077c8.986 3.216 17.753 4.528 26.758 6.77l10.578-42.386c2.123-1.091 3.676-.888 5.143-.574a132.886 132.886 0 0 0 42.676 2.14c12.368-1.373 23.343-6.088 32.148-15.372 9.791-10.323 14.71-22.952 17.078-36.535 1.93-11.065 1.436-22.277-5.06-32.071-5.091-7.674-12.084-13.53-21.197-18.26zM223.128 312.17c17.411 4.325 34.803 8.95 53.02 5.624 9.715-1.774 17.037-6.73 19.985-16.503 2.78-9.218 1.164-17.593-5.673-24.879-7.11-7.576-16.254-11.514-25.682-14.807-11.264-3.934-22.683-7.508-34.99-8.48l-13.972 56.788c2.981.929 5.117 1.712 7.312 2.257zm61.5-80.324c9.628-1.368 17.612-7.738 19.958-16.393 2.869-10.583-.337-19.865-8.902-26.178-9.718-7.163-20.908-10.807-32.47-13.337-4.307-.943-8.544-3.454-13.756-1.759l-12.599 51.209c16.457 4.155 31.611 8.753 47.769 6.458z"></path></svg>`,
 		btc: {p2pkh: 0, p2sh: 5, hrp: 'bc', p2wpkh: 0, p2tr: 1},
 		url(x) { return `https://blockstream.info/address/${x}`; },
 	},
 	{
-		coin: 2, // LTC
+		coin: 2,
+		name: 'ltc',
 		icon: `<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 500 500" role="img" class="sc-56a68b4b-0 nEsDk"><circle cx="249.8" cy="250.2" r="248.4" style="fill: rgb(51, 94, 159);"></circle><path d="m139.4 402.6 37-120.2-40.3 12.3 10.7-29.6 37-11.5 51.7-170.1c1.1-3.6 4.5-6.1 8.3-6.1h52.8c5.8 0 9.9 5.6 8.3 11.1l-42 140.4 37.9-10.7-6.9 28.6-39.1 11.8-27.3 87.2h139c4.2 0 7.2 4 6.1 8L360.5 398c-.8 2.7-3.2 4.6-6.1 4.6h-215z" style="fill: rgb(255, 255, 255);"></path></svg>`,
 		btc: {p2pkh: 0x30, p2sh: 0x32, hrp: 'ltc', p2wpkh: 0},
 		url(x) { return `https://litecoinspace.org/address/${x}`; }
 	},
 	{
-		coin: 3, // DOGE
+		coin: 3,
+		name: 'doge',
 		icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 2000" role="img" class="sc-56a68b4b-0 nEsDk"><g fill="#c2a633"><path d="M1024 659H881.12v281.69h224.79v117.94H881.12v281.67H1031c38.51 0 316.16 4.35 315.73-327.72S1077.44 659 1024 659z"></path><path d="M1000 0C447.71 0 0 447.71 0 1000s447.71 1000 1000 1000 1000-447.71 1000-1000S1552.29 0 1000 0zm39.29 1540.1H677.14v-481.46H549.48V940.7h127.65V459.21h310.82c73.53 0 560.56-15.27 560.56 549.48 0 574.09-509.21 531.41-509.21 531.41z"></path></g></svg>`,
 		btc: {p2pkh: 0x1E, p2sh: 0x16},
 		url(x) { return `https://dogechain.info/address/${x}`; }
 	},
 	{
-		coin:  8444, // CHIA
+		coin:  8444,
+		name: 'chia',
 		icon: '🌱️',
 		bech32: {hrp: 'xch', type: Bech32.M},
 		url(x) { return `https://xchscan.com/address/${x}`; },
@@ -1604,7 +1619,7 @@ const RECORDS = [
 		name: 'atom',
 		icon: '<img src="https://atomscan.com/img/icons/chains/atom.svg">',
 		bech32: {hrp: 'cosmos', type: 1},
-		url(x) { return `https://atomscan.com/account/`; },
+		url(x) { return `https://atomscan.com/account/${x}`; },
 		bonus: true
 	},
 	{
@@ -1695,9 +1710,7 @@ let multicall_contract;
 let price_oracle_contract;
 let reverse_registrar;
 let resolve_timer = RESOLVE_MODE_IDLE;
-let resolve_last;
-let resolve_debug;
-let available;
+let resolve_state;
 
 console.log(versions);
 version_span.innerHTML = `v${versions.version}`;
@@ -1923,28 +1936,22 @@ show_details_check.addEventListener('input', () => {
 });
 show_records_check.addEventListener('input', () => {
 	save_settings();
-	let row = $('.row.records');
-	if (row) {
-		row.classList.toggle('hide', !show_records_check.checked);
-		let avatar = $('.avatar');
-		if (avatar) avatar.classList.toggle('hide', !show_records_check.checked);
-	} else if (show_records_check.checked) {
-		resolve();
-	}
+	sync_settings();
+	if (show_records_check.checked && !$('.records')) resolve();
 });
 show_components_check.addEventListener('input', () => {
 	save_settings();
 	update_exploded();
 });
 skip_norm_check.addEventListener('input', resolve);
-
-function sync_force_ltr() {
-	input_field.classList.toggle('force-ltr', force_ltr_check.checked);
-}
 force_ltr_check.addEventListener('input', () => {
 	save_settings();
-	sync_force_ltr();
+	sync_settings();
 });
+function sync_settings() {
+	input_field.classList.toggle('force-ltr', force_ltr_check.checked);
+	output_div.classList.toggle('hide-recs', !show_records_check.checked);
+}
 
 function sync_examples() {
 	if (examples_div.classList.contains('hide')) {
@@ -1989,7 +1996,7 @@ $('#disable_debug_btn').addEventListener('click', () => {
 	debug_enabled = false;
 	save_settings();
 	sync_debug();
-	if (resolve_debug) resolve();
+	if (resolve_state.debug) resolve();
 });
 $('#apply_debug_btn').addEventListener('click', apply_debug);
 function apply_debug() {
@@ -2015,7 +2022,7 @@ function apply_debug() {
 			save_settings();
 		}
 		sync_debug(); // pretty
-		if (debug_settings !== resolve_debug) resolve();
+		if (debug_settings !== resolve_state.debug) resolve();
 	} catch (err) {
 		window.alert(err.message);
 	}
@@ -2031,7 +2038,7 @@ debug_ta.addEventListener('keydown', e => {
 });
 debug_ta.placeholder = `{
 	// resolver overrides: name -> contract
-	"resolvers": {
+	"resolver": {
 		"domain.fake": "0x32aC8A721A0d9Ce85F88599228297BBa8E183044"
 	},
 	// endpoint overrides: contract -> endpoint
@@ -2093,7 +2100,7 @@ try {
 }
 if (!debug_settings) debug_settings = {};
 sync_recent(localStorage[STORAGE_RECENT]);
-sync_force_ltr();
+sync_settings();
 sync_examples();
 sync_debug();
 apply_page_url(location0);
@@ -2101,29 +2108,25 @@ input_field.focus();
 
 const ccipReadFetchOld = ethers.AbstractProvider.prototype.ccipReadFetch;
 ethers.AbstractProvider.prototype.ccipReadFetch = function(tx, calldata, urls) {
-	if (resolve_debug) {
-		try {
-			let url = resolve_debug.ccip[tx.to];
-			if (url) urls = [url];
-		} catch (err) {
-		}
+	try {
+		let rewrite = resolve_state.debug.ccip[tx.to];
+		if (rewrite) urls = [rewrite];
+	} catch (err) {
 	}
 	return ccipReadFetchOld.call(this, tx, calldata, urls);
-}
+};
 
 if (window.ethereum) {
-	let p = ethereum;
-	if (Array.isArray(p.providers)) p = p.providers[0]; // fix scuffed multi-provider
-	window_provider = new ethers.BrowserProvider(p, 'any');
-	window_provider.__provider = p;
+	window_provider = new ethers.BrowserProvider(ethereum, 'any');
+	window_provider.__provider = ethereum;
 	let timer = setTimeout(set_window_network, 100);
 	window_provider._detectNetwork().catch(() => {}).then(network => {
 		clearTimeout(timer);
 		set_window_network(network);
 	});
-	p.on('connect', ({chainId}) => set_window_network(ethers.Network.from(parseInt(chainId))));
-	p.on('chainChanged', chainId => set_window_network(ethers.Network.from(parseInt(chainId))));
-	p.on('disconnect', () => set_window_network());
+	ethereum.on('connect', ({chainId}) => set_window_network(ethers.Network.from(parseInt(chainId))));
+	ethereum.on('chainChanged', chainId => set_window_network(ethers.Network.from(parseInt(chainId))));
+	ethereum.on('disconnect', () => set_window_network());
 } else {
 	update_network();
 }
@@ -2161,10 +2164,6 @@ async function change_window_to_chain(chain) {
 		}
 		throw err;
 	}
-}
-function is_user_rejection(err) {
-	console.log(err, {...err});
-	return err.shortMessage === 'user rejected action';
 }
 function set_window_network(network) {
 	window_provider.__network = network;
@@ -2216,9 +2215,8 @@ function update_network() {
 		eth_controller_contract = null;
 		wrapper_contract = null;
 		reverse_registrar = null;
-		NOT_IFACE_RESOLVER.clear();
 		IS_CONTRACT.clear();
-		IS_WILD.clear();		
+		RESOLVER_INFO.clear();
 		if (input_field.value) {
 			schedule_resolve(0);
 		} else if (init) {
@@ -2336,7 +2334,7 @@ function parse() {
 	show_components_label.classList.add('hide');
 	output_div.innerHTML = '';
 	clock_span.innerHTML = '';
-	available = undefined;
+	resolve_state = {};
 	if (!input) {
 		stop_resolving();
 		show_components_check
@@ -2686,11 +2684,11 @@ function create_etherscan_address_link(addr, {innerHTML, anchor = '', contract, 
 	return create_link(`${active_chain.explorer}/address/${addr}${anchor}`, {innerHTML, className, ...a});
 }
 function create_jazz_icon(address) {
-	let i = ADDRESS_MAP.get(address);
-	if (!i || (resolve_debug && resolve_debug.jazz)) ADDRESS_MAP.set(address, i = ADDRESS_MAP.size + 1);
+	let {addrs, debug} = resolve_state;
+	let i = addrs.get(address);
+	if (!i || (debug && debug.jazz)) addrs.set(address, i = addrs.size + 1);
 	return create('span', {innerHTML: i, className: ['jazz', `addr${i}`]});
 }
-
 function make_click_copy(el, raw, {hint} = {}) {
 	if (el.title) el.title += `\n${CLICK_TO_COPY}`;
 	el.dataset.copy = raw;
@@ -2886,7 +2884,6 @@ function make_exploded(row, name, is_norm, components) {
 		row.append(tokens_div);
 	}
 }
-
 function create_ethmoji_row(tokens, suffix) {
 	let row = create_row('Ethmoji');
 	row.classList.add('category', 'ethmoji');
@@ -2954,11 +2951,23 @@ function create_digits_row(norm, group, values, negative, suffix) {
 	return row;
 }
 
-async function add_contract_name(row, address, check) {
-	let name = RESOLVER_NAMES[address];
-	if (active_chain.is_mainnet && name) {
+async function add_resolver_info(row, resolver) {	
+	let name = RESOLVER_NAMES[resolver.target];
+	if (name && active_chain.is_mainnet) {
 		add_row_tag(row, create_tag('good', name));
-	} else if (check && !await is_contract(address)) {
+	} 
+	if (resolver.__info.offchain_dns) {
+		add_row_tag(row, create_tag('special', 'Offchain DNS', resolver.__info.offchain_dns));
+	} else if (resolver.__info.wild) {
+		add_row_tag(row, create_tag('special', 'Wildcard'));
+		if (resolver.__basename) {
+			if (resolver.__dropped) {
+				add_row_tag(row, create_resolve_btn(resolver.__basename, `↩️ Basename`));
+			} else {
+				add_row_tag(row, 'Basename');
+			}
+		}
+	} else if (!await is_contract(resolver.target)) {
 		add_row_tag(row, create_tag('fail', 'Not a Contract'));
 	}
 }
@@ -3129,9 +3138,9 @@ function create_dot_eth_button(name) {
 }
 function create_elapsed() {
 	let now = Date.now();
-	let delta = now - resolve_last;
+	let delta = now - resolve_state.t;
 	if (!delta) return; // 0ms is stupid
-	resolve_last = now;
+	resolve_state.t = now;
 	return create_tag('elapsed', format_dur(delta));
 }
 function create_pretty_tag() {
@@ -3222,7 +3231,7 @@ function create_dns_breakdown(name) {
 }
 function create_breakdown_row(name, before) {
 	let outer = create('div', {className: 'breakdown'});
-	if (available) outer.classList.add('available');
+	if (resolve_state.available) outer.classList.add('available');
 	make_detailed(outer);
 	outer.append(create_namehash_breakdown(name));
 	outer.append(create_dns_breakdown(name));
@@ -3302,7 +3311,7 @@ function create_breakdown_row(name, before) {
 
 function create_row(label, waiting) {
 	let row = create('div', {className: 'row'});
-	if (available) row.classList.add('available');
+	if (resolve_state.available) row.classList.add('available');
 	if (label) {
 		let span = create('span', {className: 'row-label'});
 		if (typeof label === 'string') {
@@ -3328,7 +3337,7 @@ function trim_trailing_decimal_zeros(s) {
 	return s.includes('.') ? s.replace(/\.?0*$/, '') : s;
 }
 function format_dur(t, n = 1) {
-	if (t < 1000) return `${Math.ceil(t)}ms`;
+	if (t < 500) return `${Math.ceil(t)}ms`;
 	t /= 1000;
 	let unit;
 	if (t < 60) {
@@ -3340,14 +3349,14 @@ function format_dur(t, n = 1) {
 		} else {
 			t /= 60;
 			if (t < 24) {
-				unit = 'h';
+				unit = 'ʜ';
 			} else {
 				t /= 24;
 				if (t < 365) {
-					unit = 'd';
+					unit = 'ᴅ';
 				} else {
 					t /= 365;
-					unit = 'y';
+					unit = 'ʏ';
 				}
 			}
 		}
@@ -3366,9 +3375,6 @@ function resolve() {
 	}
 	clearTimeout(resolve_timer);
 	resolve_timer = RESOLVE_MODE_IDLE;
-	resolve_debug = debug_enabled ? debug_settings : null;
-	available = undefined;
-	ADDRESS_MAP.clear();
 	let input = input_field.value;
 	let skip = skip_norm_check.checked;
 	// replace marketplace URL with token:XXX
@@ -3473,7 +3479,9 @@ function resolve() {
 	resolve_btn.disabled = true;
 	primary_loader.classList.remove('hide');
 	const url = get_page_url();
-	const t0 = resolve_last = Date.now();
+	const t0 = Date.now();
+	resolve_state = {url, t0, t: t0, addrs: new Map()};
+	if (debug_enabled) resolve_state.debug = debug_settings;
 	resolve1(name, skip).then(() => {
 		clock_span.innerHTML = format_dur(Date.now() - t0, 2);
 		resolve_btn.disabled = false;
@@ -3558,8 +3566,7 @@ async function resolve1(input, skip_norm) {
 		
 		resolver_row.append(create_etherscan_address_link(resolver.target, {contract: true}));
 		add_row_tag(resolver_row, create_copy_btn(resolver.target, {value: true}));
-		await add_contract_name(resolver_row, resolver.target, !resolver.__wild);
-		if (should_stop_resolving()) return;
+		add_resolver_info(resolver_row, resolver);
 
 		reverse_row = normed_row = create_row('Reverse', true);
 		output_div.append(reverse_row);
@@ -3588,6 +3595,7 @@ async function resolve1(input, skip_norm) {
 		} catch (err) {
 			reverse_row.classList.add('error');
 			add_row_tag(reverse_row, create_tag('norm', err));
+			add_row_tag(reverse_row, create_resolve_btn(primary));
 			if (!skip_norm) return;
 			name_norm = primary;
 			norm_err = err;
@@ -3739,31 +3747,99 @@ async function resolve1(input, skip_norm) {
 	try {
 		resolver = await get_resolver(name_norm);
 	} catch (err) {
-		resolver_err = err;
+		resolver_row.classList.add('error');
+		add_row_tag(resolver_row, create_tag('warn', err));
 	}
 	if (should_stop_resolving()) return;
 	remove_temporary(resolver_row);	
 	add_row_tag(resolver_row, create_elapsed());
 	
-	if (resolver_err) {
-		resolver_row.classList.add('error');
-		add_row_tag(resolver_row, create_tag('warn', resolver_err));
-	} else if (resolver) { 
-		//add_avatar(normed_row, resolver); 
+	if (resolver) { 
 		resolver_row.append(create_etherscan_address_link(resolver.target, {contract: true}));
 		add_row_tag(resolver_row, create_copy_btn(resolver.target, {value: true}));
-		await add_contract_name(resolver_row, resolver.target, !resolver.__wild);
-		if (should_stop_resolving()) return;
-		if (resolver.__wild) {
-			add_row_tag(resolver_row, create_tag('special', 'Wildcard'));
-			if (resolver.__dropped) {
-				add_row_tag(resolver_row, create_resolve_btn(resolver.__basename, `↩️ ${resolver.__basename}`));
-			} else {
-				add_row_tag(resolver_row, 'Basename');
-			}
-		}
-	} else {
+		add_resolver_info(resolver_row, resolver);
+	} else if (resolver === null) {
 		add_row_tag(resolver_row, create_tag('warn', `Not Set`));	
+	}
+
+	let dns_txt_address;
+	if (resolver && resolver.__info.offchain_dns) {
+		// https://blog.ens.domains/post/gasless-dnssec
+		let ens1_row = create_row(create_link('https://support.ens.domains/en/articles/8834820-offchain-gasless-dnssec-names-in-ens', {innerHTML: 'DNS <code style="color: #58f">"ENS1"</code>'}), true);
+		ens1_row.classList.add('dns');
+		output_div.append(ens1_row);
+		let args;
+		try {
+			let url = new URL('https://1.1.1.1/dns-query');
+			url.searchParams.set('name', name_norm.split('.').map(puny_encoded).join('.'));
+			url.searchParams.set('type', 'TXT');
+			let res = await fetch(url, {
+				headers: {accept: 'application/dns-json'}
+			});
+			if (res.ok) {
+				let {Answer = []} = await res.json();
+				const prefix = '"ENS1 ';
+				let rec = Answer.find(x => x.type === 16 && x.data.startsWith(prefix) && x.data.endsWith('"'));
+				if (!rec) throw new Error('No record found');
+				//txt_row.append(create('code', {innerText: rec.data, className: ['tags', 'long', 'raw']}));
+				args = rec.data.slice(prefix.length, -1).split(/\s+/);
+				for (let arg of args) {
+					ens1_row.append(create_tag('raw', arg));
+				}
+				make_detailed(ens1_row); // hide it
+			} else if (res.status == 504) {
+				throw new Error('DNS query timeout');
+			} else {
+				throw new Error(`HTTP ${res.status}`);
+			}
+		} catch (err) {
+			ens1_row.classList.add('error');
+			add_row_tag(ens1_row, create_tag('warn', err));
+		}
+		if (should_stop_resolving()) return;
+		remove_temporary(ens1_row);
+		add_row_tag(ens1_row, create_elapsed()); 
+
+		if (args) {
+			let target_row = create_row('DNS Resolver', true);
+			target_row.classList.add('dns');
+			output_div.append(target_row);
+			try {
+				let target = args[0];
+				if (is_address(target)) {
+					target = ethers.getAddress(target.toLowerCase());
+				} else {
+					let r = await get_resolver(target);
+					if (should_stop_resolving()) return;
+					target = await fetch_addr60(r);
+					if (should_stop_resolving()) return;
+				}
+				let info = await get_resolver_info(target);
+				if (should_stop_resolving()) return;
+				target_row.append(create_etherscan_address_link(target, {contract: true}));
+				add_row_tag(target_row, create_copy_btn(resolver.target, {value: true}));
+				add_resolver_info(target_row, {target, __info: info});
+				if (info.edns) {
+					resolver.__only_addr = true; // prevent querying extra records that dont exist (yet)
+					add_row_tag(target_row, create_tag('special', 'Wildcard DNS'));
+					let addr = args[1];
+					if (is_address(addr)) {
+						dns_txt_address = ethers.getAddress(addr.toLowerCase());
+						add_row_tag(target_row, create_resolve_btn(addr, '↩️ Address'));
+					} else if (addr) {
+						add_row_tag(target_row, create_tag('fail', 'Invalid address', addr));
+					} else {
+						add_row_tag(target_row, create_tag('fail', 'Missing address'));
+					}
+				}
+			} catch (err) {
+				target_row.classList.add('error');
+				target_row.append(create_tag('warn', err));
+			}
+			if (should_stop_resolving()) return;
+			remove_temporary(target_row);
+			add_row_tag(target_row, create_elapsed()); 
+		}
 	}
 
 	let parent_domain = name_norm.slice(sep_pos+1);
@@ -3771,6 +3847,7 @@ async function resolve1(input, skip_norm) {
 	let nft_contract;
 	let nft_token;
 
+	let available;
 	let avail_row = create_row('Availability', true);
 	if (parent_domain === 'eth') {
 		let label = name_norm.slice(0, sep_pos);
@@ -3785,7 +3862,7 @@ async function resolve1(input, skip_norm) {
 			if (should_stop_resolving()) return;
 			nft_contract = eth_nft_contract;
 			if (len >= MIN_ETH_LENGTH) {
-				available = await eth_nft_contract.available(nft_token);
+				resolve_state.available = available = await eth_nft_contract.available(nft_token);
 				if (should_stop_resolving()) return;
 				expiry = Number(await eth_nft_contract.nameExpires(nft_token));
 				if (available) {
@@ -3855,6 +3932,7 @@ async function resolve1(input, skip_norm) {
 					}
 				}
 			}
+			resolve_state.available = available;
 		} catch (err) {
 			avail_err = err;
 		}
@@ -3924,10 +4002,6 @@ async function resolve1(input, skip_norm) {
 		remove_temporary(wrapped_row);
 		add_row_tag(wrapped_row, create_elapsed());
 
-		// there doesn't seem to be an "owner"
-		//owner = await resolver._fetch('0x02571be3'); // owner(bytes32)
-		//owner = await resolver._fetch('0x38a699a4'); // exists(bytes32)
-		//owner = await resolver._fetch('0x7dd56411'); // ownerOf(bytes32)
 		let owner_row = create_row(available ? 'Previous Owner' : 'Owner', true);
 		let owner_err;
 		let checked_nft;
@@ -3940,7 +4014,7 @@ async function resolve1(input, skip_norm) {
 				let now = Date.now();
 				let exp = Number(data.expiry) * 1000;
 				let fuses = Number(data.fuses);
-				if (resolve_debug && resolve_debug.fuses) fuses = 0x7FFFF;
+				if (resolve_state.debug && resolve_state.debug.fuses) fuses = 0x7FFFF;
 				if (fuses & 0x10000) { // PARENT_CANNOT_CONTROL 
 					if (fuses & 0x00001) { // CANNOT_UNWRAP 
 						add_row_tag(wrapped_row, create_tag('good', '🔒️ Locked')); 
@@ -4059,62 +4133,7 @@ async function resolve1(input, skip_norm) {
 		}
 	}
 	if (should_stop_resolving()) return;
-	if (resolver && !NOT_IFACE_RESOLVER.has(resolver.target)) {
-		let row = create_row(create_link('https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar#discovery', {innerHTML: 'Interfaces'}), true);
-		output_div.append(row);	
-		// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar	
-		const TITLE_WRAPPER = '<b>Wrapper</b> ERC-1155';
-		let interfaces = [
-			//{iface: IFACE_ETH_NFT, name: 'NFT'},  
-			{iface: '0x019a38fe', title: TITLE_WRAPPER},
-			{iface: IFACE_ETH_CONTROLLER, title: '<b>Controller</b>'},
-			{iface: '0x018fac06', title: '<b>Old Controller</b>'},
-			{iface: '0x6ccb2df4', name: '<b>NFT</b> ERC-721'},
-			{iface: '0x7ba18ba1', title: '<b>Migration</b>'},
-		];
-		let discovered = new Set();
-		function add_iface(html, addr) {
-			if (is_null_hex(addr)) return;
-			if (discovered.has(addr)) return;
-			discovered.add(addr);
-			html += ` <code class="prefix">${addr.slice(0, 6)}</code>`;
-			add_row_tag(row, create_etherscan_address_link(addr, {innerHTML: html, contract: true, className: 'iface'}));
-		}
-		try {
-			// https://github.com/ensdomains/ens-contracts/blob/dev/contracts/resolvers/profiles/IInterfaceResolver.sol
-			if (!await resolver.supportsInterface('0x124a319c')) {
-				throw new Error('not EIP-165');
-			}
-			for (let {iface, title} of interfaces) {
-				if (should_stop_resolving()) return;
-				let addr = await resolver.__get_interface(iface);
-				if (is_null_hex(addr)) continue;
-				add_iface(`${title} <code>${iface.slice(2)}</code>`, addr);
-				if (iface === IFACE_ETH_CONTROLLER) {
-					let controller = contract_for_controller(addr);
-					let oracle = await controller.prices().catch(() => {});
-					if (!is_null_hex(oracle)) {
-						add_iface('<b>Price Oracle</b>', oracle);
-						add_iface('<b>USD Oracle</b>', await contract_for_price_oracle(oracle).usdOracle().catch(() => {}));
-					}
-					add_iface(TITLE_WRAPPER, await controller.nameWrapper().catch(() => {}));
-					//add_iface('DAO Wallet', await contract.owner().catch(() => ''));
-				}
-			}
-		} catch (err) {
-			if (discovered.size) {
-				add_row_tag(row, create_tag('warn', err));
-			}
-		}
-		if (discovered.size) {
-			remove_temporary(row);
-			add_row_tag(row, create_elapsed()); 
-		} else {
-			row.remove();
-			NOT_IFACE_RESOLVER.add(resolver.target);
-		}
-	}
-
+	
 	// add address
 	let address;
 	if (resolver) {
@@ -4126,10 +4145,7 @@ async function resolve1(input, skip_norm) {
 			address = await fetch_addr60(resolver);
 		} catch (err) {
 			address_err = err;
-			console.log(err);
 		}
-		if (should_stop_resolving()) return;
-		if (await is_contract(address)) make_contract(address_row);
 		if (should_stop_resolving()) return;
 		if (address_err) {
 			address_row.classList.add('error');
@@ -4137,6 +4153,8 @@ async function resolve1(input, skip_norm) {
 		} else if (!address) {
 			add_row_tag(address_row, create_tag('warn', 'Not Set'));
 		} else {
+			if (should_stop_resolving()) return;
+			if (await is_contract(address)) make_contract(address_row);
 			address_row.append(create_jazz_icon(address));
 			address_row.append(create_etherscan_address_link(address));
 			address_row.append(create_copy_btn(address, {value: true}));
@@ -4148,12 +4166,6 @@ async function resolve1(input, skip_norm) {
 					add_row_tag(address_row, create_resolve_btn(address));
 					add_row_tag(address_row, create_tag('warn', 'Different from Owner'));	
 				}
-			// } else if (owner !== address && nft_owner !== address) {
-			// 	add_row_tag(address_row, create_resolve_btn(address));
-			// 	if (owner) {
-			// 		add_row_tag(address_row, create_typed_tag('fail', 'Owner'));	
-			// 	}
-			// 	add_owner_links(address_row, address); 
 			} else if (owner === address) {
 				if (nft_owner && nft_owner !== address) {
 					add_row_tag(address_row, create_tag('good', `Same as ${MANAGER_NAME}`));	
@@ -4164,6 +4176,9 @@ async function resolve1(input, skip_norm) {
 				add_row_tag(address_row, create_tag('good', `Same as ${NFT_OWNER_NAME}`));
 			} else {
 				add_row_tag(address_row, create_resolve_btn(address));
+				if (dns_txt_address && address !== dns_txt_address) {
+					add_row_tag(address_row, create_tag('fail', 'Same as DNS'));
+				}
 				if (owner) {
 					add_row_tag(address_row, create_tag('fail', 'Owner'));	
 				}
@@ -4171,24 +4186,27 @@ async function resolve1(input, skip_norm) {
 			}
 		}
 		remove_temporary(address_row);
-		add_row_tag(address_row, create_elapsed());	
+		add_row_tag(address_row, create_elapsed());
 
-		if (show_records_check.checked) {
+		let show_recs = show_records_check.checked;
+		if (show_recs) {
 			let records_row = create_row(create_link('https://docs.ens.domains/contract-api-reference/publicresolver', {innerHTML: 'Records'}), true);
 			records_row.classList.add('records');
-			//make_available(records_row);
+			records_row.dataset.records = '1';
 			output_div.append(records_row);	
 			let old = records_row.childElementCount;
 			if (resolver.__unreachable) {
-				add_row_tag(records_row, create_tag('fail', 'Unreachable'));
+				add_row_tag(records_row, create_tag('stop', 'Unreachable'));
+			} else if (resolver.__only_addr) {
+				add_row_tag(records_row, `Wildcard DNS resolver only supports <code>addr()</code>`);
 			} else {
 				let records = RECORDS;
 				if (name_norm.endsWith(REVERSE_DOMAIN)) {
 					records = [{type: TYPE_NAME}];
 				}
-				if (resolve_debug && Array.isArray(resolve_debug.records)) {
+				if (resolve_state.debug && Array.isArray(resolve_state.debug.records)) {
 					records = records.slice();
-					for (let rec of resolve_debug.records) {
+					for (let rec of resolve_state.debug.records) {
 						try {
 							records.push(prepare_record({...rec}));
 						} catch (err) {
@@ -4196,14 +4214,17 @@ async function resolve1(input, skip_norm) {
 					}
 				}
 				for (let {rec, data, error} of await fetch_records(resolver, records)) {
+					// if (error) {
+					// 	add_row_tag(records_row, create_tag('fail', error));
+					// 	continue;
+					// } 
 					if (error) continue;
-					//if (error) return create_typed_tag('warn', error);
 					let a = create('a', {className: 'record', target: '_blank'});
 					switch (rec.type) {
 						case TYPE_NAME: {
-							if (is_null_hex(data)) continue;
-							a.innerHTML =`<b>name</b>`;
-							make_click_copy(a, data);							
+							if (!data) continue;
+							a.innerHTML = `<b>name</b>`;
+							make_click_copy(a, data);
 							a.append(dom_from_tokens(ens_tokenize(data), {components: false, before: true, tld: true}));
 							try {
 								if (ens_beautify(data) === data) {
@@ -4217,14 +4238,15 @@ async function resolve1(input, skip_norm) {
 							break;
 						}
 						// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IAddressResolver.sol
-						// https://docs.ens.domains/ens-improvement-proposals/ensip-9-multichain-address-resolution
 						case TYPE_ADDR: {
 							if (is_null_hex(data)) continue;
-							a.classList.add('rtrim');
-							a.innerHTML = rec.icon || `<b>${rec.name}</b>`;
+							let {name, coin, evm} = rec;
+							if (!name && evm) name = `chain(${evm})`;
+							if (!name) name = `coin(${coin})`;
+							a.innerHTML = rec.icon || `<b>${name}</b>`;
 							try {
 								let v = ethers.getBytes(data);
-								let lines = [`CoinType: ${format_dec_hex(rec.coin)}`];
+								let lines = [`CoinType: ${format_dec_hex(coin)}`];
 								let address;
 								if (rec.evm) {
 									address = ethers.getAddress(data);
@@ -4240,13 +4262,19 @@ async function resolve1(input, skip_norm) {
 								}
 								lines.unshift(address);
 								a.append(create('span', {innerHTML: address, className: ['addr', 'long']}));
-								a.href = rec.url(encodeURIComponent(address));
-								//if (rec.testnet) a.classList.add('testnet');
-								a.append(create_copy_btn(address, {value: true}));
+								if (rec.url) {
+									a.href = rec.url(encodeURIComponent(address));
+									//if (rec.testnet) a.classList.add('testnet');
+									a.append(create_copy_btn(address, {value: true}));
+									a.classList.add('rtrim');
+								} else {
+									make_click_copy(a, address);
+								}
 								a.title = lines.join('\n');
 							} catch (err) {
 								a.append(create_tag('fail', err));
 								a.append(create_copy_btn(data));
+								a.classList.add('rtrim');
 							}
 							break;
 						}
@@ -4276,8 +4304,16 @@ async function resolve1(input, skip_norm) {
 							if (text) {
 								a.append(create('span', {innerText: text, className: text.length > 32 ? 'long' : null}));
 							}
+							if (rec.ens) {
+								try {
+									if (ens_normalize(data) === name_norm) {
+										a.append(create('span', {innerText: 'Same as ENS', className: ['tags', 'good']}));
+									}
+								} catch (err) {
+								}
+							}
 							if (rec.url) {
-								a.href = rec.url(data);
+								a.href = rec.url(encodeURIComponent(data));
 								a.classList.add('rtrim');
 								a.append(create_copy_btn(data));
 							} else {
@@ -4289,7 +4325,6 @@ async function resolve1(input, skip_norm) {
 							}
 							if (rec.key === 'avatar') {
 								let spinner = create('div', {className: ['avatar', 'spinner']});
-								if (!show_records_check.checked) spinner.classList.add('hide');
 								normed_row.append(spinner);
 								fetch_resource_url(data, owner).then(avatar => {
 									if (!normed_row.isConnected) return;
@@ -4321,7 +4356,7 @@ async function resolve1(input, skip_norm) {
 						// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IPubkeyResolver.sol
 						case TYPE_PUBKEY: {
 							let [x, y] = data;
-							if (is_null_hex(x)) continue;
+							if (is_null_hex(x) && is_null_hex(y)) continue;
 							a.innerHTML = `<b>pubkey</b>`;
 							a.classList.add('rtrim');
 							a.append(make_click_copy(create('button', {innerText: 'x', title: x}), x));
@@ -4332,7 +4367,7 @@ async function resolve1(input, skip_norm) {
 						// https://docs.ens.domains/ens-improvement-proposals/ensip-7-contenthash-field
 						// https://github.com/multiformats/multicodec/blob/master/table.csv
 						case TYPE_CONTENTHASH: { 
-							if (is_null_hex(data))  continue;
+							if (is_null_hex(data)) continue;
 							a.innerHTML = `<b>${rec.type}</b>`;
 							a.classList.add('rtrim');
 							let buf = ethers.getBytes(data);
@@ -4437,6 +4472,60 @@ async function resolve1(input, skip_norm) {
 			remove_temporary(records_row);
 			add_row_tag(records_row, create_elapsed());	
 		}
+
+		if (show_recs && resolver.__info.impl) {
+			let row = create_row(create_link('https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar#discovery', {innerHTML: 'Interfaces'}), true);
+			row.classList.add('impls');
+			output_div.append(row);	
+			// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar	
+			const TITLE_WRAPPER = '<b>Wrapper</b> ERC-1155';
+			let interfaces = [
+				//{iface: IFACE_ETH_NFT, name: 'NFT'},  
+				{iface: '0x019a38fe', title: TITLE_WRAPPER},
+				{iface: IFACE_ETH_CONTROLLER, title: '<b>Controller</b>'},
+				{iface: '0x018fac06', title: '<b>Old Controller</b>'},
+				{iface: '0x6ccb2df4', name: '<b>NFT</b> ERC-721'},
+				{iface: '0x7ba18ba1', title: '<b>Migration</b>'},
+			];
+			let discovered = new Set();
+			function add_iface(html, addr) {
+				if (is_null_hex(addr)) return;
+				if (discovered.has(addr)) return;
+				discovered.add(addr);
+				html += ` <code class="prefix">${addr.slice(0, 6)}</code>`;
+				add_row_tag(row, create_etherscan_address_link(addr, {innerHTML: html, contract: true, className: 'iface'}));
+			}
+			const {target, interface: abi, __node} = resolver;
+			let frag = abi.getFunction('interfaceImplementer');
+			try {
+				let multi = await multicall_contract.tryAggregate(true, interfaces.map(x => {
+					return {target, data: abi.encodeFunctionData(frag, [__node, x.iface])};
+				}));
+				for (let i = 0; i < interfaces.length; i++) {
+					let {iface, title} = interfaces[i];
+					let [addr] = abi.decodeFunctionResult(frag, multi[i].data); 
+					if (is_null_hex(addr)) continue;
+					add_iface(`${title} <code>${iface.slice(2)}</code>`, addr);
+					if (iface === IFACE_ETH_CONTROLLER) {
+						let controller = contract_for_controller(addr);
+						let oracle = await controller.prices().catch(() => {});
+						if (!is_null_hex(oracle)) {
+							add_iface('<b>Price Oracle</b>', oracle);
+							add_iface('<b>USD Oracle</b>', await contract_for_price_oracle(oracle).usdOracle().catch(() => {}));
+						}
+						add_iface(TITLE_WRAPPER, await controller.nameWrapper().catch(() => {}));
+						//add_iface('DAO Wallet', await contract.owner().catch(() => ''));
+					}
+				}
+				if (!discovered.size) {
+					add_row_tag(row, 'None');
+				}
+			} catch (err) {
+				add_row_tag(row, create_tag('warn', err));
+			}
+			remove_temporary(row);
+			add_row_tag(row, create_elapsed());
+		}
 	}
 
 	if (input_is_address || !address) return; // nothing more to do
@@ -4453,7 +4542,7 @@ async function resolve1(input, skip_norm) {
 			if (should_stop_resolving()) return;
 			let [{data, error}] = await fetch_records(rev_resolver, [{type: TYPE_NAME}]);
 			if (error) throw error;
-			if (resolve_debug && resolve_debug.primary) data = data.toUpperCase();
+			if (resolve_state.debug && resolve_state.debug.primary) data = data.toUpperCase();
 			primary = data;
 		}
 	} catch (err) {
@@ -4462,7 +4551,6 @@ async function resolve1(input, skip_norm) {
 	if (should_stop_resolving()) return;
 	remove_temporary(primary_row);
 	add_row_tag(primary_row, create_elapsed());
-	//make_available(primary_row);
 	if (primary_err) {
 		primary_row.classList.add('error');
 		add_row_tag(primary_row, create_tag('warn', primary_err));
@@ -4474,7 +4562,6 @@ async function resolve1(input, skip_norm) {
 	}
 	make_exploded(primary_row, primary, false);	
 
-	// 🤽🏽‍♀.eth
 	// lets check if it's normalized
 	let primary_norm;
 	try {
@@ -4531,7 +4618,6 @@ async function resolve1(input, skip_norm) {
 	}
 	output_div.append(create_breakdown_row(primary_norm));
 }
-
 function add_owner_links(row, owner) {	
 	add_row_tag(row, create_link(`${active_chain.is_mainnet ? 'https://opensea.io/' : 'https://testnets.opensea.io/'}${owner}?tab=collected`, {innerHTML: OPENSEA_NAME, className: 'external'}));
 	if (active_chain.is_mainnet) {
@@ -4540,60 +4626,78 @@ function add_owner_links(row, owner) {
 	add_row_tag(row, create_link(`https://rainbow.me/${owner}`, {innerHTML: 'Rainbow', className: 'external'}));
 	add_row_tag(row, create_link(`https://debank.com/profile/${owner}`, {innerHTML: 'Debank', className: 'external'}));
 }
-function parse_custom_error(err) {
-	if (err.code === 'CALL_EXCEPTION' && err.data) {
-		let error = ERROR_ABI.parseError(err.data);
-		if (error) {
-			let temp = new Error(`Contract error: ${error.signature} <a href="https://www.4byte.directory/signatures/?bytes4_signature=${error.selector}" target="_blank"><code>${error.selector}</code></a>`);
-			temp.custom = error;
-			return temp;
+function is_user_rejection(err) {
+	return err.shortMessage === 'user rejected action';
+}
+function parse_call_error(calldata) {
+	let selector = calldata.slice(0, 10);
+	let message = `<a href="https://www.4byte.directory/signatures/?bytes4_signature=${selector}" target="_blank"><code>${selector}</code></a>`;	
+	let error = {selector, data: '0x' + calldata.slice(10)};
+	let desc = ERROR_ABI.parseError(calldata);
+	if (desc) {
+		error.desc = desc;
+		if (desc.name === 'Error') {
+			entity_span.innerText = desc.args[0];
+			message = entity_span.innerHTML;
 		}
+		message = `<b>${error.signature}</b> ${message}`;
+	}
+	return Object.assign(new Error(`Call error: ${message}`), error);
+}
+function parse_ethers_error(err) {
+	//if (err.code === 'BAD_DATA' && err.value === '0x') {
+	if (err.code === 'CALL_EXCEPTION' && err.data) {
+		return parse_call_error(err.data);
 	} else if (err.code === 'OFFCHAIN_FAULT') {
-		let {reason, errorMessages = []} = err.info;
+		let {reason, errorMessages = ['unknown']} = err.info;
 		if (reason) {
 			return new Error(`CCIP error: ${errorMessages.join(' ')} <code>${reason}</code>`);
 		}
 	}
+	return err;
 }
 async function fetch_addr60(resolver) {
+	if (!resolver) throw new Error('Resolver not set');
 	let [{data: address, error}] = await fetch_records(resolver, [{type: TYPE_ADDR, coin: 60}]);
 	if (error) throw error;
 	if (!is_null_hex(address)) return ethers.getAddress(address);
 }
 async function fetch_records(resolver, records) {
-	if (resolver.__unreachable) {
-		return records.map(rec => ({rec, error: new Error('unreachable')})); 
-	}
 	const options = {enableCcipRead: true};
-	if (records.length > 1) {
+	const {target, interface: abi, __node, __dns_encoded, __info: {wild}} = resolver;
+	if (records.length > 1 && !resolver.__unreachable) {
 		let encoded = records.map(rec => {
-			let frag = resolver.interface.getFunction(rec.type);
-			let params = [resolver.__node];
+			let frag = abi.getFunction(rec.type);
+			let params = [__node];
 			switch (rec.type) {
 				case TYPE_TEXT: params.push(rec.key); break;
 				case TYPE_ADDR: params.push(rec.coin); break;
 			}
-			return resolver.interface.encodeFunctionData(frag, params);
+			return abi.encodeFunctionData(frag, params);
 		});
 		try {
-			let res;
-			if (resolver.__wild) { // optimistic CCIP-multicall
-				let frag = resolver.interface.getFunction('multicall');
-				res = await resolver.resolve(resolver.__dns_encoded, resolver.interface.encodeFunctionData(frag, [encoded]), options);
-				[res] = resolver.interface.decodeFunctionResult(frag, res);
+			let multi;
+			if (wild) { // optimistic CCIP-multicall
+				let frag = abi.getFunction('multicall');
+				let data = await resolver.resolve(__dns_encoded, abi.encodeFunctionData(frag, [encoded]), options);
+				[multi] = abi.decodeFunctionResult(frag, data);
 			} else {
-				let {target} = resolver;
-				res = await multicall_contract.tryAggregate(false, encoded.map(data => ({target, data})));
-				res = res.map(({success, data}) => success ? data : null);
+				multi = await multicall_contract.tryAggregate(false, encoded.map(data => ({target, data})));
+				multi = multi.map(x => x.data);
 			}
-			if (res && res.length === records.length) {
-				resolver.__multicall = records.length;
+			if (multi && multi.length === records.length) {
+				resolver.__multicall = records.length; // meh
 				return records.map((rec, i) => {
+					let calldata = multi[i];
 					try {
-						let frag = resolver.interface.getFunction(rec.type);
-						let data = resolver.interface.decodeFunctionResult(frag, res[i]);
-						if (frag.outputs.length === 1) data = data[0];
-						return {rec, data};
+						let frag = abi.getFunction(rec.type);
+						if ((calldata.length - 2) & 63) {
+							return {rec, error: parse_call_error(calldata)};
+						} else {
+							let data = abi.decodeFunctionResult(frag, calldata);
+							if (frag.outputs.length === 1) data = data[0];
+							return {rec, data};
+						}
 					} catch (error) {
 						return {rec, error};
 					}
@@ -4607,32 +4711,32 @@ async function fetch_records(resolver, records) {
 		if (should_stop_resolving()) {
 			return {rec, error: new Error('aborted')};
 		}
-		let params = [resolver.__node];
+		if (resolver.__unreachable) {
+			return {rec, error: new Error('unreachable')};
+		}
+		let params = [__node];
 		if (rec.type === TYPE_ADDR && rec.coin === 60) { // try boomer method first
 			const method = 'addr(bytes32)';
 			try {
 				let data;
-				if (resolver.__wild) {
-					let frag = resolver.interface.getFunction(method);
-					data = await resolver.resolve(resolver.__dns_encoded, resolver.interface.encodeFunctionData(frag, params), options);
-					[data] = resolver.interface.decodeFunctionResult(frag, data);
-					if (data.length !== 42) throw new Error('expected address');
+				if (wild) {
+					let frag = abi.getFunction(method);
+					let calldata = await resolver.resolve(__dns_encoded, abi.encodeFunctionData(frag, params), options);
+					[data] = abi.decodeFunctionResult(frag, calldata);
 				} else {
-					data = await resolver[method](resolver.__node, options);
+					data = await resolver[method](__node, options);
 				}
 				return {rec, data};
 			} catch (err) {
 				if (err instanceof TypeError) { // fetch() network error? 
 					resolver.__unreachable = 'network';
-					return {rec, error: err};
-				} else {
-					let error = parse_custom_error(err);
-					if (error) {
-						if (error.custom && error.custom.selector === '0xe861b2bd') {
-							resolver.__unreachable = 'contract';
-						}
-						return {rec, error};
-					}
+				 	return {rec, error: err};
+				// } else {
+				// 	let error = parse_ethers_error(err);
+				// 	if (error.name === 'InvalidLabelCount') { // currently thrown by OffchainDNS resolver
+				// 		resolver.__unreachable = 'contract';
+				// 		return {rec, error};
+				// 	}
 				}
 			}
 		}
@@ -4642,52 +4746,50 @@ async function fetch_records(resolver, records) {
 		}
 		try {
 			let data;
-			if (resolver.__wild) {
-				let frag = resolver.interface.getFunction(rec.type);
-				data = await resolver.resolve(resolver.__dns_encoded, resolver.interface.encodeFunctionData(frag, params), options);
-				data = resolver.interface.decodeFunctionResult(frag, data);
+			if (wild) {
+				let frag = abi.getFunction(rec.type);
+				data = await resolver.resolve(__dns_encoded, abi.encodeFunctionData(frag, params), options);
+				data = abi.decodeFunctionResult(frag, data);
 				if (frag.outputs.length === 1) data = data[0];
 			} else {
 				data = await resolver[rec.type](...params, options);
 			}
 			return {rec, data};
 		} catch (err) {
-			if (err.code === 'BAD_DATA' && err.value === '0x') return {rec};
-			let error = parse_custom_error(err) || err;
-			return {rec, error};
+			return {rec, error: parse_ethers_error(err)};
 		}
 	}));
 }
-async function fetch_resource_url(avatar, owner) {
-	let pos = avatar.indexOf('://');
+async function fetch_resource_url(value, owner) {
+	let pos = value.indexOf('://');
 	if (pos >= 0) {
-		let proto = avatar.slice(0, pos).toLowerCase();
+		let proto = value.slice(0, pos).toLowerCase();
 		if (proto === 'ipfs') {
-			let path = avatar.slice(pos + 3).replace(/^ipfs\//, '');
+			let path = value.slice(pos + 3).replace(/^ipfs\//, ''); // drop leading /ipfs/
 			try {
-				CID.from(path.split('/', 1)[0]);
+				CID.from(path.split('/', 1)[0]); // validate cid
 			} catch (err) {
 				return {error: err.message};
 			}
-			avatar = url_from_ipfs_path(path);
+			value = url_from_ipfs_path(path);
 		}
 		let type;
 		switch (proto) {
 			case 'data': type = 'On-chain'; break;
-			case 'ipfs':
+			case 'ipfs': type = 'IPFS'; break;
 			case 'http':
 			case 'https': type = 'URL'; break;
 		}
 		if (type) {
 			try {
-				return {url: new URL(avatar).toString(), type, proto};
+				return {url: new URL(value).toString(), type, proto};
 			} catch (err) {
 				return {error: 'invalid url'};
 			}
 		}
 	}
-	if (owner && avatar.startsWith('eip155:')) {
-		let match = avatar.toLowerCase().match(/^eip155:([0-9]+)\/erc(721|1155):(0x[0-9a-f]{40})\/(0x[0-9a-f]+|[0-9]+)$/i);
+	if (owner && value.startsWith('eip155:')) {
+		let match = value.toLowerCase().match(/^eip155:([0-9]+)\/erc(721|1155):(0x[0-9a-f]{40})\/(0x[0-9a-f]+|[0-9]+)$/i);
 		if (!match) {
 			return {error: 'invalid avatar string'};
 		}
@@ -4730,7 +4832,7 @@ async function fetch_resource_url(avatar, owner) {
 async function fetch_nft_image(url0) {
 	let {error, url: meta_url} = await fetch_resource_url(url0);
 	if (error) {
-		return {error: 'expected metadata url'};
+		return {error: 'expected metadata url', cause: error};
 	}
 	// fix opensea bullshit
 	let fixed;
@@ -4746,19 +4848,18 @@ async function fetch_nft_image(url0) {
 			if (typeof image !== 'string') {
 				return {error: 'expected metadata "image"'};
 			}
-			let {url, error} = await fetch_resource_url(image);
+			let {error, url} = await fetch_resource_url(image);
 			if (error) {
 				return {error};
 			}
 			return {type: 'NFT', url, meta_url, fixed};
 		} else {
-			return {error: `HTTP ${res.status}: ${meta_url}}`};
+			return {error: `HTTP ${res.status}: ${meta_url}`};
 		}
-	} catch (err) {
-		return {error: `fetch failure`};
+	} catch (cause) {
+		return {error: `fetch failure`, cause};
 	}
 }
-
 async function ensure_eth_resolver() {
 	if (eth_resolver_contract) return;
 	if (eth_resolver_contract === false) throw new Error(`No "eth" resolver`);
@@ -4788,7 +4889,7 @@ async function ensure_wrapper() {
 	if (wrapper_contract) return;
 	if (wrapper_contract === false) throw new Error(`Not implementated`);
 	await ensure_eth_resolver();
-	let wrapper_address = await eth_resolver_contract.__get_interface('0x019a38fe');
+	let wrapper_address = await eth_resolver_contract.interfaceImplementer(eth_resolver_contract.__node, '0x019a38fe');
 	if (is_null_hex(wrapper_address)) {
 		wrapper_contract = false;
 		return ensure_wrapper();
@@ -4816,7 +4917,7 @@ async function ensure_eth_nft() {
 	], active_provider);
 	// TODO: make this abortable
 	eth_nft_contract.__grace_period = 1000 * (await eth_nft_contract.GRACE_PERIOD().then(Number).catch(() => 90*86400));
-	eth_controller_contract = contract_for_controller(await eth_resolver_contract.__get_interface(IFACE_ETH_CONTROLLER));
+	eth_controller_contract = contract_for_controller(await eth_resolver_contract.interfaceImplementer(eth_resolver_contract.__node, IFACE_ETH_CONTROLLER));
 	price_oracle_contract = contract_for_price_oracle(await eth_controller_contract.prices());
 }
 function labels_from_dns_encoded(v) {
@@ -4848,21 +4949,87 @@ function dns_encoded_from(labels) {
 	v.push(0);
 	return Uint8Array.from(v);
 }
-async function get_resolver(name) {
-	// returns resolver | undefined | throws
-	// https://docs.ens.domains/ens-improvement-proposals/ensip-10-wildcard-resolution
-	let v = name.split('.');
-	for (let i = 0; i < v.length; i++) {
-		let basename = v.slice(i).join('.');
-		let basenode = namehash(basename);
-		let address;
-		if (resolve_debug && is_object(resolve_debug.resolver)) address = resolve_debug.resolver[basename];
-		if (!address) address = await registry_contract.resolver(basenode);
+async function is_contract(address) {
+	let is = IS_CONTRACT.get(address);
+	if (is === undefined) {
+		try {
+			is = !is_null_hex(await active_provider.getCode(address));
+			IS_CONTRACT.set(address, is);
+		} catch (err) {
+		}
+	}
+	return is;
+}
+async function get_resolver_info(target) {
+	let info = RESOLVER_INFO.get(target);
+	if (info === undefined) {
+		info = {};
+		if (IS_CONTRACT.get(target) !== false) { // is contract or unknown
+			let abi = new ethers.Interface([
+				'function supportsInterface(bytes4 interfaceID) external view returns (bool)',
+				'function gatewayURL() view returns (string)',
+			]);
+			let multi;
+			try {
+				// TODO: replace with deployless with gas-limit
+				multi = await multicall_contract.tryAggregate(false, [
+					{target, data: abi.encodeFunctionData('supportsInterface', ['0x124a319c'])}, // IInterfaceResolver:   interfaceImplementer(bytes32,bytes4)
+					{target, data: abi.encodeFunctionData('supportsInterface', ['0x9061b923'])}, // IExtendedResolver:    resolve(bytes,bytes)
+					{target, data: abi.encodeFunctionData('supportsInterface', ['0x8ef98a7e'])}, // IExtendedDNSResolver: resolve(bytes,bytes,bytes)
+					{target, data: abi.encodeFunctionData('gatewayURL')}
+				]);
+			} catch (err) {
+				// if a function doesn’t exist on a contract compiled in solidity
+				// version 0.4.11 or below, it’ll revert and use all the gas available
+				if (err.code !== 'CALL_EXCEPTION') throw err;
+			}
+			if (multi) {
+				if (multi.some(x => x.success)) IS_CONTRACT.set(target, true); // any success => is contract
+				let [impl, wild, edns, gateway] = multi;
+				info.impl = impl.success && !is_null_hex(impl.data);
+				info.wild = wild.success && !is_null_hex(wild.data);
+				info.edns = edns.success && !is_null_hex(edns.data);
+				try {
+					if (gateway.success) {
+						// TODO: better way of doing this
+						let [url] = abi.decodeFunctionResult('gatewayURL', gateway.data);
+						if (url === 'https://dnssec-oracle.ens.domains/') {
+							info.offchain_dns = url;
+						}
+					}
+				} catch (err) {
+				}
+			}
+		}
+		RESOLVER_INFO.set(target, info);
+	}
+	return info;
+}
+async function get_resolver(name0) {
+	// returns resolver | null | throws
+	let {target, interface: abi} = registry_contract;
+	let frag = abi.getFunction('resolver');
+	let labels = name0.split('.');
+	let domains = labels.map((_, i) => {
+		let name = labels.slice(i).join('.');
+		return {name, node: namehash(name)};
+	});
+	let multi = await multicall_contract.tryAggregate(true, domains.map(x => {
+		return {target, data: abi.encodeFunctionData(frag, [x.node])};
+	}));
+	for (let i = 0; i < domains.length; i++) {
+		let {name, node} = domains[i];
+		let [address] = abi.decodeFunctionResult(frag, multi[i].data);
+		try {
+			let rewrite = resolve_state.debug.resolver[name];
+			if (rewrite) address = rewrite;
+		} catch (err) {
+		}
 		if (should_stop_resolving()) throw new Error('aborted');
 		if (is_null_hex(address)) continue;
 		// https://github.com/ensdomains/ens-contracts/tree/staging/contracts/resolvers/profiles
+		// https://docs.ens.domains/ens-improvement-proposals/ensip-10-wildcard-resolution
 		let resolver = new ethers.Contract(address, [
-			'function supportsInterface(bytes4 interfaceID) external view returns (bool)',
 			'function interfaceImplementer(bytes32 node, bytes4 interfaceID) external view returns (address)',
 			'function resolve(bytes name, bytes data) view returns (bytes)',
 			'function addr(bytes32 node, uint coinType) view returns (bytes)',
@@ -4873,71 +5040,42 @@ async function get_resolver(name) {
 			'function name(bytes32 node) view returns (string)',
 			'function recordVersions(bytes32 node) external view returns (uint64)',
 			'function multicall(bytes[] calldata data) external returns (bytes[] memory results)',
-		], active_provider);
-		let wild = IS_WILD.get(address);
-		if (wild === undefined) {
-			wild = await resolver.supportsInterface('0x9061b923').catch(() => {});
-			if (wild !== undefined) {
-				IS_WILD.set(address, wild);
-			}
-		}
-		if (i && !wild) break; // ancestor but not wildcard
-		resolver.__name = name;
-		resolver.__node = namehash(name);
+		], active_provider);	
+		let info = await get_resolver_info(address);
+		if (i && !info.wild) break; // ancestor but not wildcard
+		resolver.__info = info;
+		resolver.__name = name0;
+		resolver.__node = namehash(name0);
 		resolver.__dropped = i; // truthy => virtual
-		resolver.__basename = basename;
-		resolver.__basenode = basenode;
-		resolver.__get_interface = hash => resolver.interfaceImplementer(resolver.__basenode, hash);
-		if (wild) {
-			resolver.__wild = true;
+		resolver.__basename = name;
+		resolver.__basenode = node;
+		if (info.wild) {
 			try {
-				resolver.__dns_encoded = dns_encoded_from(v);
+				resolver.__dns_encoded = dns_encoded_from(labels);
 			} catch (err) {
 				resolver.__unreachable = 'name too long';
 			}
 		}
 		return resolver;
 	}
+	return null;
 }
 async function get_safe_primary(owner, alt_owner) {
-	// return normalized primary if resolve(reverse(owner)) is owner or alt_owner
+	// return normalized primary if resolve(reverse(owner)) is owner or alt_owner | throws
 	let rev_resolver = await get_resolver(reverse_name(owner));
-	if (!rev_resolver) {
-		throw new Error('Primary not set');
-	}
+	if (!rev_resolver) throw new Error('Primary not set');
 	if (should_stop_resolving()) return;
 	let [{data: primary, error}] = await fetch_records(rev_resolver, [{type: TYPE_NAME}]);
 	if (error) throw error;
-	if (!primary) {
-		throw new Error('Primary is Null');
-	}
 	let name = ens_normalize(primary);
+	if (!name) throw new Error('Primary is Null');
 	if (should_stop_resolving()) return;
 	let resolver = await get_resolver(name);
-	if (!resolver) {
-		throw new Error('Resolver not set');
-	}
 	if (should_stop_resolving()) return;
 	let address = await fetch_addr60(resolver);
-	if (!address) {
-		throw new Error('Address not set');
-	}
-	if (owner !== address && alt_owner !== address) {
-		throw new Error(`Address mismatch`);
-	}
+	if (!address) throw new Error('Address not set');
+	if (owner !== address && alt_owner !== address) throw new Error(`Address mismatch`);
 	return name;
-}
-async function is_contract(address) {
-	if (!is_address(address)) return;
-	address = address.toLowerCase();
-	let is = IS_CONTRACT.get(address);
-	if (typeof is === 'boolean') return is;
-	try {
-		is = !is_null_hex(await active_provider.getCode(address));
-		IS_CONTRACT.set(address, is);
-		return is;
-	} catch (err) {
-	}	
 }
 function repair_social(value, {prefix = '@', url = 1} = {}) {
 	if (prefix && value.startsWith(prefix)) return value.slice(prefix.length);
