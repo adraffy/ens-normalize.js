@@ -1416,7 +1416,9 @@ const RESOLVER_INFO = new Map();
 const ERROR_ABI = new ethers.Interface([
 	'error Error(string)',
 	'error NotImplemented()',
+	'error InvalidOperation()',
 	'error InvalidAddressFormat()',
+	'error CouldNotResolve(bytes)',
 	'error InvalidLabelCount(bytes dns, uint256 count)',
 ]);
 
@@ -1937,7 +1939,7 @@ show_details_check.addEventListener('input', () => {
 show_records_check.addEventListener('input', () => {
 	save_settings();
 	sync_settings();
-	if (show_records_check.checked && !$('.records')) resolve();
+	if (show_records_check.checked && resolve_state && resolve_state.skipped_records) resolve();
 });
 show_components_check.addEventListener('input', () => {
 	save_settings();
@@ -3480,7 +3482,11 @@ function resolve() {
 	primary_loader.classList.remove('hide');
 	const url = get_page_url();
 	const t0 = Date.now();
-	resolve_state = {url, t0, t: t0, addrs: new Map()};
+	resolve_state = {
+		url, 
+		t0, t: t0, 
+		addrs: new Map()
+	};
 	if (debug_enabled) resolve_state.debug = debug_settings;
 	resolve1(name, skip).then(() => {
 		clock_span.innerHTML = format_dur(Date.now() - t0, 2);
@@ -3765,7 +3771,7 @@ async function resolve1(input, skip_norm) {
 	let dns_txt_address;
 	if (resolver && resolver.__info.offchain_dns) {
 		// https://blog.ens.domains/post/gasless-dnssec
-		let ens1_row = create_row(create_link('https://support.ens.domains/en/articles/8834820-offchain-gasless-dnssec-names-in-ens', {innerHTML: 'DNS <code style="color: #58f">"ENS1"</code>'}), true);
+		let ens1_row = create_row(create_link('https://support.ens.domains/en/articles/8834820-offchain-gasless-dnssec-names-in-ens', {innerHTML: 'DNS <code style="color: #58f">ENS1</code>'}), true);
 		ens1_row.classList.add('dns');
 		output_div.append(ens1_row);
 		let args;
@@ -4189,6 +4195,7 @@ async function resolve1(input, skip_norm) {
 		add_row_tag(address_row, create_elapsed());
 
 		let show_recs = show_records_check.checked;
+		if (!show_recs) resolve_state.skipped_records = true;
 		if (show_recs) {
 			let records_row = create_row(create_link('https://docs.ens.domains/contract-api-reference/publicresolver', {innerHTML: 'Records'}), true);
 			records_row.classList.add('records');
@@ -4640,7 +4647,7 @@ function parse_call_error(calldata) {
 			entity_span.innerText = desc.args[0];
 			message = entity_span.innerHTML;
 		}
-		message = `<b>${error.signature}</b> ${message}`;
+		message = `<b>${desc.signature}</b> ${message}`;
 	}
 	return Object.assign(new Error(`Call error: ${message}`), error);
 }
@@ -4731,12 +4738,14 @@ async function fetch_records(resolver, records) {
 				if (err instanceof TypeError) { // fetch() network error? 
 					resolver.__unreachable = 'network';
 				 	return {rec, error: err};
-				// } else {
-				// 	let error = parse_ethers_error(err);
-				// 	if (error.name === 'InvalidLabelCount') { // currently thrown by OffchainDNS resolver
-				// 		resolver.__unreachable = 'contract';
-				// 		return {rec, error};
-				// 	}
+				} else {
+					let error = parse_ethers_error(err);
+					switch (error.desc && error.desc.name) { // currently thrown by OffchainDNS resolver
+						case 'InvalidLabelCount': // unicode
+						case 'CouldNotResolve':   // no records
+							resolver.__unreachable = 'contract';
+							return {rec, error};
+					}
 				}
 			}
 		}
