@@ -75,6 +75,7 @@ async function download({major, minor, patch}, files) {
 	let version = `${major}.${minor}.${patch}`;
 	let dir = new URL(`./data/${major}.${minor}.${patch}/`, import.meta.url);
 	let changed = 0;
+	let error;
 	console.log(`Downloading ${version} (${files.length} files)`);
 	for (let sources of files) {
 		let urls = sources.map(s => url_from_source(s, {major, minor, patch}));
@@ -89,13 +90,12 @@ async function download({major, minor, patch}, files) {
 		} catch (err) {
 			if (err instanceof AggregateError) {
 				for (let i = 0; i < sources.length; i++) {
-					console.log(`${i+1}. ${sources[i]} => ${urls[i]}`);
-					console.log(err.errors[i]);
+					console.log(`FAIL <${urls[i]}> [${i+1}/${sources.length}] => ${err.errors[i].message}`);
 				}
 			} else {
-				console.log(err);
+				throw err;
 			}
-			throw new Error(`Download failed`);
+			error = true;
 		}
 	}
 	// 20231023: include excluded/limited/recommended
@@ -105,9 +105,9 @@ async function download({major, minor, patch}, files) {
 		let name = `script-kinds.json`;
 		await write(name, Buffer.from(JSON.stringify(kinds)), `<${name}>`);
 	} catch (err) {
-		console.log(err);
-		throw new Error(`Download failed`);
+		error = true;
 	}
+	if (error) throw new Error('incomplete download');	
 	console.log(`Changes: ${changed}`);
 	if (changed) {
 		// only bump the version if something changed
@@ -127,6 +127,6 @@ async function download({major, minor, patch}, files) {
 			await mkdir(dir, {recursive: true});
 			await writeFile(file, buf);
 		}
-		console.log(`${same ? 'Same' : 'Updated'} ${desc}`);
+		console.log(`${same ? 'SAME' : 'NEW!'} ${desc}`);
 	}
 }

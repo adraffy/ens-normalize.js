@@ -35,8 +35,9 @@ body {
 }
 #grid td {
 	position: relative;
-	border: 1px solid #ccc;
+	border: 1px solid #aaa;
 	outline-color: #0060df00;
+	text-align: center;
 }
 #grid td.nochar {
 	background: #aaa;
@@ -47,28 +48,32 @@ body {
 	border-color: #fff;
 	z-index: 1;
 	opacity: 1;
+	border-radius: 4px;
 }
-span.corner {
-	color: #666;
+td.emoji {
+	background-color: #cff;
+	font-size: 32px;
+}
+td .corner {
+	color: #444;
 	position: absolute;
 }
-span.code {
-	font-family: monospace;
+td code.corner {
 	color: #000;
 	top: 0;
 	left: 0;
 	font-size: 12pt;
 }
-span.abbr {
+td .abbr {
 	top: 0;
 	right: 0;
 	font-size: 10pt;
 }
-span.name {
+td .name {
 	bottom: 0;
 	left: 0;
 	right: 0;
-	font-size: 8pt;
+	font: 11px sans-serif;
 }
 #grid tr:nth-child(even) {
 	background: rgba(0, 0, 0, .05);
@@ -95,6 +100,22 @@ span.name {
 	font-size: 20px;
 	text-align: center;
 }
+#jump_btn {
+	position: fixed;
+	bottom: 16px;
+	right: 16px;
+	box-shadow: 0 0 5px #0004;
+	transition: .5s ease opacity;
+	z-index: 1;
+	padding: 8px;
+	cursor: pointer;
+	font-size: 100%;
+}
+#jump_btn code {
+	padding: 1px;
+	background-color: #cff;
+	font-size: 130%;
+}
 footer {
 	text-align: center;
 	color: #666;
@@ -104,6 +125,7 @@ footer {
 </style>
 </head>
 <body>
+<button id="jump_btn" class="hide"></button>
 <div id="overlay" class="hide">
 <div>
 <input placeholder="Hex or Name or Char">
@@ -116,11 +138,24 @@ footer {
 import {ens_tokenize, hex_cp, dom_from_tokens, use_default_style} from '../dist/all.min.js';
 use_default_style();
 
+const MAX_CP = 0x10FFFF; 
+const ROW_WIDTH = 140;
+const ROW_HEIGHT = 80;
+
 const overlay_div = document.querySelector('#overlay');
 const search_field = document.querySelector('#overlay input');
+const jump_btn = document.querySelector('#jump_btn');
+const table = document.querySelector('#grid');
 
-let max_cp = 0x10FFFF; 
 const char_map = new Map();
+
+let scrollLast;
+let scrollHeight;
+let grid_rows;
+let grid_cols;
+let max_rows;
+let jump_cp;
+
 fetch('../derive/output/names.json').then(r => r.json()).then(({chars, ranges, scripts}) => {
 	for (let [cp, name] of chars) {
 		char_map.set(cp, {name});
@@ -143,21 +178,174 @@ fetch('../derive/output/names.json').then(r => r.json()).then(({chars, ranges, s
 		}
 	}
 	scrollLast = undefined; // dirty
-	//max_cp = Math.max(...char_map.keys());
 	for (let s of scripts) {
 		s.avg = s.cps.reduce((a, x) => a + x) / s.cps.length;
 	}
 	scripts.sort((a, b) => a.avg - b.avg);
-	let style = document.createElement('style');
-	style.innerText = scripts.map(({abbr}, i) => {
-		return `td.${abbr} { background: hsla(${360*(i/10%1)},100%,50%,.15); }`
-	}).join('\n');
-	document.body.append(style);
-
+	document.body.append(create('style', {
+		innerText: scripts.map(({abbr}, i) => {
+			return `td.${abbr} { background: hsla(${360*(i/10%1)},100%,50%,.15); }`
+		}).join('\n')
+	}));
 }).catch(console.log).then(() => {
 	requestAnimationFrame(update_hash);
 });	
 
+jump_btn.addEventListener('click', () => scroll_to_cp(jump_cp));
+window.addEventListener('unload', () => {});
+window.addEventListener('resize', () => update_cols());
+window.addEventListener('hashchange', update_hash);
+window.addEventListener('keydown', e => {
+	if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+		e.preventDefault();
+		show_overlay();
+	} else if (e.key === 'Escape') {
+		overlay_div.classList.add('hide');
+	} else if (e.key === 'Enter') {
+		if (overlay_div.classList.contains('hide')) {
+			show_overlay();
+		} else {
+			overlay_div.classList.add('hide');
+			scroll_to_input(search_field.value.trim());
+		}
+	} else if (!e.altKey && !e.ctrlKey && !e.metaKey && /^[a-z0-9]$/i.test(e.key)) {
+		if (overlay_div.classList.contains('hide')) {
+			show_overlay();
+			search_field.value = e.key;
+			e.preventDefault();
+		} else {
+			search_field.focus();
+		}
+	}
+});
+
+update_cols();
+check_scroll();
+
+function update_cols() {
+	let h = window.innerHeight;
+	grid_rows = Math.round(h / ROW_HEIGHT);
+	grid_cols = Math.max(1, Math.floor(window.innerWidth / ROW_WIDTH));
+	max_rows = Math.ceil((1 + MAX_CP) / grid_cols);
+	scrollLast = undefined; // dirty
+	scrollHeight = Math.max(1, MAX_CP - h); // prevent div/0
+	document.body.style.height = `${Math.max(MAX_CP, h)}px`;
+}
+function check_scroll() {
+	requestAnimationFrame(check_scroll);
+	let y = Math.max(0, Math.min(window.scrollY, scrollHeight));
+	if (scrollLast !== y) {
+		scrollLast = y;
+		update_table();
+	}
+}
+function update_hash() {
+	scroll_to_input(window.location.hash.slice(1));
+}
+function scroll_to_input(input) {
+	if (/^[a-f0-9]+$/i.test(input)) {
+		scroll_to_cp(parseInt(input, 16));
+	//} else if (/^(['"]).*\1$/.test(input)) {
+	//	scroll_to_cp([...input][1].codePointAt(0));
+	} else if (input) {
+		input = input.toLowerCase();
+		for (let [cp, {name}] of char_map) {
+			if (name.toLowerCase().includes(input)) {
+				return scroll_to_cp(cp);
+			}
+		}
+		scroll_to_cp(input.codePointAt(0));
+	}
+}
+function scroll_to_cp(cp) {
+	if (cp >= 0 && cp <= MAX_CP) {
+		let url = `#${hex_cp(cp)}`;
+		if (window.history.state) {
+			if (window.history.state != url) {
+				window.history.pushState(url, null, url);
+			}
+		} else {
+			window.history.replaceState(url, null, url);
+		}
+		jump_cp = cp;
+		jump_btn.innerHTML = `Return to <code>${hex_cp(cp)}</code>`;
+		let td = document.querySelector(`[data-cp="${cp}"]`);
+		if (td) {
+			let old = document.querySelector('.active');
+			if (old) old.classList.remove('active');
+			mark_active(td);
+		} else {
+			let row = Math.floor(cp / grid_cols - grid_rows / 2);
+			let frac = Math.max(0, Math.min(row /max_rows, 1));
+			window.scrollTo(0, scrollHeight * frac);
+		}
+	}
+}
+function mark_active(td) {
+	td.classList.add('active');
+}
+function show_overlay() {
+	overlay_div.classList.remove('hide');
+	search_field.value = '';
+	search_field.focus();
+}
+function update_table() {
+	table.innerHTML = '';
+	let cp = grid_cols * Math.round((max_rows - grid_rows) * window.scrollY/scrollHeight);
+	let height = `${Math.floor(100 / grid_rows)}%`;
+	let marked = false;
+	for (let r = 0; r < grid_rows; r++) {
+		let tr = document.createElement('tr');
+		tr.setAttribute('height', height);
+		for (let c = 0; c < grid_cols && cp <= MAX_CP; c++, cp++) {
+			let td = document.createElement('td');
+			td.dataset.cp = cp;
+			if (cp === jump_cp) {
+				mark_active(td);
+				marked = true;
+			}
+			td.append(create('code', {className: 'corner', innerText: hex_cp(cp)}));
+			let [token] = ens_tokenize(String.fromCodePoint(cp));
+			let info0 = char_map.get(cp);
+			if (info0 && info0.name) {
+				let name_span = document.createElement('span');
+				name_span.classList.add('corner', 'name');
+				name_span.innerText = info0.name.toLowerCase();
+				td.append(name_span);
+			} else if (char_map.size) {
+				td.classList.add('nochar');
+			}
+			if (token.emoji) {
+				td.classList.add('emoji');
+				td.append(create('span', {className: ['corner', 'abbr'], innerText: 'Emoji'}));
+				//td.append(create('span', {className: 'emoji', innerHTML: String.fromCodePoint(...token.emoji)}))
+				td.append(String.fromCodePoint(...token.emoji));
+			} else {
+				let abbr;
+				if (token.type === 'mapped') {
+					let v = token.cps.map(x => char_map.get(x));
+					let abbr0 = v.find(x => x)?.abbr;
+					if (v.every(x => x && x.abbr === abbr0)) {
+						abbr = abbr0;
+					}
+				} else {
+					let info = char_map.get(cp);
+					if (info) {
+						abbr = info.abbr;
+					}
+				}
+				if (abbr) {
+					td.classList.add(abbr);
+					td.append(create('span', {className: ['corner', 'abbr'], innerText: abbr}));
+				}
+				td.append(dom_from_tokens([token], {extra}));
+			}
+			tr.append(td);
+		}
+		table.append(tr);
+	}
+	jump_btn.classList.toggle('hide', !Number.isInteger(jump_cp) || marked);
+}
 function extra(type, cps) {
 	if (cps.length === 1) {
 		let info = char_map.get(cps[0]);
@@ -178,196 +366,30 @@ function extra(type, cps) {
 		});
 	}
 }
-
-const table = document.querySelector('#grid');
-
-const ROW_WIDTH = 128;
-const ROW_HEIGHT = 80;
-
-let scrollLast;
-let scrollHeight;
-let grid_rows;
-let grid_cols;
-let max_rows;
-let mark_cp;
-//let mark_timer;
-
-update_cols();
-window.addEventListener('resize', () => {
-	update_cols();
-});
-
-function update_cols() {
-	let h = window.innerHeight;
-	grid_rows = Math.round(h / ROW_HEIGHT);
-	grid_cols = Math.max(1, Math.floor(window.innerWidth / ROW_WIDTH));
-	max_rows = Math.ceil((1 + max_cp) / grid_cols);
-	scrollLast = undefined; // dirty
-	const H = max_cp; // using actual pixels is fucked
-	scrollHeight = Math.max(1, H - h); // prevent div/0
-	document.body.style.height = `${Math.max(H, h)}px`;
-}
-
-/*
-function create_index_td(i) {
-	let td = document.createElement('td');
-	td.classList.add('index');
-	td.innerText = i.toString(16).padStart(2, '0').toUpperCase();
-	return td;
-}
-*/
-window.addEventListener('hashchange', update_hash);
-function update_hash() {
-	let hash = window.location.hash.slice(1);
-	if (hash) {
-		window.history.replaceState(null, null, ' ');
-		scroll_to_cp(parseInt(hash, 16));
-	}
-}
-
-function scroll_to_cp(cp) {
-	if (cp >= 0 && cp <= max_cp) {
-		let td = document.querySelector(`[data-cp="${cp}"]`);
-		//clearTimeout(mark_timer);
-		if (td) {
-			let old = document.querySelector('.active');
-			if (old) old.classList.remove('active');
-			mark_active(td);
-		} else {
-			mark_cp = cp;
-			let row = Math.floor(cp / grid_cols - grid_rows / 2);
-			let frac = Math.max(0, Math.min(row /max_rows, 1));
-			window.scrollTo(0, scrollHeight * frac);
-		}
-	}
-}
-
-function mark_active(td) {
-	td.classList.add('active');
-	mark_cp = undefined;
-	//mark_timer = setTimeout(() => td.classList.remove('active'), 5000);
-}
-
-function update_table() {
-	table.innerHTML = '';
-	let cp = grid_cols * Math.round((max_rows - grid_rows) * window.scrollY/scrollHeight);
-	/*
-	let tr_header = document.createElement('tr');
-	tr_header.innerHTML = '<td class="index"></td>';
-	for (let c = 0; c < grid_cols; c++) {
-		tr_header.append(create_index_td(c));
-	}
-	table.append(tr_header);
-	*/
-	let height = `${Math.floor(100 / grid_rows)}%`;
-	for (let r = 0; r < grid_rows; r++) {
-		let tr = document.createElement('tr');
-		tr.setAttribute('height', height);
-		//tr.style.height = height;
-		//tr.append(create_index_td(cp));
-		for (let c = 0; c < grid_cols && cp <= max_cp; c++, cp++) {
-			let td = document.createElement('td');
-			td.dataset.cp = cp;
-			if (cp === mark_cp) {
-				mark_active(td);
-			}
-			
-			let hex_span = document.createElement('span');
-			hex_span.classList.add('corner', 'code');
-			hex_span.innerText = hex_cp(cp);
-			td.append(hex_span);
-
-			let info0 = char_map.get(cp);
-			if (info0 && info0.name) {
-				let name_span = document.createElement('span');
-				name_span.classList.add('corner', 'name');
-				name_span.innerText = info0.name.toLowerCase();
-				td.append(name_span);
-			} else if (char_map.size) {
-				td.classList.add('nochar');
-			}
-
-			let tokens = ens_tokenize(String.fromCodePoint(cp));
-			if (tokens.length == 1) {
-				let abbr;
-				if (tokens[0].type === 'mapped') {
-					let v = tokens[0].cps.map(x => char_map.get(x));
-					let abbr0 = v.find(x => x)?.abbr;
-					if (v.every(x => x && x.abbr === abbr0)) {
-						abbr = abbr0;
-					}
-				} else {
-					let info = char_map.get(cp);
-					if (info) {
-						abbr = info.abbr;
+function create(el, args, ...a) {
+	if (typeof el === 'string') el = document.createElement(el);
+	if (args) {
+		for (let [k, v] of Object.entries(args)) {
+			if (!v) continue;
+			if (v instanceof Function) {
+				el.addEventListener(k, v);
+			} else if (k === 'dataset') {
+				Object.assign(el.dataset, v);
+			} else if (k === 'className') {
+				for (let x of [v].flat(Infinity)) {
+					if (typeof x === 'string') {
+						el.classList.add(x);
+					} else if (x) {
+						Object.entries(x).forEach(([k, v]) => el.classList.toggle(k, !!v));
 					}
 				}
-				if (abbr) {
-					td.classList.add(abbr);
-					let abbr_span = document.createElement('span');
-					abbr_span.classList.add('corner', 'abbr');
-					abbr_span.innerText = abbr;
-					td.append(abbr_span);
-				}
-			}
-			td.append(dom_from_tokens(tokens, {extra}));
-			tr.append(td);
-		}
-		table.append(tr);
-	}
-}
-
-window.addEventListener('keydown', e => {
-	if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
-		e.preventDefault();
-		show_overlay();
-	} else if (e.key === 'Escape') {
-		overlay_div.classList.add('hide');
-	} else if (e.key === 'Enter') {
-		if (overlay_div.classList.contains('hide')) {
-			show_overlay();
-		} else {
-			overlay_div.classList.add('hide');
-			let input = search_field.value.trim();
-			if (/^[a-f0-9]+$/i.test(input)) {
-				scroll_to_cp(parseInt(input, 16));
-			//} else if (/^(['"]).*\1$/.test(input)) {
-			//	scroll_to_cp([...input][1].codePointAt(0));
-			} else if (input) {
-				input = input.toLowerCase();
-				for (let [cp, {name}] of char_map) {
-					if (name.toLowerCase().includes(input)) {
-						return scroll_to_cp(cp);
-					}
-				}
-				scroll_to_cp(input.codePointAt(0));
+			} else {
+				el[k] = v;
 			}
 		}
-	} else if (!e.altKey && !e.ctrlKey && !e.metaKey && /^[a-z0-9]$/i.test(e.key)) {
-		if (overlay_div.classList.contains('hide')) {
-			show_overlay();
-			search_field.value = e.key;
-			e.preventDefault();
-		} else {
-			search_field.focus();
-		}
 	}
-});
-
-function show_overlay() {
-	overlay_div.classList.remove('hide');
-	search_field.value = '';
-	search_field.focus();
-}
-
-check();
-function check() {
-	requestAnimationFrame(check);
-	let y = Math.max(0, Math.min(window.scrollY, scrollHeight));
-	if (scrollLast !== y) {
-		scrollLast = y;
-		update_table();
-	}
+	el.append(...a);
+	return el;	
 }
 </script>
 </body>

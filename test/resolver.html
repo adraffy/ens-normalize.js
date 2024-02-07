@@ -4201,7 +4201,6 @@ async function resolve1(input, skip_norm) {
 			records_row.classList.add('records');
 			records_row.dataset.records = '1';
 			output_div.append(records_row);	
-			let old = records_row.childElementCount;
 			if (resolver.__unreachable) {
 				add_row_tag(records_row, create_tag('stop', 'Unreachable'));
 			} else if (resolver.__only_addr) {
@@ -4220,7 +4219,8 @@ async function resolve1(input, skip_norm) {
 						}
 					}
 				}
-				for (let {rec, data, error} of await fetch_records(resolver, records)) {
+				let results = await fetch_records(resolver, records);
+				for (let {rec, data, error} of results) {
 					// if (error) {
 					// 	add_row_tag(records_row, create_tag('fail', error));
 					// 	continue;
@@ -4468,11 +4468,11 @@ async function resolve1(input, skip_norm) {
 					}
 					records_row.append(a);
 				}
-				if (records_row.childElementCount === old) {
-					add_row_tag(records_row, 'None');
-				}
-				if (resolver.__multicall) {
-					add_row_tag(records_row, create_tag('good', `Multicall (${resolver.__multicall})`));
+				let success = results.reduce((a, x) => a + (x.error?0:1), 0);
+				if (resolver.__multicalled) {
+					add_row_tag(records_row, create_tag('good', `Multicall: ${success}/${results.length}`));
+				} else {
+					add_row_tag(records_row, `${success}/${results.length}`);
 				}
 			}
 			if (should_stop_resolving()) return;
@@ -4693,7 +4693,7 @@ async function fetch_records(resolver, records) {
 				multi = multi.map(x => x.data);
 			}
 			if (multi && multi.length === records.length) {
-				resolver.__multicall = records.length; // meh
+				resolver.__multicalled = true; 
 				return records.map((rec, i) => {
 					let calldata = multi[i];
 					try {
@@ -4712,10 +4712,9 @@ async function fetch_records(resolver, records) {
 			}
 		} catch (err) {
 		}
-		records = records.filter(x => !x.bonus); // remove bonus records
 	}
 	return Promise.all(records.map(async rec => {
-		if (should_stop_resolving()) {
+		if (should_stop_resolving() || rec.bonus) {
 			return {rec, error: new Error('aborted')};
 		}
 		if (resolver.__unreachable) {
