@@ -2071,7 +2071,6 @@ debug_ta.placeholder = `{
 		1234     or {"coin": 1234},    // coin()
 		-5       or {"evm": 5}         // coin() via ENSIP-11
 	],
-	"record_errors": true, // show record exceptions
 	// misc interface stuff
 	"jazz": true,    // debug jazz icons
 	"fuzes": true,   // debug wrapper fuses interface
@@ -4255,7 +4254,7 @@ async function resolve1(input, skip_norm) {
 					let a = create('a', {className: 'record', target: '_blank'});
 					if (error) {
 						error_count++;
-						if (resolve_state.debug && resolve_state.debug.record_errors) {
+						if (resolve_state.debug) {
 							a.append(create('b', {innerText: `${rec.key || rec.coin || rec.type}`}));
 							a.append(create_tag('fail', error));
 							a.classList.add('rtrim');
