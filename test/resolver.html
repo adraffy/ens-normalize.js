@@ -1274,13 +1274,13 @@ Hebrew:
 </ul>
 </div>
 <div id="debug" class="hide">
-<div id="debug_header">
-	<b>🛠️ Debug Settings:</b>
-	<span class="balloon"></span>
-	<button id="apply_debug_btn">🔄️ <span class="key">shift+enter</span></button>
-	<button id="disable_debug_btn">🛑️</button>
-</div>
-<textarea rows="20"></textarea>
+	<div id="debug_header">
+		<b>🛠️ Debug Settings:</b>
+		<button id="apply_debug_btn">🔄️ <span class="key">shift+enter</span></button>
+		<span class="balloon"></span>
+		<button id="disable_debug_btn">🛑️</button>
+	</div>
+	<textarea rows="20"></textarea>
 </div>
 <footer>
 	<span>Created by <a href="https://x.com/adraffy">raffy.eth</a></span>
@@ -1625,6 +1625,13 @@ const RECORDS = [
 		bonus: true
 	},
 	{
+		coin: 195,
+		name: "tron",
+		base58check: true,
+		url(x) { return `https://tronscan.org/#/address/${x}`; },
+		bonus: true,
+	},
+	{
 		coin: 501,
 		name: 'sol',
 		base58: true,
@@ -1678,9 +1685,18 @@ const RECORDS = [
 	{
 		key: 'banner',
 		format() { return ''; },
-		url(x) { return x; },
+		//url(x) { return x; },
 	},
 ].map(prepare_record);
+function expand_record(rec) {
+	if (typeof rec === 'string') {
+		return {key: rec};
+	} else if (Number.isInteger(rec)) {
+		return rec < 0 ? {evm: rec} : {coin: rec};
+	} else {
+		return {...rec};
+	}
+}
 function prepare_record(rec) {
 	if (typeof rec.key === 'string') {
 		rec.type = TYPE_TEXT;
@@ -1916,7 +1932,7 @@ escape_btn.addEventListener('click', e => {
 	update_location();
 });
 $('#copy_link_btn').addEventListener('click', () => {
-	navigator.clipboard.writeText(get_page_url());
+	navigator.clipboard.writeText(get_page_url(true));
 });
 $('#copy_example_btn').addEventListener('click', () => {
 	let url = get_page_url();
@@ -2016,7 +2032,9 @@ function apply_debug() {
 		}
 		if (records) {
 			if (!Array.isArray(records)) throw new Error('expected "records" array');
-			records.forEach(x => prepare_record({...x})); // only validate
+			for (let x of records) {
+				prepare_record(expand_record(x)); // only validate
+			}
 		}
 		let dirty = JSON.stringify(debug_settings) !== JSON.stringify(settings);
 		if (dirty) {
@@ -2049,14 +2067,15 @@ debug_ta.placeholder = `{
 	},
 	// additional records
 	"records": [
-		{"key": "primary-contact"}, // text()
-		{"coin": 1234},             // coin()
-		{"evm": 5}                  // coin() via ENSIP-11
+		"avatar" or {"key": "avatar"}, // text()
+		1234     or {"coin": 1234},    // coin()
+		-5       or {"evm": 5}         // coin() via ENSIP-11
 	],
+	"record_errors": true, // show record exceptions
 	// misc interface stuff
-	"jazz": false,    // debug jazz icons
-	"fuzes": false,   // debug wrapper fuses interface
-	"primary": false, // debug primary normalization	
+	"jazz": true,    // debug jazz icons
+	"fuzes": true,   // debug wrapper fuses interface
+	"primary": true, // debug primary normalization
 }`.replaceAll('\t', DEBUG_INDENT);
 
 function set_page_url(url) {
@@ -2100,13 +2119,21 @@ try {
 	({debug_enabled, debug_settings} = settings);
 } catch (err) {
 }
-if (!debug_settings) debug_settings = {};
+if (location0.searchParams.has('debug')) {
+	try {
+		debug_settings = JSON.parse(location0.searchParams.get('debug'));
+		debug_enabled = true;
+	} catch (err) {
+	}
+}
+if (!is_object(debug_settings)) debug_settings = {};
 sync_recent(localStorage[STORAGE_RECENT]);
 sync_settings();
 sync_examples();
 sync_debug();
 apply_page_url(location0);
 input_field.focus();
+
 
 const ccipReadFetchOld = ethers.AbstractProvider.prototype.ccipReadFetch;
 ethers.AbstractProvider.prototype.ccipReadFetch = function(tx, calldata, urls) {
@@ -2284,12 +2311,13 @@ function apply_page_url(url) {
 		skip_norm_check.checked = true;
 	}
 }
-function get_page_url() {
+function get_page_url(debug) {
 	let input = input_field.value;
 	let url = new URL(location0);
 	let args = [];
 	if (!active_chain.is_mainnet) args.push(active_chain.slug);
 	if (skip_norm_check.checked) args.push('skip');
+	if (debug && debug_enabled) args.push(`debug=${encodeURIComponent(JSON.stringify(debug_settings))}`);
 	url.search = args.join('&');
 	url.hash = input ? '#' + encode_uri_component_surrogate_escaped(input) : '';
 	return url;
@@ -4212,21 +4240,29 @@ async function resolve1(input, skip_norm) {
 				}
 				if (resolve_state.debug && Array.isArray(resolve_state.debug.records)) {
 					records = records.slice();
-					for (let rec of resolve_state.debug.records) {
+					for (let x of resolve_state.debug.records) {
 						try {
-							records.push(prepare_record({...rec}));
+							records.push(prepare_record(expand_record(x)));
 						} catch (err) {
 						}
 					}
 				}
-				let results = await fetch_records(resolver, records);
+				let info = {};
+				let results = await fetch_records(resolver, records, info);
+				let shown_count = 0;
+				let error_count = 0;
 				for (let {rec, data, error} of results) {
-					// if (error) {
-					// 	add_row_tag(records_row, create_tag('fail', error));
-					// 	continue;
-					// } 
-					if (error) continue;
 					let a = create('a', {className: 'record', target: '_blank'});
+					if (error) {
+						error_count++;
+						if (resolve_state.debug && resolve_state.debug.record_errors) {
+							a.append(create('b', {innerText: `${rec.key || rec.coin || rec.type}`}));
+							a.append(create_tag('fail', error));
+							a.classList.add('rtrim');
+							records_row.append(a);
+						}
+						continue;
+					}
 					switch (rec.type) {
 						case TYPE_NAME: {
 							if (!data) continue;
@@ -4264,30 +4300,35 @@ async function resolve1(input, skip_norm) {
 									address = new Bech32(rec.bech32.hrp, convert(v, 8, 5, true), rec.bech32.type).toString();
 								} else if (rec.base58) {
 									address = Base58BTC.encode(v);
-								} else {
-									throw new Error('nyi');
+								} else if (rec.base58check) {
+									address = base58check(v);
 								}
-								lines.unshift(address);
-								a.append(create('span', {innerHTML: address, className: ['addr', 'long']}));
-								if (rec.url) {
-									a.href = rec.url(encodeURIComponent(address));
-									//if (rec.testnet) a.classList.add('testnet');
-									a.append(create_copy_btn(address, {value: true}));
-									a.classList.add('rtrim');
+								if (address) {
+									lines.unshift(address);
+									a.append(create('span', {innerHTML: address, className: ['addr', 'long']}));
+									if (rec.url) {
+										a.href = rec.url(encodeURIComponent(address));
+										//if (rec.testnet) a.classList.add('testnet');
+										a.append(create_copy_btn(address, {value: true}));
+										a.classList.add('rtrim');
+									} else {
+										make_click_copy(a, address);
+									}
 								} else {
-									make_click_copy(a, address);
+									lines.push('Unknown encoding');
+									make_click_copy(a, data);
 								}
 								a.title = lines.join('\n');
 							} catch (err) {
 								a.append(create_tag('fail', err));
-								a.append(create_copy_btn(data));
+								a.append(create_copy_btn(data, {value: true}));
 								a.classList.add('rtrim');
 							}
 							break;
 						}
 						// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/ITextResolver.sol
 						case TYPE_TEXT: {
-							data = data.trim();
+							data = data.trim(); // silent error for empty-able string
 							if (!data) continue;
 							a.innerHTML = rec.icon || `<b>${rec.key}</b>`;
 							let fixed = data;
@@ -4333,7 +4374,7 @@ async function resolve1(input, skip_norm) {
 							if (rec.key === 'avatar') {
 								let spinner = create('div', {className: ['avatar', 'spinner']});
 								normed_row.append(spinner);
-								fetch_resource_url(data, owner).then(avatar => {
+								fetch_resource_url(data, owner || address).then(avatar => { // use address if not ownable
 									if (!normed_row.isConnected) return;
 									if (avatar.error) {
 										a.append(create('span', {
@@ -4467,12 +4508,11 @@ async function resolve1(input, skip_norm) {
 						}
 					}
 					records_row.append(a);
+					shown_count++;
 				}
-				let success = results.reduce((a, x) => a + (x.error?0:1), 0);
-				if (resolver.__multicalled) {
-					add_row_tag(records_row, create_tag('good', `Multicall: ${success}/${results.length}`));
-				} else {
-					add_row_tag(records_row, `${success}/${results.length}`);
+				add_row_tag(records_row, `🟩️${shown_count} ⬜️${results.length-error_count-shown_count} 🟥️${error_count}`);
+				if (info.multicalled) {
+					add_row_tag(records_row, create_tag('good', 'Multicall'));
 				}
 			}
 			if (should_stop_resolving()) return;
@@ -4669,7 +4709,7 @@ async function fetch_addr60(resolver) {
 	if (error) throw error;
 	if (!is_null_hex(address)) return ethers.getAddress(address);
 }
-async function fetch_records(resolver, records) {
+async function fetch_records(resolver, records, info = {}) {
 	const options = {enableCcipRead: true};
 	const {target, interface: abi, __node, __dns_encoded, __info: {wild}} = resolver;
 	if (records.length > 1 && !resolver.__unreachable) {
@@ -4693,7 +4733,7 @@ async function fetch_records(resolver, records) {
 				multi = multi.map(x => x.data);
 			}
 			if (multi && multi.length === records.length) {
-				resolver.__multicalled = true; 
+				info.multicalled = true; 
 				return records.map((rec, i) => {
 					let calldata = multi[i];
 					try {
@@ -4714,8 +4754,11 @@ async function fetch_records(resolver, records) {
 		}
 	}
 	return Promise.all(records.map(async rec => {
-		if (should_stop_resolving() || rec.bonus) {
+		if (should_stop_resolving()) {
 			return {rec, error: new Error('aborted')};
+		}
+		if (!resolve_state.debug && rec.bonus) {
+			return {rec, error: new Error('skipped')};
 		}
 		if (resolver.__unreachable) {
 			return {rec, error: new Error('unreachable')};
