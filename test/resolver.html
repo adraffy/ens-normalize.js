@@ -441,8 +441,8 @@ button.copy {
 	background-color: inherit;
 	background-position: center;
 	background-repeat: no-repeat;
-	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' height='24' shape-rendering='geometricPrecision' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' viewBox='0 0 24 24' width='24' style='color:var(--geist-foreground)'%3E%3Cpath d='M6 17C4.89543 17 4 16.1046 4 15V5C4 3.89543 4.89543 3 6 3H13C13.7403 3 14.3866 3.4022 14.7324 4M11 21H18C19.1046 21 20 20.1046 20 19V9C20 7.89543 19.1046 7 18 7H11C9.89543 7 9 7.89543 9 9V19C9 20.1046 9.89543 21 11 21Z'/%3E%3C/svg%3E");
-	background-size: 85%;	
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' height='24' shape-rendering='geometricPrecision' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' viewBox='0 0 24 24' width='24' style='color:var(--geist-foreground)'%3E%3Cpath d='M6 17C4.89543 17 4 16.1046 4 15V5C4 3.89543 4.89543 3 6 3H13C13.7403 3 14.3866 3.4022 14.7324 4M11 21H18C19.1046 21 20 20.1046 20 19V9C20 7.89543 19.1046 7 18 7H11C9.89543 7 9 7.89543 9 9V19C9 20.1046 9.89543 21 11 21Z'/%3E%3C/svg%3E");
+	background-size: 85%;
 }
 button.copy.small {
 	width: 20px;
@@ -582,6 +582,16 @@ button.copy.copied {
 	color: #000;
 	background: #fff;
 }
+span.tally {
+	background-color: #eff;
+	border: 1px solid #ccc;
+	display: flex;
+	gap: 4px;
+	font: bold 80% sans-serif;
+}
+.tally .pass { color: #0a0; }
+.tally .none { color: #aaa; }
+.tally .fail { color: #a00; }
 .jazz {
 	order: -9;
 	width: 1.2rem;
@@ -867,6 +877,11 @@ footer {
 	width: 100%;
 	resize: vertical;
 	font-family: monospace;
+}
+#debug_footer {
+	margin-top: 4px;
+	color: #666;
+	font-style: italic;
 }
 @media only screen and (max-width: 800px) { 
 	body {
@@ -1281,6 +1296,7 @@ Hebrew:
 		<button id="disable_debug_btn">🛑️</button>
 	</div>
 	<textarea rows="20"></textarea>
+	<div id="debug_footer">While visible, all records are read and errors are shown.</div>
 </div>
 <footer>
 	<span>Created by <a href="https://x.com/adraffy">raffy.eth</a></span>
@@ -2061,29 +2077,28 @@ debug_ta.placeholder = `{
 	"resolver": {
 		"domain.fake": "0x32aC8A721A0d9Ce85F88599228297BBa8E183044"
 	},
-	// endpoint rewrites: contract -> endpoint
+	// ccip endpoint rewrites: contract -> endpoint
 	"ccip": {
 		"0x32aC8A721A0d9Ce85F88599228297BBa8E183044": "https://localhost:80/"
 	},
 	// additional records
 	"records": [
 		"avatar" or {"key": "avatar"}, // text()
-		1234     or {"coin": 1234},    // coin()
-		-5       or {"evm": 5}         // coin() via ENSIP-11
+		1234     or {"coin": 1234},    // addr()
+		-5       or {"evm": 5}         // addr() via ENSIP-11
 	],
 	// misc interface stuff
 	"jazz": true,    // debug jazz icons
 	"fuzes": true,   // debug wrapper fuses interface
 	"primary": true, // debug primary normalization
 }`.replaceAll('\t', DEBUG_INDENT);
-
 function set_page_url(url) {
 	apply_page_url(url);
 	if (!update_network()) {
 		resolve();
 	}
 }
-window.addEventListener('popstate', e => set_page_url(new URL(e.state || '', location0)));
+window.addEventListener('popstate',   e => set_page_url(new URL(e.state || '', location0)));
 window.addEventListener('hashchange', e => set_page_url(new URL(e.newURL)));
 window.addEventListener('unload', () => {}); // prevent weird restore behavior 
 
@@ -2385,14 +2400,14 @@ function parse() {
 	let row = create_row(INPUT_NAME);
 	let tokens = ens_tokenize(name); 
 	if (tokens.some(x => x.emoji)) show_components_label.classList.remove('hide');
-	make_exploded(row, name, false); //, true);
+	make_exploded(row, name, false);
 	add_row_tag(row, create_dot_eth_button(name));
+	add_row_tag(row, create_copy_btn(name));
 	output_div.append(row, create_breakdown_row(name, true));
 	try {
 		let norm = ens_normalize(name);
 		if (norm === name) {
 			make_normalized(row, norm);
-			//make_exploded(row, name, false);
 		} else {
 			add_row_tag(row, create_tag('fail', 'Normalized'));
 			if (!skip) {
@@ -2403,7 +2418,7 @@ function parse() {
 				add_ensip1_tag(norm_row, name, true);
 				output_div.append(norm_row, create_breakdown_row(norm));
 			}
-		}		
+		}
 		add_ensip1_tag(row, name);
 		//output_div.append(create_dns_row(norm));
 		return true;
@@ -3156,7 +3171,15 @@ function add_reg_exp_tags(row, exp, now) {
 		span.innerHTML += ` (${format_dur(exp - now)})`;
 	}
 }
-
+function create_result_tally(pass, none, fail) {
+	let tally = create('span', {className: 'tally'});
+	let total = pass + none + fail;
+	if (total > pass) tally.append(create('span', {className: 'total', innerText: total, title: 'Total Records'}));
+	tally.append(create('span', {className: 'pass', innerText: pass, title: 'Non-null Records'}));
+	if (none) tally.append(create('span', {className: 'none', innerText: none, title: 'Null Records'}));
+	if (fail) tally.append(create('span', {className: 'fail', innerText: fail, tile: 'Erroring records'}));
+	return tally;
+}
 function create_dot_eth_button(name) {
 	let added = add_dot_eth(name);
 	if (added !== name) {
@@ -3853,16 +3876,18 @@ async function resolve1(input, skip_norm) {
 				add_row_tag(target_row, create_copy_btn(resolver.target, {value: true}));
 				add_resolver_info(target_row, {target, __info: info});
 				if (info.edns) {
-					resolver.__only_addr = true; // prevent querying extra records that dont exist (yet)
 					add_row_tag(target_row, create_tag('special', 'Wildcard DNS'));
-					let addr = args[1];
-					if (is_address(addr)) {
-						dns_txt_address = ethers.getAddress(addr.toLowerCase());
-						add_row_tag(target_row, create_resolve_btn(addr, '↩️ Address'));
-					} else if (addr) {
-						add_row_tag(target_row, create_tag('fail', 'Invalid address', addr));
-					} else {
-						add_row_tag(target_row, create_tag('fail', 'Missing address'));
+					if (args.length == 2) {
+						resolver.__only_addr = true; // prevent querying extra records that dont exist (yet)
+						let addr = args[1];
+						if (is_address(addr)) {
+							dns_txt_address = ethers.getAddress(addr.toLowerCase());
+							add_row_tag(target_row, create_resolve_btn(addr, '↩️ Address'));
+						} else if (addr) {
+							add_row_tag(target_row, create_tag('fail', 'Invalid address', addr));
+						} else {
+							add_row_tag(target_row, create_tag('fail', 'Missing address'));
+						}
 					}
 				}
 			} catch (err) {
@@ -4314,7 +4339,7 @@ async function resolve1(input, skip_norm) {
 										make_click_copy(a, address);
 									}
 								} else {
-									lines.push('Unknown encoding');
+									lines.unshift('Unknown encoding', data);
 									make_click_copy(a, data);
 								}
 								a.title = lines.join('\n');
@@ -4509,9 +4534,9 @@ async function resolve1(input, skip_norm) {
 					records_row.append(a);
 					shown_count++;
 				}
-				add_row_tag(records_row, `🟩️${shown_count} ⬜️${results.length-error_count-shown_count} 🟥️${error_count}`);
+				add_row_tag(records_row, create_result_tally(shown_count, results.length-error_count-shown_count, error_count));
 				if (info.multicalled) {
-					add_row_tag(records_row, create_tag('good', 'Multicall'));
+					add_row_tag(records_row, create_tag('good', resolver.__info.wild ? 'Wildcard Multicall' : 'Multicall'));
 				}
 			}
 			if (should_stop_resolving()) return;
@@ -4709,7 +4734,7 @@ async function fetch_addr60(resolver) {
 	if (!is_null_hex(address)) return ethers.getAddress(address);
 }
 async function fetch_records(resolver, records, info = {}) {
-	const options = {enableCcipRead: true};
+	const options = {enableCcipRead: true}; // 20240211: CCIP getting cached??? blockTag: 'latest'};
 	const {target, interface: abi, __node, __dns_encoded, __info: {wild}} = resolver;
 	if (records.length > 1 && !resolver.__unreachable) {
 		let encoded = records.map(rec => {
