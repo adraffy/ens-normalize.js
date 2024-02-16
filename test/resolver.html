@@ -1430,7 +1430,6 @@ const RESOLVER_NAMES = {
 const IS_CONTRACT = new Map();
 const RESOLVER_INFO = new Map();
 const ERROR_ABI = new ethers.Interface([
-	'error Error(string)',
 	'error NotImplemented()',
 	'error InvalidOperation()',
 	'error InvalidAddressFormat()',
@@ -2754,10 +2753,11 @@ function make_click_copy(el, raw, {hint} = {}) {
 	return el;
 }
 
-function create_copy_btn(raw, {small, value} = {}) {
+function create_copy_btn(raw, {small, value, alt} = {}) {
 	let btn = create('button', {className: 'copy'});
 	if (small) btn.classList.add('small');
 	make_click_copy(btn, raw);
+	if (alt) btn.dataset.alt = alt;
 	if (value) {
 		btn.title = raw;
 	} else {
@@ -3842,7 +3842,6 @@ async function resolve1(input, skip_norm) {
 				for (let arg of args) {
 					ens1_row.append(create_tag('raw', arg));
 				}
-				make_detailed(ens1_row); // hide it
 			} else if (res.status == 504) {
 				throw new Error('DNS query timeout');
 			} else {
@@ -3883,6 +3882,7 @@ async function resolve1(input, skip_norm) {
 						if (is_address(addr)) {
 							dns_txt_address = ethers.getAddress(addr.toLowerCase());
 							add_row_tag(target_row, create_resolve_btn(addr, '↩️ Address'));
+							make_detailed(ens1_row); // hide it by default
 						} else if (addr) {
 							add_row_tag(target_row, create_tag('fail', 'Invalid address', addr));
 						} else {
@@ -4333,10 +4333,15 @@ async function resolve1(input, skip_norm) {
 									if (rec.url) {
 										a.href = rec.url(encodeURIComponent(address));
 										//if (rec.testnet) a.classList.add('testnet');
-										a.append(create_copy_btn(address, {value: true}));
+										let btn = create_copy_btn(address, {value: true});
+										btn.dataset.alt = data;
+										btn.title = `${address}\n[ALT] Copy Raw`;
+										a.append(btn);
 										a.classList.add('rtrim');
 									} else {
 										make_click_copy(a, address);
+										a.dataset.alt = data;
+										lines.push('[ALT] Copy Raw');
 									}
 								} else {
 									lines.unshift('Unknown encoding', data);
@@ -4710,7 +4715,10 @@ function parse_call_error(calldata) {
 		if (desc.name === 'Error') {
 			entity_span.innerText = desc.args[0];
 			message = entity_span.innerHTML;
+		} else if (desc.name === 'Panic') {
+			message = `→ ${desc.args[0]}`;
 		}
+		console.log({...desc});
 		message = `<b>${desc.signature}</b> ${message}`;
 	}
 	return Object.assign(new Error(`Call error: ${message}`), error);
