@@ -2228,10 +2228,13 @@ function update_network() {
 	} else {
 		let old = active_provider;
 		if (old === window_provider || active_chain !== chain) {
+			const options = {batchMaxCount: 10, staticNetwork: true};
 			if (chain.rpc) {
-				active_provider = new ethers.JsonRpcProvider(chain.rpc, chain.id, {staticNetwork: true});
+				active_provider = new ethers.JsonRpcProvider(chain.rpc, chain.id, options);
 			} else {
-				active_provider = new ethers.InfuraProvider(chain.id, 'f36f6a8638134ac09f9400d3a7008dfe');
+				let network = ethers.Network.from(chain.id);
+				let request = ethers.InfuraProvider.getRequest(network, 'f36f6a8638134ac09f9400d3a7008dfe');
+				active_provider = new ethers.JsonRpcProvider(request, network, options);
 			}
 		}
 		if (old && old !== window_provider && old !== active_provider) {
@@ -2500,6 +2503,7 @@ function parse() {
 		if (tokens.some(x => x.type === 'nfc' || x.type === 'ignored' || x.type === 'mapped' || (x.type === 'emoji' && x.input.includes(0xFE0F)))) {
 			add_row_tag(row, create('button', {
 				innerHTML: '💪️ Force Normalize',
+				title: 'Apply normalization to each character separately',
 				click() {
 					input_field.value = str_from_cps(tokens.flatMap(token => {
 						switch (token.type) { 
@@ -3018,33 +3022,33 @@ async function add_resolver_info(row, resolver) {
 
 function add_ensip1_tag(row, input, is_norm) {
 	const OLD_NAME = 'ENSIP-1';
-	let span = create('span', {className: ['tags', 'ensip1']});
+	let tag = create('span', {className: ['tags', 'ensip1']});
 	try {
-		let norm0 = eth_ens_namehash.normalize(input);
-		let norm;
+	 	let norm1 = eth_ens_namehash.normalize(input); 
+		let norm15;
 		try {
-			norm = ens_normalize(input);
+			norm15 = ens_normalize(input);
 		} catch (err) {
 		}
+		 // norm1 exists but norm15 might not
 		let html = OLD_NAME;
-		if (norm !== input && norm0 !== norm) { // change + disagree
+		if (norm15 !== input && norm1 !== norm15) { // change + disagree
 			html += `: ⚠️<b>Diff Norm</b>`;
 		}
-		if (norm0 === input) {
-			span.innerHTML = html; // `✓ ${html}`; //`✅️ ${html}`;
-		} else {
-			// norm0 isn't the input:
-			// if we agree, we are "not normalized" in ensip-1
-			if (norm0 === norm) throw new Error('not normalized');
-			// we disagree, there's another possibility
-			add_row_tag(row, create_resolve_btn(norm0, `❌️ ${html}`));
-			return;
+		if (norm1 === input) { // ensip1 === input
+			tag.innerHTML = html; 
+			tag.title = 'Same as Input';
+		} else if (norm1 === norm15) { // we agree but we dont match the input
+			throw new Error('not normalized');
+		} else { // we disagree
+			tag = create_resolve_btn(norm1, `↩️ ${html}`);
+			//tag.title = [[15, norm15], [1, norm_1]].map(([i, s]) => `[ENSIP-${i}] ${s ? safe_str_from_cps(explode_cp(s)) : '❌️'}`).join('\n');
 		}
 	} catch (err) {
-		span.innerHTML = `❌️ ${OLD_NAME}`;
-		span.title = err.message;
+		tag.innerHTML = `❌️ ${OLD_NAME}`;
+		tag.title = err.message;
 	}
-	add_row_tag(row, span);
+	add_row_tag(row, tag);
 }
 
 function add_nft_links(row, name, contract, token) {
@@ -4718,7 +4722,6 @@ function parse_call_error(calldata) {
 		} else if (desc.name === 'Panic') {
 			message = `→ ${desc.args[0]}`;
 		}
-		console.log({...desc});
 		message = `<b>${desc.signature}</b> ${message}`;
 	}
 	return Object.assign(new Error(`Call error: ${message}`), error);
@@ -4728,6 +4731,9 @@ function parse_ethers_error(err) {
 	if (err.code === 'CALL_EXCEPTION' && err.data) {
 		return parse_call_error(err.data);
 	} else if (err.code === 'OFFCHAIN_FAULT') {
+		if (err.reason === '404_MISSING_RESOURCE') {
+			return new Error(`CCIP error: <b title="${err.info.url}">HTTP 404</b>`);
+		} 
 		let {reason, errorMessages = ['unknown']} = err.info;
 		if (reason) {
 			return new Error(`CCIP error: ${errorMessages.join(' ')} <code>${reason}</code>`);
