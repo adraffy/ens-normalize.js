@@ -213,7 +213,7 @@ body.testnet {
 }
 #options label {
 	display: flex;
-	gap: 4px;
+	gap: 2px;
 	align-items: center;
 	padding: 2px 4px;
 	border-radius: 4px;
@@ -254,11 +254,13 @@ body.testnet {
 	border-color: #aa0;
 	background-color: #ffa;
 }
+#skip_norm_check:checked + label::before { content: '✖'; font-size: 95%; }
 #skip_norm_check:checked + label {
 	border-color: #f00;
 	background-color: #f00;
 	color: #fff;
 }
+#force_ltr_check:checked + label::after { content: '!'; }
 #force_ltr_check:checked + label {	
 	border-color: #555;
 	background-color: #555;
@@ -1212,7 +1214,7 @@ Hebrew:
 	<input type="checkbox" id="skip_norm_check">
 	<label for="skip_norm_check"  title="When active, normalization is not applied"><svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="var(--geist-fill)"></circle><path d="M15 9L9 15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M9 9L15 15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>Norm</label>
 	<input type="checkbox" id="force_ltr_check">
-	<label for="force_ltr_check" title="Override Bidi Handling with Left-to-Right Direction&#10;(Applies only to Input)">LTR!</label>
+	<label for="force_ltr_check" title="Override Bidi Handling with Left-to-Right Direction&#10;(Applies only to Input)">LTR</label>
 	<select id="chain_select"></select>
 	<button id="mainnet_btn" class="hide">↪ Mainnet</button>
 	<button id="browser_btn" class="hide">Browser ↩</button>
@@ -1371,14 +1373,10 @@ const CLICK_TO_COPY = '(Click to Copy)';
 const SAME_AS_INPUT = 'Same as Input';
 const SAME_AS_NORM = 'Same as Norm';
 
-const CHAIN_ID_MAINNET = 1;
-const CHAIN_ID_GOERLI = 5;
-const CHAIN_ID_SEPOLIA = 11155111;
-const CHAIN_ID_HOLESKY = 17000;
 const CHAINS = [
 	{
 		// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-1.json
-		id: CHAIN_ID_MAINNET,
+		id: 1,
 		name: 'Mainnet',
 		explorer: 'https://etherscan.io',
 		metadata: 'https://metadata.ens.domains/mainnet',
@@ -1387,7 +1385,7 @@ const CHAINS = [
 	},
 	{
 		// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-5.json
-		id: CHAIN_ID_GOERLI,
+		id: 5,
 		name: 'Goerli',
 		explorer: 'https://goerli.etherscan.io',
 		metadata: 'https://metadata.ens.domains/goerli',
@@ -1395,7 +1393,7 @@ const CHAINS = [
 	},
 	{
 		// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-11155111.json
-		id: CHAIN_ID_SEPOLIA,
+		id: 11155111,
 		name: 'Sepolia',
 		explorer: 'https://sepolia.etherscan.io',
 		metadata: 'https://metadata.ens.domains/sepolia',
@@ -1403,7 +1401,7 @@ const CHAINS = [
 	},
 	{
 		// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-17000.json
-		id: CHAIN_ID_HOLESKY,
+		id: 17000,
 		name: 'Holesky',
 		explorer: 'https://holesky.etherscan.io',
 		metadata: 'https://metadata.ens.domains/holesky',
@@ -1413,6 +1411,8 @@ const CHAINS = [
 ];
 CHAINS.forEach(chain => {
 	if (!chain.slug) chain.slug = chain.name.toLowerCase();
+	chain.contracts = new Map();
+	chain.resolvers = new Map();
 });
 
 const MIN_ETH_LENGTH = 3;
@@ -1427,8 +1427,6 @@ const RESOLVER_NAMES = {
 	'0x5fBb459C49BB06083C33109fA4f14810eC2Cf358': 'Old Reverse (v1)',
 	'0xA2C122BE93b0074270ebeE7f6b7292C7deB45047': 'Old Reverse (v2)',
 };
-const IS_CONTRACT = new Map();
-const RESOLVER_INFO = new Map();
 const ERROR_ABI = new ethers.Interface([
 	'error NotImplemented()',
 	'error InvalidOperation()',
@@ -1734,21 +1732,16 @@ let debug_settings;
 let window_provider;
 let active_provider;
 let active_chain;
-let registry_contract;
-let eth_resolver_contract;
-let eth_nft_contract;
-let eth_controller_contract;
-let wrapper_contract;
-let multicall_contract;
-let price_oracle_contract;
-let reverse_registrar;
 let resolve_timer = RESOLVE_MODE_IDLE;
 let resolve_state;
+let network_state;
 
-console.log(versions);
 version_span.innerHTML = `v${versions.version}`;
 version_span.addEventListener('click', () => {
 	window.alert(Object.entries(versions).map(([k, v]) => `[${k}]\n${v}`).join('\n\n'));
+});
+Object.defineProperty(window, 'Debug', {
+	get() { return {RECORDS, CHAINS, network_state, resolve_state, versions}; }
 });
 
 function keycap(i) {
@@ -2242,26 +2235,21 @@ function update_network() {
 		}
 	}
 	if (active_chain !== chain) {
+		let init = !active_chain;
 		changed = true;
 		active_chain = chain;
-		let init = !registry_contract;
-		// registry contract address is static on all supported chains
-		registry_contract = new ethers.Contract('0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e', [
-			'function resolver(bytes32 node) external view returns (address)',
-			'function owner(bytes32 node) external view returns (address)',
-		], active_provider);
-		// multicall3 contract address is static on all supported chains
-		// https://www.multicall3.com/deployments
-		multicall_contract = new ethers.Contract('0xcA11bde05977b3631167028862bE2a173976CA11', [
-			`function tryAggregate(bool requireSuccess, tuple(address target, bytes data)[] memory calls) public view returns (tuple(bool success, bytes data)[] memory returnData)`
-		], active_provider);
-		eth_resolver_contract = null;
-		eth_nft_contract = null;
-		eth_controller_contract = null;
-		wrapper_contract = null;
-		reverse_registrar = null;
-		IS_CONTRACT.clear();
-		RESOLVER_INFO.clear();
+		network_state = {
+			// registry contract address is static on all supported chains
+			ens: new ethers.Contract('0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e', [
+				'function resolver(bytes32 node) external view returns (address)',
+				'function owner(bytes32 node) external view returns (address)',
+			], active_provider),
+			// multicall3 contract address is static on all supported chains
+			// https://www.multicall3.com/deployments
+			multicall: new ethers.Contract('0xcA11bde05977b3631167028862bE2a173976CA11', [
+				`function tryAggregate(bool requireSuccess, tuple(address target, bytes data)[] memory calls) public view returns (tuple(bool success, bytes data)[] memory returnData)`
+			], active_provider),
+		};
 		if (input_field.value) {
 			schedule_resolve(0);
 		} else if (init) {
@@ -2274,7 +2262,7 @@ function update_network() {
 	chain_select.title = `Network: ${format_dec_hex(active_chain.id)}`;
 	mainnet_btn.classList.toggle('hide', !!active_chain.is_mainnet);
 	browser_btn.classList.toggle('hide', !(!using_window && window_provider && window_provider.__chain && !window_provider.__chain.is_mainnet));
-	provider_div.replaceChildren(create('div', {className: 'network'}, 'using ', create_etherscan_address_link(registry_contract.target, {
+	provider_div.replaceChildren(create('div', {className: 'network'}, 'using ', create_etherscan_address_link(network_state.ens.target, {
 		innerHTML: using_window ? 'Browser' : active_chain.rpc ? 'Public RPC' : 'Infura', 
 		title: 'ENS Registry Contract',
 		contract: true
@@ -2300,6 +2288,9 @@ function update_network() {
 
 function should_stop_resolving() {
 	return resolve_timer !== RESOLVE_MODE_IDLE;
+}
+function check_abort() {
+	if (should_stop_resolving()) throw new Error('aborted');
 }
 
 function schedule_resolve(delay = 1000) {
@@ -3421,10 +3412,10 @@ function format_dur(t, n = 1) {
 }
 
 function is_working() {
-	return resolve_btn.disabled || !registry_contract;
+	return resolve_btn.disabled || !active_chain;
 }
 function resolve() {
-	if (!registry_contract) return;
+	if (!active_chain) return;
 	if (is_working()) {
 		resolve_timer = [0]; // ASAP
 		return;
@@ -3497,7 +3488,7 @@ function resolve() {
 		return (async () => {
 			try {
 				await ensure_wrapper();
-				let v = ethers.getBytes(await wrapper_contract.names(hash));
+				let v = ethers.getBytes(await network_state.wrapper.names(hash));
 				if (!v.length) throw new Error(`Unknown namehash preimage: ${hash}`);
 				input_field.value = labels_from_dns_encoded(v).join('.');
 				setTimeout(resolve, 0);
@@ -3536,11 +3527,7 @@ function resolve() {
 	primary_loader.classList.remove('hide');
 	const url = get_page_url();
 	const t0 = Date.now();
-	resolve_state = {
-		url, 
-		t0, t: t0, 
-		addrs: new Map()
-	};
+	resolve_state = {name, input, skip, url, t0, t: t0, addrs: new Map(), chain: active_chain};
 	if (debug_enabled) resolve_state.debug = debug_settings;
 	resolve1(name, skip).then(() => {
 		clock_span.innerHTML = format_dur(Date.now() - t0, 2);
@@ -3599,16 +3586,17 @@ async function resolve1(input, skip_norm) {
 		remove_temporary(resolver_row);	
 		add_row_tag(resolver_row, create_elapsed());
 
-		if (reverse_registrar === null) {
+		if (network_state.reverse_registrar === null) {
+			let address;
 			try {
-				reverse_registrar = await registry_contract.owner(namehash(REVERSE_DOMAIN));
+				address = await network_state.ens.owner(namehash(REVERSE_DOMAIN));
 			} catch (err) {
 			}
 			if (should_stop_resolving()) return;
-			if (!reverse_registrar) reverse_registrar = false;
+			network_state.reverse_registrar = address || false;
 		}
-		if (reverse_registrar) {
-			add_row_tag(input_row, create_etherscan_address_link(reverse_registrar, {
+		if (network_state.reverse_registrar) {
+			add_row_tag(input_row, create_etherscan_address_link(network_state.reverse_registrar, {
 				contract: true, 
 				anchor: '#writeContract#F7',
 				innerHTML: '<button class="glow">✍️ Set Name</button>'
@@ -3921,15 +3909,14 @@ async function resolve1(input, skip_norm) {
 		output_div.append(avail_row);
 		try {
 			await ensure_eth_nft();
-			if (should_stop_resolving()) return;
-			nft_contract = eth_nft_contract;
+			nft_contract = network_state.eth_nft;
 			if (len >= MIN_ETH_LENGTH) {
-				resolve_state.available = available = await eth_nft_contract.available(nft_token);
-				if (should_stop_resolving()) return;
-				expiry = Number(await eth_nft_contract.nameExpires(nft_token));
+				available = await nft_contract.available(nft_token);
+				check_abort();
+				expiry = Number(await nft_contract.nameExpires(nft_token));
+				check_abort();
 				if (available) {
-					if (should_stop_resolving()) return;
-					premium = await price_oracle_contract.premium(label, expiry, 0);
+					premium = await network_state.price_oracle.premium(label, expiry, 0);
 				}
 			}
 		} catch (err) {
@@ -3957,16 +3944,17 @@ async function resolve1(input, skip_norm) {
 			//add_row_tag(avail_row, create_ens_link(name_norm, {title: 'Register'}));
 		} else {
 			let exp = expiry * 1000;
-			let end = exp + eth_nft_contract.__grace_period;
+			let {grace_period} = network_state;
+			let end = exp + grace_period;
 			let now = Date.now();
 			if (now >= exp && now <= end) {
-				add_row_tag(avail_row, create_tag('warn', `Grace period (${format_dur(eth_nft_contract.__grace_period)}) ends in ${format_dur(end - now)}`));
+				add_row_tag(avail_row, create_tag('warn', `Grace period (${format_dur(grace_period)}) ends in ${format_dur(end - now)}`));
 			} else {
 				add_reg_exp_tags(avail_row, exp, now);
 			}
 		}
 		if (nft_contract) {
-			avail_row.querySelector('.row-label').title = `Grace: ${format_dur(nft_contract.__grace_period)}\nPremium: ${format_dur(price_oracle_contract.__premium_period)}`;
+			avail_row.querySelector('.row-label').title = `Grace: ${format_dur(network_state.grace_period)}\nPremium: ${format_dur(network_state.premium_period)}`;
 		}
 	} else if (nft_backed) {
 		let label = name_norm.slice(0, sep_pos);
@@ -3975,14 +3963,15 @@ async function resolve1(input, skip_norm) {
 		let avail_err;
 		output_div.append(avail_row);
 		try {
-			let address = await registry_contract.owner(namehash(parent_domain));
-			if (should_stop_resolving()) return;
+			let address = await network_state.ens.owner(namehash(parent_domain));
+			check_abort();
 			if (is_null_hex(address)) throw new Error('Missing backing contract');
 			nft_contract = new ethers.Contract(address, [
 				'function available(uint256 id) external view returns(bool)',
 				'function ownerOf(uint256 id) external view returns (address)',
 			], active_provider);
-			available = await nft_contract.available(nft_token); //.catch(() => {});
+			available = await nft_contract.available(nft_token);
+			check_abort();
 			if (active_chain.is_mainnet && parent_domain === 'art') {
 				avail_url = `https://protocol.art/api/art-tokens?exact=${encodeURIComponent(label)}`;
 				if (available) {
@@ -3994,7 +3983,6 @@ async function resolve1(input, skip_norm) {
 					}
 				}
 			}
-			resolve_state.available = available;
 		} catch (err) {
 			avail_err = err;
 		}
@@ -4016,6 +4004,8 @@ async function resolve1(input, skip_norm) {
 			}
 		}
 	}
+	resolve_state.available = available; // true|false|undefined
+	
 	// get the owner
 	let is_wrapped, owner, nft_owner;
 	if ((!resolver || !resolver.__dropped) && (!nft_backed || available !== undefined)) { 
@@ -4034,7 +4024,7 @@ async function resolve1(input, skip_norm) {
 				await ensure_wrapper();
 				if (should_stop_resolving()) return;
 				if (!unwrappable) {
-					is_wrapped = await wrapper_contract.isWrapped(node);
+					is_wrapped = await network_state.wrapper.isWrapped(node);
 				}
 			} catch (err) {
 				wrapped_err = err;
@@ -4048,12 +4038,12 @@ async function resolve1(input, skip_norm) {
 			} else if (!is_wrapped) {
 				add_row_tag(wrapped_row, 'Unwrapped');
 			}
-			if (wrapper_contract) {
+			if (network_state.wrapper) {
 				let old = wrapped_row.querySelector('.row-label');
-				old.replaceChildren(create_etherscan_address_link(wrapper_contract.target, {innerHTML: old.innerHTML, contract: true}));
+				old.replaceChildren(create_etherscan_address_link(network_state.wrapper.target, {innerHTML: old.innerHTML, contract: true}));
 			}
 			if (is_wrapped) {
-				add_nft_links(normed_row, name_norm, wrapper_contract.target, node);
+				add_nft_links(normed_row, name_norm, network_state.wrapper.target, node);
 			} else if (nft_contract) {
 				add_nft_links(normed_row, name_norm, nft_contract.target, nft_token);
 			}
@@ -4070,7 +4060,7 @@ async function resolve1(input, skip_norm) {
 		output_div.append(owner_row);
 		try {
 			if (is_wrapped) {
-				let data = await wrapper_contract.getData(node);
+				let data = await network_state.wrapper.getData(node);
 				if (should_stop_resolving()) return;
 				owner = data.owner;
 				let now = Date.now();
@@ -4107,7 +4097,7 @@ async function resolve1(input, skip_norm) {
 				if (fuses & 0x00020) add_row_tag(wrapped_row, '🚫️ Subdomain');
 				if (fuses & 0x00040) add_row_tag(wrapped_row, '🚫️ Approve');
 			} else {
-				owner = await registry_contract.owner(node);
+				owner = await network_state.ens.owner(node);
 				if (should_stop_resolving()) return;
 				if (is_null_hex(owner)) owner = false;
 				if (!owner && nft_contract) {
@@ -4155,7 +4145,6 @@ async function resolve1(input, skip_norm) {
 				nft_row.classList.add('nft');
 				output_div.append(nft_row);
 				try {
-					await ensure_eth_nft();
 					nft_owner = await nft_contract.ownerOf(nft_token);
 					if (is_null_hex(nft_owner)) nft_owner = false;
 				} catch (err) {
@@ -4568,24 +4557,29 @@ async function resolve1(input, skip_norm) {
 				{iface: '0x7ba18ba1', title: '<b>Migration</b>'},
 			];
 			let discovered = new Set();
-			function add_iface(html, addr) {
-				if (is_null_hex(addr)) return;
-				if (discovered.has(addr)) return;
-				discovered.add(addr);
-				html += ` <code class="prefix">${addr.slice(0, 6)}</code>`;
-				add_row_tag(row, create_etherscan_address_link(addr, {innerHTML: html, contract: true, className: 'iface'}));
+			function add_iface(html, address, iface) {
+				if (is_null_hex(address)) return;
+				if (discovered.has(address)) return;
+				discovered.add(address);
+				let lines = [`Contract: ${address}`];
+				if (iface) {
+					html += ` <code>${iface.slice(2)}</code>`;
+					lines.push(`Interface: ${iface}`);
+				}
+				html += ` <code class="prefix">${address.slice(0, 6)}</code>`;
+				add_row_tag(row, create_etherscan_address_link(address, {innerHTML: html, contract: true, className: 'iface', title: lines.join('\n')}));
 			}
 			const {target, interface: abi, __node} = resolver;
 			let frag = abi.getFunction('interfaceImplementer');
 			try {
-				let multi = await multicall_contract.tryAggregate(true, interfaces.map(x => {
+				let multi = await network_state.multicall.tryAggregate(true, interfaces.map(x => {
 					return {target, data: abi.encodeFunctionData(frag, [__node, x.iface])};
 				}));
 				for (let i = 0; i < interfaces.length; i++) {
 					let {iface, title} = interfaces[i];
 					let [addr] = abi.decodeFunctionResult(frag, multi[i].data); 
 					if (is_null_hex(addr)) continue;
-					add_iface(`${title} <code>${iface.slice(2)}</code>`, addr);
+					add_iface(title, addr, iface);
 					if (iface === IFACE_ETH_CONTROLLER) {
 						let controller = contract_for_controller(addr);
 						let oracle = await controller.prices().catch(() => {});
@@ -4767,7 +4761,7 @@ async function fetch_records(resolver, records, info = {}) {
 				let data = await resolver.resolve(__dns_encoded, abi.encodeFunctionData(frag, [encoded]), options);
 				[multi] = abi.decodeFunctionResult(frag, data);
 			} else {
-				multi = await multicall_contract.tryAggregate(false, encoded.map(data => ({target, data})));
+				multi = await network_state.multicall.tryAggregate(false, encoded.map(data => ({target, data})));
 				multi = multi.map(x => x.data);
 			}
 			if (multi && multi.length === records.length) {
@@ -4950,13 +4944,11 @@ async function fetch_nft_image(url0) {
 	}
 }
 async function ensure_eth_resolver() {
-	if (eth_resolver_contract) return;
-	if (eth_resolver_contract === false) throw new Error(`No "eth" resolver`);
-	eth_resolver_contract = await get_resolver('eth');
-	if (!eth_resolver_contract) {
-		eth_resolver_contract = false;
-		return ensure_eth_resolver();
-	}
+	let {eth} = network_state;
+	if (eth) return;
+	if (eth === false) throw new Error(`No "eth" resolver`);
+	network_state.eth = await get_resolver('eth') || false;
+	return ensure_eth_resolver();
 }
 function contract_for_controller(address) {
 	return new ethers.Contract(address, [
@@ -4966,48 +4958,63 @@ function contract_for_controller(address) {
 	], active_provider);
 }
 function contract_for_price_oracle(address) {
-	let contract = new ethers.Contract(address, [
+	return new ethers.Contract(address, [
 		'function premium(string calldata name, uint256 expires, uint256 duration) external view returns (uint256)',
 		'function price(string calldata name, uint256 expires, uint256 duration) external view returns (uint256)',
 		'function usdOracle() external view returns (address)',
 	], active_provider);
-	contract.__premium_period = 21*86400*1000;
-	return contract;
 }
 async function ensure_wrapper() {
-	if (wrapper_contract) return;
-	if (wrapper_contract === false) throw new Error(`Not implementated`);
+	let {wrapper} = network_state;
+	if (wrapper) return;
+	if (wrapper === false) throw new Error(`Not implementated`);
 	await ensure_eth_resolver();
-	let wrapper_address = await eth_resolver_contract.interfaceImplementer(eth_resolver_contract.__node, '0x019a38fe');
-	if (is_null_hex(wrapper_address)) {
-		wrapper_contract = false;
+	const {eth} = network_state;
+	let address = await eth.interfaceImplementer(eth.__node, '0x019a38fe');
+	if (is_null_hex(address)) {
+		network_state.wrapper = false;
 		return ensure_wrapper();
 	}
-	wrapper_contract = new ethers.Contract(wrapper_address, [
+	network_state.wrapper = new ethers.Contract(address, [
 		'function isWrapped(bytes32 node) public view returns (bool)',
 		'function getData(uint256 id) external view returns (address owner, uint32 fuses, uint64 expiry)',
 		'function names(bytes32 node) public view returns (bytes)',	
 	], active_provider);
 }
 async function ensure_eth_nft() {
-	if (eth_nft_contract) return;
-	if (eth_nft_contract === false) throw new Error(`Not implemented`);
+	let {eth_nft} = network_state;
+	if (eth_nft) return;
+	if (eth_nft === false) throw new Error(`Not implemented`);
 	await ensure_eth_resolver();
-	let nft_address = await registry_contract.owner(eth_resolver_contract.__node);
-	if (is_null_hex(nft_address)) {
-		eth_nft_contract = false;
+	const {ens, eth} = network_state;
+	let address = await ens.owner(eth.__node);
+	check_abort();
+	if (is_null_hex(address)) {
+		network_state.eth_nft = false;
 		return ensure_eth_nft();
 	}
-	eth_nft_contract = new ethers.Contract(nft_address, [
+	eth_nft = new ethers.Contract(address, [
 		'function available(uint256 id) external view returns(bool)',
 		'function nameExpires(uint256 id) external view returns(uint256)',
 		'function ownerOf(uint256 id) external view returns (address)',
 		'function GRACE_PERIOD() external view returns (uint256)',
 	], active_provider);
-	// TODO: make this abortable
-	eth_nft_contract.__grace_period = 1000 * (await eth_nft_contract.GRACE_PERIOD().then(Number).catch(() => 90*86400));
-	eth_controller_contract = contract_for_controller(await eth_resolver_contract.interfaceImplementer(eth_resolver_contract.__node, IFACE_ETH_CONTROLLER));
-	price_oracle_contract = contract_for_price_oracle(await eth_controller_contract.prices());
+	let [grace_sec, controller_address] = await Promise.all([
+		eth_nft.GRACE_PERIOD().then(Number).catch(() => 90*86400),
+		eth.interfaceImplementer(eth.__node, IFACE_ETH_CONTROLLER)
+	]);
+	check_abort();
+	let eth_controller = contract_for_controller(controller_address);
+	let price_oracle = contract_for_price_oracle(await eth_controller.prices());
+	check_abort();
+	Object.assign(network_state, {
+		eth_nft, 
+		eth_controller,
+		price_oracle,
+		grace_period: 1000 * grace_sec,
+		premium_period: 1000 * 21*86400 // TODO: find this on-chain
+	});
+
 }
 function labels_from_dns_encoded(v) {
 	let labels = [];
@@ -5039,21 +5046,23 @@ function dns_encoded_from(labels) {
 	return Uint8Array.from(v);
 }
 async function is_contract(address) {
-	let is = IS_CONTRACT.get(address);
-	if (is === undefined) {
+	const {contracts} = active_chain;
+	let size = contracts.get(address);
+	if (size === undefined) {
 		try {
-			is = !is_null_hex(await active_provider.getCode(address));
-			IS_CONTRACT.set(address, is);
+			let data = await active_provider.getCode(address);
+			contracts.set(address, (data.length - 2) >> 1);
 		} catch (err) {
 		}
 	}
-	return is;
+	return size;
 }
 async function get_resolver_info(target) {
-	let info = RESOLVER_INFO.get(target);
+	const {resolvers, contracts} = active_chain;
+	let info = resolvers.get(target);
 	if (info === undefined) {
 		info = {};
-		if (IS_CONTRACT.get(target) !== false) { // is contract or unknown
+		if (contracts.get(target) !== false) { // is contract or unknown
 			let abi = new ethers.Interface([
 				'function supportsInterface(bytes4 interfaceID) external view returns (bool)',
 				'function gatewayURL() view returns (string)',
@@ -5061,7 +5070,7 @@ async function get_resolver_info(target) {
 			let multi;
 			try {
 				// TODO: replace with deployless with gas-limit
-				multi = await multicall_contract.tryAggregate(false, [
+				multi = await network_state.multicall.tryAggregate(false, [
 					{target, data: abi.encodeFunctionData('supportsInterface', ['0x124a319c'])}, // IInterfaceResolver:   interfaceImplementer(bytes32,bytes4)
 					{target, data: abi.encodeFunctionData('supportsInterface', ['0x9061b923'])}, // IExtendedResolver:    resolve(bytes,bytes)
 					{target, data: abi.encodeFunctionData('supportsInterface', ['0x8ef98a7e'])}, // IExtendedDNSResolver: resolve(bytes,bytes,bytes)
@@ -5072,8 +5081,9 @@ async function get_resolver_info(target) {
 				// version 0.4.11 or below, it’ll revert and use all the gas available
 				if (err.code !== 'CALL_EXCEPTION') throw err;
 			}
+			check_abort();
 			if (multi) {
-				if (multi.some(x => x.success)) IS_CONTRACT.set(target, true); // any success => is contract
+				if (multi.some(x => x.success)) contracts.set(target, true); // any success => is contract
 				let [impl, wild, edns, gateway] = multi;
 				info.impl = impl.success && !is_null_hex(impl.data);
 				info.wild = wild.success && !is_null_hex(wild.data);
@@ -5090,31 +5100,31 @@ async function get_resolver_info(target) {
 				}
 			}
 		}
-		RESOLVER_INFO.set(target, info);
+		resolvers.set(target, info);
 	}
 	return info;
 }
 async function get_resolver(name0) {
 	// returns resolver | null | throws
-	let {target, interface: abi} = registry_contract;
-	let frag = abi.getFunction('resolver');
+	const {ens, multicall} = network_state;
+	let func = ens.interface.getFunction('resolver');
 	let labels = name0.split('.');
 	let domains = labels.map((_, i) => {
 		let name = labels.slice(i).join('.');
 		return {name, node: namehash(name)};
 	});
-	let multi = await multicall_contract.tryAggregate(true, domains.map(x => {
-		return {target, data: abi.encodeFunctionData(frag, [x.node])};
+	let multi = await multicall.tryAggregate(true, domains.map(x => {
+		return {target: ens.target, data: ens.interface.encodeFunctionData(func, [x.node])};
 	}));
 	for (let i = 0; i < domains.length; i++) {
 		let {name, node} = domains[i];
-		let [address] = abi.decodeFunctionResult(frag, multi[i].data);
+		let [address] = ens.interface.decodeFunctionResult(func, multi[i].data);
 		try {
 			let rewrite = resolve_state.debug.resolver[name];
 			if (rewrite) address = rewrite;
 		} catch (err) {
 		}
-		if (should_stop_resolving()) throw new Error('aborted');
+		check_abort();
 		if (is_null_hex(address)) continue;
 		// https://github.com/ensdomains/ens-contracts/tree/staging/contracts/resolvers/profiles
 		// https://docs.ens.domains/ens-improvement-proposals/ensip-10-wildcard-resolution
@@ -5153,14 +5163,13 @@ async function get_safe_primary(owner, alt_owner) {
 	// return normalized primary if resolve(reverse(owner)) is owner or alt_owner | throws
 	let rev_resolver = await get_resolver(reverse_name(owner));
 	if (!rev_resolver) throw new Error('Primary not set');
-	if (should_stop_resolving()) return;
 	let [{data: primary, error}] = await fetch_records(rev_resolver, [{type: TYPE_NAME}]);
+	check_abort();
 	if (error) throw error;
 	let name = ens_normalize(primary);
 	if (!name) throw new Error('Primary is Null');
-	if (should_stop_resolving()) return;
 	let resolver = await get_resolver(name);
-	if (should_stop_resolving()) return;
+	check_abort();
 	let address = await fetch_addr60(resolver);
 	if (!address) throw new Error('Address not set');
 	if (owner !== address && alt_owner !== address) throw new Error(`Address mismatch`);
