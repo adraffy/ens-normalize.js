@@ -5047,22 +5047,22 @@ function dns_encoded_from(labels) {
 }
 async function is_contract(address) {
 	const {contracts} = active_chain;
-	let size = contracts.get(address);
-	if (size === undefined) {
+	let is = contracts.get(address);
+	if (is === undefined) {
 		try {
-			let data = await active_provider.getCode(address);
-			contracts.set(address, (data.length - 2) >> 1);
+			is = !is_null_hex(await active_provider.getCode(address));
+			contracts.set(address, is);
 		} catch (err) {
 		}
 	}
-	return size;
+	return is;
 }
 async function get_resolver_info(target) {
 	const {resolvers, contracts} = active_chain;
 	let info = resolvers.get(target);
 	if (info === undefined) {
 		info = {};
-		if (contracts.get(target) !== 0) { // isn't an EoA
+		if (contracts.get(target) !== false) { // isn't an EoA
 			let abi = new ethers.Interface([
 				'function supportsInterface(bytes4 interfaceID) external view returns (bool)',
 				'function gatewayURL() view returns (string)',
