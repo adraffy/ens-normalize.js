@@ -5062,7 +5062,7 @@ async function get_resolver_info(target) {
 	let info = resolvers.get(target);
 	if (info === undefined) {
 		info = {};
-		if (contracts.get(target) !== false) { // is contract or unknown
+		if (contracts.get(target) !== 0) { // isn't an EoA
 			let abi = new ethers.Interface([
 				'function supportsInterface(bytes4 interfaceID) external view returns (bool)',
 				'function gatewayURL() view returns (string)',
