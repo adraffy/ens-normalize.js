@@ -23,7 +23,7 @@
 	white-space: pre-wrap !important;
 	word-break: break-word;
 }
-.force-ltr {
+.force_ltr {
 	direction: ltr;
 	unicode-bidi: bidi-override;
 }
@@ -281,11 +281,13 @@ body.testnet {
 	gap: 8px;
 	font-size: 14pt;
 }
-#output.hide-recs .avatar,
-#output.hide-recs .row.records,
-#output.hide-recs .row.impls {
+#output.hide_recs .avatar,
+#output.hide_recs .row.records,
+#output.hide_recs .row.impls {
 	display: none;
 }
+#output.hide_details .detailed { display: none; }
+#output:not(.hide_details) .inv_detailed { display: none; } 
 .row button {
 	font-size: 11pt;
 }
@@ -412,6 +414,17 @@ a.internal {
 	background: #eff;
 	order: 100;
 }
+a[data-badge]::after {
+	content: attr(data-badge);
+	margin-left: 4px;
+	display: inline-block;
+	padding: 2px 4px;
+	border-radius: 4px;
+	font: 70% sans-serif;
+	background-color: #fff;
+	color: #888;
+	border: 1px solid #ccc;
+}
 a.addr {
 	line-break: anywhere;
 	font: 85% monospace;
@@ -485,6 +498,7 @@ button.copy.copied {
 	font: 9pt sans-serif;
 	order: 50;
 }
+.record.raw,
 .tags.raw {
 	font: 80% monospace;
 	background-color: #cff;
@@ -674,13 +688,13 @@ button.glow {
 	padding: 3px 6px;
 }
 .breakdown .label.valid {
-	background: linear-gradient(90deg, #efea, #0000);
+	background: linear-gradient(90deg, #0000, #efea, #0000);
 }
 .breakdown .label.error {
-	background: linear-gradient(90deg, #fcca, #0000);
+	background: linear-gradient(90deg, #0000, #fcca, #0000);
 }
 .breakdown .label.mapped {
-	background: linear-gradient(90deg, #ccf6, #0000);
+	background: linear-gradient(90deg, #0000, #ccf6, #0000);
 }
 .breakdown .name {
 	margin: 0 4px;
@@ -688,7 +702,7 @@ button.glow {
 	border-radius: 4px;
 	padding: 1px 4px;
 	font: 13pt monospace;	
-  	color: #000;
+	color: #000;
 }
 .breakdown .restricted {
 	text-decoration: none;
@@ -945,7 +959,7 @@ footer {
 	<div id="provider"></div>
 	<div id="github">
 		<a href="https://github.com/adraffy/ens-normalize.js">adraffy/ens-normalize.js</a>
-		<a href="https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard"><b>ENSIP-15</b></a>
+		<a href="https://docs.ens.domains/ensip/15"><b>ENSIP-15</b></a>
 	</div>
 </header>
 <div id="examples" class="hide">
@@ -974,7 +988,7 @@ footer {
 <button data-name="239.chonksociety.eth">Chonk #239</button>
 <button>raffy.antistupid.com</button>
 
-<a href="https://docs.ens.domains/ens-improvement-proposals/ensip-10-wildcard-resolution"><b>Wildcard:</b></a>
+<a href="https://docs.ens.domains/ensip/10"><b>Wildcard:</b></a>
 <button>moo331.nft-owner.eth</button>
 <button>💎.gmcafe.eth</button>
 <button>1.offchainexample.eth</button>
@@ -1256,7 +1270,7 @@ Hebrew:
 <li><code>range:HEX<sub>1</sub>..HEX<sub>n</sub></code> expands to a range of characters <button data-name="range:61..7A" data-delay="1000">ASCII a-z</button></li>
 <li><button id="copy_example_btn">Copy Link</button></a> to get a URL that resolves on page-load.</li>
 <li>Many elements have tooltips with additional information.</li>
-<li>Follows <a class="internal" href="https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard">ENSIP-15</a> and <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
+<li>Follows <a class="internal" href="https://docs.ens.domains/ensip/15">ENSIP-15</a> and <a href="https://docs.ens.domains/terminology">ENS Terminology</a>.</li>
 <li>Clear input to return to this page.</li>
 </ul>
 <ul class="row legend">
@@ -1275,16 +1289,19 @@ Hebrew:
 <li><a class="internal" href="./report-nf.html">Unicode NormalizationTest</a></li>
 <li><a href="../../ens-norm-tests/test-breakdown/output-20230226/">ENSIP-1→15 Breakdown</a></li>
 <li><a href="https://github.com/ensdomains/ens-contracts/tree/staging/deployments/">ENS Deployments</a></li>
-<li><a href="../../ens-labels/demo.html">Labelhash⁻¹</a></li>
+<li><a href="../../ens-labels/demo.html" data-badge="js">Labelhash⁻¹</a></li>
 <li><a href="https://github.com/adraffy/ens-labels/">Label Database</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-regs.html">Recent Registrations</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-renews.html">Recent Renews</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-exp.html">Expirations</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-emoji-freq.html">Emoji Frequency Browser</a></li>
-<li><a href="../../emoji.js/test/demo.html">Emoji Parser</a></li>
-<li><a href="../../keccak.js/test/demo.html">Keccak Hasher</a></li>
-<li><a href="../../punycode.js/test/demo.html">Punycode Coder</a></li>
-<li><a href="../../cid.js/test/demo.html">CID Tool</a></li>
+<li><a href="../../emoji.js/test/demo.html" data-badge="js">Emoji Parser</a></li>
+<li><a href="../../keccak.js/test/demo.html" data-badge="js">Keccak Hasher</a></li>
+<li><a href="../../punycode.js/test/demo.html" data-badge="js">Punycode Coder</a></li>
+<li><a href="../../cid.js/test/demo.html" data-badge="js">CID Tool</a></li>
+<li><a href="https://github.com/resolverworks/TheOffchainResolver.sol" data-badge="solc">TheOffchainResolver</a></li>
+<li><a href="https://github.com/resolverworks/ezccip.js" data-badge="js">ezccip</a></li>
+<li><a href="https://github.com/resolverworks/TheOffchainGateway.js" data-badge="js">TheOffchainGateway</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-batch-resolver.html">Batch Resolver</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-nft-matcher.html">ENS+NFT Matcher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/emoji-pixels.html">Emoji Pixel Maker</a></li>
@@ -1307,7 +1324,7 @@ Hebrew:
 	<span id="enable_debug_btn" title="Enable Debugging">🛠️</span>
 </footer>
 <script type="module">
-import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.10.0/ethers.min.js';
+import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.11.0/ethers.min.js';
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
 	nfc, nfd, hex_cp, quote_cp, explode_cp, str_from_cps, safe_str_from_cps,
@@ -1435,9 +1452,9 @@ const ERROR_ABI = new ethers.Interface([
 	'error InvalidLabelCount(bytes dns, uint256 count)',
 ]);
 
-// https://github.com/ensdomains/docs/blob/profile-text-records/ens-improvement-proposals/ensip-xx-profile-text-records.md
-// https://docs.ens.domains/ens-improvement-proposals/ensip-9-multichain-address-resolution
+// https://docs.ens.domains/ensip/9
 // https://github.com/satoshilabs/slips/blob/master/slip-0044.md
+// https://github.com/ensdomains/docs/blob/profile-text-records/ens-improvement-proposals/ensip-xx-profile-text-records.md
 const TYPE_ADDR = 'addr(bytes32,uint256)';
 const TYPE_TEXT = 'text';
 const TYPE_PUBKEY = 'pubkey';
@@ -1956,9 +1973,7 @@ auto_resolve_check.addEventListener('input', () => {
 });
 show_details_check.addEventListener('input', () => {	
 	save_settings();
-	for (let el of document.querySelectorAll('.detailed')) {
-		make_detailed(el);
-	}
+	sync_settings();
 });
 show_records_check.addEventListener('input', () => {
 	save_settings();
@@ -1975,8 +1990,9 @@ force_ltr_check.addEventListener('input', () => {
 	sync_settings();
 });
 function sync_settings() {
-	input_field.classList.toggle('force-ltr', force_ltr_check.checked);
-	output_div.classList.toggle('hide-recs', !show_records_check.checked);
+	input_field.classList.toggle('force_ltr', force_ltr_check.checked);
+	output_div.classList.toggle('hide_recs', !show_records_check.checked);	
+	output_div.classList.toggle('hide_details', !show_details_check.checked);
 }
 
 function sync_examples() {
@@ -2125,6 +2141,12 @@ try {
 	({debug_enabled, debug_settings} = settings);
 } catch (err) {
 }
+if (location0.searchParams.has('records')) {
+	show_records_check.checked = true;
+}
+if (location0.searchParams.has('details')) {
+	show_details_check.checked = true;
+}
 if (location0.searchParams.has('debug')) {
 	try {
 		debug_settings = JSON.parse(location0.searchParams.get('debug'));
@@ -2139,7 +2161,6 @@ sync_examples();
 sync_debug();
 apply_page_url(location0);
 input_field.focus();
-
 
 const ccipReadFetchOld = ethers.AbstractProvider.prototype.ccipReadFetch;
 ethers.AbstractProvider.prototype.ccipReadFetch = function(tx, calldata, urls) {
@@ -2901,11 +2922,8 @@ function make_normalized(row, name) {
 	}
 }
 
-function make_detailed(el) {
-	el.classList.add('detailed');
-	let hide = !show_details_check.checked;
-	if (el.dataset.reversed) hide = !hide;
-	el.classList.toggle('hide', hide);
+function make_detailed(el, invert) {
+	el.classList.add(invert ? 'inv_detailed' : 'detailed');
 }
 function make_locked(row) {
 	row.classList.add('locked');
@@ -2994,7 +3012,9 @@ async function add_resolver_info(row, resolver) {
 	let name = RESOLVER_NAMES[resolver.target];
 	if (name && active_chain.is_mainnet) {
 		add_row_tag(row, create_tag('good', name));
-	} 
+	} else if (resolver.__info.tor) {
+		add_row_tag(row, create_tag('good', 'TheOffchainResolver'));
+	}
 	if (resolver.__info.offchain_dns) {
 		add_row_tag(row, create_tag('special', 'Offchain DNS', resolver.__info.offchain_dns));
 	} else if (resolver.__info.wild) {
@@ -3206,8 +3226,7 @@ function create_tag(type, value, title) {
 			value = `⭐️ ${value}`;
 			break;
 		case 'norm':
-			span.dataset.reversed = '1';
-			make_detailed(span);
+			make_detailed(span, true);
 			// fallthru
 		case 'warn':
 			type = 'note';
@@ -3242,8 +3261,7 @@ function add_row_tag(row, tag) {
 function create_namehash_button(name) {
 	let node = namehash(name);
 	let btn = create('button', {innerHTML: '🆔️'});
-	btn.dataset.reversed = true;
-	make_detailed(btn);
+	make_detailed(btn, true);
 	make_click_copy(btn, node);
 	let lines = [`Namehash: ${node}`];
 	try {
@@ -4251,12 +4269,18 @@ async function resolve1(input, skip_norm) {
 			} else if (resolver.__only_addr) {
 				add_row_tag(records_row, `Wildcard DNS resolver only supports <code>addr()</code>`);
 			} else {
-				let records = RECORDS;
+				let records = [...RECORDS];
 				if (name_norm.endsWith(REVERSE_DOMAIN)) {
 					records = [{type: TYPE_NAME}];
 				}
+				if (resolver.__info.tor) {
+					records.push({
+						type: TYPE_TEXT,
+						key: 'ccip.context',
+						class: ['raw', 'detailed']
+					});
+				}
 				if (resolve_state.debug && Array.isArray(resolve_state.debug.records)) {
-					records = records.slice();
 					for (let x of resolve_state.debug.records) {
 						try {
 							records.push(prepare_record(expand_record(x)));
@@ -4391,7 +4415,7 @@ async function resolve1(input, skip_norm) {
 							}
 							a.title = `${data}\nText: ${rec.key}`;
 							if (rec.class) {
-								a.classList.add(rec.class);
+								a.classList.add(...[rec.class].flat());
 							}
 							if (rec.key === 'avatar') {
 								let spinner = create('div', {className: ['avatar', 'spinner']});
@@ -4555,6 +4579,7 @@ async function resolve1(input, skip_norm) {
 				{iface: '0x018fac06', title: '<b>Old Controller</b>'},
 				{iface: '0x6ccb2df4', name: '<b>NFT</b> ERC-721'},
 				{iface: '0x7ba18ba1', title: '<b>Migration</b>'},
+				{iface: '0xd1a70fd3', title: '<b>Bulk Renewal</b>'},
 			];
 			let discovered = new Set();
 			function add_iface(html, address, iface) {
@@ -5074,6 +5099,7 @@ async function get_resolver_info(target) {
 					{target, data: abi.encodeFunctionData('supportsInterface', ['0x124a319c'])}, // IInterfaceResolver:   interfaceImplementer(bytes32,bytes4)
 					{target, data: abi.encodeFunctionData('supportsInterface', ['0x9061b923'])}, // IExtendedResolver:    resolve(bytes,bytes)
 					{target, data: abi.encodeFunctionData('supportsInterface', ['0x8ef98a7e'])}, // IExtendedDNSResolver: resolve(bytes,bytes,bytes)
+					{target, data: abi.encodeFunctionData('supportsInterface', ['0x73302a25'])}, // TheOffchainResolver.sol
 					{target, data: abi.encodeFunctionData('gatewayURL')}
 				]);
 			} catch (err) {
@@ -5084,10 +5110,11 @@ async function get_resolver_info(target) {
 			check_abort();
 			if (multi) {
 				if (multi.some(x => x.success)) contracts.set(target, true); // any success => is contract
-				let [impl, wild, edns, gateway] = multi;
+				let [impl, wild, edns, tor, gateway] = multi;
 				info.impl = impl.success && !is_null_hex(impl.data);
 				info.wild = wild.success && !is_null_hex(wild.data);
 				info.edns = edns.success && !is_null_hex(edns.data);
+				info.tor = tor.success && !is_null_hex(tor.data);
 				try {
 					if (gateway.success) {
 						// TODO: better way of doing this
