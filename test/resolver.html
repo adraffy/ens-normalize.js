@@ -3008,7 +3008,7 @@ function create_digits_row(norm, group, values, negative, suffix) {
 	return row;
 }
 
-async function add_resolver_info(row, resolver) {	
+async function add_resolver_info(row, resolver, from_dns) {	
 	let name = RESOLVER_NAMES[resolver.target];
 	if (name && active_chain.is_mainnet) {
 		add_row_tag(row, create_tag('good', name));
@@ -3018,7 +3018,9 @@ async function add_resolver_info(row, resolver) {
 	if (resolver.__info.offchain_dns) {
 		add_row_tag(row, create_tag('special', 'Offchain DNS', resolver.__info.offchain_dns));
 	} else if (resolver.__info.wild) {
-		add_row_tag(row, create_tag('special', 'Wildcard'));
+		if (!from_dns) {
+			add_row_tag(row, create_tag('special', 'Wildcard'));
+		}
 		if (resolver.__basename) {
 			if (resolver.__dropped) {
 				add_row_tag(row, create_resolve_btn(resolver.__basename, `↩️ Basename`));
@@ -3883,7 +3885,7 @@ async function resolve1(input, skip_norm) {
 				if (should_stop_resolving()) return;
 				target_row.append(create_etherscan_address_link(target, {contract: true}));
 				add_row_tag(target_row, create_copy_btn(resolver.target, {value: true}));
-				add_resolver_info(target_row, {target, __info: info});
+				add_resolver_info(target_row, {target, __info: info}, true);
 				if (info.edns) {
 					add_row_tag(target_row, create_tag('special', 'Wildcard DNS'));
 					if (args.length == 2) {
@@ -4276,8 +4278,9 @@ async function resolve1(input, skip_norm) {
 				if (resolver.__info.tor) {
 					records.push({
 						type: TYPE_TEXT,
+						node: resolver.__basenode,
 						key: 'ccip.context',
-						class: ['raw', 'detailed']
+						class: 'raw'
 					});
 				}
 				if (resolve_state.debug && Array.isArray(resolve_state.debug.records)) {
@@ -4737,11 +4740,12 @@ function parse_call_error(calldata) {
 		error.desc = desc;
 		if (desc.name === 'Error') {
 			entity_span.innerText = desc.args[0];
-			message = entity_span.innerHTML;
+			message = `<b>${desc.signature}</b> ${entity_span.innerHTML}`;
 		} else if (desc.name === 'Panic') {
-			message = `→ ${desc.args[0]}`;
+			message = `<b>${desc.signature}</b> → ${desc.args[0]}`;
+		} else {
+			message = `<b>${desc.name}(</b>${[...desc.args].map(x => `<code>${x}</code>`).join(', ')}<b>)</b>`
 		}
-		message = `<b>${desc.signature}</b> ${message}`;
 	}
 	return Object.assign(new Error(`Call error: ${message}`), error);
 }
@@ -4772,7 +4776,7 @@ async function fetch_records(resolver, records, info = {}) {
 	if (records.length > 1 && !resolver.__unreachable) {
 		let encoded = records.map(rec => {
 			let frag = abi.getFunction(rec.type);
-			let params = [__node];
+			let params = [rec.node ?? __node];
 			switch (rec.type) {
 				case TYPE_TEXT: params.push(rec.key); break;
 				case TYPE_ADDR: params.push(rec.coin); break;
