@@ -1450,6 +1450,7 @@ const ERROR_ABI = new ethers.Interface([
 	'error InvalidAddressFormat()',
 	'error CouldNotResolve(bytes)',
 	'error InvalidLabelCount(bytes dns, uint256 count)',
+	'error Untrusted(address signed, address expected)',
 ]);
 
 // https://docs.ens.domains/ensip/9
@@ -4410,7 +4411,7 @@ async function resolve1(input, skip_norm) {
 								}
 							}
 							if (rec.url) {
-								a.href = rec.url(encodeURIComponent(data));
+								a.href = rec.url(data);
 								a.classList.add('rtrim');
 								a.append(create_copy_btn(data));
 							} else {
