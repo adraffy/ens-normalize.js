@@ -3895,7 +3895,7 @@ async function resolve1(input, skip_norm) {
 						if (is_address(addr)) {
 							dns_txt_address = ethers.getAddress(addr.toLowerCase());
 							add_row_tag(target_row, create_resolve_btn(addr, '↩️ Address'));
-							make_detailed(ens1_row); // hide it by default
+							//make_detailed(ens1_row); // hide it by default
 						} else if (addr) {
 							add_row_tag(target_row, create_tag('fail', 'Invalid address', addr));
 						} else {
