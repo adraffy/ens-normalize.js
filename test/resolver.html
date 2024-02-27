@@ -600,13 +600,15 @@ button.copy.copied {
 }
 span.tally {
 	background-color: #eff;
+	color: #000;
 	border: 1px solid #ccc;
 	display: flex;
 	gap: 4px;
 	font: bold 80% sans-serif;
 }
 .tally .pass { color: #0a0; }
-.tally .none { color: #aaa; }
+.tally .none { color: #888; }
+.tally .skip { color: #bbb; text-decoration: line-through; }
 .tally .fail { color: #a00; }
 .jazz {
 	order: -9;
@@ -1312,7 +1314,8 @@ Hebrew:
 		<b>🛠️ Debug Settings:</b>
 		<button id="apply_debug_btn">🔄️ <span class="key">shift+enter</span></button>
 		<span class="balloon"></span>
-		<button id="disable_debug_btn">🛑️</button>
+		<button id="clean_debug_btn" title="Clear debugger">🧹️</button>
+		<button id="disable_debug_btn" class="ens" title="Disable debugger">🛑️</button>
 	</div>
 	<textarea rows="20"></textarea>
 	<div id="debug_footer">While visible, all records are read and errors are shown.</div>
@@ -2034,6 +2037,10 @@ enable_debug_btn.addEventListener('click', () => {
 	save_settings();
 	sync_debug();
 	debug_ta.scrollIntoView();
+});
+$('#clean_debug_btn').addEventListener('click', () => {
+	debug_ta.value = '';
+	apply_debug();
 });
 $('#disable_debug_btn').addEventListener('click', () => {
 	debug_enabled = false;
@@ -3189,13 +3196,14 @@ function add_reg_exp_tags(row, exp, now) {
 		span.innerHTML += ` (${format_dur(exp - now)})`;
 	}
 }
-function create_result_tally(pass, none, fail) {
+function create_result_tally(pass, none, skip, fail) {
 	let tally = create('span', {className: 'tally'});
-	let total = pass + none + fail;
+	let total = pass + none + skip + fail;
 	if (total > pass) tally.append(create('span', {className: 'total', innerText: total, title: 'Total Records'}));
 	tally.append(create('span', {className: 'pass', innerText: pass, title: 'Non-null Records'}));
 	if (none) tally.append(create('span', {className: 'none', innerText: none, title: 'Null Records'}));
-	if (fail) tally.append(create('span', {className: 'fail', innerText: fail, tile: 'Erroring records'}));
+	if (skip) tally.append(create('span', {className: 'skip', innerText: skip, title: 'Skipped Records'}));
+	if (fail) tally.append(create('span', {className: 'fail', innerText: fail, title: 'Erroring records'}));
 	return tally;
 }
 function create_dot_eth_button(name) {
@@ -4296,15 +4304,20 @@ async function resolve1(input, skip_norm) {
 				let results = await fetch_records(resolver, records, info);
 				let shown_count = 0;
 				let error_count = 0;
-				for (let {rec, data, error} of results) {
+				let skipped_count = 0;
+				for (let {rec, data, error, skipped} of results) {
 					let a = create('a', {className: 'record', target: '_blank'});
 					if (error) {
-						error_count++;
-						if (resolve_state.debug) {
-							a.append(create('b', {innerText: `${rec.key || rec.coin || rec.type}`}));
-							a.append(create_tag('fail', error));
-							a.classList.add('rtrim');
-							records_row.append(a);
+						if (skipped) {
+							skipped_count++;
+						} else {
+							error_count++;
+							if (resolve_state.debug) {
+								a.append(create('b', {innerText: `${rec.key || rec.coin || rec.type}`}));
+								a.append(create_tag('fail', error));
+								a.classList.add('rtrim');
+								records_row.append(a);
+							}
 						}
 						continue;
 					}
@@ -4560,7 +4573,7 @@ async function resolve1(input, skip_norm) {
 					records_row.append(a);
 					shown_count++;
 				}
-				add_row_tag(records_row, create_result_tally(shown_count, results.length-error_count-shown_count, error_count));
+				add_row_tag(records_row, create_result_tally(shown_count, results.length-error_count-shown_count-skipped_count, skipped_count, error_count));
 				if (info.multicalled) {
 					add_row_tag(records_row, create_tag('good', resolver.__info.wild ? 'Wildcard Multicall' : 'Multicall'));
 				}
@@ -4820,10 +4833,10 @@ async function fetch_records(resolver, records, info = {}) {
 			return {rec, error: new Error('aborted')};
 		}
 		if (!resolve_state.debug && rec.bonus) {
-			return {rec, error: new Error('skipped')};
+			return {rec, error: new Error('skipped'), skipped: true};
 		}
 		if (resolver.__unreachable) {
-			return {rec, error: new Error('unreachable')};
+			return {rec, error: new Error('unreachable'), skipped: true};
 		}
 		let params = [__node];
 		if (rec.type === TYPE_ADDR && rec.coin === 60) { // try boomer method first
