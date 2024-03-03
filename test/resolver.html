@@ -1221,12 +1221,12 @@ Hebrew:
 	<button id="examples_btn">👀 Examples</button>
 	<input type="checkbox" id="auto_resolve_check" checked>
 	<label for="auto_resolve_check"><svg width="20" fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>on Input</label>
-	<input type="checkbox" id="show_details_check">
-	<label for="show_details_check">Details</label>
 	<input type="checkbox" id="show_components_check" checked>
 	<label class="hide" for="show_components_check" title="Reveal internal emoji codepoints">Emoji 🧬️</label>
 	<input type="checkbox" id="show_records_check" checked>
 	<label for="show_records_check" title="Include common text and address records">Records</label>
+	<input type="checkbox" id="show_details_check">
+	<label for="show_details_check">Details</label>
 	<input type="checkbox" id="skip_norm_check">
 	<label for="skip_norm_check"  title="When active, normalization is not applied"><svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="var(--geist-fill)"></circle><path d="M15 9L9 15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M9 9L15 15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>Norm</label>
 	<input type="checkbox" id="force_ltr_check">
@@ -1389,9 +1389,9 @@ const VISION_HOST = 'vision.io';
 const PRETTY_NAME = '💖️';
 const MANAGER_NAME = 'Manager';
 const NFT_OWNER_NAME = 'NFT Owner';
-const CLICK_TO_COPY = '(Click to Copy)';
 const SAME_AS_INPUT = 'Same as Input';
 const SAME_AS_NORM = 'Same as Norm';
+const ALT_RAW = '[ALT] Raw Value';
 
 const CHAINS = [
 	{
@@ -2757,7 +2757,7 @@ function create_jazz_icon(address) {
 	return create('span', {innerHTML: i, className: ['jazz', `addr${i}`]});
 }
 function make_click_copy(el, raw, {hint} = {}) {
-	if (el.title) el.title += `\n${CLICK_TO_COPY}`;
+	if (el.title) el.title += `\n(Click to Copy)`;
 	el.dataset.copy = raw;
 	el.addEventListener('click', function(e) {
 		e.preventDefault();
@@ -2776,24 +2776,22 @@ function make_click_copy(el, raw, {hint} = {}) {
 	});
 	return el;
 }
-
 function create_copy_btn(raw, {small, value, alt} = {}) {
 	let btn = create('button', {className: 'copy'});
 	if (small) btn.classList.add('small');
-	make_click_copy(btn, raw);
 	if (alt) btn.dataset.alt = alt;
-	if (value) {
-		btn.title = raw;
-	} else {
-		let cps = explode_cp(raw);
-		btn.title = [
-			raw,
-			cps.map(hex_cp).join(' '),
-			`[ALT] Codepoints (${cps.length})`,
-			`[SHIFT] UTF-8 Bytes (${bytes_from_utf8(raw).length})`,
-		].join('\n');
-	}
+	btn.title = value ? raw : make_exploded_utf8_title(raw);
+	make_click_copy(btn, raw);
 	return btn;
+}
+function make_exploded_utf8_title(raw) {
+	let cps = explode_cp(raw);
+	return [
+		raw,
+		cps.map(hex_cp).join(' '),
+		`[ALT] Codepoints (${cps.length})`,
+		`[SHIFT] UTF-8 Bytes (${bytes_from_utf8(raw).length})`,
+	].join('\n');
 }
 function reverse_name(addr) {
 	return `${addr.slice(2).toLowerCase()}.${REVERSE_DOMAIN}`;
@@ -3195,16 +3193,6 @@ function add_reg_exp_tags(row, exp, now) {
 	} else {
 		span.innerHTML += ` (${format_dur(exp - now)})`;
 	}
-}
-function create_result_tally(pass, none, skip, fail) {
-	let tally = create('span', {className: 'tally'});
-	let total = pass + none + skip + fail;
-	if (total > pass) tally.append(create('span', {className: 'total', innerText: total, title: 'Total Records'}));
-	tally.append(create('span', {className: 'pass', innerText: pass, title: 'Non-null Records'}));
-	if (none) tally.append(create('span', {className: 'none', innerText: none, title: 'Null Records'}));
-	if (skip) tally.append(create('span', {className: 'skip', innerText: skip, title: 'Skipped Records'}));
-	if (fail) tally.append(create('span', {className: 'fail', innerText: fail, title: 'Erroring records'}));
-	return tally;
 }
 function create_dot_eth_button(name) {
 	let added = add_dot_eth(name);
@@ -4302,16 +4290,16 @@ async function resolve1(input, skip_norm) {
 				}
 				let info = {};
 				let results = await fetch_records(resolver, records, info);
-				let shown_count = 0;
-				let error_count = 0;
-				let skipped_count = 0;
+				let good_count = 0;
+				let fail_count = 0;
+				let skip_count = 0;
 				for (let {rec, data, error, skipped} of results) {
 					let a = create('a', {className: 'record', target: '_blank'});
 					if (error) {
 						if (skipped) {
-							skipped_count++;
+							skip_count++;
 						} else {
-							error_count++;
+							fail_count++;
 							if (resolve_state.debug) {
 								a.append(create('b', {innerText: `${rec.key || rec.coin || rec.type}`}));
 								a.append(create_tag('fail', error));
@@ -4324,8 +4312,7 @@ async function resolve1(input, skip_norm) {
 					switch (rec.type) {
 						case TYPE_NAME: {
 							if (!data) continue;
-							a.innerHTML = `<b>name</b>`;
-							make_click_copy(a, data);
+							a.innerHTML = `<b>primary</b>`;
 							a.append(dom_from_tokens(ens_tokenize(data), {components: false, before: true, tld: true}));
 							try {
 								if (ens_beautify(data) === data) {
@@ -4336,6 +4323,8 @@ async function resolve1(input, skip_norm) {
 							}
 							a.append(create_resolve_btn(data));
 							a.classList.add('rtrim');
+							a.title = make_exploded_utf8_title(data);
+							make_click_copy(a, data);
 							break;
 						}
 						// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IAddressResolver.sol
@@ -4369,13 +4358,13 @@ async function resolve1(input, skip_norm) {
 										//if (rec.testnet) a.classList.add('testnet');
 										let btn = create_copy_btn(address, {value: true});
 										btn.dataset.alt = data;
-										btn.title = `${address}\n[ALT] Copy Raw`;
+										btn.title = [address, ALT_RAW].join('\n');;
 										a.append(btn);
 										a.classList.add('rtrim');
 									} else {
 										make_click_copy(a, address);
 										a.dataset.alt = data;
-										lines.push('[ALT] Copy Raw');
+										lines.push(ALT_RAW);
 									}
 								} else {
 									lines.unshift('Unknown encoding', data);
@@ -4470,8 +4459,15 @@ async function resolve1(input, skip_norm) {
 							if (is_null_hex(x) && is_null_hex(y)) continue;
 							a.innerHTML = `<b>pubkey</b>`;
 							a.classList.add('rtrim');
+							let raw = ethers.concat([x, y]);
+							let address = ethers.getAddress('0x' + ethers.keccak256(ethers.concat([x, y])).slice(-40));
+							a.append(create_etherscan_address_link(address));
 							a.append(make_click_copy(create('button', {innerText: 'x', title: x}), x));
 							a.append(make_click_copy(create('button', {innerText: 'y', title: y}), y));
+							a.append(create_resolve_btn(address));
+							a.title = [address, ALT_RAW].join('\n');
+							make_click_copy(a, address);
+							a.dataset.alt = raw;
 							break;
 						}
 						// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IContentHashResolver.sol
@@ -4550,16 +4546,16 @@ async function resolve1(input, skip_norm) {
 									}
 									default: throw new Error(`unknown protocol: ${proto}`);
 								}
-								make_click_copy(a, url);
 								let lines = [url, `Protocol: ${format_dec_hex(proto)}`];
 								if (cid) {
 									lines.push(`CID: Version: ${format_dec_hex(cid.version)} / Codec: ${format_dec_hex(cid.codec)} / Bytes: ${buf.length}`);
 									lines.push(`Hash: Codec: ${format_dec_hex(cid.hash.codec)} / Bytes: ${cid.hash.data.length}`);
 									a.append(create_link(`https://cid.ipfs.tech/#${cid}`, {button: '🔍️ Inspect'}));
 								}
-								lines.push(`Raw: ${data}`, `[ALT] Copy Raw`);
+								lines.push(`Raw: ${data}`, ALT_RAW);
 								a.dataset.alt = data;
 								a.title = lines.join('\n');
+								make_click_copy(a, url);
 								// upgrade the decentralized website link
 								$('.row.dns').replaceWith(create_dns_row(name_norm, {replaced: false, contenthash: rep}));
 							} catch (err) {
@@ -4571,9 +4567,18 @@ async function resolve1(input, skip_norm) {
 						}
 					}
 					records_row.append(a);
-					shown_count++;
+					good_count++;
 				}
-				add_row_tag(records_row, create_result_tally(shown_count, results.length-error_count-shown_count-skipped_count, skipped_count, error_count));
+				let null_count = results.length - good_count - fail_count - skip_count;
+
+				let tally = create('span', {className: 'tally'});
+				let call_count = good_count + null_count + fail_count; // dont include skipped
+				if (call_count > good_count) tally.append(create('span', {className: 'total', innerText: call_count, title: 'Total Records'}));
+				if (good_count) tally.append(create('span', {className: 'pass', innerText: good_count, title: 'Non-null Records'}));
+				if (null_count) tally.append(create('span', {className: 'none', innerText: null_count, title: 'Null Records'}));
+				if (fail_count) tally.append(create('span', {className: 'fail', innerText: fail_count, title: 'Erroring Records'}));
+				if (skip_count) tally.append(create('span', {className: 'skip', innerText: skip_count, title: 'Skipped Records'}));
+				add_row_tag(records_row, tally);
 				if (info.multicalled) {
 					add_row_tag(records_row, create_tag('good', resolver.__info.wild ? 'Wildcard Multicall' : 'Multicall'));
 				}
@@ -4594,8 +4599,8 @@ async function resolve1(input, skip_norm) {
 				{iface: '0x019a38fe', title: TITLE_WRAPPER},
 				{iface: IFACE_ETH_CONTROLLER, title: '<b>Controller</b>'},
 				{iface: '0x018fac06', title: '<b>Old Controller</b>'},
-				{iface: '0x6ccb2df4', name: '<b>NFT</b> ERC-721'},
-				{iface: '0x7ba18ba1', title: '<b>Migration</b>'},
+				{iface: '0x6ccb2df4', title: '<b>NFT</b> ERC-721'},
+				{iface: '0x7ba18ba1', title: '<b>Old Registrar</b>'},
 				{iface: '0xd1a70fd3', title: '<b>Bulk Renewal</b>'},
 			];
 			let discovered = new Set();
@@ -5132,7 +5137,7 @@ async function get_resolver_info(target) {
 				info.impl = impl.success && !is_null_hex(impl.data);
 				info.wild = wild.success && !is_null_hex(wild.data);
 				info.edns = edns.success && !is_null_hex(edns.data);
-				info.tor = tor.success && !is_null_hex(tor.data);
+				info.tor  =  tor.success && !is_null_hex(tor.data );
 				try {
 					if (gateway.success) {
 						// TODO: better way of doing this
