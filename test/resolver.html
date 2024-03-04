@@ -421,8 +421,8 @@ a[data-badge]::after {
 	padding: 2px 4px;
 	border-radius: 4px;
 	font: 70% sans-serif;
-	background-color: #fff;
-	color: #888;
+	background-color: #fed;
+	color: #666;
 	border: 1px solid #ccc;
 }
 a.addr {
@@ -625,6 +625,7 @@ span.tally {
 .jazz.addr2 { background-color: #c4c; }
 .jazz.addr3 { background-color: #0a8; }
 .jazz.addr4 { background-color: #a80; }
+.jazz.addr5 { background-color: #57d; }
 .avatar {
 	order: -1;
 } 
@@ -784,6 +785,7 @@ button.glow {
 	color: #666;
 	user-select: none;
 	pointer-events: none;
+	order: -10;
 }
 .record:not([href]):hover {
 	border: 2px solid #0a0;
@@ -1302,8 +1304,9 @@ Hebrew:
 <li><a href="../../punycode.js/test/demo.html" data-badge="js">Punycode Coder</a></li>
 <li><a href="../../cid.js/test/demo.html" data-badge="js">CID Tool</a></li>
 <li><a href="https://github.com/resolverworks/TheOffchainResolver.sol" data-badge="solc">TheOffchainResolver</a></li>
-<li><a href="https://github.com/resolverworks/ezccip.js" data-badge="js">ezccip</a></li>
 <li><a href="https://github.com/resolverworks/TheOffchainGateway.js" data-badge="js">TheOffchainGateway</a></li>
+<li><a href="https://github.com/resolverworks/ezccip.js" data-badge="js">ezccip</a></li>
+<li><a href="https://github.com/resolverworks/enson.js" data-badge="js">enson</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-batch-resolver.html">Batch Resolver</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-nft-matcher.html">ENS+NFT Matcher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/emoji-pixels.html">Emoji Pixel Maker</a></li>
@@ -2291,7 +2294,7 @@ function update_network() {
 	chain_select.title = `Network: ${format_dec_hex(active_chain.id)}`;
 	mainnet_btn.classList.toggle('hide', !!active_chain.is_mainnet);
 	browser_btn.classList.toggle('hide', !(!using_window && window_provider && window_provider.__chain && !window_provider.__chain.is_mainnet));
-	provider_div.replaceChildren(create('div', {className: 'network'}, 'using ', create_etherscan_address_link(network_state.ens.target, {
+	provider_div.replaceChildren(create('div', {className: 'network'}, 'using ', create_explorer_address_lin(network_state.ens.target, {
 		innerHTML: using_window ? 'Browser' : active_chain.rpc ? 'Public RPC' : 'Infura', 
 		title: 'ENS Registry Contract',
 		contract: true
@@ -2414,7 +2417,7 @@ function parse() {
 	}
 	if (is_checksum_address(name)) {
 		let row = create_row('Address');
-		row.append(create_etherscan_address_link(name));		
+		row.append(create_explorer_address_lin(name));		
 		add_row_tag(row, create_reverse_resolve_btn(name));
 		output_div.append(row);
 		return true;
@@ -2742,13 +2745,13 @@ function create_ens_link(name, innerHTML = '<button>🛠️ ENS</button>') {
 	} catch (err) {
 	}
 }
-function create_etherscan_address_link(addr, {innerHTML, anchor = '', contract, className, ...a} = {}) {
+function create_explorer_address_lin(addr, {innerHTML, anchor = '', contract, className, ...a} = {}) {
 	if (!innerHTML) {
 		innerHTML = addr;
 		className = 'addr';
 	}
 	if (contract && !anchor) anchor = '#readContract';
-	return create_link(`${active_chain.explorer}/address/${addr}${anchor}`, {innerHTML, className, ...a});
+	return create_link(`${active_chain.explorer}/address/${addr}${anchor}`, {innerHTML, title: `Explorer: ${addr}`, className, ...a});
 }
 function create_jazz_icon(address) {
 	let {addrs, debug} = resolve_state;
@@ -3072,7 +3075,7 @@ function add_ensip1_tag(row, input, is_norm) {
 
 function add_nft_links(row, name, contract, token) {
 	add_row_tag(row, create_link(`${active_chain.metadata}/${contract}/${token}`, {button: '🏷️ Metadata', className: 'metadata'}));
-	add_row_tag(row, create_link(`${active_chain.explorer}/nft/${contract}/${BigInt(token)}`, {innerHTML: 'Etherscan', className: 'external'}));
+	add_row_tag(row, create_link(`${active_chain.explorer}/nft/${contract}/${BigInt(token)}`, {innerHTML: 'Explorer', className: 'external'}));
 	if (active_chain.opensea) {
 		add_row_tag(row, create_link(`${active_chain.opensea}${contract}/${BigInt(token)}`, {innerHTML: OPENSEA_NAME, className: 'external'}));
 	}
@@ -3573,7 +3576,7 @@ async function resolve1(input, skip_norm) {
 	if (input_is_address) {
 		input_row = create_row('Address');
 		input_row.append(create_jazz_icon(input));
-		input_row.append(create_etherscan_address_link(input));
+		input_row.append(create_explorer_address_lin(input));
 		add_row_tag(input_row, create_copy_btn(input, {value: true}));
 		add_row_tag(input_row, create_reverse_resolve_btn(input));
 		add_owner_links(input_row, input);
@@ -3613,7 +3616,7 @@ async function resolve1(input, skip_norm) {
 			network_state.reverse_registrar = address || false;
 		}
 		if (network_state.reverse_registrar) {
-			add_row_tag(input_row, create_etherscan_address_link(network_state.reverse_registrar, {
+			add_row_tag(input_row, create_explorer_address_lin(network_state.reverse_registrar, {
 				contract: true, 
 				anchor: '#writeContract#F7',
 				innerHTML: '<button class="glow">✍️ Set Name</button>'
@@ -3629,7 +3632,7 @@ async function resolve1(input, skip_norm) {
 			return;
 		}
 		
-		resolver_row.append(create_etherscan_address_link(resolver.target, {contract: true}));
+		resolver_row.append(create_explorer_address_lin(resolver.target, {contract: true}));
 		add_row_tag(resolver_row, create_copy_btn(resolver.target, {value: true}));
 		add_resolver_info(resolver_row, resolver);
 
@@ -3820,7 +3823,7 @@ async function resolve1(input, skip_norm) {
 	add_row_tag(resolver_row, create_elapsed());
 	
 	if (resolver) { 
-		resolver_row.append(create_etherscan_address_link(resolver.target, {contract: true}));
+		resolver_row.append(create_explorer_address_lin(resolver.target, {contract: true}));
 		add_row_tag(resolver_row, create_copy_btn(resolver.target, {value: true}));
 		add_resolver_info(resolver_row, resolver);
 	} else if (resolver === null) {
@@ -3880,7 +3883,7 @@ async function resolve1(input, skip_norm) {
 				}
 				let info = await get_resolver_info(target);
 				if (should_stop_resolving()) return;
-				target_row.append(create_etherscan_address_link(target, {contract: true}));
+				target_row.append(create_explorer_address_lin(target, {contract: true}));
 				add_row_tag(target_row, create_copy_btn(resolver.target, {value: true}));
 				add_resolver_info(target_row, {target, __info: info}, true);
 				if (info.edns) {
@@ -4009,7 +4012,7 @@ async function resolve1(input, skip_norm) {
 		add_row_tag(avail_row, create_tag('length', Array.from(label).length));
 		if (nft_contract) {
 			let old = avail_row.querySelector('.row-label');
-			old.replaceChildren(create_etherscan_address_link(nft_contract.target, {innerHTML: old.innerHTML, contract: true}));
+			old.replaceChildren(create_explorer_address_lin(nft_contract.target, {innerHTML: old.innerHTML, contract: true}));
 		}
 		if (avail_err) {
 			avail_row.classList.add('error');
@@ -4057,7 +4060,7 @@ async function resolve1(input, skip_norm) {
 			}
 			if (network_state.wrapper) {
 				let old = wrapped_row.querySelector('.row-label');
-				old.replaceChildren(create_etherscan_address_link(network_state.wrapper.target, {innerHTML: old.innerHTML, contract: true}));
+				old.replaceChildren(create_explorer_address_lin(network_state.wrapper.target, {innerHTML: old.innerHTML, contract: true}));
 			}
 			if (is_wrapped) {
 				add_nft_links(normed_row, name_norm, network_state.wrapper.target, node);
@@ -4141,7 +4144,7 @@ async function resolve1(input, skip_norm) {
 				add_row_tag(owner_row, create_tag('warn', 'Not Set'));
 			}
 		} else {
-			owner_row.append(create_etherscan_address_link(owner));
+			owner_row.append(create_explorer_address_lin(owner));
 			add_row_tag(owner_row, create_copy_btn(owner, {value: true}));
 			// if the input was an address, we can validate
 			if (input_is_address) {
@@ -4158,7 +4161,7 @@ async function resolve1(input, skip_norm) {
 				add_row_tag(avail_row, create_link(`https://protocol.art/account/${owner}`, {button: '🛠️ Configure', className: 'external'}));
 			}
 			if (!is_wrapped && !available && !checked_nft && nft_contract) {
-				let nft_row = create_row(create_etherscan_address_link(nft_contract.target, {innerHTML: NFT_OWNER_NAME, contract: true}), true);
+				let nft_row = create_row(create_explorer_address_lin(nft_contract.target, {innerHTML: NFT_OWNER_NAME, contract: true}), true);
 				nft_row.classList.add('nft');
 				output_div.append(nft_row);
 				try {
@@ -4171,7 +4174,7 @@ async function resolve1(input, skip_norm) {
 					owner_row.querySelector('.row-label').innerHTML = MANAGER_NAME;
 					owner_row.insertAdjacentElement('beforebegin', nft_row); // move up
 					nft_row.append(create_jazz_icon(nft_owner));
-					let a = create_etherscan_address_link(nft_owner);
+					let a = create_explorer_address_lin(nft_owner);
 					nft_row.append(a);
 					add_row_tag(nft_row, create_copy_btn(nft_owner, {value: true}));
 					try {
@@ -4224,7 +4227,7 @@ async function resolve1(input, skip_norm) {
 			if (should_stop_resolving()) return;
 			if (await is_contract(address)) make_contract(address_row);
 			address_row.append(create_jazz_icon(address));
-			address_row.append(create_etherscan_address_link(address));
+			address_row.append(create_explorer_address_lin(address));
 			address_row.append(create_copy_btn(address, {value: true}));
 			if (input_is_address) {
 				if (address === input) {
@@ -4460,14 +4463,27 @@ async function resolve1(input, skip_norm) {
 							a.innerHTML = `<b>pubkey</b>`;
 							a.classList.add('rtrim');
 							let raw = ethers.concat([x, y]);
-							let address = ethers.getAddress('0x' + ethers.keccak256(ethers.concat([x, y])).slice(-40));
-							a.append(create_etherscan_address_link(address));
+							let addr = ethers.getAddress('0x' + ethers.keccak256(ethers.concat([x, y])).slice(-40));
+							let temp = create_explorer_address_lin(addr);
+							a.href = temp.href;
+							a.title = temp.title;
+							let match;
+							if (addr === nft_owner) {
+								match = NFT_OWNER_NAME;
+							} else if (addr === address) {
+								match = MANAGER_NAME;
+							}
+							a.append(create_jazz_icon(addr));
+							// add a short address?
+							a.append(create_resolve_btn(addr));
+							if (match) {
+								a.append(create('span', {innerText: `Same as ${NFT_OWNER_NAME}`, className: ['tags', 'good']}));
+							}
 							a.append(make_click_copy(create('button', {innerText: 'x', title: x}), x));
 							a.append(make_click_copy(create('button', {innerText: 'y', title: y}), y));
-							a.append(create_resolve_btn(address));
-							a.title = [address, ALT_RAW].join('\n');
-							make_click_copy(a, address);
-							a.dataset.alt = raw;
+							//a.title = [address, ALT_RAW].join('\n');
+							//make_click_copy(a, address);
+							//a.dataset.alt = raw;
 							break;
 						}
 						// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IContentHashResolver.sol
@@ -4614,7 +4630,7 @@ async function resolve1(input, skip_norm) {
 					lines.push(`Interface: ${iface}`);
 				}
 				html += ` <code class="prefix">${address.slice(0, 6)}</code>`;
-				add_row_tag(row, create_etherscan_address_link(address, {innerHTML: html, contract: true, className: 'iface', title: lines.join('\n')}));
+				add_row_tag(row, create_explorer_address_lin(address, {innerHTML: html, contract: true, className: 'iface', title: lines.join('\n')}));
 			}
 			const {target, interface: abi, __node} = resolver;
 			let frag = abi.getFunction('interfaceImplementer');
