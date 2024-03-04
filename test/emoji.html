@@ -6,13 +6,6 @@
 <link rel="icon" type="image/png" href="./favicon.png">
 <title>ENS Emoji</title>
 <style>
-:root {
-	--length-color: #f8eedd;
-	--error-bg-color: #fcc;
-	--btn-fill-color: #eee;
-	--btn-hover-fill-color: #ccc;
-	--btn-border-color: #888;
-}
 .hide {
 	display: none !important;
 }
@@ -30,23 +23,24 @@ button {
 	appearance: none;
 	margin: 0;
 	padding: 4px 8px;
-	border: 1px solid var(--btn-border-color);
+	border: 1px solid #888;
 	border-radius: 4px;
-	background-color: var(--btn-fill-color);
+	background-color: #eee;
 	color: #000;
 	font-size: 100%;
+	transition: transform .1s ease;
 }
 button:disabled {
 	opacity: .5;
 	pointer-events: none;
 }
 button:hover {
-	border-color: #000;
-	background-color: var(--btn-hover-fill-color);
+	transform: scale(1.04);
+	border: 2px solid #000;
+	margin: -1px;
 }
 button:hover:active {
-	background-color: #aaa;
-	color: #000;
+	transform: unset;
 }
 .cp {
 	font-size: 75%;
@@ -165,7 +159,7 @@ h1 .count span {
 	background-color: #cfc;
 }
 #jumps .disabled {
-	background-color: var(--error-bg-color);
+	background-color: #fcc;
 }
 #top_btn {
 	position: fixed;
@@ -235,7 +229,7 @@ h1 .count span {
 }
 .heading .length {
 	font-weight: bold;
-	background-color: var(--length-color);
+	background-color: #f8eedd;
 	border: 1px solid #aaa;
 }
 .heading .cost {
@@ -248,7 +242,7 @@ h1 .count span {
 	gap: 4px;
 }
 .heading .disabled {
-	background-color: var(--error-bg-color);
+	background-color: #fcc;
 }
 main:empty {
 	display: none;
@@ -374,7 +368,7 @@ td.info {
 }
 button[data-by="cost"] { background-color: #080; color: #fff; }
 button[data-by="emoji"] { background-color: #fe0;  }
-button[data-by="length"], [data-by="length"] .title, .length { background-color: var(--length-color); }
+button[data-by="length"], [data-by="length"] .title, .length { background-color: #f8eedd; }
 button[data-by="type"], [data-by="type"] .title, .type {  background-color: #ffe0c0; }
 button[data-by="group"], [data-by="group"] .title, .group { background-color: #ddf; }
 button[data-by="subgroup"], [data-by="subgroup"] .title, .subgroup { background-color: #def; }
@@ -411,6 +405,7 @@ button[data-by="version"], [data-by="version"] .title, .version { background-col
 .resolve a {
 	text-decoration: none;
 	cursor: help;
+	font-size: 150%;
 }
 #none {
 	display: flex;
@@ -493,29 +488,29 @@ footer span:hover {
 <div id="examples">
 	<button style="background-color: #afa" data-query="v15.1">⭐️ New in 15.1</button>
 	<b>People:</b>
-	<button data-query="/\bman/ !woman">Man</button>
-	<button data-query="woman !/\bman/">Woman</button>
+	<button data-query="/\bman/ !woman">👨️ Man</button>
+	<button data-query="woman !/\bman/">👩️ Woman</button>
 	<button data-query="{2642}">♂️</button>
 	<button data-query="{2640}">♀️</button>
-	<button>Family</button>
-	<button>Person</button>
-	<button data-query="face !clock">Face</button>
-	<button>Finger</button>
+	<button data-query="family">👪️ Family</button>
+	<button data-query="person">🏃️ Person</button>
+	<button data-query="face !clock">🐸️ Face</button>
+	<button data-query="finger">☝️ Finger</button>
 	<b>Kind:</b>
 	<button data-query="Basic_Emoji">Basic</button>
-	<button data-query="flag:">Flags</button>
+	<button data-query="country-flag + subdivision-flag">Region Flags</button>
 	<button>Component</button>
 	<button style="background-color: #faa" data-query="Disabled">Disabled</button>
 	<b>Skin:</b>
-	<button style="background-color: #fe8" data-query="/\b(person|(wo)?man)\b/ !’ !/[\u{1F3FB}-\u{1F3FF}]/ !/^flag:/">Golden</button>
-	<button data-query="/[\u{1F3FB}-\u{1F3FF}]/">Any</button>
+	<button data-query="/\b(person|(wo)?man)\b/ !’ !skin !/^flag:/">👱️ Golden</button>
+	<button data-query="skin">Any</button>
 	<button>&#x1F3FB;</button>
 	<button>&#x1F3FC;</button>
 	<button>&#x1F3FD;</button>
 	<button>&#x1F3FE;</button>
 	<button>&#x1F3FF;</button>
 	<b>Hair:</b>
-	<button data-query="/[\u{1F9B0}-\u{1F9B3}]/">Any</button>
+	<button data-query="hair">Any</button>
 	<button>&#x1F9B0;</button>
 	<button>&#x1F9B1;</button>
 	<button>&#x1F9B2;</button>
@@ -525,9 +520,9 @@ footer span:hover {
 	<button data-query="/\bdog\b/">🐕️</button>
 	<button data-query="heart">❤️</button>
 	<button data-query="{200D}{27A1}">➡️</button>
-	<button data-query="1cp !v14+">Safest</button>
-	<button data-query="max(2)">Only <b>2</b> Variants</button>
-	<button  style="background-color: #fe8" data-query="singles !skin">Base Singles</button>
+	<button style="background-color: #fdb" data-query="1cp !v14+">🦺️ Safest</button>
+	<button style="background-color: #dbe" data-query="max(2)">Only <b>2</b> Variants</button>
+	<button style="background-color: #fe8" data-query="singles !skin">👑️ Base Singles</button>
 	<b>Min Repeated:</b>
 	<button>Singles</button>
 	<button>Doubles</button>
@@ -587,6 +582,12 @@ const COSTS = [
 	{length: 4, cost: 160},
 	{length: 5, cost:   5, length_ge: true},
 ];
+
+const ALIASES = Object.entries({
+	chonk: 'cat',
+	skin: '/[\u{1F3FB}-\u{1F3FF}]/',
+	hair: '/[\u{1F9B0}-\u{1F9B3}]/'
+}).map(([k, v]) => [new RegExp(`\\b${k}\\b`, 'ig'), v]);
 
 const search_field = document.querySelector('#search input');
 const toc_ul = document.querySelector('#toc');
@@ -900,7 +901,9 @@ function update_search() {
 		setup_render(all_emoji);
 		return;
 	}
-	input = input.replaceAll(/\bchonk\b/gi, 'cat');
+	for (let [regex, value] of ALIASES) {
+		input = input.replaceAll(regex, value);
+	}
 	let stack = [];
 	let results = all_emoji;
 	for (let arg of input.split(/\s+/)) {
@@ -941,9 +944,13 @@ function update_search() {
 			test_fn = x => x.info && compare(parseFloat(x.info.version), version);
 		} else if (match = type_map.get(arg)) {
 			test_fn = x => x.info && x.info.type === match;
-		} else if (match = arg.match(/^(\d+)cp$/i)) {
+		} else if (match = arg.match(/^(\d+)cp(\+?)$/i)) {
 			let length = parseInt(match[1]);
-			test_fn = x => x.norm_length === length;
+			if (match[2]) {
+				test_fn = x => x.norm_length >= length;
+			} else {
+				test_fn = x => x.norm_length === length;
+			}
 		} else if (match = arg.match(/^(.*)\^(\d+)$/i)) {
 			let c = replace_escapes(match[1]).codePointAt(0);
 			let n = parseInt(match[2]);
