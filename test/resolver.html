@@ -8,7 +8,6 @@
 <style>
 :root {
 	--btn-fill-color: #eee;
-	--btn-hover-fill-color: #ccc;
 	--btn-border-color: #888;
 	--copied-color: #8f8;
 	--confusing-color: #d47;
@@ -45,17 +44,19 @@ button {
 	color: #000;
 	font-size: 100%;
 	gap: 4px;
+	transition: transform .1s ease;
 }
 button:disabled {
-	opacity: 50%;
+	opacity: .5;
 	pointer-events: none;
 }
 button:hover {
-	background-color: var(--btn-hover-fill-color);
+	transform: scale(1.04);
+	border: 2px solid #000;
+	margin: -1px;
 }
 button:hover:active {
-	background-color: #aaa;
-	/*transform: translate(0px, 1px);*/
+	transform: unset;
 }
 .rtrim {
 	padding-right: 4px !important;
@@ -114,11 +115,11 @@ body.testnet {
 	background: #ffe0ff;
 }
 .spinner {
-	width: 32px;
-	height: 32px;
+	width: 24px;
+	height: 24px;
 	box-sizing: border-box;
 	animation: spin 2s infinite linear;
-	border: 5px solid #000;
+	border: 4px solid #000;
 	border-bottom-color: transparent;
 	border-radius: 100%;
 }
@@ -183,24 +184,15 @@ body.testnet {
 	font-size: 12pt;
 }
 #actions {
-	min-height: 32px; /* spinner */
-	display: flex;
 	flex-wrap: wrap;
-	justify-content: flex-end;
-	align-items: stretch;
-	gap: 8px;
 }
-.segmented {
+.left {
+	margin-left: auto;
+}
+.grouped {
 	display: flex;
-}
-.segmented button:not(:last-child) {
-	border-top-right-radius: 0;
-	border-bottom-right-radius: 0;
-}
-.segmented button:not(:first-child) {
-	border-left: 0;
-	border-top-left-radius: 0;
-	border-bottom-left-radius: 0;
+	align-items: center;
+	gap: 8px;
 }
 #options {
 	display: flex;
@@ -272,8 +264,12 @@ body.testnet {
 #chain_select {
 	font-size: 100%;
 }
+#copy_link_btn {
+	margin-left: auto;
+}
 #resolve_btn {
 	font-weight: bold;
+	font-size: 120%;
 }
 #output {
 	display: flex;
@@ -445,6 +441,11 @@ span.tags {
 	/* border: 1px solid #ccc; */
 	white-space: pre;
 }
+button.ens  {
+	border-color: #04f;
+	background-color: #58f;
+	color: #fff;
+}
 button.copy {
 	flex: 0 0 auto;
 	align-self: center;
@@ -452,6 +453,7 @@ button.copy {
 	border: none;
 	width: 28px;
 	height: 28px;
+	margin: 0;
 	border-radius: 4px;
 	background-color: inherit;
 	background-position: center;
@@ -467,6 +469,7 @@ button.copy.small {
 button.copy:hover {
 	opacity: 1;
 	background-color: var(--copied-color);
+	transform: unset;
 }
 button.copy.copied {
 	opacity: 1;
@@ -485,18 +488,14 @@ button.copy.copied {
 	user-select: none;
 }
 .tags.ens { order: 9; }
-.ens button {
-	border-color: #04f;
-	background-color: #58f;
-	color: #fff;
-}
 .tags.metadata { order: 10; }
-.tags.external { order: 11; font-size: 80%; }
+.external { order: 11; font-size: 80%; }
 .tags.invalid { color: #f00; }
 .tags.elapsed {
 	background: #f0f0f0;
 	font: 9pt sans-serif;
 	order: 50;
+	margin-left: auto;
 }
 .record.raw,
 .tags.raw {
@@ -510,7 +509,7 @@ button.copy.copied {
 }
 .normalized .confusing {
 	margin: -8px 0;
-	font-size: 75%;
+	font: 11px sans-serif;	
 }
 .tags.normalized { background: #8f8; }
 .tags.normalized.ascii {
@@ -519,6 +518,7 @@ button.copy.copied {
 	font: 11pt monospace;
 }
 .tags.length {
+	color: #333;
 	background: #f8eedd;
 }
 .tags.length:after {
@@ -527,7 +527,8 @@ button.copy.copied {
 	font-size: 70%;
 }
 .tags.bytes {
-	background-color: #eee;
+	color: #333;
+	background-color: #f8f8f8;
 }
 .bytes:after {
 	content: 'bytes';
@@ -640,9 +641,6 @@ span.tally {
 }
 .avatar img:hover {
 	transform: scale(3);
-}
-button.glow {
-	border: 2px solid #2c2;
 }
 .breakdown {
 	font-size: 12pt;
@@ -849,7 +847,7 @@ button.glow {
 }
 #recent_select:hover,
 #recent_select:active {
-	background-color: var(--btn-hover-fill-color);
+	background-color: #ccc;
 }
 footer {
 	margin: 16px 0;
@@ -935,6 +933,9 @@ footer {
 	}
 	.row {
 		justify-content: center;
+	}
+	.tags.elapsed {
+		margin-left: unset;
 	}
 	#examples_btn {
 		display: block;
@@ -1236,32 +1237,25 @@ Hebrew:
 	<select id="chain_select"></select>
 	<button id="mainnet_btn" class="hide">↪ Mainnet</button>
 	<button id="browser_btn" class="hide">Browser ↩</button>
+	<button id="copy_link_btn">🔗️ Copy Link</button>
 </div>
 <div id="input">
 	<input id="input_field" size="20" placeholder="Name or Address">
-	<button id="parent_btn" class="hide" title="Resolve parent domain&#10;[ESC] Clear input"><svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 16 24" width="16"><path d="M8 22V2"/><path d="M1 9l7-7 7 7"/></svg></button>
 	<select id="recent_select" title="Recent Names" class="hide">
 		<option value="reset">🗑️ Clear History</option>
 		<optgroup label="Recent Names"></optgroup>
 	</select>
 </div>
-<div id="actions">
-	<div class="spinner"></div>
-	<div class="balloon"></div>
-	<div class="segmented">
-		<button id="random_emoji_btn" title="Random Emoji&#10;[ALT] Only Use Singles">🎲</button>
-		<button id="find_emoji_btn" title="Lookup Selected/First Emoji">Emoji</button>
+<div id="actions" class="grouped">
+	<button id="find_emoji_btn" title="Lookup Selected/First Emoji&#10;[ALT] Random Emoji&#10;[SHIFT] Only Use Singles">Emoji</button>
+	<button id="chars_btn" title="Lookup Selected/First Character">Chars</button>
+	<button id="confused_btn" title="Explain Confusable Characters">Confused</button>
+	<button id="nf_btn" title="NFD↔NFC">NF</button>
+	<button id="escape_btn" title="[ALT] Unicode Escaped">Escape</button>
+	<div class="grouped left">
+		<div class="spinner"></div>
+		<button id="resolve_btn" title="[ALT] Resolve parent&#10;[ESC] Clear input" class="ens">Resolve</button>
 	</div>
-	<div class="segmented">
-		<button id="chars_btn" title="Lookup Selected/First Character">Chars</button>
-		<button id="confused_btn" title="Explain Confusable Characters">Confused</button>
-	</div>
-	<div class="segmented">
-		<button id="nf_btn">NFD↔NFC</button>
-		<button id="escape_btn" title="[ALT] Unicode Escaped">Escape</button>
-	</div>
-	<button id="copy_link_btn">Copy Link</button>
-	<button id="resolve_btn">Resolve</button>
 </div>
 <div id="output">
 <ul class="row readme">
@@ -1294,7 +1288,7 @@ Hebrew:
 <li><a href="../../ens-norm-tests/test-breakdown/output-20230226/">ENSIP-1→15 Breakdown</a></li>
 <li><a href="https://github.com/ensdomains/ens-contracts/tree/staging/deployments/">ENS Deployments</a></li>
 <li><a href="../../ens-labels/demo.html" data-badge="js">Labelhash⁻¹</a></li>
-<li><a href="https://github.com/adraffy/ens-labels/">Label Database</a></li>
+<li><a href="https://github.com/adraffy/ens-labels/" data-badge="json">Label Database</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-regs.html">Recent Registrations</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-renews.html">Recent Renews</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-exp.html">Expirations</a></li>
@@ -1318,7 +1312,7 @@ Hebrew:
 		<button id="apply_debug_btn">🔄️ <span class="key">shift+enter</span></button>
 		<span class="balloon"></span>
 		<button id="clean_debug_btn" title="Clear debugger">🧹️</button>
-		<button id="disable_debug_btn" class="ens" title="Disable debugger">🛑️</button>
+		<button id="disable_debug_btn" title="Disable debugger">🛑️</button>
 	</div>
 	<textarea rows="20"></textarea>
 	<div id="debug_footer">While visible, all records are read and errors are shown.</div>
@@ -1368,7 +1362,6 @@ const examples_btn = $('#examples_btn');
 const provider_div = $('#provider');
 const nf_btn = $('#nf_btn');
 const escape_btn = $('#escape_btn');
-const parent_btn = $('#parent_btn');
 const version_span = $('#version');
 const clock_span = $('#clock');
 const enable_debug_btn = $('#enable_debug_btn');
@@ -1395,6 +1388,8 @@ const NFT_OWNER_NAME = 'NFT Owner';
 const SAME_AS_INPUT = 'Same as Input';
 const SAME_AS_NORM = 'Same as Norm';
 const ALT_RAW = '[ALT] Raw Value';
+const EMOJI_INSPECT = '🔍️ Inspect';
+const EMOJI_CHECK = '✅️ Check';
 
 const CHAINS = [
 	{
@@ -1630,6 +1625,7 @@ const RECORDS = [
 		evm: 100,
 		legacy: 700,
 		name: 'gnosis', // xdai
+		icon: '<img src="https://cryptologos.cc/logos/gnosis-gno-gno-logo.svg">',
 		url(x) { return `https://gnosisscan.io/address/${x}`; },
 		bonus: true,
 	},
@@ -1759,6 +1755,7 @@ let active_chain;
 let resolve_timer = RESOLVE_MODE_IDLE;
 let resolve_state;
 let network_state;
+let history_timer;
 
 version_span.innerHTML = `v${versions.version}`;
 version_span.addEventListener('click', () => {
@@ -1829,7 +1826,14 @@ for (let x of document.querySelectorAll('[data-tokenize]')) {
 		tld: true
 	}));
 }
-resolve_btn.addEventListener('click', resolve);
+resolve_btn.addEventListener('click', e => {
+	if (e.altKey) {
+		let name = input_field.value;
+		let pos = name.indexOf('.');
+		input_field.value = pos >= 0 ? name.slice(pos+1) : '';
+	}
+	resolve();
+});
 input_field.addEventListener('keydown', e => {
 	if (e.key === 'Enter') {
 		e.stopPropagation();
@@ -1905,16 +1909,6 @@ function add_recent(name, save = true) {
 	} 
 }
 
-$('#random_emoji_btn').addEventListener('click', e => {
-	let name = '';
-	let pool = e.altKey ? EMOJI.filter(cps => cps.length == 1 || (cps.length == 2 && cps[1] === 0xFE0F)) : EMOJI;
-	while (Array.from(name).length < MIN_ETH_LENGTH) {
-		name += ens_normalize(str_from_cps(pool[Math.random() * pool.length|0]));
-	}
-	input_field.value = add_dot_eth(name);
-	skip_norm_check.checked = false;
-	resolve();
-});
 function get_selected_input() {
 	let {value, selectionStart, selectionEnd} = input_field;
 	if (selectionEnd > selectionStart) {
@@ -1922,12 +1916,28 @@ function get_selected_input() {
 	}
 	return replace_escapes(value);
 }
+function resolve_random_emoji(only_singles) {
+	let name = '';
+	let pool = only_singles ? EMOJI.filter(cps => cps.length == 1 || (cps.length == 2 && cps[1] === 0xFE0F)) : EMOJI;
+	while ([...name].length < MIN_ETH_LENGTH) {
+		name += ens_normalize(str_from_cps(pool[Math.random() * pool.length|0]));
+	}
+	input_field.value = add_dot_eth(name);
+	skip_norm_check.checked = false;
+	resolve();
+}
 $('#find_emoji_btn').addEventListener('click', e => {
-	let url = './emoji.html';
-	let value = get_selected_input();
-	let token = ens_tokenize(value).find(x => x.emoji);
-	if (token) url += `#q=${encodeURIComponent(String.fromCodePoint(...token.cps))}`;
-	create_link(url).click();	
+	if (e.altKey) {
+		resolve_random_emoji();
+	} else if (e.shiftKey) {
+		resolve_random_emoji(true);
+	} else {
+		let url = './emoji.html';
+		let value = get_selected_input();
+		let token = ens_tokenize(value).find(x => x.emoji);
+		if (token) url += `#q=${encodeURIComponent(String.fromCodePoint(...token.cps))}`;
+		create_link(url).click();
+	}
 });
 $('#chars_btn').addEventListener('click', e => {
 	let url = './chars.html';
@@ -1945,12 +1955,6 @@ nf_btn.addEventListener('click', () => {
 	let s3 = apply_escapes_where(str_from_cps(nfc(explode_cp(s1))));
 	if (s2 === s3 && s2 === apply_escapes_where(s1)) return; // do nothing
 	input_field.value = s0 == s2 ? s3 : s2;
-	resolve();
-});
-parent_btn.addEventListener('click', e => {
-	let name = input_field.value;
-	let pos = name.indexOf('.');
-	input_field.value = pos >= 0 ? name.slice(pos+1) : '';
 	resolve();
 });
 escape_btn.addEventListener('click', e => {
@@ -2279,7 +2283,7 @@ function update_network() {
 			// multicall3 contract address is static on all supported chains
 			// https://www.multicall3.com/deployments
 			multicall: new ethers.Contract('0xcA11bde05977b3631167028862bE2a173976CA11', [
-				`function tryAggregate(bool requireSuccess, tuple(address target, bytes data)[] memory calls) public view returns (tuple(bool success, bytes data)[] memory returnData)`
+				`function tryAggregate(bool requireSuccess, tuple(address target, bytes data)[] memory calls) public view returns (tuple(bool ok, bytes data)[] memory returnData)`
 			], active_provider),
 		};
 		if (input_field.value) {
@@ -2294,7 +2298,7 @@ function update_network() {
 	chain_select.title = `Network: ${format_dec_hex(active_chain.id)}`;
 	mainnet_btn.classList.toggle('hide', !!active_chain.is_mainnet);
 	browser_btn.classList.toggle('hide', !(!using_window && window_provider && window_provider.__chain && !window_provider.__chain.is_mainnet));
-	provider_div.replaceChildren(create('div', {className: 'network'}, 'using ', create_explorer_address_lin(network_state.ens.target, {
+	provider_div.replaceChildren(create('div', {className: 'network'}, 'using ', create_explorer_address_link(network_state.ens.target, {
 		innerHTML: using_window ? 'Browser' : active_chain.rpc ? 'Public RPC' : 'Infura', 
 		title: 'ENS Registry Contract',
 		contract: true
@@ -2375,88 +2379,85 @@ function get_page_title() {
 	}
 	return title;
 }
-function update_location() {	
-	let url = get_page_url();
-	if (window.history.state) {
-		if (window.history.state != url) {
-			window.history.pushState(null, null, url);
-		}
-	} else {
+function update_location() {
+	let url = get_page_url().toString();
+	if (!window.history.state) {
 		window.history.replaceState(null, null, url);
+	} else if (window.history.state != url) {
+		window.history.pushState(null, null, url);
 	}
 	document.title = get_page_title();
+	clearTimeout(history_timer);
 }
 function parse() {
 	if (!active_chain) return; // wait for init
 	update_location();	
-	let input = input_field.value;
-	let width = ens_tokenize(input, {nf: false}).reduce((a, x) => {
+	let input0 = input_field.value;
+	let width = ens_tokenize(input0, {nf: false}).reduce((a, x) => {
 		if (x.type === 'valid') return x.cps.reduce((b, y) => b + (is_combining_mark(y, true) ? 0.5 : 1), a);
 		return a + (x.emoji ? 2 : 1);
 	}, 0);
 	input_field.classList.toggle('small',   width >= 21);
 	input_field.classList.toggle('smaller', width >= 36);
 	let skip = skip_norm_check.checked;
-	nf_btn.disabled = !input;
-	escape_btn.disabled = !input;
-	parent_btn.classList.toggle('hide', !input);
+	nf_btn.disabled = !input0;
+	escape_btn.disabled = !input0;
 	show_components_label.classList.add('hide');
 	output_div.innerHTML = '';
 	clock_span.innerHTML = '';
 	resolve_state = {};
-	if (!input) {
+	if (!input0) {
 		stop_resolving();
 		show_components_check
 		output_div.append(...readme_dom);
 		return;
 	}
 	// TODO: conslidate this code with resolve()
-	let name = replace_escapes(input);
+	let input = replace_escapes(input0);
 	if (resolve_timer === RESOLVE_MODE_EMPTY) {
 		resolve_timer = RESOLVE_MODE_IDLE;
 	}
-	if (is_checksum_address(name)) {
+	if (is_checksum_address(input)) {
 		let row = create_row('Address');
-		row.append(create_explorer_address_lin(name));		
-		add_row_tag(row, create_reverse_resolve_btn(name));
+		row.append(create_explorer_address_link(input));		
+		add_row_tag(row, create_reverse_resolve_btn(input));
 		output_div.append(row);
 		return true;
 	}
 	let row = create_row(INPUT_NAME);
-	let tokens = ens_tokenize(name); 
+	let tokens = ens_tokenize(input); 
 	if (tokens.some(x => x.emoji)) show_components_label.classList.remove('hide');
-	make_exploded(row, name, false);
-	add_row_tag(row, create_dot_eth_button(name));
-	add_row_tag(row, create_copy_btn(name));
-	output_div.append(row, create_breakdown_row(name, true));
+	make_exploded(row, input, false);
+	add_input_features(row, input);
+	output_div.append(row, create_breakdown_row(input, true));
 	try {
-		let norm = ens_normalize(name);
-		if (norm === name) {
+		let norm = ens_normalize(input);
+		if (norm === input) {
 			make_normalized(row, norm);
 		} else {
 			add_row_tag(row, create_tag('fail', 'Normalized'));
 			if (!skip) {
-				add_transformed_row(name);
+				add_transformed_row(input);
 				let norm_row = create_row('Normalized');
 				make_exploded(norm_row, norm, true);
 				make_normalized(norm_row, norm);
-				add_ensip1_tag(norm_row, name, true);
+				add_ensip1_tag(norm_row, input, true);
 				output_div.append(norm_row, create_breakdown_row(norm));
 			}
 		}
-		add_ensip1_tag(row, name);
+		add_ensip1_tag(row, input);
 		//output_div.append(create_dns_row(norm));
 		return true;
 	} catch (err) {
 		row.classList.add('error');
 		add_row_tag(row, create_tag('norm', err));
 		if (skip) return true;
-		add_ensip1_tag(row, name);
+		add_ensip1_tag(row, input);
 		stop_resolving();
 
 		// if there is a fully ignorable label
-		let collapsed = ens_split(name).filter(x => !x.tokens || x.tokens.length).map(x => str_from_cps(x.input)).join('.');
-		if (collapsed !== name) {
+		let collapsed = ens_split(input).filter(x => !x.tokens || x.tokens.length).map(x => str_from_cps(x.input)).join('.');
+		if (collapsed !== input) {
 			add_row_tag(row, create('button', {
 				innerText: '💥️ Collapse Empty Labels',
 				click() {
@@ -2467,8 +2468,8 @@ function parse() {
 		}
 
 		// if there is whitespace
-		let stripped = name.replace(/\s+/g, '');
-		if (stripped !== name) {
+		let stripped = input.replace(/\s+/g, '');
+		if (stripped !== input) {
 			add_row_tag(row, create('button', {
 				innerText: '✂️ Strip Whitespace',
 				click() {
@@ -2485,8 +2486,8 @@ function parse() {
 			[0xFF0E, 0x2E],
 			[0xFF61, 0x2E],
 		]);
-		let sloppy = str_from_cps(explode_cp(name).map(x => SLOPPY_MAP.get(x) || x))
-		if (sloppy !== name) {
+		let sloppy = str_from_cps(explode_cp(input).map(x => SLOPPY_MAP.get(x) || x))
+		if (sloppy !== input) {
 			add_row_tag(row, create('button', {
 				innerHTML: '💣️ Unsafe Replace',
 				title: `Replace the following characters:` + [...SLOPPY_MAP.entries()].map(([a, b]) => {
@@ -2554,7 +2555,17 @@ function add_transformed_row(input) {
 		output_div.append(row);
 	}
 }
-
+function add_input_features(row, input) {
+	add_row_tag(row, create_dot_eth_button(input));
+	if (/^0x[0-9a-f]{40}$/i.test(input)) {
+		add_row_tag(row, create_resolve_btn(ethers.getAddress(input.toLowerCase()), '🛠️ Fix Checksum'));
+	}
+	add_row_tag(row, create_copy_btn(input));
+	add_row_tag(row, create_namehash_button(input));
+	let len = create_tag('length', [...input].length);
+	make_detailed(len, true);
+	add_row_tag(row, len);	
+}
 function create_dns_row(name, {replaced, contenthash} = {}) {
 	let row = create_row(replaced ? 'Alternative DNS' : 'DNS');
 	row.classList.add('dns');
@@ -2617,20 +2628,22 @@ function create_dns_row(name, {replaced, contenthash} = {}) {
 		}
 		if (active_chain.is_mainnet) {
 			if (encoded.endsWith('.eth')) {
+				let group = create('div', {className: ['grouped', 'external']});
 				if (contenthash) {
-					add_row_tag(row, create_link(`https://${encoded}.limo`, {button: '↗️ Website', buttonClass: 'glow', className: 'external'}));
+					add_row_tag(row, create_link(`https://${encoded}.limo`, {button: '↗️ Website', className: 'external'}));
 				} else {
-					add_row_tag(row, create_link(`https://${encoded}.limo`, {innerHTML: '.limo', className: 'external'}));
+					add_row_tag(group, create_link(`https://${encoded}.limo`, {innerHTML: '.limo'}));
 				}
-				add_row_tag(row, create_link(`https://${encoded}.link`, {innerHTML: '.link', className: 'external'}));
-				add_row_tag(row, create_link(`https://${encoded}.li`,   {innerHTML: '.li',   className: 'external'}));
-				add_row_tag(row, create_link(`https://${encoded}.xyz`,  {innerHTML: '.xyz',  className: 'external'}));
-				add_row_tag(row, create_link(`https://${encoded}.co`,   {innerHTML: '.co',   className: 'external'}));
+				add_row_tag(group, create_link(`https://${encoded}.link`, {innerHTML: '.link'}));
+				add_row_tag(group, create_link(`https://${encoded}.li`,   {innerHTML: '.li',}));
+				add_row_tag(group, create_link(`https://${encoded}.xyz`,  {innerHTML: '.xyz',}));
+				add_row_tag(group, create_link(`https://${encoded}.co`,   {innerHTML: '.co',}));
+				row.append(group);
 			} else {
 				add_row_tag(row, create_link(`https://${encoded}`, {button: '↗️ Website', className: 'external'}));
 			}
 		}
-		add_row_tag(row, create_link(`../../punycode.js/test/demo.html#u=${encode_uri_component_surrogate_escaped(name)}`, {button: '✅️ Check'}));
+		add_row_tag(row, create_link(`../../punycode.js/test/demo.html#u=${encode_uri_component_surrogate_escaped(name)}`, {button: EMOJI_CHECK}));
 	} catch (err) {
 		row.classList.add('invalid');
 		add_row_tag(row, create_tag('fail', err));
@@ -2737,15 +2750,15 @@ function create_link(url, {button, buttonClass, ...args} = {}) {
 	}
 	return a;
 }
-function create_ens_link(name, innerHTML = '<button>🛠️ ENS</button>') {
+function create_ens_link(name, title = '🛠️ ENS') {
 	try {
 		if (ens_normalize(name) === name) {
-			return create_link(`https://app.ens.domains/${encode_uri_component_ens_escaped(name)}`, {innerHTML, className: 'ens'});
+			return create_link(`https://app.ens.domains/${encode_uri_component_ens_escaped(name)}`, {innerHTML, button: title, buttonClass: 'ens'});
 		}
 	} catch (err) {
 	}
 }
-function create_explorer_address_lin(addr, {innerHTML, anchor = '', contract, className, ...a} = {}) {
+function create_explorer_address_link(addr, {innerHTML, anchor = '', contract, className, ...a} = {}) {
 	if (!innerHTML) {
 		innerHTML = addr;
 		className = 'addr';
@@ -3074,20 +3087,23 @@ function add_ensip1_tag(row, input, is_norm) {
 }
 
 function add_nft_links(row, name, contract, token) {
-	add_row_tag(row, create_link(`${active_chain.metadata}/${contract}/${token}`, {button: '🏷️ Metadata', className: 'metadata'}));
-	add_row_tag(row, create_link(`${active_chain.explorer}/nft/${contract}/${BigInt(token)}`, {innerHTML: 'Explorer', className: 'external'}));
+	
+	let group = create('div', {className: ['grouped', 'external']});
+	add_row_tag(group, create_link(`${active_chain.metadata}/${contract}/${token}`, {innerHTML: 'Metadata'}));
+	add_row_tag(group, create_link(`${active_chain.explorer}/nft/${contract}/${BigInt(token)}`, {innerHTML: 'Explorer'}));
 	if (active_chain.opensea) {
-		add_row_tag(row, create_link(`${active_chain.opensea}${contract}/${BigInt(token)}`, {innerHTML: OPENSEA_NAME, className: 'external'}));
+		add_row_tag(group, create_link(`${active_chain.opensea}${contract}/${BigInt(token)}`, {innerHTML: OPENSEA_NAME}));
 	}
 	if (!active_chain.is_mainnet) return;
 	try {
 		let encoded = encodeURIComponent(name);
 		if (encoded.endsWith('.eth')) {
-			add_row_tag(row, create_link(`https://${VISION_HOST}/name/${encoded.slice(0, -4)}`, {innerHTML: VISION_NAME, className: 'external'}));
+			add_row_tag(group, create_link(`https://${VISION_HOST}/name/${encoded.slice(0, -4)}`, {innerHTML: VISION_NAME}));
 		}
-		add_row_tag(row, create_link(`http://predomain.eth.limo/#/domain/${encoded}`, {innerHTML: 'Predomain', className: 'external'}));
+		add_row_tag(group, create_link(`http://predomain.eth.limo/#/domain/${encoded}`, {innerHTML: 'Predomain'}));
 	} catch (err) {
 	}
+	row.append(group);
 }
 
 // https://github.com/adraffy/keccak.js/blob/main/src/utils.js#L96
@@ -3259,7 +3275,6 @@ function add_row_tag(row, tag) {
 	return tag;
 }
 
-
 function create_namehash_button(name) {
 	let node = namehash(name);
 	let btn = create('button', {innerHTML: '🆔️'});
@@ -3286,11 +3301,13 @@ function create_namehash_breakdown(name) {
 }
 function create_dns_breakdown(name) {
 	let div = create('div', {className: 'hash'});
+	div.append(create('b', {innerText: 'Length:'}), create_tag('length', [...name].length), create_tag('bytes', bytes_from_utf8(name).length));
+	div.append(' • ')
 	div.append(create('b', {innerText: 'DNS-encoded:'}));
 	try {
 		let v = dns_encoded_from(name);
 		let hex = ethers.hexlify(v);
-		div.append(create('span', {className: 'bytes', innerText: v.length}), create_copy_btn(hex, {small: true, value: true}));
+		div.append(create_tag('bytes', v.length), create_copy_btn(hex, {small: true, value: true}));
 	} catch (err) {
 		div.append(create('span', {innerText: '🚫️', title: err.message}));
 	}
@@ -3322,10 +3339,7 @@ function create_breakdown_row(name, before) {
 		}
 		if (info.label) {
 			row.append(create_tag('length', info.cps.length));
-			if (info.emoji || info.type !== 'ASCII') {
-				let v = bytes_from_utf8(info.label);
-				row.append(create_tag('bytes', v.length));
-			}
+			row.append(create_tag('bytes', bytes_from_utf8(info.label).length));
 		}
 		if (info.error) {
 			row.classList.add('error');
@@ -3376,7 +3390,7 @@ function create_breakdown_row(name, before) {
 	return outer;
 }
 
-function create_row(label, waiting) {
+function create_row(label) {
 	let row = create('div', {className: 'row'});
 	if (resolve_state.available) row.classList.add('available');
 	if (label) {
@@ -3388,12 +3402,11 @@ function create_row(label, waiting) {
 		}
 		row.append(span);
 	}
-	if (waiting) {
-		row.append(create('div', {innerHTML: '<div class="spinner"></div>', className: 'temporary'}));
-	}
 	return row;
 }
-
+function add_spinner(row) {
+	row.append(create('div', {innerHTML: '<div class="spinner"></div>', className: 'temporary'}));
+}
 function remove_temporary(row) {
 	for (let x of row.querySelectorAll('.temporary')) {
 		x.remove();
@@ -3539,13 +3552,17 @@ function resolve() {
 	input_field.value = input;	
 	let name = replace_escapes(input);
 	add_recent(name);
+	const url = get_page_url();
 	if (!parse() && (!input || !skip)) {
 		primary_loader.classList.add('hide');
+		history_timer = setTimeout(() => {
+			// commit the error to history
+			window.history.replaceState(url.toString(), null, url);
+		}, 2000);
 		return;
 	}
 	resolve_btn.disabled = true;
 	primary_loader.classList.remove('hide');
-	const url = get_page_url();
 	const t0 = Date.now();
 	resolve_state = {name, input, skip, url, t0, t: t0, addrs: new Map(), chain: active_chain};
 	if (debug_enabled) resolve_state.debug = debug_settings;
@@ -3556,9 +3573,8 @@ function resolve() {
 			setTimeout(resolve, Math.max(0, resolve_timer[0] - Date.now()));
 		} else {
 			primary_loader.classList.add('hide');
-			window.history.replaceState(url.toString(), null, url);
-			// TODO: change this to idle() for 2sec or something
-			// so it works on errors, but not partial input
+			// commit resolve() to history
+			window.history.replaceState(url.toString(), null, url); 
 		}
 	});
 }
@@ -3576,7 +3592,7 @@ async function resolve1(input, skip_norm) {
 	if (input_is_address) {
 		input_row = create_row('Address');
 		input_row.append(create_jazz_icon(input));
-		input_row.append(create_explorer_address_lin(input));
+		input_row.append(create_explorer_address_link(input));
 		add_row_tag(input_row, create_copy_btn(input, {value: true}));
 		add_row_tag(input_row, create_reverse_resolve_btn(input));
 		add_owner_links(input_row, input);
@@ -3590,7 +3606,8 @@ async function resolve1(input, skip_norm) {
 		rev_details.append(rev_div, create_namehash_breakdown(rev_name), create_dns_breakdown(rev_name));
 		output_div.append(input_row, rev_details);
 
-		let resolver_row = create_row('Reverse Resolver', true);
+		let resolver_row = create_row('Reverse Resolver');
+		add_spinner(resolver_row);
 		output_div.append(resolver_row);
 
 		if (await is_contract(input)) make_contract(input_row);
@@ -3606,20 +3623,13 @@ async function resolve1(input, skip_norm) {
 		remove_temporary(resolver_row);	
 		add_row_tag(resolver_row, create_elapsed());
 
-		if (network_state.reverse_registrar === null) {
-			let address;
-			try {
-				address = await network_state.ens.owner(namehash(REVERSE_DOMAIN));
-			} catch (err) {
-			}
-			if (should_stop_resolving()) return;
-			network_state.reverse_registrar = address || false;
-		}
-		if (network_state.reverse_registrar) {
-			add_row_tag(input_row, create_explorer_address_lin(network_state.reverse_registrar, {
+		let rev = await try_reverse_registrar();
+		if (should_stop_resolving()) return;
+		if (network_state.reverse) {
+			add_row_tag(input_row, create_explorer_address_link(network_state.reverse, {
 				contract: true, 
 				anchor: '#writeContract#F7',
-				innerHTML: '<button class="glow">✍️ Set Name</button>'
+				button: '✍️ Set Name'
 			}));
 		}
 
@@ -3632,11 +3642,12 @@ async function resolve1(input, skip_norm) {
 			return;
 		}
 		
-		resolver_row.append(create_explorer_address_lin(resolver.target, {contract: true}));
+		resolver_row.append(create_explorer_address_link(resolver.target, {contract: true}));
 		add_row_tag(resolver_row, create_copy_btn(resolver.target, {value: true}));
 		add_resolver_info(resolver_row, resolver);
 
-		reverse_row = normed_row = create_row('Reverse', true);
+		reverse_row = normed_row = create_row('Primary');
+		add_spinner(reverse_row);
 		output_div.append(reverse_row);
 		let primary;
 		[{data: primary, error: last_err}] = await fetch_records(resolver, [{type: TYPE_NAME}]);
@@ -3653,9 +3664,7 @@ async function resolve1(input, skip_norm) {
 		}
 
 		make_exploded(reverse_row, primary, false);
-		add_row_tag(reverse_row, create_copy_btn(primary));
-		add_row_tag(reverse_row, create_ens_link(primary));		
-		add_row_tag(reverse_row, create_namehash_button(primary));
+		add_input_features(reverse_row, primary);
 		output_div.append(create_breakdown_row(primary, true));
 			
 		try {
@@ -3674,7 +3683,7 @@ async function resolve1(input, skip_norm) {
 				make_normalized(reverse_row, name_norm);
 			} else {
 				add_row_tag(reverse_row, create_tag('fail', 'Normalized'));
-				let row = normed_row = create_row('Normalized Reverse');
+				let row = normed_row = create_row('Normalized Primary');
 				make_exploded(row, name_norm, true);
 				add_row_tag(row, create_copy_btn(name_norm));
 				add_row_tag(row, create_resolve_btn(name_norm));
@@ -3693,14 +3702,7 @@ async function resolve1(input, skip_norm) {
 		add_row_tag(input_row, create_ens_link(input));
 		output_div.append(input_row);
 		output_div.append(create_breakdown_row(input, true));
-		add_row_tag(input_row, create_copy_btn(input));
-
-		if (/^0x[0-9a-f]{40}$/i.test(input)) {
-			add_row_tag(input_row, create_resolve_btn(ethers.getAddress(input.toLowerCase()), '🛠️ Fix Checksum'));
-		}
-		add_row_tag(input_row, create_dot_eth_button(input));
-		add_row_tag(input_row, create_namehash_button(input));
-
+		add_input_features(input_row, input);
 		try {
 			name_norm = ens_normalize(input);
 		} catch (err) {
@@ -3810,7 +3812,8 @@ async function resolve1(input, skip_norm) {
 	// at this point, we have a name
 	// lookup the name
 	let resolver, resolver_err;
-	let resolver_row = create_row('Resolver', true);
+	let resolver_row = create_row('Resolver');
+	add_spinner(resolver_row);
 	output_div.append(resolver_row);
 	try {
 		resolver = await get_resolver(name_norm);
@@ -3823,7 +3826,7 @@ async function resolve1(input, skip_norm) {
 	add_row_tag(resolver_row, create_elapsed());
 	
 	if (resolver) { 
-		resolver_row.append(create_explorer_address_lin(resolver.target, {contract: true}));
+		resolver_row.append(create_explorer_address_link(resolver.target, {contract: true}));
 		add_row_tag(resolver_row, create_copy_btn(resolver.target, {value: true}));
 		add_resolver_info(resolver_row, resolver);
 	} else if (resolver === null) {
@@ -3833,19 +3836,28 @@ async function resolve1(input, skip_norm) {
 	let dns_txt_address;
 	if (resolver && resolver.__info.offchain_dns) {
 		// https://blog.ens.domains/post/gasless-dnssec
-		let ens1_row = create_row(create_link('https://support.ens.domains/en/articles/8834820-offchain-gasless-dnssec-names-in-ens', {innerHTML: 'DNS <code style="color: #58f">ENS1</code>'}), true);
+		let ens1_row = create_row(create_link('https://support.ens.domains/en/articles/8834820-offchain-gasless-dnssec-names-in-ens', {innerHTML: 'DNS <code style="color: #58f">ENS1</code>'}));
+		add_spinner(ens1_row);
 		ens1_row.classList.add('dns');
 		output_div.append(ens1_row);
-		let args;
+		let host = name_norm.split('.').map(puny_encoded).join('.');
+		let args, res, inspect;
 		try {
 			let url = new URL('https://1.1.1.1/dns-query');
-			url.searchParams.set('name', name_norm.split('.').map(puny_encoded).join('.'));
+			url.searchParams.set('name', host); // cannot fail
 			url.searchParams.set('type', 'TXT');
 			let res = await fetch(url, {
 				headers: {accept: 'application/dns-json'}
 			});
 			if (res.ok) {
-				let {Answer = []} = await res.json();
+				let json = await res.json();
+				inspect = create('button', {
+					innerText: EMOJI_INSPECT,
+					click() {
+						window.alert(JSON.stringify(json, null, '  '));
+					}
+				});
+				let {Answer = []}  = json;
 				const prefix = '"ENS1 ';
 				let rec = Answer.find(x => x.type === 16 && x.data.startsWith(prefix) && x.data.endsWith('"'));
 				if (!rec) throw new Error('No record found');
@@ -3865,10 +3877,13 @@ async function resolve1(input, skip_norm) {
 		}
 		if (should_stop_resolving()) return;
 		remove_temporary(ens1_row);
-		add_row_tag(ens1_row, create_elapsed()); 
+		add_row_tag(ens1_row, inspect);
+		add_row_tag(ens1_row, create_link(`https://dnssec-debugger.verisignlabs.com/${host}`, {innerText: 'Verisign', className: 'external'}));
 
+		add_row_tag(ens1_row, create_elapsed());
 		if (args) {
-			let target_row = create_row('DNS Resolver', true);
+			let target_row = create_row('DNS Resolver');
+			add_spinner(target_row);
 			target_row.classList.add('dns');
 			output_div.append(target_row);
 			try {
@@ -3883,7 +3898,7 @@ async function resolve1(input, skip_norm) {
 				}
 				let info = await get_resolver_info(target);
 				if (should_stop_resolving()) return;
-				target_row.append(create_explorer_address_lin(target, {contract: true}));
+				target_row.append(create_explorer_address_link(target, {contract: true}));
 				add_row_tag(target_row, create_copy_btn(resolver.target, {value: true}));
 				add_resolver_info(target_row, {target, __info: info}, true);
 				if (info.edns) {
@@ -3918,7 +3933,8 @@ async function resolve1(input, skip_norm) {
 	let nft_token;
 
 	let available;
-	let avail_row = create_row('Availability', true);
+	let avail_row = create_row('Availability');
+	add_spinner(avail_row);
 	if (parent_domain === 'eth') {
 		let label = name_norm.slice(0, sep_pos);
 		nft_token = labelhash(label);
@@ -3955,7 +3971,7 @@ async function resolve1(input, skip_norm) {
 			let padded = Array(1 + Math.max(0, MIN_ETH_LENGTH - len)).fill(label).join('');
 			add_row_tag(avail_row, create_resolve_btn(add_dot_eth(padded), '↩️ Repeat until 3+'));
 		} else if (available) {
-			add_row_tag(avail_row, create_ens_link(name_norm, '<button>👌️ Available to Register</button>'));
+			add_row_tag(avail_row, create_ens_link(name_norm, 'Available to Register'));
 			let ether = parseFloat(ethers.formatEther(premium));
 			if (ether) {
 				add_row_tag(avail_row, create_tag('warn', `${ether.toFixed(ether < 1 ? 4 : 2)}Ξ Premium`));
@@ -4012,7 +4028,7 @@ async function resolve1(input, skip_norm) {
 		add_row_tag(avail_row, create_tag('length', Array.from(label).length));
 		if (nft_contract) {
 			let old = avail_row.querySelector('.row-label');
-			old.replaceChildren(create_explorer_address_lin(nft_contract.target, {innerHTML: old.innerHTML, contract: true}));
+			old.replaceChildren(create_explorer_address_link(nft_contract.target, {innerHTML: old.innerHTML, contract: true}));
 		}
 		if (avail_err) {
 			avail_row.classList.add('error');
@@ -4030,7 +4046,8 @@ async function resolve1(input, skip_norm) {
 	let is_wrapped, owner, nft_owner;
 	if ((!resolver || !resolver.__dropped) && (!nft_backed || available !== undefined)) { 
 		let node = namehash(name_norm);
-		let wrapped_row = create_row('Wrapper', true);
+		let wrapped_row = create_row('Wrapper');
+		add_spinner(wrapped_row);
 		let unwrappable;
 		try {
 			dns_encoded_from(name_norm);
@@ -4060,7 +4077,7 @@ async function resolve1(input, skip_norm) {
 			}
 			if (network_state.wrapper) {
 				let old = wrapped_row.querySelector('.row-label');
-				old.replaceChildren(create_explorer_address_lin(network_state.wrapper.target, {innerHTML: old.innerHTML, contract: true}));
+				old.replaceChildren(create_explorer_address_link(network_state.wrapper.target, {innerHTML: old.innerHTML, contract: true}));
 			}
 			if (is_wrapped) {
 				add_nft_links(normed_row, name_norm, network_state.wrapper.target, node);
@@ -4074,7 +4091,8 @@ async function resolve1(input, skip_norm) {
 		remove_temporary(wrapped_row);
 		add_row_tag(wrapped_row, create_elapsed());
 
-		let owner_row = create_row(available ? 'Previous Owner' : 'Owner', true);
+		let owner_row = create_row(available ? 'Previous Owner' : 'Owner');
+		add_spinner(owner_row);
 		let owner_err;
 		let checked_nft;
 		output_div.append(owner_row);
@@ -4144,7 +4162,7 @@ async function resolve1(input, skip_norm) {
 				add_row_tag(owner_row, create_tag('warn', 'Not Set'));
 			}
 		} else {
-			owner_row.append(create_explorer_address_lin(owner));
+			owner_row.append(create_explorer_address_link(owner));
 			add_row_tag(owner_row, create_copy_btn(owner, {value: true}));
 			// if the input was an address, we can validate
 			if (input_is_address) {
@@ -4161,7 +4179,8 @@ async function resolve1(input, skip_norm) {
 				add_row_tag(avail_row, create_link(`https://protocol.art/account/${owner}`, {button: '🛠️ Configure', className: 'external'}));
 			}
 			if (!is_wrapped && !available && !checked_nft && nft_contract) {
-				let nft_row = create_row(create_explorer_address_lin(nft_contract.target, {innerHTML: NFT_OWNER_NAME, contract: true}), true);
+				let nft_row = create_row(create_explorer_address_link(nft_contract.target, {innerHTML: NFT_OWNER_NAME, contract: true}));
+				add_spinner(nft_row);
 				nft_row.classList.add('nft');
 				output_div.append(nft_row);
 				try {
@@ -4174,7 +4193,7 @@ async function resolve1(input, skip_norm) {
 					owner_row.querySelector('.row-label').innerHTML = MANAGER_NAME;
 					owner_row.insertAdjacentElement('beforebegin', nft_row); // move up
 					nft_row.append(create_jazz_icon(nft_owner));
-					let a = create_explorer_address_lin(nft_owner);
+					let a = create_explorer_address_link(nft_owner);
 					nft_row.append(a);
 					add_row_tag(nft_row, create_copy_btn(nft_owner, {value: true}));
 					try {
@@ -4209,7 +4228,8 @@ async function resolve1(input, skip_norm) {
 	let address;
 	if (resolver) {
 		let address_err;
-		let address_row = create_row('ETH Address', true);
+		let address_row = create_row('ETH Address');
+		add_spinner(address_row);
 		address_row.classList.add('addr');
 		output_div.append(address_row);	
 		try {
@@ -4227,7 +4247,7 @@ async function resolve1(input, skip_norm) {
 			if (should_stop_resolving()) return;
 			if (await is_contract(address)) make_contract(address_row);
 			address_row.append(create_jazz_icon(address));
-			address_row.append(create_explorer_address_lin(address));
+			address_row.append(create_explorer_address_link(address));
 			address_row.append(create_copy_btn(address, {value: true}));
 			if (input_is_address) {
 				if (address === input) {
@@ -4262,7 +4282,8 @@ async function resolve1(input, skip_norm) {
 		let show_recs = show_records_check.checked;
 		if (!show_recs) resolve_state.skipped_records = true;
 		if (show_recs) {
-			let records_row = create_row(create_link('https://docs.ens.domains/contract-api-reference/publicresolver', {innerHTML: 'Records'}), true);
+			let records_row = create_row(create_link('https://docs.ens.domains/contract-api-reference/publicresolver', {innerHTML: 'Records'}));
+			add_spinner(records_row);
 			records_row.classList.add('records');
 			records_row.dataset.records = '1';
 			output_div.append(records_row);	
@@ -4339,7 +4360,7 @@ async function resolve1(input, skip_norm) {
 							a.innerHTML = rec.icon || `<b>${name}</b>`;
 							try {
 								let v = ethers.getBytes(data);
-								let lines = [`CoinType: ${format_dec_hex(coin)}`];
+								let lines = [`Name: ${name}`, `Type: ${format_dec_hex(coin)}`];
 								let address;
 								if (rec.evm) {
 									address = ethers.getAddress(data);
@@ -4464,7 +4485,7 @@ async function resolve1(input, skip_norm) {
 							a.classList.add('rtrim');
 							let raw = ethers.concat([x, y]);
 							let addr = ethers.getAddress('0x' + ethers.keccak256(ethers.concat([x, y])).slice(-40));
-							let temp = create_explorer_address_lin(addr);
+							let temp = create_explorer_address_link(addr);
 							a.href = temp.href;
 							a.title = temp.title;
 							let match;
@@ -4557,7 +4578,7 @@ async function resolve1(input, skip_norm) {
 										rep = Base64URL.encode(buf);
 										url = `ar://${rep}`;
 										a.append(create_link(`https://arweave.net/${rep}`, {button: 'Arweave'}));
-										a.append(create_link(`https://viewblock.io/arweave/tx/${rep}`, {button: '🔍️ Inspect'}));
+										a.append(create_link(`https://viewblock.io/arweave/tx/${rep}`, {button: EMOJI_INSPECT}));
 										break;
 									}
 									default: throw new Error(`unknown protocol: ${proto}`);
@@ -4566,7 +4587,7 @@ async function resolve1(input, skip_norm) {
 								if (cid) {
 									lines.push(`CID: Version: ${format_dec_hex(cid.version)} / Codec: ${format_dec_hex(cid.codec)} / Bytes: ${buf.length}`);
 									lines.push(`Hash: Codec: ${format_dec_hex(cid.hash.codec)} / Bytes: ${cid.hash.data.length}`);
-									a.append(create_link(`https://cid.ipfs.tech/#${cid}`, {button: '🔍️ Inspect'}));
+									a.append(create_link(`https://cid.ipfs.tech/#${cid}`, {button: EMOJI_INSPECT}));
 								}
 								lines.push(`Raw: ${data}`, ALT_RAW);
 								a.dataset.alt = data;
@@ -4578,7 +4599,7 @@ async function resolve1(input, skip_norm) {
 								a.append(create_tag('fail', err));
 								make_click_copy(a, data, {hint: true});
 							}
-							a.append(create_link(`../../cid.js/test/demo.html#${data}`, {button: '✅️ Check'}));
+							a.append(create_link(`../../cid.js/test/demo.html#${data}`, {button: EMOJI_CHECK}));
 							break;
 						}
 					}
@@ -4605,63 +4626,28 @@ async function resolve1(input, skip_norm) {
 		}
 
 		if (show_recs && resolver.__info.impl) {
-			let row = create_row(create_link('https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar#discovery', {innerHTML: 'Interfaces'}), true);
+			let row = create_row(create_link('https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar#discovery', {innerHTML: 'Interfaces'}));
 			row.classList.add('impls');
 			output_div.append(row);	
-			// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar	
-			const TITLE_WRAPPER = '<b>Wrapper</b> ERC-1155';
-			let interfaces = [
-				//{iface: IFACE_ETH_NFT, name: 'NFT'},  
-				{iface: '0x019a38fe', title: TITLE_WRAPPER},
-				{iface: IFACE_ETH_CONTROLLER, title: '<b>Controller</b>'},
-				{iface: '0x018fac06', title: '<b>Old Controller</b>'},
-				{iface: '0x6ccb2df4', title: '<b>NFT</b> ERC-721'},
-				{iface: '0x7ba18ba1', title: '<b>Old Registrar</b>'},
-				{iface: '0xd1a70fd3', title: '<b>Bulk Renewal</b>'},
-			];
-			let discovered = new Set();
-			function add_iface(html, address, iface) {
-				if (is_null_hex(address)) return;
-				if (discovered.has(address)) return;
-				discovered.add(address);
-				let lines = [`Contract: ${address}`];
-				if (iface) {
-					html += ` <code>${iface.slice(2)}</code>`;
-					lines.push(`Interface: ${iface}`);
-				}
-				html += ` <code class="prefix">${address.slice(0, 6)}</code>`;
-				add_row_tag(row, create_explorer_address_lin(address, {innerHTML: html, contract: true, className: 'iface', title: lines.join('\n')}));
-			}
-			const {target, interface: abi, __node} = resolver;
-			let frag = abi.getFunction('interfaceImplementer');
-			try {
-				let multi = await network_state.multicall.tryAggregate(true, interfaces.map(x => {
-					return {target, data: abi.encodeFunctionData(frag, [__node, x.iface])};
-				}));
-				for (let i = 0; i < interfaces.length; i++) {
-					let {iface, title} = interfaces[i];
-					let [addr] = abi.decodeFunctionResult(frag, multi[i].data); 
-					if (is_null_hex(addr)) continue;
-					add_iface(title, addr, iface);
-					if (iface === IFACE_ETH_CONTROLLER) {
-						let controller = contract_for_controller(addr);
-						let oracle = await controller.prices().catch(() => {});
-						if (!is_null_hex(oracle)) {
-							add_iface('<b>Price Oracle</b>', oracle);
-							add_iface('<b>USD Oracle</b>', await contract_for_price_oracle(oracle).usdOracle().catch(() => {}));
-						}
-						add_iface(TITLE_WRAPPER, await controller.nameWrapper().catch(() => {}));
-						//add_iface('DAO Wallet', await contract.owner().catch(() => ''));
+			if (name_norm === 'eth') {
+				add_spinner(row);
+				await load_known_interfaces(row, resolver, owner);
+				remove_temporary(row);
+				add_row_tag(row, create_elapsed());
+			} else {
+				row.append(create('button', {
+					innerText: 'Check Interfaces',
+					click() {
+						const t0 = Date.now();
+						this.remove();
+						add_spinner(row);
+						load_known_interfaces(row, resolver, owner).then(() => {
+							remove_temporary(row);
+							add_row_tag(row, create_tag('elapsed', format_dur(Date.now() - t0)));
+						});
 					}
-				}
-				if (!discovered.size) {
-					add_row_tag(row, 'None');
-				}
-			} catch (err) {
-				add_row_tag(row, create_tag('warn', err));
+				}))
 			}
-			remove_temporary(row);
-			add_row_tag(row, create_elapsed());
 		}
 	}
 
@@ -4755,13 +4741,15 @@ async function resolve1(input, skip_norm) {
 	}
 	output_div.append(create_breakdown_row(primary_norm));
 }
-function add_owner_links(row, owner) {	
-	add_row_tag(row, create_link(`${active_chain.is_mainnet ? 'https://opensea.io/' : 'https://testnets.opensea.io/'}${owner}?tab=collected`, {innerHTML: OPENSEA_NAME, className: 'external'}));
+function add_owner_links(row, owner) {
+	let group = create('div', {className: ['grouped', 'external']});
+	add_row_tag(group, create_link(`${active_chain.is_mainnet ? 'https://opensea.io/' : 'https://testnets.opensea.io/'}${owner}?tab=collected`, {innerHTML: OPENSEA_NAME}));
 	if (active_chain.is_mainnet) {
-		add_row_tag(row, create_link(`https://${VISION_HOST}/0x/${owner}`, {innerHTML: VISION_NAME, className: 'external'}));	
+		add_row_tag(group, create_link(`https://${VISION_HOST}/0x/${owner}`, {innerHTML: VISION_NAME}));	
 	}	
-	add_row_tag(row, create_link(`https://rainbow.me/${owner}`, {innerHTML: 'Rainbow', className: 'external'}));
-	add_row_tag(row, create_link(`https://debank.com/profile/${owner}`, {innerHTML: 'Debank', className: 'external'}));
+	add_row_tag(group, create_link(`https://rainbow.me/${owner}`, {innerHTML: 'Rainbow'}));
+	add_row_tag(group, create_link(`https://debank.com/profile/${owner}`, {innerHTML: 'Debank'}));
+	row.append(group);
 }
 function is_user_rejection(err) {
 	return err.shortMessage === 'user rejected action';
@@ -5007,6 +4995,19 @@ async function fetch_nft_image(url0) {
 		return {error: `fetch failure`, cause};
 	}
 }
+async function try_reverse_registrar() {
+	let {reverse} = network_state;
+	if (reverse === undefined) {
+		try {
+			reverse = await network_state.ens.owner(namehash(REVERSE_DOMAIN));
+			if (is_null_hex(reverse)) reverse = null;
+		} catch (err) {
+			reverse = false;
+		}
+		network_state.reverse = reverse;
+	}
+	return reverse;
+}
 async function ensure_eth_resolver() {
 	let {eth} = network_state;
 	if (eth) return;
@@ -5029,7 +5030,7 @@ function contract_for_price_oracle(address) {
 	], active_provider);
 }
 async function ensure_wrapper() {
-	let {wrapper} = network_state;
+	let {wrapper, ens} = network_state;
 	if (wrapper) return;
 	if (wrapper === false) throw new Error(`Not implementated`);
 	await ensure_eth_resolver();
@@ -5078,7 +5079,6 @@ async function ensure_eth_nft() {
 		grace_period: 1000 * grace_sec,
 		premium_period: 1000 * 21*86400 // TODO: find this on-chain
 	});
-
 }
 function labels_from_dns_encoded(v) {
 	let labels = [];
@@ -5121,6 +5121,82 @@ async function is_contract(address) {
 	}
 	return is;
 }
+async function multicall_tryAggregate(calls) {
+	try {
+		return await network_state.multicall.tryAggregate(false, calls);
+	} catch (err) {
+		// if a function doesn’t exist on a contract compiled in solidity
+		// version 0.4.11 or below, it’ll revert and use all the gas available
+		// assume call exception => out of gas
+		if (err.code !== 'CALL_EXCEPTION') throw err;
+	}
+	return Promise.all(calls.map(async ({target, data}) => {
+		try {
+			let res = await active_provider.call({to: target, data});
+			return [!((res.length - 2) & 63), res];
+		} catch (err) {
+			return [false, '0x', err];
+		}
+	}));
+}
+async function load_known_interfaces(row, resolver, owner) {
+	// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar	
+	const TITLE_WRAPPER = 'Wrapper';
+	const TITLE_NFT = 'NFT';
+	let interfaces = [
+		//{iface: IFACE_ETH_NFT, name: 'NFT'},  
+		{iface: '0x019a38fe', title: TITLE_WRAPPER},
+		{iface: IFACE_ETH_CONTROLLER, title: 'Controller'},
+		{iface: '0x018fac06', title: 'Old Controller'},
+		{iface: '0x6ccb2df4', title: 'NFT ERC-721'},
+		{iface: '0x7ba18ba1', title: 'Old Registrar'},
+		{iface: '0xd1a70fd3', title: 'Bulk Renewal'},
+	];
+	let discovered = new Set();
+	function add_iface(html, address, iface) {
+		if (is_null_hex(address)) return;
+		if (discovered.has(address)) return;
+		discovered.add(address);
+		let lines = [`Contract: ${address}`];
+		if (iface) {
+			html += ` <code>${iface.slice(2)}</code>`;
+			lines.push(`Interface: ${iface}`);
+		}
+		html += ` <code class="prefix">${address.slice(0, 6)}</code>`;
+		add_row_tag(row, create_explorer_address_link(address, {innerHTML: html, contract: true, className: 'iface', title: lines.join('\n')}));
+	}
+	const {target, interface: abi, __node} = resolver;
+	let frag = abi.getFunction('interfaceImplementer');
+	try {
+		let multi = await multicall_tryAggregate(interfaces.map(x => {
+			return {target, data: abi.encodeFunctionData(frag, [__node, x.iface])};
+		}));
+		for (let i = 0; i < interfaces.length; i++) {
+			let {iface, title} = interfaces[i];
+			let [ok, data] = multi[i];
+			if (!ok) continue;
+			let [addr] = abi.decodeFunctionResult(frag, data); 
+			if (is_null_hex(addr)) continue;
+			add_iface(title, addr, iface);
+			if (iface === IFACE_ETH_CONTROLLER) {
+				let controller = contract_for_controller(addr);
+				let oracle = await controller.prices().catch(() => {});
+				if (!is_null_hex(oracle)) {
+					add_iface('Price Oracle', oracle);
+					add_iface('USD Oracle', await contract_for_price_oracle(oracle).usdOracle().catch(() => {}));
+				}
+				add_iface('NFT', owner);
+				add_iface(TITLE_WRAPPER, await controller.nameWrapper().catch(() => {}));
+				//add_iface('DAO Wallet', await contract.owner().catch(() => ''));
+			}
+		}
+		if (!discovered.size) {
+			add_row_tag(row, 'None');
+		}
+	} catch (err) {
+		add_row_tag(row, create_tag('warn', err));
+	}
+}
 async function get_resolver_info(target) {
 	const {resolvers, contracts} = active_chain;
 	let info = resolvers.get(target);
@@ -5131,31 +5207,23 @@ async function get_resolver_info(target) {
 				'function supportsInterface(bytes4 interfaceID) external view returns (bool)',
 				'function gatewayURL() view returns (string)',
 			]);
-			let multi;
-			try {
-				// TODO: replace with deployless with gas-limit
-				multi = await network_state.multicall.tryAggregate(false, [
-					{target, data: abi.encodeFunctionData('supportsInterface', ['0x124a319c'])}, // IInterfaceResolver:   interfaceImplementer(bytes32,bytes4)
-					{target, data: abi.encodeFunctionData('supportsInterface', ['0x9061b923'])}, // IExtendedResolver:    resolve(bytes,bytes)
-					{target, data: abi.encodeFunctionData('supportsInterface', ['0x8ef98a7e'])}, // IExtendedDNSResolver: resolve(bytes,bytes,bytes)
-					{target, data: abi.encodeFunctionData('supportsInterface', ['0x73302a25'])}, // TheOffchainResolver.sol
-					{target, data: abi.encodeFunctionData('gatewayURL')}
-				]);
-			} catch (err) {
-				// if a function doesn’t exist on a contract compiled in solidity
-				// version 0.4.11 or below, it’ll revert and use all the gas available
-				if (err.code !== 'CALL_EXCEPTION') throw err;
-			}
+			let multi = await multicall_tryAggregate([
+				{target, data: abi.encodeFunctionData('supportsInterface', ['0x124a319c'])}, // IInterfaceResolver:   interfaceImplementer(bytes32,bytes4)
+				{target, data: abi.encodeFunctionData('supportsInterface', ['0x9061b923'])}, // IExtendedResolver:    resolve(bytes,bytes)
+				{target, data: abi.encodeFunctionData('supportsInterface', ['0x8ef98a7e'])}, // IExtendedDNSResolver: resolve(bytes,bytes,bytes)
+				{target, data: abi.encodeFunctionData('supportsInterface', ['0x73302a25'])}, // TheOffchainResolver.sol
+				{target, data: abi.encodeFunctionData('gatewayURL')}
+			]);
 			check_abort();
 			if (multi) {
-				if (multi.some(x => x.success)) contracts.set(target, true); // any success => is contract
+				if (multi.some(x => x.ok)) contracts.set(target, true); // any success => is contract
 				let [impl, wild, edns, tor, gateway] = multi;
-				info.impl = impl.success && !is_null_hex(impl.data);
-				info.wild = wild.success && !is_null_hex(wild.data);
-				info.edns = edns.success && !is_null_hex(edns.data);
-				info.tor  =  tor.success && !is_null_hex(tor.data );
+				info.impl = impl.ok && !is_null_hex(impl.data);
+				info.wild = wild.ok && !is_null_hex(wild.data);
+				info.edns = edns.ok && !is_null_hex(edns.data);
+				info.tor  =  tor.ok && !is_null_hex(tor.data );
 				try {
-					if (gateway.success) {
+					if (gateway.ok) {
 						// TODO: better way of doing this
 						let [url] = abi.decodeFunctionResult('gatewayURL', gateway.data);
 						if (url === 'https://dnssec-oracle.ens.domains/') {
@@ -5172,14 +5240,14 @@ async function get_resolver_info(target) {
 }
 async function get_resolver(name0) {
 	// returns resolver | null | throws
-	const {ens, multicall} = network_state;
+	const {ens} = network_state;
 	let func = ens.interface.getFunction('resolver');
 	let labels = name0.split('.');
 	let domains = labels.map((_, i) => {
 		let name = labels.slice(i).join('.');
 		return {name, node: namehash(name)};
 	});
-	let multi = await multicall.tryAggregate(true, domains.map(x => {
+	let multi = await multicall_tryAggregate(domains.map(x => {
 		return {target: ens.target, data: ens.interface.encodeFunctionData(func, [x.node])};
 	}));
 	for (let i = 0; i < domains.length; i++) {

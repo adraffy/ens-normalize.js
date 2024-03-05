@@ -402,6 +402,9 @@ button[data-by="version"], [data-by="version"] .title, .version { background-col
 .cps :nth-child(2) {
 	background: #fff;
 }
+/* .resolve {
+	filter: hue-rotate(70deg);
+} */
 .resolve a {
 	text-decoration: none;
 	cursor: help;
@@ -521,7 +524,7 @@ footer span:hover {
 	<button data-query="heart">❤️</button>
 	<button data-query="{200D}{27A1}">➡️</button>
 	<button style="background-color: #fdb" data-query="1cp !v14+">🦺️ Safest</button>
-	<button style="background-color: #dbe" data-query="max(2)">Only <b>2</b> Variants</button>
+	<button style="background-color: #dbe" data-query="max(3)">Only <b>3</b> Variants</button>
 	<button style="background-color: #fe8" data-query="singles !skin">👑️ Base Singles</button>
 	<b>Min Repeated:</b>
 	<button>Singles</button>
@@ -677,8 +680,7 @@ top_btn.addEventListener('click', () => window.scrollTo(0, 0));
 	emoji_versions = [...emoji_versions].sort((a, b) => a - b);
 
 	for (let cps of ens_emoji()) {
-		let rec = make_rec(cps);
-		all_emoji.push(rec);
+		all_emoji.push(make_rec(cps));
 	}
 	emoji_count = all_emoji.length;
 	document.querySelector('h1').innerHTML += ` <span class="count">(${emoji_count}<span>+${disabled_emoji.length}</span>)</span>`; 
@@ -988,15 +990,25 @@ function find_mod_set(max) {
 		0xFE0F,
 	]);
 	let dups = new Map();
+	let retry = [];
 	for (let rec of all_emoji) {
-		if (!rec.cps.includes(0x200D)) continue;
-		let key = String.fromCodePoint(...rec.cps.filter(cp => !ignored.has(cp)));
-		let bucket = dups.get(key);
-		if (!bucket) {
-			bucket = [];
-			dups.set(key, bucket);
+		if (rec.cps.includes(0x200D)) {
+			let key = String.fromCodePoint(...rec.cps.filter(cp => !ignored.has(cp)));
+			let bucket = dups.get(key);
+			if (!bucket) {
+				bucket = [];
+				dups.set(key, bucket);
+			}
+			bucket.push(rec);
+		} else {
+			retry.push(rec);
 		}
-		bucket.push(rec);
+	}
+	for (let rec of retry) {
+		let bucket = dups.get(`${rec.norm}\u200D`);
+		if (bucket) {
+			bucket.push(rec);
+		}
 	}
 	return new Set([...dups.values()].filter(v => v.length <= max).flat());
 }
