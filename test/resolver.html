@@ -442,6 +442,11 @@ span.tags {
 	/* border: 1px solid #ccc; */
 	white-space: pre;
 }
+code.framed {
+	background-color: #fff;
+	border: 1px solid #ccc;
+	padding: 2px 4px;
+}
 button.ens  {
 	border-color: #04f;
 	background-color: #58f;
@@ -1615,7 +1620,7 @@ const RECORDS = [
 		bonus: true,
 	},
 	{
-		evm: 84532,
+		evm: 8453,
 		name: 'base',
 		icon: '<img src="https://base.org/document/favicon-32x32.png">',
 		url(x) { return `https://basescan.org/address/${x}`; },
@@ -2750,10 +2755,10 @@ function create_link(url, {button, buttonClass, ...args} = {}) {
 	}
 	return a;
 }
-function create_ens_link(name, title = '🛠️ ENS') {
+function create_ens_link(name, title = 'ENS') {
 	try {
 		if (ens_normalize(name) === name) {
-			return create_link(`https://app.ens.domains/${encode_uri_component_ens_escaped(name)}`, {innerHTML, button: title, buttonClass: 'ens'});
+			return create_link(`https://app.ens.domains/${encode_uri_component_ens_escaped(name)}`, {button: title, buttonClass: 'ens', className: 'ens'});
 		}
 	} catch (err) {
 	}
@@ -3043,15 +3048,16 @@ async function add_resolver_info(row, resolver, from_dns) {
 		if (!from_dns) {
 			add_row_tag(row, create_tag('special', 'Wildcard'));
 		}
-		if (resolver.__basename) {
-			if (resolver.__dropped) {
-				add_row_tag(row, create_resolve_btn(resolver.__basename, `↩️ Basename`));
-			} else {
-				add_row_tag(row, 'Basename');
-			}
-		}
 	} else if (!await is_contract(resolver.target)) {
 		add_row_tag(row, create_tag('fail', 'Not a Contract'));
+	}
+	if (resolver.__basename) {
+		if (resolver.__dropped) {
+			add_row_tag(row, `↑${resolver.__dropped}`);
+			add_row_tag(row, create_resolve_btn(resolver.__basename, `↩️ Basename: <code class="framed">${ens_beautify(resolver.__basename)}</code>`));
+		} else {
+			add_row_tag(row, 'Basename');
+		}
 	}
 }
 
