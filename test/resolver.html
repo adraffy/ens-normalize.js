@@ -217,7 +217,7 @@ body.testnet {
 	white-space: pre;
 }
 #options :disabled + label {
-	opacity: 0.5;
+	opacity: .5;
 }
 #options :not(:disabled) + label {
 	cursor: pointer;
@@ -305,7 +305,7 @@ body.testnet {
 	text-decoration: underline;
 }
 .row.locked .row-label {
-	opacity: 65%;
+	opacity: .65;
 }
 .row.locked .row-label:before {
 	content: '🔒️';
@@ -332,7 +332,7 @@ body.testnet {
 	background:#f5faff; 
 }
 .available {
-	opacity: 65%;
+	opacity: .65;
 }
 .row.dns .main {
 	border-bottom-style: dotted;
@@ -470,15 +470,15 @@ button.copy {
 button.copy.small {
 	width: 20px;
 	height: 20px;
-	opacity: 35%;
+	opacity: .4;
 }
 button.copy:hover {
-	opacity: 1;
+	opacity: unset;
 	background-color: var(--copied-color);
 	transform: unset;
 }
 button.copy.copied {
-	opacity: 1;
+	opacity: unset;
 	background-color: var(--copied-color);
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' height='24' shape-rendering='geometricPrecision' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' viewBox='0 0 24 24' width='24' style='color:var(--geist-foreground)'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
 }
@@ -490,8 +490,14 @@ button.copy.copied {
 .tags.index {
 	font: 9pt monospace;
 	background-color: unset;
-	opacity: 50%;
+	opacity: .5;
 	user-select: none;
+}
+.tags.dist { background-color: #fca; color: #000; }
+.tags.dist::before {
+	content: 'Δ';
+	padding-right: 2px;
+	opacity: .7;
 }
 .tags.ens { order: 9; }
 .tags.metadata { order: 10; }
@@ -831,8 +837,8 @@ span.tally {
 }
 .row.contract::before {
 	position: absolute;
-	top: 3px;
-	right: 6px;
+	top: 2px;
+	right: 4px;
 	content: 'Contract';
 	font: 11px monospace;
 	color: #999;
@@ -1302,6 +1308,7 @@ Hebrew:
 <li><a href="../../keccak.js/test/demo.html" data-badge="js">Keccak Hasher</a></li>
 <li><a href="../../punycode.js/test/demo.html" data-badge="js">Punycode Coder</a></li>
 <li><a href="../../cid.js/test/demo.html" data-badge="js">CID Tool</a></li>
+<li><a href="https://github.com/adraffy/blocksmith.js" data-badge="js">blocksmith</a>
 <li><a href="https://github.com/resolverworks/TheOffchainResolver.sol" data-badge="solc">TheOffchainResolver</a></li>
 <li><a href="https://github.com/resolverworks/TheOffchainGateway.js" data-badge="js">TheOffchainGateway</a></li>
 <li><a href="https://github.com/resolverworks/ezccip.js" data-badge="js">ezccip</a></li>
@@ -1456,7 +1463,14 @@ const ERROR_ABI = new ethers.Interface([
 	'error InvalidAddressFormat()',
 	'error CouldNotResolve(bytes)',
 	'error InvalidLabelCount(bytes dns, uint256 count)',
+	// old TOR
 	'error Untrusted(address signed, address expected)',
+	// new TOR
+	'error CCIPReadExpired(uint256 expired)',
+	'error CCIPReadUntrusted(address signed, address expected)',
+	'error Unauthorized(address owner)',
+	'error InvalidContext(bytes context)',
+	'error Unreachable(bytes name)',
 ]);
 
 // https://docs.ens.domains/ensip/9
@@ -2567,9 +2581,10 @@ function add_input_features(row, input) {
 	}
 	add_row_tag(row, create_copy_btn(input));
 	add_row_tag(row, create_namehash_button(input));
-	let len = create_tag('length', [...input].length);
-	make_detailed(len, true);
-	add_row_tag(row, len);	
+	let ncp = create_tag('length', [...input].length);
+	ncp.title = `${bytes_from_utf8(input).length} bytes`;
+	make_detailed(ncp, true);
+	add_row_tag(row, ncp);
 }
 function create_dns_row(name, {replaced, contenthash} = {}) {
 	let row = create_row(replaced ? 'Alternative DNS' : 'DNS');
@@ -3053,7 +3068,7 @@ async function add_resolver_info(row, resolver, from_dns) {
 	}
 	if (resolver.__basename) {
 		if (resolver.__dropped) {
-			add_row_tag(row, `↑${resolver.__dropped}`);
+			add_row_tag(row, create('span', {innerText: resolver.__dropped, className: 'dist', title: 'Distance to Basename'}));
 			add_row_tag(row, create_resolve_btn(resolver.__basename, `↩️ Basename: <code class="framed">${ens_beautify(resolver.__basename)}</code>`));
 		} else {
 			add_row_tag(row, 'Basename');
@@ -3307,13 +3322,14 @@ function create_namehash_breakdown(name) {
 }
 function create_dns_breakdown(name) {
 	let div = create('div', {className: 'hash'});
-	div.append(create('b', {innerText: 'Length:'}), create_tag('length', [...name].length), create_tag('bytes', bytes_from_utf8(name).length));
+	div.append(create('b', {innerText: 'Length:'})); 
+	div.append(create_tag('length', [...name].length));
+	div.append(create_tag('bytes', bytes_from_utf8(name).length));
 	div.append(' • ')
 	div.append(create('b', {innerText: 'DNS-encoded:'}));
 	try {
 		let v = dns_encoded_from(name);
-		let hex = ethers.hexlify(v);
-		div.append(create_tag('bytes', v.length), create_copy_btn(hex, {small: true, value: true}));
+		div.append(create_tag('bytes', v.length), create_copy_btn(ethers.hexlify(v), {small: true, value: true}));
 	} catch (err) {
 		div.append(create('span', {innerText: '🚫️', title: err.message}));
 	}
