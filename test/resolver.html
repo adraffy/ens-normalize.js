@@ -30,7 +30,7 @@ a, button, select {
 	cursor: pointer;
 }
 a.button {
-	text-decoration: none;	
+	text-decoration: none;
 }
 button {
 	appearance: none;
@@ -61,8 +61,8 @@ button:hover:active {
 .rtrim {
 	padding-right: 4px !important;
 }
-body { 
-	margin: 3rem; 
+body {
+	margin: 3rem;
 	background: #eee;
 	display: flex;
 	flex-direction: column;
@@ -225,7 +225,7 @@ body.testnet {
 #options :not(:disabled) + label:hover {
 	outline: 2px solid #000;
 }
-#options :checked + label {	
+#options :checked + label {
 	color: #000;
 }
 #auto_resolve_check:checked + label {
@@ -254,7 +254,7 @@ body.testnet {
 	color: #fff;
 }
 #force_ltr_check:checked + label::after { content: '!'; }
-#force_ltr_check:checked + label {	
+#force_ltr_check:checked + label {
 	border-color: #555;
 	background-color: #555;
 	color: #fff;
@@ -284,7 +284,7 @@ body.testnet {
 	display: none;
 }
 #output.hide_details .detailed { display: none; }
-#output:not(.hide_details) .inv_detailed { display: none; } 
+#output:not(.hide_details) .inv_detailed { display: none; }
 .row button {
 	font-size: 11pt;
 }
@@ -294,7 +294,7 @@ body.testnet {
 	font-weight: bold;
 	white-space: pre;
 }
-.row-label a {	
+.row-label a {
 	color: #000;
 	text-decoration: none;
 }
@@ -329,7 +329,7 @@ body.testnet {
 	background: #fffff0;
 }
 .row.dns {
-	background:#f5faff; 
+	background:#f5faff;
 }
 .available {
 	opacity: .65;
@@ -338,7 +338,7 @@ body.testnet {
 	border-bottom-style: dotted;
 }
 .row.dns.invalid {
-	background: #fff0f0;	
+	background: #fff0f0;
 	outline: 3px dashed #fcc;
 }
 .row.pretty {
@@ -405,7 +405,7 @@ a.internal {
 	min-height: 32px;
 }
 .row.links {
-	display: grid;	
+	display: grid;
 	gap: 8px;
 	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 	background: #eff;
@@ -509,6 +509,10 @@ button.copy.copied {
 	order: 50;
 	margin-left: auto;
 }
+.calls {
+	opacity: .5;
+	padding-right: 4px;
+}
 .record.raw,
 .tags.raw {
 	font: 80% monospace;
@@ -521,7 +525,7 @@ button.copy.copied {
 }
 .normalized .confusing {
 	margin: -8px 0;
-	font: 11px sans-serif;	
+	font: 11px sans-serif;
 }
 .tags.normalized { background: #8f8; }
 .tags.normalized.ascii {
@@ -641,7 +645,7 @@ span.tally {
 .jazz.addr5 { background-color: #57d; }
 .avatar {
 	order: -1;
-} 
+}
 .avatar img {
 	position: relative;
 	z-index: 1;
@@ -714,7 +718,7 @@ span.tally {
 	border: 1px solid #aaa;
 	border-radius: 4px;
 	padding: 1px 4px;
-	font: 13pt monospace;	
+	font: 13pt monospace;
 	color: #000;
 }
 .breakdown .restricted {
@@ -837,8 +841,8 @@ span.tally {
 }
 .row.contract::before {
 	position: absolute;
-	top: 2px;
-	right: 4px;
+	top: 1px;
+	right: 3px;
 	content: 'Contract';
 	font: 11px monospace;
 	color: #999;
@@ -882,7 +886,7 @@ footer {
 	font-family: monospace;
 	cursor: help;
 }
-#version:hover {	
+#version:hover {
 	color: #000;
 	text-decoration: underline;
 }
@@ -913,7 +917,7 @@ footer {
 	color: #666;
 	font-style: italic;
 }
-@media only screen and (max-width: 800px) { 
+@media only screen and (max-width: 800px) {
 	body {
 		margin: 0;
 	}
@@ -962,7 +966,7 @@ footer {
 		margin: 8px;
 	}
 }
-@media only screen and (max-width: 400px) { 
+@media only screen and (max-width: 400px) {
 	h1 a {
 		display: none;
 	}
@@ -1030,7 +1034,7 @@ footer {
 <button>Ⅷ</button>
 <button>⨌</button>
 
-<b>Ignored:</b> 
+<b>Ignored:</b>
 <button data-name="{FE0E}{FE0F}">Emoji Style</button>
 
 <b>Disallowed:</b>
@@ -1041,7 +1045,7 @@ footer {
 <button data-name="{DF00}">Surrogate</button>
 <button data-name="[ba967c160905ade030f84952644a963994eeaed3881a6b8a4e9c8cbe452ad7a2].eth" data-skip="1">"💩.eth"</button>
 
-<b>Deviation:</b> 
+<b>Deviation:</b>
 <button>ß</button>
 <button>ẞ</button>
 <button>ς</button>
@@ -1135,14 +1139,14 @@ ZWJ:
 <button data-name="a{200D}b"></button>
 
 <a href="https://datatracker.ietf.org/doc/html/rfc5892#appendix-A.3"><b>ContextO:</b></a>
-Middle Dot: 
+Middle Dot:
 <button data-name="{6C}{B7}{6C}"></button>
 
 Katakana Dot:
 <button data-name="月・水"></button>
 <button data-name="a・a{300}"></button>
 
-Greek Keraia: 
+Greek Keraia:
 <button data-name="{375}α"></button>
 
 Hebrew Geresh:
@@ -1336,14 +1340,14 @@ Hebrew:
 	<span id="enable_debug_btn" title="Enable Debugging">🛠️</span>
 </footer>
 <script type="module">
-import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.11.0/ethers.min.js';
+import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.11.1/ethers.min.js';
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
 	nfc, nfd, hex_cp, quote_cp, explode_cp, str_from_cps, safe_str_from_cps,
 	versions, compare_arrays, is_combining_mark, should_escape,
 	dom_from_tokens, use_default_style,
 } from '../dist/all.min.js';
-import {puny_encoded, is_surrogate} from '../../punycode.js/dist/index.min.js'; 
+import {puny_encoded, is_surrogate} from '../../punycode.js/dist/index.min.js';
 import {CID, uvarint, convert, Bech32, Base32, Base58BTC, Base64URL} from '../../cid.js/dist/index.min.js';
 import eth_ens_namehash from './eth-ens-namehash@2.0.15.min.js';
 use_default_style();
@@ -1436,7 +1440,8 @@ const CHAINS = [
 		explorer: 'https://holesky.etherscan.io',
 		metadata: 'https://metadata.ens.domains/holesky',
 		//opensea: 'https://testnets.opensea.io/assets/holesky/',
-		rpc: 'https://rpc.holesky.ethpandaops.io'
+		rpc: 'https://rpc.holesky.ethpandaops.io',
+
 	}
 ];
 CHAINS.forEach(chain => {
@@ -1509,7 +1514,7 @@ const RECORDS = [
 	},
 	{
 		key: 'location'
-	},	
+	},
 	{
 		key: 'phone',
 		icon: '☎️',
@@ -1521,13 +1526,13 @@ const RECORDS = [
 		url(x) { return `mailto:${x}`; }
 	},
 	{
-		key: 'com.twitter', 
+		key: 'com.twitter',
 		icon: `<svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 22 20"><path fill="var(--geist-fill, currentColor)" stroke="none" d="M16.99 0H20.298L13.071 8.26L21.573 19.5H14.916L9.702 12.683L3.736 19.5H0.426L8.156 10.665L0 0H6.826L11.539 6.231L16.99 0ZM15.829 17.52H17.662L5.83 1.876H3.863L15.829 17.52Z"/></svg>`,
 		url(x) { return `https://twitter.com/${x}`; },
 		fix: repair_social,
 	},
 	{
-		key: 'farcaster', 
+		key: 'farcaster',
 		icon: '<img src="https://warpcast.com/favicon.png">',
 		url(x) { return `https://warpcast.com/${x}`; },
 		fix: repair_social,
@@ -1539,7 +1544,7 @@ const RECORDS = [
 		ens: true,
 	},
 	{
-		key: 'com.github', 
+		key: 'com.github',
 		icon: '<img src="https://github.githubassets.com/favicons/favicon.png">',
 		url(x) { return `https://github.com/${x}`; }
 	},
@@ -1548,7 +1553,7 @@ const RECORDS = [
 		icon: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#5A57DD"><path d="M20.7273 5.45455C20.7273 5.45455 18.2264 3.49746 15.2727 3.27273L15.0065 3.80509C17.6771 4.45855 18.9022 5.39509 20.1818 6.54546C17.9755 5.41909 15.7969 4.36364 12 4.36364C8.20309 4.36364 6.02455 5.41909 3.81818 6.54546C5.09782 5.39509 6.55527 4.35546 8.99345 3.80509L8.72727 3.27273C5.62855 3.56564 3.27273 5.45455 3.27273 5.45455C3.27273 5.45455 0.479455 9.50455 0 17.4545C2.81564 20.7016 7.09091 20.7273 7.09091 20.7273L7.98491 19.5355C6.46745 19.008 4.75364 18.066 3.27273 16.3636C5.03891 17.7 7.70455 19.0909 12 19.0909C16.2955 19.0909 18.9611 17.7 20.7273 16.3636C19.2464 18.066 17.5325 19.008 16.0151 19.5355L16.9091 20.7273C16.9091 20.7273 21.1844 20.7016 24 17.4545C23.5205 9.50455 20.7273 5.45455 20.7273 5.45455ZM8.45455 15.2727C7.40018 15.2727 6.54545 14.2958 6.54545 13.0909C6.54545 11.886 7.40018 10.9091 8.45455 10.9091C9.50891 10.9091 10.3636 11.886 10.3636 13.0909C10.3636 14.2958 9.50891 15.2727 8.45455 15.2727ZM15.5455 15.2727C14.4911 15.2727 13.6364 14.2958 13.6364 13.0909C13.6364 11.886 14.4911 10.9091 15.5455 10.9091C16.5998 10.9091 17.4545 11.886 17.4545 13.0909C17.4545 14.2958 16.5998 15.2727 15.5455 15.2727Z"></path></svg>`,
 	},
 	{
-		key: 'com.reddit', 
+		key: 'com.reddit',
 		icon: '<img src="https://www.redditstatic.com/desktop2x/img/favicon/apple-icon-60x60.png">',
 		url(x) { return `https://reddit.com/u/${x}`; },
 	},
@@ -1612,7 +1617,7 @@ const RECORDS = [
 		url(x) { return `https://polygonscan.com/address/${x}`; },
 		bonus: true,
 	},
-	{	
+	{
 		evm: 10,
 		name: 'op',
 		icon: '<img src="https://assets-global.website-files.com/611dbb3c82ba72fbc285d4e2/612d2f8f988b5f801bd0cf1e_favicon.png">',
@@ -1775,6 +1780,7 @@ let resolve_timer = RESOLVE_MODE_IDLE;
 let resolve_state;
 let network_state;
 let history_timer;
+let request_count = 0;
 
 version_span.innerHTML = `v${versions.version}`;
 version_span.addEventListener('click', () => {
@@ -1804,7 +1810,7 @@ add_digits('CJK', '〇一二三四五六七八九');
 add_digits('Devangari', '०१२३४५६७८९');
 add_digits('Thai', '๐๑๒๓๔๕๖๗๘๙');
 //add_digits('Bengali', '০১২৩৪৫৬৭৮৯');
-//add_digits('Tamil', '௦௧௨௩௪௫௬௭௮௯'); 
+//add_digits('Tamil', '௦௧௨௩௪௫௬௭௮௯');
 
 for (let btn of document.querySelectorAll('#examples button:not([id]), button[data-name]')) {
 	let name = btn.innerText;
@@ -1818,7 +1824,7 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 		}
 	} catch (err) {
 		btn.classList.add('error');
-	}	
+	}
 	if (!meta) name = add_dot_eth(name);
 	if (typeof btn.dataset.escape === 'string') name = apply_escapes_where(name);
 	if (!btn.title) btn.title = meta ? name : `${name}\n${explode_cp(name).map(hex_cp).join(' ')}`;
@@ -1877,7 +1883,7 @@ function sync_recent(saved) {
 	recent_optgroup.innerHTML = '';
 	try {
 		JSON.parse(saved).reverse().forEach(x => add_recent(x, false));
-	} catch (err) {	
+	} catch (err) {
 	}
 }
 recent_select.addEventListener('change', () => {
@@ -1910,7 +1916,7 @@ function add_recent(name, save = true) {
 		let option = new Option();
 		option.value = name;
 		if (is_checksum_address(name)) {
-			option.innerHTML = `🏠️ ${name}`; 
+			option.innerHTML = `🏠️ ${name}`;
 		} else {
 			try {
 				let norm = ens_normalize(name);
@@ -1925,7 +1931,7 @@ function add_recent(name, save = true) {
 	recent_select.classList.remove('hide');
 	if (save) {
 		localStorage[STORAGE_RECENT] = JSON.stringify([...recent_optgroup.children].map(x => x.value));
-	} 
+	}
 }
 
 function get_selected_input() {
@@ -1982,7 +1988,7 @@ escape_btn.addEventListener('click', e => {
 	let s2 = apply_escapes_where(s1, undefined, e.altKey);
 	let s3 = apply_escapes_where(s1, () => true, e.altKey);
 	let set = [...new Set([s1, s2, s3])];
-	let pos = set.indexOf(s0);	
+	let pos = set.indexOf(s0);
 	input_field.value = set[(pos + 1) % set.length];
 	update_location();
 });
@@ -2001,7 +2007,7 @@ auto_resolve_check.addEventListener('input', () => {
 		resolve();
 	}
 });
-show_details_check.addEventListener('input', () => {	
+show_details_check.addEventListener('input', () => {
 	save_settings();
 	sync_settings();
 });
@@ -2021,7 +2027,7 @@ force_ltr_check.addEventListener('input', () => {
 });
 function sync_settings() {
 	input_field.classList.toggle('force_ltr', force_ltr_check.checked);
-	output_div.classList.toggle('hide_recs', !show_records_check.checked);	
+	output_div.classList.toggle('hide_recs', !show_records_check.checked);
 	output_div.classList.toggle('hide_details', !show_details_check.checked);
 }
 
@@ -2110,7 +2116,7 @@ debug_ta.addEventListener('keydown', e => {
 		e.preventDefault();
 		apply_debug();
 	} else if (e.key === 'Tab') {
-		e.preventDefault();	
+		e.preventDefault();
 		document.execCommand('insertText', false, DEBUG_INDENT);
 	}
 });
@@ -2142,7 +2148,7 @@ function set_page_url(url) {
 }
 window.addEventListener('popstate',   e => set_page_url(new URL(e.state || '', location0)));
 window.addEventListener('hashchange', e => set_page_url(new URL(e.newURL)));
-window.addEventListener('unload', () => {}); // prevent weird restore behavior 
+window.addEventListener('unload', () => {}); // prevent weird restore behavior
 
 // cleanup non-namespaced keys
 // TODO: remove me
@@ -2209,22 +2215,27 @@ ethers.AbstractProvider.prototype.ccipReadFetch = function(tx, calldata, urls) {
 if (window.ethereum) {
 	window_provider = new ethers.BrowserProvider(ethereum, 'any');
 	window_provider.__provider = ethereum;
+	let send = window_provider.send.bind(window_provider);
+	window_provider.send = (...a) => {
+		if (a[0] === 'eth_call') ++request_count;
+		return send(...a);
+	};
 	let timer = setTimeout(set_window_network, 100);
 	window_provider._detectNetwork().catch(() => {}).then(network => {
 		clearTimeout(timer);
 		set_window_network(network);
 	});
-	ethereum.on('connect', ({chainId}) => set_window_network(ethers.Network.from(parseInt(chainId))));
+	ethereum.on('connect',  ({chainId}) => set_window_network(ethers.Network.from(parseInt(chainId))));
 	ethereum.on('chainChanged', chainId => set_window_network(ethers.Network.from(parseInt(chainId))));
 	ethereum.on('disconnect', () => set_window_network());
 } else {
 	update_network();
 }
 
-async function change_window_to_chain(chain) {	
-	let chainId = `0x${chain.id.toString(16)}`;	
+async function change_window_to_chain(chain) {
+	let chainId = `0x${chain.id.toString(16)}`;
 	try {
-		await window_provider.send('wallet_switchEthereumChain', [{chainId}]); 
+		await window_provider.send('wallet_switchEthereumChain', [{chainId}]);
 		// throws on cancel request
 		// throws on unknown provider
 	} catch (err) {
@@ -2235,7 +2246,7 @@ async function change_window_to_chain(chain) {
 			try {
 				// https://eips.ethereum.org/EIPS/eip-3085
 				await window_provider.send('wallet_addEthereumChain', [{
-					chainId, 
+					chainId,
 					chainName: chain.name,
 					blockExplorerUrls: [chain.explorer],
 					nativeCurrency: {
@@ -2276,14 +2287,15 @@ function update_network() {
 	} else {
 		let old = active_provider;
 		if (old === window_provider || active_chain !== chain) {
-			const options = {batchMaxCount: 10, staticNetwork: true};
-			if (chain.rpc) {
-				active_provider = new ethers.JsonRpcProvider(chain.rpc, chain.id, options);
-			} else {
-				let network = ethers.Network.from(chain.id);
-				let request = ethers.InfuraProvider.getRequest(network, 'f36f6a8638134ac09f9400d3a7008dfe');
-				active_provider = new ethers.JsonRpcProvider(request, network, options);
-			}
+			let request = new ethers.FetchRequest(chain.rpc || `https://${chain.name.toLowerCase()}.infura.io/v3/f36f6a8638134ac09f9400d3a7008dfe`);
+			request.preflightFunc = req => {
+				++request_count;
+				return req;
+			};
+			active_provider = new ethers.JsonRpcProvider(request, chain.id, {
+				batchMaxCount: chain.rpc ? 1 : 10, // holesky rpc has batching issues
+				staticNetwork: true
+			});
 		}
 		if (old && old !== window_provider && old !== active_provider) {
 			setTimeout(() => old.destroy(), 0);
@@ -2318,7 +2330,7 @@ function update_network() {
 	mainnet_btn.classList.toggle('hide', !!active_chain.is_mainnet);
 	browser_btn.classList.toggle('hide', !(!using_window && window_provider && window_provider.__chain && !window_provider.__chain.is_mainnet));
 	provider_div.replaceChildren(create('div', {className: 'network'}, 'using ', create_explorer_address_link(network_state.ens.target, {
-		innerHTML: using_window ? 'Browser' : active_chain.rpc ? 'Public RPC' : 'Infura', 
+		innerHTML: using_window ? 'Browser' : active_chain.rpc ? 'Public RPC' : 'Infura',
 		title: 'ENS Registry Contract',
 		contract: true
 	})));
@@ -2356,7 +2368,7 @@ function schedule_resolve(delay = 1000) {
 		primary_loader.classList.remove('hide'); // pre-start
 		resolve_timer = setTimeout(resolve, delay);
 	}
-} 
+}
 
 function stop_resolving() {
 	clearTimeout(resolve_timer);
@@ -2410,7 +2422,7 @@ function update_location() {
 }
 function parse() {
 	if (!active_chain) return; // wait for init
-	update_location();	
+	update_location();
 	let input0 = input_field.value;
 	let width = ens_tokenize(input0, {nf: false}).reduce((a, x) => {
 		if (x.type === 'valid') return x.cps.reduce((b, y) => b + (is_combining_mark(y, true) ? 0.5 : 1), a);
@@ -2438,13 +2450,13 @@ function parse() {
 	}
 	if (is_checksum_address(input)) {
 		let row = create_row('Address');
-		row.append(create_explorer_address_link(input));		
+		row.append(create_explorer_address_link(input));
 		add_row_tag(row, create_reverse_resolve_btn(input));
 		output_div.append(row);
 		return true;
 	}
 	let row = create_row(INPUT_NAME);
-	let tokens = ens_tokenize(input); 
+	let tokens = ens_tokenize(input);
 	if (tokens.some(x => x.emoji)) show_components_label.classList.remove('hide');
 	make_exploded(row, input, false);
 	add_input_features(row, input);
@@ -2500,7 +2512,7 @@ function parse() {
 
 		// if there are likely unmapped mistakes
 		const SLOPPY_MAP = new Map([
-			[0x2F, 0x2044], 
+			[0x2F, 0x2044],
 			[0x3002, 0x2E],
 			[0xFF0E, 0x2E],
 			[0xFF61, 0x2E],
@@ -2538,7 +2550,7 @@ function parse() {
 						}));
 						resolve();
 					}
-				}));	
+				}));
 			}
 		}
 
@@ -2549,9 +2561,9 @@ function parse() {
 				title: 'Apply normalization to each character separately',
 				click() {
 					input_field.value = str_from_cps(tokens.flatMap(token => {
-						switch (token.type) { 
+						switch (token.type) {
 							case 'ignored': return []; // removes ignored (dangerous)
-							case 'mapped': // applies known mappings 
+							case 'mapped': // applies known mappings
 							case 'emoji': // removes FE0F from known emoji
 							case 'nfc':
 							case 'valid': return token.cps;
@@ -2591,7 +2603,7 @@ function create_dns_row(name, {replaced, contenthash} = {}) {
 	row.classList.add('dns');
 	try {
 		const MAX_LABEL = 63;
-		const MAX_NAME = 253; 
+		const MAX_NAME = 253;
 		const VALID_REGEX = /^[-0-9a-z]*$/i;
 		let encoded = name.split('.').map(label => {
 			let cps = explode_cp(label);
@@ -2670,9 +2682,9 @@ function create_dns_row(name, {replaced, contenthash} = {}) {
 		if (!replaced) {
 			add_alternative_btn(row, name);
 		}
-	}	
+	}
 	return row;
-	
+
 }
 
 // try some transformations
@@ -2726,7 +2738,7 @@ function replace_escapes(s) {
 	// match: \u{HEX}, {HEX}, \uXXXX, [0xHEX], [DEC]
 	return s.replace(/(?:(?:(?:\\u)?\{([0-9a-f]+)\}|\\u([0-9a-f]{4}))|(?:\[((?:0x[0-9a-f]+)|[0-9]+)\]))/uig, (_, hex1, hex2, num) => {
 		try {
-			return String.fromCodePoint(num ? parseInt(num) : parseInt(hex1 || hex2, 16)); 
+			return String.fromCodePoint(num ? parseInt(num) : parseInt(hex1 || hex2, 16));
 		} catch (err) {
 			return '�';
 		}
@@ -2803,7 +2815,7 @@ function make_click_copy(el, raw, {hint} = {}) {
 			copy = alt || explode_cp(copy).map(hex_cp).join(' ');
 		} else if (e.shiftKey) {
 			copy = shift || '0x' + Array.from(bytes_from_utf8(copy), hex_cp).join('');
-		} 
+		}
 		const cls = 'copied';
 		document.querySelectorAll(`.${cls}`).forEach(x => x.classList.remove(cls));
 		navigator.clipboard.writeText(copy);
@@ -2854,7 +2866,7 @@ function upgrade_split_type(info) {
 		if (cps.every(cp => cp < 0x80)) {
 			info.type = 'ASCII';
 		}
-	} 
+	}
 	let flat = flatten_tokens(info.tokens);
 	info.confusing = determine_confusion(str_from_cps(info.input), flat);
 	info.style = determine_style(flat);
@@ -2939,7 +2951,7 @@ function make_normalized(row, name) {
 	split.forEach(upgrade_split_type);
 	if (pure_ascii) {
 		span.classList.add('ascii');
-		span.innerHTML = 'ASCII'; 
+		span.innerHTML = 'ASCII';
 	} else {
 		let types = new Set(split.map(x => x.type));
 		if (types.has('Latin') && types.has('ASCII')) {
@@ -2973,7 +2985,7 @@ function make_locked(row) {
 function make_contract(row) {
 	row.classList.add('contract');
 }
-function make_exploded(row, name, is_norm, components) {	
+function make_exploded(row, name, is_norm, components) {
 	let before = !is_norm;
 	let tokens_div = create_exploded(name, before, components);
 	let old = row.querySelector('.exploded');
@@ -3050,7 +3062,7 @@ function create_digits_row(norm, group, values, negative, suffix) {
 	return row;
 }
 
-async function add_resolver_info(row, resolver, from_dns) {	
+async function add_resolver_info(row, resolver, from_dns) {
 	let name = RESOLVER_NAMES[resolver.target];
 	if (name && active_chain.is_mainnet) {
 		add_row_tag(row, create_tag('good', name));
@@ -3066,7 +3078,7 @@ async function add_resolver_info(row, resolver, from_dns) {
 	} else if (!await is_contract(resolver.target)) {
 		add_row_tag(row, create_tag('fail', 'Not a Contract'));
 	}
-	if (resolver.__basename) {
+	if (resolver.__info.wild && resolver.__basename) {
 		if (resolver.__dropped) {
 			add_row_tag(row, create('span', {innerText: resolver.__dropped, className: 'dist', title: 'Distance to Basename'}));
 			add_row_tag(row, create_resolve_btn(resolver.__basename, `↩️ Basename: <code class="framed">${ens_beautify(resolver.__basename)}</code>`));
@@ -3080,7 +3092,7 @@ function add_ensip1_tag(row, input, is_norm) {
 	const OLD_NAME = 'ENSIP-1';
 	let tag = create('span', {className: ['tags', 'ensip1']});
 	try {
-	 	let norm1 = eth_ens_namehash.normalize(input); 
+	 	let norm1 = eth_ens_namehash.normalize(input);
 		let norm15;
 		try {
 			norm15 = ens_normalize(input);
@@ -3092,7 +3104,7 @@ function add_ensip1_tag(row, input, is_norm) {
 			html += `: ⚠️<b>Diff Norm</b>`;
 		}
 		if (norm1 === input) { // ensip1 === input
-			tag.innerHTML = html; 
+			tag.innerHTML = html;
 			tag.title = 'Same as Input';
 		} else if (norm1 === norm15) { // we agree but we dont match the input
 			throw new Error('not normalized');
@@ -3108,7 +3120,7 @@ function add_ensip1_tag(row, input, is_norm) {
 }
 
 function add_nft_links(row, name, contract, token) {
-	
+
 	let group = create('div', {className: ['grouped', 'external']});
 	add_row_tag(group, create_link(`${active_chain.metadata}/${contract}/${token}`, {innerHTML: 'Metadata'}));
 	add_row_tag(group, create_link(`${active_chain.explorer}/nft/${contract}/${BigInt(token)}`, {innerHTML: 'Explorer'}));
@@ -3178,12 +3190,12 @@ function create_exploded(name, before, components) {
 	let first = true;
 	for (let i = 0; i < split.length; i++) {
 		if (i > 0) {
-			wrapper.append(...dom_from_tokens(ens_tokenize('.')).children); 
+			wrapper.append(...dom_from_tokens(ens_tokenize('.')).children);
 		}
 		let {input, error} = split[i];
 		let label = str_from_cps(input);
 		let tokens = dom_from_tokens(ens_tokenize(label), {
-			before, 
+			before,
 			tld: i === split.length-1,
 			components: components || show_components_check.checked,
 			emoji(a, {emoji}) {
@@ -3242,12 +3254,22 @@ function create_dot_eth_button(name) {
 		return btn;
 	}
 }
-function create_elapsed() {
-	let now = Date.now();
-	let delta = now - resolve_state.t;
-	if (!delta) return; // 0ms is stupid
+function create_elapsed(dt, reqs, final) {
+	let tag = create_tag('elapsed', format_dur(dt, final ? 2 : 1));
+	if (reqs || final) {
+		tag.prepend(create('span', {innerText: `${reqs}⇅`, className: 'calls'}));
+	}
+	return tag;
+}
+function create_elapsed_since() {
+	const now = Date.now();
+	let {t, r} = resolve_state;
+	let dt = now - t;
+	let reqs = request_count - r;
+	if (!dt) return; // 0ms is stupid
 	resolve_state.t = now;
-	return create_tag('elapsed', format_dur(delta));
+	resolve_state.r = request_count;
+	return create_elapsed(dt, reqs);
 }
 function create_pretty_tag() {
 	return create_tag('clean', PRETTY_NAME, 'Beautified Form');
@@ -3260,7 +3282,7 @@ function create_tag(type, value, title) {
 		span.classList.add('long');
 	}
 	switch (type) {
-		case 'star': 
+		case 'star':
 			type = 'attn';
 			value = `⭐️ ${value}`;
 			break;
@@ -3274,7 +3296,7 @@ function create_tag(type, value, title) {
 		case 'fire':
 			value = `🔥️ ${value}`;
 			break;
-		case 'fail': 
+		case 'fail':
 			value = `❌️ ${value}`;
 			break;
 		case 'stop':
@@ -3322,7 +3344,7 @@ function create_namehash_breakdown(name) {
 }
 function create_dns_breakdown(name) {
 	let div = create('div', {className: 'hash'});
-	div.append(create('b', {innerText: 'Length:'})); 
+	div.append(create('b', {innerText: 'Length:'}));
 	div.append(create_tag('length', [...name].length));
 	div.append(create_tag('bytes', bytes_from_utf8(name).length));
 	div.append(' • ')
@@ -3397,7 +3419,7 @@ function create_breakdown_row(name, before) {
 			hash_div.append(create('code', {innerText: hash, className: 'long'}));
 			hash_div.append(create_copy_btn(hash, {small: true, value: true}));
 			outer.append(hash_div);
-			
+
 			let parent = split.slice(info.index + 1).map(x => x.label).join('.');
 			if (NFT_DOMAINS.has(parent)) {
 				let token = BigInt(hash).toString();
@@ -3481,7 +3503,7 @@ function resolve() {
 	let skip = skip_norm_check.checked;
 	// replace marketplace URL with token:XXX
 	if (input.includes('://')) {
-		try {	
+		try {
 			let url = new URL(input);
 			if ([VISION_HOST, 'ens.vision', 'www.ens.vision'].some(x => x === url.host)) {
 				// /name/%F0%9F%91%A9%F0%9F%8F%BC%E2%80%8D%F0%9F%A6%BC%E2%80%8D%E2%AC%85
@@ -3489,7 +3511,7 @@ function resolve() {
 				if (v.length >= 2 && v[0] === 'name') {
 					input_field.value = input = add_dot_eth(decodeURIComponent(v[1]));
 				}
-			} else { 
+			} else {
 				// generalized handler
 				// https://opensea.io/assets/ethereum/0xd4416b13d2b3a9abae7acd5d6c2bbdbe25686401/65925476150180752387929572463320899353544457962160224303512375154243473029563
 				// https://opensea.io/assets/ethereum/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
@@ -3497,7 +3519,7 @@ function resolve() {
 				// https://element.market/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/91842011529764390124322931916134555051359118325819011691525342013207339157209
 				let v = url.pathname.toLowerCase().split('/').filter(x => x);
 				if (v.length >= 2 && /^[a-f0-9]+$/i.test(v[v.length-1])) {
-					// TODO: fix this, use ensure_nft() and ensure_wrapper() 
+					// TODO: fix this, use ensure_nft() and ensure_wrapper()
 					if (v[v.length-2] === '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85') {
 						input_field.value = input = `token:${v[v.length-1]}`;
 					} else if (v[v.length-2] === '0xd4416b13d2b3a9abae7acd5d6c2bbdbe25686401') {
@@ -3563,15 +3585,15 @@ function resolve() {
 		}
 	}
 	// input convenience: HEX HEX HEX => {HEX}{HEX}
-	if (/^\s*[0-9a-f]{2,}(\s+[0-9a-f]{2,})+\s*$/i.test(input)) { 
-		input = input.trim().split(/\s+/).map(x => `{${x}}`).join('');	
+	if (/^\s*[0-9a-f]{2,}(\s+[0-9a-f]{2,})+\s*$/i.test(input)) {
+		input = input.trim().split(/\s+/).map(x => `{${x}}`).join('');
 	}
 	// input convenience: entities
 	input = input.replace(/&#?[0-9a-z]+;/gui, x => {
 		entity_span.innerHTML = x;
 		return apply_escapes_where(entity_span.innerText);
 	});
-	input_field.value = input;	
+	input_field.value = input;
 	let name = replace_escapes(input);
 	add_recent(name);
 	const url = get_page_url();
@@ -3586,17 +3608,24 @@ function resolve() {
 	resolve_btn.disabled = true;
 	primary_loader.classList.remove('hide');
 	const t0 = Date.now();
-	resolve_state = {name, input, skip, url, t0, t: t0, addrs: new Map(), chain: active_chain};
+	const r0 = request_count;
+	resolve_state = {
+		name, input, skip, url, 
+		addrs: new Map(), 
+		chain: active_chain,
+		t0, t: t0, 
+		r0, r: r0
+	};
 	if (debug_enabled) resolve_state.debug = debug_settings;
 	resolve1(name, skip).then(() => {
-		clock_span.innerHTML = format_dur(Date.now() - t0, 2);
+		clock_span.innerHTML = create_elapsed(Date.now() - t0, request_count - r0, 3).innerHTML;
 		resolve_btn.disabled = false;
 		if (Array.isArray(resolve_timer)) {
 			setTimeout(resolve, Math.max(0, resolve_timer[0] - Date.now()));
 		} else {
 			primary_loader.classList.add('hide');
 			// commit resolve() to history
-			window.history.replaceState(url.toString(), null, url); 
+			window.history.replaceState(url.toString(), null, url);
 		}
 	});
 }
@@ -3638,18 +3667,18 @@ async function resolve1(input, skip_norm) {
 		let resolver, last_err;
 		try {
 			resolver = await get_resolver(rev_name);
-		} catch (err) {	
+		} catch (err) {
 			last_err = err;
-		} 
+		}
 		if (should_stop_resolving()) return;
-		remove_temporary(resolver_row);	
-		add_row_tag(resolver_row, create_elapsed());
+		remove_temporary(resolver_row);
+		add_row_tag(resolver_row, create_elapsed_since());
 
 		let rev = await try_reverse_registrar();
 		if (should_stop_resolving()) return;
 		if (network_state.reverse) {
 			add_row_tag(input_row, create_explorer_address_link(network_state.reverse, {
-				contract: true, 
+				contract: true,
 				anchor: '#writeContract#F7',
 				button: '✍️ Set Name'
 			}));
@@ -3663,7 +3692,7 @@ async function resolve1(input, skip_norm) {
 			add_row_tag(resolver_row, create_tag('stop', 'Primary Not Set'));
 			return;
 		}
-		
+
 		resolver_row.append(create_explorer_address_link(resolver.target, {contract: true}));
 		add_row_tag(resolver_row, create_copy_btn(resolver.target, {value: true}));
 		add_resolver_info(resolver_row, resolver);
@@ -3675,7 +3704,7 @@ async function resolve1(input, skip_norm) {
 		[{data: primary, error: last_err}] = await fetch_records(resolver, [{type: TYPE_NAME}]);
 		if (should_stop_resolving()) return;
 		remove_temporary(reverse_row);
-		add_row_tag(reverse_row, create_elapsed());
+		add_row_tag(reverse_row, create_elapsed_since());
 		if (last_err) {
 			reverse_row.classList.add('error');
 			add_row_tag(reverse_row, create_tag('warn', last_err));
@@ -3688,7 +3717,7 @@ async function resolve1(input, skip_norm) {
 		make_exploded(reverse_row, primary, false);
 		add_input_features(reverse_row, primary);
 		output_div.append(create_breakdown_row(primary, true));
-			
+
 		try {
 			name_norm = ens_normalize(primary);
 		} catch (err) {
@@ -3713,10 +3742,10 @@ async function resolve1(input, skip_norm) {
 				make_normalized(row, name_norm);
 				output_div.append(row);
 				output_div.append(create_breakdown_row(name_norm));
-			}	
+			}
 		}
 	} else {
-		
+
 		// the input is a name
 		input_row = normed_row = create_row(INPUT_NAME);
 		input_row.classList.add('input');
@@ -3733,13 +3762,13 @@ async function resolve1(input, skip_norm) {
 			if (!skip_norm) return; // i think this is always true
 			name_norm = input;
 			norm_err = err;
-		}	
+		}
 
 		if (!norm_err) {
 			if (name_norm === input) {
 				make_normalized(input_row, name_norm);
-				//make_exploded(input_row, input, false); 
-			} else  { 
+				//make_exploded(input_row, input, false);
+			} else  {
 				add_row_tag(input_row, create_tag('fail', 'Normalized'));
 				if (skip_norm) {
 					name_norm = input;
@@ -3764,7 +3793,7 @@ async function resolve1(input, skip_norm) {
 	if (sep_pos == -1) sep_pos = name_norm.length;
 	if (sep_pos > 0) {
 		let prefix = name_norm.slice(0, sep_pos);
-		let suffix = name_norm.slice(sep_pos); 
+		let suffix = name_norm.slice(sep_pos);
 		let tokens = ens_tokenize(prefix);
 		if (tokens.every(t => t.type === 'emoji')) {
 			input_row.after(create_ethmoji_row(tokens, suffix));
@@ -3805,7 +3834,7 @@ async function resolve1(input, skip_norm) {
 	if (name_norm) {
 		let form, pretty;
 		try {
-			form = ens_beautify(name_norm);	
+			form = ens_beautify(name_norm);
 			pretty = true;
 		} catch (err) {
 		}
@@ -3817,7 +3846,7 @@ async function resolve1(input, skip_norm) {
 		if (pretty) row.classList.add('pretty');
 		row.append(create_main_span(form));
 		add_row_tag(row, create_copy_btn(form));
-		if (input === form) { 
+		if (input === form) {
 			add_row_tag(row, skip_norm ? SAME_AS_INPUT : create_tag('good', SAME_AS_INPUT));
 		} else if (name_norm === form) {
 			add_row_tag(row, create_tag('good', SAME_AS_NORM));
@@ -3844,15 +3873,15 @@ async function resolve1(input, skip_norm) {
 		add_row_tag(resolver_row, create_tag('warn', err));
 	}
 	if (should_stop_resolving()) return;
-	remove_temporary(resolver_row);	
-	add_row_tag(resolver_row, create_elapsed());
-	
-	if (resolver) { 
+	remove_temporary(resolver_row);
+	add_row_tag(resolver_row, create_elapsed_since());
+
+	if (resolver) {
 		resolver_row.append(create_explorer_address_link(resolver.target, {contract: true}));
 		add_row_tag(resolver_row, create_copy_btn(resolver.target, {value: true}));
 		add_resolver_info(resolver_row, resolver);
 	} else if (resolver === null) {
-		add_row_tag(resolver_row, create_tag('warn', `Not Set`));	
+		add_row_tag(resolver_row, create_tag('warn', `Not Set`));
 	}
 
 	let dns_txt_address;
@@ -3902,7 +3931,7 @@ async function resolve1(input, skip_norm) {
 		add_row_tag(ens1_row, inspect);
 		add_row_tag(ens1_row, create_link(`https://dnssec-debugger.verisignlabs.com/${host}`, {innerText: 'Verisign', className: 'external'}));
 
-		add_row_tag(ens1_row, create_elapsed());
+		add_row_tag(ens1_row, create_elapsed_since());
 		if (args) {
 			let target_row = create_row('DNS Resolver');
 			add_spinner(target_row);
@@ -3945,7 +3974,7 @@ async function resolve1(input, skip_norm) {
 			}
 			if (should_stop_resolving()) return;
 			remove_temporary(target_row);
-			add_row_tag(target_row, create_elapsed()); 
+			add_row_tag(target_row, create_elapsed_since());
 		}
 	}
 
@@ -3982,7 +4011,7 @@ async function resolve1(input, skip_norm) {
 		}
 		remove_temporary(avail_row);
 		if (should_stop_resolving()) return;
-		add_row_tag(avail_row, create_elapsed()); 
+		add_row_tag(avail_row, create_elapsed_since());
 		add_row_tag(avail_row, create_tag('length', len));
 
 		if (avail_err) {
@@ -4046,7 +4075,7 @@ async function resolve1(input, skip_norm) {
 		}
 		remove_temporary(avail_row);
 		if (should_stop_resolving()) return;
-		add_row_tag(avail_row, create_elapsed()); 
+		add_row_tag(avail_row, create_elapsed_since());
 		add_row_tag(avail_row, create_tag('length', Array.from(label).length));
 		if (nft_contract) {
 			let old = avail_row.querySelector('.row-label');
@@ -4063,10 +4092,10 @@ async function resolve1(input, skip_norm) {
 		}
 	}
 	resolve_state.available = available; // true|false|undefined
-	
+
 	// get the owner
 	let is_wrapped, owner, nft_owner;
-	if ((!resolver || !resolver.__dropped) && (!nft_backed || available !== undefined)) { 
+	if ((!resolver || !resolver.__dropped) && (!nft_backed || available !== undefined)) {
 		let node = namehash(name_norm);
 		let wrapped_row = create_row('Wrapper');
 		add_spinner(wrapped_row);
@@ -4111,7 +4140,7 @@ async function resolve1(input, skip_norm) {
 			add_row_tag(wrapped_row, create_tag('stop', 'Unwrappable'));
 		}
 		remove_temporary(wrapped_row);
-		add_row_tag(wrapped_row, create_elapsed());
+		add_row_tag(wrapped_row, create_elapsed_since());
 
 		let owner_row = create_row(available ? 'Previous Owner' : 'Owner');
 		add_spinner(owner_row);
@@ -4127,13 +4156,13 @@ async function resolve1(input, skip_norm) {
 				let exp = Number(data.expiry) * 1000;
 				let fuses = Number(data.fuses);
 				if (resolve_state.debug && resolve_state.debug.fuses) fuses = 0x7FFFF;
-				if (fuses & 0x10000) { // PARENT_CANNOT_CONTROL 
-					if (fuses & 0x00001) { // CANNOT_UNWRAP 
-						add_row_tag(wrapped_row, create_tag('good', '🔒️ Locked')); 
+				if (fuses & 0x10000) { // PARENT_CANNOT_CONTROL
+					if (fuses & 0x00001) { // CANNOT_UNWRAP
+						add_row_tag(wrapped_row, create_tag('good', '🔒️ Locked'));
 					} else {
 						add_row_tag(wrapped_row, create_tag('good', '🕊️ Emancipated'));
 					}
-					if (!(fuses & 0x20000)) { // !IS_DOT_ETH 
+					if (!(fuses & 0x20000)) { // !IS_DOT_ETH
 						add_reg_exp_tags(wrapped_row, exp, now); // note: this includes grace for .eth subs
 						if (fuses & 0x40000) { // CAN_EXTEND_EXPIRY => no approval needed
 							add_row_tag(wrapped_row, create_tag('warn', 'Public Extendable'));
@@ -4173,7 +4202,7 @@ async function resolve1(input, skip_norm) {
 		if (await is_contract(owner)) make_contract(owner_row);
 		remove_temporary(owner_row);
 		if (should_stop_resolving()) return;
-		add_row_tag(owner_row, create_elapsed());
+		add_row_tag(owner_row, create_elapsed_since());
 		if (owner_err) {
 			owner_row.classList.add('error');
 			owner_row.append(create_tag('warn', owner_err));
@@ -4235,7 +4264,7 @@ async function resolve1(input, skip_norm) {
 						add_row_tag(nft_row, create_resolve_btn(nft_owner));
 					}
 					add_owner_links(nft_row, nft_owner);
-					add_row_tag(nft_row, create_elapsed());
+					add_row_tag(nft_row, create_elapsed_since());
 					remove_temporary(nft_row);
 				} else {
 					nft_row.remove();
@@ -4245,7 +4274,7 @@ async function resolve1(input, skip_norm) {
 		}
 	}
 	if (should_stop_resolving()) return;
-	
+
 	// add address
 	let address;
 	if (resolver) {
@@ -4253,7 +4282,7 @@ async function resolve1(input, skip_norm) {
 		let address_row = create_row('ETH Address');
 		add_spinner(address_row);
 		address_row.classList.add('addr');
-		output_div.append(address_row);	
+		output_div.append(address_row);
 		try {
 			address = await fetch_addr60(resolver);
 		} catch (err) {
@@ -4277,11 +4306,11 @@ async function resolve1(input, skip_norm) {
 					add_row_tag(address_row, SAME_AS_INPUT);
 				} else if (address) {
 					add_row_tag(address_row, create_resolve_btn(address));
-					add_row_tag(address_row, create_tag('warn', 'Different from Owner'));	
+					add_row_tag(address_row, create_tag('warn', 'Different from Owner'));
 				}
 			} else if (owner === address) {
 				if (nft_owner && nft_owner !== address) {
-					add_row_tag(address_row, create_tag('good', `Same as ${MANAGER_NAME}`));	
+					add_row_tag(address_row, create_tag('good', `Same as ${MANAGER_NAME}`));
 				} else {
 					add_row_tag(address_row, create_tag('good', 'Same as Owner'));
 				}
@@ -4293,13 +4322,13 @@ async function resolve1(input, skip_norm) {
 					add_row_tag(address_row, create_tag('fail', 'Same as DNS'));
 				}
 				if (owner) {
-					add_row_tag(address_row, create_tag('fail', 'Owner'));	
+					add_row_tag(address_row, create_tag('fail', 'Owner'));
 				}
 				add_owner_links(address_row, address);
 			}
 		}
 		remove_temporary(address_row);
-		add_row_tag(address_row, create_elapsed());
+		add_row_tag(address_row, create_elapsed_since());
 
 		let show_recs = show_records_check.checked;
 		if (!show_recs) resolve_state.skipped_records = true;
@@ -4308,7 +4337,7 @@ async function resolve1(input, skip_norm) {
 			add_spinner(records_row);
 			records_row.classList.add('records');
 			records_row.dataset.records = '1';
-			output_div.append(records_row);	
+			output_div.append(records_row);
 			if (resolver.__unreachable) {
 				add_row_tag(records_row, create_tag('stop', 'Unreachable'));
 			} else if (resolver.__only_addr) {
@@ -4442,7 +4471,7 @@ async function resolve1(input, skip_norm) {
 							if (fixed !== data) {
 								a.append(create('span', {
 									className: ['tags', 'changed'],
-									innerHTML: '⚠️ Changed', 
+									innerHTML: '⚠️ Changed',
 									title: `Original: ${data}\nChange: ${fixed}`}));
 								data = fixed;
 							}
@@ -4476,8 +4505,8 @@ async function resolve1(input, skip_norm) {
 									if (!normed_row.isConnected) return;
 									if (avatar.error) {
 										a.append(create('span', {
-											className: ['tags', 'changed'], 
-											innerHTML: '❌️ Failed', 
+											className: ['tags', 'changed'],
+											innerHTML: '❌️ Failed',
 											title: avatar.error
 										}));
 										spinner.replaceWith(create('span', {className: 'avatar', innerText: '❌️'}));
@@ -4486,7 +4515,7 @@ async function resolve1(input, skip_norm) {
 										if (avatar.fixed) {
 											a.append(create('span', {
 												className: ['tags', 'changed'],
-												innerHTML: '⚠️ Changed', 
+												innerHTML: '⚠️ Changed',
 												title: avatar.fixed
 											}));
 										}
@@ -4532,7 +4561,7 @@ async function resolve1(input, skip_norm) {
 						// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IContentHashResolver.sol
 						// https://docs.ens.domains/ens-improvement-proposals/ensip-7-contenthash-field
 						// https://github.com/multiformats/multicodec/blob/master/table.csv
-						case TYPE_CONTENTHASH: { 
+						case TYPE_CONTENTHASH: {
 							if (is_null_hex(data)) continue;
 							a.innerHTML = `<b>${rec.type}</b>`;
 							a.classList.add('rtrim');
@@ -4567,7 +4596,7 @@ async function resolve1(input, skip_norm) {
 										url = `bzz://${rep}`;
 										break;
 									}
-									//case 0xE8: // DNSLink 
+									//case 0xE8: // DNSLink
 									case 0x1BC: { // onion v2
 										// https://support.torproject.org/onionservices/v2-deprecation/
 										rep = Base32.encode(buf);
@@ -4644,28 +4673,29 @@ async function resolve1(input, skip_norm) {
 			}
 			if (should_stop_resolving()) return;
 			remove_temporary(records_row);
-			add_row_tag(records_row, create_elapsed());	
+			add_row_tag(records_row, create_elapsed_since());
 		}
 
 		if (show_recs && resolver.__info.impl) {
 			let row = create_row(create_link('https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar#discovery', {innerHTML: 'Interfaces'}));
 			row.classList.add('impls');
-			output_div.append(row);	
+			output_div.append(row);
 			if (name_norm === 'eth') {
 				add_spinner(row);
 				await load_known_interfaces(row, resolver, owner);
 				remove_temporary(row);
-				add_row_tag(row, create_elapsed());
+				add_row_tag(row, create_elapsed_since());
 			} else {
 				row.append(create('button', {
 					innerText: 'Check Interfaces',
 					click() {
 						const t0 = Date.now();
+						const reqs = request_count;
 						this.remove();
 						add_spinner(row);
 						load_known_interfaces(row, resolver, owner).then(() => {
 							remove_temporary(row);
-							add_row_tag(row, create_tag('elapsed', format_dur(Date.now() - t0)));
+							add_row_tag(row, create_elapsed(Date.now() - t0, request_count - reqs));
 						});
 					}
 				}))
@@ -4675,9 +4705,9 @@ async function resolve1(input, skip_norm) {
 
 	if (input_is_address || !address) return; // nothing more to do
 
-	// lookup primary from eth address 
+	// lookup primary from eth address
 	let primary, primary_err;
-	let primary_row = create_row('Primary', true);	
+	let primary_row = create_row('Primary', true);
 	let rev_resolver;
 	output_div.append(primary_row);
 	//primary_row.append(create_jazz_icon(address)); // only true in the forward direction
@@ -4695,7 +4725,7 @@ async function resolve1(input, skip_norm) {
 	}
 	if (should_stop_resolving()) return;
 	remove_temporary(primary_row);
-	add_row_tag(primary_row, create_elapsed());
+	add_row_tag(primary_row, create_elapsed_since());
 	if (primary_err) {
 		primary_row.classList.add('error');
 		add_row_tag(primary_row, create_tag('warn', primary_err));
@@ -4705,7 +4735,7 @@ async function resolve1(input, skip_norm) {
 		add_row_tag(primary_row, create_tag('warn', 'Not Set'));
 		return;
 	}
-	make_exploded(primary_row, primary, false);	
+	make_exploded(primary_row, primary, false);
 
 	// lets check if it's normalized
 	let primary_norm;
@@ -4717,12 +4747,12 @@ async function resolve1(input, skip_norm) {
 			} else {
 				add_row_tag(normed_row, create_tag('good', 'Primary'));
 			}
-		}	
+		}
 	} catch (err) {
 		primary_row.classList.add('error');
 		add_row_tag(primary_row, create_tag('norm', err));
 	}
-	
+
 	if (primary === input) {
 		add_row_tag(primary_row, SAME_AS_INPUT);
 	} else if (primary === name_norm) {
@@ -4735,7 +4765,7 @@ async function resolve1(input, skip_norm) {
 	if (primary === name_norm) {
 		primary_row.classList.add('normalized');
 		return;
-	}	
+	}
 	output_div.append(create_breakdown_row(primary, true));
 	if (primary === primary_norm) {
 		make_normalized(primary_row, primary_norm);
@@ -4743,18 +4773,18 @@ async function resolve1(input, skip_norm) {
 	}
 	if (!primary_norm) return;
 	add_row_tag(primary_row, create_tag('fail', 'Normalized'));
-	
+
 	let primary_norm_row = create_row('Normalized Primary');
 	make_exploded(primary_norm_row, primary_norm, true);
 	output_div.append(primary_norm_row);
 	if (primary_norm === input) {
 		add_row_tag(primary_norm_row, SAME_AS_INPUT);
-		primary_norm_row.classList.add('normalized'); 
+		primary_norm_row.classList.add('normalized');
 		return;
-	} 
+	}
 	if (name_norm === primary_norm) {
 		add_row_tag(primary_norm_row, SAME_AS_NORM);
-		primary_norm_row.classList.add('normalized'); 
+		primary_norm_row.classList.add('normalized');
 	} else {
 		add_row_tag(primary_norm_row, create_copy_btn(primary_norm));
 		add_ensip1_tag(primary_norm_row, primary_norm, true);
@@ -4767,8 +4797,8 @@ function add_owner_links(row, owner) {
 	let group = create('div', {className: ['grouped', 'external']});
 	add_row_tag(group, create_link(`${active_chain.is_mainnet ? 'https://opensea.io/' : 'https://testnets.opensea.io/'}${owner}?tab=collected`, {innerHTML: OPENSEA_NAME}));
 	if (active_chain.is_mainnet) {
-		add_row_tag(group, create_link(`https://${VISION_HOST}/0x/${owner}`, {innerHTML: VISION_NAME}));	
-	}	
+		add_row_tag(group, create_link(`https://${VISION_HOST}/0x/${owner}`, {innerHTML: VISION_NAME}));
+	}
 	add_row_tag(group, create_link(`https://rainbow.me/${owner}`, {innerHTML: 'Rainbow'}));
 	add_row_tag(group, create_link(`https://debank.com/profile/${owner}`, {innerHTML: 'Debank'}));
 	row.append(group);
@@ -4778,7 +4808,7 @@ function is_user_rejection(err) {
 }
 function parse_call_error(calldata) {
 	let selector = calldata.slice(0, 10);
-	let message = `<a href="https://www.4byte.directory/signatures/?bytes4_signature=${selector}" target="_blank"><code>${selector}</code></a>`;	
+	let message = `<a href="https://www.4byte.directory/signatures/?bytes4_signature=${selector}" target="_blank"><code>${selector}</code></a>`;
 	let error = {selector, data: '0x' + calldata.slice(10)};
 	let desc = ERROR_ABI.parseError(calldata);
 	if (desc) {
@@ -4801,7 +4831,7 @@ function parse_ethers_error(err) {
 	} else if (err.code === 'OFFCHAIN_FAULT') {
 		if (err.reason === '404_MISSING_RESOURCE') {
 			return new Error(`CCIP error: <b title="${err.info.url}">HTTP 404</b>`);
-		} 
+		}
 		let {reason, errorMessages = ['unknown']} = err.info;
 		if (reason) {
 			return new Error(`CCIP error: ${errorMessages.join(' ')} <code>${reason}</code>`);
@@ -4835,11 +4865,11 @@ async function fetch_records(resolver, records, info = {}) {
 				let data = await resolver.resolve(__dns_encoded, abi.encodeFunctionData(frag, [encoded]), options);
 				[multi] = abi.decodeFunctionResult(frag, data);
 			} else {
-				multi = await network_state.multicall.tryAggregate(false, encoded.map(data => ({target, data})));
+				multi = await network_state.multicall.tryAggregate(false, encoded.map(data => [target, data]));
 				multi = multi.map(x => x.data);
 			}
 			if (multi && multi.length === records.length) {
-				info.multicalled = true; 
+				info.multicalled = true;
 				return records.map((rec, i) => {
 					let calldata = multi[i];
 					try {
@@ -4883,7 +4913,7 @@ async function fetch_records(resolver, records, info = {}) {
 				}
 				return {rec, data};
 			} catch (err) {
-				if (err instanceof TypeError) { // fetch() network error? 
+				if (err instanceof TypeError) { // fetch() network error?
 					resolver.__unreachable = 'network';
 				 	return {rec, error: err};
 				} else {
@@ -5065,7 +5095,7 @@ async function ensure_wrapper() {
 	network_state.wrapper = new ethers.Contract(address, [
 		'function isWrapped(bytes32 node) public view returns (bool)',
 		'function getData(uint256 id) external view returns (address owner, uint32 fuses, uint64 expiry)',
-		'function names(bytes32 node) public view returns (bytes)',	
+		'function names(bytes32 node) public view returns (bytes)',
 	], active_provider);
 }
 async function ensure_eth_nft() {
@@ -5095,7 +5125,7 @@ async function ensure_eth_nft() {
 	let price_oracle = contract_for_price_oracle(await eth_controller.prices());
 	check_abort();
 	Object.assign(network_state, {
-		eth_nft, 
+		eth_nft,
 		eth_controller,
 		price_oracle,
 		grace_period: 1000 * grace_sec,
@@ -5162,11 +5192,11 @@ async function multicall_tryAggregate(calls) {
 	}));
 }
 async function load_known_interfaces(row, resolver, owner) {
-	// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar	
+	// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar
 	const TITLE_WRAPPER = 'Wrapper';
 	const TITLE_NFT = 'NFT';
 	let interfaces = [
-		//{iface: IFACE_ETH_NFT, name: 'NFT'},  
+		//{iface: IFACE_ETH_NFT, name: 'NFT'},
 		{iface: '0x019a38fe', title: TITLE_WRAPPER},
 		{iface: IFACE_ETH_CONTROLLER, title: 'Controller'},
 		{iface: '0x018fac06', title: 'Old Controller'},
@@ -5197,7 +5227,7 @@ async function load_known_interfaces(row, resolver, owner) {
 			let {iface, title} = interfaces[i];
 			let [ok, data] = multi[i];
 			if (!ok) continue;
-			let [addr] = abi.decodeFunctionResult(frag, data); 
+			let [addr] = abi.decodeFunctionResult(frag, data);
 			if (is_null_hex(addr)) continue;
 			add_iface(title, addr, iface);
 			if (iface === IFACE_ETH_CONTROLLER) {
@@ -5209,6 +5239,7 @@ async function load_known_interfaces(row, resolver, owner) {
 				}
 				add_iface('NFT', owner);
 				add_iface(TITLE_WRAPPER, await controller.nameWrapper().catch(() => {}));
+				add_iface('Public Resolver', await network_state.ens.resolver(namehash('resolver.eth')));
 				//add_iface('DAO Wallet', await contract.owner().catch(() => ''));
 			}
 		}
@@ -5295,7 +5326,7 @@ async function get_resolver(name0) {
 			'function name(bytes32 node) view returns (string)',
 			'function recordVersions(bytes32 node) external view returns (uint64)',
 			'function multicall(bytes[] calldata data) external returns (bytes[] memory results)',
-		], active_provider);	
+		], active_provider);
 		let info = await get_resolver_info(address);
 		if (i && !info.wild) break; // ancestor but not wildcard
 		resolver.__info = info;
@@ -5401,7 +5432,7 @@ function create(el, args, ...a) {
 		}
 	}
 	el.append(...a);
-	return el;	
+	return el;
 }
 function add_dot_eth(name, append) {
 	const suffix = '.eth';
