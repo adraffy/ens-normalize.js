@@ -4948,6 +4948,9 @@ async function fetch_records(resolver, records, info = {}) {
 	}));
 }
 async function fetch_resource_url(value, owner) {
+	if (value.startsWith('data:')) {
+		return {url: value, type: 'On-chain'};
+	}
 	let pos = value.indexOf('://');
 	if (pos >= 0) {
 		let proto = value.slice(0, pos).toLowerCase();
@@ -4962,7 +4965,6 @@ async function fetch_resource_url(value, owner) {
 		}
 		let type;
 		switch (proto) {
-			case 'data': type = 'On-chain'; break;
 			case 'ipfs': type = 'IPFS'; break;
 			case 'http':
 			case 'https': type = 'URL'; break;
