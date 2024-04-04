@@ -637,12 +637,14 @@ span.tally {
 	justify-content: center;
 	color: #fff;
 	font: bold 12px monospace;
+	background-color: #666;
 }
 .jazz.addr1 { background-color: #66f; }
 .jazz.addr2 { background-color: #c4c; }
 .jazz.addr3 { background-color: #0a8; }
 .jazz.addr4 { background-color: #a80; }
-.jazz.addr5 { background-color: #57d; }
+.jazz.addr5 { background-color: #c93; }
+.jazz.addr6 { background-color: #42e; }
 .avatar {
 	order: -1;
 }
@@ -799,7 +801,8 @@ span.tally {
 	color: #666;
 	user-select: none;
 	pointer-events: none;
-	order: -10;
+	order: -15;
+	display: flex;
 }
 .record:not([href]):hover {
 	border: 2px solid #0a0;
@@ -2801,8 +2804,10 @@ function create_explorer_address_link(addr, {innerHTML, anchor = '', contract, c
 function create_jazz_icon(address) {
 	let {addrs, debug} = resolve_state;
 	let i = addrs.get(address);
-	if (!i || (debug && debug.jazz)) addrs.set(address, i = addrs.size + 1);
+	if (debug && debug.jazz) address += addrs.size; // force unique
+	if (!i) addrs.set(address, i = addrs.size + 1);
 	return create('span', {innerHTML: i, className: ['jazz', `addr${i}`]});
+	//return create('span', {innerHTML: i, className: 'jazz', style: {backgroundColor: `hsl(${((i+1)*83)%360} 75 50)`}});
 }
 function make_click_copy(el, raw, {hint} = {}) {
 	if (el.title) el.title += `\n(Click to Copy)`;
@@ -4408,7 +4413,7 @@ async function resolve1(input, skip_norm) {
 							let {name, coin, evm} = rec;
 							if (!name && evm) name = `chain(${evm})`;
 							if (!name) name = `coin(${coin})`;
-							a.innerHTML = rec.icon || `<b>${name}</b>`;
+							a.innerHTML = `<b>${rec.icon || name}</b>`;
 							try {
 								let v = ethers.getBytes(data);
 								let lines = [`Name: ${name}`, `Type: ${format_dec_hex(coin)}`];
@@ -4427,6 +4432,12 @@ async function resolve1(input, skip_norm) {
 								}
 								if (address) {
 									lines.unshift(address);
+									//let show = true;
+									if (rec.evm) {
+										//show = !resolve_state.addrs.has(address);
+										a.append(create_jazz_icon(address));
+									}
+									//if (show)
 									a.append(create('span', {innerHTML: address, className: ['addr', 'long']}));
 									if (rec.url) {
 										a.href = rec.url(encodeURIComponent(address));
@@ -5382,6 +5393,7 @@ function repair_social(value, {prefix = '@', url = 1} = {}) {
 function base58check(v) {
 	return Base58BTC.encode([...v, ...ethers.getBytes(ethers.sha256(ethers.sha256(v))).slice(0, 4)]);
 }
+// btc: {p2pkh: 0, p2sh: 5, hrp: 'bc', p2wpkh: 0, p2tr: 1},
 function format_btc_address(v, {p2pkh, p2sh, hrp, p2wpkh, p2tr}) {
 	let n = v.length;
 	// P2PKH: OP_DUP OP_HASH160 <pubKeyHash> OP_EQUALVERIFY OP_CHECKSIG
@@ -5397,12 +5409,14 @@ function format_btc_address(v, {p2pkh, p2sh, hrp, p2wpkh, p2tr}) {
 	try {
 		let version = v[0];
 		if (version) version -= 0x50;
-		let v32 = convert(v.subarray(2), 8, 5);
-		if (p2wpkh === version) {
-			return new Bech32(hrp, [version, ...v32], 1).toString();
-		}
-		if (p2tr === version) {
-			return new Bech32(hrp, [version, ...v32], Bech32.M).toString();
+		if (v[1] === v.length-2) {
+			let v32 = convert(v.subarray(2), 8, 5);
+			if (p2wpkh === version) {
+				return new Bech32(hrp, [version, ...v32], 1).toString();
+			}
+			if (p2tr === version) {
+				return new Bech32(hrp, [version, ...v32], Bech32.M).toString();
+			}
 		}
 	} catch (err) {
 	}
@@ -5418,8 +5432,8 @@ function create(el, args, ...a) {
 			if (!v) continue;
 			if (v instanceof Function) {
 				el.addEventListener(k, v);
-			} else if (k === 'dataset') {
-				Object.assign(el.dataset, v);
+			} else if (k === 'dataset' || k === 'style') {
+				Object.assign(el[k], v);
 			} else if (k === 'className') {
 				for (let x of [v].flat(Infinity)) {
 					if (typeof x === 'string') {
