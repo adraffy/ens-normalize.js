@@ -1618,21 +1618,21 @@ const RECORDS = [
 		name: 'polygon',
 		icon: '<img src="https://assets-global.website-files.com/637359c81e22b715cec245ad/63f775c741010796d62770fd_polygon-favicon.png">',
 		url(x) { return `https://polygonscan.com/address/${x}`; },
-		bonus: true,
+		//bonus: true,
 	},
 	{
 		evm: 10,
 		name: 'op',
 		icon: '<img src="https://assets-global.website-files.com/611dbb3c82ba72fbc285d4e2/612d2f8f988b5f801bd0cf1e_favicon.png">',
 		url(x) { return `https://optimistic.ethereum.io/address/${x}`; },
-		bonus: true,
+		//bonus: true,
 	},
 	{
 		evm: 42161,
 		name: 'arb',
 		icon: '<img src="https://arbitrum.foundation/favicon.ico">',
 		url(x) { return `https://arbiscan.io/address/${x}`; },
-		bonus: true,
+		//bonus: true,
 	},
 	{
 		evm: 43114,
@@ -1646,7 +1646,7 @@ const RECORDS = [
 		name: 'base',
 		icon: '<img src="https://base.org/document/favicon-32x32.png">',
 		url(x) { return `https://basescan.org/address/${x}`; },
-		bonus: true,
+		//bonus: true,
 	},
 	{
 		evm: 100,
@@ -1660,6 +1660,12 @@ const RECORDS = [
 		evm: 534352,
 		name: 'scroll',
 		url(x) { return `https://scrollscan.com/address/${x}`; },
+		bonus: true,
+	},
+	{
+		evm: 324,
+		name: 'zkSync',
+		url(x) { return `https://explorer.zksync.io/address/${x}`; },
 		bonus: true,
 	},
 	{
@@ -1716,6 +1722,12 @@ const RECORDS = [
 		legacy: 52752,
 		name: 'celo',
 		url(x) { return `https://explorer.celo.org/mainnet/address/${x}`; },
+		bonus: true,
+	},
+	{
+		evm: 81457,
+		name: 'blast',
+		url(x) { return `https://blastscan.io/address/${x}`; },
 		bonus: true,
 	},
 	// {
