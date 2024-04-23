@@ -321,6 +321,7 @@ function scroll_to_cp(cp) {
 function clear_active() {
 	let td = document.querySelector('td.active');
 	if (td) td.classList.remove('active');
+	jump_btn.classList.add('hide');
 }
 function mark_active(td) {
 	td.classList.add('active');
