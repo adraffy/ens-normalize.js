@@ -1858,10 +1858,15 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 	});
 }
 for (let x of document.querySelectorAll('[data-tokenize]')) {
+	let components = !!x.dataset.parts;
 	x.replaceWith(dom_from_tokens(ens_tokenize(replace_escapes(x.dataset.tokenize)), {
-		components: x.dataset.parts,
+		components,
 		emoji(a, {emoji}) {
 			a.href = `#${encodeURIComponent(String.fromCodePoint(...emoji))}`;
+			a.addEventListener('click', () => {
+				show_components_check.checked = components;
+				save_settings();
+			});
 		},
 		tld: true
 	}));
@@ -2196,11 +2201,15 @@ try {
 	({debug_enabled, debug_settings} = settings);
 } catch (err) {
 }
-if (location0.searchParams.has('records')) {
-	show_records_check.checked = true;
-}
-if (location0.searchParams.has('details')) {
-	show_details_check.checked = true;
+
+// one-time parse options
+parse_check(show_details_check, 'details');
+parse_check(show_records_check, 'records');
+parse_check(show_components_check, 'components');
+function parse_check(check, key) {
+	let value = location0.searchParams.get(key);
+	if (value === null) return;
+	check.checked = is_truelike_str(value);
 }
 if (location0.searchParams.has('debug')) {
 	try {
@@ -2209,6 +2218,7 @@ if (location0.searchParams.has('debug')) {
 	} catch (err) {
 	}
 }
+
 if (!is_object(debug_settings)) debug_settings = {};
 sync_recent(localStorage[STORAGE_RECENT]);
 sync_settings();
@@ -2454,7 +2464,6 @@ function parse() {
 	resolve_state = {};
 	if (!input0) {
 		stop_resolving();
-		show_components_check
 		output_div.append(...readme_dom);
 		return;
 	}
@@ -5498,6 +5507,9 @@ function namehash(s) {
 }
 function bytes32_from(x) {
 	return '0x' + BigInt(x).toString(16).padStart(64, '0').slice(-64);
+}
+function is_truelike_str(s) {
+	return !/^(|0+|f|false|n|no|off)$/i.test(s);
 }
 function is_object(x) {
 	return x && x.constructor === Object;

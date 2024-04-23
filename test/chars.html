@@ -100,32 +100,56 @@ td .name {
 	font-size: 20px;
 	text-align: center;
 }
-#jump_btn {
+.floater {
 	position: fixed;
-	bottom: 16px;
-	right: 16px;
 	box-shadow: 0 0 5px #0004;
 	transition: .5s ease opacity;
 	z-index: 1;
 	padding: 8px;
-	cursor: pointer;
-	font-size: 100%;
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	font-size: 20px;
 }
-#jump_btn code {
-	padding: 1px;
+.floater code {
+	padding: 1px 2px;
 	background-color: #cff;
-	font-size: 130%;
+	font-size: 24px;
+	border: 1px solid #ccc;
 }
-footer {
-	text-align: center;
-	color: #666;
-	margin-top: 1rem;
-	margin-bottom: 0.5rem;
+#jump_btn {
+	bottom: 16px;
+	right: 16px;
+	cursor: pointer;
+}
+#loading {
+	position: fixed;
+	top: 16px;
+	padding-left: 12px;
+	margin-left: 50%;
+	transform: translateX(-50%);
+	font-size: 150%;
+	background-color: #ffc;
+	border-radius: 8px;
+	border: 1px solid #888;
+}
+.spinner {
+	width: 24px;
+	height: 24px;
+	box-sizing: border-box;
+	animation: spin 2s infinite linear;
+	border: 4px solid #000;
+	border-bottom-color: transparent;
+	border-radius: 100%;
+}
+@keyframes spin {
+	to { transform:rotate(360deg); }
 }
 </style>
 </head>
 <body>
-<button id="jump_btn" class="hide"></button>
+<div class="floater" id="loading"><div class="spinner"></div>Downloading <code>names.json</code></div>
+<button class="floater" id="jump_btn" class="hide"></button>
 <div id="overlay" class="hide">
 <div>
 <input placeholder="Hex or Name or Char">
@@ -156,6 +180,7 @@ let grid_cols;
 let max_rows;
 let jump_cp;
 
+requestAnimationFrame(apply_hash);
 fetch('../derive/output/names.json').then(r => r.json()).then(({chars, ranges, scripts}) => {
 	for (let [cp, name] of chars) {
 		char_map.set(cp, {name});
@@ -188,19 +213,24 @@ fetch('../derive/output/names.json').then(r => r.json()).then(({chars, ranges, s
 		}).join('\n')
 	}));
 }).catch(console.log).then(() => {
-	requestAnimationFrame(update_hash);
-});	
+	requestAnimationFrame(apply_hash);
+	document.querySelector('#loading').remove();
+});
 
 jump_btn.addEventListener('click', () => scroll_to_cp(jump_cp));
 window.addEventListener('unload', () => {});
 window.addEventListener('resize', () => update_cols());
-window.addEventListener('hashchange', update_hash);
+window.addEventListener('hashchange', apply_hash);
 window.addEventListener('keydown', e => {
 	if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
 		e.preventDefault();
 		show_overlay();
 	} else if (e.key === 'Escape') {
-		overlay_div.classList.add('hide');
+		if (overlay_div.classList.contains('hide')) {
+			clear_hash();
+		} else {
+			overlay_div.classList.add('hide');
+		}
 	} else if (e.key === 'Enter') {
 		if (overlay_div.classList.contains('hide')) {
 			show_overlay();
@@ -239,7 +269,7 @@ function check_scroll() {
 		update_table();
 	}
 }
-function update_hash() {
+function apply_hash() {
 	scroll_to_input(window.location.hash.slice(1));
 }
 function scroll_to_input(input) {
@@ -257,22 +287,29 @@ function scroll_to_input(input) {
 		scroll_to_cp(input.codePointAt(0));
 	}
 }
+function sync_hash(url) {
+	if (window.history.state) {
+		if (window.history.state != url) {
+			window.history.pushState(url, null, url);
+		}
+	} else {
+		window.history.replaceState(url, null, url);
+	}
+}
+function clear_hash() {
+	if (!Number.isInteger(jump_cp)) return;
+	jump_cp = undefined;
+	sync_hash(' ');
+	clear_active();
+}
 function scroll_to_cp(cp) {
 	if (cp >= 0 && cp <= MAX_CP) {
-		let url = `#${hex_cp(cp)}`;
-		if (window.history.state) {
-			if (window.history.state != url) {
-				window.history.pushState(url, null, url);
-			}
-		} else {
-			window.history.replaceState(url, null, url);
-		}
+		sync_hash(`#${hex_cp(cp)}`);
 		jump_cp = cp;
 		jump_btn.innerHTML = `Return to <code>${hex_cp(cp)}</code>`;
 		let td = document.querySelector(`[data-cp="${cp}"]`);
 		if (td) {
-			let old = document.querySelector('.active');
-			if (old) old.classList.remove('active');
+			clear_active();
 			mark_active(td);
 		} else {
 			let row = Math.floor(cp / grid_cols - grid_rows / 2);
@@ -280,6 +317,10 @@ function scroll_to_cp(cp) {
 			window.scrollTo(0, scrollHeight * frac);
 		}
 	}
+}
+function clear_active() {
+	let td = document.querySelector('td.active');
+	if (td) td.classList.remove('active');
 }
 function mark_active(td) {
 	td.classList.add('active');
