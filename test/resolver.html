@@ -1705,6 +1705,14 @@ const RECORDS = [
 		bonus: true,
 	},
 	{
+		coin: 1815,
+		name: 'ada',
+		icon: '<img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/ada.png">',
+		bech32: {hrp: 'addr', type: 1},
+		url(x) { return `https://cexplorer.io/address/${x}`; },
+		bonus: true
+	},
+	{
 		evm: 56,
 		name: 'bsc',
 		url(x) { return `https://bscscan.com/address/${x}`; },

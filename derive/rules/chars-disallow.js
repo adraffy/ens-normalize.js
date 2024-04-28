@@ -623,6 +623,9 @@ export default [
     0x1361, // (፡) ETHIOPIC WORDSPACE
 
 	/*
+	// 20240423: why weren't these disabled?
+	// `node tools/reg-count.js 1390..1399` shows 1 illegal reg
+	// TODO: disable for 16
 	0x1390, // (᎐) ETHIOPIC TONAL MARK YIZET
 	0x1391, // (᎑) ETHIOPIC TONAL MARK DERET
 	0x1392, // (᎒) ETHIOPIC TONAL MARK RIKRIK
