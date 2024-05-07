@@ -3651,7 +3651,7 @@ function resolve() {
 		r0, r: r0
 	};
 	if (debug_enabled) resolve_state.debug = debug_settings;
-	resolve1(name, skip).then(() => {
+	resolve1(name, skip).catch(err => console.log(err)).then(() => {
 		clock_span.innerHTML = create_elapsed(Date.now() - t0, request_count - r0, 3).innerHTML;
 		resolve_btn.disabled = false;
 		if (Array.isArray(resolve_timer)) {
