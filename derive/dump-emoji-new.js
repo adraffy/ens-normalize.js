@@ -1,7 +1,11 @@
-// find emoji that are new
+// print out new emoji
+// node derive/dump-emoji-new.js release?
 
-import {PRINTER, UNICODE} from './unicode-version.js';
+import {UnicodeSpec, UnicodePrinter} from './unicode-logic.js';
 import {version_ordinal} from './utils.js';
+
+const UNICODE = UnicodeSpec.from_release(process.argv[2] || 'current');
+const PRINTER = new UnicodePrinter(UNICODE);
 
 const version0 = version_ordinal(UNICODE.unicode_version); // version threshold
 
@@ -18,14 +22,26 @@ function add(cps, info) {
 	rec.types.push(info.type);
 }
 
-for (let info of Object.values(UNICODE.read_emoji_data()).flat()) {
-	add([info.cp], info);
+try {
+	for (let info of Object.values(UNICODE.read_emoji_data()).flat()) {
+		add([info.cp], info);
+	}
+} catch (err) {
+	console.log(`no data: ${err.message}`)
 }
-for (let info of Object.values(UNICODE.read_emoji_seqs()).flat()) {
-	add(info.cps, info);
+try {
+	for (let info of Object.values(UNICODE.read_emoji_seqs()).flat()) {
+		add(info.cps, info);
+	}
+} catch (err) {
+	console.log(`no seq: ${err.message}`);
 }
-for (let info of Object.values(UNICODE.read_emoji_zwjs()).flat()) {
-	add(info.cps, info);
+try {
+	for (let info of Object.values(UNICODE.read_emoji_zwjs()).flat()) {
+		add(info.cps, info);
+	}
+} catch (err) {
+	console.log(`no zwj: ${err.message}`);
 }
 
 for (let info of found.values()) {

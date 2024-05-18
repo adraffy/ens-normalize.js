@@ -1319,6 +1319,7 @@ Hebrew:
 <li><a href="https://github.com/resolverworks/TheOffchainResolver.sol" data-badge="solc">TheOffchainResolver</a></li>
 <li><a href="https://github.com/resolverworks/TheOffchainGateway.js" data-badge="js">TheOffchainGateway</a></li>
 <li><a href="https://github.com/resolverworks/ezccip.js" data-badge="js">ezccip</a></li>
+<li><a href="https://resolverworks.github.io/ezccip.js/test/postman.html">CCIP-Read Postman</a></li>
 <li><a href="https://github.com/resolverworks/enson.js" data-badge="js">enson</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-batch-resolver.html">Batch Resolver</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-nft-matcher.html">ENS+NFT Matcher</a></li>
@@ -3951,6 +3952,7 @@ async function resolve1(input, skip_norm) {
 				for (let arg of args) {
 					ens1_row.append(create_tag('raw', arg));
 				}
+				ens1_row.append(create_copy_btn(rec.data.slice(1, -1)));
 			} else if (res.status == 504) {
 				throw new Error('DNS query timeout');
 			} else {

@@ -133,12 +133,34 @@ export class UnicodeChar {
 }
 
 export class UnicodeSpec {
+	static releases() {
+		return JSON.parse(readFileSync(new URL('./data/releases.json', import.meta.url)));
+	}
+	static from_release(release) {
+		if (typeof release !== 'string') throw new Error('expected release');
+		let v = this.releases();
+		let info;
+		if (/^\d+$/.test(release)) {
+			info = v[parseInt(release)];
+		} else {
+			info = v.find(x => x.tag === release);
+		}
+		if (!info) throw new Error(`unknown release: ${release}`);
+		return this.from_versions(info);
+	}
+	static from_versions({unicode, cldr}) {
+		return new this(
+			new URL(`./data/${unicode}/`, import.meta.url), 
+			new URL(`./data/CLDR-${cldr}/`, import.meta.url)
+		);
+	}
 	constructor(data_dir, cldr_dir) {
 		this.data_dir = data_dir;
 		this.cldr_dir = cldr_dir;
 		this.unicode_version = JSON.parse(readFileSync(new URL('./version.json', data_dir)));
 		this.cldr_version = JSON.parse(readFileSync(new URL('./version.json', cldr_dir)));
 		// cache some stuff
+		this.script_map = new Map(); // 20240518: define this before char_map
 		this.char_map = new Map(this.read_ucd().map(x => [x.cp, x]));
 		this.cm = new Set([...this.char_map.values()].filter(x => x.is_cm).map(x => x.cp)); 
 		this.nsm = new Set([...this.char_map.values()].filter(x => x.is_nsm).map(x => x.cp));
@@ -157,7 +179,7 @@ export class UnicodeSpec {
 		let {sc} = this.read_prop_values(); // sc = Script
 		// this.names = new Map(sc.map(v => [v[0], v[1]])); // abbr -> name
 		let name2abbr = new Map(sc.map(v => [v[1], v[0]])); // name -> abbr
-		this.script_map = new Map(this.read_scripts().map(([name, cps]) => {
+		for (let [name, cps] of this.read_scripts()) {
 			let abbr = name2abbr.get(name);
 			if (!abbr) throw new TypeError(`unknown script: ${name}`);
 			name = name.replaceAll('_', ' '); // fix name
@@ -166,8 +188,8 @@ export class UnicodeSpec {
 			for (let info of map.values()) {
 				info.script = script;
 			}
-			return [abbr, script];
-		}));
+			this.script_map.set(abbr, script);
+		}
 		// ensure that every character has a script
 		// "All code points not explicitly listed for Script have the value Unknown (Zzzz)."
 		let script0 = new UnicodeScript('Zzzz', 'Unknown', new Map());

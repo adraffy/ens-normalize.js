@@ -4,8 +4,8 @@
 import {UnicodeSpec} from './unicode-logic.js';
 import {ens_idna_rules} from './idna.js'; 
 
-const UNICODE0 = new UnicodeSpec(new URL('./data/15.0.0/', import.meta.url), new URL('./data/CLDR-42/', import.meta.url));
-const UNICODE1 = new UnicodeSpec(new URL('./data/15.1.0/', import.meta.url), new URL('./data/CLDR-43.1/', import.meta.url));
+const UNICODE0 = UnicodeSpec.from_release('current');
+const UNICODE1 = UnicodeSpec.from_release('beta');
 
 deep_diff(expand(UNICODE0), expand(UNICODE1), (path, a, b) => {
 	console.log(`[${path.join('/')}] ${a} =!= ${b}`);
@@ -13,7 +13,6 @@ deep_diff(expand(UNICODE0), expand(UNICODE1), (path, a, b) => {
 
 function expand(unicode) {
 	let obj = {
-		scripts: unicode.script_map, // force this before char_map
 		unicode, 
 		idna_ens: expand_idna(ens_idna_rules(unicode)),
 		//idna_2003: unicode.derive_idna_rules({version: 2003, use_STD3: true, valid_deviations: true}),

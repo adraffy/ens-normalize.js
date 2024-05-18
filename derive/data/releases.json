@@ -1,0 +1,22 @@
+[
+	{
+		"spec_hash": "962316964553fce6188e25a5166a4c1e906333adf53bdf2964c71dedc0f8e2c8",
+		"library": "1.9.4",
+		"unicode": "15.0.0",
+		"cldr": "42"
+	},
+	{
+		"spec_hash": "1f6d3bdb7a724fe3b91f6d73ab14defcb719e0f4ab79022089c940e7e9c56b9c",
+		"library": "1.10.1",
+		"unicode": "15.1.0",
+		"cldr": "43.1",
+		"tag": "current"
+	},
+	{
+		"spec_hash": "TBD",
+		"library": "1.11.0",
+		"unicode": "16.0.0",
+		"cldr": "44",
+		"tag": "beta"
+	}
+]
