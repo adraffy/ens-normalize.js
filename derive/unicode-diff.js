@@ -1,11 +1,15 @@
 // compare two unicode versions AFTER parsing
-// TODO: support arg1 arg2 where arg = unicode-version/cldr-version
+// TODO: expand more of this into hex literals
 
 import {UnicodeSpec} from './unicode-logic.js';
 import {ens_idna_rules} from './idna.js'; 
+import {hex_cp, hex_seq} from './utils.js';
 
-const UNICODE0 = UnicodeSpec.from_release('current');
-const UNICODE1 = UnicodeSpec.from_release('beta');
+let args = process.argv.slice(2);
+if (args.length < 2) args.unshift('current');
+if (args.length < 2) args.push('beta');
+const UNICODE0 = UnicodeSpec.from_release(args[0]);
+const UNICODE1 = UnicodeSpec.from_release(args[1]);
 
 deep_diff(expand(UNICODE0), expand(UNICODE1), (path, a, b) => {
 	console.log(`[${path.join('/')}] ${a} =!= ${b}`);
@@ -16,60 +20,26 @@ function expand(unicode) {
 		unicode, 
 		idna_ens: expand_idna(ens_idna_rules(unicode)),
 		//idna_2003: unicode.derive_idna_rules({version: 2003, use_STD3: true, valid_deviations: true}),
-		emoji_data: map_values(unicode.read_emoji_data(), v => new Map(v.map(x => [x.cp, x]))),
-		emoji_zwjs: expand_named_cps(unicode.read_emoji_zwjs()),
-		emoji_seqs: expand_named_cps(unicode.read_emoji_seqs()),
+		//emoji_data: map_values(unicode.read_emoji_data(), v => new Map(v.map(x => [hex_cp(x.cp), hex_seq(x)]))),
+		emoji_data: new Map(Object.entries(unicode.read_emoji_data()).map(([k, v]) => [k, new Set(v.map(x => hex_cp(x.cp)))])),
+		emoji_zwjs: new Map(Object.entries(unicode.read_emoji_zwjs()).map(([k, v]) => [k, new Set(v.map(x => hex_seq(x.cps)))])),
+		emoji_seqs: new Map(Object.entries(unicode.read_emoji_seqs()).map(([k, v]) => [k, new Set(v.map(x => hex_seq(x.cps)))])),
 		regions: new Set(unicode.read_regions()),
+		combining_class: new Map(unicode.combining_classes().map(([k, v]) => [k, new Set(v.map(hex_cp))])),
+		decompositions: new Map(unicode.decompositions().map(([k, v]) => [k, hex_seq(v)])),
+		confusables: new Map(unicode.read_confusables().map(([k, v]) => [hex_seq(k), new Set(v.map(hex_cp))])),
+		intentional_confusables: new Map(unicode.read_intentional_confusables()),
+		nonchars: new Set(unicode.get_noncharacter_cps().map(hex_cp)),
+		script_kinds: new Map(Object.entries(unicode.read_script_kinds()).map(([k, v]) => [k, new Set(v)])),
 	};
-	for (let fn of [
-		// [UnicodeSpec]
-		//'read_ucd', 
-		//'read_scripts',
-		//'read_short_names', 
-		//'read_prop_values',
-		//'read_script_extensions',
-
-		//'derive_idna_rules'
-		//'read_emoji_zwjs',
-		//'read_emoji_seqs',
-		//'read_emoji_data',
-		//'read_props',
-		//'read_regions',
-
-		'get_noncharacter_cps', 
-		'combining_ranks',
-		'decompositions',
-		'read_confusables',
-		'read_intentional_confusables',
-		'read_script_kinds',
-
-		// [ignored]
-		//'get_unnamed_cps',
-		//'read_emoji_test',
-		//'read_nf_tests',
-		//'core_props',
-		//'read_allowed_identifiers',
-		//'read_identifier_types',
-		//'read_nf_props',
-	]) {
-		obj[fn] = unicode[fn]();
-	}
 	return obj;
-}
-function expand_named_cps(m) {
-	return map_values(m, v => new Map(v.map(x => [String.fromCodePoint(...x.cps), x])));
 }
 function expand_idna({valid, mapped, ignored}) {
 	return {
-		valid: new Set(valid),
-		mapped: new Map(mapped),
-		ignored: new Set(ignored)
+		valid: new Set(valid.map(hex_cp)),
+		mapped: new Map(mapped.map(([k, v]) => [hex_cp(k), hex_seq(v)])),
+		ignored: new Set(ignored.map(hex_cp))
 	};
-}
-function map_values(obj, fn) {
-	for (let [k, v] of Object.entries(obj)) {
-		obj[k] = fn(v, k);
-	}
 }
 
 function deep_diff(a, b, callback, path = [], visited = new Set()) {
@@ -94,7 +64,7 @@ function deep_diff(a, b, callback, path = [], visited = new Set()) {
 			let a_minus_b = new Set([...a].filter(x => !b.has(x)));
 			let b_minus_a = new Set([...b].filter(x => !a.has(x)));
 			if (a_minus_b.size || b_minus_a.size) {
-				callback([...path, 'symmetricDiff()'], [...a_minus_b], [...b_minus_a]);
+				callback([...path, 'diff()'], JSON.stringify([...a_minus_b]), JSON.stringify([...b_minus_a]));
 			}
 		} else {
 			for (let k of new Set([...a, ...b])) {

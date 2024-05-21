@@ -290,7 +290,8 @@ export class UnicodeSpec {
 		return buf.join('');
 	}
 	read_script_kinds() {
-		return JSON.parse(readFileSync(new URL('./script-kinds.json', this.data_dir)));
+		let {revision, ...kinds} = JSON.parse(readFileSync(new URL('./script-kinds.json', this.data_dir)));
+		return kinds;
 	}
 	require_script(abbr) {
 		let script = this.script_map.get(abbr);
@@ -463,6 +464,19 @@ export class UnicodeSpec {
 				}*/
 			}
 		});
+	}
+	combining_classes() {
+		let map = new Map();
+		for (let char of this.char_map.values()) {
+			let {cp, cc} = char;
+			let bucket = map.get(cc);
+			if (!bucket) {
+				bucket = [];
+				map.set(cc, bucket);
+			}
+			bucket.push(cp);
+		}
+		return [...map].sort((a, b) => a[0] - b[0]);
 	}
 	combining_ranks() {
 		// return list of codepoints in order by increasing combining class

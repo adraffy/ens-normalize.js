@@ -1421,14 +1421,14 @@ const CHAINS = [
 		opensea: 'https://opensea.io/assets/ethereum/',
 		is_mainnet: true,
 	},
-	{
-		// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-5.json
-		id: 5,
-		name: 'Goerli',
-		explorer: 'https://goerli.etherscan.io',
-		metadata: 'https://metadata.ens.domains/goerli',
-		opensea: 'https://testnets.opensea.io/assets/goerli/'
-	},
+	// {
+	// 	// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-5.json
+	// 	id: 5,
+	// 	name: 'Goerli',
+	// 	explorer: 'https://goerli.etherscan.io',
+	// 	metadata: 'https://metadata.ens.domains/goerli',
+	// 	opensea: 'https://testnets.opensea.io/assets/goerli/'
+	// },
 	{
 		// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-11155111.json
 		id: 11155111,
@@ -1509,10 +1509,15 @@ const RECORDS = [
 	},
 	{
 		key: 'url',
-		icon: '🌐️',
-		format(x) {
-			let match = x.match(/^https?:\/\/(.*?)\/?$/i);
-			return match ? match[1] : x;
+		//icon: '🌐️',
+		format(text, el) {
+			if (text.startsWith('data:')) {
+				let match = text.match(/^data:([a-z0-9-/]+)[;,]/i)
+				el.append(create('span', {innerText: match ? match[1].toLowerCase() : 'Data', className: ['tags', 'minor']}));
+			} else {
+				let match = text.match(/^https?:\/\/(.*?)\/?$/i);
+				return match ? match[1] : text; //el.append(create('span', {innerText: match ? match[1] : text, className: 'url'}));
+			}
 		},
 		url(x) { return x; }
 	},
@@ -1761,12 +1766,12 @@ const RECORDS = [
 	},
 	{
 		key: 'avatar',
-		format() { return ''; },
+		format() {},
 	},
 	{
 		key: 'banner',
-		format() { return ''; },
-		//url(x) { return x; },
+		format() {},
+		url(x) { return x; }
 	},
 ].map(prepare_record);
 function expand_record(rec) {
@@ -3652,7 +3657,7 @@ function resolve() {
 		r0, r: r0
 	};
 	if (debug_enabled) resolve_state.debug = debug_settings;
-	resolve1(name, skip).catch(err => console.log(err)).then(() => {
+	resolve1(name, skip).catch(err => console.error(err)).then(() => {
 		clock_span.innerHTML = create_elapsed(Date.now() - t0, request_count - r0, 3).innerHTML;
 		resolve_btn.disabled = false;
 		if (Array.isArray(resolve_timer)) {
@@ -4517,7 +4522,7 @@ async function resolve1(input, skip_norm) {
 									title: `Original: ${data}\nChange: ${fixed}`}));
 								data = fixed;
 							}
-							let text = rec.format ? rec.format(data) : data;
+							let text = rec.format ? rec.format(data, a) : data;
 							if (text) {
 								a.append(create('span', {innerText: text, className: text.length > 32 ? 'long' : null}));
 							}
@@ -4893,7 +4898,7 @@ async function fetch_records(resolver, records, info = {}) {
 	if (records.length > 1 && !resolver.__unreachable) {
 		let encoded = records.map(rec => {
 			let frag = abi.getFunction(rec.type);
-			let params = [rec.node ?? __node];
+			let params = [rec.node || __node];
 			switch (rec.type) {
 				case TYPE_TEXT: params.push(rec.key); break;
 				case TYPE_ADDR: params.push(rec.coin); break;
