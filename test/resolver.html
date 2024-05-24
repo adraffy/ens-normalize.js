@@ -1470,8 +1470,9 @@ const ERROR_ABI = new ethers.Interface([
 	'error NotImplemented()',
 	'error InvalidOperation()',
 	'error InvalidAddressFormat()',
-	'error CouldNotResolve(bytes)',
+	'error CouldNotResolve(bytes name)',
 	'error InvalidLabelCount(bytes dns, uint256 count)',
+	'error ECDSAInvalidSignatureLength(uint256 length)',
 	// old TOR
 	'error Untrusted(address signed, address expected)',
 	// new TOR
