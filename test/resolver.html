@@ -999,7 +999,6 @@ footer {
 <button>xn--ls8h</button>
 <button>xn--💩</button>
 <button>💷pound</button>
-
 <a href="https://github.com/ensdomains/ens-contracts/tree/master/contracts/wrapper#namewrapper-docs"><b>Wrapper:</b></a>
 <button data-name="firstwrappedname">Emanicpated 2LD</button>
 <button data-name="please.pumpdeezbags.eth">Emanicpated 3LD</button>
@@ -1316,11 +1315,12 @@ Hebrew:
 <li><a href="../../punycode.js/test/demo.html" data-badge="js">Punycode Coder</a></li>
 <li><a href="../../cid.js/test/demo.html" data-badge="js">CID Tool</a></li>
 <li><a href="https://github.com/adraffy/blocksmith.js" data-badge="js">blocksmith</a>
-<li><a href="https://github.com/resolverworks/TheOffchainResolver.sol" data-badge="solc">TheOffchainResolver</a></li>
+<li><a href="https://github.com/resolverworks/TheOffchainResolver.sol" data-badge="sol">TheOffchainResolver</a></li>
 <li><a href="https://github.com/resolverworks/TheOffchainGateway.js" data-badge="js">TheOffchainGateway</a></li>
 <li><a href="https://github.com/resolverworks/ezccip.js" data-badge="js">ezccip</a></li>
 <li><a href="https://resolverworks.github.io/ezccip.js/test/postman.html">CCIP-Read Postman</a></li>
 <li><a href="https://github.com/resolverworks/enson.js" data-badge="js">enson</a></li>
+<li><a href="https://adraffy.github.io/CCIPRewriter.sol/test/" data-badge="sol">CCIPRewriter</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-batch-resolver.html">Batch Resolver</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-nft-matcher.html">ENS+NFT Matcher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/emoji-pixels.html">Emoji Pixel Maker</a></li>
@@ -3650,10 +3650,10 @@ function resolve() {
 	const t0 = Date.now();
 	const r0 = request_count;
 	resolve_state = {
-		name, input, skip, url, 
-		addrs: new Map(), 
+		name, input, skip, url,
+		addrs: new Map(),
 		chain: active_chain,
-		t0, t: t0, 
+		t0, t: t0,
 		r0, r: r0
 	};
 	if (debug_enabled) resolve_state.debug = debug_settings;
