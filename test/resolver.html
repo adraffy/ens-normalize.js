@@ -4999,23 +4999,35 @@ async function fetch_resource_url(value, owner) {
 	if (value.startsWith('data:')) {
 		return {url: value, type: 'On-chain'};
 	}
-	let pos = value.indexOf('://');
+	const SEP = '://';
+	let pos = value.indexOf(SEP);
 	if (pos >= 0) {
 		let proto = value.slice(0, pos).toLowerCase();
-		if (proto === 'ipfs') {
-			let path = value.slice(pos + 3).replace(/^ipfs\//, ''); // drop leading /ipfs/
-			try {
-				CID.from(path.split('/', 1)[0]); // validate cid
-			} catch (err) {
-				return {error: err.message};
-			}
-			value = url_from_ipfs_path(path);
-		}
+		let rest = value.slice(pos + SEP.length);
 		let type;
-		switch (proto) {
-			case 'ipfs': type = 'IPFS'; break;
-			case 'http':
-			case 'https': type = 'URL'; break;
+		try {
+			switch (proto) {
+				case 'ipfs': {
+					type = 'IPFS';
+					let path = rest.replace(/^ipfs\//, ''); // drop leading /ipfs/
+					CID.from(path.split('/', 1)[0]); // validate cid
+					value = url_from_ipfs_path(path);
+					break;
+				}
+				case 'ar': {
+					type = 'Arweave';
+					if (Base64URL.decode(rest).length != 32) throw new Error('expected sha256');
+					value = `https://arweave.net/${rest}`;
+					break;
+				}
+				case 'http':
+				case 'https': {
+					type = 'URL'; 
+					break;
+				}
+			}
+		} catch (err) {
+			return {error: `Invalid ${type} URL: ${err.message}`};
 		}
 		if (type) {
 			try {
