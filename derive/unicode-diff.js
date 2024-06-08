@@ -12,7 +12,7 @@ const UNICODE0 = UnicodeSpec.from_release(args[0]);
 const UNICODE1 = UnicodeSpec.from_release(args[1]);
 
 deep_diff(expand(UNICODE0), expand(UNICODE1), (path, a, b) => {
-	console.log(`[${path.join('/')}] ${a} =!= ${b}`);
+	console.log(`[${path.join('/')}] ${stringify(a)} =!= ${stringify(b)}`);
 });
 
 function expand(unicode) {
@@ -64,7 +64,7 @@ function deep_diff(a, b, callback, path = [], visited = new Set()) {
 			let a_minus_b = new Set([...a].filter(x => !b.has(x)));
 			let b_minus_a = new Set([...b].filter(x => !a.has(x)));
 			if (a_minus_b.size || b_minus_a.size) {
-				callback([...path, 'diff()'], JSON.stringify([...a_minus_b]), JSON.stringify([...b_minus_a]));
+				callback([...path, 'diff()'], stringify(a_minus_b), stringify(b_minus_a));
 			}
 		} else {
 			for (let k of new Set([...a, ...b])) {
@@ -74,7 +74,7 @@ function deep_diff(a, b, callback, path = [], visited = new Set()) {
 	} else if (Array.isArray(a)) {
 		let size = Math.max(a.length, b.length);
 		if (size <= 10 && [...a, ...b].every(is_primitive)) { // treat small array as literal
-			return deep_diff(JSON.stringify(a), JSON.stringify(b), callback, [...path, 'stringify()'], visited);
+			return deep_diff(stringify(a), stringify(b), callback, [...path, 'stringify()'], visited);
 		}
 		for (let i = 0; i < size; i++) {
 			deep_diff(a[i], b[i], callback, [...path, `[${i}]`], visited);
@@ -85,6 +85,21 @@ function deep_diff(a, b, callback, path = [], visited = new Set()) {
 		}
 	}
 }
+
+function stringify(x) {
+	if (x instanceof Set) {
+		return stringify([...x]);
+	} else if (x instanceof Map) {
+		return Object.fromEntries([...x]);
+	} else if (x === undefined) {
+		return '?';
+	} else if (Array.isArray(x)) {
+		return JSON.stringify(x);
+	} else {
+		return `${x}`;
+	}
+}
+
 function is_primitive(x) {
 	switch (typeof x) {
 		case 'function':
