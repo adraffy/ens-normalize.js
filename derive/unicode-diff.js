@@ -1,6 +1,10 @@
 // compare two unicode versions AFTER parsing
 // TODO: expand more of this into hex literals
 
+// `node unicode-diff.js`     => current vs beta
+// `node unicode-diff.js r`   => current vs $r
+// `node unicode-diff.js a b` =>      $a vs $b 
+
 import {UnicodeSpec} from './unicode-logic.js';
 import {ens_idna_rules} from './idna.js'; 
 import {hex_cp, hex_seq} from './utils.js';
@@ -16,9 +20,14 @@ deep_diff(expand(UNICODE0), expand(UNICODE1), (path, a, b) => {
 });
 
 function expand(unicode) {
-	let obj = {
-		unicode, 
-		idna_ens: expand_idna(ens_idna_rules(unicode)),
+	let {valid, mapped, ignored} = ens_idna_rules(unicode);
+	return {
+		unicode,
+		idna_ens: {
+			valid: new Set(valid.map(hex_cp)),
+			mapped: new Map(mapped.map(([k, v]) => [hex_cp(k), hex_seq(v)])),
+			ignored: new Set(ignored.map(hex_cp))
+		},
 		//idna_2003: unicode.derive_idna_rules({version: 2003, use_STD3: true, valid_deviations: true}),
 		//emoji_data: map_values(unicode.read_emoji_data(), v => new Map(v.map(x => [hex_cp(x.cp), hex_seq(x)]))),
 		emoji_data: new Map(Object.entries(unicode.read_emoji_data()).map(([k, v]) => [k, new Set(v.map(x => hex_cp(x.cp)))])),
@@ -31,14 +40,6 @@ function expand(unicode) {
 		intentional_confusables: new Map(unicode.read_intentional_confusables()),
 		nonchars: new Set(unicode.get_noncharacter_cps().map(hex_cp)),
 		script_kinds: new Map(Object.entries(unicode.read_script_kinds()).map(([k, v]) => [k, new Set(v)])),
-	};
-	return obj;
-}
-function expand_idna({valid, mapped, ignored}) {
-	return {
-		valid: new Set(valid.map(hex_cp)),
-		mapped: new Map(mapped.map(([k, v]) => [hex_cp(k), hex_seq(v)])),
-		ignored: new Set(ignored.map(hex_cp))
 	};
 }
 
@@ -90,14 +91,23 @@ function stringify(x) {
 	if (x instanceof Set) {
 		return stringify([...x]);
 	} else if (x instanceof Map) {
-		return Object.fromEntries([...x]);
+		return stringify(Object.fromEntries([...x]));
 	} else if (x === undefined) {
 		return '?';
-	} else if (Array.isArray(x)) {
-		return JSON.stringify(x);
-	} else {
+	} else if (is_custom_object(x)) {
 		return `${x}`;
+	} else {
+		return JSON.stringify(x);
 	}
+}
+
+// function is_literal_object(x) {
+// 	return x && typeof x === 'object' && Object.getPrototypeOf(x) === Object.prototype;
+// }
+
+// not an array or literal object
+function is_custom_object(x) { 
+	return x && typeof x === 'object' && !Array.isArray(x) && Object.getPrototypeOf(x) !== Object.prototype;
 }
 
 function is_primitive(x) {

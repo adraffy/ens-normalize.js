@@ -1,7 +1,7 @@
 import COMPRESSED, {FENCED, NSM_MAX} from './include-ens.js';
 import {read_compressed_payload, read_sorted, read_sorted_arrays, read_mapped, read_trie, read_array_while} from './decoder.js';
 import {explode_cp, str_from_cps, quote_cp, compare_arrays, array_replace} from './utils.js';
-import {nfc, nfd} from './nf.js';
+import {nfc, nfd /*, nf_deinit*/} from './nf.js';
 //import {nfc, nfd} from './nf-native.js'; // replaced by rollup
 export {nfc, nfd}; 
 
@@ -24,6 +24,12 @@ class Emoji extends Array {
 }
 
 let MAPPED, IGNORED, CM, NSM, ESCAPE, NFC_CHECK, GROUPS, WHOLE_VALID, WHOLE_MAP, VALID, EMOJI_LIST, EMOJI_ROOT;
+
+// export function ens_deinit() {
+// 	nf_deinit();
+// 	if (!MAPPED) return;
+// 	MAPPED = IGNORED = CM = NSM = ESCAPE = NFC_CHECK = GROUPS = WHOLE_VALID = WHOLE_MAP = VALID = EMOJI_LIST = EMOJI_ROOT = undefined;
+// }
 
 function init() {
 	if (MAPPED) return;

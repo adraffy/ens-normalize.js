@@ -30,6 +30,11 @@ function unpack_cp(packed) {
 
 let SHIFTED_RANK, EXCLUSIONS, DECOMP, RECOMP;
 
+// export function nf_deinit() {
+// 	if (!SHIFTED_RANK) return;
+// 	SHIFTED_RANK = EXCLUSIONS = DECOMP = RECOMP = undefined;
+// }
+
 function init() {
 	//console.time('nf');
 	let r = read_compressed_payload(COMPRESSED);
