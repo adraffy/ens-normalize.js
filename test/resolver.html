@@ -3992,7 +3992,7 @@ async function resolve1(input, skip_norm) {
 				let info = await get_resolver_info(target);
 				if (should_stop_resolving()) return;
 				target_row.append(create_explorer_address_link(target, {contract: true}));
-				add_row_tag(target_row, create_copy_btn(resolver.target, {value: true}));
+				add_row_tag(target_row, create_copy_btn(target, {value: true}));
 				add_resolver_info(target_row, {target, __info: info}, true);
 				if (info.edns) {
 					add_row_tag(target_row, create_tag('special', 'Wildcard DNS'));
