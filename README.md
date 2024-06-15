@@ -6,6 +6,7 @@
 		* Python — [namehash/ens-normalize-python](https://github.com/namehash/ens-normalize-python)
 		* C# — [adraffy/ENSNormalize.cs](https://github.com/adraffy/ENSNormalize.cs)
 		* Java — [adraffy/ENSNormalize.java](https://github.com/adraffy/ENSNormalize.java)
+		* Go — [adraffy/ENSNormalize.go](https://github.com/adraffy/ENSNormalize.go)
 		* Javascript — [ensdomains/eth-ens-namehash](https://github.com/ensdomains/eth-ens-namehash)
 	* [Breakdown Reports from ENSIP-1](https://adraffy.github.io/ens-norm-tests/test-breakdown/output-20230226/)	
 * ✅️ Passes **100%** [ENSIP-15 Validation Tests](https://adraffy.github.io/ens-normalize.js/test/validate.html)
