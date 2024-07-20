@@ -1,6 +1,8 @@
 # ens-normalize.js
 0-dependancy [Ethereum Name Service](https://ens.domains/) (ENS) Name Normalizer.
 
+`$ npm i @adraffy/ens-normalize` [&check;](https://www.npmjs.com/package/@adraffy/ens-normalize)
+
 * 🏛️ Follows [ENSIP-15: ENS Name Normalization Standard](https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard)
 	* Other implementations:
 		* Python — [namehash/ens-normalize-python](https://github.com/namehash/ens-normalize-python)
@@ -24,16 +26,14 @@
 	* [Recent .eth Registrations](https://raffy.antistupid.com/eth/ens-regs.html) • [.eth Renews](https://raffy.antistupid.com/eth/ens-renews.html)
 	* [.eth Expirations](https://raffy.antistupid.com/eth/ens-exp.html)
 	* [Emoji Frequency Explorer](https://raffy.antistupid.com/eth/ens-emoji-freq.html)
-	* [ENS+NFT Matcher](https://raffy.antistupid.com/eth/ens-nft-matcher.html)
-	* [Batch Resolver](https://raffy.antistupid.com/eth/ens-batch-resolver.html)
 	* [Label Database](https://github.com/adraffy/ens-labels/) • [Labelhash⁻¹](https://adraffy.github.io/ens-labels/demo.html)
-	* [adraffy/punycode.js](https://github.com/adraffy/punycode.js/) • [Punycode Coder](https://adraffy.github.io/punycode.js/test/demo.html)
-	* [adraffy/keccak.js](https://github.com/adraffy/keccak.js/) • [Keccak Hasher](https://adraffy.github.io/keccak.js/test/demo.html)
-	* [adraffy/emoji.js](https://github.com/adraffy/emoji.js/) • [Emoji Parser](https://adraffy.github.io/emoji.js/test/demo.html)
+	* [adraffy/**punycode.js**](https://github.com/adraffy/punycode.js/) • [Punycode Coder](https://adraffy.github.io/punycode.js/test/demo.html)
+	* [adraffy/**keccak.js**](https://github.com/adraffy/keccak.js/) • [Keccak Hasher](https://adraffy.github.io/keccak.js/test/demo.html)
+	* [adraffy/**emoji.js**](https://github.com/adraffy/emoji.js/) • [Emoji Parser](https://adraffy.github.io/emoji.js/test/demo.html)
+	* More links at bottom of Resolver Demo
 
 ```js
 import {ens_normalize} from '@adraffy/ens-normalize'; // or require()
-// npm i @adraffy/ens-normalize
 // browser: https://cdn.jsdelivr.net/npm/@adraffy/ens-normalize@latest/dist/index.min.mjs (or .cjs)
 
 // *** ALL errors thrown by this library are safe to print ***

@@ -3579,7 +3579,10 @@ function resolve() {
 		return (async() => {
 			try {
 				//if (!active_chain.is_mainnet) throw new Error(`token: only works on mainnet`);
-				let res = await fetch('https://api.thegraph.com/subgraphs/name/ensdomains/ens', {
+				// 20240720: was https://api.thegraph.com/subgraphs/name/ensdomains/ens
+				const API_KEY = 'bed3a6cc6de79eb96724b610aeb6e03b';
+				const SUBGRAPH_ID = '5XqPmWe6gjyrJtFn9cLy237i4cWw2j9HcUJEXsP5qGtH';
+				let res = await fetch(`https://gateway-arbitrum.network.thegraph.com/api/${API_KEY}/subgraphs/id/${SUBGRAPH_ID}`, {
 					method: 'POST',
 					body: JSON.stringify({
 						query: `{domains(where:{labelhash:"${hash}"}){labelName}}`
