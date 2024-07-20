@@ -3,13 +3,13 @@
 
 `$ npm i @adraffy/ens-normalize` [&check;](https://www.npmjs.com/package/@adraffy/ens-normalize)
 
-* 🏛️ Follows [ENSIP-15: ENS Name Normalization Standard](https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard)
+* 🏛️ Follows [**ENSIP-15**: ENS Name Normalization Standard](https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard)
 	* Other implementations:
-		* Python — [namehash/ens-normalize-python](https://github.com/namehash/ens-normalize-python)
-		* C# — [adraffy/ENSNormalize.cs](https://github.com/adraffy/ENSNormalize.cs)
-		* Java — [adraffy/ENSNormalize.java](https://github.com/adraffy/ENSNormalize.java)
-		* Go — [adraffy/ENSNormalize.go](https://github.com/adraffy/ENSNormalize.go)
-		* Javascript — [ensdomains/eth-ens-namehash](https://github.com/ensdomains/eth-ens-namehash)
+		* Python — [namehash/**ens-normalize-python**](https://github.com/namehash/ens-normalize-python)
+		* C# — [adraffy/**ENSNormalize.cs**](https://github.com/adraffy/ENSNormalize.cs)
+		* Java — [adraffy/**ENSNormalize.java**](https://github.com/adraffy/ENSNormalize.java)
+		* Go — [adraffy/**ENSNormalize.go**](https://github.com/adraffy/ENSNormalize.go)
+		* Javascript — [ensdomains/**eth-ens-namehash**](https://github.com/ensdomains/eth-ens-namehash)
 	* [Breakdown Reports from ENSIP-1](https://adraffy.github.io/ens-norm-tests/test-breakdown/output-20230226/)	
 * ✅️ Passes **100%** [ENSIP-15 Validation Tests](https://adraffy.github.io/ens-normalize.js/test/validate.html)
 * ✅️ Passes **100%** [Unicode Normalization Tests](https://adraffy.github.io/ens-normalize.js/test/report-nf.html)
@@ -30,7 +30,7 @@
 	* [adraffy/**punycode.js**](https://github.com/adraffy/punycode.js/) • [Punycode Coder](https://adraffy.github.io/punycode.js/test/demo.html)
 	* [adraffy/**keccak.js**](https://github.com/adraffy/keccak.js/) • [Keccak Hasher](https://adraffy.github.io/keccak.js/test/demo.html)
 	* [adraffy/**emoji.js**](https://github.com/adraffy/emoji.js/) • [Emoji Parser](https://adraffy.github.io/emoji.js/test/demo.html)
-	* More links at bottom of Resolver Demo
+	* More links at bottom of [Resolver Demo](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 
 ```js
 import {ens_normalize} from '@adraffy/ens-normalize'; // or require()
