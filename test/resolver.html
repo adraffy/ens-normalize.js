@@ -1421,6 +1421,7 @@ const CHAINS = [
 		metadata: 'https://metadata.ens.domains/mainnet',
 		opensea: 'https://opensea.io/assets/ethereum/',
 		is_mainnet: true,
+		public: 'https://cloudflare-eth.com/'
 	},
 	// {
 	// 	// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-5.json
@@ -1438,6 +1439,7 @@ const CHAINS = [
 		explorer: 'https://sepolia.etherscan.io',
 		metadata: 'https://metadata.ens.domains/sepolia',
 		opensea: 'https://testnets.opensea.io/assets/sepolia/',
+		public: 'https://ethereum-sepolia-rpc.publicnode.com',
 	},
 	{
 		// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-17000.json
@@ -1448,6 +1450,7 @@ const CHAINS = [
 		metadata: 'https://metadata.ens.domains/holesky',
 		//opensea: 'https://testnets.opensea.io/assets/holesky/',
 		//rpc: 'https://rpc.holesky.ethpandaops.io',
+		public: 'https://ethereum-holesky-rpc.publicnode.com',
 	}
 ];
 CHAINS.forEach(chain => {
@@ -2283,7 +2286,7 @@ async function change_window_to_chain(chain) {
 	} catch (err) {
 		if (is_user_rejection(err)) return;
 		if (err.error && err.error.code === 4902) { // unrecognized chain
-			let {rpc} = chain;
+			let {public: rpc} = chain;
 			if (!rpc) throw new Error(`Unknown RPC for ${chain.name}\nNetwork: ${format_dec_hex(chain.id)}`);
 			try {
 				// https://eips.ethereum.org/EIPS/eip-3085
@@ -2330,13 +2333,13 @@ function update_network() {
 		let old = active_provider;
 		if (old === window_provider || active_chain !== chain) {
 			//let request = new ethers.FetchRequest(chain.rpc || `https://${chain.name.toLowerCase()}.infura.io/v3/f36f6a8638134ac09f9400d3a7008dfe`);
-			let request = new ethers.FetchRequest(chain.rpc || `https://rpc.ankr.com/${chain.ankr}/4f33b3901537986c548375fa2d307572637cca0f4a4f17d5a4944ca27fee5ea9`)
+			let request = new ethers.FetchRequest(`https://rpc.ankr.com/${chain.ankr}/4f33b3901537986c548375fa2d307572637cca0f4a4f17d5a4944ca27fee5ea9`)
 			request.preflightFunc = req => {
 				++request_count;
 				return req;
 			};
 			active_provider = new ethers.JsonRpcProvider(request, chain.id, {
-				batchMaxCount: chain.rpc ? 1 : 10, // holesky rpc has batching issues
+				batchMaxCount: 10, //chain.rpc ? 1 : 10, // holesky rpc has batching issues
 				staticNetwork: true
 			});
 		}
