@@ -660,6 +660,9 @@ span.tally {
 .avatar img:hover {
 	transform: scale(3);
 }
+.avatar img.not_owner {
+	outline: 2px solid #f00;
+}
 .breakdown {
 	font-size: 12pt;
 }
@@ -1421,7 +1424,7 @@ const CHAINS = [
 		metadata: 'https://metadata.ens.domains/mainnet',
 		opensea: 'https://opensea.io/assets/ethereum/',
 		is_mainnet: true,
-		public: 'https://cloudflare-eth.com/'
+		public: 'https://cloudflare-eth.com/',
 	},
 	// {
 	// 	// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-5.json
@@ -4558,7 +4561,10 @@ async function resolve1(input, skip_norm) {
 							if (rec.key === 'avatar') {
 								let spinner = create('div', {className: ['avatar', 'spinner']});
 								normed_row.append(spinner);
-								fetch_resource_url(data, owner || address).then(avatar => { // use address if not ownable
+								let owner_set = new Set();
+								if (owner) owner_set.add(owner);
+								if (address) owner_set.add(address);
+								fetch_resource_url(data, owner_set).then(avatar => { // use address if not ownable
 									if (!normed_row.isConnected) return;
 									if (avatar.error) {
 										a.append(create('span', {
@@ -4568,6 +4574,8 @@ async function resolve1(input, skip_norm) {
 										}));
 										spinner.replaceWith(create('span', {className: 'avatar', innerText: '❌️'}));
 									} else {
+										let img = new Image();
+										img.src = avatar.url;
 										a.append(create('span', {className: ['tags', 'minor'], innerText: avatar.type}));
 										if (avatar.fixed) {
 											a.append(create('span', {
@@ -4576,8 +4584,13 @@ async function resolve1(input, skip_norm) {
 												title: avatar.fixed
 											}));
 										}
-										let img = new Image();
-										img.src = avatar.url;
+										if (avatar.owned === false) {
+											img.classList.add('not_owner');
+											a.append(create('span', {
+												className: ['tags', 'changed'],
+												innerHTML: '⚠️ Not Owner'
+											}));
+										}
 										spinner.replaceWith(create('a', {className: 'avatar', target: '_blank', href: avatar.url}, img));
 									}
 									a.classList.add('rtrim');
@@ -5004,7 +5017,7 @@ async function fetch_records(resolver, records, info = {}) {
 		}
 	}));
 }
-async function fetch_resource_url(value, owner) {
+async function fetch_resource_url(value, owner_set) {
 	if (value.startsWith('data:')) {
 		return {url: value, type: 'On-chain'};
 	}
@@ -5046,7 +5059,7 @@ async function fetch_resource_url(value, owner) {
 			}
 		}
 	}
-	if (owner && value.startsWith('eip155:')) {
+	if (value.startsWith('eip155:')) {
 		let match = value.toLowerCase().match(/^eip155:([0-9]+)\/erc(721|1155):(0x[0-9a-f]{40})\/(0x[0-9a-f]+|[0-9]+)$/i);
 		if (!match) {
 			return {error: 'invalid avatar string'};
@@ -5057,7 +5070,7 @@ async function fetch_resource_url(value, owner) {
 		let token = BigInt(match[4]);
 		// TODO: check known chains
 		if (chain_id !== active_chain.id) {
-			return {error: `wrong chain: ${format_dec_hex(chain_id)}`};
+			return {error: `unsupported chain: ${format_dec_hex(chain_id)}`};
 		}
 		switch (erc) {
 			case '721': {
@@ -5066,21 +5079,25 @@ async function fetch_resource_url(value, owner) {
 					`function ownerOf(uint256) view returns (address)`,
 				], active_provider);
 				let nft_owner = await contract.ownerOf(token);
-				if (nft_owner !== owner) {
-					return {error: 'not owner'};
-				}
-				return {address, token, ...await fetch_nft_image(await contract.tokenURI(token))};
+				return {
+					address,
+					token,
+					owned: owner_set?.has(nft_owner),
+					...await fetch_nft_image(await contract.tokenURI(token))
+				};
 			}
 			case '1155': {
 				let contract = new ethers.Contract(address, [
 					`function uri(uint256) view returns (string)`,
 					`function balanceOf(address, uint256) view returns (uint256)`,
 				], active_provider);
-				let balance = await contract.balanceOf(owner, token);
-				if (!balance) {
-					return {error: 'not owner'};
-				}
-				return {address, token, ...await fetch_nft_image(await contract.uri(token).then(url => url.replace('{id}', token.toString(16).padStart(64, '0'))))};
+				let balances = owner_set ? await Promise.all(Array.from(owner_set, x => contract.balanceOf(x, token))) : [];
+				return {
+					address,
+					token,
+					owned: balances.some(x => x > 0),
+					...await fetch_nft_image(await contract.uri(token).then(url => url.replace('{id}', token.toString(16).padStart(64, '0'))))
+				};
 			}
 			default: return {error: `unknown ERC-${erc}`};
 		}
@@ -5515,7 +5532,9 @@ function add_dot_eth(name, append) {
 	return name;
 }
 function url_from_ipfs_path(s) {
-	return `https://cloudflare-ipfs.com/ipfs/${s}`;
+	// 20240803: this is cors restricted
+	//return `https://cloudflare-ipfs.com/ipfs/${s}`;
+	return `https://ipfs.io/ipfs/${s}`;
 }
 function format_dec_hex(id) {
 	return id < 10 ? id : `${id} (0x${id.toString(16).toUpperCase()})`;
