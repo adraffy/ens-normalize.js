@@ -5,7 +5,7 @@
 // `node unicode-diff.js r`   => current vs $r
 // `node unicode-diff.js a b` =>      $a vs $b 
 
-import {UnicodeSpec} from './unicode-logic.js';
+import {UnicodeScript, UnicodeSpec} from './unicode-logic.js';
 import {ens_idna_rules} from './idna.js'; 
 import {hex_cp, hex_seq} from './utils.js';
 
@@ -65,7 +65,7 @@ function deep_diff(a, b, callback, path = [], visited = new Set()) {
 			let a_minus_b = new Set([...a].filter(x => !b.has(x)));
 			let b_minus_a = new Set([...b].filter(x => !a.has(x)));
 			if (a_minus_b.size || b_minus_a.size) {
-				callback([...path, 'diff()'], stringify(a_minus_b), stringify(b_minus_a));
+				callback([...path, 'diff()'], [...a_minus_b], [...b_minus_a]);
 			}
 		} else {
 			for (let k of new Set([...a, ...b])) {
@@ -97,6 +97,9 @@ function stringify(x) {
 	} else if (is_custom_object(x)) {
 		return `${x}`;
 	} else {
+		if (Array.isArray(x) && x.every(y => y instanceof UnicodeScript)) {
+			x = x.map(y => y.abbr);
+		}
 		return JSON.stringify(x);
 	}
 }

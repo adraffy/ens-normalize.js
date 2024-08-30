@@ -290,7 +290,8 @@ export class UnicodeSpec {
 		return buf.join('');
 	}
 	read_script_kinds() {
-		let {revision, ...kinds} = JSON.parse(readFileSync(new URL('./script-kinds.json', this.data_dir)));
+		// 20240829: reversion => report_url
+		let {revision, report_url, ...kinds} = JSON.parse(readFileSync(new URL('./script-kinds.json', this.data_dir)));
 		return kinds;
 	}
 	require_script(abbr) {

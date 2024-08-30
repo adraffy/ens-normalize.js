@@ -3,16 +3,25 @@ export async function fetch_UAX31_script_kinds(version) {
 	// download full spec to find revision number
 	let html = await fetch_text(`https://www.unicode.org/versions/Unicode${version}/`);
 
-	// find the latest revision number
-	// https://www.unicode.org/reports/tr31/tr31-39.html
-	let revision = 0;
-	for (let match of html.matchAll(/\/tr31\/tr31-(\d+)\.html/gsu)) {
-		revision = Math.max(revision, parseInt(match[1]));
+	// find the latest spec
+	// warning: this is complete dog shit
+	// eg. https://www.unicode.org/reports/tr31/tr31-39.html
+	// eg. https://www.unicode.org/reports/tr31/proposed.html
+	let report_name;
+	if (html.includes('(REVIEW DRAFT)')) {
+		report_name = 'proposed';
+	} else {
+		let revision = 0;
+		for (let match of html.matchAll(/\/tr31\/tr31-(\d+)\.html/gsu)) {
+			revision = Math.max(revision, parseInt(match[1]));
+		}
+		if (!revision) throw new Error(`Unable to determine revision number`);
+		report_name = `tr31-${revision}`;
 	}
-	if (!revision) throw new Error(`Unable to determine revision number`);
 
 	// download the corresponding report
-	html = await fetch_text(`https://www.unicode.org/reports/tr31/tr31-${revision}.html`);
+	let report_url = `https://www.unicode.org/reports/tr31/${report_name}.html`;
+	html = await fetch_text(report_url);
 
 	// parse the html tables as list of abbr
 	// these tables dont seem to be available in any other unicode file
@@ -25,7 +34,7 @@ export async function fetch_UAX31_script_kinds(version) {
 	// as this has not proven to be productive for the derivation of identifier-related classes used in security profiles.
 	// Thus the aspirational use scripts have been recategorized as limited use scripts.
 
-	return {limited_use, excluded, recommended, revision};
+	return {limited_use, excluded, recommended, report_url};
 }
 
 async function fetch_text(url) {

@@ -75,7 +75,7 @@ async function download({major, minor, patch}, files) {
 	let version = `${major}.${minor}.${patch}`;
 	let dir = new URL(`./data/${major}.${minor}.${patch}/`, import.meta.url);
 	let changed = 0;
-	let error;
+	let cause;
 	console.log(`Downloading ${version} (${files.length} files)`);
 	for (let sources of files) {
 		let urls = sources.map(s => url_from_source(s, {major, minor, patch}));
@@ -95,7 +95,7 @@ async function download({major, minor, patch}, files) {
 			} else {
 				throw err;
 			}
-			error = true;
+			cause = err;
 		}
 	}
 	// 20231023: include excluded/limited/recommended
@@ -105,9 +105,9 @@ async function download({major, minor, patch}, files) {
 		let name = `script-kinds.json`;
 		await write(name, Buffer.from(JSON.stringify(kinds)), `<${name}>`);
 	} catch (err) {
-		error = true;
+		cause = err;
 	}
-	if (error) throw new Error('incomplete download');	
+	if (cause) throw new Error('incomplete download', {cause});
 	console.log(`Changes: ${changed}`);
 	if (changed) {
 		// only bump the version if something changed
