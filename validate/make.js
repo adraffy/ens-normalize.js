@@ -1,6 +1,6 @@
 import {readFileSync, writeFileSync} from 'node:fs';
 import {UNICODE} from '../derive/unicode-version.js';
-import {parse_cp_sequence, mulberry32, print_section, print_checked} from '../derive/utils.js';
+import {parse_cp_sequence, mulberry32, print_section, print_checked, hex_seq, explode_cp, hex_cp} from '../derive/utils.js';
 import {ens_normalize, ens_emoji, ens_beautify, ens_split} from '../src/lib.js';
 import {random_sample, run_tests} from '../src/utils.js';
 import {read_labels, read_random, read_spec} from './data.js';
@@ -172,7 +172,7 @@ if (expect_pass.error.length) {
 let expect_fail = process(EXPECT_FAIL);
 if (expect_fail.valid.length) {
 	print_section('REVIEW: VALID expected FAIL');
-	console.log(expect_fail.valid);
+	console.log(expect_fail.valid.map(x => [x.name, explode_cp(x.name).map(hex_cp).join(' ')]));
 }
 if (expect_fail.need_norm.length) {
 	print_section('REVIEW: NORMED expected FAIL');
@@ -210,7 +210,7 @@ for (let [k, v] of Object.entries(registered)) {
 let rng = mulberry32(0x2EC4373F); 
 
 // number of tests to generate (arbitrary)
-// 20230211: changed from 2048 (target 2MB)
+// 20230211: changed from 2048 to 5000 (target 2MB)
 let sample = 5000; 
 let tests = [
 	{name: 'version', validated: new Date(), ...versions},
@@ -224,5 +224,7 @@ let tests = [
 ].flat(Infinity);
 
 print_section(`Write Output`);
-writeFileSync(new URL('./tests.json', import.meta.url), JSON.stringify(tests, null, '\t'));
+let buf = Buffer.from(JSON.stringify(tests, null, '\t'));
+writeFileSync(new URL('./tests.json', import.meta.url), buf);
 console.log(`Tests: ${tests.length}`);
+console.log(`Bytes: ${buf.length}`);

@@ -5,9 +5,13 @@
 // `node unicode-diff.js r`   => current vs $r
 // `node unicode-diff.js a b` =>      $a vs $b 
 
-import {UnicodeScript, UnicodeSpec} from './unicode-logic.js';
+import {UnicodeChar, UnicodeScript, UnicodeSpec} from './unicode-logic.js';
 import {ens_idna_rules} from './idna.js'; 
-import {hex_cp, hex_seq} from './utils.js';
+import {hex_cp} from './utils.js';
+
+function hex_cps(cps) {
+	return cps.map(hex_cp).join(' ');
+}
 
 let args = process.argv.slice(2);
 if (args.length < 2) args.unshift('current');
@@ -22,21 +26,21 @@ deep_diff(expand(UNICODE0), expand(UNICODE1), (path, a, b) => {
 function expand(unicode) {
 	let {valid, mapped, ignored} = ens_idna_rules(unicode);
 	return {
-		unicode,
+		...unicode,
 		idna_ens: {
 			valid: new Set(valid.map(hex_cp)),
-			mapped: new Map(mapped.map(([k, v]) => [hex_cp(k), hex_seq(v)])),
+			mapped: new Map(mapped.map(([k, v]) => [hex_cp(k), hex_cps(v)])),
 			ignored: new Set(ignored.map(hex_cp))
 		},
 		//idna_2003: unicode.derive_idna_rules({version: 2003, use_STD3: true, valid_deviations: true}),
 		//emoji_data: map_values(unicode.read_emoji_data(), v => new Map(v.map(x => [hex_cp(x.cp), hex_seq(x)]))),
 		emoji_data: new Map(Object.entries(unicode.read_emoji_data()).map(([k, v]) => [k, new Set(v.map(x => hex_cp(x.cp)))])),
-		emoji_zwjs: new Map(Object.entries(unicode.read_emoji_zwjs()).map(([k, v]) => [k, new Set(v.map(x => hex_seq(x.cps)))])),
-		emoji_seqs: new Map(Object.entries(unicode.read_emoji_seqs()).map(([k, v]) => [k, new Set(v.map(x => hex_seq(x.cps)))])),
+		emoji_zwjs: new Map(Object.entries(unicode.read_emoji_zwjs()).map(([k, v]) => [k, new Set(v.map(x => hex_cps(x.cps)))])),
+		emoji_seqs: new Map(Object.entries(unicode.read_emoji_seqs()).map(([k, v]) => [k, new Set(v.map(x => hex_cps(x.cps)))])),
 		regions: new Set(unicode.read_regions()),
 		combining_class: new Map(unicode.combining_classes().map(([k, v]) => [k, new Set(v.map(hex_cp))])),
-		decompositions: new Map(unicode.decompositions().map(([k, v]) => [k, hex_seq(v)])),
-		confusables: new Map(unicode.read_confusables().map(([k, v]) => [hex_seq(k), new Set(v.map(hex_cp))])),
+		decompositions: new Map(unicode.decompositions().map(([k, v]) => [k, hex_cps(v)])),
+		confusables: new Map(unicode.read_confusables().map(([k, v]) => [hex_cps(k), new Set(v.map(hex_cp))])),
 		intentional_confusables: new Map(unicode.read_intentional_confusables()),
 		nonchars: new Set(unicode.get_noncharacter_cps().map(hex_cp)),
 		script_kinds: new Map(Object.entries(unicode.read_script_kinds()).map(([k, v]) => [k, new Set(v)])),
@@ -81,10 +85,18 @@ function deep_diff(a, b, callback, path = [], visited = new Set()) {
 			deep_diff(a[i], b[i], callback, [...path, `[${i}]`], visited);
 		}
 	} else {
-		for (let k of new Set([...Object.keys(a), ...Object.keys(b)])) {
+		for (let k of new Set([...get_keys(a), ...get_keys(b)])) {
 			deep_diff(a[k], b[k], callback, [...path, k], visited);
 		}
 	}
+}
+
+function get_keys(x) {
+	let keys = Object.keys(x);
+	if (x instanceof UnicodeChar) {
+		keys = keys.filter(x => x !== 'extended')
+	}
+	return keys;
 }
 
 function stringify(x) {

@@ -6590,6 +6590,8 @@ export const CONFUSE_GROUPS = [
 		'DF', // LATIN SMALL LETTER SHARP S [Latn]=>[Latn]
 		valid(0xDF), // (ß) LATIN SMALL LETTER SHARP S [Latn]=>[Latn]
 		0xA7B5, // (ꞵ) LATIN SMALL LETTER BETA [Latn]=>[Latn]
+		//IDNA:0x1E9E, // (ẞ) LATIN CAPITAL LETTER SHARP S [Latin]=>[Latin] (16.0.0)
+		//IDNA:0xA7D6, // (Ꟗ) LATIN CAPITAL LETTER MIDDLE SCOTS S [Latin]=>[Latin] (16.0.0)	
 		0x3B2, // (β) GREEK SMALL LETTER BETA [Grek]=>[Grek]
 		//IDNA:0x3D0, // (ϐ) GREEK BETA SYMBOL [Grek]=>[Grek]
 		//IDNA:0x1D6C3, // (𝛃) MATHEMATICAL BOLD SMALL BETA [Zyyy]=>[ALL]
@@ -7072,6 +7074,7 @@ export const CONFUSE_GROUPS = [
 		//IDNA:0x245, // (Ʌ) LATIN CAPITAL LETTER TURNED V [Latn]=>[Latn]
 		0x668, // (٨) ARABIC-INDIC DIGIT EIGHT [Arab]=>[Arab,Thaa,Yezi]
 		0x6F8, // (۸) EXTENDED ARABIC-INDIC DIGIT EIGHT [Arab]=>[Arab]
+		//IDNA:0xA7DA, // (Ꟛ) LATIN CAPITAL LETTER LAMBDA [Latin]=>[Latin] (16.0.0)
 		//IDNA:0x39B, // (Λ) GREEK CAPITAL LETTER LAMDA [Grek]=>[Grek]
 		//IDNA:0x1D6B2, // (𝚲) MATHEMATICAL BOLD CAPITAL LAMDA [Zyyy]=>[ALL]
 		//IDNA:0x1D6EC, // (𝛬) MATHEMATICAL ITALIC CAPITAL LAMDA [Zyyy]=>[ALL]
@@ -14407,9 +14410,10 @@ export const CONFUSE_GROUPS = [
 	],
 	[
 		// "儿" <Same>
-		'513F', // CJK Ideograph-513F <832/20992> [Hani]=>[Hani,Hanb,Jpan,Kore]
-		0x513F, // (儿) CJK Ideograph-513F <832/20992> [Hani]=>[Hani,Hanb,Jpan,Kore]
-		//IDNA:0x2F09, // (⼉) KANGXI RADICAL LEGS [Hani]=>[Hani,Hanb,Jpan,Kore]
+		'513F', // CJK Ideograph-513F [832/20992] [Han]=>[Han]
+		0x513F, // (儿) CJK Ideograph-513F [832/20992] [Han]=>[Han]
+		0x3126, // (ㄦ) BOPOMOFO LETTER ER [Bopomofo]=>[Bopomofo] (16.0.0)
+		//IDNA:0x2F09, // (⼉) KANGXI RADICAL LEGS [Han]=>[Han]
 	],
 	[
 		// "兀" <Same>
@@ -21441,5 +21445,19 @@ export const CONFUSE_GROUPS = [
 		'9FA0', // CJK Ideograph-9FA0 <20897/20992> [Hani]=>[Hani,Hanb,Jpan,Kore]
 		0x9FA0, // (龠) CJK Ideograph-9FA0 <20897/20992> [Hani]=>[Hani,Hanb,Jpan,Kore]
 		//IDNA:0x2FD5, // (⿕) KANGXI RADICAL FLUTE [Hani]=>[Hani,Hanb,Jpan,Kore]
+	],
+	// 16.0.0
+	// additions inserted above
+	// not included: OUTLINED LATIN
+	[
+		// "◌᜕" <Same>
+		'1715', // TAGALOG SIGN PAMUDPOD [Tagalog]=>[Tagalog]
+		0x1715, // (◌᜕) TAGALOG SIGN PAMUDPOD [Tagalog]=>[Tagalog]
+		0x1734, // (◌᜴) HANUNOO SIGN PAMUDPOD [Hanunoo]=>[Hanunoo]
+	],
+	[
+		// "Ʌ̸" <Same>
+		'245 338', // LATIN CAPITAL LETTER TURNED V + COMBINING LONG SOLIDUS OVERLAY [Latin,Inherited]=>[]
+		//IDNA:0xA7DC, // (Ƛ) LATIN CAPITAL LETTER LAMBDA WITH STROKE [Latin]=>[Latin]
 	],
 ];

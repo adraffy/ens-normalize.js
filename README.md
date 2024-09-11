@@ -4,6 +4,7 @@
 `$ npm i @adraffy/ens-normalize` [&check;](https://www.npmjs.com/package/@adraffy/ens-normalize)
 
 * 🏛️ Follows [**ENSIP-15**: ENS Name Normalization Standard](https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard)
+	* Unicode: [`16.0.0`](./derive/data/16.0.0/) • CLDR: [`45`](./derive/data/CLDR-45/)
 	* Other implementations:
 		* Python — [namehash/**ens-normalize-python**](https://github.com/namehash/ens-normalize-python)
 		* C# — [adraffy/**ENSNormalize.cs**](https://github.com/adraffy/ENSNormalize.cs)
@@ -14,9 +15,9 @@
 * ✅️ Passes **100%** [ENSIP-15 Validation Tests](https://adraffy.github.io/ens-normalize.js/test/validate.html)
 * ✅️ Passes **100%** [Unicode Normalization Tests](https://adraffy.github.io/ens-normalize.js/test/report-nf.html)
 * Minified File Sizes: 
-	* [`28KB`](./dist/index-xnf.min.js) — native `NFC` via [nf-native.js](./src/nf-native.js) using `String.normalize()` ⚠️
-	* [`37KB` **Default**](./dist/index.min.js) — custom `NFC` via [nf.js](./src/nf.js)
-	* [`43KB`](./dist/all.min.js) *Everything!* — custom `NFC` + sub-libraries: [parts.js](./src/parts.js), [utils.js](./src/utils.js)
+	* [`29KB`](./dist/index-xnf.min.js) — native `NFC` via [nf-native.js](./src/nf-native.js) using `String.normalize()` ⚠️
+	* [`38KB` **Default**](./dist/index.min.js) — custom `NFC` via [nf.js](./src/nf.js)
+	* [`44KB`](./dist/all.min.js) *Everything!* — custom `NFC` + sub-libraries: [parts.js](./src/parts.js), [utils.js](./src/utils.js)
 * Included Apps:
 	* [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html) ⭐
 	* [Supported Emoji](https://adraffy.github.io/ens-normalize.js/test/emoji.html)
@@ -192,12 +193,6 @@ safe_str_from_cps(Array(100).fill(97), 4); // "aa…aa" => middle-truncated
 * `npm run build` — create [/dist/](./dist/)
 * `npm run rebuild` — run all the commands above
 * `npm run order` — create optimal group ordering and rebuild again
-
-### Publishing to NPM
-
-This project uses `.js` instead of `.mjs` so [package.json](./package.json) uses `type: module`.  To avoid bundling issues, `type` is [dropped during packing](./src/prepost.js).  `pre/post` hooks aren't used because they're buggy.
-* `npm run pack` instead of `npm pack`
-* `npm run pub` instead of `npm publish`
 
 ## Security
 

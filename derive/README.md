@@ -11,8 +11,8 @@
 * [Unicode Standard Annex #31: Identifier and Pattern Syntax](https://www.unicode.org/reports/tr31/)
 	* [script-kinds.json](./data/15.1.0/scripts-kinds.json) — [Excluded](https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers), [Recommended](https://www.unicode.org/reports/tr31/#Table_Recommended_Scripts), [Limited Use](https://www.unicode.org/reports/tr31/#Table_Limited_Use_Scripts)
 * [Unicode Technical Standard #39: Security Mechanisms](https://www.unicode.org/reports/tr39/)
-	* [unicode-logic.js/`augmented_script_set()`](./unicode-logic.js#L11) — [spec](https://www.unicode.org/reports/tr39/#def-augmented-script-set)
-	* [unicode-logic.js/`get_resolved_script_set()`](./unicode-logic.js#L311) — [spec](https://www.unicode.org/reports/tr39/#def-resolved-script-set)
+	* [unicode-logic.js/`augmented_script_set()`](./unicode-logic.js#L15) — [spec](https://www.unicode.org/reports/tr39/#def-augmented-script-set)
+	* [unicode-logic.js/`get_resolved_script_set()`](./unicode-logic.js#L347) — [spec](https://www.unicode.org/reports/tr39/#def-resolved-script-set)
 * [RFC-3492: Punycode](https://datatracker.ietf.org/doc/html/rfc3492)
 * [RFC-5891: IDNA: Protocol](https://datatracker.ietf.org/doc/html/rfc5891) 
 * [RFC-5892: The Unicode Code Points and IDNA](https://datatracker.ietf.org/doc/html/rfc5892)
@@ -20,11 +20,11 @@
 * [Unicode data files](https://www.unicode.org/Public/)
 	* Download Latest: `node download.js` 
 	* To download older version: `node download.js 12.1.0` 
-	* Already included: [Unicode 11-15.1](./data/)
+	* Already included: [Unicode 11-16](./data/)
 * [CLDR data files](https://github.com/unicode-org/cldr)
 	* Download Latest: `node parse-cldr.js`
 	* To download older version: `node parse-cldr.js 42` 
-	* Already included: [CLDR 42-44](./data/)
+	* Already included: [CLDR 42-45](./data/)
 	* ⚠️ Versioned separately from Unicode!
 
 ## Instructions
@@ -56,12 +56,38 @@
 
 ## Upgrade Notes
 
-### [15.0.0 → 15.1.0](https://www.unicode.org/versions/Unicode15.1.0/#Character_Additions)
+### 15.1.0 → 16.0.0
 
- `node unicode-diff.js`
+* [Release](https://www.unicode.org/versions/Unicode16.0.0/#Character_Additions)
+* [Diff](./diffs/15.1.0-vs-16.0.0.txt) `node unicode.diff.js 15.1 16`
 * CLDR
 	* `short-names.json` **Unchanged**
 	* `regions.json` **New** `"CQ"`
+* UAX-31: 
+	* **New** 6 Scripts: Gara, Gukh, Krai, Onao, Sunu, Todr, Tutg
+* UTS-39:
+	* **Change** `confusables.txt`
+		* `OUTLINED LATIN [AZ]` with `LATIN CAPITAL [AZ]` (no effect, not confusable)
+		* `LATIN SMALL LETTER SHARP S` (no effect)
+* UTS-46:
+	* **Change** IDNA — kept prior behavior
+		* `disallowed_STD3_valid` &rarr; `valid`
+		* `disallowed_STD3_mapped` &rarr; `mapped`
+	* **Change** Various Invisibles/Filler: disallowed &rarr; ignored
+	* **Change** `_` and `$` mappings
+	* **New** [Legacy Computing Supplement](https://www.unicode.org/charts/PDF/Unicode-16.0/U160-1CC00.pdf)
+* UTS-51:
+	* **New** 8 Emoji
+* Prior Validation: `node test/validate.js 1.10.1` 
+	* Fails on new character changes
+	* Fails on new emoji
+
+### 15.0.0 → 15.1.0
+
+* [Release](https://www.unicode.org/versions/Unicode15.1.0)
+* [Diff](./diffs/15.0.0-vs-15.1.0.txt) `node unicode.diff.js 15 15.1`
+* CLDR
+	* `short-names.json` **Unchanged**
 * UCD:
 	* **New** Ideographic Description Characters
 	* **New** CJK Ideograph Extension I Block
@@ -70,9 +96,11 @@
 	* **Unchanged** Recommended, Excluded, Limited Use Scripts
 	* **New** Zyyy Script Extensions
 * UTS-39: 
-	* **New** Confusable Bidi Logic (doesn't apply since mixed-Bidi not allowed)
+	* **New** Confusable Bidi Logic (no effect, since mixed-Bidi not allowed)
 	* `confusables.txt` **Unchanged**
 * UTS-46: 
-	* **Change** `1E9E (ẞ) LATIN CAPITAL LETTER SHARP S` &rarr; `0xDF (ß) LATIN SMALL LETTER SHARP S`
-* Prior Validation: `node ../test/validate.js prior-tests/1.9.4.json`
-	* Only fails on emoji that are now valid.
+	* **Change** `1E9E (ẞ) LATIN CAPITAL LETTER SHARP S` &rarr; `DF (ß) LATIN SMALL LETTER SHARP S`
+* UTS-51:
+	* **New** 118 Emoji
+* Prior Validation: `node test/validate.js 1.9.4`
+	* Fails new emoji

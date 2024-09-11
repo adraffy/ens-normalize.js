@@ -237,4 +237,13 @@ export const RESTRICTED_SCRIPTS = [
 	'Yezi', // Yezidi
 	'Zanb', // Zanabazar Square
 
+	// 20240910: added in 16.0.0
+	'Gara', // Garay
+	'Gukh', // Gurung Khema
+	'Krai', // Kirat Rai
+	'Onao', // Ol Onal
+	'Sunu', // Sunuwar
+	'Todr', // Todhri
+	'Tutg', // Tulu Tigalari
+
 ];

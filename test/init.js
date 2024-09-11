@@ -28,3 +28,4 @@ console.log(`init() Speed: ${t_avg.toFixed(0)}ms [${N}x]`);
 // concat and Array_from instead of spreads
 // 20230921: 150ms
 // build P and Q from parts instead of flattened constructor
+// 20240910: still 150ms

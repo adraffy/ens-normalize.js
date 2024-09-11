@@ -1,6 +1,6 @@
-Build Date: 2024-09-11T06:12:10.385Z
-Unicode Version: 16.0.0 (2024-09-10T20:47:54.200Z)
-CLDR Version: 45 (2024-04-19T05:36:55.332Z)
+Build Date: 2024-01-24T01:26:48.153Z
+Unicode Version: 15.1.0 (2023-09-06T02:58:19.261Z)
+CLDR Version: 44 (2023-10-31T21:30:02.123Z)
 ==== RGI Emoji ZWJ Sequences ====
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -633,7 +633,7 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 2708 FE0F] (🧑‍✈️) 
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F33E] (🧑‍🌾) farmer
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F373] (🧑‍🍳) cook
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F37C] (🧑‍🍼) person feeding baby
-Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F384] (🧑‍🎄) Mx Claus
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F384] (🧑‍🎄) mx claus
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F393] (🧑‍🎓) student
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F3A4] (🧑‍🎤) singer
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F3A8] (🧑‍🎨) artist
@@ -657,7 +657,7 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 2708 FE0F] (🧑🏻�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F33E] (🧑🏻‍🌾) farmer: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F373] (🧑🏻‍🍳) cook: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F37C] (🧑🏻‍🍼) person feeding baby: light skin tone
-Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F384] (🧑🏻‍🎄) Mx Claus: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F384] (🧑🏻‍🎄) mx claus: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F393] (🧑🏻‍🎓) student: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F3A4] (🧑🏻‍🎤) singer: light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F3A8] (🧑🏻‍🎨) artist: light skin tone
@@ -681,7 +681,7 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 2708 FE0F] (🧑🏼�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F33E] (🧑🏼‍🌾) farmer: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F373] (🧑🏼‍🍳) cook: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F37C] (🧑🏼‍🍼) person feeding baby: medium-light skin tone
-Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F384] (🧑🏼‍🎄) Mx Claus: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F384] (🧑🏼‍🎄) mx claus: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F393] (🧑🏼‍🎓) student: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F3A4] (🧑🏼‍🎤) singer: medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F3A8] (🧑🏼‍🎨) artist: medium-light skin tone
@@ -705,7 +705,7 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 2708 FE0F] (🧑🏽�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F33E] (🧑🏽‍🌾) farmer: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F373] (🧑🏽‍🍳) cook: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F37C] (🧑🏽‍🍼) person feeding baby: medium skin tone
-Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F384] (🧑🏽‍🎄) Mx Claus: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F384] (🧑🏽‍🎄) mx claus: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F393] (🧑🏽‍🎓) student: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F3A4] (🧑🏽‍🎤) singer: medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F3A8] (🧑🏽‍🎨) artist: medium skin tone
@@ -729,7 +729,7 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 2708 FE0F] (🧑🏾�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F33E] (🧑🏾‍🌾) farmer: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F373] (🧑🏾‍🍳) cook: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F37C] (🧑🏾‍🍼) person feeding baby: medium-dark skin tone
-Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F384] (🧑🏾‍🎄) Mx Claus: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F384] (🧑🏾‍🎄) mx claus: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F393] (🧑🏾‍🎓) student: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F3A4] (🧑🏾‍🎤) singer: medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F3A8] (🧑🏾‍🎨) artist: medium-dark skin tone
@@ -753,7 +753,7 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 2708 FE0F] (🧑🏿�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F33E] (🧑🏿‍🌾) farmer: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F373] (🧑🏿‍🍳) cook: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F37C] (🧑🏿‍🍼) person feeding baby: dark skin tone
-Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F384] (🧑🏿‍🎄) Mx Claus: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F384] (🧑🏿‍🎄) mx claus: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F393] (🧑🏿‍🎓) student: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F3A4] (🧑🏿‍🎤) singer: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F3A8] (🧑🏿‍🎨) artist: dark skin tone
@@ -2195,7 +2195,6 @@ Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1F2] (🇨🇲) flag: Cameroo
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1F3] (🇨🇳) flag: China
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1F4] (🇨🇴) flag: Colombia
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1F5] (🇨🇵) flag: Clipperton Island
-Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1F6] (🇨🇶) flag: Sark
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1F7] (🇨🇷) flag: Costa Rica
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1FA] (🇨🇺) flag: Cuba
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E8 1F1FB] (🇨🇻) flag: Cape Verde
@@ -2437,8 +2436,6 @@ Demoted Emoji: [39] (9) DIGIT NINE
 Demoted Emoji: [23] (#) hash sign / NUMBER SIGN
 Demoted Emoji: [2A] (*) asterisk / ASTERISK
 ==== Disable Emoji (and Characters) ====
-Removed Mapped: 203C (‼) DOUBLE EXCLAMATION MARK => [21 21] (!!) EXCLAMATION MARK + EXCLAMATION MARK
-Removed Mapped: 2049 (⁉) EXCLAMATION QUESTION MARK => [21 3F] (!?) EXCLAMATION MARK + QUESTION MARK
 Removed Valid: 1F3FB (🏻) EMOJI MODIFIER FITZPATRICK TYPE-1-2
 Removed Valid: 1F3FC (🏼) EMOJI MODIFIER FITZPATRICK TYPE-3
 Removed Valid: 1F3FD (🏽) EMOJI MODIFIER FITZPATRICK TYPE-4
@@ -3745,8 +3742,6 @@ Removed Valid: 1FA85 (🪅) PINATA
 Removed Valid: 1FA86 (🪆) NESTING DOLLS
 Removed Valid: 1FA87 (🪇) MARACAS
 Removed Valid: 1FA88 (🪈) FLUTE
-Removed Valid: 1FA89 (🪉) HARP
-Removed Valid: 1FA8F (🪏) SHOVEL
 Removed Valid: 1FA90 (🪐) RINGED PLANET
 Removed Valid: 1FA91 (🪑) CHAIR
 Removed Valid: 1FA92 (🪒) RAZOR
@@ -3793,7 +3788,6 @@ Removed Valid: 1FABA (🪺) NEST WITH EGGS
 Removed Valid: 1FABB (🪻) HYACINTH
 Removed Valid: 1FABC (🪼) JELLYFISH
 Removed Valid: 1FABD (🪽) WING
-Removed Valid: 1FABE (🪾) LEAFLESS TREE
 Removed Valid: 1FABF (🪿) GOOSE
 Removed Valid: 1FAC0 (🫀) ANATOMICAL HEART
 Removed Valid: 1FAC1 (🫁) LUNGS
@@ -3801,7 +3795,6 @@ Removed Valid: 1FAC2 (🫂) PEOPLE HUGGING
 Removed Valid: 1FAC3 (🫃) PREGNANT MAN
 Removed Valid: 1FAC4 (🫄) PREGNANT PERSON
 Removed Valid: 1FAC5 (🫅) PERSON WITH CROWN
-Removed Valid: 1FAC6 (🫆) FINGERPRINT
 Removed Valid: 1FACE (🫎) MOOSE
 Removed Valid: 1FACF (🫏) DONKEY
 Removed Valid: 1FAD0 (🫐) BLUEBERRIES
@@ -3816,8 +3809,6 @@ Removed Valid: 1FAD8 (🫘) BEANS
 Removed Valid: 1FAD9 (🫙) JAR
 Removed Valid: 1FADA (🫚) GINGER ROOT
 Removed Valid: 1FADB (🫛) PEA POD
-Removed Valid: 1FADC (🫜) ROOT VEGETABLE
-Removed Valid: 1FADF (🫟) SPLATTER
 Removed Valid: 1FAE0 (🫠) MELTING FACE
 Removed Valid: 1FAE1 (🫡) SALUTING FACE
 Removed Valid: 1FAE2 (🫢) FACE WITH OPEN EYES AND HAND OVER MOUTH
@@ -3827,7 +3818,6 @@ Removed Valid: 1FAE5 (🫥) DOTTED LINE FACE
 Removed Valid: 1FAE6 (🫦) BITING LIP
 Removed Valid: 1FAE7 (🫧) BUBBLES
 Removed Valid: 1FAE8 (🫨) SHAKING FACE
-Removed Valid: 1FAE9 (🫩) FACE WITH BAGS UNDER EYES
 Removed Valid: 1FAF0 (🫰) HAND WITH INDEX FINGER AND THUMB CROSSED
 Removed Valid: 1FAF1 (🫱) RIGHTWARDS HAND
 Removed Valid: 1FAF2 (🫲) LEFTWARDS HAND
@@ -5113,8 +5103,6 @@ Register Emoji [Emoji_Presentation]: [1FA85 FE0F] (🪅️) piñata / PINATA
 Register Emoji [Emoji_Presentation]: [1FA86 FE0F] (🪆️) nesting dolls / NESTING DOLLS
 Register Emoji [Emoji_Presentation]: [1FA87 FE0F] (🪇️) maracas / MARACAS
 Register Emoji [Emoji_Presentation]: [1FA88 FE0F] (🪈️) flute / FLUTE
-Register Emoji [Emoji_Presentation]: [1FA89 FE0F] (🪉️) HARP
-Register Emoji [Emoji_Presentation]: [1FA8F FE0F] (🪏️) SHOVEL
 Register Emoji [Emoji_Presentation]: [1FA90 FE0F] (🪐️) ringed planet / RINGED PLANET
 Register Emoji [Emoji_Presentation]: [1FA91 FE0F] (🪑️) chair / CHAIR
 Register Emoji [Emoji_Presentation]: [1FA92 FE0F] (🪒️) razor / RAZOR
@@ -5161,7 +5149,6 @@ Register Emoji [Emoji_Presentation]: [1FABA FE0F] (🪺️) nest with eggs / NES
 Register Emoji [Emoji_Presentation]: [1FABB FE0F] (🪻️) hyacinth / HYACINTH
 Register Emoji [Emoji_Presentation]: [1FABC FE0F] (🪼️) jellyfish / JELLYFISH
 Register Emoji [Emoji_Presentation]: [1FABD FE0F] (🪽️) wing / WING
-Register Emoji [Emoji_Presentation]: [1FABE FE0F] (🪾️) LEAFLESS TREE
 Register Emoji [Emoji_Presentation]: [1FABF FE0F] (🪿️) goose / GOOSE
 Register Emoji [Emoji_Presentation]: [1FAC0 FE0F] (🫀️) anatomical heart / ANATOMICAL HEART
 Register Emoji [Emoji_Presentation]: [1FAC1 FE0F] (🫁️) lungs / LUNGS
@@ -5169,7 +5156,6 @@ Register Emoji [Emoji_Presentation]: [1FAC2 FE0F] (🫂️) people hugging / PEO
 Register Emoji [Emoji_Presentation]: [1FAC3 FE0F] (🫃️) pregnant man / PREGNANT MAN
 Register Emoji [Emoji_Presentation]: [1FAC4 FE0F] (🫄️) pregnant person / PREGNANT PERSON
 Register Emoji [Emoji_Presentation]: [1FAC5 FE0F] (🫅️) person with crown / PERSON WITH CROWN
-Register Emoji [Emoji_Presentation]: [1FAC6 FE0F] (🫆️) FINGERPRINT
 Register Emoji [Emoji_Presentation]: [1FACE FE0F] (🫎️) moose / MOOSE
 Register Emoji [Emoji_Presentation]: [1FACF FE0F] (🫏️) donkey / DONKEY
 Register Emoji [Emoji_Presentation]: [1FAD0 FE0F] (🫐️) blueberries / BLUEBERRIES
@@ -5184,8 +5170,6 @@ Register Emoji [Emoji_Presentation]: [1FAD8 FE0F] (🫘️) beans / BEANS
 Register Emoji [Emoji_Presentation]: [1FAD9 FE0F] (🫙️) jar / JAR
 Register Emoji [Emoji_Presentation]: [1FADA FE0F] (🫚️) ginger root / GINGER ROOT
 Register Emoji [Emoji_Presentation]: [1FADB FE0F] (🫛️) pea pod / PEA POD
-Register Emoji [Emoji_Presentation]: [1FADC FE0F] (🫜️) ROOT VEGETABLE
-Register Emoji [Emoji_Presentation]: [1FADF FE0F] (🫟️) SPLATTER
 Register Emoji [Emoji_Presentation]: [1FAE0 FE0F] (🫠️) melting face / MELTING FACE
 Register Emoji [Emoji_Presentation]: [1FAE1 FE0F] (🫡️) saluting face / SALUTING FACE
 Register Emoji [Emoji_Presentation]: [1FAE2 FE0F] (🫢️) face with open eyes and hand over mouth / FACE WITH OPEN EYES AND HAND OVER MOUTH
@@ -5195,7 +5179,6 @@ Register Emoji [Emoji_Presentation]: [1FAE5 FE0F] (🫥️) dotted line face / D
 Register Emoji [Emoji_Presentation]: [1FAE6 FE0F] (🫦️) biting lip / BITING LIP
 Register Emoji [Emoji_Presentation]: [1FAE7 FE0F] (🫧️) bubbles / BUBBLES
 Register Emoji [Emoji_Presentation]: [1FAE8 FE0F] (🫨️) shaking face / SHAKING FACE
-Register Emoji [Emoji_Presentation]: [1FAE9 FE0F] (🫩️) FACE WITH BAGS UNDER EYES
 Register Emoji [Emoji_Presentation]: [1FAF0 FE0F] (🫰️) hand with index finger and thumb crossed / HAND WITH INDEX FINGER AND THUMB CROSSED
 Register Emoji [Emoji_Presentation]: [1FAF1 FE0F] (🫱️) rightwards hand / RIGHTWARDS HAND
 Register Emoji [Emoji_Presentation]: [1FAF2 FE0F] (🫲️) leftwards hand / LEFTWARDS HAND
@@ -5250,74 +5233,12 @@ Removed Valid: 2E3A (⸺) TWO-EM DASH
 Add Mapped: 2E3A (⸺) TWO-EM DASH => [2D 2D] (--) HYPHEN-MINUS + HYPHEN-MINUS
 Removed Valid: 2E3B (⸻) THREE-EM DASH
 Add Mapped: 2E3B (⸻) THREE-EM DASH => [2D 2D 2D] (---) HYPHEN-MINUS + HYPHEN-MINUS + HYPHEN-MINUS
-Removed Valid: 27 (') APOSTROPHE
 Add Mapped: 27 (') APOSTROPHE => [2019] (’) RIGHT SINGLE QUOTATION MARK
 ==== Add Ignored Characters ====
 ==== Add Valid Characters ====
-*** Already valid: 24 ($) DOLLAR SIGN
-*** Already valid: 5F (_) LOW LINE
+Added Valid: 24 ($) DOLLAR SIGN
+Added Valid: 5F (_) LOW LINE
 ==== Remove Disallowed Characters ====
-Removed Valid: 00 (�) NULL
-Removed Valid: 01 (�) START OF HEADING
-Removed Valid: 02 (�) START OF TEXT
-Removed Valid: 03 (�) END OF TEXT
-Removed Valid: 04 (�) END OF TRANSMISSION
-Removed Valid: 05 (�) ENQUIRY
-Removed Valid: 06 (�) ACKNOWLEDGE
-Removed Valid: 07 (�) BELL
-Removed Valid: 08 (�) BACKSPACE
-Removed Valid: 09 (�) CHARACTER TABULATION
-Removed Valid: 0A (�) LINE FEED (LF)
-Removed Valid: 0B (�) LINE TABULATION
-Removed Valid: 0C (�) FORM FEED (FF)
-Removed Valid: 0D (�) CARRIAGE RETURN (CR)
-Removed Valid: 0E (�) SHIFT OUT
-Removed Valid: 0F (�) SHIFT IN
-Removed Valid: 10 (�) DATA LINK ESCAPE
-Removed Valid: 11 (�) DEVICE CONTROL ONE
-Removed Valid: 12 (�) DEVICE CONTROL TWO
-Removed Valid: 13 (�) DEVICE CONTROL THREE
-Removed Valid: 14 (�) DEVICE CONTROL FOUR
-Removed Valid: 15 (�) NEGATIVE ACKNOWLEDGE
-Removed Valid: 16 (�) SYNCHRONOUS IDLE
-Removed Valid: 17 (�) END OF TRANSMISSION BLOCK
-Removed Valid: 18 (�) CANCEL
-Removed Valid: 19 (�) END OF MEDIUM
-Removed Valid: 1A (�) SUBSTITUTE
-Removed Valid: 1B (�) ESCAPE
-Removed Valid: 1C (�) INFORMATION SEPARATOR FOUR
-Removed Valid: 1D (�) INFORMATION SEPARATOR THREE
-Removed Valid: 1E (�) INFORMATION SEPARATOR TWO
-Removed Valid: 1F (�) INFORMATION SEPARATOR ONE
-Removed Valid: 20 ( ) SPACE
-Removed Valid: 21 (!) EXCLAMATION MARK
-Removed Valid: 22 (") QUOTATION MARK
-Removed Valid: 23 (#) NUMBER SIGN
-Removed Valid: 25 (%) PERCENT SIGN
-Removed Valid: 26 (&) AMPERSAND
-Removed Valid: 28 (() LEFT PARENTHESIS
-Removed Valid: 29 ()) RIGHT PARENTHESIS
-Removed Valid: 2A (*) ASTERISK
-Removed Valid: 2B (+) PLUS SIGN
-Removed Valid: 2C (,) COMMA
-Removed Valid: 2F (/) SOLIDUS
-Removed Valid: 3A (:) COLON
-Removed Valid: 3B (;) SEMICOLON
-Removed Valid: 3C (<) LESS-THAN SIGN
-Removed Valid: 3D (=) EQUALS SIGN
-Removed Valid: 3E (>) GREATER-THAN SIGN
-Removed Valid: 3F (?) QUESTION MARK
-Removed Valid: 40 (@) COMMERCIAL AT
-Removed Valid: 5B ([) LEFT SQUARE BRACKET
-Removed Valid: 5C (\) REVERSE SOLIDUS
-Removed Valid: 5D (]) RIGHT SQUARE BRACKET
-Removed Valid: 5E (^) CIRCUMFLEX ACCENT
-Removed Valid: 60 (`) GRAVE ACCENT
-Removed Valid: 7B ({) LEFT CURLY BRACKET
-Removed Valid: 7C (|) VERTICAL LINE
-Removed Valid: 7D (}) RIGHT CURLY BRACKET
-Removed Valid: 7E (~) TILDE
-Removed Valid: 7F (�) DELETE
 Removed Valid: 200C (�) ZERO WIDTH NON-JOINER
 Removed Valid: 200D (�) ZERO WIDTH JOINER
 Removed Mapped: 3002 (。) IDEOGRAPHIC FULL STOP => [2E] (.) FULL STOP
@@ -5374,12 +5295,10 @@ Removed Valid: 7F9 (߹) NKO EXCLAMATION MARK
 Removed Valid: 1E95E (𞥞) ADLAM INITIAL EXCLAMATION MARK
 Removed Valid: 1944 (᥄) LIMBU EXCLAMATION MARK
 *** Already disallowed: 1945 (᥅) LIMBU QUESTION MARK
-Removed Mapped: FE56 (﹖) SMALL QUESTION MARK => [3F] (?) QUESTION MARK
-Removed Mapped: FE57 (﹗) SMALL EXCLAMATION MARK => [21] (!) EXCLAMATION MARK
-Removed Mapped: FF01 (！) FULLWIDTH EXCLAMATION MARK => [21] (!) EXCLAMATION MARK
-Removed Mapped: FF1F (？) FULLWIDTH QUESTION MARK => [3F] (?) QUESTION MARK
-Removed Valid: 2CFA (⳺) COPTIC OLD NUBIAN DIRECT QUESTION MARK
-Removed Valid: 2CFB (⳻) COPTIC OLD NUBIAN INDIRECT QUESTION MARK
+*** Already disallowed: FE56 (﹖) SMALL QUESTION MARK
+*** Already disallowed: FE57 (﹗) SMALL EXCLAMATION MARK
+*** Already disallowed: FF01 (！) FULLWIDTH EXCLAMATION MARK
+*** Already disallowed: FF1F (？) FULLWIDTH QUESTION MARK
 Removed Valid: 1FBC4 (🯄) NEGATIVE SQUARED QUESTION MARK
 Removed Valid: 1F18A (🆊) CROSSED NEGATIVE SQUARED LATIN CAPITAL LETTER P
 Removed Valid: 24FF (⓿) NEGATIVE CIRCLED DIGIT ZERO
@@ -5650,7 +5569,6 @@ Removed Valid: A7A9 (ꞩ) LATIN SMALL LETTER S WITH OBLIQUE STROKE
 Removed Valid: A7CA (ꟊ) LATIN SMALL LETTER S WITH SHORT STROKE OVERLAY
 Removed Valid: 2C66 (ⱦ) LATIN SMALL LETTER T WITH DIAGONAL STROKE
 Removed Valid: A75F (ꝟ) LATIN SMALL LETTER V WITH DIAGONAL STROKE
-Removed Valid: A7CD (ꟍ) LATIN SMALL LETTER S WITH DIAGONAL STROKE
 Removed Valid: 1D7B (ᵻ) LATIN SMALL CAPITAL LETTER I WITH STROKE
 Removed Valid: 1D7E (ᵾ) LATIN SMALL CAPITAL LETTER U WITH STROKE
 Removed Valid: 1D7C (ᵼ) LATIN SMALL LETTER IOTA WITH STROKE
@@ -5702,7 +5620,6 @@ Removed Valid: AB55 (ꭕ) LATIN SMALL LETTER CHI WITH LOW LEFT SERIF
 Removed Valid: AB64 (ꭤ) LATIN SMALL LETTER INVERTED ALPHA
 Removed Valid: A7B5 (ꞵ) LATIN SMALL LETTER BETA
 Removed Valid: A7B7 (ꞷ) LATIN SMALL LETTER OMEGA
-Removed Valid: A7DB (ꟛ) LATIN SMALL LETTER LAMBDA
 Removed Valid: 2180 (ↀ) ROMAN NUMERAL ONE THOUSAND C D
 Removed Valid: 2181 (ↁ) ROMAN NUMERAL FIVE THOUSAND
 Removed Valid: 2182 (ↂ) ROMAN NUMERAL TEN THOUSAND
@@ -5947,7 +5864,7 @@ Removed Mapped: 207F (ⁿ) SUPERSCRIPT LATIN SMALL LETTER N => [6E] (n) LATIN SM
 Removed Mapped: FC5B (ﱛ) ARABIC LIGATURE THAL WITH SUPERSCRIPT ALEF ISOLATED FORM => [630 670] (ذٰ) ARABIC LETTER THAL + ARABIC LETTER SUPERSCRIPT ALEF
 Removed Mapped: FC5C (ﱜ) ARABIC LIGATURE REH WITH SUPERSCRIPT ALEF ISOLATED FORM => [631 670] (رٰ) ARABIC LETTER REH + ARABIC LETTER SUPERSCRIPT ALEF
 Removed Mapped: FC5D (ﱝ) ARABIC LIGATURE ALEF MAKSURA WITH SUPERSCRIPT ALEF ISOLATED FORM => [649 670] (ىٰ) ARABIC LETTER ALEF MAKSURA + ARABIC LETTER SUPERSCRIPT ALEF
-Removed Mapped: FC63 (ﱣ) ARABIC LIGATURE SHADDA WITH SUPERSCRIPT ALEF ISOLATED FORM => [20 651 670] ( ّٰ) SPACE + ARABIC SHADDA + ARABIC LETTER SUPERSCRIPT ALEF
+*** Already disallowed: FC63 (ﱣ) ARABIC LIGATURE SHADDA WITH SUPERSCRIPT ALEF ISOLATED FORM
 Removed Mapped: FC90 (ﲐ) ARABIC LIGATURE ALEF MAKSURA WITH SUPERSCRIPT ALEF FINAL FORM => [649 670] (ىٰ) ARABIC LETTER ALEF MAKSURA + ARABIC LETTER SUPERSCRIPT ALEF
 Removed Mapped: FCD9 (ﳙ) ARABIC LIGATURE HEH WITH SUPERSCRIPT ALEF INITIAL FORM => [647 670] (هٰ) ARABIC LETTER HEH + ARABIC LETTER SUPERSCRIPT ALEF
 Removed Valid: 671 (ٱ) ARABIC LETTER ALEF WASLA
@@ -6070,7 +5987,6 @@ Removed Valid: A695 (ꚕ) CYRILLIC SMALL LETTER HWE
 Removed Valid: A697 (ꚗ) CYRILLIC SMALL LETTER SHWE
 Removed Valid: A699 (ꚙ) CYRILLIC SMALL LETTER DOUBLE O
 Removed Valid: A69B (ꚛ) CYRILLIC SMALL LETTER CROSSED O
-Removed Valid: 1C8A (ᲊ) CYRILLIC SMALL LETTER TJE
 Removed Valid: 30D (◌̍) COMBINING VERTICAL LINE ABOVE
 Removed Valid: 30E (◌̎) COMBINING DOUBLE VERTICAL LINE ABOVE
 Removed Valid: 30F (◌̏) COMBINING DOUBLE GRAVE ACCENT
@@ -6394,8 +6310,8 @@ Removed Valid: A8EF (◌꣯) COMBINING DEVANAGARI LETTER RA
 Removed Valid: A8F0 (◌꣰) COMBINING DEVANAGARI LETTER VI
 Removed Valid: A8F1 (◌꣱) COMBINING DEVANAGARI SIGN AVAGRAHA
 Removed Valid: B82 (◌ஂ) TAMIL SIGN ANUSVARA
-Removed Mapped: 309B (゛) KATAKANA-HIRAGANA VOICED SOUND MARK => [20 3099] ( ゙) SPACE + COMBINING KATAKANA-HIRAGANA VOICED SOUND MARK
-Removed Mapped: 309C (゜) KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK => [20 309A] ( ゚) SPACE + COMBINING KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK
+*** Already disallowed: 309B (゛) KATAKANA-HIRAGANA VOICED SOUND MARK
+*** Already disallowed: 309C (゜) KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK
 Removed Valid: 16FF0 (◌𖿰) VIETNAMESE ALTERNATE READING MARK CA
 Removed Valid: 16FF1 (◌𖿱) VIETNAMESE ALTERNATE READING MARK NHAY
 Removed Valid: 615 (◌ؕ) ARABIC SMALL HIGH TAH
@@ -7049,9 +6965,6 @@ Removed Valid: 1B5E (᭞) BALINESE CARIK SIKI
 Removed Valid: 1B5F (᭟) BALINESE CARIK PAREREN
 Removed Valid: 1B7D (᭽) BALINESE PANTI LANTANG
 Removed Valid: 1B7E (᭾) BALINESE PAMADA LANTANG
-Removed Valid: 1B7F (᭿) BALINESE PANTI BAWAK
-Removed Valid: 1B4E (᭎) BALINESE INVERTED CARIK SIKI
-Removed Valid: 1B4F (᭏) BALINESE INVERTED CARIK PAREREN
 Removed Valid: 1C3B (᰻) LEPCHA PUNCTUATION TA-ROL
 Removed Valid: 1C3C (᰼) LEPCHA PUNCTUATION NYET THYOOM TA-ROL
 Removed Valid: 1C7E (᱾) OL CHIKI PUNCTUATION MUCAAD
@@ -7160,10 +7073,6 @@ Removed Valid: 10A52 (𐩒) KHAROSHTHI PUNCTUATION CIRCLE
 Removed Valid: 10A53 (𐩓) KHAROSHTHI PUNCTUATION CRESCENT BAR
 Removed Valid: 10A54 (𐩔) KHAROSHTHI PUNCTUATION MANGALAM
 Removed Valid: 10A58 (𐩘) KHAROSHTHI PUNCTUATION LINES
-Removed Valid: 113D4 (𑏔) TULU-TIGALARI DANDA
-Removed Valid: 113D5 (𑏕) TULU-TIGALARI DOUBLE DANDA
-Removed Valid: 16D6E (𖵮) KIRAT RAI DANDA
-Removed Valid: 16D6F (𖵯) KIRAT RAI DOUBLE DANDA
 Removed Valid: 6FD (۽) ARABIC SIGN SINDHI AMPERSAND
 Removed Valid: 214B (⅋) TURNED AMPERSAND
 Removed Valid: 1F672 (🙲) LIGATURE OPEN ET ORNAMENT
@@ -7419,6 +7328,8 @@ Removed Valid: 2027 (‧) HYPHENATION POINT
 Removed Valid: 29FF (⧿) MINY
 Removed Mapped: 207B (⁻) SUPERSCRIPT MINUS => [2212] (−) MINUS SIGN
 Removed Mapped: 208B (₋) SUBSCRIPT MINUS => [2212] (−) MINUS SIGN
+Removed Mapped: FE31 (︱) PRESENTATION FORM FOR VERTICAL EM DASH => [2014] (—) EM DASH
+Removed Mapped: FE32 (︲) PRESENTATION FORM FOR VERTICAL EN DASH => [2013] (–) EN DASH
 Removed Valid: 23BA (⎺) HORIZONTAL SCAN LINE-1
 Removed Valid: 23BB (⎻) HORIZONTAL SCAN LINE-3
 Removed Valid: 23BC (⎼) HORIZONTAL SCAN LINE-7
@@ -7428,7 +7339,6 @@ Removed Valid: 2E1A (⸚) HYPHEN WITH DIAERESIS
 Removed Valid: 640 (ـ) ARABIC TATWEEL
 Removed Valid: 58A (֊) ARMENIAN HYPHEN
 Removed Valid: 971 (ॱ) DEVANAGARI SIGN HIGH SPACING DOT
-Removed Valid: 1806 (᠆) MONGOLIAN TODO SOFT HYPHEN
 Removed Valid: 2E17 (⸗) DOUBLE OBLIQUE HYPHEN
 Removed Valid: 2E40 (⹀) DOUBLE HYPHEN
 Removed Valid: 2E5D (⹝) OBLIQUE HYPHEN
@@ -7593,39 +7503,6 @@ Removed Valid: 2225 (∥) PARALLEL TO
 Removed Valid: 2226 (∦) NOT PARALLEL TO
 Removed Valid: 2AEE (⫮) DOES NOT DIVIDE WITH REVERSED NEGATION SLASH
 Removed Valid: 27C2 (⟂) PERPENDICULAR
-Removed Mapped: FE10 (︐) PRESENTATION FORM FOR VERTICAL COMMA => [2C] (,) COMMA
-Removed Mapped: FE11 (︑) PRESENTATION FORM FOR VERTICAL IDEOGRAPHIC COMMA => [3001] (、) IDEOGRAPHIC COMMA
-*** Already disallowed: FE12 (︒) PRESENTATION FORM FOR VERTICAL IDEOGRAPHIC FULL STOP
-Removed Mapped: FE13 (︓) PRESENTATION FORM FOR VERTICAL COLON => [3A] (:) COLON
-Removed Mapped: FE14 (︔) PRESENTATION FORM FOR VERTICAL SEMICOLON => [3B] (;) SEMICOLON
-Removed Mapped: FE15 (︕) PRESENTATION FORM FOR VERTICAL EXCLAMATION MARK => [21] (!) EXCLAMATION MARK
-Removed Mapped: FE16 (︖) PRESENTATION FORM FOR VERTICAL QUESTION MARK => [3F] (?) QUESTION MARK
-Removed Mapped: FE17 (︗) PRESENTATION FORM FOR VERTICAL LEFT WHITE LENTICULAR BRACKET => [3016] (〖) LEFT WHITE LENTICULAR BRACKET
-Removed Mapped: FE18 (︘) PRESENTATION FORM FOR VERTICAL RIGHT WHITE LENTICULAR BRAKCET => [3017] (〗) RIGHT WHITE LENTICULAR BRACKET
-*** Already disallowed: FE19 (︙) PRESENTATION FORM FOR VERTICAL HORIZONTAL ELLIPSIS
-*** Already disallowed: FE30 (︰) PRESENTATION FORM FOR VERTICAL TWO DOT LEADER
-Removed Mapped: FE31 (︱) PRESENTATION FORM FOR VERTICAL EM DASH => [2014] (—) EM DASH
-Removed Mapped: FE32 (︲) PRESENTATION FORM FOR VERTICAL EN DASH => [2013] (–) EN DASH
-Removed Mapped: FE33 (︳) PRESENTATION FORM FOR VERTICAL LOW LINE => [5F] (_) LOW LINE
-Removed Mapped: FE34 (︴) PRESENTATION FORM FOR VERTICAL WAVY LOW LINE => [5F] (_) LOW LINE
-Removed Mapped: FE35 (︵) PRESENTATION FORM FOR VERTICAL LEFT PARENTHESIS => [28] (() LEFT PARENTHESIS
-Removed Mapped: FE36 (︶) PRESENTATION FORM FOR VERTICAL RIGHT PARENTHESIS => [29] ()) RIGHT PARENTHESIS
-Removed Mapped: FE37 (︷) PRESENTATION FORM FOR VERTICAL LEFT CURLY BRACKET => [7B] ({) LEFT CURLY BRACKET
-Removed Mapped: FE38 (︸) PRESENTATION FORM FOR VERTICAL RIGHT CURLY BRACKET => [7D] (}) RIGHT CURLY BRACKET
-Removed Mapped: FE39 (︹) PRESENTATION FORM FOR VERTICAL LEFT TORTOISE SHELL BRACKET => [3014] (〔) LEFT TORTOISE SHELL BRACKET
-Removed Mapped: FE3A (︺) PRESENTATION FORM FOR VERTICAL RIGHT TORTOISE SHELL BRACKET => [3015] (〕) RIGHT TORTOISE SHELL BRACKET
-Removed Mapped: FE3B (︻) PRESENTATION FORM FOR VERTICAL LEFT BLACK LENTICULAR BRACKET => [3010] (【) LEFT BLACK LENTICULAR BRACKET
-Removed Mapped: FE3C (︼) PRESENTATION FORM FOR VERTICAL RIGHT BLACK LENTICULAR BRACKET => [3011] (】) RIGHT BLACK LENTICULAR BRACKET
-Removed Mapped: FE3D (︽) PRESENTATION FORM FOR VERTICAL LEFT DOUBLE ANGLE BRACKET => [300A] (《) LEFT DOUBLE ANGLE BRACKET
-Removed Mapped: FE3E (︾) PRESENTATION FORM FOR VERTICAL RIGHT DOUBLE ANGLE BRACKET => [300B] (》) RIGHT DOUBLE ANGLE BRACKET
-Removed Mapped: FE3F (︿) PRESENTATION FORM FOR VERTICAL LEFT ANGLE BRACKET => [3008] (〈) LEFT ANGLE BRACKET
-Removed Mapped: FE40 (﹀) PRESENTATION FORM FOR VERTICAL RIGHT ANGLE BRACKET => [3009] (〉) RIGHT ANGLE BRACKET
-Removed Mapped: FE41 (﹁) PRESENTATION FORM FOR VERTICAL LEFT CORNER BRACKET => [300C] (「) LEFT CORNER BRACKET
-Removed Mapped: FE42 (﹂) PRESENTATION FORM FOR VERTICAL RIGHT CORNER BRACKET => [300D] (」) RIGHT CORNER BRACKET
-Removed Mapped: FE43 (﹃) PRESENTATION FORM FOR VERTICAL LEFT WHITE CORNER BRACKET => [300E] (『) LEFT WHITE CORNER BRACKET
-Removed Mapped: FE44 (﹄) PRESENTATION FORM FOR VERTICAL RIGHT WHITE CORNER BRACKET => [300F] (』) RIGHT WHITE CORNER BRACKET
-Removed Mapped: FE47 (﹇) PRESENTATION FORM FOR VERTICAL LEFT SQUARE BRACKET => [5B] ([) LEFT SQUARE BRACKET
-Removed Mapped: FE48 (﹈) PRESENTATION FORM FOR VERTICAL RIGHT SQUARE BRACKET => [5D] (]) RIGHT SQUARE BRACKET
 Removed Valid: 25DC (◜) UPPER LEFT QUADRANT CIRCULAR ARC
 Removed Valid: 25DD (◝) UPPER RIGHT QUADRANT CIRCULAR ARC
 Removed Valid: 25DE (◞) LOWER RIGHT QUADRANT CIRCULAR ARC
@@ -8216,9 +8093,9 @@ Removed Valid: 2A70 (⩰) APPROXIMATELY EQUAL OR EQUAL TO
 Removed Valid: 2A71 (⩱) EQUALS SIGN ABOVE PLUS SIGN
 Removed Valid: 2A72 (⩲) PLUS SIGN ABOVE EQUALS SIGN
 Removed Valid: 2A73 (⩳) EQUALS SIGN ABOVE TILDE OPERATOR
-Removed Mapped: 2A74 (⩴) DOUBLE COLON EQUAL => [3A 3A 3D] (::=) COLON + COLON + EQUALS SIGN
-Removed Mapped: 2A75 (⩵) TWO CONSECUTIVE EQUALS SIGNS => [3D 3D] (==) EQUALS SIGN + EQUALS SIGN
-Removed Mapped: 2A76 (⩶) THREE CONSECUTIVE EQUALS SIGNS => [3D 3D 3D] (===) EQUALS SIGN + EQUALS SIGN + EQUALS SIGN
+*** Already disallowed: 2A74 (⩴) DOUBLE COLON EQUAL
+*** Already disallowed: 2A75 (⩵) TWO CONSECUTIVE EQUALS SIGNS
+*** Already disallowed: 2A76 (⩶) THREE CONSECUTIVE EQUALS SIGNS
 Removed Valid: 2A77 (⩷) EQUALS SIGN WITH TWO DOTS ABOVE AND TWO DOTS BELOW
 Removed Valid: 2A78 (⩸) EQUIVALENT WITH FOUR DOTS ABOVE
 Removed Valid: 2A79 (⩹) LESS-THAN WITH CIRCLE INSIDE
@@ -9178,605 +9055,6 @@ Removed Valid: 1F770 (🝰) ALCHEMICAL SYMBOL FOR DAY-NIGHT
 Removed Valid: 1F771 (🝱) ALCHEMICAL SYMBOL FOR MONTH
 Removed Valid: 1F772 (🝲) ALCHEMICAL SYMBOL FOR HALF DRAM
 Removed Valid: 1F773 (🝳) ALCHEMICAL SYMBOL FOR HALF OUNCE
-Removed Valid: 1CC00 (𜰀) UP-POINTING GO-KART
-Removed Valid: 1CC01 (𜰁) RIGHT-POINTING GO-KART
-Removed Valid: 1CC02 (𜰂) LEFT-POINTING STICK FIGURE
-Removed Valid: 1CC03 (𜰃) RIGHT-POINTING STICK FIGURE
-Removed Valid: 1CC04 (𜰄) DOWN-POINTING STICK FIGURE
-Removed Valid: 1CC05 (𜰅) LOWER HORIZONTAL RULER SEGMENT
-Removed Valid: 1CC06 (𜰆) RIGHT VERTICAL RULER SEGMENT
-Removed Valid: 1CC07 (𜰇) LOWER RIGHT RULER SEGMENT
-Removed Valid: 1CC08 (𜰈) ANTENNA
-Removed Valid: 1CC09 (𜰉) HORIZONTAL RESISTOR SEGMENT
-Removed Valid: 1CC0A (𜰊) VERTICAL RESISTOR SEGMENT
-Removed Valid: 1CC0B (𜰋) LEFT THIRD INDUCTOR
-Removed Valid: 1CC0C (𜰌) MIDDLE THIRD INDUCTOR
-Removed Valid: 1CC0D (𜰍) RIGHT THIRD INDUCTOR
-Removed Valid: 1CC0E (𜰎) LEFT-POINTING DIODE
-Removed Valid: 1CC0F (𜰏) RIGHT-POINTING DIODE
-Removed Valid: 1CC10 (𜰐) NPN TRANSISTOR
-Removed Valid: 1CC11 (𜰑) PNP TRANSISTOR
-Removed Valid: 1CC12 (𜰒) RECEPTACLE
-Removed Valid: 1CC13 (𜰓) HORIZONTAL CAPACITOR
-Removed Valid: 1CC14 (𜰔) VERTICAL CAPACITOR
-Removed Valid: 1CC15 (𜰕) LOGIC GATE OR
-Removed Valid: 1CC16 (𜰖) LOGIC GATE AND
-Removed Valid: 1CC17 (𜰗) LOGIC GATE INVERTED INPUTS
-Removed Valid: 1CC18 (𜰘) LOGIC GATE INVERTED OUTPUT
-Removed Valid: 1CC19 (𜰙) LOGIC GATE BUFFER
-Removed Valid: 1CC1A (𜰚) LOGIC GATE BUFFER WITH INVERTED INPUT
-Removed Valid: 1CC1B (𜰛) BOX DRAWINGS LIGHT HORIZONTAL AND UPPER RIGHT
-Removed Valid: 1CC1C (𜰜) BOX DRAWINGS LIGHT HORIZONTAL AND LOWER RIGHT
-Removed Valid: 1CC1D (𜰝) BOX DRAWINGS LIGHT TOP AND UPPER LEFT
-Removed Valid: 1CC1E (𜰞) BOX DRAWINGS LIGHT BOTTOM AND LOWER LEFT
-Removed Valid: 1CC1F (𜰟) BOX DRAWINGS DOUBLE DIAGONAL UPPER RIGHT TO LOWER LEFT
-Removed Valid: 1CC20 (𜰠) BOX DRAWINGS DOUBLE DIAGONAL UPPER LEFT TO LOWER RIGHT
-Removed Valid: 1CC21 (𜰡) SEPARATED BLOCK QUADRANT-1
-Removed Valid: 1CC22 (𜰢) SEPARATED BLOCK QUADRANT-2
-Removed Valid: 1CC23 (𜰣) SEPARATED BLOCK QUADRANT-12
-Removed Valid: 1CC24 (𜰤) SEPARATED BLOCK QUADRANT-3
-Removed Valid: 1CC25 (𜰥) SEPARATED BLOCK QUADRANT-13
-Removed Valid: 1CC26 (𜰦) SEPARATED BLOCK QUADRANT-23
-Removed Valid: 1CC27 (𜰧) SEPARATED BLOCK QUADRANT-123
-Removed Valid: 1CC28 (𜰨) SEPARATED BLOCK QUADRANT-4
-Removed Valid: 1CC29 (𜰩) SEPARATED BLOCK QUADRANT-14
-Removed Valid: 1CC2A (𜰪) SEPARATED BLOCK QUADRANT-24
-Removed Valid: 1CC2B (𜰫) SEPARATED BLOCK QUADRANT-124
-Removed Valid: 1CC2C (𜰬) SEPARATED BLOCK QUADRANT-34
-Removed Valid: 1CC2D (𜰭) SEPARATED BLOCK QUADRANT-134
-Removed Valid: 1CC2E (𜰮) SEPARATED BLOCK QUADRANT-234
-Removed Valid: 1CC2F (𜰯) SEPARATED BLOCK QUADRANT-1234
-Removed Valid: 1CC30 (𜰰) UPPER LEFT TWELFTH CIRCLE
-Removed Valid: 1CC31 (𜰱) UPPER CENTRE LEFT TWELFTH CIRCLE
-Removed Valid: 1CC32 (𜰲) UPPER CENTRE RIGHT TWELFTH CIRCLE
-Removed Valid: 1CC33 (𜰳) UPPER RIGHT TWELFTH CIRCLE
-Removed Valid: 1CC34 (𜰴) UPPER MIDDLE LEFT TWELFTH CIRCLE
-Removed Valid: 1CC35 (𜰵) UPPER LEFT QUARTER CIRCLE
-Removed Valid: 1CC36 (𜰶) UPPER RIGHT QUARTER CIRCLE
-Removed Valid: 1CC37 (𜰷) UPPER MIDDLE RIGHT TWELFTH CIRCLE
-Removed Valid: 1CC38 (𜰸) LOWER MIDDLE LEFT TWELFTH CIRCLE
-Removed Valid: 1CC39 (𜰹) LOWER LEFT QUARTER CIRCLE
-Removed Valid: 1CC3A (𜰺) LOWER RIGHT QUARTER CIRCLE
-Removed Valid: 1CC3B (𜰻) LOWER MIDDLE RIGHT TWELFTH CIRCLE
-Removed Valid: 1CC3C (𜰼) LOWER LEFT TWELFTH CIRCLE
-Removed Valid: 1CC3D (𜰽) LOWER CENTRE LEFT TWELFTH CIRCLE
-Removed Valid: 1CC3E (𜰾) LOWER CENTRE RIGHT TWELFTH CIRCLE
-Removed Valid: 1CC3F (𜰿) LOWER RIGHT TWELFTH CIRCLE
-Removed Valid: 1CC40 (𜱀) SPARSE HORIZONTAL FILL
-Removed Valid: 1CC41 (𜱁) SPARSE VERTICAL FILL
-Removed Valid: 1CC42 (𜱂) ORTHOGONAL CROSSHATCH FILL
-Removed Valid: 1CC43 (𜱃) DIAGONAL CROSSHATCH FILL
-Removed Valid: 1CC44 (𜱄) DENSE VERTICAL FILL
-Removed Valid: 1CC45 (𜱅) DENSE HORIZONTAL FILL
-Removed Valid: 1CC46 (𜱆) SPECKLE FILL FRAME-1
-Removed Valid: 1CC47 (𜱇) SPECKLE FILL FRAME-2
-Removed Valid: 1CC5D (𜱝) BOTTOM HALF LEFT-FACING ROBOT
-Removed Valid: 1CC5E (𜱞) BOTTOM HALF FORWARD-FACING ROBOT
-Removed Valid: 1CC5F (𜱟) BOTTOM HALF RIGHT-FACING ROBOT
-Removed Valid: 1CC60 (𜱠) LEFT-POINTING ATOMIC BOMB
-Removed Valid: 1CC61 (𜱡) UP-POINTING ATOMIC BOMB
-Removed Valid: 1CC62 (𜱢) RIGHT-POINTING ATOMIC BOMB
-Removed Valid: 1CC63 (𜱣) DOWN-POINTING ATOMIC BOMB
-Removed Valid: 1CC64 (𜱤) MUSHROOM CLOUD
-Removed Valid: 1CC65 (𜱥) LEFT-POINTING RIFLE
-Removed Valid: 1CC66 (𜱦) UP-POINTING RIFLE
-Removed Valid: 1CC67 (𜱧) RIGHT-POINTING RIFLE
-Removed Valid: 1CC68 (𜱨) DOWN-POINTING RIFLE
-Removed Valid: 1CC6B (𜱫) BLACK LARGE CIRCLE MINUS LEFT QUARTER SECTION
-Removed Valid: 1CC6C (𜱬) BLACK LARGE CIRCLE MINUS UPPER QUARTER SECTION
-Removed Valid: 1CC6D (𜱭) BLACK LARGE CIRCLE MINUS RIGHT QUARTER SECTION
-Removed Valid: 1CC6E (𜱮) BLACK LARGE CIRCLE MINUS LOWER QUARTER SECTION
-Removed Valid: 1CC6F (𜱯) BLACK NEUTRAL FACE
-Removed Valid: 1CC70 (𜱰) LEFT-FACING SNAKE HEAD WITH OPEN MOUTH
-Removed Valid: 1CC71 (𜱱) UP-FACING SNAKE HEAD WITH OPEN MOUTH
-Removed Valid: 1CC72 (𜱲) RIGHT-FACING SNAKE HEAD WITH OPEN MOUTH
-Removed Valid: 1CC73 (𜱳) DOWN-FACING SNAKE HEAD WITH OPEN MOUTH
-Removed Valid: 1CC74 (𜱴) LEFT-FACING SNAKE HEAD WITH CLOSED MOUTH
-Removed Valid: 1CC75 (𜱵) UP-FACING SNAKE HEAD WITH CLOSED MOUTH
-Removed Valid: 1CC76 (𜱶) RIGHT-FACING SNAKE HEAD WITH CLOSED MOUTH
-Removed Valid: 1CC77 (𜱷) DOWN-FACING SNAKE HEAD WITH CLOSED MOUTH
-Removed Valid: 1CC78 (𜱸) LEFT-POINTING ENERGY WAVE
-Removed Valid: 1CC79 (𜱹) UP-POINTING ENERGY WAVE
-Removed Valid: 1CC7A (𜱺) RIGHT-POINTING ENERGY WAVE
-Removed Valid: 1CC7B (𜱻) DOWN-POINTING ENERGY WAVE
-Removed Valid: 1CC7C (𜱼) SQUARE SPIRAL FROM TOP LEFT
-Removed Valid: 1CC7D (𜱽) SQUARE SPIRAL FROM TOP RIGHT
-Removed Valid: 1CC7E (𜱾) SQUARE SPIRAL FROM BOTTOM RIGHT
-Removed Valid: 1CC7F (𜱿) SQUARE SPIRAL FROM BOTTOM LEFT
-Removed Valid: 1CC80 (𜲀) STRIPED LEFT-POINTING TRIANGLE
-Removed Valid: 1CC81 (𜲁) STRIPED UP-POINTING TRIANGLE
-Removed Valid: 1CC82 (𜲂) STRIPED RIGHT-POINTING TRIANGLE
-Removed Valid: 1CC83 (𜲃) STRIPED DOWN-POINTING TRIANGLE
-Removed Valid: 1CC84 (𜲄) VERTICAL LADDER
-Removed Valid: 1CC85 (𜲅) HORIZONTAL LADDER
-Removed Valid: 1CC86 (𜲆) WHITE LOWER LEFT POINTER
-Removed Valid: 1CC87 (𜲇) WHITE LOWER RIGHT POINTER
-Removed Valid: 1CC88 (𜲈) TWO RINGS ALIGNED HORIZONTALLY
-Removed Valid: 1CC89 (𜲉) SQUARE FOUR CORNER SALTIRES
-Removed Valid: 1CC8A (𜲊) SQUARE FOUR CORNER DIAGONALS
-Removed Valid: 1CC8B (𜲋) SQUARE FOUR CORNER BLACK TRIANGLES
-Removed Valid: 1CC8D (𜲍) INVERSE BLACK DIAMOND
-Removed Valid: 1CC8E (𜲎) LEFT AND UPPER ONE EIGHTH BLOCK CONTAINING BLACK SMALL SQUARE
-Removed Valid: 1CC8F (𜲏) INVERSE BLACK SMALL SQUARE
-Removed Valid: 1CC90 (𜲐) VERTICAL LINE WITH FOUR TICK MARKS
-Removed Valid: 1CC91 (𜲑) HORIZONTAL LINE WITH FOUR TICK MARKS
-Removed Valid: 1CC9E (𜲞) LEFT-POINTING TANK
-Removed Valid: 1CC9F (𜲟) RIGHT-POINTING TANK
-Removed Valid: 1CCA0 (𜲠) LEFT-POINTING ROCKET BOOSTER
-Removed Valid: 1CCA1 (𜲡) RIGHT-POINTING ROCKET BOOSTER
-Removed Valid: 1CCA2 (𜲢) LEFT-POINTING ROLLER COASTER CAR
-Removed Valid: 1CCA3 (𜲣) RIGHT-POINTING ROLLER COASTER CAR
-Removed Valid: 1CCAA (𜲪) LOWER LEFT QUADRANT SMILING FACE
-Removed Valid: 1CCAB (𜲫) LOWER RIGHT QUADRANT SMILING FACE
-Removed Valid: 1CCAC (𜲬) LOWER LEFT QUADRANT NEUTRAL FACE
-Removed Valid: 1CCAD (𜲭) LOWER RIGHT QUADRANT NEUTRAL FACE
-Removed Valid: 1CCAE (𜲮) LOWER LEFT QUADRANT FACE WITH OPEN MOUTH
-Removed Valid: 1CCAF (𜲯) LOWER RIGHT QUADRANT FACE WITH OPEN MOUTH
-Removed Valid: 1CCB0 (𜲰) LOWER LEFT QUADRANT FROWNING FACE
-Removed Valid: 1CCB1 (𜲱) LOWER RIGHT QUADRANT FROWNING FACE
-Removed Valid: 1CCB2 (𜲲) UPPER LEFT QUADRANT TELEVISION
-Removed Valid: 1CCB3 (𜲳) UPPER RIGHT QUADRANT TELEVISION
-Removed Valid: 1CCB4 (𜲴) LOWER LEFT QUADRANT TELEVISION
-Removed Valid: 1CCB5 (𜲵) LOWER RIGHT QUADRANT TELEVISION
-Removed Valid: 1CCB6 (𜲶) UPPER LEFT QUADRANT MICROCOMPUTER
-Removed Valid: 1CCB7 (𜲷) UPPER RIGHT QUADRANT MICROCOMPUTER
-Removed Valid: 1CCB8 (𜲸) LOWER LEFT QUADRANT MICROCOMPUTER
-Removed Valid: 1CCB9 (𜲹) LOWER RIGHT QUADRANT MICROCOMPUTER
-Removed Valid: 1CCBA (𜲺) UPPER LEFT QUADRANT CHESS KING
-Removed Valid: 1CCBB (𜲻) UPPER RIGHT QUADRANT CHESS KING
-Removed Valid: 1CCBC (𜲼) LOWER LEFT QUADRANT CHESS KING
-Removed Valid: 1CCBD (𜲽) LOWER RIGHT QUADRANT CHESS KING
-Removed Valid: 1CCBE (𜲾) UPPER LEFT QUADRANT CHESS QUEEN
-Removed Valid: 1CCBF (𜲿) UPPER RIGHT QUADRANT CHESS QUEEN
-Removed Valid: 1CCC0 (𜳀) LOWER LEFT QUADRANT CHESS QUEEN
-Removed Valid: 1CCC1 (𜳁) LOWER RIGHT QUADRANT CHESS QUEEN
-Removed Valid: 1CCC2 (𜳂) UPPER LEFT QUADRANT CHESS ROOK
-Removed Valid: 1CCC3 (𜳃) UPPER RIGHT QUADRANT CHESS ROOK
-Removed Valid: 1CCC4 (𜳄) LOWER LEFT QUADRANT CHESS ROOK
-Removed Valid: 1CCC5 (𜳅) LOWER RIGHT QUADRANT CHESS ROOK
-Removed Valid: 1CCC6 (𜳆) UPPER LEFT QUADRANT CHESS BISHOP
-Removed Valid: 1CCC7 (𜳇) UPPER RIGHT QUADRANT CHESS BISHOP
-Removed Valid: 1CCC8 (𜳈) LOWER LEFT QUADRANT CHESS BISHOP
-Removed Valid: 1CCC9 (𜳉) LOWER RIGHT QUADRANT CHESS BISHOP
-Removed Valid: 1CCCA (𜳊) UPPER LEFT QUADRANT CHESS KNIGHT
-Removed Valid: 1CCCB (𜳋) UPPER RIGHT QUADRANT CHESS KNIGHT
-Removed Valid: 1CCCC (𜳌) LOWER LEFT QUADRANT CHESS KNIGHT
-Removed Valid: 1CCCD (𜳍) LOWER RIGHT QUADRANT CHESS KNIGHT
-Removed Valid: 1CCCE (𜳎) UPPER LEFT QUADRANT CHESS PAWN
-Removed Valid: 1CCCF (𜳏) UPPER RIGHT QUADRANT CHESS PAWN
-Removed Valid: 1CCD0 (𜳐) LOWER LEFT QUADRANT CHESS PAWN
-Removed Valid: 1CCD1 (𜳑) LOWER RIGHT QUADRANT CHESS PAWN
-Removed Valid: 1CCD2 (𜳒) UPPER LEFT QUADRANT STANDING KNIGHT
-Removed Valid: 1CCD3 (𜳓) UPPER RIGHT QUADRANT STANDING KNIGHT
-Removed Valid: 1CCD4 (𜳔) LOWER LEFT QUADRANT STANDING KNIGHT
-Removed Valid: 1CCD5 (𜳕) LOWER RIGHT QUADRANT STANDING KNIGHT
-Removed Mapped: 1CCD6 (𜳖) OUTLINED LATIN CAPITAL LETTER A => [61] (a) LATIN SMALL LETTER A
-Removed Valid: 1CD00 (𜴀) BLOCK OCTANT-3
-Removed Valid: 1CD01 (𜴁) BLOCK OCTANT-23
-Removed Valid: 1CD02 (𜴂) BLOCK OCTANT-123
-Removed Valid: 1CD03 (𜴃) BLOCK OCTANT-4
-Removed Valid: 1CD04 (𜴄) BLOCK OCTANT-14
-Removed Valid: 1CD05 (𜴅) BLOCK OCTANT-124
-Removed Valid: 1CD06 (𜴆) BLOCK OCTANT-34
-Removed Valid: 1CD07 (𜴇) BLOCK OCTANT-134
-Removed Valid: 1CD08 (𜴈) BLOCK OCTANT-234
-Removed Valid: 1CD09 (𜴉) BLOCK OCTANT-5
-Removed Valid: 1CD0A (𜴊) BLOCK OCTANT-15
-Removed Valid: 1CD0B (𜴋) BLOCK OCTANT-25
-Removed Valid: 1CD0C (𜴌) BLOCK OCTANT-125
-Removed Valid: 1CD0D (𜴍) BLOCK OCTANT-135
-Removed Valid: 1CD0E (𜴎) BLOCK OCTANT-235
-Removed Valid: 1CD0F (𜴏) BLOCK OCTANT-1235
-Removed Valid: 1CD10 (𜴐) BLOCK OCTANT-45
-Removed Valid: 1CD11 (𜴑) BLOCK OCTANT-145
-Removed Valid: 1CD12 (𜴒) BLOCK OCTANT-245
-Removed Valid: 1CD13 (𜴓) BLOCK OCTANT-1245
-Removed Valid: 1CD14 (𜴔) BLOCK OCTANT-345
-Removed Valid: 1CD15 (𜴕) BLOCK OCTANT-1345
-Removed Valid: 1CD16 (𜴖) BLOCK OCTANT-2345
-Removed Valid: 1CD17 (𜴗) BLOCK OCTANT-12345
-Removed Valid: 1CD18 (𜴘) BLOCK OCTANT-6
-Removed Valid: 1CD19 (𜴙) BLOCK OCTANT-16
-Removed Valid: 1CD1A (𜴚) BLOCK OCTANT-26
-Removed Valid: 1CD1B (𜴛) BLOCK OCTANT-126
-Removed Valid: 1CD1C (𜴜) BLOCK OCTANT-36
-Removed Valid: 1CD1D (𜴝) BLOCK OCTANT-136
-Removed Valid: 1CD1E (𜴞) BLOCK OCTANT-236
-Removed Valid: 1CD1F (𜴟) BLOCK OCTANT-1236
-Removed Valid: 1CD20 (𜴠) BLOCK OCTANT-146
-Removed Valid: 1CD21 (𜴡) BLOCK OCTANT-246
-Removed Valid: 1CD22 (𜴢) BLOCK OCTANT-1246
-Removed Valid: 1CD23 (𜴣) BLOCK OCTANT-346
-Removed Valid: 1CD24 (𜴤) BLOCK OCTANT-1346
-Removed Valid: 1CD25 (𜴥) BLOCK OCTANT-2346
-Removed Valid: 1CD26 (𜴦) BLOCK OCTANT-12346
-Removed Valid: 1CD27 (𜴧) BLOCK OCTANT-56
-Removed Valid: 1CD28 (𜴨) BLOCK OCTANT-156
-Removed Valid: 1CD29 (𜴩) BLOCK OCTANT-256
-Removed Valid: 1CD2A (𜴪) BLOCK OCTANT-1256
-Removed Valid: 1CD2B (𜴫) BLOCK OCTANT-356
-Removed Valid: 1CD2C (𜴬) BLOCK OCTANT-1356
-Removed Valid: 1CD2D (𜴭) BLOCK OCTANT-2356
-Removed Valid: 1CD2E (𜴮) BLOCK OCTANT-12356
-Removed Valid: 1CD2F (𜴯) BLOCK OCTANT-456
-Removed Valid: 1CD30 (𜴰) BLOCK OCTANT-1456
-Removed Valid: 1CD31 (𜴱) BLOCK OCTANT-2456
-Removed Valid: 1CD32 (𜴲) BLOCK OCTANT-12456
-Removed Valid: 1CD33 (𜴳) BLOCK OCTANT-3456
-Removed Valid: 1CD34 (𜴴) BLOCK OCTANT-13456
-Removed Valid: 1CD35 (𜴵) BLOCK OCTANT-23456
-Removed Valid: 1CD36 (𜴶) BLOCK OCTANT-17
-Removed Valid: 1CD37 (𜴷) BLOCK OCTANT-27
-Removed Valid: 1CD38 (𜴸) BLOCK OCTANT-127
-Removed Valid: 1CD39 (𜴹) BLOCK OCTANT-37
-Removed Valid: 1CD3A (𜴺) BLOCK OCTANT-137
-Removed Valid: 1CD3B (𜴻) BLOCK OCTANT-237
-Removed Valid: 1CD3C (𜴼) BLOCK OCTANT-1237
-Removed Valid: 1CD3D (𜴽) BLOCK OCTANT-47
-Removed Valid: 1CD3E (𜴾) BLOCK OCTANT-147
-Removed Valid: 1CD3F (𜴿) BLOCK OCTANT-247
-Removed Valid: 1CD40 (𜵀) BLOCK OCTANT-1247
-Removed Valid: 1CD41 (𜵁) BLOCK OCTANT-347
-Removed Valid: 1CD42 (𜵂) BLOCK OCTANT-1347
-Removed Valid: 1CD43 (𜵃) BLOCK OCTANT-2347
-Removed Valid: 1CD44 (𜵄) BLOCK OCTANT-12347
-Removed Valid: 1CD45 (𜵅) BLOCK OCTANT-157
-Removed Valid: 1CD46 (𜵆) BLOCK OCTANT-257
-Removed Valid: 1CD47 (𜵇) BLOCK OCTANT-1257
-Removed Valid: 1CD48 (𜵈) BLOCK OCTANT-357
-Removed Valid: 1CD49 (𜵉) BLOCK OCTANT-2357
-Removed Valid: 1CD4A (𜵊) BLOCK OCTANT-12357
-Removed Valid: 1CD4B (𜵋) BLOCK OCTANT-457
-Removed Valid: 1CD4C (𜵌) BLOCK OCTANT-1457
-Removed Valid: 1CD4D (𜵍) BLOCK OCTANT-12457
-Removed Valid: 1CD4E (𜵎) BLOCK OCTANT-3457
-Removed Valid: 1CD4F (𜵏) BLOCK OCTANT-13457
-Removed Valid: 1CD50 (𜵐) BLOCK OCTANT-23457
-Removed Valid: 1CD51 (𜵑) BLOCK OCTANT-67
-Removed Valid: 1CD52 (𜵒) BLOCK OCTANT-167
-Removed Valid: 1CD53 (𜵓) BLOCK OCTANT-267
-Removed Valid: 1CD54 (𜵔) BLOCK OCTANT-1267
-Removed Valid: 1CD55 (𜵕) BLOCK OCTANT-367
-Removed Valid: 1CD56 (𜵖) BLOCK OCTANT-1367
-Removed Valid: 1CD57 (𜵗) BLOCK OCTANT-2367
-Removed Valid: 1CD58 (𜵘) BLOCK OCTANT-12367
-Removed Valid: 1CD59 (𜵙) BLOCK OCTANT-467
-Removed Valid: 1CD5A (𜵚) BLOCK OCTANT-1467
-Removed Valid: 1CD5B (𜵛) BLOCK OCTANT-2467
-Removed Valid: 1CD5C (𜵜) BLOCK OCTANT-12467
-Removed Valid: 1CD5D (𜵝) BLOCK OCTANT-3467
-Removed Valid: 1CD5E (𜵞) BLOCK OCTANT-13467
-Removed Valid: 1CD5F (𜵟) BLOCK OCTANT-23467
-Removed Valid: 1CD60 (𜵠) BLOCK OCTANT-123467
-Removed Valid: 1CD61 (𜵡) BLOCK OCTANT-567
-Removed Valid: 1CD62 (𜵢) BLOCK OCTANT-1567
-Removed Valid: 1CD63 (𜵣) BLOCK OCTANT-2567
-Removed Valid: 1CD64 (𜵤) BLOCK OCTANT-12567
-Removed Valid: 1CD65 (𜵥) BLOCK OCTANT-3567
-Removed Valid: 1CD66 (𜵦) BLOCK OCTANT-13567
-Removed Valid: 1CD67 (𜵧) BLOCK OCTANT-23567
-Removed Valid: 1CD68 (𜵨) BLOCK OCTANT-123567
-Removed Valid: 1CD69 (𜵩) BLOCK OCTANT-4567
-Removed Valid: 1CD6A (𜵪) BLOCK OCTANT-14567
-Removed Valid: 1CD6B (𜵫) BLOCK OCTANT-24567
-Removed Valid: 1CD6C (𜵬) BLOCK OCTANT-124567
-Removed Valid: 1CD6D (𜵭) BLOCK OCTANT-34567
-Removed Valid: 1CD6E (𜵮) BLOCK OCTANT-134567
-Removed Valid: 1CD6F (𜵯) BLOCK OCTANT-234567
-Removed Valid: 1CD70 (𜵰) BLOCK OCTANT-1234567
-Removed Valid: 1CD71 (𜵱) BLOCK OCTANT-18
-Removed Valid: 1CD72 (𜵲) BLOCK OCTANT-28
-Removed Valid: 1CD73 (𜵳) BLOCK OCTANT-128
-Removed Valid: 1CD74 (𜵴) BLOCK OCTANT-38
-Removed Valid: 1CD75 (𜵵) BLOCK OCTANT-138
-Removed Valid: 1CD76 (𜵶) BLOCK OCTANT-238
-Removed Valid: 1CD77 (𜵷) BLOCK OCTANT-1238
-Removed Valid: 1CD78 (𜵸) BLOCK OCTANT-48
-Removed Valid: 1CD79 (𜵹) BLOCK OCTANT-148
-Removed Valid: 1CD7A (𜵺) BLOCK OCTANT-248
-Removed Valid: 1CD7B (𜵻) BLOCK OCTANT-1248
-Removed Valid: 1CD7C (𜵼) BLOCK OCTANT-348
-Removed Valid: 1CD7D (𜵽) BLOCK OCTANT-1348
-Removed Valid: 1CD7E (𜵾) BLOCK OCTANT-2348
-Removed Valid: 1CD7F (𜵿) BLOCK OCTANT-12348
-Removed Valid: 1CD80 (𜶀) BLOCK OCTANT-58
-Removed Valid: 1CD81 (𜶁) BLOCK OCTANT-158
-Removed Valid: 1CD82 (𜶂) BLOCK OCTANT-258
-Removed Valid: 1CD83 (𜶃) BLOCK OCTANT-1258
-Removed Valid: 1CD84 (𜶄) BLOCK OCTANT-358
-Removed Valid: 1CD85 (𜶅) BLOCK OCTANT-1358
-Removed Valid: 1CD86 (𜶆) BLOCK OCTANT-2358
-Removed Valid: 1CD87 (𜶇) BLOCK OCTANT-12358
-Removed Valid: 1CD88 (𜶈) BLOCK OCTANT-458
-Removed Valid: 1CD89 (𜶉) BLOCK OCTANT-1458
-Removed Valid: 1CD8A (𜶊) BLOCK OCTANT-2458
-Removed Valid: 1CD8B (𜶋) BLOCK OCTANT-12458
-Removed Valid: 1CD8C (𜶌) BLOCK OCTANT-3458
-Removed Valid: 1CD8D (𜶍) BLOCK OCTANT-13458
-Removed Valid: 1CD8E (𜶎) BLOCK OCTANT-23458
-Removed Valid: 1CD8F (𜶏) BLOCK OCTANT-123458
-Removed Valid: 1CD90 (𜶐) BLOCK OCTANT-168
-Removed Valid: 1CD91 (𜶑) BLOCK OCTANT-268
-Removed Valid: 1CD92 (𜶒) BLOCK OCTANT-1268
-Removed Valid: 1CD93 (𜶓) BLOCK OCTANT-368
-Removed Valid: 1CD94 (𜶔) BLOCK OCTANT-2368
-Removed Valid: 1CD95 (𜶕) BLOCK OCTANT-12368
-Removed Valid: 1CD96 (𜶖) BLOCK OCTANT-468
-Removed Valid: 1CD97 (𜶗) BLOCK OCTANT-1468
-Removed Valid: 1CD98 (𜶘) BLOCK OCTANT-12468
-Removed Valid: 1CD99 (𜶙) BLOCK OCTANT-3468
-Removed Valid: 1CD9A (𜶚) BLOCK OCTANT-13468
-Removed Valid: 1CD9B (𜶛) BLOCK OCTANT-23468
-Removed Valid: 1CD9C (𜶜) BLOCK OCTANT-568
-Removed Valid: 1CD9D (𜶝) BLOCK OCTANT-1568
-Removed Valid: 1CD9E (𜶞) BLOCK OCTANT-2568
-Removed Valid: 1CD9F (𜶟) BLOCK OCTANT-12568
-Removed Valid: 1CDA0 (𜶠) BLOCK OCTANT-3568
-Removed Valid: 1CDA1 (𜶡) BLOCK OCTANT-13568
-Removed Valid: 1CDA2 (𜶢) BLOCK OCTANT-23568
-Removed Valid: 1CDA3 (𜶣) BLOCK OCTANT-123568
-Removed Valid: 1CDA4 (𜶤) BLOCK OCTANT-4568
-Removed Valid: 1CDA5 (𜶥) BLOCK OCTANT-14568
-Removed Valid: 1CDA6 (𜶦) BLOCK OCTANT-24568
-Removed Valid: 1CDA7 (𜶧) BLOCK OCTANT-124568
-Removed Valid: 1CDA8 (𜶨) BLOCK OCTANT-34568
-Removed Valid: 1CDA9 (𜶩) BLOCK OCTANT-134568
-Removed Valid: 1CDAA (𜶪) BLOCK OCTANT-234568
-Removed Valid: 1CDAB (𜶫) BLOCK OCTANT-1234568
-Removed Valid: 1CDAC (𜶬) BLOCK OCTANT-178
-Removed Valid: 1CDAD (𜶭) BLOCK OCTANT-278
-Removed Valid: 1CDAE (𜶮) BLOCK OCTANT-1278
-Removed Valid: 1CDAF (𜶯) BLOCK OCTANT-378
-Removed Valid: 1CDB0 (𜶰) BLOCK OCTANT-1378
-Removed Valid: 1CDB1 (𜶱) BLOCK OCTANT-2378
-Removed Valid: 1CDB2 (𜶲) BLOCK OCTANT-12378
-Removed Valid: 1CDB3 (𜶳) BLOCK OCTANT-478
-Removed Valid: 1CDB4 (𜶴) BLOCK OCTANT-1478
-Removed Valid: 1CDB5 (𜶵) BLOCK OCTANT-2478
-Removed Valid: 1CDB6 (𜶶) BLOCK OCTANT-12478
-Removed Valid: 1CDB7 (𜶷) BLOCK OCTANT-3478
-Removed Valid: 1CDB8 (𜶸) BLOCK OCTANT-13478
-Removed Valid: 1CDB9 (𜶹) BLOCK OCTANT-23478
-Removed Valid: 1CDBA (𜶺) BLOCK OCTANT-123478
-Removed Valid: 1CDBB (𜶻) BLOCK OCTANT-578
-Removed Valid: 1CDBC (𜶼) BLOCK OCTANT-1578
-Removed Valid: 1CDBD (𜶽) BLOCK OCTANT-2578
-Removed Valid: 1CDBE (𜶾) BLOCK OCTANT-12578
-Removed Valid: 1CDBF (𜶿) BLOCK OCTANT-3578
-Removed Valid: 1CDC0 (𜷀) BLOCK OCTANT-13578
-Removed Valid: 1CDC1 (𜷁) BLOCK OCTANT-23578
-Removed Valid: 1CDC2 (𜷂) BLOCK OCTANT-123578
-Removed Valid: 1CDC3 (𜷃) BLOCK OCTANT-4578
-Removed Valid: 1CDC4 (𜷄) BLOCK OCTANT-14578
-Removed Valid: 1CDC5 (𜷅) BLOCK OCTANT-24578
-Removed Valid: 1CDC6 (𜷆) BLOCK OCTANT-124578
-Removed Valid: 1CDC7 (𜷇) BLOCK OCTANT-34578
-Removed Valid: 1CDC8 (𜷈) BLOCK OCTANT-134578
-Removed Valid: 1CDC9 (𜷉) BLOCK OCTANT-234578
-Removed Valid: 1CDCA (𜷊) BLOCK OCTANT-1234578
-Removed Valid: 1CDCB (𜷋) BLOCK OCTANT-678
-Removed Valid: 1CDCC (𜷌) BLOCK OCTANT-1678
-Removed Valid: 1CDCD (𜷍) BLOCK OCTANT-2678
-Removed Valid: 1CDCE (𜷎) BLOCK OCTANT-12678
-Removed Valid: 1CDCF (𜷏) BLOCK OCTANT-3678
-Removed Valid: 1CDD0 (𜷐) BLOCK OCTANT-13678
-Removed Valid: 1CDD1 (𜷑) BLOCK OCTANT-23678
-Removed Valid: 1CDD2 (𜷒) BLOCK OCTANT-123678
-Removed Valid: 1CDD3 (𜷓) BLOCK OCTANT-4678
-Removed Valid: 1CDD4 (𜷔) BLOCK OCTANT-14678
-Removed Valid: 1CDD5 (𜷕) BLOCK OCTANT-24678
-Removed Valid: 1CDD6 (𜷖) BLOCK OCTANT-124678
-Removed Valid: 1CDD7 (𜷗) BLOCK OCTANT-34678
-Removed Valid: 1CDD8 (𜷘) BLOCK OCTANT-134678
-Removed Valid: 1CDD9 (𜷙) BLOCK OCTANT-234678
-Removed Valid: 1CDDA (𜷚) BLOCK OCTANT-1234678
-Removed Valid: 1CDDB (𜷛) BLOCK OCTANT-15678
-Removed Valid: 1CDDC (𜷜) BLOCK OCTANT-25678
-Removed Valid: 1CDDD (𜷝) BLOCK OCTANT-125678
-Removed Valid: 1CDDE (𜷞) BLOCK OCTANT-35678
-Removed Valid: 1CDDF (𜷟) BLOCK OCTANT-235678
-Removed Valid: 1CDE0 (𜷠) BLOCK OCTANT-1235678
-Removed Valid: 1CDE1 (𜷡) BLOCK OCTANT-45678
-Removed Valid: 1CDE2 (𜷢) BLOCK OCTANT-145678
-Removed Valid: 1CDE3 (𜷣) BLOCK OCTANT-1245678
-Removed Valid: 1CDE4 (𜷤) BLOCK OCTANT-1345678
-Removed Valid: 1CDE5 (𜷥) BLOCK OCTANT-2345678
-Removed Valid: 1CDE6 (𜷦) TOP HALF STANDING PERSON
-Removed Valid: 1CDE7 (𜷧) BOTTOM HALF STANDING PERSON
-Removed Valid: 1CDE8 (𜷨) TOP HALF RIGHT-FACING RUNNER FRAME-1
-Removed Valid: 1CDE9 (𜷩) BOTTOM HALF RIGHT-FACING RUNNER FRAME-1
-Removed Valid: 1CDEA (𜷪) TOP HALF RIGHT-FACING RUNNER FRAME-2
-Removed Valid: 1CDEB (𜷫) BOTTOM HALF RIGHT-FACING RUNNER FRAME-2
-Removed Valid: 1CDEC (𜷬) TOP HALF LEFT-FACING RUNNER FRAME-1
-Removed Valid: 1CDED (𜷭) BOTTOM HALF LEFT-FACING RUNNER FRAME-1
-Removed Valid: 1CDEE (𜷮) TOP HALF LEFT-FACING RUNNER FRAME-2
-Removed Valid: 1CDEF (𜷯) BOTTOM HALF LEFT-FACING RUNNER FRAME-2
-Removed Valid: 1CDF0 (𜷰) TOP HALF FORWARD-FACING RUNNER
-Removed Valid: 1CDF1 (𜷱) BOTTOM HALF FORWARD-FACING RUNNER FRAME-1
-Removed Valid: 1CDF2 (𜷲) BOTTOM HALF FORWARD-FACING RUNNER FRAME-2
-Removed Valid: 1CDF3 (𜷳) BOTTOM HALF FORWARD-FACING RUNNER FRAME-3
-Removed Valid: 1CDF4 (𜷴) BOTTOM HALF FORWARD-FACING RUNNER FRAME-4
-Removed Valid: 1CDFA (𜷺) SMALL UP-POINTING AIRPLANE
-Removed Valid: 1CDFB (𜷻) UP-POINTING FROG
-Removed Valid: 1CDFC (𜷼) DOWN-POINTING FROG
-Removed Valid: 1CE00 (𜸀) RIGHT HALF AND LEFT HALF WHITE CIRCLE
-Removed Valid: 1CE01 (𜸁) LOWER HALF AND UPPER HALF WHITE CIRCLE
-Removed Valid: 1CE02 (𜸂) EXPLOSION AT HORIZON
-Removed Valid: 1CE03 (𜸃) UPPER HALF HEAVY WHITE SQUARE
-Removed Valid: 1CE04 (𜸄) LOWER HALF HEAVY WHITE SQUARE
-Removed Valid: 1CE05 (𜸅) HEAVY WHITE SQUARE CONTAINING BLACK VERY SMALL SQUARE
-Removed Valid: 1CE06 (𜸆) WHITE VERTICAL RECTANGLE WITH HORIZONTAL BAR
-Removed Valid: 1CE07 (𜸇) TOP LEFT BLACK LEFT-POINTING SMALL TRIANGLE
-Removed Valid: 1CE08 (𜸈) FUNNEL
-Removed Valid: 1CE09 (𜸉) BOX DRAWINGS DOUBLE DIAGONAL LOWER LEFT TO MIDDLE CENTRE TO LOWER RIGHT
-Removed Valid: 1CE0A (𜸊) BOX DRAWINGS DOUBLE DIAGONAL UPPER LEFT TO MIDDLE CENTRE TO UPPER RIGHT
-Removed Valid: 1CE0B (𜸋) LEFT HALF WHITE ELLIPSE
-Removed Valid: 1CE0C (𜸌) RIGHT HALF WHITE ELLIPSE
-Removed Valid: 1CE0D (𜸍) LEFT HALF TRIPLE DASH HORIZONTAL
-Removed Valid: 1CE0E (𜸎) RIGHT HALF TRIPLE DASH HORIZONTAL
-Removed Valid: 1CE0F (𜸏) HORIZONTAL LINE WITH TICK MARK
-Removed Valid: 1CE10 (𜸐) LEFT HALF HORIZONTAL LINE WITH THREE TICK MARKS
-Removed Valid: 1CE11 (𜸑) RIGHT HALF HORIZONTAL LINE WITH THREE TICK MARKS
-Removed Valid: 1CE12 (𜸒) HORIZONTAL LINE WITH THREE TICK MARKS
-Removed Valid: 1CE13 (𜸓) LOWER HALF VERTICAL LINE WITH THREE TICK MARKS
-Removed Valid: 1CE14 (𜸔) UPPER HALF VERTICAL LINE WITH THREE TICK MARKS
-Removed Valid: 1CE15 (𜸕) VERTICAL LINE WITH THREE TICK MARKS
-Removed Valid: 1CE16 (𜸖) BOX DRAWINGS LIGHT VERTICAL AND TOP RIGHT
-Removed Valid: 1CE17 (𜸗) BOX DRAWINGS LIGHT VERTICAL AND BOTTOM RIGHT
-Removed Valid: 1CE18 (𜸘) BOX DRAWINGS LIGHT VERTICAL AND TOP LEFT
-Removed Valid: 1CE19 (𜸙) BOX DRAWINGS LIGHT VERTICAL AND BOTTOM LEFT
-Removed Valid: 1CE1A (𜸚) LARGE TYPE PIECE UPPER LEFT ARC
-Removed Valid: 1CE1B (𜸛) LARGE TYPE PIECE UPPER LEFT CORNER
-Removed Valid: 1CE1C (𜸜) LARGE TYPE PIECE UPPER TERMINAL
-Removed Valid: 1CE1D (𜸝) LARGE TYPE PIECE UPPER LEFT CROTCH
-Removed Valid: 1CE1E (𜸞) LARGE TYPE PIECE LEFT ARM
-Removed Valid: 1CE1F (𜸟) LARGE TYPE PIECE CROSSBAR
-Removed Valid: 1CE20 (𜸠) LARGE TYPE PIECE CROSSBAR WITH LOWER STEM
-Removed Valid: 1CE21 (𜸡) LARGE TYPE PIECE UPPER HALF VERTEX OF M
-Removed Valid: 1CE22 (𜸢) LARGE TYPE PIECE DIAGONAL LOWER LEFT
-Removed Valid: 1CE23 (𜸣) LARGE TYPE PIECE SHORT UPPER TERMINAL
-Removed Valid: 1CE24 (𜸤) LARGE TYPE PIECE UPPER RIGHT ARC
-Removed Valid: 1CE25 (𜸥) LARGE TYPE PIECE RIGHT ARM
-Removed Valid: 1CE26 (𜸦) LARGE TYPE PIECE UPPER RIGHT CROTCH
-Removed Valid: 1CE27 (𜸧) LARGE TYPE PIECE UPPER RIGHT CORNER
-Removed Valid: 1CE28 (𜸨) LARGE TYPE PIECE STEM WITH RIGHT CROSSBAR
-Removed Valid: 1CE29 (𜸩) LARGE TYPE PIECE STEM
-Removed Valid: 1CE2A (𜸪) LARGE TYPE PIECE DIAGONAL UPPER RIGHT AND LOWER RIGHT
-Removed Valid: 1CE2B (𜸫) LARGE TYPE PIECE DIAGONAL UPPER RIGHT
-Removed Valid: 1CE2C (𜸬) LARGE TYPE PIECE DIAGONAL LOWER RIGHT
-Removed Valid: 1CE2D (𜸭) LARGE TYPE PIECE SHORT LOWER TERMINAL
-Removed Valid: 1CE2E (𜸮) LARGE TYPE PIECE LOWER LEFT AND UPPER LEFT ARC
-Removed Valid: 1CE2F (𜸯) LARGE TYPE PIECE CENTRE OF K
-Removed Valid: 1CE30 (𜸰) LARGE TYPE PIECE LOWER HALF VERTEX OF M
-Removed Valid: 1CE31 (𜸱) LARGE TYPE PIECE UPPER HALF VERTEX OF W
-Removed Valid: 1CE32 (𜸲) LARGE TYPE PIECE CENTRE OF X
-Removed Valid: 1CE33 (𜸳) LARGE TYPE PIECE CENTRE OF Y
-Removed Valid: 1CE34 (𜸴) LARGE TYPE PIECE CENTRE OF Z WITH CROSSBAR
-Removed Valid: 1CE35 (𜸵) LARGE TYPE PIECE RAISED UPPER LEFT ARC
-Removed Valid: 1CE36 (𜸶) LARGE TYPE PIECE STEM WITH LEFT CROSSBAR
-Removed Valid: 1CE37 (𜸷) LARGE TYPE PIECE LOWER RIGHT AND UPPER RIGHT ARC
-Removed Valid: 1CE38 (𜸸) LARGE TYPE PIECE DIAGONAL UPPER LEFT AND LOWER LEFT
-Removed Valid: 1CE39 (𜸹) LARGE TYPE PIECE STEM WITH LEFT JOINT
-Removed Valid: 1CE3A (𜸺) LARGE TYPE PIECE STEM WITH CROSSBAR
-Removed Valid: 1CE3B (𜸻) LARGE TYPE PIECE DIAGONAL UPPER LEFT
-Removed Valid: 1CE3C (𜸼) LARGE TYPE PIECE LOWER TERMINAL
-Removed Valid: 1CE3D (𜸽) LARGE TYPE PIECE LOWER LEFT CORNER
-Removed Valid: 1CE3E (𜸾) LARGE TYPE PIECE LOWER LEFT ARC
-Removed Valid: 1CE3F (𜸿) LARGE TYPE PIECE LOWER LEFT CROTCH
-Removed Valid: 1CE40 (𜹀) LARGE TYPE PIECE CROSSBAR WITH UPPER STEM
-Removed Valid: 1CE41 (𜹁) LARGE TYPE PIECE VERTEX OF V
-Removed Valid: 1CE42 (𜹂) LARGE TYPE PIECE LOWER HALF VERTEX OF W
-Removed Valid: 1CE43 (𜹃) LARGE TYPE PIECE LOWER RIGHT ARC
-Removed Valid: 1CE44 (𜹄) LARGE TYPE PIECE LOWER RIGHT CORNER
-Removed Valid: 1CE45 (𜹅) LARGE TYPE PIECE LOWER RIGHT ARC WITH TAIL
-Removed Valid: 1CE46 (𜹆) LARGE TYPE PIECE LOWER RIGHT CROTCH
-Removed Valid: 1CE47 (𜹇) LARGE TYPE PIECE STEM-45
-Removed Valid: 1CE48 (𜹈) LARGE TYPE PIECE STEM-2345
-Removed Valid: 1CE49 (𜹉) LARGE TYPE PIECE STEM-4
-Removed Valid: 1CE4A (𜹊) LARGE TYPE PIECE STEM-34
-Removed Valid: 1CE4B (𜹋) LARGE TYPE PIECE STEM-234
-Removed Valid: 1CE4C (𜹌) LARGE TYPE PIECE STEM-1234
-Removed Valid: 1CE4D (𜹍) LARGE TYPE PIECE STEM-3
-Removed Valid: 1CE4E (𜹎) LARGE TYPE PIECE STEM-23
-Removed Valid: 1CE4F (𜹏) LARGE TYPE PIECE STEM-2
-Removed Valid: 1CE50 (𜹐) LARGE TYPE PIECE STEM-12
-Removed Valid: 1CE51 (𜹑) SEPARATED BLOCK SEXTANT-1
-Removed Valid: 1CE52 (𜹒) SEPARATED BLOCK SEXTANT-2
-Removed Valid: 1CE53 (𜹓) SEPARATED BLOCK SEXTANT-12
-Removed Valid: 1CE54 (𜹔) SEPARATED BLOCK SEXTANT-3
-Removed Valid: 1CE55 (𜹕) SEPARATED BLOCK SEXTANT-13
-Removed Valid: 1CE56 (𜹖) SEPARATED BLOCK SEXTANT-23
-Removed Valid: 1CE57 (𜹗) SEPARATED BLOCK SEXTANT-123
-Removed Valid: 1CE58 (𜹘) SEPARATED BLOCK SEXTANT-4
-Removed Valid: 1CE59 (𜹙) SEPARATED BLOCK SEXTANT-14
-Removed Valid: 1CE5A (𜹚) SEPARATED BLOCK SEXTANT-24
-Removed Valid: 1CE5B (𜹛) SEPARATED BLOCK SEXTANT-124
-Removed Valid: 1CE5C (𜹜) SEPARATED BLOCK SEXTANT-34
-Removed Valid: 1CE5D (𜹝) SEPARATED BLOCK SEXTANT-134
-Removed Valid: 1CE5E (𜹞) SEPARATED BLOCK SEXTANT-234
-Removed Valid: 1CE5F (𜹟) SEPARATED BLOCK SEXTANT-1234
-Removed Valid: 1CE60 (𜹠) SEPARATED BLOCK SEXTANT-5
-Removed Valid: 1CE61 (𜹡) SEPARATED BLOCK SEXTANT-15
-Removed Valid: 1CE62 (𜹢) SEPARATED BLOCK SEXTANT-25
-Removed Valid: 1CE63 (𜹣) SEPARATED BLOCK SEXTANT-125
-Removed Valid: 1CE64 (𜹤) SEPARATED BLOCK SEXTANT-35
-Removed Valid: 1CE65 (𜹥) SEPARATED BLOCK SEXTANT-135
-Removed Valid: 1CE66 (𜹦) SEPARATED BLOCK SEXTANT-235
-Removed Valid: 1CE67 (𜹧) SEPARATED BLOCK SEXTANT-1235
-Removed Valid: 1CE68 (𜹨) SEPARATED BLOCK SEXTANT-45
-Removed Valid: 1CE69 (𜹩) SEPARATED BLOCK SEXTANT-145
-Removed Valid: 1CE6A (𜹪) SEPARATED BLOCK SEXTANT-245
-Removed Valid: 1CE6B (𜹫) SEPARATED BLOCK SEXTANT-1245
-Removed Valid: 1CE6C (𜹬) SEPARATED BLOCK SEXTANT-345
-Removed Valid: 1CE6D (𜹭) SEPARATED BLOCK SEXTANT-1345
-Removed Valid: 1CE6E (𜹮) SEPARATED BLOCK SEXTANT-2345
-Removed Valid: 1CE6F (𜹯) SEPARATED BLOCK SEXTANT-12345
-Removed Valid: 1CE70 (𜹰) SEPARATED BLOCK SEXTANT-6
-Removed Valid: 1CE71 (𜹱) SEPARATED BLOCK SEXTANT-16
-Removed Valid: 1CE72 (𜹲) SEPARATED BLOCK SEXTANT-26
-Removed Valid: 1CE73 (𜹳) SEPARATED BLOCK SEXTANT-126
-Removed Valid: 1CE74 (𜹴) SEPARATED BLOCK SEXTANT-36
-Removed Valid: 1CE75 (𜹵) SEPARATED BLOCK SEXTANT-136
-Removed Valid: 1CE76 (𜹶) SEPARATED BLOCK SEXTANT-236
-Removed Valid: 1CE77 (𜹷) SEPARATED BLOCK SEXTANT-1236
-Removed Valid: 1CE78 (𜹸) SEPARATED BLOCK SEXTANT-46
-Removed Valid: 1CE79 (𜹹) SEPARATED BLOCK SEXTANT-146
-Removed Valid: 1CE7A (𜹺) SEPARATED BLOCK SEXTANT-246
-Removed Valid: 1CE7B (𜹻) SEPARATED BLOCK SEXTANT-1246
-Removed Valid: 1CE7C (𜹼) SEPARATED BLOCK SEXTANT-346
-Removed Valid: 1CE7D (𜹽) SEPARATED BLOCK SEXTANT-1346
-Removed Valid: 1CE7E (𜹾) SEPARATED BLOCK SEXTANT-2346
-Removed Valid: 1CE7F (𜹿) SEPARATED BLOCK SEXTANT-12346
-Removed Valid: 1CE80 (𜺀) SEPARATED BLOCK SEXTANT-56
-Removed Valid: 1CE81 (𜺁) SEPARATED BLOCK SEXTANT-156
-Removed Valid: 1CE82 (𜺂) SEPARATED BLOCK SEXTANT-256
-Removed Valid: 1CE83 (𜺃) SEPARATED BLOCK SEXTANT-1256
-Removed Valid: 1CE84 (𜺄) SEPARATED BLOCK SEXTANT-356
-Removed Valid: 1CE85 (𜺅) SEPARATED BLOCK SEXTANT-1356
-Removed Valid: 1CE86 (𜺆) SEPARATED BLOCK SEXTANT-2356
-Removed Valid: 1CE87 (𜺇) SEPARATED BLOCK SEXTANT-12356
-Removed Valid: 1CE88 (𜺈) SEPARATED BLOCK SEXTANT-456
-Removed Valid: 1CE89 (𜺉) SEPARATED BLOCK SEXTANT-1456
-Removed Valid: 1CE8A (𜺊) SEPARATED BLOCK SEXTANT-2456
-Removed Valid: 1CE8B (𜺋) SEPARATED BLOCK SEXTANT-12456
-Removed Valid: 1CE8C (𜺌) SEPARATED BLOCK SEXTANT-3456
-Removed Valid: 1CE8D (𜺍) SEPARATED BLOCK SEXTANT-13456
-Removed Valid: 1CE8E (𜺎) SEPARATED BLOCK SEXTANT-23456
-Removed Valid: 1CE8F (𜺏) SEPARATED BLOCK SEXTANT-123456
-Removed Valid: 1CE90 (𜺐) UPPER LEFT ONE SIXTEENTH BLOCK
-Removed Valid: 1CE91 (𜺑) UPPER CENTRE LEFT ONE SIXTEENTH BLOCK
-Removed Valid: 1CE92 (𜺒) UPPER CENTRE RIGHT ONE SIXTEENTH BLOCK
-Removed Valid: 1CE93 (𜺓) UPPER RIGHT ONE SIXTEENTH BLOCK
-Removed Valid: 1CE94 (𜺔) UPPER MIDDLE LEFT ONE SIXTEENTH BLOCK
-Removed Valid: 1CE95 (𜺕) UPPER MIDDLE CENTRE LEFT ONE SIXTEENTH BLOCK
-Removed Valid: 1CE96 (𜺖) UPPER MIDDLE CENTRE RIGHT ONE SIXTEENTH BLOCK
-Removed Valid: 1CE97 (𜺗) UPPER MIDDLE RIGHT ONE SIXTEENTH BLOCK
-Removed Valid: 1CE98 (𜺘) LOWER MIDDLE LEFT ONE SIXTEENTH BLOCK
-Removed Valid: 1CE99 (𜺙) LOWER MIDDLE CENTRE LEFT ONE SIXTEENTH BLOCK
-Removed Valid: 1CE9A (𜺚) LOWER MIDDLE CENTRE RIGHT ONE SIXTEENTH BLOCK
-Removed Valid: 1CE9B (𜺛) LOWER MIDDLE RIGHT ONE SIXTEENTH BLOCK
-Removed Valid: 1CE9C (𜺜) LOWER LEFT ONE SIXTEENTH BLOCK
-Removed Valid: 1CE9D (𜺝) LOWER CENTRE LEFT ONE SIXTEENTH BLOCK
-Removed Valid: 1CE9E (𜺞) LOWER CENTRE RIGHT ONE SIXTEENTH BLOCK
-Removed Valid: 1CE9F (𜺟) LOWER RIGHT ONE SIXTEENTH BLOCK
-Removed Valid: 1CEA0 (𜺠) RIGHT HALF LOWER ONE QUARTER BLOCK
-Removed Valid: 1CEA1 (𜺡) RIGHT THREE QUARTERS LOWER ONE QUARTER BLOCK
-Removed Valid: 1CEA2 (𜺢) LEFT THREE QUARTERS LOWER ONE QUARTER BLOCK
-Removed Valid: 1CEA3 (𜺣) LEFT HALF LOWER ONE QUARTER BLOCK
-Removed Valid: 1CEA4 (𜺤) LOWER HALF LEFT ONE QUARTER BLOCK
-Removed Valid: 1CEA5 (𜺥) LOWER THREE QUARTERS LEFT ONE QUARTER BLOCK
-Removed Valid: 1CEA6 (𜺦) UPPER THREE QUARTERS LEFT ONE QUARTER BLOCK
-Removed Valid: 1CEA7 (𜺧) UPPER HALF LEFT ONE QUARTER BLOCK
-Removed Valid: 1CEA8 (𜺨) LEFT HALF UPPER ONE QUARTER BLOCK
-Removed Valid: 1CEA9 (𜺩) LEFT THREE QUARTERS UPPER ONE QUARTER BLOCK
-Removed Valid: 1CEAA (𜺪) RIGHT THREE QUARTERS UPPER ONE QUARTER BLOCK
-Removed Valid: 1CEAB (𜺫) RIGHT HALF UPPER ONE QUARTER BLOCK
-Removed Valid: 1CEAC (𜺬) UPPER HALF RIGHT ONE QUARTER BLOCK
-Removed Valid: 1CEAD (𜺭) UPPER THREE QUARTERS RIGHT ONE QUARTER BLOCK
-Removed Valid: 1CEAE (𜺮) LOWER THREE QUARTERS RIGHT ONE QUARTER BLOCK
-Removed Valid: 1CEAF (𜺯) LOWER HALF RIGHT ONE QUARTER BLOCK
-Removed Valid: 1CEB0 (𜺰) HORIZONTAL ZIGZAG LINE
-Removed Valid: 1CEB3 (𜺳) BLACK RIGHT TRIANGLE CARET
 Removed Valid: 2500 (─) BOX DRAWINGS LIGHT HORIZONTAL
 Removed Valid: 2501 (━) BOX DRAWINGS HEAVY HORIZONTAL
 Removed Valid: 2502 (│) BOX DRAWINGS LIGHT VERTICAL
@@ -10482,14 +9760,14 @@ Removed Valid: 1D16F (◌𝅯) MUSICAL SYMBOL COMBINING FLAG-2
 Removed Valid: 1D170 (◌𝅰) MUSICAL SYMBOL COMBINING FLAG-3
 Removed Valid: 1D171 (◌𝅱) MUSICAL SYMBOL COMBINING FLAG-4
 Removed Valid: 1D172 (◌𝅲) MUSICAL SYMBOL COMBINING FLAG-5
-Removed Ignored: 1D173 (𝅳) MUSICAL SYMBOL BEGIN BEAM
-Removed Ignored: 1D174 (𝅴) MUSICAL SYMBOL END BEAM
-Removed Ignored: 1D175 (𝅵) MUSICAL SYMBOL BEGIN TIE
-Removed Ignored: 1D176 (𝅶) MUSICAL SYMBOL END TIE
-Removed Ignored: 1D177 (𝅷) MUSICAL SYMBOL BEGIN SLUR
-Removed Ignored: 1D178 (𝅸) MUSICAL SYMBOL END SLUR
-Removed Ignored: 1D179 (𝅹) MUSICAL SYMBOL BEGIN PHRASE
-Removed Ignored: 1D17A (𝅺) MUSICAL SYMBOL END PHRASE
+*** Already disallowed: 1D173 (𝅳) MUSICAL SYMBOL BEGIN BEAM
+*** Already disallowed: 1D174 (𝅴) MUSICAL SYMBOL END BEAM
+*** Already disallowed: 1D175 (𝅵) MUSICAL SYMBOL BEGIN TIE
+*** Already disallowed: 1D176 (𝅶) MUSICAL SYMBOL END TIE
+*** Already disallowed: 1D177 (𝅷) MUSICAL SYMBOL BEGIN SLUR
+*** Already disallowed: 1D178 (𝅸) MUSICAL SYMBOL END SLUR
+*** Already disallowed: 1D179 (𝅹) MUSICAL SYMBOL BEGIN PHRASE
+*** Already disallowed: 1D17A (𝅺) MUSICAL SYMBOL END PHRASE
 Removed Valid: 1D17B (◌𝅻) MUSICAL SYMBOL COMBINING ACCENT
 Removed Valid: 1D17C (◌𝅼) MUSICAL SYMBOL COMBINING STACCATO
 Removed Valid: 1D17D (◌𝅽) MUSICAL SYMBOL COMBINING TENUTO
@@ -11156,8 +10434,6 @@ Removed Valid: 31E0 (㇠) CJK STROKE HXWG
 Removed Valid: 31E1 (㇡) CJK STROKE HZZZG
 Removed Valid: 31E2 (㇢) CJK STROKE PG
 Removed Valid: 31E3 (㇣) CJK STROKE Q
-Removed Valid: 31E4 (㇤) CJK STROKE HXG
-Removed Valid: 31E5 (㇥) CJK STROKE SZP
 Removed Valid: 10F1 (ჱ) GEORGIAN LETTER HE
 Removed Valid: 10F2 (ჲ) GEORGIAN LETTER HIE
 Removed Valid: 10F3 (ჳ) GEORGIAN LETTER WE
@@ -11871,17 +11147,17 @@ Disallowed Script: [Lina] Linear A [X]
 Disallowed Script: [Linb] Linear B [X]
 Disallowed Script: [Sgnw] SignWriting [X]
 Valid  | Name       | Test      | Rest      | Extra                     
- 99193 | Japanese   | Kana+Hira | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
-110510 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
- 98983 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
+ 99088 | Japanese   | Kana+Hira | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+110406 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+ 98879 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
  97880 | Bopomofo   | Bopo      | Hani      |                           
-  1442 | Latin      | Latn+Zyyy | Zinh      | π                         
-  1282 | Cyrillic   | Cyrl      | Zyyy+Zinh |                           
-  1268 | Greek      | Grek      | Zyyy+Zinh |                           
-   410 | Arabic     | Arab      |           | -                         
+  1338 | Latin      | Latn+Zyyy | Zinh      | π                         
+  1184 | Cyrillic   | Cyrl      | Zyyy+Zinh |                           
+  1172 | Greek      | Grek      | Zyyy+Zinh |                           
+   405 | Arabic     | Arab      |           | -                         
    120 | Devanagari | Deva      |           |                           
-    86 | Hebrew     | Hebr      |           | ₪                         
-    87 | Thai       | Thai      |           | ฿                         
+    84 | Hebrew     | Hebr      |           | ₪                         
+    86 | Thai       | Thai      |           | ฿                         
     91 | Bengali    | Beng      |           |                           
     61 | Thaana     | Thaa      |           |                           
     74 | Gurmukhi   | Guru      |           |                           
@@ -11895,10 +11171,10 @@ Valid  | Name       | Test      | Rest      | Extra
    113 | Malayalam  | Mlym      |           |                           
     80 | Lao        | Laoo      |           |                           
     42 | Georgian   | Geor      |           |                           
-   234 | Myanmar    | Mymr      |           |                           
+   214 | Myanmar    | Mymr      |           |                           
    515 | Ethiopic   | Ethi      |           |                           
    137 | Khmer      | Khmr      |           |                           
-    44 | Armenian   | Armn      |           |                           
+    43 | Armenian   | Armn      |           |                           
     52 | Adlm [R]   | Adlm      |           |                           
     90 | Bali [R]   | Bali      |           |                           
    654 | Bamu [R]   | Bamu      |           |                           
@@ -11906,7 +11182,7 @@ Valid  | Name       | Test      | Rest      | Extra
     88 | Cakm [R]   | Cakm      |           |                           
    722 | Cans [R]   | Cans      |           |                           
     80 | Cham [R]   | Cham      |           |                           
-    92 | Cher [R]   | Cher      |           |                           
+    86 | Cher [R]   | Cher      |           |                           
     71 | Hmnp [R]   | Hmnp      |           |                           
     89 | Java [R]   | Java      |           |                           
     46 | Kali [R]   | Kali      |           |                           
@@ -11919,21 +11195,21 @@ Valid  | Name       | Test      | Rest      | Extra
     93 | Newa [R]   | Newa      |           |                           
     54 | Nkoo [R]   | Nkoo      |           |                           
     46 | Olck [R]   | Olck      |           |                           
-    39 | Osge [R]   | Osge      |           |                           
+    36 | Osge [R]   | Osge      |           |                           
    149 | Plrd [R]   | Plrd      |           |                           
     50 | Rohg [R]   | Rohg      |           |                           
     80 | Saur [R]   | Saur      |           |                           
     72 | Sund [R]   | Sund      |           |                           
     55 | Sylo [R]   | Sylo      |           |                           
-    91 | Syrc [R]   | Syrc      |           |                           
-    50 | Tale [R]   | Tale      |           |                           
+    86 | Syrc [R]   | Syrc      |           |                           
+    45 | Tale [R]   | Tale      |           |                           
     83 | Talu [R]   | Talu      |           |                           
     72 | Tavt [R]   | Tavt      |           |                           
-    62 | Tfng [R]   | Tfng      |           |                           
+    58 | Tfng [R]   | Tfng      |           |                           
    292 | Vaii [R]   | Vaii      |           |                           
     59 | Wcho [R]   | Wcho      |           |                           
   1221 | Yiii [R]   | Yiii      |           |                           
-    54 | Aghb [R]   | Aghb      |           |                           
+    53 | Aghb [R]   | Aghb      |           |                           
     62 | Ahom [R]   | Ahom      |           |                           
     31 | Armi [R]   | Armi      |           |                           
     61 | Avst [R]   | Avst      |           |                           
@@ -11944,20 +11220,20 @@ Valid  | Name       | Test      | Rest      | Extra
     20 | Buhd [R]   | Buhd      |           |                           
     49 | Cari [R]   | Cari      |           |                           
     28 | Chrs [R]   | Chrs      |           |                           
-    77 | Copt [R]   | Copt      |           |                           
+    75 | Copt [R]   | Copt      |           |                           
     99 | Cpmn [R]   | Cpmn      |           |                           
     55 | Cprt [R]   | Cprt      |           |                           
     70 | Diak [R]   | Diak      |           |                           
     70 | Dogr [R]   | Dogr      |           |                           
     40 | Dsrt [R]   | Dsrt      |           |                           
-   145 | Dupl [R]   | Dupl      |           |                           
-  5089 | Egyp [R]   | Egyp      |           |                           
-    41 | Elba [R]   | Elba      |           |                           
+   142 | Dupl [R]   | Dupl      |           |                           
+  1094 | Egyp [R]   | Egyp      |           |                           
+    40 | Elba [R]   | Elba      |           |                           
     23 | Elym [R]   | Elym      |           |                           
-    88 | Glag [R]   | Glag      |           |                           
+    86 | Glag [R]   | Glag      |           |                           
     63 | Gong [R]   | Gong      |           |                           
     75 | Gonm [R]   | Gonm      |           |                           
-    30 | Goth [R]   | Goth      |           |                           
+    27 | Goth [R]   | Goth      |           |                           
    103 | Gran [R]   | Gran      |           |                           
     21 | Hano [R]   | Hano      |           |                           
     26 | Hatr [R]   | Hatr      |           |                           
@@ -11965,10 +11241,10 @@ Valid  | Name       | Test      | Rest      | Extra
    124 | Hmng [R]   | Hmng      |           |                           
     57 | Hung [R]   | Hung      |           |                           
     39 | Ital [R]   | Ital      |           |                           
-    85 | Kawi [R]   | Kawi      |           |                           
+    84 | Kawi [R]   | Kawi      |           |                           
     60 | Khar [R]   | Khar      |           |                           
     71 | Khoj [R]   | Khoj      |           |                           
-   472 | Kits [R]   | Kits      |           |                           
+   471 | Kits [R]   | Kits      |           |                           
     72 | Kthi [R]   | Kthi      |           |                           
     29 | Lyci [R]   | Lyci      |           |                           
     27 | Lydi [R]   | Lydi      |           |                           
@@ -11995,7 +11271,7 @@ Valid  | Name       | Test      | Rest      | Extra
     23 | Ougr [R]   | Ougr      |           |                           
     32 | Palm [R]   | Palm      |           |                           
     57 | Pauc [R]   | Pauc      |           |                           
-    47 | Perm [R]   | Perm      |           |                           
+    43 | Perm [R]   | Perm      |           |                           
     54 | Phag [R]   | Phag      |           |                           
     27 | Phli [R]   | Phli      |           |                           
     29 | Phlp [R]   | Phlp      |           |                           
@@ -12027,13 +11303,6 @@ Valid  | Name       | Test      | Rest      | Extra
   1234 | Xsux [R]   | Xsux      |           |                           
     57 | Yezi [R]   | Yezi      |           |                           
     70 | Zanb [R]   | Zanb      |           |                           
-    47 | Gara [R]   | Gara      |           |                           
-    58 | Gukh [R]   | Gukh      |           |                           
-    56 | Krai [R]   | Krai      |           |                           
-    44 | Onao [R]   | Onao      |           |                           
-    47 | Sunu [R]   | Sunu      |           |                           
-    55 | Todr [R]   | Todr      |           |                           
-    88 | Tutg [R]   | Tutg      |           |                           
 ==== Compute CM Whitelist ====
 [E0] (à) LATIN SMALL LETTER A WITH GRAVE <0> "a+◌̀" [Latin]
 [E1] (á) LATIN SMALL LETTER A WITH ACUTE <0> "a+◌́" [Latin]
@@ -12163,8 +11432,7 @@ Valid  | Name       | Test      | Rest      | Extra
 [307D] (ぽ) HIRAGANA LETTER PO <0> "ほ+◌゚" [Japanese]
 [3094] (ゔ) HIRAGANA LETTER VU <0> "う+◌゙" [Japanese]
 [309E] (ゞ) HIRAGANA VOICED ITERATION MARK <0> "ゝ+◌゙" [Japanese]
-==== Purge CM: Japanese (3) ====
-305 (◌̅) COMBINING OVERLINE => [305] (◌̅) COMBINING OVERLINE
+==== Purge CM: Japanese (2) ====
 3099 (◌゙) COMBINING KATAKANA-HIRAGANA VOICED SOUND MARK => [3099] (◌゙) COMBINING KATAKANA-HIRAGANA VOICED SOUND MARK
 309A (◌゚) COMBINING KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK => [309A] (◌゚) COMBINING KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK
 ==== Purge CM: Latin (209) ====
@@ -12377,14 +11645,20 @@ FF (ÿ) LATIN SMALL LETTER Y WITH DIAERESIS => [79 308] (ÿ) LATIN SMALL LETTER
 1EF5 (ỵ) LATIN SMALL LETTER Y WITH DOT BELOW => [79 323] (ỵ) LATIN SMALL LETTER Y + COMBINING DOT BELOW
 1EF7 (ỷ) LATIN SMALL LETTER Y WITH HOOK ABOVE => [79 309] (ỷ) LATIN SMALL LETTER Y + COMBINING HOOK ABOVE
 1EF9 (ỹ) LATIN SMALL LETTER Y WITH TILDE => [79 303] (ỹ) LATIN SMALL LETTER Y + COMBINING TILDE
-==== Purge CM: Cyrillic (26) ====
+==== Purge CM: Cyrillic (32) ====
 300 (◌̀) COMBINING GRAVE ACCENT => [300] (◌̀) COMBINING GRAVE ACCENT
 301 (◌́) COMBINING ACUTE ACCENT => [301] (◌́) COMBINING ACUTE ACCENT
 302 (◌̂) COMBINING CIRCUMFLEX ACCENT => [302] (◌̂) COMBINING CIRCUMFLEX ACCENT
+303 (◌̃) COMBINING TILDE => [303] (◌̃) COMBINING TILDE
 304 (◌̄) COMBINING MACRON => [304] (◌̄) COMBINING MACRON
+305 (◌̅) COMBINING OVERLINE => [305] (◌̅) COMBINING OVERLINE
 306 (◌̆) COMBINING BREVE => [306] (◌̆) COMBINING BREVE
+307 (◌̇) COMBINING DOT ABOVE => [307] (◌̇) COMBINING DOT ABOVE
 308 (◌̈) COMBINING DIAERESIS => [308] (◌̈) COMBINING DIAERESIS
+309 (◌̉) COMBINING HOOK ABOVE => [309] (◌̉) COMBINING HOOK ABOVE
+30A (◌̊) COMBINING RING ABOVE => [30A] (◌̊) COMBINING RING ABOVE
 30B (◌̋) COMBINING DOUBLE ACUTE ACCENT => [30B] (◌̋) COMBINING DOUBLE ACUTE ACCENT
+30C (◌̌) COMBINING CARON => [30C] (◌̌) COMBINING CARON
 327 (◌̧) COMBINING CEDILLA => [327] (◌̧) COMBINING CEDILLA
 450 (ѐ) CYRILLIC SMALL LETTER IE WITH GRAVE => [435 300] (ѐ) CYRILLIC SMALL LETTER IE + COMBINING GRAVE ACCENT
 45D (ѝ) CYRILLIC SMALL LETTER I WITH GRAVE => [438 300] (ѝ) CYRILLIC SMALL LETTER I + COMBINING GRAVE ACCENT
@@ -12404,12 +11678,20 @@ FF (ÿ) LATIN SMALL LETTER Y WITH DIAERESIS => [79 308] (ÿ) LATIN SMALL LETTER
 4F3 (ӳ) CYRILLIC SMALL LETTER U WITH DOUBLE ACUTE => [443 30B] (ӳ) CYRILLIC SMALL LETTER U + COMBINING DOUBLE ACUTE ACCENT
 4F5 (ӵ) CYRILLIC SMALL LETTER CHE WITH DIAERESIS => [447 308] (ӵ) CYRILLIC SMALL LETTER CHE + COMBINING DIAERESIS
 4F9 (ӹ) CYRILLIC SMALL LETTER YERU WITH DIAERESIS => [44B 308] (ӹ) CYRILLIC SMALL LETTER YERU + COMBINING DIAERESIS
-==== Purge CM: Greek (82) ====
+==== Purge CM: Greek (90) ====
 300 (◌̀) COMBINING GRAVE ACCENT => [300] (◌̀) COMBINING GRAVE ACCENT
 301 (◌́) COMBINING ACUTE ACCENT => [301] (◌́) COMBINING ACUTE ACCENT
+302 (◌̂) COMBINING CIRCUMFLEX ACCENT => [302] (◌̂) COMBINING CIRCUMFLEX ACCENT
+303 (◌̃) COMBINING TILDE => [303] (◌̃) COMBINING TILDE
 304 (◌̄) COMBINING MACRON => [304] (◌̄) COMBINING MACRON
+305 (◌̅) COMBINING OVERLINE => [305] (◌̅) COMBINING OVERLINE
 306 (◌̆) COMBINING BREVE => [306] (◌̆) COMBINING BREVE
+307 (◌̇) COMBINING DOT ABOVE => [307] (◌̇) COMBINING DOT ABOVE
 308 (◌̈) COMBINING DIAERESIS => [308] (◌̈) COMBINING DIAERESIS
+309 (◌̉) COMBINING HOOK ABOVE => [309] (◌̉) COMBINING HOOK ABOVE
+30A (◌̊) COMBINING RING ABOVE => [30A] (◌̊) COMBINING RING ABOVE
+30B (◌̋) COMBINING DOUBLE ACUTE ACCENT => [30B] (◌̋) COMBINING DOUBLE ACUTE ACCENT
+30C (◌̌) COMBINING CARON => [30C] (◌̌) COMBINING CARON
 327 (◌̧) COMBINING CEDILLA => [327] (◌̧) COMBINING CEDILLA
 1F00 (ἀ) GREEK SMALL LETTER ALPHA WITH PSILI => [3B1 313] (ἀ) GREEK SMALL LETTER ALPHA + COMBINING COMMA ABOVE
 1F01 (ἁ) GREEK SMALL LETTER ALPHA WITH DASIA => [3B1 314] (ἁ) GREEK SMALL LETTER ALPHA + COMBINING REVERSED COMMA ABOVE
@@ -12487,10 +11769,6 @@ FF (ÿ) LATIN SMALL LETTER Y WITH DIAERESIS => [79 308] (ÿ) LATIN SMALL LETTER
 1FE6 (ῦ) GREEK SMALL LETTER UPSILON WITH PERISPOMENI => [3C5 342] (ῦ) GREEK SMALL LETTER UPSILON + COMBINING GREEK PERISPOMENI
 1FE7 (ῧ) GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND PERISPOMENI => [3C5 308 342] (ῧ) GREEK SMALL LETTER UPSILON + COMBINING DIAERESIS + COMBINING GREEK PERISPOMENI
 1FF6 (ῶ) GREEK SMALL LETTER OMEGA WITH PERISPOMENI => [3C9 342] (ῶ) GREEK SMALL LETTER OMEGA + COMBINING GREEK PERISPOMENI
-==== Purge CM: Gukh (3) ====
-16121 (◌𖄡) GURUNG KHEMA VOWEL SIGN U => [1611E 1611E] (◌𖄡) GURUNG KHEMA VOWEL SIGN AA + GURUNG KHEMA VOWEL SIGN AA
-16126 (◌𖄦) GURUNG KHEMA VOWEL SIGN O => [1611E 1611E 1611F] (◌𖄦) GURUNG KHEMA VOWEL SIGN AA + GURUNG KHEMA VOWEL SIGN AA + GURUNG KHEMA VOWEL SIGN I
-16128 (◌𖄨) GURUNG KHEMA VOWEL SIGN AU => [1611E 1611E 16120] (◌𖄨) GURUNG KHEMA VOWEL SIGN AA + GURUNG KHEMA VOWEL SIGN AA + GURUNG KHEMA VOWEL SIGN II
 ==== Compute Confusables ====
 Override: 32 (2) DIGIT TWO [Japanese,Korean,Han,Latin,Cyrillic,Greek]
 Override: 33 (3) DIGIT THREE [Japanese,Korean,Han,Latin,Cyrillic,Greek]
@@ -12506,13 +11784,10 @@ Unresolved: [Hebrew] 599 (◌֙) HEBREW ACCENT PASHTA vs 5A8 (◌֨) HEBREW ACCE
 Unresolved: [Hebrew] 59A (◌֚) HEBREW ACCENT YETIV vs 5A4 (◌֤) HEBREW ACCENT MAHAPAKH
 Unresolved: [Hebrew] 59C (◌֜) HEBREW ACCENT GERESH vs 59D (◌֝) HEBREW ACCENT GERESH MUQDAM
 Unresolved: [Syrc] 64E (◌َ) ARABIC FATHA vs 747 (◌݇) SYRIAC OBLIQUE LINE ABOVE
-Unresolved: [Syrc] 652 (◌ْ) ARABIC SUKUN vs 30A (◌̊) COMBINING RING ABOVE
+Auto-Override: 8EB (◌࣫) ARABIC TONE TWO DOTS ABOVE [Arabic vs Nkoo]
 Unresolved: [Arabic] 64B (◌ً) ARABIC FATHATAN vs 8F0 (◌ࣰ) ARABIC OPEN FATHATAN
-Unresolved: [Syrc] 653 (◌ٓ) ARABIC MADDAH ABOVE vs 303 (◌̃) COMBINING TILDE
-Unresolved: [Hebrew] 5B9 (◌ֹ) HEBREW POINT HOLAM vs 5BA (◌ֺ) HEBREW POINT HOLAM HASER FOR VAV vs 5C1 (◌ׁ) HEBREW POINT SHIN DOT vs 5C2 (◌ׂ) HEBREW POINT SIN DOT vs 5C4 (◌ׄ) HEBREW MARK UPPER DOT vs 307 (◌̇) COMBINING DOT ABOVE
-Unresolved: [Syrc] 741 (◌݁) SYRIAC QUSHSHAYA vs 307 (◌̇) COMBINING DOT ABOVE
+Unresolved: [Hebrew] 5B9 (◌ֹ) HEBREW POINT HOLAM vs 5BA (◌ֺ) HEBREW POINT HOLAM HASER FOR VAV vs 5C1 (◌ׁ) HEBREW POINT SHIN DOT vs 5C2 (◌ׂ) HEBREW POINT SIN DOT vs 5C4 (◌ׄ) HEBREW MARK UPPER DOT
 Unresolved: [Arabic] 6EC (◌۬) ARABIC ROUNDED HIGH STOP WITH FILLED CENTRE vs 8EA (◌࣪) ARABIC TONE ONE DOT ABOVE
-Unresolved: [Copt,Goth] 304 (◌̄) COMBINING MACRON vs 305 (◌̅) COMBINING OVERLINE
 Unresolved: [Arabic] 8F8 (◌ࣸ) ARABIC RIGHT ARROWHEAD ABOVE vs 8FF (◌ࣿ) ARABIC MARK SIDEWAYS NOON GHUNNA
 Unresolved: [Arabic] 64C (◌ٌ) ARABIC DAMMATAN vs 8E5 (◌ࣥ) ARABIC CURLY DAMMA vs 8E8 (◌ࣨ) ARABIC CURLY DAMMATAN vs 8F1 (◌ࣱ) ARABIC OPEN DAMMATAN
 Unresolved: [Arabic] 64D (◌ٍ) ARABIC KASRATAN vs 8F2 (◌ࣲ) ARABIC OPEN KASRATAN
@@ -12839,7 +12114,6 @@ Unresolved: [Japanese] 2E85 (⺅) CJK RADICAL PERSON vs 30A4 (イ) KATAKANA LETT
 Unresolved: [Korean,Han,Bopomofo] 2E85 (⺅) CJK RADICAL PERSON vs 4EBB (亻) CJK Ideograph-4EBB [188/20992]
 Unresolved: [Japanese,Korean,Han,Bopomofo] 4F75 (併) CJK Ideograph-4F75 [374/20992] vs 5002 (倂) CJK Ideograph-5002 [515/20992]
 Unresolved: [Japanese,Korean,Han,Bopomofo] 5024 (値) CJK Ideograph-5024 [549/20992] vs 503C (值) CJK Ideograph-503C [573/20992]
-Unresolved: [Bopomofo] 3126 (ㄦ) BOPOMOFO LETTER ER vs 513F (儿) CJK Ideograph-513F [832/20992]
 Unresolved: [Japanese,Korean,Han,Bopomofo] 2E8E (⺎) CJK RADICAL LAME ONE vs 5140 (兀) CJK Ideograph-5140 [833/20992]
 Override: 516B (八) CJK Ideograph-516B [876/20992] [Japanese,Korean,Han,Bopomofo]
 Override: 30CF (ハ) KATAKANA LETTER HA [Japanese]
@@ -13030,6 +12304,9 @@ Removed Valid: 22D (ȭ) LATIN SMALL LETTER O WITH TILDE AND MACRON
 Removed Valid: 22F (ȯ) LATIN SMALL LETTER O WITH DOT ABOVE
 Removed Valid: 231 (ȱ) LATIN SMALL LETTER O WITH DOT ABOVE AND MACRON
 Removed Valid: 233 (ȳ) LATIN SMALL LETTER Y WITH MACRON
+Removed Valid: 305 (◌̅) COMBINING OVERLINE
+Removed Valid: 309 (◌̉) COMBINING HOOK ABOVE
+Removed Valid: 30B (◌̋) COMBINING DOUBLE ACUTE ACCENT
 Removed Valid: 450 (ѐ) CYRILLIC SMALL LETTER IE WITH GRAVE
 Removed Valid: 45D (ѝ) CYRILLIC SMALL LETTER I WITH GRAVE
 Removed Valid: 477 (ѷ) CYRILLIC SMALL LETTER IZHITSA WITH DOUBLE GRAVE ACCENT
@@ -13806,9 +13083,6 @@ Removed Valid: 10764 (𐝤) LINEAR A SIGN A804
 Removed Valid: 10765 (𐝥) LINEAR A SIGN A805
 Removed Valid: 10766 (𐝦) LINEAR A SIGN A806
 Removed Valid: 10767 (𐝧) LINEAR A SIGN A807
-Removed Valid: 16121 (◌𖄡) GURUNG KHEMA VOWEL SIGN U
-Removed Valid: 16126 (◌𖄦) GURUNG KHEMA VOWEL SIGN O
-Removed Valid: 16128 (◌𖄨) GURUNG KHEMA VOWEL SIGN AU
 Removed Valid: 1DA00 (◌𝨀) SIGNWRITING HEAD RIM
 Removed Valid: 1DA01 (◌𝨁) SIGNWRITING HEAD MOVEMENT-WALLPLANE STRAIGHT
 Removed Valid: 1DA02 (◌𝨂) SIGNWRITING HEAD MOVEMENT-WALLPLANE TILT
@@ -14739,11 +14013,6 @@ Removed Valid: 1DA89 (𝪉) SIGNWRITING SEMICOLON
 Removed Valid: 1DA8A (𝪊) SIGNWRITING COLON
 Removed Valid: 1DA8B (𝪋) SIGNWRITING PARENTHESIS
 ==== Remove Invalid Mappings ====
-Removed Mapping: A0 ( ) NO-BREAK SPACE => [20] ( ) SPACE
-Removed Mapping: A8 (¨) DIAERESIS => [20 308] ( ̈) SPACE + COMBINING DIAERESIS
-Removed Mapping: AF (¯) MACRON => [20 304] ( ̄) SPACE + COMBINING MACRON
-Removed Mapping: B4 (´) ACUTE ACCENT => [20 301] ( ́) SPACE + COMBINING ACUTE ACCENT
-Removed Mapping: B8 (¸) CEDILLA => [20 327] ( ̧) SPACE + COMBINING CEDILLA
 Removed Mapping: D0 (Ð) LATIN CAPITAL LETTER ETH => [F0] (ð) LATIN SMALL LETTER ETH
 Removed Mapping: DE (Þ) LATIN CAPITAL LETTER THORN => [FE] (þ) LATIN SMALL LETTER THORN
 Removed Mapping: 10A (Ċ) LATIN CAPITAL LETTER C WITH DOT ABOVE => [10B] (ċ) LATIN SMALL LETTER C WITH DOT ABOVE
@@ -14884,21 +14153,11 @@ Removed Mapping: 248 (Ɉ) LATIN CAPITAL LETTER J WITH STROKE => [249] (ɉ) LATIN
 Removed Mapping: 24A (Ɋ) LATIN CAPITAL LETTER SMALL Q WITH HOOK TAIL => [24B] (ɋ) LATIN SMALL LETTER Q WITH HOOK TAIL
 Removed Mapping: 24C (Ɍ) LATIN CAPITAL LETTER R WITH STROKE => [24D] (ɍ) LATIN SMALL LETTER R WITH STROKE
 Removed Mapping: 24E (Ɏ) LATIN CAPITAL LETTER Y WITH STROKE => [24F] (ɏ) LATIN SMALL LETTER Y WITH STROKE
-Removed Mapping: 2D8 (˘) BREVE => [20 306] ( ̆) SPACE + COMBINING BREVE
-Removed Mapping: 2D9 (˙) DOT ABOVE => [20 307] ( ̇) SPACE + COMBINING DOT ABOVE
-Removed Mapping: 2DA (˚) RING ABOVE => [20 30A] ( ̊) SPACE + COMBINING RING ABOVE
-Removed Mapping: 2DB (˛) OGONEK => [20 328] ( ̨) SPACE + COMBINING OGONEK
-Removed Mapping: 2DC (˜) SMALL TILDE => [20 303] ( ̃) SPACE + COMBINING TILDE
-Removed Mapping: 2DD (˝) DOUBLE ACUTE ACCENT => [20 30B] ( ̋) SPACE + COMBINING DOUBLE ACUTE ACCENT
 Removed Mapping: 343 (◌̓) COMBINING GREEK KORONIS => [313] (◌̓) COMBINING COMMA ABOVE
 Removed Mapping: 370 (Ͱ) GREEK CAPITAL LETTER HETA => [371] (ͱ) GREEK SMALL LETTER HETA
 Removed Mapping: 372 (Ͳ) GREEK CAPITAL LETTER ARCHAIC SAMPI => [373] (ͳ) GREEK SMALL LETTER ARCHAIC SAMPI
 Removed Mapping: 376 (Ͷ) GREEK CAPITAL LETTER PAMPHYLIAN DIGAMMA => [377] (ͷ) GREEK SMALL LETTER PAMPHYLIAN DIGAMMA
-Removed Mapping: 37A (ͺ) GREEK YPOGEGRAMMENI => [20 3B9] ( ι) SPACE + GREEK SMALL LETTER IOTA
-Removed Mapping: 37E (;) GREEK QUESTION MARK => [3B] (;) SEMICOLON
 Removed Mapping: 37F (Ϳ) GREEK CAPITAL LETTER YOT => [3F3] (ϳ) GREEK LETTER YOT
-Removed Mapping: 384 (΄) GREEK TONOS => [20 301] ( ́) SPACE + COMBINING ACUTE ACCENT
-Removed Mapping: 385 (΅) GREEK DIALYTIKA TONOS => [20 308 301] ( ̈́) SPACE + COMBINING DIAERESIS + COMBINING ACUTE ACCENT
 Removed Mapping: 387 (·) GREEK ANO TELEIA => [B7] (·) MIDDLE DOT
 Removed Mapping: 3CF (Ϗ) GREEK CAPITAL KAI SYMBOL => [3D7] (ϗ) GREEK KAI SYMBOL
 Removed Mapping: 3D8 (Ϙ) GREEK LETTER ARCHAIC KOPPA => [3D9] (ϙ) GREEK SMALL LETTER ARCHAIC KOPPA
@@ -14956,47 +14215,8 @@ Removed Mapping: 50E (Ԏ) CYRILLIC CAPITAL LETTER KOMI TJE => [50F] (ԏ) CYRILLI
 Removed Mapping: 510 (Ԑ) CYRILLIC CAPITAL LETTER REVERSED ZE => [511] (ԑ) CYRILLIC SMALL LETTER REVERSED ZE
 Removed Mapping: 52A (Ԫ) CYRILLIC CAPITAL LETTER DZZHE => [52B] (ԫ) CYRILLIC SMALL LETTER DZZHE
 Removed Mapping: 52C (Ԭ) CYRILLIC CAPITAL LETTER DCHE => [52D] (ԭ) CYRILLIC SMALL LETTER DCHE
-Removed Mapping: 10A0 (Ⴀ) GEORGIAN CAPITAL LETTER AN => [2D00] (ⴀ) GEORGIAN SMALL LETTER AN
-Removed Mapping: 10A1 (Ⴁ) GEORGIAN CAPITAL LETTER BAN => [2D01] (ⴁ) GEORGIAN SMALL LETTER BAN
-Removed Mapping: 10A2 (Ⴂ) GEORGIAN CAPITAL LETTER GAN => [2D02] (ⴂ) GEORGIAN SMALL LETTER GAN
-Removed Mapping: 10A3 (Ⴃ) GEORGIAN CAPITAL LETTER DON => [2D03] (ⴃ) GEORGIAN SMALL LETTER DON
-Removed Mapping: 10A4 (Ⴄ) GEORGIAN CAPITAL LETTER EN => [2D04] (ⴄ) GEORGIAN SMALL LETTER EN
-Removed Mapping: 10A5 (Ⴅ) GEORGIAN CAPITAL LETTER VIN => [2D05] (ⴅ) GEORGIAN SMALL LETTER VIN
-Removed Mapping: 10A6 (Ⴆ) GEORGIAN CAPITAL LETTER ZEN => [2D06] (ⴆ) GEORGIAN SMALL LETTER ZEN
-Removed Mapping: 10A7 (Ⴇ) GEORGIAN CAPITAL LETTER TAN => [2D07] (ⴇ) GEORGIAN SMALL LETTER TAN
-Removed Mapping: 10A8 (Ⴈ) GEORGIAN CAPITAL LETTER IN => [2D08] (ⴈ) GEORGIAN SMALL LETTER IN
-Removed Mapping: 10A9 (Ⴉ) GEORGIAN CAPITAL LETTER KAN => [2D09] (ⴉ) GEORGIAN SMALL LETTER KAN
-Removed Mapping: 10AA (Ⴊ) GEORGIAN CAPITAL LETTER LAS => [2D0A] (ⴊ) GEORGIAN SMALL LETTER LAS
-Removed Mapping: 10AB (Ⴋ) GEORGIAN CAPITAL LETTER MAN => [2D0B] (ⴋ) GEORGIAN SMALL LETTER MAN
-Removed Mapping: 10AC (Ⴌ) GEORGIAN CAPITAL LETTER NAR => [2D0C] (ⴌ) GEORGIAN SMALL LETTER NAR
-Removed Mapping: 10AD (Ⴍ) GEORGIAN CAPITAL LETTER ON => [2D0D] (ⴍ) GEORGIAN SMALL LETTER ON
-Removed Mapping: 10AE (Ⴎ) GEORGIAN CAPITAL LETTER PAR => [2D0E] (ⴎ) GEORGIAN SMALL LETTER PAR
-Removed Mapping: 10AF (Ⴏ) GEORGIAN CAPITAL LETTER ZHAR => [2D0F] (ⴏ) GEORGIAN SMALL LETTER ZHAR
-Removed Mapping: 10B0 (Ⴐ) GEORGIAN CAPITAL LETTER RAE => [2D10] (ⴐ) GEORGIAN SMALL LETTER RAE
-Removed Mapping: 10B1 (Ⴑ) GEORGIAN CAPITAL LETTER SAN => [2D11] (ⴑ) GEORGIAN SMALL LETTER SAN
-Removed Mapping: 10B2 (Ⴒ) GEORGIAN CAPITAL LETTER TAR => [2D12] (ⴒ) GEORGIAN SMALL LETTER TAR
-Removed Mapping: 10B3 (Ⴓ) GEORGIAN CAPITAL LETTER UN => [2D13] (ⴓ) GEORGIAN SMALL LETTER UN
-Removed Mapping: 10B4 (Ⴔ) GEORGIAN CAPITAL LETTER PHAR => [2D14] (ⴔ) GEORGIAN SMALL LETTER PHAR
-Removed Mapping: 10B5 (Ⴕ) GEORGIAN CAPITAL LETTER KHAR => [2D15] (ⴕ) GEORGIAN SMALL LETTER KHAR
-Removed Mapping: 10B6 (Ⴖ) GEORGIAN CAPITAL LETTER GHAN => [2D16] (ⴖ) GEORGIAN SMALL LETTER GHAN
-Removed Mapping: 10B7 (Ⴗ) GEORGIAN CAPITAL LETTER QAR => [2D17] (ⴗ) GEORGIAN SMALL LETTER QAR
-Removed Mapping: 10B8 (Ⴘ) GEORGIAN CAPITAL LETTER SHIN => [2D18] (ⴘ) GEORGIAN SMALL LETTER SHIN
-Removed Mapping: 10B9 (Ⴙ) GEORGIAN CAPITAL LETTER CHIN => [2D19] (ⴙ) GEORGIAN SMALL LETTER CHIN
-Removed Mapping: 10BA (Ⴚ) GEORGIAN CAPITAL LETTER CAN => [2D1A] (ⴚ) GEORGIAN SMALL LETTER CAN
-Removed Mapping: 10BB (Ⴛ) GEORGIAN CAPITAL LETTER JIL => [2D1B] (ⴛ) GEORGIAN SMALL LETTER JIL
-Removed Mapping: 10BC (Ⴜ) GEORGIAN CAPITAL LETTER CIL => [2D1C] (ⴜ) GEORGIAN SMALL LETTER CIL
-Removed Mapping: 10BD (Ⴝ) GEORGIAN CAPITAL LETTER CHAR => [2D1D] (ⴝ) GEORGIAN SMALL LETTER CHAR
-Removed Mapping: 10BE (Ⴞ) GEORGIAN CAPITAL LETTER XAN => [2D1E] (ⴞ) GEORGIAN SMALL LETTER XAN
-Removed Mapping: 10BF (Ⴟ) GEORGIAN CAPITAL LETTER JHAN => [2D1F] (ⴟ) GEORGIAN SMALL LETTER JHAN
-Removed Mapping: 10C0 (Ⴠ) GEORGIAN CAPITAL LETTER HAE => [2D20] (ⴠ) GEORGIAN SMALL LETTER HAE
-Removed Mapping: 10C1 (Ⴡ) GEORGIAN CAPITAL LETTER HE => [2D21] (ⴡ) GEORGIAN SMALL LETTER HE
-Removed Mapping: 10C2 (Ⴢ) GEORGIAN CAPITAL LETTER HIE => [2D22] (ⴢ) GEORGIAN SMALL LETTER HIE
-Removed Mapping: 10C3 (Ⴣ) GEORGIAN CAPITAL LETTER WE => [2D23] (ⴣ) GEORGIAN SMALL LETTER WE
-Removed Mapping: 10C4 (Ⴤ) GEORGIAN CAPITAL LETTER HAR => [2D24] (ⴤ) GEORGIAN SMALL LETTER HAR
-Removed Mapping: 10C5 (Ⴥ) GEORGIAN CAPITAL LETTER HOE => [2D25] (ⴥ) GEORGIAN SMALL LETTER HOE
 Removed Mapping: 1C87 (ᲇ) CYRILLIC SMALL LETTER TALL YAT => [463] (ѣ) CYRILLIC SMALL LETTER YAT
 Removed Mapping: 1C88 (ᲈ) CYRILLIC SMALL LETTER UNBLENDED UK => [A64B] (ꙋ) CYRILLIC SMALL LETTER MONOGRAPH UK
-Removed Mapping: 1C89 (Ᲊ) CYRILLIC CAPITAL LETTER TJE => [1C8A] (ᲊ) CYRILLIC SMALL LETTER TJE
 Removed Mapping: 1CB1 (Ჱ) GEORGIAN MTAVRULI CAPITAL LETTER HE => [10F1] (ჱ) GEORGIAN LETTER HE
 Removed Mapping: 1CB2 (Ჲ) GEORGIAN MTAVRULI CAPITAL LETTER HIE => [10F2] (ჲ) GEORGIAN LETTER HIE
 Removed Mapping: 1CB3 (Ჳ) GEORGIAN MTAVRULI CAPITAL LETTER WE => [10F3] (ჳ) GEORGIAN LETTER WE
@@ -15226,116 +14446,24 @@ Removed Mapping: 1FB7 (ᾷ) GREEK SMALL LETTER ALPHA WITH PERISPOMENI AND YPOGEG
 Removed Mapping: 1FB8 (Ᾰ) GREEK CAPITAL LETTER ALPHA WITH VRACHY => [1FB0] (ᾰ) GREEK SMALL LETTER ALPHA WITH VRACHY
 Removed Mapping: 1FB9 (Ᾱ) GREEK CAPITAL LETTER ALPHA WITH MACRON => [1FB1] (ᾱ) GREEK SMALL LETTER ALPHA WITH MACRON
 Removed Mapping: 1FBA (Ὰ) GREEK CAPITAL LETTER ALPHA WITH VARIA => [1F70] (ὰ) GREEK SMALL LETTER ALPHA WITH VARIA
-Removed Mapping: 1FBD (᾽) GREEK KORONIS => [20 313] ( ̓) SPACE + COMBINING COMMA ABOVE
-Removed Mapping: 1FBF (᾿) GREEK PSILI => [20 313] ( ̓) SPACE + COMBINING COMMA ABOVE
-Removed Mapping: 1FC0 (῀) GREEK PERISPOMENI => [20 342] ( ͂) SPACE + COMBINING GREEK PERISPOMENI
-Removed Mapping: 1FC1 (῁) GREEK DIALYTIKA AND PERISPOMENI => [20 308 342] ( ̈͂) SPACE + COMBINING DIAERESIS + COMBINING GREEK PERISPOMENI
 Removed Mapping: 1FC2 (ῂ) GREEK SMALL LETTER ETA WITH VARIA AND YPOGEGRAMMENI => [1F74 3B9] (ὴι) GREEK SMALL LETTER ETA WITH VARIA + GREEK SMALL LETTER IOTA
 Removed Mapping: 1FC7 (ῇ) GREEK SMALL LETTER ETA WITH PERISPOMENI AND YPOGEGRAMMENI => [1FC6 3B9] (ῆι) GREEK SMALL LETTER ETA WITH PERISPOMENI + GREEK SMALL LETTER IOTA
 Removed Mapping: 1FC8 (Ὲ) GREEK CAPITAL LETTER EPSILON WITH VARIA => [1F72] (ὲ) GREEK SMALL LETTER EPSILON WITH VARIA
 Removed Mapping: 1FCA (Ὴ) GREEK CAPITAL LETTER ETA WITH VARIA => [1F74] (ὴ) GREEK SMALL LETTER ETA WITH VARIA
-Removed Mapping: 1FCD (῍) GREEK PSILI AND VARIA => [20 313 300] ( ̓̀) SPACE + COMBINING COMMA ABOVE + COMBINING GRAVE ACCENT
-Removed Mapping: 1FCE (῎) GREEK PSILI AND OXIA => [20 313 301] ( ̓́) SPACE + COMBINING COMMA ABOVE + COMBINING ACUTE ACCENT
-Removed Mapping: 1FCF (῏) GREEK PSILI AND PERISPOMENI => [20 313 342] ( ̓͂) SPACE + COMBINING COMMA ABOVE + COMBINING GREEK PERISPOMENI
 Removed Mapping: 1FD8 (Ῐ) GREEK CAPITAL LETTER IOTA WITH VRACHY => [1FD0] (ῐ) GREEK SMALL LETTER IOTA WITH VRACHY
 Removed Mapping: 1FD9 (Ῑ) GREEK CAPITAL LETTER IOTA WITH MACRON => [1FD1] (ῑ) GREEK SMALL LETTER IOTA WITH MACRON
 Removed Mapping: 1FDA (Ὶ) GREEK CAPITAL LETTER IOTA WITH VARIA => [1F76] (ὶ) GREEK SMALL LETTER IOTA WITH VARIA
-Removed Mapping: 1FDD (῝) GREEK DASIA AND VARIA => [20 314 300] ( ̔̀) SPACE + COMBINING REVERSED COMMA ABOVE + COMBINING GRAVE ACCENT
-Removed Mapping: 1FDE (῞) GREEK DASIA AND OXIA => [20 314 301] ( ̔́) SPACE + COMBINING REVERSED COMMA ABOVE + COMBINING ACUTE ACCENT
-Removed Mapping: 1FDF (῟) GREEK DASIA AND PERISPOMENI => [20 314 342] ( ̔͂) SPACE + COMBINING REVERSED COMMA ABOVE + COMBINING GREEK PERISPOMENI
 Removed Mapping: 1FE8 (Ῠ) GREEK CAPITAL LETTER UPSILON WITH VRACHY => [1FE0] (ῠ) GREEK SMALL LETTER UPSILON WITH VRACHY
 Removed Mapping: 1FE9 (Ῡ) GREEK CAPITAL LETTER UPSILON WITH MACRON => [1FE1] (ῡ) GREEK SMALL LETTER UPSILON WITH MACRON
 Removed Mapping: 1FEA (Ὺ) GREEK CAPITAL LETTER UPSILON WITH VARIA => [1F7A] (ὺ) GREEK SMALL LETTER UPSILON WITH VARIA
 Removed Mapping: 1FEC (Ῥ) GREEK CAPITAL LETTER RHO WITH DASIA => [1FE5] (ῥ) GREEK SMALL LETTER RHO WITH DASIA
-Removed Mapping: 1FED (῭) GREEK DIALYTIKA AND VARIA => [20 308 300] ( ̈̀) SPACE + COMBINING DIAERESIS + COMBINING GRAVE ACCENT
-Removed Mapping: 1FEE (΅) GREEK DIALYTIKA AND OXIA => [20 308 301] ( ̈́) SPACE + COMBINING DIAERESIS + COMBINING ACUTE ACCENT
-Removed Mapping: 1FEF (`) GREEK VARIA => [60] (`) GRAVE ACCENT
 Removed Mapping: 1FF2 (ῲ) GREEK SMALL LETTER OMEGA WITH VARIA AND YPOGEGRAMMENI => [1F7C 3B9] (ὼι) GREEK SMALL LETTER OMEGA WITH VARIA + GREEK SMALL LETTER IOTA
 Removed Mapping: 1FF7 (ῷ) GREEK SMALL LETTER OMEGA WITH PERISPOMENI AND YPOGEGRAMMENI => [1FF6 3B9] (ῶι) GREEK SMALL LETTER OMEGA WITH PERISPOMENI + GREEK SMALL LETTER IOTA
 Removed Mapping: 1FF8 (Ὸ) GREEK CAPITAL LETTER OMICRON WITH VARIA => [1F78] (ὸ) GREEK SMALL LETTER OMICRON WITH VARIA
 Removed Mapping: 1FFA (Ὼ) GREEK CAPITAL LETTER OMEGA WITH VARIA => [1F7C] (ὼ) GREEK SMALL LETTER OMEGA WITH VARIA
-Removed Mapping: 1FFD (´) GREEK OXIA => [20 301] ( ́) SPACE + COMBINING ACUTE ACCENT
-Removed Mapping: 1FFE (῾) GREEK DASIA => [20 314] ( ̔) SPACE + COMBINING REVERSED COMMA ABOVE
-Removed Mapping: 2000 ( ) EN QUAD => [20] ( ) SPACE
-Removed Mapping: 2001 ( ) EM QUAD => [20] ( ) SPACE
-Removed Mapping: 2002 ( ) EN SPACE => [20] ( ) SPACE
-Removed Mapping: 2003 ( ) EM SPACE => [20] ( ) SPACE
-Removed Mapping: 2004 ( ) THREE-PER-EM SPACE => [20] ( ) SPACE
-Removed Mapping: 2005 ( ) FOUR-PER-EM SPACE => [20] ( ) SPACE
-Removed Mapping: 2006 ( ) SIX-PER-EM SPACE => [20] ( ) SPACE
-Removed Mapping: 2007 ( ) FIGURE SPACE => [20] ( ) SPACE
-Removed Mapping: 2008 ( ) PUNCTUATION SPACE => [20] ( ) SPACE
-Removed Mapping: 2009 ( ) THIN SPACE => [20] ( ) SPACE
-Removed Mapping: 200A ( ) HAIR SPACE => [20] ( ) SPACE
-Removed Mapping: 2017 (‗) DOUBLE LOW LINE => [20 333] ( ̳) SPACE + COMBINING DOUBLE LOW LINE
-Removed Mapping: 202F ( ) NARROW NO-BREAK SPACE => [20] ( ) SPACE
-Removed Mapping: 203E (‾) OVERLINE => [20 305] ( ̅) SPACE + COMBINING OVERLINE
-Removed Mapping: 2047 (⁇) DOUBLE QUESTION MARK => [3F 3F] (??) QUESTION MARK + QUESTION MARK
-Removed Mapping: 2048 (⁈) QUESTION EXCLAMATION MARK => [3F 21] (?!) QUESTION MARK + EXCLAMATION MARK
-Removed Mapping: 205F ( ) MEDIUM MATHEMATICAL SPACE => [20] ( ) SPACE
-Removed Mapping: 207A (⁺) SUPERSCRIPT PLUS SIGN => [2B] (+) PLUS SIGN
-Removed Mapping: 207C (⁼) SUPERSCRIPT EQUALS SIGN => [3D] (=) EQUALS SIGN
-Removed Mapping: 207D (⁽) SUPERSCRIPT LEFT PARENTHESIS => [28] (() LEFT PARENTHESIS
-Removed Mapping: 207E (⁾) SUPERSCRIPT RIGHT PARENTHESIS => [29] ()) RIGHT PARENTHESIS
-Removed Mapping: 208A (₊) SUBSCRIPT PLUS SIGN => [2B] (+) PLUS SIGN
-Removed Mapping: 208C (₌) SUBSCRIPT EQUALS SIGN => [3D] (=) EQUALS SIGN
-Removed Mapping: 208D (₍) SUBSCRIPT LEFT PARENTHESIS => [28] (() LEFT PARENTHESIS
-Removed Mapping: 208E (₎) SUBSCRIPT RIGHT PARENTHESIS => [29] ()) RIGHT PARENTHESIS
 Removed Mapping: 2094 (ₔ) LATIN SUBSCRIPT SMALL LETTER SCHWA => [259] (ə) LATIN SMALL LETTER SCHWA
-Removed Mapping: 2100 (℀) ACCOUNT OF => [61 2F 63] (a/c) LATIN SMALL LETTER A + SOLIDUS + LATIN SMALL LETTER C
-Removed Mapping: 2101 (℁) ADDRESSED TO THE SUBJECT => [61 2F 73] (a/s) LATIN SMALL LETTER A + SOLIDUS + LATIN SMALL LETTER S
-Removed Mapping: 2105 (℅) CARE OF => [63 2F 6F] (c/o) LATIN SMALL LETTER C + SOLIDUS + LATIN SMALL LETTER O
-Removed Mapping: 2106 (℆) CADA UNA => [63 2F 75] (c/u) LATIN SMALL LETTER C + SOLIDUS + LATIN SMALL LETTER U
 Removed Mapping: 2107 (ℇ) EULER CONSTANT => [25B] (ɛ) LATIN SMALL LETTER OPEN E
 Removed Mapping: 210F (ℏ) PLANCK CONSTANT OVER TWO PI => [127] (ħ) LATIN SMALL LETTER H WITH STROKE
-Removed Mapping: 2132 (Ⅎ) TURNED CAPITAL F => [214E] (ⅎ) TURNED SMALL F
-Removed Mapping: 2183 (Ↄ) ROMAN NUMERAL REVERSED ONE HUNDRED => [2184] (ↄ) LATIN SMALL LETTER REVERSED C
-Removed Mapping: 2474 (⑴) PARENTHESIZED DIGIT ONE => [28 31 29] ((1)) LEFT PARENTHESIS + DIGIT ONE + RIGHT PARENTHESIS
-Removed Mapping: 2475 (⑵) PARENTHESIZED DIGIT TWO => [28 32 29] ((2)) LEFT PARENTHESIS + DIGIT TWO + RIGHT PARENTHESIS
-Removed Mapping: 2476 (⑶) PARENTHESIZED DIGIT THREE => [28 33 29] ((3)) LEFT PARENTHESIS + DIGIT THREE + RIGHT PARENTHESIS
-Removed Mapping: 2477 (⑷) PARENTHESIZED DIGIT FOUR => [28 34 29] ((4)) LEFT PARENTHESIS + DIGIT FOUR + RIGHT PARENTHESIS
-Removed Mapping: 2478 (⑸) PARENTHESIZED DIGIT FIVE => [28 35 29] ((5)) LEFT PARENTHESIS + DIGIT FIVE + RIGHT PARENTHESIS
-Removed Mapping: 2479 (⑹) PARENTHESIZED DIGIT SIX => [28 36 29] ((6)) LEFT PARENTHESIS + DIGIT SIX + RIGHT PARENTHESIS
-Removed Mapping: 247A (⑺) PARENTHESIZED DIGIT SEVEN => [28 37 29] ((7)) LEFT PARENTHESIS + DIGIT SEVEN + RIGHT PARENTHESIS
-Removed Mapping: 247B (⑻) PARENTHESIZED DIGIT EIGHT => [28 38 29] ((8)) LEFT PARENTHESIS + DIGIT EIGHT + RIGHT PARENTHESIS
-Removed Mapping: 247C (⑼) PARENTHESIZED DIGIT NINE => [28 39 29] ((9)) LEFT PARENTHESIS + DIGIT NINE + RIGHT PARENTHESIS
-Removed Mapping: 247D (⑽) PARENTHESIZED NUMBER TEN => [28 31 30 29] ((10)) LEFT PARENTHESIS + DIGIT ONE + DIGIT ZERO + RIGHT PARENTHESIS
-Removed Mapping: 247E (⑾) PARENTHESIZED NUMBER ELEVEN => [28 31 31 29] ((11)) LEFT PARENTHESIS + DIGIT ONE + DIGIT ONE + RIGHT PARENTHESIS
-Removed Mapping: 247F (⑿) PARENTHESIZED NUMBER TWELVE => [28 31 32 29] ((12)) LEFT PARENTHESIS + DIGIT ONE + DIGIT TWO + RIGHT PARENTHESIS
-Removed Mapping: 2480 (⒀) PARENTHESIZED NUMBER THIRTEEN => [28 31 33 29] ((13)) LEFT PARENTHESIS + DIGIT ONE + DIGIT THREE + RIGHT PARENTHESIS
-Removed Mapping: 2481 (⒁) PARENTHESIZED NUMBER FOURTEEN => [28 31 34 29] ((14)) LEFT PARENTHESIS + DIGIT ONE + DIGIT FOUR + RIGHT PARENTHESIS
-Removed Mapping: 2482 (⒂) PARENTHESIZED NUMBER FIFTEEN => [28 31 35 29] ((15)) LEFT PARENTHESIS + DIGIT ONE + DIGIT FIVE + RIGHT PARENTHESIS
-Removed Mapping: 2483 (⒃) PARENTHESIZED NUMBER SIXTEEN => [28 31 36 29] ((16)) LEFT PARENTHESIS + DIGIT ONE + DIGIT SIX + RIGHT PARENTHESIS
-Removed Mapping: 2484 (⒄) PARENTHESIZED NUMBER SEVENTEEN => [28 31 37 29] ((17)) LEFT PARENTHESIS + DIGIT ONE + DIGIT SEVEN + RIGHT PARENTHESIS
-Removed Mapping: 2485 (⒅) PARENTHESIZED NUMBER EIGHTEEN => [28 31 38 29] ((18)) LEFT PARENTHESIS + DIGIT ONE + DIGIT EIGHT + RIGHT PARENTHESIS
-Removed Mapping: 2486 (⒆) PARENTHESIZED NUMBER NINETEEN => [28 31 39 29] ((19)) LEFT PARENTHESIS + DIGIT ONE + DIGIT NINE + RIGHT PARENTHESIS
-Removed Mapping: 2487 (⒇) PARENTHESIZED NUMBER TWENTY => [28 32 30 29] ((20)) LEFT PARENTHESIS + DIGIT TWO + DIGIT ZERO + RIGHT PARENTHESIS
-Removed Mapping: 249C (⒜) PARENTHESIZED LATIN SMALL LETTER A => [28 61 29] ((a)) LEFT PARENTHESIS + LATIN SMALL LETTER A + RIGHT PARENTHESIS
-Removed Mapping: 249D (⒝) PARENTHESIZED LATIN SMALL LETTER B => [28 62 29] ((b)) LEFT PARENTHESIS + LATIN SMALL LETTER B + RIGHT PARENTHESIS
-Removed Mapping: 249E (⒞) PARENTHESIZED LATIN SMALL LETTER C => [28 63 29] ((c)) LEFT PARENTHESIS + LATIN SMALL LETTER C + RIGHT PARENTHESIS
-Removed Mapping: 249F (⒟) PARENTHESIZED LATIN SMALL LETTER D => [28 64 29] ((d)) LEFT PARENTHESIS + LATIN SMALL LETTER D + RIGHT PARENTHESIS
-Removed Mapping: 24A0 (⒠) PARENTHESIZED LATIN SMALL LETTER E => [28 65 29] ((e)) LEFT PARENTHESIS + LATIN SMALL LETTER E + RIGHT PARENTHESIS
-Removed Mapping: 24A1 (⒡) PARENTHESIZED LATIN SMALL LETTER F => [28 66 29] ((f)) LEFT PARENTHESIS + LATIN SMALL LETTER F + RIGHT PARENTHESIS
-Removed Mapping: 24A2 (⒢) PARENTHESIZED LATIN SMALL LETTER G => [28 67 29] ((g)) LEFT PARENTHESIS + LATIN SMALL LETTER G + RIGHT PARENTHESIS
-Removed Mapping: 24A3 (⒣) PARENTHESIZED LATIN SMALL LETTER H => [28 68 29] ((h)) LEFT PARENTHESIS + LATIN SMALL LETTER H + RIGHT PARENTHESIS
-Removed Mapping: 24A4 (⒤) PARENTHESIZED LATIN SMALL LETTER I => [28 69 29] ((i)) LEFT PARENTHESIS + LATIN SMALL LETTER I + RIGHT PARENTHESIS
-Removed Mapping: 24A5 (⒥) PARENTHESIZED LATIN SMALL LETTER J => [28 6A 29] ((j)) LEFT PARENTHESIS + LATIN SMALL LETTER J + RIGHT PARENTHESIS
-Removed Mapping: 24A6 (⒦) PARENTHESIZED LATIN SMALL LETTER K => [28 6B 29] ((k)) LEFT PARENTHESIS + LATIN SMALL LETTER K + RIGHT PARENTHESIS
-Removed Mapping: 24A7 (⒧) PARENTHESIZED LATIN SMALL LETTER L => [28 6C 29] ((l)) LEFT PARENTHESIS + LATIN SMALL LETTER L + RIGHT PARENTHESIS
-Removed Mapping: 24A8 (⒨) PARENTHESIZED LATIN SMALL LETTER M => [28 6D 29] ((m)) LEFT PARENTHESIS + LATIN SMALL LETTER M + RIGHT PARENTHESIS
-Removed Mapping: 24A9 (⒩) PARENTHESIZED LATIN SMALL LETTER N => [28 6E 29] ((n)) LEFT PARENTHESIS + LATIN SMALL LETTER N + RIGHT PARENTHESIS
-Removed Mapping: 24AA (⒪) PARENTHESIZED LATIN SMALL LETTER O => [28 6F 29] ((o)) LEFT PARENTHESIS + LATIN SMALL LETTER O + RIGHT PARENTHESIS
-Removed Mapping: 24AB (⒫) PARENTHESIZED LATIN SMALL LETTER P => [28 70 29] ((p)) LEFT PARENTHESIS + LATIN SMALL LETTER P + RIGHT PARENTHESIS
-Removed Mapping: 24AC (⒬) PARENTHESIZED LATIN SMALL LETTER Q => [28 71 29] ((q)) LEFT PARENTHESIS + LATIN SMALL LETTER Q + RIGHT PARENTHESIS
-Removed Mapping: 24AD (⒭) PARENTHESIZED LATIN SMALL LETTER R => [28 72 29] ((r)) LEFT PARENTHESIS + LATIN SMALL LETTER R + RIGHT PARENTHESIS
-Removed Mapping: 24AE (⒮) PARENTHESIZED LATIN SMALL LETTER S => [28 73 29] ((s)) LEFT PARENTHESIS + LATIN SMALL LETTER S + RIGHT PARENTHESIS
-Removed Mapping: 24AF (⒯) PARENTHESIZED LATIN SMALL LETTER T => [28 74 29] ((t)) LEFT PARENTHESIS + LATIN SMALL LETTER T + RIGHT PARENTHESIS
-Removed Mapping: 24B0 (⒰) PARENTHESIZED LATIN SMALL LETTER U => [28 75 29] ((u)) LEFT PARENTHESIS + LATIN SMALL LETTER U + RIGHT PARENTHESIS
-Removed Mapping: 24B1 (⒱) PARENTHESIZED LATIN SMALL LETTER V => [28 76 29] ((v)) LEFT PARENTHESIS + LATIN SMALL LETTER V + RIGHT PARENTHESIS
-Removed Mapping: 24B2 (⒲) PARENTHESIZED LATIN SMALL LETTER W => [28 77 29] ((w)) LEFT PARENTHESIS + LATIN SMALL LETTER W + RIGHT PARENTHESIS
-Removed Mapping: 24B3 (⒳) PARENTHESIZED LATIN SMALL LETTER X => [28 78 29] ((x)) LEFT PARENTHESIS + LATIN SMALL LETTER X + RIGHT PARENTHESIS
-Removed Mapping: 24B4 (⒴) PARENTHESIZED LATIN SMALL LETTER Y => [28 79 29] ((y)) LEFT PARENTHESIS + LATIN SMALL LETTER Y + RIGHT PARENTHESIS
-Removed Mapping: 24B5 (⒵) PARENTHESIZED LATIN SMALL LETTER Z => [28 7A 29] ((z)) LEFT PARENTHESIS + LATIN SMALL LETTER Z + RIGHT PARENTHESIS
 Removed Mapping: 2C60 (Ⱡ) LATIN CAPITAL LETTER L WITH DOUBLE BAR => [2C61] (ⱡ) LATIN SMALL LETTER L WITH DOUBLE BAR
 Removed Mapping: 2C62 (Ɫ) LATIN CAPITAL LETTER L WITH MIDDLE TILDE => [26B] (ɫ) LATIN SMALL LETTER L WITH MIDDLE TILDE
 Removed Mapping: 2C63 (Ᵽ) LATIN CAPITAL LETTER P WITH STROKE => [1D7D] (ᵽ) LATIN SMALL LETTER P WITH STROKE
@@ -15351,75 +14479,7 @@ Removed Mapping: 2C72 (Ⱳ) LATIN CAPITAL LETTER W WITH HOOK => [2C73] (ⱳ) LAT
 Removed Mapping: 2C75 (Ⱶ) LATIN CAPITAL LETTER HALF H => [2C76] (ⱶ) LATIN SMALL LETTER HALF H
 Removed Mapping: 2C7E (Ȿ) LATIN CAPITAL LETTER S WITH SWASH TAIL => [23F] (ȿ) LATIN SMALL LETTER S WITH SWASH TAIL
 Removed Mapping: 2C7F (Ɀ) LATIN CAPITAL LETTER Z WITH SWASH TAIL => [240] (ɀ) LATIN SMALL LETTER Z WITH SWASH TAIL
-Removed Mapping: 3000 (　) IDEOGRAPHIC SPACE => [20] ( ) SPACE
 Removed Mapping: 3036 (〶) CIRCLED POSTAL MARK => [3012] (〒) POSTAL MARK
-Removed Mapping: 3200 (㈀) PARENTHESIZED HANGUL KIYEOK => [28 1100 29] ((ᄀ)) LEFT PARENTHESIS + HANGUL CHOSEONG KIYEOK + RIGHT PARENTHESIS
-Removed Mapping: 3201 (㈁) PARENTHESIZED HANGUL NIEUN => [28 1102 29] ((ᄂ)) LEFT PARENTHESIS + HANGUL CHOSEONG NIEUN + RIGHT PARENTHESIS
-Removed Mapping: 3202 (㈂) PARENTHESIZED HANGUL TIKEUT => [28 1103 29] ((ᄃ)) LEFT PARENTHESIS + HANGUL CHOSEONG TIKEUT + RIGHT PARENTHESIS
-Removed Mapping: 3203 (㈃) PARENTHESIZED HANGUL RIEUL => [28 1105 29] ((ᄅ)) LEFT PARENTHESIS + HANGUL CHOSEONG RIEUL + RIGHT PARENTHESIS
-Removed Mapping: 3204 (㈄) PARENTHESIZED HANGUL MIEUM => [28 1106 29] ((ᄆ)) LEFT PARENTHESIS + HANGUL CHOSEONG MIEUM + RIGHT PARENTHESIS
-Removed Mapping: 3205 (㈅) PARENTHESIZED HANGUL PIEUP => [28 1107 29] ((ᄇ)) LEFT PARENTHESIS + HANGUL CHOSEONG PIEUP + RIGHT PARENTHESIS
-Removed Mapping: 3206 (㈆) PARENTHESIZED HANGUL SIOS => [28 1109 29] ((ᄉ)) LEFT PARENTHESIS + HANGUL CHOSEONG SIOS + RIGHT PARENTHESIS
-Removed Mapping: 3207 (㈇) PARENTHESIZED HANGUL IEUNG => [28 110B 29] ((ᄋ)) LEFT PARENTHESIS + HANGUL CHOSEONG IEUNG + RIGHT PARENTHESIS
-Removed Mapping: 3208 (㈈) PARENTHESIZED HANGUL CIEUC => [28 110C 29] ((ᄌ)) LEFT PARENTHESIS + HANGUL CHOSEONG CIEUC + RIGHT PARENTHESIS
-Removed Mapping: 3209 (㈉) PARENTHESIZED HANGUL CHIEUCH => [28 110E 29] ((ᄎ)) LEFT PARENTHESIS + HANGUL CHOSEONG CHIEUCH + RIGHT PARENTHESIS
-Removed Mapping: 320A (㈊) PARENTHESIZED HANGUL KHIEUKH => [28 110F 29] ((ᄏ)) LEFT PARENTHESIS + HANGUL CHOSEONG KHIEUKH + RIGHT PARENTHESIS
-Removed Mapping: 320B (㈋) PARENTHESIZED HANGUL THIEUTH => [28 1110 29] ((ᄐ)) LEFT PARENTHESIS + HANGUL CHOSEONG THIEUTH + RIGHT PARENTHESIS
-Removed Mapping: 320C (㈌) PARENTHESIZED HANGUL PHIEUPH => [28 1111 29] ((ᄑ)) LEFT PARENTHESIS + HANGUL CHOSEONG PHIEUPH + RIGHT PARENTHESIS
-Removed Mapping: 320D (㈍) PARENTHESIZED HANGUL HIEUH => [28 1112 29] ((ᄒ)) LEFT PARENTHESIS + HANGUL CHOSEONG HIEUH + RIGHT PARENTHESIS
-Removed Mapping: 320E (㈎) PARENTHESIZED HANGUL KIYEOK A => [28 AC00 29] ((가)) LEFT PARENTHESIS + Hangul Syllable-AC00 [1/11172] + RIGHT PARENTHESIS
-Removed Mapping: 320F (㈏) PARENTHESIZED HANGUL NIEUN A => [28 B098 29] ((나)) LEFT PARENTHESIS + Hangul Syllable-B098 [1177/11172] + RIGHT PARENTHESIS
-Removed Mapping: 3210 (㈐) PARENTHESIZED HANGUL TIKEUT A => [28 B2E4 29] ((다)) LEFT PARENTHESIS + Hangul Syllable-B2E4 [1765/11172] + RIGHT PARENTHESIS
-Removed Mapping: 3211 (㈑) PARENTHESIZED HANGUL RIEUL A => [28 B77C 29] ((라)) LEFT PARENTHESIS + Hangul Syllable-B77C [2941/11172] + RIGHT PARENTHESIS
-Removed Mapping: 3212 (㈒) PARENTHESIZED HANGUL MIEUM A => [28 B9C8 29] ((마)) LEFT PARENTHESIS + Hangul Syllable-B9C8 [3529/11172] + RIGHT PARENTHESIS
-Removed Mapping: 3213 (㈓) PARENTHESIZED HANGUL PIEUP A => [28 BC14 29] ((바)) LEFT PARENTHESIS + Hangul Syllable-BC14 [4117/11172] + RIGHT PARENTHESIS
-Removed Mapping: 3214 (㈔) PARENTHESIZED HANGUL SIOS A => [28 C0AC 29] ((사)) LEFT PARENTHESIS + Hangul Syllable-C0AC [5293/11172] + RIGHT PARENTHESIS
-Removed Mapping: 3215 (㈕) PARENTHESIZED HANGUL IEUNG A => [28 C544 29] ((아)) LEFT PARENTHESIS + Hangul Syllable-C544 [6469/11172] + RIGHT PARENTHESIS
-Removed Mapping: 3216 (㈖) PARENTHESIZED HANGUL CIEUC A => [28 C790 29] ((자)) LEFT PARENTHESIS + Hangul Syllable-C790 [7057/11172] + RIGHT PARENTHESIS
-Removed Mapping: 3217 (㈗) PARENTHESIZED HANGUL CHIEUCH A => [28 CC28 29] ((차)) LEFT PARENTHESIS + Hangul Syllable-CC28 [8233/11172] + RIGHT PARENTHESIS
-Removed Mapping: 3218 (㈘) PARENTHESIZED HANGUL KHIEUKH A => [28 CE74 29] ((카)) LEFT PARENTHESIS + Hangul Syllable-CE74 [8821/11172] + RIGHT PARENTHESIS
-Removed Mapping: 3219 (㈙) PARENTHESIZED HANGUL THIEUTH A => [28 D0C0 29] ((타)) LEFT PARENTHESIS + Hangul Syllable-D0C0 [9409/11172] + RIGHT PARENTHESIS
-Removed Mapping: 321A (㈚) PARENTHESIZED HANGUL PHIEUPH A => [28 D30C 29] ((파)) LEFT PARENTHESIS + Hangul Syllable-D30C [9997/11172] + RIGHT PARENTHESIS
-Removed Mapping: 321B (㈛) PARENTHESIZED HANGUL HIEUH A => [28 D558 29] ((하)) LEFT PARENTHESIS + Hangul Syllable-D558 [10585/11172] + RIGHT PARENTHESIS
-Removed Mapping: 321C (㈜) PARENTHESIZED HANGUL CIEUC U => [28 C8FC 29] ((주)) LEFT PARENTHESIS + Hangul Syllable-C8FC [7421/11172] + RIGHT PARENTHESIS
-Removed Mapping: 321D (㈝) PARENTHESIZED KOREAN CHARACTER OJEON => [28 C624 C804 29] ((오전)) LEFT PARENTHESIS + Hangul Syllable-C624 [6693/11172] + Hangul Syllable-C804 [7173/11172] + RIGHT PARENTHESIS
-Removed Mapping: 321E (㈞) PARENTHESIZED KOREAN CHARACTER O HU => [28 C624 D6C4 29] ((오후)) LEFT PARENTHESIS + Hangul Syllable-C624 [6693/11172] + Hangul Syllable-D6C4 [10949/11172] + RIGHT PARENTHESIS
-Removed Mapping: 3220 (㈠) PARENTHESIZED IDEOGRAPH ONE => [28 4E00 29] ((一)) LEFT PARENTHESIS + CJK Ideograph-4E00 [1/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3221 (㈡) PARENTHESIZED IDEOGRAPH TWO => [28 4E8C 29] ((二)) LEFT PARENTHESIS + CJK Ideograph-4E8C [141/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3222 (㈢) PARENTHESIZED IDEOGRAPH THREE => [28 4E09 29] ((三)) LEFT PARENTHESIS + CJK Ideograph-4E09 [10/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3223 (㈣) PARENTHESIZED IDEOGRAPH FOUR => [28 56DB 29] ((四)) LEFT PARENTHESIS + CJK Ideograph-56DB [2268/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3224 (㈤) PARENTHESIZED IDEOGRAPH FIVE => [28 4E94 29] ((五)) LEFT PARENTHESIS + CJK Ideograph-4E94 [149/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3225 (㈥) PARENTHESIZED IDEOGRAPH SIX => [28 516D 29] ((六)) LEFT PARENTHESIS + CJK Ideograph-516D [878/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3226 (㈦) PARENTHESIZED IDEOGRAPH SEVEN => [28 4E03 29] ((七)) LEFT PARENTHESIS + CJK Ideograph-4E03 [4/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3227 (㈧) PARENTHESIZED IDEOGRAPH EIGHT => [28 516B 29] ((八)) LEFT PARENTHESIS + CJK Ideograph-516B [876/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3228 (㈨) PARENTHESIZED IDEOGRAPH NINE => [28 4E5D 29] ((九)) LEFT PARENTHESIS + CJK Ideograph-4E5D [94/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3229 (㈩) PARENTHESIZED IDEOGRAPH TEN => [28 5341 29] ((十)) LEFT PARENTHESIS + CJK Ideograph-5341 [1346/20992] + RIGHT PARENTHESIS
-Removed Mapping: 322A (㈪) PARENTHESIZED IDEOGRAPH MOON => [28 6708 29] ((月)) LEFT PARENTHESIS + CJK Ideograph-6708 [6409/20992] + RIGHT PARENTHESIS
-Removed Mapping: 322B (㈫) PARENTHESIZED IDEOGRAPH FIRE => [28 706B 29] ((火)) LEFT PARENTHESIS + CJK Ideograph-706B [8812/20992] + RIGHT PARENTHESIS
-Removed Mapping: 322C (㈬) PARENTHESIZED IDEOGRAPH WATER => [28 6C34 29] ((水)) LEFT PARENTHESIS + CJK Ideograph-6C34 [7733/20992] + RIGHT PARENTHESIS
-Removed Mapping: 322D (㈭) PARENTHESIZED IDEOGRAPH WOOD => [28 6728 29] ((木)) LEFT PARENTHESIS + CJK Ideograph-6728 [6441/20992] + RIGHT PARENTHESIS
-Removed Mapping: 322E (㈮) PARENTHESIZED IDEOGRAPH METAL => [28 91D1 29] ((金)) LEFT PARENTHESIS + CJK Ideograph-91D1 [17362/20992] + RIGHT PARENTHESIS
-Removed Mapping: 322F (㈯) PARENTHESIZED IDEOGRAPH EARTH => [28 571F 29] ((土)) LEFT PARENTHESIS + CJK Ideograph-571F [2336/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3230 (㈰) PARENTHESIZED IDEOGRAPH SUN => [28 65E5 29] ((日)) LEFT PARENTHESIS + CJK Ideograph-65E5 [6118/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3231 (㈱) PARENTHESIZED IDEOGRAPH STOCK => [28 682A 29] ((株)) LEFT PARENTHESIS + CJK Ideograph-682A [6699/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3232 (㈲) PARENTHESIZED IDEOGRAPH HAVE => [28 6709 29] ((有)) LEFT PARENTHESIS + CJK Ideograph-6709 [6410/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3233 (㈳) PARENTHESIZED IDEOGRAPH SOCIETY => [28 793E 29] ((社)) LEFT PARENTHESIS + CJK Ideograph-793E [11071/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3234 (㈴) PARENTHESIZED IDEOGRAPH NAME => [28 540D 29] ((名)) LEFT PARENTHESIS + CJK Ideograph-540D [1550/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3235 (㈵) PARENTHESIZED IDEOGRAPH SPECIAL => [28 7279 29] ((特)) LEFT PARENTHESIS + CJK Ideograph-7279 [9338/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3236 (㈶) PARENTHESIZED IDEOGRAPH FINANCIAL => [28 8CA1 29] ((財)) LEFT PARENTHESIS + CJK Ideograph-8CA1 [16034/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3237 (㈷) PARENTHESIZED IDEOGRAPH CONGRATULATION => [28 795D 29] ((祝)) LEFT PARENTHESIS + CJK Ideograph-795D [11102/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3238 (㈸) PARENTHESIZED IDEOGRAPH LABOR => [28 52B4 29] ((労)) LEFT PARENTHESIS + CJK Ideograph-52B4 [1205/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3239 (㈹) PARENTHESIZED IDEOGRAPH REPRESENT => [28 4EE3 29] ((代)) LEFT PARENTHESIS + CJK Ideograph-4EE3 [228/20992] + RIGHT PARENTHESIS
-Removed Mapping: 323A (㈺) PARENTHESIZED IDEOGRAPH CALL => [28 547C 29] ((呼)) LEFT PARENTHESIS + CJK Ideograph-547C [1661/20992] + RIGHT PARENTHESIS
-Removed Mapping: 323B (㈻) PARENTHESIZED IDEOGRAPH STUDY => [28 5B66 29] ((学)) LEFT PARENTHESIS + CJK Ideograph-5B66 [3431/20992] + RIGHT PARENTHESIS
-Removed Mapping: 323C (㈼) PARENTHESIZED IDEOGRAPH SUPERVISE => [28 76E3 29] ((監)) LEFT PARENTHESIS + CJK Ideograph-76E3 [10468/20992] + RIGHT PARENTHESIS
-Removed Mapping: 323D (㈽) PARENTHESIZED IDEOGRAPH ENTERPRISE => [28 4F01 29] ((企)) LEFT PARENTHESIS + CJK Ideograph-4F01 [258/20992] + RIGHT PARENTHESIS
-Removed Mapping: 323E (㈾) PARENTHESIZED IDEOGRAPH RESOURCE => [28 8CC7 29] ((資)) LEFT PARENTHESIS + CJK Ideograph-8CC7 [16072/20992] + RIGHT PARENTHESIS
-Removed Mapping: 323F (㈿) PARENTHESIZED IDEOGRAPH ALLIANCE => [28 5354 29] ((協)) LEFT PARENTHESIS + CJK Ideograph-5354 [1365/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3240 (㉀) PARENTHESIZED IDEOGRAPH FESTIVAL => [28 796D 29] ((祭)) LEFT PARENTHESIS + CJK Ideograph-796D [11118/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3241 (㉁) PARENTHESIZED IDEOGRAPH REST => [28 4F11 29] ((休)) LEFT PARENTHESIS + CJK Ideograph-4F11 [274/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3242 (㉂) PARENTHESIZED IDEOGRAPH SELF => [28 81EA 29] ((自)) LEFT PARENTHESIS + CJK Ideograph-81EA [13291/20992] + RIGHT PARENTHESIS
-Removed Mapping: 3243 (㉃) PARENTHESIZED IDEOGRAPH REACH => [28 81F3 29] ((至)) LEFT PARENTHESIS + CJK Ideograph-81F3 [13300/20992] + RIGHT PARENTHESIS
 Removed Mapping: 33A7 (㎧) SQUARE M OVER S => [6D 2215 73] (m∕s) LATIN SMALL LETTER M + DIVISION SLASH + LATIN SMALL LETTER S
 Removed Mapping: 33A8 (㎨) SQUARE M OVER S SQUARED => [6D 2215 73 32] (m∕s2) LATIN SMALL LETTER M + DIVISION SLASH + LATIN SMALL LETTER S + DIGIT TWO
 Removed Mapping: 33AE (㎮) SQUARE RAD OVER S => [72 61 64 2215 73] (rad∕s) LATIN SMALL LETTER R + LATIN SMALL LETTER A + LATIN SMALL LETTER D + DIVISION SLASH + LATIN SMALL LETTER S
@@ -15546,14 +14606,9 @@ Removed Mapping: A7C5 (Ʂ) LATIN CAPITAL LETTER S WITH HOOK => [282] (ʂ) LATIN
 Removed Mapping: A7C6 (Ᶎ) LATIN CAPITAL LETTER Z WITH PALATAL HOOK => [1D8E] (ᶎ) LATIN SMALL LETTER Z WITH PALATAL HOOK
 Removed Mapping: A7C7 (Ꟈ) LATIN CAPITAL LETTER D WITH SHORT STROKE OVERLAY => [A7C8] (ꟈ) LATIN SMALL LETTER D WITH SHORT STROKE OVERLAY
 Removed Mapping: A7C9 (Ꟊ) LATIN CAPITAL LETTER S WITH SHORT STROKE OVERLAY => [A7CA] (ꟊ) LATIN SMALL LETTER S WITH SHORT STROKE OVERLAY
-Removed Mapping: A7CB (Ɤ) LATIN CAPITAL LETTER RAMS HORN => [264] (ɤ) LATIN SMALL LETTER RAMS HORN
-Removed Mapping: A7CC (Ꟍ) LATIN CAPITAL LETTER S WITH DIAGONAL STROKE => [A7CD] (ꟍ) LATIN SMALL LETTER S WITH DIAGONAL STROKE
 Removed Mapping: A7D0 (Ꟑ) LATIN CAPITAL LETTER CLOSED INSULAR G => [A7D1] (ꟑ) LATIN SMALL LETTER CLOSED INSULAR G
 Removed Mapping: A7D6 (Ꟗ) LATIN CAPITAL LETTER MIDDLE SCOTS S => [A7D7] (ꟗ) LATIN SMALL LETTER MIDDLE SCOTS S
 Removed Mapping: A7D8 (Ꟙ) LATIN CAPITAL LETTER SIGMOID S => [A7D9] (ꟙ) LATIN SMALL LETTER SIGMOID S
-Removed Mapping: A7DA (Ꟛ) LATIN CAPITAL LETTER LAMBDA => [A7DB] (ꟛ) LATIN SMALL LETTER LAMBDA
-Removed Mapping: A7DC (Ƛ) LATIN CAPITAL LETTER LAMBDA WITH STROKE => [19B] (ƛ) LATIN SMALL LETTER LAMBDA WITH STROKE
-Removed Mapping: FB29 (﬩) HEBREW LETTER ALTERNATIVE PLUS SIGN => [2B] (+) PLUS SIGN
 Removed Mapping: FB50 (ﭐ) ARABIC LETTER ALEF WASLA ISOLATED FORM => [671] (ٱ) ARABIC LETTER ALEF WASLA
 Removed Mapping: FB51 (ﭑ) ARABIC LETTER ALEF WASLA FINAL FORM => [671] (ٱ) ARABIC LETTER ALEF WASLA
 Removed Mapping: FB86 (ﮆ) ARABIC LETTER DUL ISOLATED FORM => [68E] (ڎ) ARABIC LETTER DUL
@@ -15563,86 +14618,38 @@ Removed Mapping: FBAB (ﮫ) ARABIC LETTER HEH DOACHASHMEE FINAL FORM => [6BE] (�
 Removed Mapping: FBAC (ﮬ) ARABIC LETTER HEH DOACHASHMEE INITIAL FORM => [6BE] (ھ) ARABIC LETTER HEH DOACHASHMEE
 Removed Mapping: FBAD (ﮭ) ARABIC LETTER HEH DOACHASHMEE MEDIAL FORM => [6BE] (ھ) ARABIC LETTER HEH DOACHASHMEE
 Removed Mapping: FBDD (ﯝ) ARABIC LETTER U WITH HAMZA ABOVE ISOLATED FORM => [6C7 674] (ۇٴ) ARABIC LETTER U + ARABIC LETTER HIGH HAMZA
-Removed Mapping: FC5E (ﱞ) ARABIC LIGATURE SHADDA WITH DAMMATAN ISOLATED FORM => [20 64C 651] ( ٌّ) SPACE + ARABIC DAMMATAN + ARABIC SHADDA
-Removed Mapping: FC5F (ﱟ) ARABIC LIGATURE SHADDA WITH KASRATAN ISOLATED FORM => [20 64D 651] ( ٍّ) SPACE + ARABIC KASRATAN + ARABIC SHADDA
-Removed Mapping: FC60 (ﱠ) ARABIC LIGATURE SHADDA WITH FATHA ISOLATED FORM => [20 64E 651] ( َّ) SPACE + ARABIC FATHA + ARABIC SHADDA
-Removed Mapping: FC61 (ﱡ) ARABIC LIGATURE SHADDA WITH DAMMA ISOLATED FORM => [20 64F 651] ( ُّ) SPACE + ARABIC DAMMA + ARABIC SHADDA
-Removed Mapping: FC62 (ﱢ) ARABIC LIGATURE SHADDA WITH KASRA ISOLATED FORM => [20 650 651] ( ِّ) SPACE + ARABIC KASRA + ARABIC SHADDA
 Removed Mapping: FCF2 (ﳲ) ARABIC LIGATURE SHADDA WITH FATHA MEDIAL FORM => [640 64E 651] (ـَّ) ARABIC TATWEEL + ARABIC FATHA + ARABIC SHADDA
 Removed Mapping: FCF3 (ﳳ) ARABIC LIGATURE SHADDA WITH DAMMA MEDIAL FORM => [640 64F 651] (ـُّ) ARABIC TATWEEL + ARABIC DAMMA + ARABIC SHADDA
 Removed Mapping: FCF4 (ﳴ) ARABIC LIGATURE SHADDA WITH KASRA MEDIAL FORM => [640 650 651] (ـِّ) ARABIC TATWEEL + ARABIC KASRA + ARABIC SHADDA
-Removed Mapping: FDFA (ﷺ) ARABIC LIGATURE SALLALLAHOU ALAYHE WASALLAM => [635 644 649 20 627 644 644 647 20 639 644 64A 647 20 648 633 644 645] (صلى الله عليه وسلم) ARABIC LETTER SAD + ARABIC LETTER LAM + ARABIC LETTER ALEF MAKSURA + SPACE + ARABIC LETTER ALEF + ARABIC LETTER LAM + ARABIC LETTER LAM + ARABIC LETTER HEH + SPACE + ARABIC LETTER AIN + ARABIC LETTER LAM + ARABIC LETTER YEH + ARABIC LETTER HEH + SPACE + ARABIC LETTER WAW + ARABIC LETTER SEEN + ARABIC LETTER LAM + ARABIC LETTER MEEM
-Removed Mapping: FDFB (ﷻ) ARABIC LIGATURE JALLAJALALOUHOU => [62C 644 20 62C 644 627 644 647] (جل جلاله) ARABIC LETTER JEEM + ARABIC LETTER LAM + SPACE + ARABIC LETTER JEEM + ARABIC LETTER LAM + ARABIC LETTER ALEF + ARABIC LETTER LAM + ARABIC LETTER HEH
-Removed Mapping: FE49 (﹉) DASHED OVERLINE => [20 305] ( ̅) SPACE + COMBINING OVERLINE
-Removed Mapping: FE4A (﹊) CENTRELINE OVERLINE => [20 305] ( ̅) SPACE + COMBINING OVERLINE
-Removed Mapping: FE4B (﹋) WAVY OVERLINE => [20 305] ( ̅) SPACE + COMBINING OVERLINE
-Removed Mapping: FE4C (﹌) DOUBLE WAVY OVERLINE => [20 305] ( ̅) SPACE + COMBINING OVERLINE
-Removed Mapping: FE50 (﹐) SMALL COMMA => [2C] (,) COMMA
+Removed Mapping: FE11 (︑) PRESENTATION FORM FOR VERTICAL IDEOGRAPHIC COMMA => [3001] (、) IDEOGRAPHIC COMMA
+Removed Mapping: FE17 (︗) PRESENTATION FORM FOR VERTICAL LEFT WHITE LENTICULAR BRACKET => [3016] (〖) LEFT WHITE LENTICULAR BRACKET
+Removed Mapping: FE18 (︘) PRESENTATION FORM FOR VERTICAL RIGHT WHITE LENTICULAR BRAKCET => [3017] (〗) RIGHT WHITE LENTICULAR BRACKET
+Removed Mapping: FE39 (︹) PRESENTATION FORM FOR VERTICAL LEFT TORTOISE SHELL BRACKET => [3014] (〔) LEFT TORTOISE SHELL BRACKET
+Removed Mapping: FE3A (︺) PRESENTATION FORM FOR VERTICAL RIGHT TORTOISE SHELL BRACKET => [3015] (〕) RIGHT TORTOISE SHELL BRACKET
+Removed Mapping: FE3B (︻) PRESENTATION FORM FOR VERTICAL LEFT BLACK LENTICULAR BRACKET => [3010] (【) LEFT BLACK LENTICULAR BRACKET
+Removed Mapping: FE3C (︼) PRESENTATION FORM FOR VERTICAL RIGHT BLACK LENTICULAR BRACKET => [3011] (】) RIGHT BLACK LENTICULAR BRACKET
+Removed Mapping: FE3D (︽) PRESENTATION FORM FOR VERTICAL LEFT DOUBLE ANGLE BRACKET => [300A] (《) LEFT DOUBLE ANGLE BRACKET
+Removed Mapping: FE3E (︾) PRESENTATION FORM FOR VERTICAL RIGHT DOUBLE ANGLE BRACKET => [300B] (》) RIGHT DOUBLE ANGLE BRACKET
+Removed Mapping: FE3F (︿) PRESENTATION FORM FOR VERTICAL LEFT ANGLE BRACKET => [3008] (〈) LEFT ANGLE BRACKET
+Removed Mapping: FE40 (﹀) PRESENTATION FORM FOR VERTICAL RIGHT ANGLE BRACKET => [3009] (〉) RIGHT ANGLE BRACKET
+Removed Mapping: FE41 (﹁) PRESENTATION FORM FOR VERTICAL LEFT CORNER BRACKET => [300C] (「) LEFT CORNER BRACKET
+Removed Mapping: FE42 (﹂) PRESENTATION FORM FOR VERTICAL RIGHT CORNER BRACKET => [300D] (」) RIGHT CORNER BRACKET
+Removed Mapping: FE43 (﹃) PRESENTATION FORM FOR VERTICAL LEFT WHITE CORNER BRACKET => [300E] (『) LEFT WHITE CORNER BRACKET
+Removed Mapping: FE44 (﹄) PRESENTATION FORM FOR VERTICAL RIGHT WHITE CORNER BRACKET => [300F] (』) RIGHT WHITE CORNER BRACKET
 Removed Mapping: FE51 (﹑) SMALL IDEOGRAPHIC COMMA => [3001] (、) IDEOGRAPHIC COMMA
-Removed Mapping: FE54 (﹔) SMALL SEMICOLON => [3B] (;) SEMICOLON
-Removed Mapping: FE55 (﹕) SMALL COLON => [3A] (:) COLON
-Removed Mapping: FE59 (﹙) SMALL LEFT PARENTHESIS => [28] (() LEFT PARENTHESIS
-Removed Mapping: FE5A (﹚) SMALL RIGHT PARENTHESIS => [29] ()) RIGHT PARENTHESIS
-Removed Mapping: FE5B (﹛) SMALL LEFT CURLY BRACKET => [7B] ({) LEFT CURLY BRACKET
-Removed Mapping: FE5C (﹜) SMALL RIGHT CURLY BRACKET => [7D] (}) RIGHT CURLY BRACKET
 Removed Mapping: FE5D (﹝) SMALL LEFT TORTOISE SHELL BRACKET => [3014] (〔) LEFT TORTOISE SHELL BRACKET
 Removed Mapping: FE5E (﹞) SMALL RIGHT TORTOISE SHELL BRACKET => [3015] (〕) RIGHT TORTOISE SHELL BRACKET
-Removed Mapping: FE5F (﹟) SMALL NUMBER SIGN => [23] (#) NUMBER SIGN
-Removed Mapping: FE60 (﹠) SMALL AMPERSAND => [26] (&) AMPERSAND
-Removed Mapping: FE61 (﹡) SMALL ASTERISK => [2A] (*) ASTERISK
-Removed Mapping: FE62 (﹢) SMALL PLUS SIGN => [2B] (+) PLUS SIGN
-Removed Mapping: FE64 (﹤) SMALL LESS-THAN SIGN => [3C] (<) LESS-THAN SIGN
-Removed Mapping: FE65 (﹥) SMALL GREATER-THAN SIGN => [3E] (>) GREATER-THAN SIGN
-Removed Mapping: FE66 (﹦) SMALL EQUALS SIGN => [3D] (=) EQUALS SIGN
-Removed Mapping: FE68 (﹨) SMALL REVERSE SOLIDUS => [5C] (\) REVERSE SOLIDUS
-Removed Mapping: FE6A (﹪) SMALL PERCENT SIGN => [25] (%) PERCENT SIGN
-Removed Mapping: FE6B (﹫) SMALL COMMERCIAL AT => [40] (@) COMMERCIAL AT
-Removed Mapping: FE70 (ﹰ) ARABIC FATHATAN ISOLATED FORM => [20 64B] ( ً) SPACE + ARABIC FATHATAN
 Removed Mapping: FE71 (ﹱ) ARABIC TATWEEL WITH FATHATAN ABOVE => [640 64B] (ـً) ARABIC TATWEEL + ARABIC FATHATAN
-Removed Mapping: FE72 (ﹲ) ARABIC DAMMATAN ISOLATED FORM => [20 64C] ( ٌ) SPACE + ARABIC DAMMATAN
-Removed Mapping: FE74 (ﹴ) ARABIC KASRATAN ISOLATED FORM => [20 64D] ( ٍ) SPACE + ARABIC KASRATAN
-Removed Mapping: FE76 (ﹶ) ARABIC FATHA ISOLATED FORM => [20 64E] ( َ) SPACE + ARABIC FATHA
 Removed Mapping: FE77 (ﹷ) ARABIC FATHA MEDIAL FORM => [640 64E] (ـَ) ARABIC TATWEEL + ARABIC FATHA
-Removed Mapping: FE78 (ﹸ) ARABIC DAMMA ISOLATED FORM => [20 64F] ( ُ) SPACE + ARABIC DAMMA
 Removed Mapping: FE79 (ﹹ) ARABIC DAMMA MEDIAL FORM => [640 64F] (ـُ) ARABIC TATWEEL + ARABIC DAMMA
-Removed Mapping: FE7A (ﹺ) ARABIC KASRA ISOLATED FORM => [20 650] ( ِ) SPACE + ARABIC KASRA
 Removed Mapping: FE7B (ﹻ) ARABIC KASRA MEDIAL FORM => [640 650] (ـِ) ARABIC TATWEEL + ARABIC KASRA
-Removed Mapping: FE7C (ﹼ) ARABIC SHADDA ISOLATED FORM => [20 651] ( ّ) SPACE + ARABIC SHADDA
 Removed Mapping: FE7D (ﹽ) ARABIC SHADDA MEDIAL FORM => [640 651] (ـّ) ARABIC TATWEEL + ARABIC SHADDA
-Removed Mapping: FE7E (ﹾ) ARABIC SUKUN ISOLATED FORM => [20 652] ( ْ) SPACE + ARABIC SUKUN
 Removed Mapping: FE7F (ﹿ) ARABIC SUKUN MEDIAL FORM => [640 652] (ـْ) ARABIC TATWEEL + ARABIC SUKUN
-Removed Mapping: FF02 (＂) FULLWIDTH QUOTATION MARK => [22] (") QUOTATION MARK
-Removed Mapping: FF03 (＃) FULLWIDTH NUMBER SIGN => [23] (#) NUMBER SIGN
-Removed Mapping: FF05 (％) FULLWIDTH PERCENT SIGN => [25] (%) PERCENT SIGN
-Removed Mapping: FF06 (＆) FULLWIDTH AMPERSAND => [26] (&) AMPERSAND
-Removed Mapping: FF07 (＇) FULLWIDTH APOSTROPHE => [27] (') APOSTROPHE
-Removed Mapping: FF08 (（) FULLWIDTH LEFT PARENTHESIS => [28] (() LEFT PARENTHESIS
-Removed Mapping: FF09 (）) FULLWIDTH RIGHT PARENTHESIS => [29] ()) RIGHT PARENTHESIS
-Removed Mapping: FF0A (＊) FULLWIDTH ASTERISK => [2A] (*) ASTERISK
-Removed Mapping: FF0B (＋) FULLWIDTH PLUS SIGN => [2B] (+) PLUS SIGN
-Removed Mapping: FF0C (，) FULLWIDTH COMMA => [2C] (,) COMMA
-Removed Mapping: FF0F (／) FULLWIDTH SOLIDUS => [2F] (/) SOLIDUS
-Removed Mapping: FF1A (：) FULLWIDTH COLON => [3A] (:) COLON
-Removed Mapping: FF1B (；) FULLWIDTH SEMICOLON => [3B] (;) SEMICOLON
-Removed Mapping: FF1C (＜) FULLWIDTH LESS-THAN SIGN => [3C] (<) LESS-THAN SIGN
-Removed Mapping: FF1D (＝) FULLWIDTH EQUALS SIGN => [3D] (=) EQUALS SIGN
-Removed Mapping: FF1E (＞) FULLWIDTH GREATER-THAN SIGN => [3E] (>) GREATER-THAN SIGN
-Removed Mapping: FF20 (＠) FULLWIDTH COMMERCIAL AT => [40] (@) COMMERCIAL AT
-Removed Mapping: FF3B (［) FULLWIDTH LEFT SQUARE BRACKET => [5B] ([) LEFT SQUARE BRACKET
-Removed Mapping: FF3C (＼) FULLWIDTH REVERSE SOLIDUS => [5C] (\) REVERSE SOLIDUS
-Removed Mapping: FF3D (］) FULLWIDTH RIGHT SQUARE BRACKET => [5D] (]) RIGHT SQUARE BRACKET
-Removed Mapping: FF3E (＾) FULLWIDTH CIRCUMFLEX ACCENT => [5E] (^) CIRCUMFLEX ACCENT
-Removed Mapping: FF40 (｀) FULLWIDTH GRAVE ACCENT => [60] (`) GRAVE ACCENT
-Removed Mapping: FF5B (｛) FULLWIDTH LEFT CURLY BRACKET => [7B] ({) LEFT CURLY BRACKET
-Removed Mapping: FF5C (｜) FULLWIDTH VERTICAL LINE => [7C] (|) VERTICAL LINE
-Removed Mapping: FF5D (｝) FULLWIDTH RIGHT CURLY BRACKET => [7D] (}) RIGHT CURLY BRACKET
-Removed Mapping: FF5E (～) FULLWIDTH TILDE => [7E] (~) TILDE
 Removed Mapping: FF5F (｟) FULLWIDTH LEFT WHITE PARENTHESIS => [2985] (⦅) LEFT WHITE PARENTHESIS
 Removed Mapping: FF60 (｠) FULLWIDTH RIGHT WHITE PARENTHESIS => [2986] (⦆) RIGHT WHITE PARENTHESIS
 Removed Mapping: FF62 (｢) HALFWIDTH LEFT CORNER BRACKET => [300C] (「) LEFT CORNER BRACKET
 Removed Mapping: FF63 (｣) HALFWIDTH RIGHT CORNER BRACKET => [300D] (」) RIGHT CORNER BRACKET
 Removed Mapping: FF64 (､) HALFWIDTH IDEOGRAPHIC COMMA => [3001] (、) IDEOGRAPHIC COMMA
-Removed Mapping: FFE3 (￣) FULLWIDTH MACRON => [20 304] ( ̄) SPACE + COMBINING MACRON
 Removed Mapping: FFE4 (￤) FULLWIDTH BROKEN BAR => [A6] (¦) BROKEN BAR
 Removed Mapping: FFE8 (￨) HALFWIDTH FORMS LIGHT VERTICAL => [2502] (│) BOX DRAWINGS LIGHT VERTICAL
 Removed Mapping: FFED (￭) HALFWIDTH BLACK SQUARE => [25A0] (■) BLACK SQUARE
@@ -15662,42 +14669,6 @@ Removed Mapping: 1EE1F (𞸟) ARABIC MATHEMATICAL DOTLESS QAF => [66F] (ٯ) ARAB
 Removed Mapping: 1EE5F (𞹟) ARABIC MATHEMATICAL TAILED DOTLESS QAF => [66F] (ٯ) ARABIC LETTER DOTLESS QAF
 Removed Mapping: 1EE7C (𞹼) ARABIC MATHEMATICAL STRETCHED DOTLESS BEH => [66E] (ٮ) ARABIC LETTER DOTLESS BEH
 Removed Mapping: 1EE7E (𞹾) ARABIC MATHEMATICAL STRETCHED DOTLESS FEH => [6A1] (ڡ) ARABIC LETTER DOTLESS FEH
-Removed Mapping: 1F101 (🄁) DIGIT ZERO COMMA => [30 2C] (0,) DIGIT ZERO + COMMA
-Removed Mapping: 1F102 (🄂) DIGIT ONE COMMA => [31 2C] (1,) DIGIT ONE + COMMA
-Removed Mapping: 1F103 (🄃) DIGIT TWO COMMA => [32 2C] (2,) DIGIT TWO + COMMA
-Removed Mapping: 1F104 (🄄) DIGIT THREE COMMA => [33 2C] (3,) DIGIT THREE + COMMA
-Removed Mapping: 1F105 (🄅) DIGIT FOUR COMMA => [34 2C] (4,) DIGIT FOUR + COMMA
-Removed Mapping: 1F106 (🄆) DIGIT FIVE COMMA => [35 2C] (5,) DIGIT FIVE + COMMA
-Removed Mapping: 1F107 (🄇) DIGIT SIX COMMA => [36 2C] (6,) DIGIT SIX + COMMA
-Removed Mapping: 1F108 (🄈) DIGIT SEVEN COMMA => [37 2C] (7,) DIGIT SEVEN + COMMA
-Removed Mapping: 1F109 (🄉) DIGIT EIGHT COMMA => [38 2C] (8,) DIGIT EIGHT + COMMA
-Removed Mapping: 1F10A (🄊) DIGIT NINE COMMA => [39 2C] (9,) DIGIT NINE + COMMA
-Removed Mapping: 1F110 (🄐) PARENTHESIZED LATIN CAPITAL LETTER A => [28 61 29] ((a)) LEFT PARENTHESIS + LATIN SMALL LETTER A + RIGHT PARENTHESIS
-Removed Mapping: 1F111 (🄑) PARENTHESIZED LATIN CAPITAL LETTER B => [28 62 29] ((b)) LEFT PARENTHESIS + LATIN SMALL LETTER B + RIGHT PARENTHESIS
-Removed Mapping: 1F112 (🄒) PARENTHESIZED LATIN CAPITAL LETTER C => [28 63 29] ((c)) LEFT PARENTHESIS + LATIN SMALL LETTER C + RIGHT PARENTHESIS
-Removed Mapping: 1F113 (🄓) PARENTHESIZED LATIN CAPITAL LETTER D => [28 64 29] ((d)) LEFT PARENTHESIS + LATIN SMALL LETTER D + RIGHT PARENTHESIS
-Removed Mapping: 1F114 (🄔) PARENTHESIZED LATIN CAPITAL LETTER E => [28 65 29] ((e)) LEFT PARENTHESIS + LATIN SMALL LETTER E + RIGHT PARENTHESIS
-Removed Mapping: 1F115 (🄕) PARENTHESIZED LATIN CAPITAL LETTER F => [28 66 29] ((f)) LEFT PARENTHESIS + LATIN SMALL LETTER F + RIGHT PARENTHESIS
-Removed Mapping: 1F116 (🄖) PARENTHESIZED LATIN CAPITAL LETTER G => [28 67 29] ((g)) LEFT PARENTHESIS + LATIN SMALL LETTER G + RIGHT PARENTHESIS
-Removed Mapping: 1F117 (🄗) PARENTHESIZED LATIN CAPITAL LETTER H => [28 68 29] ((h)) LEFT PARENTHESIS + LATIN SMALL LETTER H + RIGHT PARENTHESIS
-Removed Mapping: 1F118 (🄘) PARENTHESIZED LATIN CAPITAL LETTER I => [28 69 29] ((i)) LEFT PARENTHESIS + LATIN SMALL LETTER I + RIGHT PARENTHESIS
-Removed Mapping: 1F119 (🄙) PARENTHESIZED LATIN CAPITAL LETTER J => [28 6A 29] ((j)) LEFT PARENTHESIS + LATIN SMALL LETTER J + RIGHT PARENTHESIS
-Removed Mapping: 1F11A (🄚) PARENTHESIZED LATIN CAPITAL LETTER K => [28 6B 29] ((k)) LEFT PARENTHESIS + LATIN SMALL LETTER K + RIGHT PARENTHESIS
-Removed Mapping: 1F11B (🄛) PARENTHESIZED LATIN CAPITAL LETTER L => [28 6C 29] ((l)) LEFT PARENTHESIS + LATIN SMALL LETTER L + RIGHT PARENTHESIS
-Removed Mapping: 1F11C (🄜) PARENTHESIZED LATIN CAPITAL LETTER M => [28 6D 29] ((m)) LEFT PARENTHESIS + LATIN SMALL LETTER M + RIGHT PARENTHESIS
-Removed Mapping: 1F11D (🄝) PARENTHESIZED LATIN CAPITAL LETTER N => [28 6E 29] ((n)) LEFT PARENTHESIS + LATIN SMALL LETTER N + RIGHT PARENTHESIS
-Removed Mapping: 1F11E (🄞) PARENTHESIZED LATIN CAPITAL LETTER O => [28 6F 29] ((o)) LEFT PARENTHESIS + LATIN SMALL LETTER O + RIGHT PARENTHESIS
-Removed Mapping: 1F11F (🄟) PARENTHESIZED LATIN CAPITAL LETTER P => [28 70 29] ((p)) LEFT PARENTHESIS + LATIN SMALL LETTER P + RIGHT PARENTHESIS
-Removed Mapping: 1F120 (🄠) PARENTHESIZED LATIN CAPITAL LETTER Q => [28 71 29] ((q)) LEFT PARENTHESIS + LATIN SMALL LETTER Q + RIGHT PARENTHESIS
-Removed Mapping: 1F121 (🄡) PARENTHESIZED LATIN CAPITAL LETTER R => [28 72 29] ((r)) LEFT PARENTHESIS + LATIN SMALL LETTER R + RIGHT PARENTHESIS
-Removed Mapping: 1F122 (🄢) PARENTHESIZED LATIN CAPITAL LETTER S => [28 73 29] ((s)) LEFT PARENTHESIS + LATIN SMALL LETTER S + RIGHT PARENTHESIS
-Removed Mapping: 1F123 (🄣) PARENTHESIZED LATIN CAPITAL LETTER T => [28 74 29] ((t)) LEFT PARENTHESIS + LATIN SMALL LETTER T + RIGHT PARENTHESIS
-Removed Mapping: 1F124 (🄤) PARENTHESIZED LATIN CAPITAL LETTER U => [28 75 29] ((u)) LEFT PARENTHESIS + LATIN SMALL LETTER U + RIGHT PARENTHESIS
-Removed Mapping: 1F125 (🄥) PARENTHESIZED LATIN CAPITAL LETTER V => [28 76 29] ((v)) LEFT PARENTHESIS + LATIN SMALL LETTER V + RIGHT PARENTHESIS
-Removed Mapping: 1F126 (🄦) PARENTHESIZED LATIN CAPITAL LETTER W => [28 77 29] ((w)) LEFT PARENTHESIS + LATIN SMALL LETTER W + RIGHT PARENTHESIS
-Removed Mapping: 1F127 (🄧) PARENTHESIZED LATIN CAPITAL LETTER X => [28 78 29] ((x)) LEFT PARENTHESIS + LATIN SMALL LETTER X + RIGHT PARENTHESIS
-Removed Mapping: 1F128 (🄨) PARENTHESIZED LATIN CAPITAL LETTER Y => [28 79 29] ((y)) LEFT PARENTHESIS + LATIN SMALL LETTER Y + RIGHT PARENTHESIS
-Removed Mapping: 1F129 (🄩) PARENTHESIZED LATIN CAPITAL LETTER Z => [28 7A 29] ((z)) LEFT PARENTHESIS + LATIN SMALL LETTER Z + RIGHT PARENTHESIS
 Removed Mapping: 1F12A (🄪) TORTOISE SHELL BRACKETED LATIN CAPITAL LETTER S => [3014 73 3015] (〔s〕) LEFT TORTOISE SHELL BRACKET + LATIN SMALL LETTER S + RIGHT TORTOISE SHELL BRACKET
 Removed Mapping: 1F240 (🉀) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-672C => [3014 672C 3015] (〔本〕) LEFT TORTOISE SHELL BRACKET + CJK Ideograph-672C [6445/20992] + RIGHT TORTOISE SHELL BRACKET
 Removed Mapping: 1F241 (🉁) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-4E09 => [3014 4E09 3015] (〔三〕) LEFT TORTOISE SHELL BRACKET + CJK Ideograph-4E09 [10/20992] + RIGHT TORTOISE SHELL BRACKET
@@ -15724,14 +14695,14 @@ Removed Mapping: 1F248 (🉈) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-655
 [✓] Fastpath ASCII
 [✓] Groups Names are A-Z
 ==== Find Unique Characters ====
-Valid: 138770
-Multi: 99100
-Unique: 39670
+Valid: 134257
+Multi: 98985
+Unique: 35272
 [✓] Matching Groups have Same CM Style
 [✓] Wholes are Valid
-Confusable: 496
-Not Confusable: 119
-Non-Confusable Non-Unique: 51
+Confusable: 492
+Not Confusable: 120
+Non-Confusable Non-Unique: 52
 ==== Compress Wholes ====
 ==== Compress Groups ====
 ==== Order Groups ====
@@ -15739,27 +14710,27 @@ Non-Confusable Non-Unique: 51
 [✓] Ordered by Registration Likelihood
 ==== Group Summary ====
 Ord | Valid  | Uniqu | Prima | Secon | CM   | Group     
-  1 |   1233 |    55 |  1232 |     1 | 0/51 | Latin     
-  2 |  98983 |     0 | 97806 |  1177 | 0/0  | Han       
-  3 |    400 |   377 |   399 |     1 |      | Arabic    
+  1 |   1129 |    55 |  1128 |     1 | 0/51 | Latin     
+  2 |    395 |   372 |   394 |     1 |      | Arabic    
+  3 |  98879 |     0 | 97806 |  1073 | 0/0  | Han       
   4 |    120 |   110 |   120 |     0 |      | Devanagari
-  5 |  99190 |   207 |   209 | 98981 | 0/58 | Japanese  
-  6 | 110509 | 11526 | 11528 | 98981 | 0/0  | Korean    
-  7 |   1256 |   105 |   105 |  1151 | 0/8  | Cyrillic  
-  8 |     86 |    83 |    85 |     1 |      | Hebrew    
-  9 |     87 |    85 |    86 |     1 |      | Thai      
+  5 |  99086 |   207 |   209 | 98877 | 0/58 | Japanese  
+  6 | 110405 | 11526 | 11528 | 98877 | 0/0  | Korean    
+  7 |   1152 |   105 |   105 |  1047 | 0/8  | Cyrillic  
+  8 |     84 |    83 |    83 |     1 |      | Hebrew    
+  9 |     86 |    85 |    85 |     1 |      | Thai      
  10 |     91 |    81 |    91 |     0 |      | Bengali   
  11 |    126 |   105 |   126 |     0 |      | Tamil     
- 12 |   1186 |    34 |    35 |  1151 | 0/11 | Greek     
+ 12 |   1082 |    34 |    35 |  1047 | 0/11 | Greek     
  13 |    186 |   186 |   186 |     0 |      | Tibetan   
  14 |     74 |    64 |    74 |     0 |      | Gurmukhi  
  15 |     80 |    80 |    80 |     0 |      | Lao       
- 16 |     96 |    96 |    96 |     0 |      | Telugu    
- 17 |  97880 |    74 |    76 | 97804 | 0/0  | Bopomofo  
- 18 |     91 |    81 |    91 |     0 |      | Gujarati  
- 19 |    233 |   223 |   233 |     0 |      | Myanmar   
+ 16 |     91 |    81 |    91 |     0 |      | Gujarati  
+ 17 |     96 |    96 |    96 |     0 |      | Telugu    
+ 18 |  97880 |    74 |    76 | 97804 | 0/0  | Bopomofo  
+ 19 |    213 |   203 |   213 |     0 |      | Myanmar   
  20 |     42 |    42 |    42 |     0 |      | Georgian  
- 21 |     44 |    43 |    44 |     0 |      | Armenian  
+ 21 |     43 |    43 |    43 |     0 |      | Armenian  
  22 |    113 |   113 |   113 |     0 |      | Malayalam 
  23 |    137 |   137 |   137 |     0 |      | Khmer     
  24 |     89 |    79 |    89 |     0 |      | Kannada   
@@ -15767,108 +14738,108 @@ Ord | Valid  | Uniqu | Prima | Secon | CM   | Group
  26 |    111 |   111 |   111 |     0 |      | Sinhala   
  27 |     89 |    89 |    89 |     0 |      | Oriya     
  28 |     61 |    50 |    61 |     0 |      | Thaana    
- 29 |     91 |    75 |    91 |     0 |      | Syrc      
+ 29 |     86 |    75 |    86 |     0 |      | Syrc      
  30 |     54 |    54 |    54 |     0 |      | Nkoo      
  31 |     29 |    29 |    29 |     0 |      | Phnx      
- 32 |     92 |    86 |    92 |     0 |      | Cher      
+ 32 |     86 |    86 |    86 |     0 |      | Cher      
  33 |    722 |   722 |   722 |     0 |      | Cans      
  34 |     86 |    86 |    86 |     0 |      | Runr      
  35 |    155 |   155 |   155 |     0 |      | Mong      
  36 |     66 |    66 |    66 |     0 |      | Limb      
  37 |     83 |    83 |    83 |     0 |      | Talu      
- 38 |   5089 |  5089 |  5089 |     0 |      | Egyp      
+ 38 |   1094 |  1094 |  1094 |     0 |      | Egyp      
  39 |     80 |    80 |    80 |     0 |      | Cham      
  40 |   1234 |  1234 |  1234 |     0 |      | Xsux      
  41 |     39 |    39 |    39 |     0 |      | Ital      
  42 |     40 |    40 |    40 |     0 |      | Dsrt      
- 43 |     32 |    32 |    32 |     0 |      | Mero      
- 44 |     28 |    28 |    28 |     0 |      | Ogam      
- 45 |     23 |    23 |    23 |     0 |      | Tglg      
- 46 |     75 |    75 |    75 |     0 |      | Gonm      
- 47 |     62 |    59 |    62 |     0 |      | Tfng      
- 48 |    654 |   654 |   654 |     0 |      | Bamu      
- 49 |     41 |    41 |    41 |     0 |      | Mroo      
- 50 |   1221 |  1220 |  1221 |     0 |      | Yiii      
- 51 |    292 |   292 |   292 |     0 |      | Vaii      
- 52 |     89 |    88 |    89 |     0 |      | Java      
- 53 |     77 |    73 |    77 |     0 |      | Copt      
- 54 |     50 |    50 |    50 |     0 |      | Xpeo      
- 55 |     73 |    73 |    73 |     0 |      | Orkh      
- 56 |     52 |    52 |    52 |     0 |      | Adlm      
- 57 |     90 |    90 |    90 |     0 |      | Bali      
- 58 |     56 |    56 |    56 |     0 |      | Batk      
- 59 |     88 |    68 |    88 |     0 |      | Cakm      
- 60 |     71 |    71 |    71 |     0 |      | Hmnp      
- 61 |     46 |    46 |    46 |     0 |      | Kali      
- 62 |    123 |   123 |   123 |     0 |      | Lana      
- 63 |     72 |    72 |    72 |     0 |      | Lepc      
- 64 |     41 |    41 |    41 |     0 |      | Lisu      
- 65 |     29 |    29 |    29 |     0 |      | Mand      
- 66 |     76 |    76 |    76 |     0 |      | Mtei      
- 67 |     93 |    93 |    93 |     0 |      | Newa      
- 68 |     46 |    46 |    46 |     0 |      | Olck      
- 69 |     39 |    36 |    39 |     0 |      | Osge      
- 70 |    149 |   149 |   149 |     0 |      | Plrd      
- 71 |     50 |    50 |    50 |     0 |      | Rohg      
- 72 |     80 |    80 |    80 |     0 |      | Saur      
- 73 |     72 |    72 |    72 |     0 |      | Sund      
- 74 |     55 |    45 |    55 |     0 |      | Sylo      
- 75 |     50 |    35 |    50 |     0 |      | Tale      
- 76 |     72 |    72 |    72 |     0 |      | Tavt      
- 77 |     59 |    59 |    59 |     0 |      | Wcho      
- 78 |     54 |    53 |    54 |     0 |      | Aghb      
- 79 |     62 |    62 |    62 |     0 |      | Ahom      
- 80 |     31 |    31 |    31 |     0 |      | Armi      
- 81 |     61 |    61 |    61 |     0 |      | Avst      
- 82 |     35 |    35 |    35 |     0 |      | Bass      
- 83 |     95 |    95 |    95 |     0 |      | Bhks      
- 84 |    113 |   113 |   113 |     0 |      | Brah      
- 85 |     31 |    30 |    31 |     0 |      | Bugi      
- 86 |     20 |    20 |    20 |     0 |      | Buhd      
- 87 |     49 |    49 |    49 |     0 |      | Cari      
- 88 |     28 |    28 |    28 |     0 |      | Chrs      
- 89 |     99 |    99 |    99 |     0 |      | Cpmn      
- 90 |     55 |    55 |    55 |     0 |      | Cprt      
- 91 |     70 |    70 |    70 |     0 |      | Diak      
- 92 |     70 |    60 |    70 |     0 |      | Dogr      
- 93 |    145 |   142 |   145 |     0 |      | Dupl      
- 94 |     41 |    40 |    41 |     0 |      | Elba      
- 95 |     23 |    23 |    23 |     0 |      | Elym      
- 96 |     88 |    86 |    88 |     0 |      | Glag      
- 97 |     63 |    63 |    63 |     0 |      | Gong      
- 98 |     30 |    27 |    30 |     0 |      | Goth      
- 99 |    103 |    82 |   103 |     0 |      | Gran      
-100 |     21 |    21 |    21 |     0 |      | Hano      
-101 |     26 |    26 |    26 |     0 |      | Hatr      
-102 |    583 |   583 |   583 |     0 |      | Hluw      
-103 |    124 |   124 |   124 |     0 |      | Hmng      
-104 |     57 |    57 |    57 |     0 |      | Hung      
-105 |     85 |    85 |    85 |     0 |      | Kawi      
-106 |     60 |    60 |    60 |     0 |      | Khar      
-107 |     71 |    61 |    71 |     0 |      | Khoj      
-108 |    472 |   472 |   472 |     0 |      | Kits      
-109 |     72 |    62 |    72 |     0 |      | Kthi      
-110 |     29 |    29 |    29 |     0 |      | Lyci      
-111 |     27 |    27 |    27 |     0 |      | Lydi      
-112 |     23 |    23 |    23 |     0 |      | Maka      
-113 |     49 |    39 |    49 |     0 |      | Mahj      
-114 |     51 |    50 |    51 |     0 |      | Mani      
-115 |     68 |    68 |    68 |     0 |      | Marc      
-116 |     57 |    57 |    57 |     0 |      | Medf      
-117 |    213 |   213 |   213 |     0 |      | Mend      
-118 |     90 |    90 |    90 |     0 |      | Merc      
-119 |     77 |    77 |    77 |     0 |      | Modi      
-120 |     47 |    37 |    47 |     0 |      | Mult      
-121 |     42 |    42 |    42 |     0 |      | Nagm      
-122 |     32 |    32 |    32 |     0 |      | Narb      
-123 |     76 |    66 |    76 |     0 |      | Nand      
-124 |     40 |    40 |    40 |     0 |      | Nbat      
-125 |    397 |   397 |   397 |     0 |      | Nshu      
+ 43 |     28 |    28 |    28 |     0 |      | Ogam      
+ 44 |     23 |    23 |    23 |     0 |      | Tglg      
+ 45 |     75 |    75 |    75 |     0 |      | Gonm      
+ 46 |     58 |    58 |    58 |     0 |      | Tfng      
+ 47 |    654 |   654 |   654 |     0 |      | Bamu      
+ 48 |     41 |    41 |    41 |     0 |      | Mroo      
+ 49 |   1221 |  1220 |  1221 |     0 |      | Yiii      
+ 50 |    292 |   292 |   292 |     0 |      | Vaii      
+ 51 |     89 |    88 |    89 |     0 |      | Java      
+ 52 |     75 |    75 |    75 |     0 |      | Copt      
+ 53 |     50 |    50 |    50 |     0 |      | Xpeo      
+ 54 |     52 |    52 |    52 |     0 |      | Adlm      
+ 55 |     90 |    90 |    90 |     0 |      | Bali      
+ 56 |     56 |    56 |    56 |     0 |      | Batk      
+ 57 |     88 |    68 |    88 |     0 |      | Cakm      
+ 58 |     71 |    71 |    71 |     0 |      | Hmnp      
+ 59 |     46 |    46 |    46 |     0 |      | Kali      
+ 60 |    123 |   123 |   123 |     0 |      | Lana      
+ 61 |     72 |    72 |    72 |     0 |      | Lepc      
+ 62 |     41 |    41 |    41 |     0 |      | Lisu      
+ 63 |     29 |    29 |    29 |     0 |      | Mand      
+ 64 |     76 |    76 |    76 |     0 |      | Mtei      
+ 65 |     93 |    93 |    93 |     0 |      | Newa      
+ 66 |     46 |    46 |    46 |     0 |      | Olck      
+ 67 |     36 |    36 |    36 |     0 |      | Osge      
+ 68 |    149 |   149 |   149 |     0 |      | Plrd      
+ 69 |     50 |    50 |    50 |     0 |      | Rohg      
+ 70 |     80 |    80 |    80 |     0 |      | Saur      
+ 71 |     72 |    72 |    72 |     0 |      | Sund      
+ 72 |     55 |    45 |    55 |     0 |      | Sylo      
+ 73 |     45 |    35 |    45 |     0 |      | Tale      
+ 74 |     72 |    72 |    72 |     0 |      | Tavt      
+ 75 |     59 |    59 |    59 |     0 |      | Wcho      
+ 76 |     53 |    53 |    53 |     0 |      | Aghb      
+ 77 |     62 |    62 |    62 |     0 |      | Ahom      
+ 78 |     31 |    31 |    31 |     0 |      | Armi      
+ 79 |     61 |    61 |    61 |     0 |      | Avst      
+ 80 |     35 |    35 |    35 |     0 |      | Bass      
+ 81 |     95 |    95 |    95 |     0 |      | Bhks      
+ 82 |    113 |   113 |   113 |     0 |      | Brah      
+ 83 |     31 |    30 |    31 |     0 |      | Bugi      
+ 84 |     20 |    20 |    20 |     0 |      | Buhd      
+ 85 |     49 |    49 |    49 |     0 |      | Cari      
+ 86 |     28 |    28 |    28 |     0 |      | Chrs      
+ 87 |     99 |    99 |    99 |     0 |      | Cpmn      
+ 88 |     55 |    55 |    55 |     0 |      | Cprt      
+ 89 |     70 |    70 |    70 |     0 |      | Diak      
+ 90 |     70 |    60 |    70 |     0 |      | Dogr      
+ 91 |    142 |   142 |   142 |     0 |      | Dupl      
+ 92 |     40 |    40 |    40 |     0 |      | Elba      
+ 93 |     23 |    23 |    23 |     0 |      | Elym      
+ 94 |     86 |    86 |    86 |     0 |      | Glag      
+ 95 |     63 |    63 |    63 |     0 |      | Gong      
+ 96 |     27 |    27 |    27 |     0 |      | Goth      
+ 97 |    103 |    82 |   103 |     0 |      | Gran      
+ 98 |     21 |    21 |    21 |     0 |      | Hano      
+ 99 |     26 |    26 |    26 |     0 |      | Hatr      
+100 |    583 |   583 |   583 |     0 |      | Hluw      
+101 |    124 |   124 |   124 |     0 |      | Hmng      
+102 |     57 |    57 |    57 |     0 |      | Hung      
+103 |     84 |    84 |    84 |     0 |      | Kawi      
+104 |     60 |    60 |    60 |     0 |      | Khar      
+105 |     71 |    61 |    71 |     0 |      | Khoj      
+106 |    471 |   471 |   471 |     0 |      | Kits      
+107 |     72 |    62 |    72 |     0 |      | Kthi      
+108 |     29 |    29 |    29 |     0 |      | Lyci      
+109 |     27 |    27 |    27 |     0 |      | Lydi      
+110 |     23 |    23 |    23 |     0 |      | Maka      
+111 |     49 |    39 |    49 |     0 |      | Mahj      
+112 |     51 |    50 |    51 |     0 |      | Mani      
+113 |     68 |    68 |    68 |     0 |      | Marc      
+114 |     57 |    57 |    57 |     0 |      | Medf      
+115 |    213 |   213 |   213 |     0 |      | Mend      
+116 |     90 |    90 |    90 |     0 |      | Merc      
+117 |     32 |    32 |    32 |     0 |      | Mero      
+118 |     77 |    77 |    77 |     0 |      | Modi      
+119 |     47 |    37 |    47 |     0 |      | Mult      
+120 |     42 |    42 |    42 |     0 |      | Nagm      
+121 |     32 |    32 |    32 |     0 |      | Narb      
+122 |     76 |    66 |    76 |     0 |      | Nand      
+123 |     40 |    40 |    40 |     0 |      | Nbat      
+124 |    397 |   397 |   397 |     0 |      | Nshu      
+125 |     73 |    73 |    73 |     0 |      | Orkh      
 126 |     40 |    40 |    40 |     0 |      | Osma      
 127 |     23 |    22 |    23 |     0 |      | Ougr      
 128 |     32 |    32 |    32 |     0 |      | Palm      
 129 |     57 |    57 |    57 |     0 |      | Pauc      
-130 |     47 |    44 |    47 |     0 |      | Perm      
+130 |     43 |    43 |    43 |     0 |      | Perm      
 131 |     54 |    54 |    54 |     0 |      | Phag      
 132 |     27 |    27 |    27 |     0 |      | Phli      
 133 |     29 |    29 |    29 |     0 |      | Phlp      
@@ -15895,22 +14866,15 @@ Ord | Valid  | Uniqu | Prima | Secon | CM   | Group
 154 |     52 |    52 |    52 |     0 |      | Wara      
 155 |     57 |    47 |    57 |     0 |      | Yezi      
 156 |     70 |    70 |    70 |     0 |      | Zanb      
-157 |     47 |    47 |    47 |     0 |      | Gara      
-158 |     55 |    55 |    55 |     0 |      | Gukh      
-159 |     56 |    56 |    56 |     0 |      | Krai      
-160 |     44 |    44 |    44 |     0 |      | Onao      
-161 |     47 |    44 |    47 |     0 |      | Sunu      
-162 |     55 |    52 |    55 |     0 |      | Todr      
-163 |     88 |    78 |    88 |     0 |      | Tutg      
 ==== NFC Quick Check ====
-Optimized: 2143 => 574
+Optimized: 2110 => 541
 ==== Compute NSM from Groups w/o CM Whitelist ====
-CM(2501) => NSM(2033) => 1095
+CM(2450) => NSM(1998) => 1050
 Per Group Max: 61
 ==== Write Output ====
-Unchanged: spec.json
+Wrote: spec.json [3137694]
 Unchanged: nf.json
 Unchanged: nf-tests.json
-Unchanged: emoji-info.json
+Wrote: emoji-info.json [730511]
 Unchanged: names.json
 Unchanged: confused.json

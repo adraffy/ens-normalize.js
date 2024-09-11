@@ -1,8 +1,8 @@
 // dump out a list of characters with consistant formatting
-// eg. `node names.js 23 2A 30..39"
+// eg. `node names.js $ 23 2A 30..39"
 
 import {UNICODE, PRINTER, IDNA} from './unicode-version.js';
-import {parse_cp_range, hex_cp} from './utils.js';
+import {parse_cp_range, explode_cp, hex_cp} from './utils.js';
 
 let check_old;
 let format = 'js';
@@ -45,7 +45,10 @@ if (args[0] === 'find') { // search by name/patt
 } else { 
 	// everything is hex codepoint ranges
 	// A B..D => [0xA, 0xB, 0xC, 0xD]
-	cps = [...new Set(args.flatMap(parse_cp_range))].sort((a, b) => a - b);
+	args = args.flatMap(arg => {
+		return /^[0-9a-f]/i.test(arg) ? parse_cp_range(arg) : explode_cp(arg).map(hex_cp);
+	});
+	cps = [...new Set(args)].sort((a, b) => a - b);
 }
 
 // TODO: fix this

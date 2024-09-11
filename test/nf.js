@@ -16,7 +16,7 @@ function run_tests(nfd, nfc) {
 			}
 			let nfc1 = nfc(input);
 			if (compare_arrays(nfc0, nfc1)) {
-				console.log({name, input, nfc0, nfc1});
+				errors.push({name, input, nfc0, nfc1});
 			}
 		}
 	}
@@ -30,7 +30,7 @@ console.log('PASS nf custom');
 // test native (might fail)
 let errors = run_tests(nfd_native, nfc_native);
 if (errors.length) {
-	console.log(errors);
+	if (errors.length < 5) console.log(errors);
 	console.log(`Native Errors: ${errors.length}`);
 	console.log(`Native Unicode Version: ${process.versions.unicode}`);
 } else {

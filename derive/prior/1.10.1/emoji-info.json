@@ -5050,7 +5050,7 @@
 	{
 		"form": "🧑‍🎄",
 		"type": "RGI_Emoji_ZWJ_Sequence",
-		"name": "Mx Claus",
+		"name": "mx claus",
 		"version": "13.0",
 		"group": "People & Body",
 		"subgroup": "person-fantasy"
@@ -5242,7 +5242,7 @@
 	{
 		"form": "🧑🏻‍🎄",
 		"type": "RGI_Emoji_ZWJ_Sequence",
-		"name": "Mx Claus: light skin tone",
+		"name": "mx claus: light skin tone",
 		"version": "13.0",
 		"group": "People & Body",
 		"subgroup": "person-fantasy"
@@ -5434,7 +5434,7 @@
 	{
 		"form": "🧑🏼‍🎄",
 		"type": "RGI_Emoji_ZWJ_Sequence",
-		"name": "Mx Claus: medium-light skin tone",
+		"name": "mx claus: medium-light skin tone",
 		"version": "13.0",
 		"group": "People & Body",
 		"subgroup": "person-fantasy"
@@ -5626,7 +5626,7 @@
 	{
 		"form": "🧑🏽‍🎄",
 		"type": "RGI_Emoji_ZWJ_Sequence",
-		"name": "Mx Claus: medium skin tone",
+		"name": "mx claus: medium skin tone",
 		"version": "13.0",
 		"group": "People & Body",
 		"subgroup": "person-fantasy"
@@ -5818,7 +5818,7 @@
 	{
 		"form": "🧑🏾‍🎄",
 		"type": "RGI_Emoji_ZWJ_Sequence",
-		"name": "Mx Claus: medium-dark skin tone",
+		"name": "mx claus: medium-dark skin tone",
 		"version": "13.0",
 		"group": "People & Body",
 		"subgroup": "person-fantasy"
@@ -6010,7 +6010,7 @@
 	{
 		"form": "🧑🏿‍🎄",
 		"type": "RGI_Emoji_ZWJ_Sequence",
-		"name": "Mx Claus: dark skin tone",
+		"name": "mx claus: dark skin tone",
 		"version": "13.0",
 		"group": "People & Body",
 		"subgroup": "person-fantasy"
@@ -17508,14 +17508,6 @@
 		"type": "RGI_Emoji_Flag_Sequence",
 		"name": "flag: Clipperton Island",
 		"version": "2.0",
-		"group": "Flags",
-		"subgroup": "country-flag"
-	},
-	{
-		"form": "🇨🇶",
-		"type": "RGI_Emoji_Flag_Sequence",
-		"name": "flag: Sark",
-		"version": "16.0",
 		"group": "Flags",
 		"subgroup": "country-flag"
 	},
@@ -29098,8 +29090,8 @@
 		"name": "crab",
 		"name0": "CRAB",
 		"version": "1.0",
-		"group": "Animals & Nature",
-		"subgroup": "animal-marine"
+		"group": "Food & Drink",
+		"subgroup": "food-marine"
 	},
 	{
 		"form": "🦁️",
@@ -29242,8 +29234,8 @@
 		"name": "shrimp",
 		"name0": "SHRIMP",
 		"version": "3.0",
-		"group": "Animals & Nature",
-		"subgroup": "animal-marine"
+		"group": "Food & Drink",
+		"subgroup": "food-marine"
 	},
 	{
 		"form": "🦑️",
@@ -29251,8 +29243,8 @@
 		"name": "squid",
 		"name0": "SQUID",
 		"version": "3.0",
-		"group": "Animals & Nature",
-		"subgroup": "animal-marine"
+		"group": "Food & Drink",
+		"subgroup": "food-marine"
 	},
 	{
 		"form": "🦒️",
@@ -29368,8 +29360,8 @@
 		"name": "lobster",
 		"name0": "LOBSTER",
 		"version": "11.0",
-		"group": "Animals & Nature",
-		"subgroup": "animal-marine"
+		"group": "Food & Drink",
+		"subgroup": "food-marine"
 	},
 	{
 		"form": "🦟️",
@@ -29476,8 +29468,8 @@
 		"name": "oyster",
 		"name0": "OYSTER",
 		"version": "12.0",
-		"group": "Animals & Nature",
-		"subgroup": "animal-marine"
+		"group": "Food & Drink",
+		"subgroup": "food-marine"
 	},
 	{
 		"form": "🦫️",
@@ -30447,22 +30439,6 @@
 		"subgroup": "musical-instrument"
 	},
 	{
-		"form": "🪉️",
-		"type": "Emoji_Presentation",
-		"name": "HARP",
-		"version": "16.0",
-		"group": "Objects",
-		"subgroup": "musical-instrument"
-	},
-	{
-		"form": "🪏️",
-		"type": "Emoji_Presentation",
-		"name": "SHOVEL",
-		"version": "16.0",
-		"group": "Objects",
-		"subgroup": "tool"
-	},
-	{
 		"form": "🪐️",
 		"type": "Emoji_Presentation",
 		"name": "ringed planet",
@@ -30877,14 +30853,6 @@
 		"subgroup": "animal-bird"
 	},
 	{
-		"form": "🪾️",
-		"type": "Emoji_Presentation",
-		"name": "LEAFLESS TREE",
-		"version": "16.0",
-		"group": "Animals & Nature",
-		"subgroup": "plant-other"
-	},
-	{
 		"form": "🪿️",
 		"type": "Emoji_Presentation",
 		"name": "goose",
@@ -30946,14 +30914,6 @@
 		"version": "14.0",
 		"group": "People & Body",
 		"subgroup": "person-role"
-	},
-	{
-		"form": "🫆️",
-		"type": "Emoji_Presentation",
-		"name": "FINGERPRINT",
-		"version": "16.0",
-		"group": "People & Body",
-		"subgroup": "person-symbol"
 	},
 	{
 		"form": "🫎️",
@@ -31082,22 +31042,6 @@
 		"subgroup": "food-vegetable"
 	},
 	{
-		"form": "🫜️",
-		"type": "Emoji_Presentation",
-		"name": "ROOT VEGETABLE",
-		"version": "16.0",
-		"group": "Food & Drink",
-		"subgroup": "food-vegetable"
-	},
-	{
-		"form": "🫟️",
-		"type": "Emoji_Presentation",
-		"name": "SPLATTER",
-		"version": "16.0",
-		"group": "Symbols",
-		"subgroup": "other-symbol"
-	},
-	{
 		"form": "🫠️",
 		"type": "Emoji_Presentation",
 		"name": "melting face",
@@ -31177,14 +31121,6 @@
 		"version": "15.0",
 		"group": "Smileys & Emotion",
 		"subgroup": "face-neutral-skeptical"
-	},
-	{
-		"form": "🫩️",
-		"type": "Emoji_Presentation",
-		"name": "FACE WITH BAGS UNDER EYES",
-		"version": "16.0",
-		"group": "Smileys & Emotion",
-		"subgroup": "face-sleepy"
 	},
 	{
 		"form": "🫰️",

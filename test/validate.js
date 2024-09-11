@@ -1,11 +1,14 @@
 import {ens_normalize, ens_tokenize, nfc} from '../src/lib.js';
 //import {ens_normalize, ens_tokenize, nfc} from '../../ens-norm-tests/old-versions/1.8.9.js';
-
 import {str_from_cps, run_tests} from '../src/utils.js';
 import {readFileSync} from 'node:fs';
 
 let file = process.argv[2];
-if (!file) file = new URL('../validate/tests.json', import.meta.url).pathname;
+if (!file) { // use current tests
+	file = new URL('../validate/tests.json', import.meta.url);
+} else if (!file.endsWith('.json')) { // use prior tests
+	file = new URL(`../validate/prior/${file}.json`, import.meta.url)
+}
 console.log(`Testing: ${file}`);
 
 const TESTS = JSON.parse(readFileSync(file));

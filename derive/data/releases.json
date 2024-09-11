@@ -10,13 +10,13 @@
 		"library": "1.10.1",
 		"unicode": "15.1.0",
 		"cldr": "43.1",
-		"tag": "current"
+		"tag": "prior"
 	},
 	{
-		"spec_hash": "TBD",
+		"spec_hash": "4bc0d968560c1281f40e093fddffca6593ebb5dc02e9f7563e61477f82d88b59",
 		"library": "1.11.0",
 		"unicode": "16.0.0",
 		"cldr": "45",
-		"tag": "beta"
+		"tag": "current"
 	}
 ]

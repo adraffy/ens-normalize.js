@@ -223,7 +223,10 @@ for (let cp of CHARS_IGNORED) {
 
 print_section('Add Valid Characters');
 for (let cp of CHARS_VALID) {
-	if (valid.has(cp)) throw new Error(`Already valid: ${PRINTER.desc_for_cp(cp)}`);
+	if (valid.has(cp)) {
+		console.log(`*** Already valid: ${PRINTER.desc_for_cp(cp)}`);
+		continue;
+	}
 	disallow_char(cp);
 	valid.add(cp);
 	console.log(`Added Valid: ${PRINTER.desc_for_cp(cp)}`);
@@ -700,6 +703,8 @@ let escaped = new Set(CHARS_ESCAPE);
 for (let cp of escaped) {
 	if (valid.has(cp)) {
 		throw new Error(`Escaped character is valid: ${PRINTER.desc_for_cp(cp)}`);
+	} else if (ignored.has(cp)) {
+		//console.log(`*** Escaped character is ignored: ${PRINTER.desc_for_cp(cp)}`);
 	}
 }
 print_checked(`No Valid Escaped`);

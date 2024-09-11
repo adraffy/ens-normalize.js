@@ -489,7 +489,8 @@ footer span:hover {
 	<a href="https://www.unicode.org/Public/draft/emoji/">Draft</a>
 </div>
 <div id="examples">
-	<button style="background-color: #afa" data-query="v15.1">⭐️ New in 15.1</button>
+	<button style="background-color: #afa; font-weight: bold;" data-query="v16">⭐️ New in 16</button>
+	<button style="background-color: #afa" data-query="v15.1">15.1</button>
 	<b>People:</b>
 	<button data-query="/\bman/ !woman">👨️ Man</button>
 	<button data-query="woman !/\bman/">👩️ Woman</button>
@@ -523,7 +524,7 @@ footer span:hover {
 	<button data-query="/\bdog\b/">🐕️</button>
 	<button data-query="heart">❤️</button>
 	<button data-query="{200D}{27A1}">➡️</button>
-	<button style="background-color: #fdb" data-query="1cp !v14+">🦺️ Safest</button>
+	<button style="background-color: #fdb" data-query="1cp !v15+">🦺️ Best Support</button>
 	<button style="background-color: #dbe" data-query="max(3)">Only <b>3</b> Variants</button>
 	<button style="background-color: #fe8" data-query="singles !skin">👑️ Base Singles</button>
 	<b>Min Repeated:</b>
@@ -534,8 +535,8 @@ footer span:hover {
 	<button data-query="Already-norm" title="Already Normalized">✅️</button>
 	<button data-query="Needs-norm" title="Requires Normalization">☑️</button>
 	<b>Codepoints:</b>
-	<button data-query="{200D}" class="raw">ZWJ</button>
 	<button data-query="!{200D}" class="raw" style="text-decoration: line-through">ZWJ</button>
+	<button data-query="{200D}" class="raw">ZWJ</button>
 	<button data-query="{200D}^2" class="raw">ZWJ²</button>
 	<button data-query="{FE0F}" class="raw">FE0F</button>
 	<button data-query="ascii" class="raw">ASCII</button>
@@ -562,7 +563,7 @@ footer span:hover {
 	</button>
 </div>
 <div id="search">
-	<input placeholder="Name • {HEX} • v15 • /regex/">
+	<input placeholder="Name • {HEX} • v16 • /regex/">
 </div>
 <div id="none" class="hide"><div>⚠️ No emoji found.</div></div>
 <main></main>
@@ -630,8 +631,7 @@ top_btn.addEventListener('click', () => window.scrollTo(0, 0));
 (async () => {
 	try {
 		let data;
-		//let {built} = versions;
-		let built = '2024-01-24T01:27:34.595Z';
+		let {built} = versions;
 		try {
 			let cache = JSON.parse(localStorage[STORAGE_EMOJI_INFO]);
 			if (cache.built === built) {

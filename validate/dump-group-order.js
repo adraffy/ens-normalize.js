@@ -13,9 +13,8 @@ let labels = read_labels();
 let tally = new Map();
 for (let label of labels) {
 	let labels = ens_split(label);
-	if (!labels.length) continue;
-	if (labels.length !== 1) throw new Error(`expected label: ${label}`);
-	let group = labels[0].type || '*** Error';
+	if (!labels.length) continue; 
+	let group = labels.length == 1 && labels[0].type || '*** Error';
 	let counter = tally.get(group);
 	if (!counter) {
 		let restricted = group.startsWith('Restricted['); // meh

@@ -1,4 +1,7 @@
-import {MAX_CP, parse_cp, parse_cp_range, parse_cp_sequence, hex_cp, hex_seq, explode_cp, quote_cp, require_cp} from './utils.js';
+import {
+	MAX_CP, parse_cp, parse_cp_range, parse_cp_sequence, hex_cp, 
+	hex_seq, explode_cp, quote_cp, require_cp, version_ordinal
+} from './utils.js';
 import {readFileSync} from 'node:fs';
 import UNPRINTABLES from './unprintables.js';
 
@@ -8,6 +11,7 @@ export const SCRIPT_TYPE_EXCLUDED = 'Excluded';
 export const SCRIPT_TYPE_LIMITED_USE = 'LimitedUse';
 
 // https://www.unicode.org/reports/tr39/#def-augmented-script-set
+// 20240910: no change (16.0.0)
 export function augment_script_set(set) {
 	if (set.has('Hani')) {
 		set.add('Hanb');
@@ -136,19 +140,27 @@ export class UnicodeSpec {
 	static releases() {
 		return JSON.parse(readFileSync(new URL('./data/releases.json', import.meta.url)));
 	}
+	static current() {
+		return this.from_release('current');
+	}
 	static from_release(release) {
-		if (typeof release !== 'string') throw new Error('expected release');
+		if (typeof release !== 'string') throw new TypeError('expected release');
 		let v = this.releases();
 		let info;
-		if (/^\d+$/.test(release)) {
+		if (/^#\d+$/.test(release)) { // build number
 			info = v[parseInt(release)];
-		} else {
+		} else if (/^[\d\.]+$/.test(release)) { // unicode version number
+			let version = version_ordinal(release);
+			info = v.findLast(x => version_ordinal(x.unicode) === version);
+		} else { // tag
 			info = v.find(x => x.tag === release);
 		}
 		if (!info) throw new Error(`unknown release: ${release}`);
 		return this.from_versions(info);
 	}
 	static from_versions({unicode, cldr}) {
+		if (typeof unicode !== 'string') throw new TypeError('expected unicode');
+		if (typeof cldr !== 'string') throw new TypeError('expected cldr');
 		return new this(
 			new URL(`./data/${unicode}/`, import.meta.url), 
 			new URL(`./data/CLDR-${cldr}/`, import.meta.url)
@@ -614,19 +626,8 @@ export class UnicodeSpec {
 		});
 	}
 	*/
-	// https://unicode.org/reports/tr46/#Implementation_Notes
-	derive_idna_rules({version, use_STD3, valid_deviations}) {
-		switch (version) {
-			case 2003:
-			case 2008: break;
-			default: throw new TypeError(`unknown IDNA version: ${version}`);
-		}
-		let {
-			valid, valid_NV8, valid_XV8,
-			deviation_mapped, deviation_ignored,
-			disallowed, disallowed_STD3_mapped, disallowed_STD3_valid,
-			ignored, mapped, ...extra
-		} = parse_semicolon_file(new URL('./IdnaMappingTable.txt', this.data_dir), {
+	read_idna() {
+		return parse_semicolon_file(new URL('./IdnaMappingTable.txt', this.data_dir), {
 			row([src, type, dst, status]) {
 				if (!src) throw new Error('bug: expected src');
 				if (type == 'deviation') type = dst ? 'deviation_mapped' : 'deviation_ignored';
@@ -640,6 +641,23 @@ export class UnicodeSpec {
 				}
 			}
 		});
+	}
+	// https://unicode.org/reports/tr46/#Implementation_Notes
+	derive_idna_rules({version, use_STD3, valid_deviations}) {
+		// 20240910: "Starting with Unicode 16.0, UseSTD3ASCIIRules=true is handled only in the Validity Criteria
+		// An implementation may choose to allow additional ASCII characters but should always consider 
+		// ASCII lowercase letters, digits, and the hyphen-minus ([\u002Da-z0-9]) as valid."
+		switch (version) {
+			case 2003:
+			case 2008: break;
+			default: throw new TypeError(`unknown IDNA version: ${version}`);
+		}
+		let {
+			valid, valid_NV8, valid_XV8,
+			deviation_mapped, deviation_ignored,
+			disallowed, disallowed_STD3_mapped, disallowed_STD3_valid,
+			ignored, mapped, ...extra
+		} = this.read_idna();
 		if (Object.keys(extra).length) {
 			throw new Error(`bug: unused IDNA keys: ${Object.keys(extra)}`);
 		}
