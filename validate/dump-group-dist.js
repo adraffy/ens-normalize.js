@@ -8,7 +8,7 @@ const LABELS = read_labels();
 let tally = {};
 for (let label of LABELS) {
 	let split = ens_split(label);
-	if (split.length != 1) throw new Error('wtf');
+	if (split.length != 1) continue;
 	split = split[0];
 	let type;
 	if (split.error) {
@@ -27,7 +27,7 @@ tally = Object.values(tally).sort((a, b) => b.count - a.count);
 
 let perc = 6;
 let count_pad = LABELS.length.toString().length;
-console.log(new Date().toJSON());
+console.log(new Date());
 for (let {count, type} of tally) {
 	console.log(
 		(100 * count / LABELS.length).toFixed(perc).padStart(4+perc)+'%', 
@@ -37,68 +37,73 @@ for (let {count, type} of tally) {
 }
 
 /*
-Loaded 2479142 labels in 2.1s
-2023-02-12T23:57:39.729Z
- 89.145922% 2210054 ASCII
-  3.542758%   87830 Latin+Emoji
-  2.292971%   56846 Emoji
-  1.340625%   33236 Latin
-  1.175366%   29139 Arabic
-  1.084246%   26880 Han
-  0.741426%   18381 *** Error
-  0.142307%    3528 Devanagari
-  0.108949%    2701 Japanese
-  0.101729%    2522 Korean
-  0.079866%    1980 Cyrillic
-  0.070670%    1752 Hebrew
-  0.060263%    1494 Thai
-  0.035980%     892 Bengali
-  0.018111%     449 Tamil
-  0.012988%     322 Greek
-  0.007301%     181 Tibetan
-  0.004639%     115 Restricted[Egyp]
-  0.004074%     101 Arabic+Emoji
-  0.003388%      84 Han+Emoji
-  0.003066%      76 Gurmukhi
-  0.002743%      68 Restricted[Mong]
-  0.002380%      59 Lao
-  0.001654%      41 Telugu
-  0.001654%      41 Bopomofo
-  0.001613%      40 Gujarati
-  0.001412%      35 Georgian
-  0.001291%      32 Armenian
-  0.001291%      32 Restricted[Runr]
-  0.001170%      29 Myanmar
-  0.000968%      24 Khmer
-  0.000887%      22 Malayalam
-  0.000887%      22 Restricted[Cher]
-  0.000766%      19 Ethiopic
-  0.000645%      16 Kannada
-  0.000565%      14 Japanese+Emoji
-  0.000484%      12 Sinhala
-  0.000363%       9 Oriya
-  0.000282%       7 Korean+Emoji
-  0.000242%       6 Restricted[Cans]
-  0.000202%       5 Restricted[Ogam]
-  0.000161%       4 Restricted[Syrc]
-  0.000161%       4 Restricted[Limb]
-  0.000161%       4 Restricted[Xsux]
-  0.000161%       4 Restricted[Xpeo]
-  0.000121%       3 Restricted[Phnx]
-  0.000121%       3 Restricted[Vaii]
-  0.000121%       3 Cyrillic+Emoji
-  0.000081%       2 Restricted[Nkoo]
-  0.000081%       2 Restricted[Talu]
-  0.000081%       2 Restricted[Cham]
-  0.000081%       2 Restricted[Ital]
-  0.000081%       2 Thaana
-  0.000081%       2 Restricted[Tglg]
-  0.000081%       2 Greek+Emoji
-  0.000040%       1 Restricted[Runr]+Emoji
-  0.000040%       1 Restricted[Dsrt]
-  0.000040%       1 Restricted[Tfng]
-  0.000040%       1 Hebrew+Emoji
-  0.000040%       1 Restricted[Java]
-  0.000040%       1 Bopomofo+Emoji
-  0.000040%       1 Restricted[Copt]+Emoji
+2024-09-11T06:54:30.224Z
+ 90.404374% 2661512 ASCII
+  3.121425%   91895 Latin+Emoji
+  1.990246%   58593 Emoji
+  1.208115%   35567 Latin
+  1.036274%   30508 Han
+  0.996465%   29336 Arabic
+  0.641235%   18878 *** Error
+  0.120550%    3549 Devanagari
+  0.100985%    2973 Japanese
+  0.092289%    2717 Korean
+  0.074694%    2199 Cyrillic
+  0.059952%    1765 Hebrew
+  0.051664%    1521 Thai
+  0.030333%     893 Bengali
+  0.015455%     455 Tamil
+  0.011855%     349 Greek
+  0.006522%     192 Tibetan
+  0.004789%     141 Restricted[Egyp]
+  0.004416%     130 Han+Emoji
+  0.003533%     104 Arabic+Emoji
+  0.002649%      78 Gurmukhi
+  0.002344%      69 Restricted[Mong]
+  0.002106%      62 Lao
+  0.001562%      46 Telugu
+  0.001461%      43 Gujarati
+  0.001461%      43 Bopomofo
+  0.001393%      41 Myanmar
+  0.001325%      39 Georgian
+  0.001291%      38 Restricted[Runr]
+  0.001155%      34 Armenian
+  0.000849%      25 Malayalam
+  0.000849%      25 Khmer
+  0.000781%      23 Restricted[Cher]
+  0.000747%      22 Kannada
+  0.000679%      20 Ethiopic
+  0.000611%      18 Japanese+Emoji
+  0.000510%      15 Sinhala
+  0.000306%       9 Oriya
+  0.000272%       8 Restricted[Cans]
+  0.000272%       8 Korean+Emoji
+  0.000204%       6 Cyrillic+Emoji
+  0.000170%       5 Restricted[Xsux]
+  0.000170%       5 Restricted[Ogam]
+  0.000136%       4 Restricted[Syrc]
+  0.000136%       4 Restricted[Limb]
+  0.000136%       4 Restricted[Xpeo]
+  0.000102%       3 Restricted[Phnx]
+  0.000102%       3 Restricted[Yiii]
+  0.000102%       3 Restricted[Vaii]
+  0.000068%       2 Restricted[Nkoo]
+  0.000068%       2 Restricted[Talu]
+  0.000068%       2 Restricted[Cham]
+  0.000068%       2 Restricted[Ital]
+  0.000068%       2 Thaana
+  0.000068%       2 Restricted[Tglg]
+  0.000068%       2 Restricted[Bamu]
+  0.000068%       2 Greek+Emoji
+  0.000034%       1 Restricted[Runr]+Emoji
+  0.000034%       1 Restricted[Dsrt]
+  0.000034%       1 Restricted[Mero]
+  0.000034%       1 Restricted[Gonm]
+  0.000034%       1 Restricted[Tfng]
+  0.000034%       1 Restricted[Mroo]
+  0.000034%       1 Hebrew+Emoji
+  0.000034%       1 Restricted[Java]
+  0.000034%       1 Bopomofo+Emoji
+  0.000034%       1 Restricted[Copt]+Emoji
+  0.000034%       1 Restricted[Orkh]
  */

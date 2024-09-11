@@ -31,3 +31,4 @@ for (let emoji of ens_emoji()) {
 }
 
 // 20230128: PASS (Node: 19.5.0 / Unicode: 15.0)
+// 20240910: PASS (Node: v22.1.0 / Unicode: 15.1)

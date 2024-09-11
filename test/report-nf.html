@@ -231,8 +231,7 @@ async function main() {
 
 		total_custom += errors[KEY_NFD_CUSTOM] + errors[KEY_NFC_CUSTOM];
 		total_native += errors[KEY_NFD_NATIVE] + errors[KEY_NFC_NATIVE];
-		console.log(errors);
-
+		
 		document.querySelector('#summary tbody').append(tr);
 		setTimeout(() => next(index + 1), 0);
 	}

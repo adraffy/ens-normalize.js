@@ -62,3 +62,17 @@ Loaded 2479142 labels in 2.2s
   0.0016%   0.1429%    39 too many combining marks
   0.0001%   0.0073%     2 empty label
 */
+
+/*
+Loaded 2944008 labels in 0.5s
+2024-09-11T06:56:58.393Z
+  0.5381%  57.6791% 15841 disallowed character
+  0.2916%  31.2627%  8586 diff norm
+  0.0440%   4.7153%  1295 illegal mixture
+  0.0327%   3.5028%   962 underscore allowed only at start
+  0.0135%   1.4455%   397 whole-script confusable
+  0.0071%   0.7646%   210 invalid label extension
+  0.0055%   0.5899%   162 illegal placement
+  0.0002%   0.0255%     7 empty label
+  0.0001%   0.0146%     4 duplicate non-spacing marks
+*/

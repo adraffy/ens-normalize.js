@@ -1,4 +1,4 @@
-Build Date: 2024-09-11T06:12:10.385Z
+Build Date: 2024-09-11T06:51:56.492Z
 Unicode Version: 16.0.0 (2024-09-10T20:47:54.200Z)
 CLDR Version: 45 (2024-04-19T05:36:55.332Z)
 ==== RGI Emoji ZWJ Sequences ====
@@ -9350,7 +9350,6 @@ Removed Valid: 1CCD2 (𜳒) UPPER LEFT QUADRANT STANDING KNIGHT
 Removed Valid: 1CCD3 (𜳓) UPPER RIGHT QUADRANT STANDING KNIGHT
 Removed Valid: 1CCD4 (𜳔) LOWER LEFT QUADRANT STANDING KNIGHT
 Removed Valid: 1CCD5 (𜳕) LOWER RIGHT QUADRANT STANDING KNIGHT
-Removed Mapped: 1CCD6 (𜳖) OUTLINED LATIN CAPITAL LETTER A => [61] (a) LATIN SMALL LETTER A
 Removed Valid: 1CD00 (𜴀) BLOCK OCTANT-3
 Removed Valid: 1CD01 (𜴁) BLOCK OCTANT-23
 Removed Valid: 1CD02 (𜴂) BLOCK OCTANT-123
@@ -15908,7 +15907,7 @@ Optimized: 2143 => 574
 CM(2501) => NSM(2033) => 1095
 Per Group Max: 61
 ==== Write Output ====
-Unchanged: spec.json
+Wrote: spec.json [3171370]
 Unchanged: nf.json
 Unchanged: nf-tests.json
 Unchanged: emoji-info.json
