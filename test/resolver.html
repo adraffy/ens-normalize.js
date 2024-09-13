@@ -991,7 +991,7 @@ footer {
 <body>
 <header>
 	<h1><a href="https://ens.domains/">ENS</a> Resolver</h1>
-	<div id="provider"></div>
+	<div id="provider"><div class="spinner"></div> waiting for Browser</div>
 	<div id="github">
 		<a href="https://github.com/adraffy/ens-normalize.js">adraffy/ens-normalize.js</a>
 		<a href="https://docs.ens.domains/ensip/15"><b>ENSIP-15</b></a>
@@ -2278,34 +2278,53 @@ ethers.AbstractProvider.prototype.ccipReadFetch = function(tx, calldata, urls) {
 	return ccipReadFetchOld.call(this, tx, calldata, urls);
 };
 
+
+
 if (window.ethereum) {
-	window_provider = new ethers.BrowserProvider(ethereum, 'any');
-	window.__provider = window_provider;
-	let send = window_provider.send.bind(window_provider);
-	window_provider.send = async (...a) => {
-		if (a[0] === 'eth_call') ++request_count;
-		try {
-			return await send(...a);
-		} catch (err) {
-			// 20240913: brave/metamask/infura bug???
-			if (err.info?.error?.data?.originalError) {
-				err.data = err.info.error.data.originalError.data;
+	// 20240913: on browser launch, window.ethereum is wonky
+	// https://github.com/MetaMask/metamask-extension/issues/27150
+	if (ethereum._state) {
+		let killer = setTimeout(() => window.location.reload(), 2000);
+		let monitor = setInterval(() => {
+			if (ethereum._state.initialized) {
+				clearInterval(monitor);
+				clearTimeout(killer);
+				init();
 			}
-			throw err;
+		}, 100);
+	} else {
+		init();
+	}
+	function init() {
+		window_provider = new ethers.BrowserProvider(ethereum, 'any');
+		window.__provider = window_provider;
+		window.__ethereum = ethereum;
+		// we cant access request.preflightFunc, this is the next best thing
+		let send = window_provider.send.bind(window_provider);
+		window_provider.send = async (...a) => {
+			if (a[0] === 'eth_call') ++request_count;
+			try {
+				return await send(...a);
+			} catch (err) {
+				// 20240913: brave/metamask/infura bug???
+				if (err.info?.error?.data?.originalError) {
+					err.data = err.info.error.data.originalError.data;
+				}
+				throw err;
+			}
+		};
+		if (ethereum.isConnected()) {
+			window_provider._detectNetwork().then(connected, () => {});
 		}
-	};
-	let timer = setTimeout(set_window_network, 100);
-	window_provider._detectNetwork().catch(() => {}).then(network => {
-		clearTimeout(timer);
-		set_window_network(network);
-	});
-	ethereum.on('connect',  ({chainId}) => set_window_network(ethers.Network.from(parseInt(chainId))));
-	ethereum.on('chainChanged', chainId => set_window_network(ethers.Network.from(parseInt(chainId))));
-	ethereum.on('disconnect', () => set_window_network());
-	// document.addEventListener('visibilitychange', async e => {
-	// 	if (!document.hidden) return;
-	// 	set_window_network(await window_provider._detectNetwork().catch(() => {}));
-	// });
+		ethereum.on('connect', ({chainId}) => {
+			connected(ethers.Network.from(parseInt(chainId)));
+		});
+		function connected(network) {
+			ethereum.on('chainChanged', chainId => set_window_network(ethers.Network.from(parseInt(chainId))));
+			ethereum.once('disconnect', () => set_window_network());
+			set_window_network(network);
+		}
+	}
 } else {
 	update_network();
 }
@@ -2372,7 +2391,7 @@ function update_network() {
 				return req;
 			};
 			active_provider = new ethers.JsonRpcProvider(request, chain.id, {
-				batchMaxCount: 10, //chain.rpc ? 1 : 10, // holesky rpc has batching issues
+				batchMaxCount: 10,
 				staticNetwork: true
 			});
 		}
