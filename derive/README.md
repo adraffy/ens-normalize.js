@@ -64,7 +64,7 @@
 	* `short-names.json` **Unchanged**
 	* `regions.json` **New** `"CQ"`
 * UAX-31: 
-	* **New** 6 Scripts: Gara, Gukh, Krai, Onao, Sunu, Todr, Tutg
+	* **New** 7 Scripts: Gara, Gukh, Krai, Onao, Sunu, Todr, Tutg
 * UTS-39:
 	* **Change** `confusables.txt`
 		* `OUTLINED LATIN [AZ]` with `LATIN CAPITAL [AZ]` (no effect, not confusable)

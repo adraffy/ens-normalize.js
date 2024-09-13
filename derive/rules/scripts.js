@@ -237,7 +237,9 @@ export const RESTRICTED_SCRIPTS = [
 	'Yezi', // Yezidi
 	'Zanb', // Zanabazar Square
 
-	// 20240910: added in 16.0.0
+	// 16.0.0
+	// https://x.com/adraffy/status/1833616504157573404
+	// https://www.unicode.org/L2/L2024/24006.htm#178-N9
 	'Gara', // Garay
 	'Gukh', // Gurung Khema
 	'Krai', // Kirat Rai

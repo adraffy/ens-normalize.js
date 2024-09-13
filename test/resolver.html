@@ -280,6 +280,7 @@ body.testnet {
 }
 #output.hide_recs .avatar,
 #output.hide_recs .row.records,
+#output.hide_recs .row.verifications,
 #output.hide_recs .row.impls {
 	display: none;
 }
@@ -833,6 +834,14 @@ span.tally {
 	background-color: #fdb;
 	order: 10;
 }
+.record.verified::before {
+	content: '✅️';
+	order: -20;
+	margin-left: -3px;
+}
+.row.verifications {
+	background-color: #eff;
+}
 .row.error {
 	background: #fcc;
 	outline: 3px dashed #d00;
@@ -1128,6 +1137,8 @@ footer {
 <button data-name="⓪①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳㉑㉒㉓㉔㉕㉖㉗㉘㉙㉚㉛㉜㉝㉞㉟">⓪-㉟</button>
 <button data-name="🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉">🅰-🆉</button>
 <button data-name="🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩">🅐-🅩</button>
+<!-- TODO: 1CCD6-1CCEF = OUTLINED LATIN CAPITAL A-Z -->
+<!-- TODO: 1CCF0-1CCF9 = OUTLINED DIGIT 0-9 -->
 <button data-name="⓿❶❷❸❹❺❻❼❽❾❿⓫⓬⓭⓮⓯⓰⓱⓲⓳⓴">⓿-❿</button>
 <button data-name="🄌➊➋➌➍➎➏➐➑➒➓">🄌-➓</button>
 <button data-name="㉈㉉㉊㉋㉌㉍㉎㉏">㉈-㉏</button>
@@ -1192,15 +1203,19 @@ Hebrew Geresh:
 <button data-name="o.٥.०.౦.੦.൦.ο.օ">"o"</button>
 <button data-name="あー.〇一.一ー.一.ー.ᅳ">CJK Dash</button>
 
-<a href="https://unicode.org/emoji/charts/emoji-released.html"><b>Unicode 15.0:</b></a>
+<a href="https://www.unicode.org/versions/Unicode15.0.0/"><b>Unicode 15.0:</b></a>
 <button data-name="{1F6DC}{1FA75}{1FA76}{1FA77}{1FA87}{1FA88}{1FAAD}{1FAAE}{1FAAF}{1FABB}{1FABC}{1FABD}{1FABF}{1FACE}{1FACF}{1FADA}{1FADB}{1FAE8}{1FAF7}{1FAF8}">Single Emoji (20)</button>
 <button data-name="{1FAF7}{1F3FB}{1FAF7}{1F3FC}{1FAF7}{1F3FD}{1FAF7}{1F3FE}{1FAF7}{1F3FF}{1FAF8}{1F3FB}{1FAF8}{1F3FC}{1FAF8}{1F3FD}{1FAF8}{1F3FE}{1FAF8}{1F3FF}">Sequences (10)</button>
 <button data-name="{1F426}{200D}{2B1B}">Black Bird</button>
 
-<a href="https://unicode.org/reports/tr51/proposed.html"><b>Unicode 15.1:</b></a>
+<a href="https://www.unicode.org/versions/Unicode15.1.0/"><b>Unicode 15.1:</b></a>
 <button>≠.≮.≯</button>
 <button data-name="{26D3}{200D}{1F4A5}.{1F344}{200D}{1F7EB}.{1F34B}{200D}{1F7E9}.{1F426}{200D}{1F525}.{1F642}{200D}{2194}.{1F642}{200D}{2195}.{1F9D1}{200D}{1F9D2}.{1F9D1}{200D}{1F9D1}{200D}{1F9D2}.{1F9D1}{200D}{1F9D2}{200D}{1F9D2}.{1F9D1}{200D}{1F9D1}{200D}{1F9D2}{200D}{1F9D2}">ZWJ Sequences (10)</button>
 <button data-name="{1F3C3}{1F3FB}{200D}{27A1}.{1F3C3}{1F3FB}{200D}{27A1}.{1F3C3}{1F3FC}{200D}{27A1}.{1F3C3}{1F3FD}{200D}{27A1}.{1F3C3}{1F3FE}{200D}{27A1}.{1F3C3}{1F3FF}{200D}{27A1}">Directional (108)</button>
+
+<a href="https://www.unicode.org/versions/Unicode15.1.0/"><b>Unicode 16.0:</b></a>
+<button data-name="{1FA89}{1FA8F}{1FABE}{1FAC6}{1FADC}{1FADF}{1FAE9}.{1F1E8}{1F1F6}">Emoji (8)</button>
+<button data-name="{1CC4A}{1CC6D}{1CC96}">Legacy Computing</button>
 
 <b>Fenced:</b>
 <button>O'Brian</button>
@@ -1509,7 +1524,6 @@ const RECORDS = [
 	},
 	{
 		key: 'timezone',
-		icon: '<b>tz</b>',
 		bonus: true,
 	},
 	{
@@ -1551,7 +1565,7 @@ const RECORDS = [
 	},
 	{
 		key: 'farcaster',
-		icon: '<img src="https://warpcast.com/favicon.png">',
+		icon: '<img src="https://pbs.twimg.com/profile_images/1546487688601096192/QoG0ZVgH_400x400.jpg">',
 		url(x) { return `https://warpcast.com/${x}`; },
 		fix: repair_social,
 		ens: true,
@@ -1771,7 +1785,6 @@ const RECORDS = [
 	// },
 	{
 		key: 'description',
-		icon: '<b>desc</b>',
 	},
 	{
 		key: 'avatar',
@@ -1782,6 +1795,10 @@ const RECORDS = [
 		format() {},
 		url(x) { return x; }
 	},
+	{
+		key: 'verifications',
+		format() {},
+	}
 ].map(prepare_record);
 function expand_record(rec) {
 	if (typeof rec === 'string') {
@@ -1821,6 +1838,7 @@ let history_timer;
 let request_count = 0;
 
 version_span.innerHTML = `v${versions.version}`;
+version_span.title = `Library: ${versions.version} (${versions.built})\nUnicode: ${versions.unicode}\nCLDR: ${versions.cldr}`;
 version_span.addEventListener('click', () => {
 	window.alert(Object.entries(versions).map(([k, v]) => `[${k}]\n${v}`).join('\n\n'));
 });
@@ -2268,7 +2286,7 @@ if (window.ethereum) {
 		if (a[0] === 'eth_call') ++request_count;
 		return send(...a);
 	};
-	let timer = setTimeout(set_window_network, 100);
+	let timer = setTimeout(set_window_network, 250);
 	window_provider._detectNetwork().catch(() => {}).then(network => {
 		clearTimeout(timer);
 		set_window_network(network);
@@ -2276,6 +2294,10 @@ if (window.ethereum) {
 	ethereum.on('connect',  ({chainId}) => set_window_network(ethers.Network.from(parseInt(chainId))));
 	ethereum.on('chainChanged', chainId => set_window_network(ethers.Network.from(parseInt(chainId))));
 	ethereum.on('disconnect', () => set_window_network());
+	// document.addEventListener('visibilitychange', async e => {
+	// 	if (!document.hidden) return;
+	// 	set_window_network(await window_provider._detectNetwork().catch(() => {}));
+	// });
 } else {
 	update_network();
 }
@@ -2370,6 +2392,13 @@ function update_network() {
 			schedule_resolve(0);
 		} else if (init) {
 			parse();
+		}
+	} else {
+		// reconnect to the current provider
+		for (let [k, x] of Object.entries(network_state)) {
+			if (x instanceof ethers.Contract) {
+				network_state[k] = x.connect(active_provider);
+			}
 		}
 	}
 	let using_window = active_provider === window_provider;
@@ -2649,6 +2678,7 @@ function add_input_features(row, input) {
 function create_dns_row(name, {replaced, contenthash} = {}) {
 	let row = create_row(replaced ? 'Alternative DNS' : 'DNS');
 	row.classList.add('dns');
+	row.classList.remove('available'); // bug when inserted later
 	try {
 		const MAX_LABEL = 63;
 		const MAX_NAME = 253;
@@ -4462,7 +4492,8 @@ async function resolve1(input, skip_norm) {
 							let {name, coin, evm} = rec;
 							if (!name && evm) name = `chain(${evm})`;
 							if (!name) name = `coin(${coin})`;
-							a.innerHTML = `<b>${rec.icon || name}</b>`;
+							if (rec.icon) a.innerHTML = rec.icon;
+							a.append(create('b', {innerText: name}));
 							try {
 								let v = ethers.getBytes(data);
 								let lines = [`Name: ${name}`, `Type: ${format_dec_hex(coin)}`];
@@ -4517,7 +4548,13 @@ async function resolve1(input, skip_norm) {
 						case TYPE_TEXT: {
 							data = data.trim(); // silent error for empty-able string
 							if (!data) continue;
-							a.innerHTML = rec.icon || `<b>${rec.key}</b>`;
+							if (rec.key === 'verifications') {
+								fetch_verifications(data, name_norm);
+								//continue;
+							}
+							if (rec.icon) a.innerHTML = rec.icon;
+							a.append(create('b', {innerText: rec.key}));
+							//a.innerHTML = rec.icon || `<b>${rec.key}</b>`;
 							let fixed = data;
 							if (rec.url) {
 								let prefix = rec.url('');
@@ -4535,6 +4572,8 @@ async function resolve1(input, skip_norm) {
 									title: `Original: ${data}\nChange: ${fixed}`}));
 								data = fixed;
 							}
+							a.dataset.key = rec.key;
+							a.dataset.value = data;
 							let text = rec.format ? rec.format(data, a) : data;
 							if (text) {
 								a.append(create('span', {innerText: text, className: text.length > 32 ? 'long' : null}));
@@ -4777,7 +4816,8 @@ async function resolve1(input, skip_norm) {
 
 	// lookup primary from eth address
 	let primary, primary_err;
-	let primary_row = create_row('Primary', true);
+	let primary_row = create_row('Primary');
+	add_spinner(primary_row);
 	let rev_resolver;
 	output_div.append(primary_row);
 	//primary_row.append(create_jazz_icon(address)); // only true in the forward direction
@@ -5336,6 +5376,100 @@ async function load_known_interfaces(row, resolver, owner) {
 		}
 	} catch (err) {
 		add_row_tag(row, create_tag('warn', err));
+	}
+}
+function fetch_verifications(data, ens_name) {
+	// note: this is super shitty and hacky
+	let row = create_row('Verifications');
+	row.classList.add('verifications');
+	output_div.append(row);
+	let urls;
+	try {
+		urls = JSON.parse(data);
+		if (!Array.isArray(urls)) throw new Error('expected list of urls');
+	} catch (err) {
+		add_row_tag(row, create_tag('warn', err.message));
+		return;
+	}
+	if (!urls.length) {
+		row.remove();
+		return;
+	}
+	const t0 = Date.now();
+	let finished = 0;
+	for (let url of urls) {
+		let loader = create('a', {
+			href: url,
+			target: '_blank',
+			className: 'record',
+		});
+		row.append(loader);
+		try {
+			url = new URL(url);
+			let spinner = create('div', {className: ['spinner']});
+			loader.append(spinner);
+			loader.append(url.host); //create('b', {innerText: url.host}));
+			(async () => {
+				try {
+					let res = await fetch(url);
+					if (!res.ok) throw new Error(`HTTP ${res.status}`);
+					let json = await res.json();
+					if (!row.isConnected) return;
+					let {vp_token} = json;
+					if (!vp_token) throw new Error('expected vp_token');
+					if (!Array.isArray(vp_token)) vp_token = [vp_token];
+					let ens = vp_token.find(token => token.credentialSubject.credentialType === 'Verified ENS');
+					if (!ens) throw new Error('no ENS record');
+					if (ens.credentialSubject.ensName !== ens_name) throw new Error('wrong ENS name');
+					for (let token of json.vp_token) {
+						if (token === ens) continue;
+						let a = create('a', {
+							href: url,
+							target: '_blank',
+							className: 'record',
+						});
+						let [key, value] = extract_verificiation_kv(token);
+						a.append(create('b', {innerText: key}));
+						a.title = `Issuer: ${ens.credentialSubject.credentialIssuer}`;
+						let rec = document.querySelector(`.row.records [data-key="${key}"]`);
+						if (rec && rec.dataset.value === value) {
+							rec.classList.add('verified');
+						} else {
+							a.classList.add('rtrim');
+							if (value) a.append(create('span', {innerText: value}));
+							a.append(create_copy_btn(value));	
+						}
+						row.append(a);
+					}
+					loader.remove();
+				} catch (err) {
+					loader.append(create('span', {innerText: `❌️ ${err.message}`, className: ['tags', 'changed']}));
+					loader.classList.add('rtrim');
+				}
+				spinner.remove();
+				finish();
+			})();
+		} catch (err) {
+			loader.innerText = '❌️ Invalid URL';
+			finish();
+		}
+		function finish() {
+			if (++finished < urls.length) return;
+			row.append(create_elapsed(Date.now() - t0)); //, finished));
+		}
+	}
+}
+function extract_verificiation_kv(token) {
+	let subj = token.credentialSubject;
+	let type = subj.credentialType;
+	switch (type) {
+		case 'Verified Account': {
+			let key = subj.verificationSource;
+			if (key === 'X') key = 'com.twitter';
+			return [key, subj.username];
+		}
+		case 'Verified Email': return ['email', subj.verifiedEmail];
+		default: return [type];
 	}
 }
 async function get_resolver_info(target) {

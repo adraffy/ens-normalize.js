@@ -13,7 +13,7 @@
 		"tag": "prior"
 	},
 	{
-		"spec_hash": "dbe76634f67cd03248e838b15138b0c8948d84c86e18fb32a460ddb4990f173e",
+		"spec_hash": "4b3c5210a328d7097500b413bf075ec210bbac045cd804deae5d1ed771304825",
 		"library": "1.11.0",
 		"unicode": "16.0.0",
 		"cldr": "45",

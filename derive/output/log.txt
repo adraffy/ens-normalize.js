@@ -1,4 +1,4 @@
-Build Date: 2024-09-11T06:51:56.492Z
+Build Date: 2024-09-13T06:42:41.079Z
 Unicode Version: 16.0.0 (2024-09-10T20:47:54.200Z)
 CLDR Version: 45 (2024-04-19T05:36:55.332Z)
 ==== RGI Emoji ZWJ Sequences ====
@@ -9250,22 +9250,15 @@ Removed Valid: 1CC44 (𜱄) DENSE VERTICAL FILL
 Removed Valid: 1CC45 (𜱅) DENSE HORIZONTAL FILL
 Removed Valid: 1CC46 (𜱆) SPECKLE FILL FRAME-1
 Removed Valid: 1CC47 (𜱇) SPECKLE FILL FRAME-2
+Removed Valid: 1CC5A (𜱚) TOP HALF LEFT-FACING ROBOT
+Removed Valid: 1CC5C (𜱜) TOP HALF RIGHT-FACING ROBOT
 Removed Valid: 1CC5D (𜱝) BOTTOM HALF LEFT-FACING ROBOT
 Removed Valid: 1CC5E (𜱞) BOTTOM HALF FORWARD-FACING ROBOT
 Removed Valid: 1CC5F (𜱟) BOTTOM HALF RIGHT-FACING ROBOT
-Removed Valid: 1CC60 (𜱠) LEFT-POINTING ATOMIC BOMB
-Removed Valid: 1CC61 (𜱡) UP-POINTING ATOMIC BOMB
-Removed Valid: 1CC62 (𜱢) RIGHT-POINTING ATOMIC BOMB
-Removed Valid: 1CC63 (𜱣) DOWN-POINTING ATOMIC BOMB
-Removed Valid: 1CC64 (𜱤) MUSHROOM CLOUD
 Removed Valid: 1CC65 (𜱥) LEFT-POINTING RIFLE
 Removed Valid: 1CC66 (𜱦) UP-POINTING RIFLE
 Removed Valid: 1CC67 (𜱧) RIGHT-POINTING RIFLE
 Removed Valid: 1CC68 (𜱨) DOWN-POINTING RIFLE
-Removed Valid: 1CC6B (𜱫) BLACK LARGE CIRCLE MINUS LEFT QUARTER SECTION
-Removed Valid: 1CC6C (𜱬) BLACK LARGE CIRCLE MINUS UPPER QUARTER SECTION
-Removed Valid: 1CC6D (𜱭) BLACK LARGE CIRCLE MINUS RIGHT QUARTER SECTION
-Removed Valid: 1CC6E (𜱮) BLACK LARGE CIRCLE MINUS LOWER QUARTER SECTION
 Removed Valid: 1CC6F (𜱯) BLACK NEUTRAL FACE
 Removed Valid: 1CC70 (𜱰) LEFT-FACING SNAKE HEAD WITH OPEN MOUTH
 Removed Valid: 1CC71 (𜱱) UP-FACING SNAKE HEAD WITH OPEN MOUTH
@@ -9295,13 +9288,15 @@ Removed Valid: 1CC88 (𜲈) TWO RINGS ALIGNED HORIZONTALLY
 Removed Valid: 1CC89 (𜲉) SQUARE FOUR CORNER SALTIRES
 Removed Valid: 1CC8A (𜲊) SQUARE FOUR CORNER DIAGONALS
 Removed Valid: 1CC8B (𜲋) SQUARE FOUR CORNER BLACK TRIANGLES
-Removed Valid: 1CC8D (𜲍) INVERSE BLACK DIAMOND
 Removed Valid: 1CC8E (𜲎) LEFT AND UPPER ONE EIGHTH BLOCK CONTAINING BLACK SMALL SQUARE
 Removed Valid: 1CC8F (𜲏) INVERSE BLACK SMALL SQUARE
 Removed Valid: 1CC90 (𜲐) VERTICAL LINE WITH FOUR TICK MARKS
 Removed Valid: 1CC91 (𜲑) HORIZONTAL LINE WITH FOUR TICK MARKS
-Removed Valid: 1CC9E (𜲞) LEFT-POINTING TANK
-Removed Valid: 1CC9F (𜲟) RIGHT-POINTING TANK
+Removed Valid: 1CC92 (𜲒) LEFT-FACING FISH
+Removed Valid: 1CC93 (𜲓) RIGHT-FACING FISH
+Removed Valid: 1CC9B (𜲛) HORIZONTAL RACING CAR
+Removed Valid: 1CC9C (𜲜) VERTICAL RACING CAR
+Removed Valid: 1CC9D (𜲝) VERTICAL GO-KART
 Removed Valid: 1CCA0 (𜲠) LEFT-POINTING ROCKET BOOSTER
 Removed Valid: 1CCA1 (𜲡) RIGHT-POINTING ROCKET BOOSTER
 Removed Valid: 1CCA2 (𜲢) LEFT-POINTING ROLLER COASTER CAR
@@ -11861,6 +11856,22 @@ Removed Valid: A612 (ꘒ) VAI SYLLABLE NDOLE SOO
 Removed Valid: A62A (ꘪ) VAI SYLLABLE NDOLE MA
 Removed Valid: A62B (ꘫ) VAI SYLLABLE NDOLE DO
 Removed Valid: 16FE3 (𖿣) OLD CHINESE ITERATION MARK
+Removed Ignored: 115F (ᅟ) HANGUL CHOSEONG FILLER
+Removed Ignored: 1160 (ᅠ) HANGUL JUNGSEONG FILLER
+Removed Ignored: 17B4 (◌឴) KHMER VOWEL INHERENT AQ
+Removed Ignored: 17B5 (◌឵) KHMER VOWEL INHERENT AA
+Removed Ignored: 180E (᠎) MONGOLIAN VOWEL SEPARATOR
+Removed Ignored: 2061 (⁡) FUNCTION APPLICATION
+Removed Ignored: 2062 (⁢) INVISIBLE TIMES
+Removed Ignored: 2063 (⁣) INVISIBLE SEPARATOR
+Removed Ignored: 206A (⁪) INHIBIT SYMMETRIC SWAPPING
+Removed Ignored: 206B (⁫) ACTIVATE SYMMETRIC SWAPPING
+Removed Ignored: 206C (⁬) INHIBIT ARABIC FORM SHAPING
+Removed Ignored: 206D (⁭) ACTIVATE ARABIC FORM SHAPING
+Removed Ignored: 206E (⁮) NATIONAL DIGIT SHAPES
+Removed Ignored: 206F (⁯) NOMINAL DIGIT SHAPES
+Removed Ignored: 3164 (ㅤ) HANGUL FILLER
+Removed Ignored: FFA0 (ﾠ) HALFWIDTH HANGUL FILLER
 Removed Valid: 2E (.) FULL STOP
 ==== Apply ScriptExt ====
 3BE (ξ) GREEK SMALL LETTER XI [Grek => Zyyy]
@@ -11870,13 +11881,13 @@ Disallowed Script: [Lina] Linear A [X]
 Disallowed Script: [Linb] Linear B [X]
 Disallowed Script: [Sgnw] SignWriting [X]
 Valid  | Name       | Test      | Rest      | Extra                     
- 99193 | Japanese   | Kana+Hira | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
-110510 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
- 98983 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
+ 99198 | Japanese   | Kana+Hira | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+110515 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+ 98988 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
  97880 | Bopomofo   | Bopo      | Hani      |                           
-  1442 | Latin      | Latn+Zyyy | Zinh      | π                         
-  1282 | Cyrillic   | Cyrl      | Zyyy+Zinh |                           
-  1268 | Greek      | Grek      | Zyyy+Zinh |                           
+  1447 | Latin      | Latn+Zyyy | Zinh      | π                         
+  1287 | Cyrillic   | Cyrl      | Zyyy+Zinh |                           
+  1273 | Greek      | Grek      | Zyyy+Zinh |                           
    410 | Arabic     | Arab      |           | -                         
    120 | Devanagari | Deva      |           |                           
     86 | Hebrew     | Hebr      |           | ₪                         
@@ -15723,8 +15734,8 @@ Removed Mapping: 1F248 (🉈) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-655
 [✓] Fastpath ASCII
 [✓] Groups Names are A-Z
 ==== Find Unique Characters ====
-Valid: 138770
-Multi: 99100
+Valid: 138775
+Multi: 99105
 Unique: 39670
 [✓] Matching Groups have Same CM Style
 [✓] Wholes are Valid
@@ -15738,18 +15749,18 @@ Non-Confusable Non-Unique: 51
 [✓] Ordered by Registration Likelihood
 ==== Group Summary ====
 Ord | Valid  | Uniqu | Prima | Secon | CM   | Group     
-  1 |   1233 |    55 |  1232 |     1 | 0/51 | Latin     
-  2 |  98983 |     0 | 97806 |  1177 | 0/0  | Han       
+  1 |   1238 |    55 |  1237 |     1 | 0/51 | Latin     
+  2 |  98988 |     0 | 97806 |  1182 | 0/0  | Han       
   3 |    400 |   377 |   399 |     1 |      | Arabic    
   4 |    120 |   110 |   120 |     0 |      | Devanagari
-  5 |  99190 |   207 |   209 | 98981 | 0/58 | Japanese  
-  6 | 110509 | 11526 | 11528 | 98981 | 0/0  | Korean    
-  7 |   1256 |   105 |   105 |  1151 | 0/8  | Cyrillic  
+  5 |  99195 |   207 |   209 | 98986 | 0/58 | Japanese  
+  6 | 110514 | 11526 | 11528 | 98986 | 0/0  | Korean    
+  7 |   1261 |   105 |   105 |  1156 | 0/8  | Cyrillic  
   8 |     86 |    83 |    85 |     1 |      | Hebrew    
   9 |     87 |    85 |    86 |     1 |      | Thai      
  10 |     91 |    81 |    91 |     0 |      | Bengali   
  11 |    126 |   105 |   126 |     0 |      | Tamil     
- 12 |   1186 |    34 |    35 |  1151 | 0/11 | Greek     
+ 12 |   1191 |    34 |    35 |  1156 | 0/11 | Greek     
  13 |    186 |   186 |   186 |     0 |      | Tibetan   
  14 |     74 |    64 |    74 |     0 |      | Gurmukhi  
  15 |     80 |    80 |    80 |     0 |      | Lao       
@@ -15907,7 +15918,7 @@ Optimized: 2143 => 574
 CM(2501) => NSM(2033) => 1095
 Per Group Max: 61
 ==== Write Output ====
-Wrote: spec.json [3171370]
+Wrote: spec.json [3171498]
 Unchanged: nf.json
 Unchanged: nf-tests.json
 Unchanged: emoji-info.json

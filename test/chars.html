@@ -273,19 +273,19 @@ function apply_hash() {
 	scroll_to_input(window.location.hash.slice(1));
 }
 function scroll_to_input(input) {
-	if (/^[a-f0-9]+$/i.test(input)) {
+	if (/^(0x)?[a-f0-9]+$/i.test(input)) {
 		scroll_to_cp(parseInt(input, 16));
 	//} else if (/^(['"]).*\1$/.test(input)) {
 	//	scroll_to_cp([...input][1].codePointAt(0));
-	} else if (input) {
+	} else if ([...input].length > 1) {
 		input = input.toLowerCase();
 		for (let [cp, {name}] of char_map) {
 			if (name.toLowerCase().includes(input)) {
 				return scroll_to_cp(cp);
 			}
 		}
-		scroll_to_cp(input.codePointAt(0));
 	}
+	scroll_to_cp(input.codePointAt(0)|0);
 }
 function sync_hash(url) {
 	if (window.history.state) {
