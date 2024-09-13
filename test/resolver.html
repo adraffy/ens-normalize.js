@@ -1362,7 +1362,7 @@ Hebrew:
 	<span id="enable_debug_btn" title="Enable Debugging">🛠️</span>
 </footer>
 <script type="module">
-import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.12.1/ethers.min.js';
+import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.min.js';
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
 	nfc, nfd, hex_cp, quote_cp, explode_cp, str_from_cps, safe_str_from_cps,
@@ -2280,13 +2280,21 @@ ethers.AbstractProvider.prototype.ccipReadFetch = function(tx, calldata, urls) {
 
 if (window.ethereum) {
 	window_provider = new ethers.BrowserProvider(ethereum, 'any');
-	window_provider.__provider = ethereum;
+	window.__provider = window_provider;
 	let send = window_provider.send.bind(window_provider);
-	window_provider.send = (...a) => {
+	window_provider.send = async (...a) => {
 		if (a[0] === 'eth_call') ++request_count;
-		return send(...a);
+		try {
+			return await send(...a);
+		} catch (err) {
+			// 20240913: brave/metamask/infura bug???
+			if (err.info?.error?.data?.originalError) {
+				err.data = err.info.error.data.originalError.data;
+			}
+			throw err;
+		}
 	};
-	let timer = setTimeout(set_window_network, 250);
+	let timer = setTimeout(set_window_network, 100);
 	window_provider._detectNetwork().catch(() => {}).then(network => {
 		clearTimeout(timer);
 		set_window_network(network);
