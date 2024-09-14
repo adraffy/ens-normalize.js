@@ -3,13 +3,13 @@
 
 `$ npm i @adraffy/ens-normalize` [&check;](https://www.npmjs.com/package/@adraffy/ens-normalize)
 
-* 🏛️ Follows [**ENSIP-15**: ENS Name Normalization Standard](https://docs.ens.domains/ens-improvement-proposals/ensip-15-normalization-standard)
+* 🏛️ Follows [**ENSIP-15**: ENS Name Normalization Standard](https://docs.ens.domains/ensip/15)
 	* Unicode: [`16.0.0`](./derive/data/16.0.0/) • CLDR: [`45`](./derive/data/CLDR-45/)
 	* Other implementations:
 		* Python — [namehash/**ens-normalize-python**](https://github.com/namehash/ens-normalize-python)
 		* C# — [adraffy/**ENSNormalize.cs**](https://github.com/adraffy/ENSNormalize.cs)
 		* Java — [adraffy/**ENSNormalize.java**](https://github.com/adraffy/ENSNormalize.java)
-		* Go — [adraffy/**ENSNormalize.go**](https://github.com/adraffy/ENSNormalize.go)
+		* Go — [adraffy/**go-ens-normalize**](https://github.com/adraffy/go-ens-normalize)
 		* Javascript — [ensdomains/**eth-ens-namehash**](https://github.com/ensdomains/eth-ens-namehash)
 	* [Breakdown Reports from ENSIP-1](https://adraffy.github.io/ens-norm-tests/test-breakdown/output-20230226/)	
 * ✅️ Passes **100%** [ENSIP-15 Validation Tests](https://adraffy.github.io/ens-normalize.js/test/validate.html)

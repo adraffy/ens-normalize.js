@@ -23,7 +23,7 @@
 		},
 		"./xnf": {
 			"import": "./dist/index-xnf.mjs",
-			"default": "./dist/index-xnf.cjs"
+			"require": "./dist/index-xnf.cjs"
 		}
 	},
 	"main": "./dist/index.cjs",

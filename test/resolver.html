@@ -120,7 +120,7 @@ body.testnet {
 	box-sizing: border-box;
 	animation: spin 2s infinite linear;
 	border: 4px solid #000;
-	border-bottom-color: transparent;
+	border-bottom-color: transparent !important;
 	border-radius: 100%;
 }
 @keyframes spin {
@@ -271,6 +271,7 @@ body.testnet {
 #resolve_btn {
 	font-weight: bold;
 	font-size: 120%;
+	gap: 8px;
 }
 #output {
 	display: flex;
@@ -1285,10 +1286,10 @@ Hebrew:
 	<button id="find_emoji_btn" title="Lookup Selected/First Emoji&#10;[ALT] Random Emoji&#10;[SHIFT] Only Use Singles">Emoji</button>
 	<button id="chars_btn" title="Lookup Selected/First Character">Chars</button>
 	<button id="confused_btn" title="Explain Confusable Characters">Confused</button>
-	<button id="nf_btn" title="NFD↔NFC">NF</button>
-	<button id="escape_btn" title="[ALT] Unicode Escaped">Escape</button>
 	<div class="grouped left">
 		<div class="spinner"></div>
+		<button id="nf_btn" title="NFD↔NFC">NF</button>
+		<button id="escape_btn" title="[ALT] Unicode Escaped">Escape</button>
 		<button id="resolve_btn" title="[ALT] Resolve parent&#10;[ESC] Clear input" class="ens">Resolve</button>
 	</div>
 </div>
@@ -1375,6 +1376,7 @@ import eth_ens_namehash from './eth-ens-namehash@2.0.15.min.js';
 use_default_style();
 
 const $ = x => document.querySelector(x);
+const $$ = x => document.querySelectorAll(x);
 const EMOJI = ens_emoji();
 
 const input_field = $('#input_field');
@@ -1508,7 +1510,6 @@ const ERROR_ABI = new ethers.Interface([
 
 // https://docs.ens.domains/ensip/9
 // https://github.com/satoshilabs/slips/blob/master/slip-0044.md
-// https://github.com/ensdomains/docs/blob/profile-text-records/ens-improvement-proposals/ensip-xx-profile-text-records.md
 const TYPE_ADDR = 'addr(bytes32,uint256)';
 const TYPE_TEXT = 'text';
 const TYPE_PUBKEY = 'pubkey';
@@ -1815,7 +1816,7 @@ function prepare_record(rec) {
 	} else if (Number.isInteger(rec.coin)) {
 		rec.type = TYPE_ADDR;
 	} else if (Number.isInteger(rec.evm)) {
-		// https://docs.ens.domains/ens-improvement-proposals/ensip-11-evmchain-address-resolution
+		// https://docs.ens.domains/ensip/11
 		rec.type = TYPE_ADDR;
 		rec.coin = rec.evm + 0x80000000;
 	} else if (!rec.type) {
@@ -1868,7 +1869,7 @@ add_digits('Thai', '๐๑๒๓๔๕๖๗๘๙');
 //add_digits('Bengali', '০১২৩৪৫৬৭৮৯');
 //add_digits('Tamil', '௦௧௨௩௪௫௬௭௮௯');
 
-for (let btn of document.querySelectorAll('#examples button:not([id]), button[data-name]')) {
+for (let btn of $$('#examples button:not([id]), button[data-name]')) {
 	let name = btn.innerText;
 	if (btn.dataset.name) name = btn.dataset.name;
 	if (typeof btn.dataset.raw !== 'string') name = replace_escapes(name);
@@ -1898,7 +1899,7 @@ for (let btn of document.querySelectorAll('#examples button:not([id]), button[da
 		}
 	});
 }
-for (let x of document.querySelectorAll('[data-tokenize]')) {
+for (let x of $$('[data-tokenize]')) {
 	let components = !!x.dataset.parts;
 	x.replaceWith(dom_from_tokens(ens_tokenize(replace_escapes(x.dataset.tokenize)), {
 		components,
@@ -2924,7 +2925,7 @@ function make_click_copy(el, raw, {hint} = {}) {
 			copy = shift || '0x' + Array.from(bytes_from_utf8(copy), hex_cp).join('');
 		}
 		const cls = 'copied';
-		document.querySelectorAll(`.${cls}`).forEach(x => x.classList.remove(cls));
+		$$(`.${cls}`).forEach(x => x.classList.remove(cls));
 		navigator.clipboard.writeText(copy);
 		this.classList.add(cls);
 		setTimeout(() => this.classList.remove(cls), 2000);
@@ -4695,7 +4696,7 @@ async function resolve1(input, skip_norm) {
 							break;
 						}
 						// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IContentHashResolver.sol
-						// https://docs.ens.domains/ens-improvement-proposals/ensip-7-contenthash-field
+						// https://docs.ens.domains/ensip/7
 						// https://github.com/multiformats/multicodec/blob/master/table.csv
 						case TYPE_CONTENTHASH: {
 							if (is_null_hex(data)) continue;
@@ -5458,7 +5459,7 @@ function fetch_verifications(data, ens_name) {
 						let [key, value] = extract_verificiation_kv(token);
 						a.append(create('b', {innerText: key}));
 						a.title = `Issuer: ${ens.credentialSubject.credentialIssuer}`;
-						let rec = document.querySelector(`.row.records [data-key="${key}"]`);
+						let rec = $(`.row.records [data-key="${key}"]`);
 						if (rec && rec.dataset.value === value) {
 							rec.classList.add('verified');
 						} else {
@@ -5563,7 +5564,7 @@ async function get_resolver(name0) {
 		check_abort();
 		if (is_null_hex(address)) continue;
 		// https://github.com/ensdomains/ens-contracts/tree/staging/contracts/resolvers/profiles
-		// https://docs.ens.domains/ens-improvement-proposals/ensip-10-wildcard-resolution
+		// https://docs.ens.domains/ensip/10
 		let resolver = new ethers.Contract(address, [
 			'function interfaceImplementer(bytes32 node, bytes4 interfaceID) external view returns (address)',
 			'function resolve(bytes name, bytes data) view returns (bytes)',
