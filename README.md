@@ -1,7 +1,7 @@
 # ens-normalize.js
-0-dependancy [Ethereum Name Service](https://ens.domains/) (ENS) Name Normalizer.
+0-dependency [Ethereum Name Service](https://ens.domains/) (ENS) Name Normalizer.
 
-`$ npm i @adraffy/ens-normalize` [&check;](https://www.npmjs.com/package/@adraffy/ens-normalize)
+`npm i @adraffy/ens-normalize` [&check;](https://www.npmjs.com/package/@adraffy/ens-normalize)
 
 * 🏛️ Follows [**ENSIP-15**: ENS Name Normalization Standard](https://docs.ens.domains/ensip/15)
 	* Unicode: [`16.0.0`](./derive/data/16.0.0/) • CLDR: [`45`](./derive/data/CLDR-45/)
@@ -15,9 +15,9 @@
 * ✅️ Passes **100%** [ENSIP-15 Validation Tests](https://adraffy.github.io/ens-normalize.js/test/validate.html)
 * ✅️ Passes **100%** [Unicode Normalization Tests](https://adraffy.github.io/ens-normalize.js/test/report-nf.html)
 * Minified File Sizes: 
-	* [`29KB`](./dist/index-xnf.min.js) — native `NFC` via [nf-native.js](./src/nf-native.js) using `String.normalize()` ⚠️
-	* [`38KB` **Default**](./dist/index.min.js) — custom `NFC` via [nf.js](./src/nf.js)
-	* [`44KB`](./dist/all.min.js) *Everything!* — custom `NFC` + sub-libraries: [parts.js](./src/parts.js), [utils.js](./src/utils.js)
+	* [`29KB`](./dist/index-xnf.min.js) — native NFC via [nf-native.js](./src/nf-native.js) using `String.normalize()` ⚠️
+	* [`38KB` **Default**](./dist/index.min.js) — custom NFC via [nf.js](./src/nf.js)
+	* [`44KB`](./dist/all.min.js) *Everything!* — custom NFC + sub-libraries: [parts.js](./src/parts.js), [utils.js](./src/utils.js)
 * Included Apps:
 	* [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html) ⭐
 	* [Supported Emoji](https://adraffy.github.io/ens-normalize.js/test/emoji.html)
