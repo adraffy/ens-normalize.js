@@ -1,10 +1,10 @@
 # Supported Emoji
-1. [Valid Emoji Sequences (3755)](#valid-emoji-sequences)
+1. [Valid Emoji Sequences (3763)](#valid-emoji-sequences)
 1. [Disabled Emoji Characters (33)](#disabled-emoji-characters)
 1. [Demoted Emoji Characters (32)](#demoted-emoji-characters)
 1. [Emoji Sequence Whitelist (0)](#emoji-sequence-whitelist)
 1. [Emoji Sequence Blacklist (0)](#emoji-sequence-blacklist)
-## <a id="valid-emoji-sequences">Valid Emoji Sequences (3755)</a>
+## <a id="valid-emoji-sequences">Valid Emoji Sequences (3763)</a>
 | Codepoints | Form | Name |
 | -: | :-: | :- |
 | `A9 FE0F` | `©️` |  copyright |
@@ -268,6 +268,7 @@
 | `1F1E8 1F1F3` | `🇨🇳` |  flag: China |
 | `1F1E8 1F1F4` | `🇨🇴` |  flag: Colombia |
 | `1F1E8 1F1F5` | `🇨🇵` |  flag: Clipperton Island |
+| `1F1E8 1F1F6` | `🇨🇶` |  flag: Sark |
 | `1F1E8 1F1F7` | `🇨🇷` |  flag: Costa Rica |
 | `1F1E8 1F1FA` | `🇨🇺` |  flag: Cuba |
 | `1F1E8 1F1FB` | `🇨🇻` |  flag: Cape Verde |
@@ -2134,6 +2135,8 @@
 | `1FA86 FE0F` | `🪆️` |  nesting dolls |
 | `1FA87 FE0F` | `🪇️` |  maracas |
 | `1FA88 FE0F` | `🪈️` |  flute |
+| `1FA89 FE0F` | `🪉️` |  HARP |
+| `1FA8F FE0F` | `🪏️` |  SHOVEL |
 | `1FA90 FE0F` | `🪐️` |  ringed planet |
 | `1FA91 FE0F` | `🪑️` |  chair |
 | `1FA92 FE0F` | `🪒️` |  razor |
@@ -2180,6 +2183,7 @@
 | `1FABB FE0F` | `🪻️` |  hyacinth |
 | `1FABC FE0F` | `🪼️` |  jellyfish |
 | `1FABD FE0F` | `🪽️` |  wing |
+| `1FABE FE0F` | `🪾️` |  LEAFLESS TREE |
 | `1FABF FE0F` | `🪿️` |  goose |
 | `1FAC0 FE0F` | `🫀️` |  anatomical heart |
 | `1FAC1 FE0F` | `🫁️` |  lungs |
@@ -2202,6 +2206,7 @@
 | `1FAC5 1F3FD` | `🫅🏽` |  person with crown: medium skin tone |
 | `1FAC5 1F3FE` | `🫅🏾` |  person with crown: medium-dark skin tone |
 | `1FAC5 1F3FF` | `🫅🏿` |  person with crown: dark skin tone |
+| `1FAC6 FE0F` | `🫆️` |  FINGERPRINT |
 | `1FACE FE0F` | `🫎️` |  moose |
 | `1FACF FE0F` | `🫏️` |  donkey |
 | `1FAD0 FE0F` | `🫐️` |  blueberries |
@@ -2216,6 +2221,8 @@
 | `1FAD9 FE0F` | `🫙️` |  jar |
 | `1FADA FE0F` | `🫚️` |  ginger root |
 | `1FADB FE0F` | `🫛️` |  pea pod |
+| `1FADC FE0F` | `🫜️` |  ROOT VEGETABLE |
+| `1FADF FE0F` | `🫟️` |  SPLATTER |
 | `1FAE0 FE0F` | `🫠️` |  melting face |
 | `1FAE1 FE0F` | `🫡️` |  saluting face |
 | `1FAE2 FE0F` | `🫢️` |  face with open eyes and hand over mouth |
@@ -2225,6 +2232,7 @@
 | `1FAE6 FE0F` | `🫦️` |  biting lip |
 | `1FAE7 FE0F` | `🫧️` |  bubbles |
 | `1FAE8 FE0F` | `🫨️` |  shaking face |
+| `1FAE9 FE0F` | `🫩️` |  FACE WITH BAGS UNDER EYES |
 | `1FAF0 FE0F` | `🫰️` |  hand with index finger and thumb crossed |
 | `1FAF0 1F3FB` | `🫰🏻` |  hand with index finger and thumb crossed: light skin tone |
 | `1FAF0 1F3FC` | `🫰🏼` |  hand with index finger and thumb crossed: medium-light skin tone |
@@ -2348,7 +2356,7 @@
 | `1F9D1 200D 1F33E` | `🧑‍🌾` |  farmer |
 | `1F9D1 200D 1F373` | `🧑‍🍳` |  cook |
 | `1F9D1 200D 1F37C` | `🧑‍🍼` |  person feeding baby |
-| `1F9D1 200D 1F384` | `🧑‍🎄` |  mx claus |
+| `1F9D1 200D 1F384` | `🧑‍🎄` |  Mx Claus |
 | `1F9D1 200D 1F393` | `🧑‍🎓` |  student |
 | `1F9D1 200D 1F3A4` | `🧑‍🎤` |  singer |
 | `1F9D1 200D 1F3A8` | `🧑‍🎨` |  artist |
@@ -2674,7 +2682,7 @@
 | `1F9D1 1F3FB 200D 1F33E` | `🧑🏻‍🌾` |  farmer: light skin tone |
 | `1F9D1 1F3FB 200D 1F373` | `🧑🏻‍🍳` |  cook: light skin tone |
 | `1F9D1 1F3FB 200D 1F37C` | `🧑🏻‍🍼` |  person feeding baby: light skin tone |
-| `1F9D1 1F3FB 200D 1F384` | `🧑🏻‍🎄` |  mx claus: light skin tone |
+| `1F9D1 1F3FB 200D 1F384` | `🧑🏻‍🎄` |  Mx Claus: light skin tone |
 | `1F9D1 1F3FB 200D 1F393` | `🧑🏻‍🎓` |  student: light skin tone |
 | `1F9D1 1F3FB 200D 1F3A4` | `🧑🏻‍🎤` |  singer: light skin tone |
 | `1F9D1 1F3FB 200D 1F3A8` | `🧑🏻‍🎨` |  artist: light skin tone |
@@ -2696,7 +2704,7 @@
 | `1F9D1 1F3FC 200D 1F33E` | `🧑🏼‍🌾` |  farmer: medium-light skin tone |
 | `1F9D1 1F3FC 200D 1F373` | `🧑🏼‍🍳` |  cook: medium-light skin tone |
 | `1F9D1 1F3FC 200D 1F37C` | `🧑🏼‍🍼` |  person feeding baby: medium-light skin tone |
-| `1F9D1 1F3FC 200D 1F384` | `🧑🏼‍🎄` |  mx claus: medium-light skin tone |
+| `1F9D1 1F3FC 200D 1F384` | `🧑🏼‍🎄` |  Mx Claus: medium-light skin tone |
 | `1F9D1 1F3FC 200D 1F393` | `🧑🏼‍🎓` |  student: medium-light skin tone |
 | `1F9D1 1F3FC 200D 1F3A4` | `🧑🏼‍🎤` |  singer: medium-light skin tone |
 | `1F9D1 1F3FC 200D 1F3A8` | `🧑🏼‍🎨` |  artist: medium-light skin tone |
@@ -2718,7 +2726,7 @@
 | `1F9D1 1F3FD 200D 1F33E` | `🧑🏽‍🌾` |  farmer: medium skin tone |
 | `1F9D1 1F3FD 200D 1F373` | `🧑🏽‍🍳` |  cook: medium skin tone |
 | `1F9D1 1F3FD 200D 1F37C` | `🧑🏽‍🍼` |  person feeding baby: medium skin tone |
-| `1F9D1 1F3FD 200D 1F384` | `🧑🏽‍🎄` |  mx claus: medium skin tone |
+| `1F9D1 1F3FD 200D 1F384` | `🧑🏽‍🎄` |  Mx Claus: medium skin tone |
 | `1F9D1 1F3FD 200D 1F393` | `🧑🏽‍🎓` |  student: medium skin tone |
 | `1F9D1 1F3FD 200D 1F3A4` | `🧑🏽‍🎤` |  singer: medium skin tone |
 | `1F9D1 1F3FD 200D 1F3A8` | `🧑🏽‍🎨` |  artist: medium skin tone |
@@ -2740,7 +2748,7 @@
 | `1F9D1 1F3FE 200D 1F33E` | `🧑🏾‍🌾` |  farmer: medium-dark skin tone |
 | `1F9D1 1F3FE 200D 1F373` | `🧑🏾‍🍳` |  cook: medium-dark skin tone |
 | `1F9D1 1F3FE 200D 1F37C` | `🧑🏾‍🍼` |  person feeding baby: medium-dark skin tone |
-| `1F9D1 1F3FE 200D 1F384` | `🧑🏾‍🎄` |  mx claus: medium-dark skin tone |
+| `1F9D1 1F3FE 200D 1F384` | `🧑🏾‍🎄` |  Mx Claus: medium-dark skin tone |
 | `1F9D1 1F3FE 200D 1F393` | `🧑🏾‍🎓` |  student: medium-dark skin tone |
 | `1F9D1 1F3FE 200D 1F3A4` | `🧑🏾‍🎤` |  singer: medium-dark skin tone |
 | `1F9D1 1F3FE 200D 1F3A8` | `🧑🏾‍🎨` |  artist: medium-dark skin tone |
@@ -2762,7 +2770,7 @@
 | `1F9D1 1F3FF 200D 1F33E` | `🧑🏿‍🌾` |  farmer: dark skin tone |
 | `1F9D1 1F3FF 200D 1F373` | `🧑🏿‍🍳` |  cook: dark skin tone |
 | `1F9D1 1F3FF 200D 1F37C` | `🧑🏿‍🍼` |  person feeding baby: dark skin tone |
-| `1F9D1 1F3FF 200D 1F384` | `🧑🏿‍🎄` |  mx claus: dark skin tone |
+| `1F9D1 1F3FF 200D 1F384` | `🧑🏿‍🎄` |  Mx Claus: dark skin tone |
 | `1F9D1 1F3FF 200D 1F393` | `🧑🏿‍🎓` |  student: dark skin tone |
 | `1F9D1 1F3FF 200D 1F3A4` | `🧑🏿‍🎤` |  singer: dark skin tone |
 | `1F9D1 1F3FF 200D 1F3A8` | `🧑🏿‍🎨` |  artist: dark skin tone |

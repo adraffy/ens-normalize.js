@@ -2,8 +2,8 @@
 | Group Name | Primary Scripts | Secondary Scripts | Restricted CM | Extra Characters |
 | - | - | - | :-: | - |
 | `Latin` | Latin, Common | Inherited | ✅️ | `π` |
-| `Arabic` | Arabic |  |  | `-` |
 | `Han` | Han | Common | ✅️ | `abcdefghijklmnopqrstuvwxyz` |
+| `Arabic` | Arabic |  |  | `-` |
 | `Devanagari` | Devanagari |  |  |  |
 | `Japanese` | Katakana, Hiragana | Han, Common | ✅️ | `abcdefghijklmnopqrstuvwxyz` |
 | `Korean` | Hangul | Han, Common | ✅️ | `abcdefghijklmnopqrstuvwxyz` |
@@ -16,9 +16,9 @@
 | `Tibetan` | Tibetan |  |  |  |
 | `Gurmukhi` | Gurmukhi |  |  |  |
 | `Lao` | Lao |  |  |  |
-| `Gujarati` | Gujarati |  |  |  |
 | `Telugu` | Telugu |  |  |  |
 | `Bopomofo` | Bopomofo | Han | ✅️ |  |
+| `Gujarati` | Gujarati |  |  |  |
 | `Myanmar` | Myanmar |  |  |  |
 | `Georgian` | Georgian |  |  |  |
 | `Armenian` | Armenian |  |  |  |
@@ -157,6 +157,13 @@
 | `Xsux†` | Cuneiform | | | |
 | `Yezi†` | Yezidi | | | |
 | `Zanb†` | Zanabazar Square | | | |
+| `Gara†` | Garay | | | |
+| `Gukh†` | Gurung Khema | | | |
+| `Krai†` | Kirat Rai | | | |
+| `Onao†` | Ol Onal | | | |
+| `Sunu†` | Sunuwar | | | |
+| `Todr†` | Todhri | | | |
+| `Tutg†` | Tulu Tigalari | | | |
 
 † Restricted Group: [Excluded](https://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Exclusion_from_Identifiers) or [Limited-Use Script](https://www.unicode.org/reports/tr31/#Table_Limited_Use_Scripts)
 
