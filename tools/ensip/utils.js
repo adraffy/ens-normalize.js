@@ -32,7 +32,7 @@ export function write_csv(name, recs, {form = true} = {}) {
 				case 'Form': {
 					let form = String.fromCodePoint(...rec.cps);
 					if (is_combining_mark(rec.cps[0])) form = '◌' + form;
-					return form.replaceAll('"', '\\"');
+					return form.replaceAll('"', '""'); // github style?
 				}
 				default: throw new Error(`unknown column: ${col}`);
 			}
