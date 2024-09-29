@@ -79,7 +79,7 @@ Input-based tokenization:
 // never throws
 let tokens = ens_tokenize('_R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./');
 // [
-//     { type: 'valid', cp: [ 95 ] }, // valid (as-is)
+//     { type: 'valid', cps: [ 95 ] }, // valid (as-is)
 //     {
 //         type: 'mapped', 
 //         cp: 82,         // input
@@ -93,13 +93,13 @@ let tokens = ens_tokenize('_R💩\u{FE0F}a\u{FE0F}\u{304}\u{AD}./');
 //     },
 //     {
 //         type: 'nfc',
-//         input: [ 97, 772 ],  // input  (before nfc)
+//         input: [ 97, 772 ],  // input (before nfc)
+//         cps: [ 257 ],        // output (after nfc)
 //         tokens0: [           // tokens (before nfc)
 //             { type: 'valid', cps: [ 97 ] },
 //             { type: 'ignored', cp: 65039 },
 //             { type: 'valid', cps: [ 772 ] }
 //         ],
-//         cps: [ 257 ],        // output (after nfc)
 //         tokens: [            // tokens (after nfc)
 //             { type: 'valid', cps: [ 257 ] }
 //         ]

@@ -1271,7 +1271,7 @@ Hebrew:
 	<input type="checkbox" id="force_ltr_check">
 	<label for="force_ltr_check" title="Override Bidi Handling with Left-to-Right Direction&#10;(Applies only to Input)">LTR</label>
 	<select id="chain_select"></select>
-	<button id="mainnet_btn" class="hide">↪ Mainnet</button>
+	<button id="mainnet_btn" class="ens hide">↪ Mainnet</button>
 	<button id="browser_btn" class="hide">Browser ↩</button>
 	<button id="copy_link_btn">🔗️ Copy Link</button>
 </div>
@@ -1334,12 +1334,14 @@ Hebrew:
 <li><a href="../../punycode.js/test/demo.html" data-badge="js">Punycode Coder</a></li>
 <li><a href="../../cid.js/test/demo.html" data-badge="js">CID Tool</a></li>
 <li><a href="https://github.com/adraffy/blocksmith.js" data-badge="js">blocksmith</a>
+<li><a href="https://github.com/unruggable-labs/unruggable-gateways" data-badge="js">Unruggable Gateway</a>
 <li><a href="https://github.com/resolverworks/TheOffchainResolver.sol" data-badge="sol">TheOffchainResolver</a></li>
 <li><a href="https://github.com/resolverworks/TheOffchainGateway.js" data-badge="js">TheOffchainGateway</a></li>
 <li><a href="https://github.com/resolverworks/ezccip.js" data-badge="js">ezccip</a></li>
 <li><a href="https://resolverworks.github.io/ezccip.js/test/postman.html">CCIP-Read Postman</a></li>
 <li><a href="https://github.com/resolverworks/enson.js" data-badge="js">enson</a></li>
 <li><a href="https://adraffy.github.io/CCIPRewriter.sol/test/" data-badge="sol">CCIPRewriter</a></li>
+<li><a href="https://raffy.antistupid.com/eth/ens-register.html">Register</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-batch-resolver.html">Batch Resolver</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-nft-matcher.html">ENS+NFT Matcher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/emoji-pixels.html">Emoji Pixel Maker</a></li>
@@ -2443,7 +2445,7 @@ function update_network() {
 	if (!using_window && window_provider && window_provider.__network) {
 		provider_div.append(create('button', {
 			innerHTML: 'Switch Browser', //`Browser→${active_chain.name}`,
-			title: 'Change Browser to match selected network',
+			title: 'Change browser to match selected network',
 			click() {
 				change_window_to_chain(active_chain);
 			}
@@ -4359,10 +4361,11 @@ async function resolve1(input, skip_norm) {
 					let a = create_explorer_address_link(nft_owner);
 					nft_row.append(a);
 					add_row_tag(nft_row, create_copy_btn(nft_owner, {value: true}));
+					let owner_ref = nft_owner;
 					try {
 						let norm = await get_safe_primary(nft_owner, owner);
 						if (norm.endsWith('.' + name_norm)) { // proper subdomain
-							nft_owner = norm; // swap
+							owner_ref = norm; // swap
 							let sub = norm.slice(0, -(name_norm.length + 1));
 							a.innerHTML = `<b>${ens_beautify(sub)}</b>.${ens_beautify(name_norm)}`;
 							add_row_tag(nft_row, create_tag('good', 'Subdomain'));
@@ -4372,8 +4375,8 @@ async function resolve1(input, skip_norm) {
 						}
 					} catch (err) {
 					}
-					if (nft_owner !== input) {
-						add_row_tag(nft_row, create_resolve_btn(nft_owner));
+					if (owner_ref !== input) {
+						add_row_tag(nft_row, create_resolve_btn(owner_ref));
 					}
 					add_owner_links(nft_row, nft_owner);
 					add_row_tag(nft_row, create_elapsed_since());
