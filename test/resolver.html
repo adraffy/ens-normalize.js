@@ -1481,6 +1481,7 @@ CHAINS.forEach(chain => {
 	chain.resolvers = new Map();
 });
 
+const COINTYPE_EVM_BIT = 0x80000000;
 const MIN_ETH_LENGTH = 3;
 const IFACE_ETH_CONTROLLER = '0x612e8c09';
 const REVERSE_DOMAIN = 'addr.reverse';
@@ -1820,7 +1821,7 @@ function prepare_record(rec) {
 	} else if (Number.isInteger(rec.evm)) {
 		// https://docs.ens.domains/ensip/11
 		rec.type = TYPE_ADDR;
-		rec.coin = rec.evm + 0x80000000;
+		rec.coin = rec.evm + COINTYPE_EVM_BIT;
 	} else if (!rec.type) {
 		throw new Error(`invalid record: ${JSON.stringify(rec)}`);
 	}
@@ -2954,15 +2955,23 @@ function make_exploded_utf8_title(raw) {
 function reverse_name(addr) {
 	return `${addr.slice(2).toLowerCase()}.${REVERSE_DOMAIN}`;
 }
+function parse_reverse_name(name) {
+	return name.match(/(?:\b|\.)([a-f0-9]{40})\.(addr|default|\d+)\.reverse$/)
+}
 function create_reverse_resolve_btn(addr) {
 	return create_resolve_btn(reverse_name(addr), '↩️ Reverse Name');
 }
 function create_resolve_btn(name, innerHTML = '↩️ Resolve') {
+	let title = `Resolve: ${name}`;
+	let addr = is_address(name);
+	if (addr) {
+		title += `\n[ALT] Reverse Name`;
+	}
 	return create('button', {
 		innerHTML,
-		title: `Resolve: ${name}`,
-		click() {
-			input_field.value = name;
+		title,
+		click(e) {
+			input_field.value = addr && e.altKey ? reverse_name(name) : name;
 			resolve();
 		}
 	});
@@ -3215,7 +3224,7 @@ function add_ensip1_tag(row, input, is_norm) {
 		}
 		if (norm1 === input) { // ensip1 === input
 			tag.innerHTML = html;
-			tag.title = 'Same as Input';
+			tag.title = SAME_AS_INPUT;
 		} else if (norm1 === norm15) { // we agree but we dont match the input
 			throw new Error('not normalized');
 		} else { // we disagree
@@ -3876,7 +3885,7 @@ async function resolve1(input, skip_norm) {
 			name_norm = input;
 			norm_err = err;
 		}
-
+		
 		if (!norm_err) {
 			if (name_norm === input) {
 				make_normalized(input_row, name_norm);
@@ -3944,7 +3953,40 @@ async function resolve1(input, skip_norm) {
 		}
 	}
 
-	if (name_norm) {
+
+	let rev_match = parse_reverse_name(name_norm);
+	if (rev_match) {
+		let addr = ethers.getAddress(rev_match[1]);
+		let row = create_row('Reverse');
+		let chain = create('span', {className: 'tags'});
+		row.append(chain);
+		row.append(create_main_span(addr));
+		add_row_tag(row, create_copy_btn(addr));
+		add_row_tag(row, create_resolve_btn(addr));
+		if (rev_match[2] === 'default') {
+			chain.innerHTML = 'Default';
+			chain.classList.add('good');
+		} else if (rev_match[2] === 'addr') {
+			chain.innerHTML = 'Standard';
+			chain.classList.add('good');
+		} else {
+			let coinType = parseInt(rev_match[2]);
+			let rec = RECORDS.find(x => x.coin == coinType);
+			if (coinType == 60) rec = {evm: 1, name: 'eth'}; // hack
+			if (rec && rec.evm) {
+				chain.innerHTML = `${rec.name}(${rec.evm})`;
+				chain.classList.add('raw');
+			} else if (coinType & COINTYPE_EVM_BIT) {
+				chain.innerHTML = `chain:${coinType & (COINTYPE_EVM_BIT-1)}`;
+				chain.classList.add('raw');
+			} else {
+				chain.innerText = '?';
+				chain.classList.add('fail');
+				chain.title = `CoinType: ${coinType}`;
+			}
+		}
+		output_div.append(row);
+	} else {
 		let form, pretty;
 		try {
 			form = ens_beautify(name_norm);
@@ -4903,6 +4945,8 @@ async function resolve1(input, skip_norm) {
 		add_row_tag(primary_row, create_resolve_btn(primary));
 		add_ensip1_tag(primary_row, primary);
 	}
+	add_row_tag(primary_row, create_reverse_resolve_btn(address));
+
 	if (primary === name_norm) {
 		primary_row.classList.add('normalized');
 		return;
