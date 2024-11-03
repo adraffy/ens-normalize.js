@@ -2959,7 +2959,7 @@ function parse_reverse_name(name) {
 	return name.match(/(?:\b|\.)([a-f0-9]{40})\.(addr|default|\d+)\.reverse$/)
 }
 function create_reverse_resolve_btn(addr) {
-	return create_resolve_btn(reverse_name(addr), '↩️ Reverse Name');
+	return create_resolve_btn(reverse_name(addr), '♻️ Reverse Name');
 }
 function create_resolve_btn(name, innerHTML = '↩️ Resolve') {
 	let title = `Resolve: ${name}`;
