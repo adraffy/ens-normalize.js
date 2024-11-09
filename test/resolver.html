@@ -1322,7 +1322,7 @@ Hebrew:
 <li><a class="internal" href="./validate.html">Validation Test</a></li>
 <li><a class="internal" href="./report-nf.html">Unicode NormalizationTest</a></li>
 <li><a href="../../ens-norm-tests/test-breakdown/output-20230226/">ENSIP-1→15 Breakdown</a></li>
-<li><a href="https://github.com/ensdomains/ens-contracts/tree/staging/deployments/">ENS Deployments</a></li>
+<li><a href="https://docs.ens.domains/learn/deployments">ENS Deployments</a></li>
 <li><a href="../../ens-labels/demo.html" data-badge="js">Labelhash⁻¹</a></li>
 <li><a href="https://github.com/adraffy/ens-labels/" data-badge="json">Label Database</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-regs.html">Recent Registrations</a></li>
@@ -1341,7 +1341,8 @@ Hebrew:
 <li><a href="https://resolverworks.github.io/ezccip.js/test/postman.html">CCIP-Read Postman</a></li>
 <li><a href="https://github.com/resolverworks/enson.js" data-badge="js">enson</a></li>
 <li><a href="https://adraffy.github.io/CCIPRewriter.sol/test/" data-badge="sol">CCIPRewriter</a></li>
-<li><a href="https://raffy.antistupid.com/eth/ens-register.html">Register</a></li>
+<li><a href="https://raffy.antistupid.com/eth/ens-register.html">Register .eth Name</a></li>
+<li><a href="https://raffy.antistupid.com/eth/ens-reverse.html">Set Primary</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-batch-resolver.html">Batch Resolver</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-nft-matcher.html">ENS+NFT Matcher</a></li>
 <li><a href="https://raffy.antistupid.com/eth/emoji-pixels.html">Emoji Pixel Maker</a></li>
@@ -2826,8 +2827,7 @@ function is_safe_ascii(cp) {
 	return cp >= 0x21 && cp <= 0x7E;
 }
 function unicode_escape_cp(cp) {
-	let hex = hex_cp(cp);
-	return hex.length > 4 ? `\\u{${hex}}` : `\\u${hex.padStart(4, '0')}`; // be nice
+	return `\\u${hex_cp(cp).padStart(4, '0')}`; // be nice
 }
 function unicode_escape(s) {
 	return explode_cp(s).map(unicode_escape_cp).join('');
@@ -3239,7 +3239,6 @@ function add_ensip1_tag(row, input, is_norm) {
 }
 
 function add_nft_links(row, name, contract, token) {
-
 	let group = create('div', {className: ['grouped', 'external']});
 	add_row_tag(group, create_link(`${active_chain.metadata}/${contract}/${token}`, {innerHTML: 'Metadata'}));
 	add_row_tag(group, create_link(`${active_chain.explorer}/nft/${contract}/${BigInt(token)}`, {innerHTML: 'Explorer'}));
