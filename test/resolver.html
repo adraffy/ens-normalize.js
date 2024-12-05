@@ -281,6 +281,7 @@ body.testnet {
 }
 #output.hide_recs .avatar,
 #output.hide_recs .row.records,
+#output.hide_recs .row.efp,
 #output.hide_recs .row.verifications,
 #output.hide_recs .row.impls {
 	display: none;
@@ -345,6 +346,9 @@ body.testnet {
 }
 .row.pretty {
 	background: linear-gradient(90deg, #fff, #fff0fc);
+}
+.row.efp {
+	background: linear-gradient(90deg, #FDF78188, #FDBBE388);
 }
 .row.category {
 	background: #ffe;
@@ -1366,7 +1370,7 @@ Hebrew:
 	<span id="enable_debug_btn" title="Enable Debugging">🛠️</span>
 </footer>
 <script type="module">
-import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.min.js';
+import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.min.js';
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
 	nfc, nfd, hex_cp, quote_cp, explode_cp, str_from_cps, safe_str_from_cps,
@@ -3251,7 +3255,8 @@ function add_nft_links(row, name, contract, token) {
 		if (encoded.endsWith('.eth')) {
 			add_row_tag(group, create_link(`https://${VISION_HOST}/name/${encoded.slice(0, -4)}`, {innerHTML: VISION_NAME}));
 		}
-		add_row_tag(group, create_link(`http://predomain.eth.limo/#/domain/${encoded}`, {innerHTML: 'Predomain'}));
+		//add_row_tag(group, create_link(`http://predomain.eth.limo/#/domain/${encoded}`, {innerHTML: 'Predomain'}));
+		add_row_tag(group, create_link(`http://ethfollow.xyz/${encoded}`, {innerHTML: 'EFP'}));
 	} catch (err) {
 	}
 	row.append(group);
@@ -4246,12 +4251,14 @@ async function resolve1(input, skip_norm) {
 			}
 		}
 	}
+	
 	resolve_state.available = available; // true|false|undefined
 
 	// get the owner
 	let is_wrapped, owner, nft_owner;
 	if ((!resolver || !resolver.__dropped) && (!nft_backed || available !== undefined)) {
 		let node = namehash(name_norm);
+		let wrapped_data;
 		let wrapped_row = create_row('Wrapper');
 		add_spinner(wrapped_row);
 		let unwrappable;
@@ -4268,6 +4275,25 @@ async function resolve1(input, skip_norm) {
 				if (should_stop_resolving()) return;
 				if (!unwrappable) {
 					is_wrapped = await network_state.wrapper.isWrapped(node);
+					if (should_stop_resolving()) return;
+					if (is_wrapped) {
+						// 0x000000006433a888000000005c7b61a99d922e9a4451ed62ebbbedbf1627ab47
+						// use raw storage access since wrapper nukes information when expired
+						// wrapped_data = await network_state.wrapper.getData(node);
+						let slot = ethers.solidityPackedKeccak256(['uint256', 'uint256'], [node, 1]);
+						let raw = await active_provider.getStorage(network_state.wrapper.target, slot);
+						if (should_stop_resolving()) return;
+						owner = ethers.dataSlice(raw, 12, 32);
+						let now = Date.now();
+						let exp = parseInt(ethers.dataSlice(raw, 0, 8)) * 1000;
+						let fuses = parseInt(ethers.dataSlice(raw, 8, 12));
+						let expired = exp && exp < now;
+						wrapped_data = {expired, now, exp, raw, slot, fuses};
+						if (expired) {
+							resolve_state.available = available = true;
+							wrapped_row.classList.add('available');
+						}
+					}
 				}
 			} catch (err) {
 				wrapped_err = err;
@@ -4297,19 +4323,14 @@ async function resolve1(input, skip_norm) {
 		remove_temporary(wrapped_row);
 		add_row_tag(wrapped_row, create_elapsed_since());
 
-		let owner_row = create_row(available ? 'Previous Owner' : 'Owner');
+		let owner_row = create_row(available ? 'Last Owner' : 'Owner');
 		add_spinner(owner_row);
 		let owner_err;
 		let checked_nft;
 		output_div.append(owner_row);
 		try {
 			if (is_wrapped) {
-				let data = await network_state.wrapper.getData(node);
-				if (should_stop_resolving()) return;
-				owner = data.owner;
-				let now = Date.now();
-				let exp = Number(data.expiry) * 1000;
-				let fuses = Number(data.fuses);
+				let {fuses, expired, now, exp} = wrapped_data;
 				if (resolve_state.debug && resolve_state.debug.fuses) fuses = 0x7FFFF;
 				if (fuses & 0x10000) { // PARENT_CANNOT_CONTROL
 					if (fuses & 0x00001) { // CANNOT_UNWRAP
@@ -4340,6 +4361,9 @@ async function resolve1(input, skip_norm) {
 				if (fuses & 0x00010) add_row_tag(wrapped_row, '🚫️ Set TTL');
 				if (fuses & 0x00020) add_row_tag(wrapped_row, '🚫️ Subdomain');
 				if (fuses & 0x00040) add_row_tag(wrapped_row, '🚫️ Approve');
+				if (expired) {
+					add_row_tag(wrapped_row, `Expired ${format_dur(now - exp)} ago`);
+				}
 			} else {
 				owner = await network_state.ens.owner(node);
 				if (should_stop_resolving()) return;
@@ -4446,8 +4470,12 @@ async function resolve1(input, skip_norm) {
 		}
 		if (should_stop_resolving()) return;
 		if (address_err) {
-			address_row.classList.add('error');
-			add_row_tag(address_row, create_tag('warn', address_err));
+			if (name_norm.endsWith(REVERSE_DOMAIN) && address_err.code === 'CALL_EXCEPTION') {
+				add_row_tag(address_row, 'Not Supported');
+			} else {
+				address_row.classList.add('error');
+				add_row_tag(address_row, create_tag('warn', address_err));
+			}
 		} else if (!address) {
 			add_row_tag(address_row, create_tag('warn', 'Not Set'));
 		} else {
@@ -4486,6 +4514,8 @@ async function resolve1(input, skip_norm) {
 		remove_temporary(address_row);
 		add_row_tag(address_row, create_elapsed_since());
 
+		if (input_is_address || !address) return; // nothing more to do
+
 		let show_recs = show_records_check.checked;
 		if (!show_recs) resolve_state.skipped_records = true;
 		if (show_recs) {
@@ -4494,6 +4524,7 @@ async function resolve1(input, skip_norm) {
 			records_row.classList.add('records');
 			records_row.dataset.records = '1';
 			output_div.append(records_row);
+			if (active_chain.is_mainnet) add_epf_row(address);
 			if (resolver.__unreachable) {
 				add_row_tag(records_row, create_tag('stop', 'Unreachable'));
 			} else if (resolver.__only_addr) {
@@ -4884,8 +4915,6 @@ async function resolve1(input, skip_norm) {
 		}
 	}
 
-	if (input_is_address || !address) return; // nothing more to do
-
 	// lookup primary from eth address
 	let primary, primary_err;
 	let primary_row = create_row('Primary');
@@ -4977,6 +5006,67 @@ async function resolve1(input, skip_norm) {
 	}
 	output_div.append(create_breakdown_row(primary_norm));
 }
+
+function add_epf_row(address) {
+	let row = create_row(create_link(`https://ethfollow.xyz/`, {innerHTML: 'EFP'}));
+	row.classList.add('efp');
+	add_spinner(row);
+	output_div.append(row);
+	(async () => {
+		const t0 = Date.now();
+		let got_list;
+		try {
+			async function fetch_epf(path) {
+				const res = await fetch('https://api.ethfollow.xyz' + path);
+				if (!res.ok) throw new Error(`http ${res.status}`);
+				return res.json();
+			}
+			const {primary_list} = await fetch_epf(`/api/v1/users/${address}/primary-list`);
+			got_list = true;
+			if (!row.isConnected) return;
+			// https://docs.ethfollow.xyz/api/users/stats/
+			// https://docs.ethfollow.xyz/api/users/details/
+			const [stats, details] = await Promise.all([
+				fetch_epf(`/api/v1/lists/${primary_list}/stats?live=false`),
+				fetch_epf(`/api/v1/users/${address}/details`),
+			]);
+			if (!row.isConnected) return;
+			row.append(create('a', {
+				className: 'record',
+				href: `https://opensea.io/assets/base/0x0e688f5dca4a0a4729946acbc44c792341714e08/${primary_list}`,
+				target: '_blank'
+			}, create('b', null, 'Primary List'), primary_list));
+
+			function add_rank(label, key) {
+				const rank = details.ranks[key];
+				if (rank) {
+					row.append(create('span', {className: ['record', 'rtrim']}, create('b', null, label), create_tag('minor', `#${rank}`)));
+				}
+			}
+			add_rank('Top 8', 'top8_rank');
+			add_rank('Blocks', 'blocks_rank');
+			add_rank('Mutuals', 'mutuals_rank');
+
+			row.append(create('span', {className: ['record', 'rtrim']}, create('b', null, 'Followers'), stats.followers_count, create_tag('minor', `#${details.ranks.followers_rank}`)));
+			row.append(create('span', {className: ['record', 'rtrim']}, create('b', null, 'Following'), stats.following_count, create_tag('minor', `#${details.ranks.following_rank}`)));
+
+			add_row_tag(row, create_link(`https://ethfollow.xyz/${address}`, {button: '↗️ Follow'}));
+			add_row_tag(row, create_link(`https://api.ethfollow.xyz/api/v1/users/${address}/qr`, {button: '🙾 QR Code'}));
+		} catch (err) {
+			row.classList.add('error');
+			add_row_tag(row, create_tag('warn', err));
+			console.log(err);
+		}
+		if (got_list) {
+			remove_temporary(row);
+			add_row_tag(row, create_elapsed(Date.now() - t0, 0));
+		} else {
+			row.remove();
+		}
+	})();
+}
+
+
 function add_owner_links(row, owner) {
 	let group = create('div', {className: ['grouped', 'external']});
 	add_row_tag(group, create_link(`${active_chain.is_mainnet ? 'https://opensea.io/' : 'https://testnets.opensea.io/'}${owner}?tab=collected`, {innerHTML: OPENSEA_NAME}));
