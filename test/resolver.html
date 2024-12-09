@@ -937,6 +937,15 @@ footer {
 	color: #666;
 	font-style: italic;
 }
+@media only screen and (max-width: 900px) {
+	#provider {
+		order: 3;
+		flex-direction: row;
+		align-items: center;
+		gap: 4px;
+		width: 100%;
+	}
+}
 @media only screen and (max-width: 800px) {
 	body {
 		margin: 0;
@@ -947,13 +956,6 @@ footer {
 	header {
 		margin: 16px;
 		margin-bottom: 0;
-	}
-	#provider {
-		order: 3;
-		flex-direction: row;
-		align-items: center;
-		gap: 4px;
-		width: 100%;
 	}
 	#input input {
 		font-size: 20pt;
@@ -4472,6 +4474,8 @@ async function resolve1(input, skip_norm) {
 		if (address_err) {
 			if (name_norm.endsWith(REVERSE_DOMAIN) && address_err.code === 'CALL_EXCEPTION') {
 				add_row_tag(address_row, 'Not Supported');
+			} else if (address_err.code === 'BAD_DATA' && address_err.value === '0x') {
+				add_row_tag(address_row, create_tag('fail', 'No Response'));
 			} else {
 				address_row.classList.add('error');
 				add_row_tag(address_row, create_tag('warn', address_err));
@@ -4514,8 +4518,6 @@ async function resolve1(input, skip_norm) {
 		remove_temporary(address_row);
 		add_row_tag(address_row, create_elapsed_since());
 
-		if (input_is_address || !address) return; // nothing more to do
-
 		let show_recs = show_records_check.checked;
 		if (!show_recs) resolve_state.skipped_records = true;
 		if (show_recs) {
@@ -4524,7 +4526,7 @@ async function resolve1(input, skip_norm) {
 			records_row.classList.add('records');
 			records_row.dataset.records = '1';
 			output_div.append(records_row);
-			if (active_chain.is_mainnet) add_epf_row(address);
+			if (address && active_chain.is_mainnet) add_epf_row(address);
 			if (resolver.__unreachable) {
 				add_row_tag(records_row, create_tag('stop', 'Unreachable'));
 			} else if (resolver.__only_addr) {
@@ -4915,6 +4917,8 @@ async function resolve1(input, skip_norm) {
 		}
 	}
 
+	if (input_is_address || !address) return; // nothing more to do
+
 	// lookup primary from eth address
 	let primary, primary_err;
 	let primary_row = create_row('Primary');
@@ -4933,6 +4937,7 @@ async function resolve1(input, skip_norm) {
 		}
 	} catch (err) {
 		primary_err = err;
+		console.log(err);
 	}
 	if (should_stop_resolving()) return;
 	remove_temporary(primary_row);
@@ -5055,7 +5060,6 @@ function add_epf_row(address) {
 		} catch (err) {
 			row.classList.add('error');
 			add_row_tag(row, create_tag('warn', err));
-			console.log(err);
 		}
 		if (got_list) {
 			remove_temporary(row);
@@ -5099,7 +5103,6 @@ function parse_call_error(calldata) {
 	return Object.assign(new Error(`Call error: ${message}`), error);
 }
 function parse_ethers_error(err) {
-	//if (err.code === 'BAD_DATA' && err.value === '0x') {
 	if (err.code === 'CALL_EXCEPTION' && err.data) {
 		return parse_call_error(err.data);
 	} else if (err.code === 'OFFCHAIN_FAULT') {
