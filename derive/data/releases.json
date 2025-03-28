@@ -18,5 +18,10 @@
 		"unicode": "16.0.0",
 		"cldr": "45",
 		"tag": "current"
+	},
+	{
+		"unicode": "17.0.0",
+		"cldr": "45",
+		"tag": "beta"
 	}
 ]

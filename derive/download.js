@@ -1,4 +1,4 @@
-import {readFile, writeFile, mkdir} from 'node:fs/promises';
+import {readFile, writeFile, mkdir, access} from 'node:fs/promises';
 import {parse_version} from './utils.js';
 import {fetch_UAX31_script_kinds} from './script-kinds.js';
 
@@ -44,7 +44,14 @@ function url_from_source(source, {major, minor = 0, patch = 0}) {
 	}));
 }
 
-let versions = process.argv.slice(2).map(parse_version);
+let force = false;
+let versions = process.argv.slice(2).filter(x => {
+	if (x === '--force') {
+		force = true;
+		return false;
+	}
+	return true;
+}).map(parse_version);
 
 if (!versions.length) {
 	// if no version is provided
@@ -65,19 +72,19 @@ if (!versions.length) {
 	}
 }
 
-console.log(versions);
+console.log({versions, force});
 
 for (let version of versions) {
-	await download(version, FILES);
+	await download(version);
 }
 
-async function download({major, minor, patch}, files) {
+async function download({major, minor, patch}) {
 	let version = `${major}.${minor}.${patch}`;
 	let dir = new URL(`./data/${major}.${minor}.${patch}/`, import.meta.url);
 	let changed = 0;
 	let cause;
-	console.log(`Downloading ${version} (${files.length} files)`);
-	for (let sources of files) {
+	console.log(`Downloading ${version} (${FILES.length} files)`);
+	for (let sources of FILES) {
 		let urls = sources.map(s => url_from_source(s, {major, minor, patch}));
 		try {
 			let [i, buf] = await Promise.any(urls.map(async (url, i) => {
@@ -107,13 +114,13 @@ async function download({major, minor, patch}, files) {
 	} catch (err) {
 		cause = err;
 	}
-	if (cause) throw new Error('incomplete download', {cause});
+	if (!force && cause) throw new Error('incomplete download', {cause});
 	console.log(`Changes: ${changed}`);
-	if (changed) {
+	const version_file = new URL('./version.json', dir);
+	if (changed || await access(version_file).catch(() => true)) {
 		// only bump the version if something changed
-		let file = new URL('./version.json', dir);
-		await writeFile(file, JSON.stringify({version, major, minor, patch, date: new Date()}));	
-		console.log(`Wrote: ${file}`);
+		await writeFile(version_file, JSON.stringify({version, major, minor, patch, date: new Date()}));	
+		console.log(`Wrote: ${version_file}`);
 	}
 	async function write(name, buf, desc) {
 		let file = new URL(name, dir);
