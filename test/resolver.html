@@ -1802,9 +1802,32 @@ const RECORDS = [
 		format() {},
 	},
 	{
-		key: 'banner',
-		format() {},
-		url(x) { return x; }
+		key: 'header',
+		url: false,
+		format(data, a) {
+			let spinner = create('div', {className: ['avatar', 'spinner']});
+			a.append(spinner);
+			fetch_resource_url(data).then(res => {
+				if (!a.isConnected) return;
+				spinner.remove();
+				if (res.error) {
+					a.append(create('span', {
+						className: ['tags', 'changed'],
+						innerHTML: '❌️ Failed',
+						title: res.error
+					}));
+					make_click_copy(a, data);
+				} else {
+					a.href = res.url;
+					a.append(create('img', {
+						src: res.url,
+						style: {width: '100%', maxWidth: '512px'}
+					}));
+					a.append(create('span', {className: ['tags', 'minor'], innerText: res.type}));
+					a.classList.add('rtrim');
+				}
+			});
+		},
 	},
 	{
 		key: 'verifications',
@@ -3848,10 +3871,8 @@ async function resolve1(input, skip_norm) {
 		let rev = await try_reverse_registrar();
 		if (should_stop_resolving()) return;
 		if (network_state.reverse) {
-			add_row_tag(input_row, create_explorer_address_link(network_state.reverse, {
-				contract: true,
-				anchor: '#writeContract#F7',
-				button: '✍️ Set Name'
+			add_row_tag(input_row, create_link('https://raffy.antistupid.com/eth/ens-reverse.html', {
+				button: '✍️ Set Primary'
 			}));
 		}
 
@@ -4748,7 +4769,7 @@ async function resolve1(input, skip_norm) {
 								a.href = rec.url(data);
 								a.classList.add('rtrim');
 								a.append(create_copy_btn(data));
-							} else {
+							} else if (rec.url !== false) {
 								make_click_copy(a, data);
 							}
 							a.title = `${data}\nText: ${rec.key}`;
@@ -4758,41 +4779,38 @@ async function resolve1(input, skip_norm) {
 							if (rec.key === 'avatar') {
 								let spinner = create('div', {className: ['avatar', 'spinner']});
 								normed_row.append(spinner);
-								let owner_set = new Set();
-								if (owner) owner_set.add(owner);
-								if (address) owner_set.add(address);
-								fetch_resource_url(data, owner_set).then(avatar => { // use address if not ownable
+								fetch_resource_url(data, new Set([owner, address].filter(x => x))).then(res => {
 									if (!normed_row.isConnected) return;
-									if (avatar.error) {
+									if (res.error) {
 										a.append(create('span', {
 											className: ['tags', 'changed'],
 											innerHTML: '❌️ Failed',
-											title: avatar.error
+											title: res.error
 										}));
 										spinner.replaceWith(create('span', {className: 'avatar', innerText: '❌️'}));
 									} else {
 										let img = new Image();
-										a.append(create('span', {className: ['tags', 'minor'], innerText: avatar.type}));
-										if (avatar.fixed) {
+										a.append(create('span', {className: ['tags', 'minor'], innerText: res.type}));
+										if (res.fixed) {
 											a.append(create('span', {
 												className: ['tags', 'changed'],
 												innerHTML: '⚠️ Changed',
-												title: avatar.fixed
+												title: res.fixed
 											}));
 										}
-										if (avatar.owned === false) {
+										if (res.owned === false) {
 											img.classList.add('not_owner');
 											a.append(create('span', {
 												className: ['tags', 'changed'],
 												innerHTML: '❌️ Not Owner'
 											}));
 										}
-										const avatar_a = create('a', {className: 'avatar', target: '_blank', href: avatar.url});
+										const avatar_a = create('a', {className: 'avatar', target: '_blank', href: res.url});
 										spinner.replaceWith(avatar_a);
 										avatar_a.append(spinner);
 										img.addEventListener('load', () => avatar_a.replaceChildren(img));
 										img.addEventListener('error', () => avatar_a.replaceChildren(img));
-										img.src = avatar.url;
+										img.src = res.url;
 									}
 									a.classList.add('rtrim');
 								});
