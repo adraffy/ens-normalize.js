@@ -5670,12 +5670,13 @@ function fetch_verifications(data, ens_name) {
 							className: 'record',
 						});
 						let [key, value] = extract_verificiation_kv(token);
+						console.log({key, value, token, ens});
 						a.append(create('b', {innerText: key}));
 						a.title = `Issuer: ${ens.credentialSubject.credentialIssuer}`;
 						let rec = $(`.row.records [data-key="${key}"]`);
 						if (rec && rec.dataset.value === value) {
 							rec.classList.add('verified');
-						} else {
+						} else if (value) {
 							a.classList.add('rtrim');
 							if (value) a.append(create('span', {innerText: value}));
 							a.append(create_copy_btn(value));	
@@ -5707,7 +5708,8 @@ function extract_verificiation_kv(token) {
 		case 'Verified Account': {
 			let key = subj.verificationSource;
 			if (key === 'X') key = 'com.twitter';
-			return [key, subj.username];
+			if (key === 'Discord') key = 'com.discord';
+			return [key, subj.username ?? subj.name];
 		}
 		case 'Verified Email': return ['email', subj.verifiedEmail];
 		default: return [type];
