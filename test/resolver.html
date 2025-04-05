@@ -4501,6 +4501,7 @@ async function resolve1(input, skip_norm) {
 					nft_row.append(create_jazz_icon(nft_owner));
 					let a = create_explorer_address_link(nft_owner);
 					nft_row.append(a);
+					if (await is_contract(nft_owner)) make_contract(nft_row);
 					add_row_tag(nft_row, create_copy_btn(nft_owner, {value: true}));
 					let owner_ref = nft_owner;
 					try {
@@ -5670,7 +5671,6 @@ function fetch_verifications(data, ens_name) {
 							className: 'record',
 						});
 						let [key, value] = extract_verificiation_kv(token);
-						console.log({key, value, token, ens});
 						a.append(create('b', {innerText: key}));
 						a.title = `Issuer: ${ens.credentialSubject.credentialIssuer}`;
 						let rec = $(`.row.records [data-key="${key}"]`);
