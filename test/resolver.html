@@ -3148,8 +3148,10 @@ function make_detailed(el, invert) {
 function make_locked(row) {
 	row.classList.add('locked');
 }
-function make_contract(row) {
-	row.classList.add('contract');
+async function make_contract(addr, row) {
+	if (await is_contract(addr)) {
+		row.classList.add('contract');
+	}
 }
 function make_exploded(row, name, is_norm, components) {
 	let before = !is_norm;
@@ -3855,7 +3857,7 @@ async function resolve1(input, skip_norm) {
 		add_spinner(resolver_row);
 		output_div.append(resolver_row);
 
-		if (await is_contract(input)) make_contract(input_row);
+		make_contract(input, input_row);
 		if (should_stop_resolving()) return;
 
 		let resolver, last_err;
@@ -4232,15 +4234,15 @@ async function resolve1(input, skip_norm) {
 		output_div.append(avail_row);
 		try {
 			await ensure_eth_nft();
+			check_abort();
 			nft_contract = network_state.eth_nft;
-			if (len >= MIN_ETH_LENGTH) {
-				available = await nft_contract.available(nft_token);
-				check_abort();
-				expiry = Number(await nft_contract.nameExpires(nft_token));
-				check_abort();
-				if (available) {
-					premium = await network_state.price_oracle.premium(label, expiry, 0);
-				}
+			[available, expiry] = await Promise.all([
+				nft_contract.available(nft_token),
+				nft_contract.nameExpires(nft_token)
+			]);
+			check_abort();
+			if (available) {
+				premium = await network_state.price_oracle.premium(label, expiry, 0);
 			}
 		} catch (err) {
 			avail_err = err;
@@ -4253,10 +4255,12 @@ async function resolve1(input, skip_norm) {
 		if (avail_err) {
 			avail_row.classList.add('error');
 			add_row_tag(avail_row, create_tag('warn', avail_err));
-		} else if (available === undefined) {
+		} else if (len < MIN_ETH_LENGTH) {
 			add_row_tag(avail_row, create_tag('fail', `Too Short`));
-			let padded = Array(1 + Math.max(0, MIN_ETH_LENGTH - len)).fill(label).join('');
-			add_row_tag(avail_row, create_resolve_btn(add_dot_eth(padded), '↩️ Repeat until 3+'));
+			if (len > 0) {
+				let padded = Array(1 + Math.max(0, MIN_ETH_LENGTH - len)).fill(label).join('');
+				add_row_tag(avail_row, create_resolve_btn(add_dot_eth(padded), '↩️ Repeat until 3+'));
+			}
 		} else if (available) {
 			add_row_tag(avail_row, create_ens_link(name_norm, 'Available to Register'));
 			let ether = parseFloat(ethers.formatEther(premium));
@@ -4266,7 +4270,7 @@ async function resolve1(input, skip_norm) {
 			//add_row_tag(avail_row, create_typed_tag('fire', 'Available'));
 			//add_row_tag(avail_row, create_ens_link(name_norm, {title: 'Register'}));
 		} else {
-			let exp = expiry * 1000;
+			let exp = Number(expiry) * 1000;
 			let {grace_period} = network_state;
 			let end = exp + grace_period;
 			let now = Date.now();
@@ -4454,7 +4458,7 @@ async function resolve1(input, skip_norm) {
 			owner_err = err;
 		}
 		if (should_stop_resolving()) return;
-		if (await is_contract(owner)) make_contract(owner_row);
+		make_contract(owner, owner_row);
 		remove_temporary(owner_row);
 		if (should_stop_resolving()) return;
 		add_row_tag(owner_row, create_elapsed_since());
@@ -4501,7 +4505,7 @@ async function resolve1(input, skip_norm) {
 					nft_row.append(create_jazz_icon(nft_owner));
 					let a = create_explorer_address_link(nft_owner);
 					nft_row.append(a);
-					if (await is_contract(nft_owner)) make_contract(nft_row);
+					make_contract(nft_owner, nft_row);
 					add_row_tag(nft_row, create_copy_btn(nft_owner, {value: true}));
 					let owner_ref = nft_owner;
 					try {
@@ -4559,7 +4563,7 @@ async function resolve1(input, skip_norm) {
 			add_row_tag(address_row, create_tag('warn', 'Not Set'));
 		} else {
 			if (should_stop_resolving()) return;
-			if (await is_contract(address)) make_contract(address_row);
+			make_contract(address, address_row);
 			address_row.append(create_jazz_icon(address));
 			address_row.append(create_explorer_address_link(address));
 			address_row.append(create_copy_btn(address, {value: true}));
