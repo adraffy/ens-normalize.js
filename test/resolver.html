@@ -1446,6 +1446,8 @@ const CHAINS = [
 		id: 1,
 		name: 'Mainnet',
 		ankr: 'eth',
+		drpc: 'https://eth.drpc.org',
+		manager: 'https://app.ens.domains',
 		explorer: 'https://etherscan.io',
 		metadata: 'https://metadata.ens.domains/mainnet',
 		opensea: 'https://opensea.io/assets/ethereum/',
@@ -1465,6 +1467,8 @@ const CHAINS = [
 		id: 11155111,
 		name: 'Sepolia',
 		ankr: 'eth_sepolia',
+		drpc: 'https://sepolia.drpc.org',
+		manager: 'https://sepolia.app.ens.domains',
 		explorer: 'https://sepolia.etherscan.io',
 		metadata: 'https://metadata.ens.domains/sepolia',
 		opensea: 'https://testnets.opensea.io/assets/sepolia/',
@@ -1475,6 +1479,8 @@ const CHAINS = [
 		id: 17000,
 		name: 'Holesky',
 		ankr: 'eth_holesky',
+		drpc: 'https://holesky.drpc.org',
+		manager: 'https://holesky.app.ens.domains',
 		explorer: 'https://holesky.etherscan.io',
 		metadata: 'https://metadata.ens.domains/holesky',
 		//opensea: 'https://testnets.opensea.io/assets/holesky/',
@@ -1516,6 +1522,18 @@ const ERROR_ABI = new ethers.Interface([
 	'error Unauthorized(address owner)',
 	'error InvalidContext(bytes context)',
 	'error Unreachable(bytes name)',
+	// standard stuff?
+	'error UnreachableName(bytes name)',
+	'error UnsupportedResolverProfile(bytes4 selector)',
+	// IUniversalResolver
+	'error ResolverNotFound(bytes name)',
+	'error ResolverNotContract(bytes name, address resolver)',
+	'error ResolverError(bytes errorData)',
+	'error ReverseAddressMismatch(string primary, bytes primaryAddress)',
+	'error HttpError(uint16 status, string message)',
+	// NameCoder
+	'error DNSDecodingFailed(bytes dns)',
+	'error DNSEncodingFailed(string ens)',
 ]);
 
 // https://docs.ens.domains/ensip/9
@@ -2326,10 +2344,11 @@ ethers.AbstractProvider.prototype.ccipReadFetch = function(tx, calldata, urls) {
 		if (rewrite) urls = [rewrite];
 	} catch (err) {
 	}
+	if (resolve_state.debug?.ccip_proxy) {
+		urls = urls.map(x => resolve_state.debug.ccip_proxy.replace('$', encodeURI(x)));
+	}
 	return ccipReadFetchOld.call(this, tx, calldata, urls);
 };
-
-
 
 if (window.ethereum) {
 	// 20240913: on browser launch, window.ethereum is wonky
@@ -2436,13 +2455,14 @@ function update_network() {
 		let old = active_provider;
 		if (old === window_provider || active_chain !== chain) {
 			//let request = new ethers.FetchRequest(chain.rpc || `https://${chain.name.toLowerCase()}.infura.io/v3/f36f6a8638134ac09f9400d3a7008dfe`);
-			let request = new ethers.FetchRequest(`https://rpc.ankr.com/${chain.ankr}/4f33b3901537986c548375fa2d307572637cca0f4a4f17d5a4944ca27fee5ea9`)
+			//let request = new ethers.FetchRequest(`https://rpc.ankr.com/${chain.ankr}/4f33b3901537986c548375fa2d307572637cca0f4a4f17d5a4944ca27fee5ea9`)
+			let request = new ethers.FetchRequest(chain.drpc);
 			request.preflightFunc = req => {
 				++request_count;
 				return req;
 			};
 			active_provider = new ethers.JsonRpcProvider(request, chain.id, {
-				batchMaxCount: 10,
+				batchMaxCount: 3,
 				//batchStallTime: 0,
 				staticNetwork: true
 			});
@@ -2487,7 +2507,7 @@ function update_network() {
 	mainnet_btn.classList.toggle('hide', !!active_chain.is_mainnet);
 	browser_btn.classList.toggle('hide', !(!using_window && window_provider && window_provider.__chain && !window_provider.__chain.is_mainnet));
 	provider_div.replaceChildren(create('div', {className: 'network'}, 'using ', create_explorer_address_link(network_state.ens.target, {
-		innerHTML: using_window ? 'Browser' : active_chain.rpc ? 'Public RPC' : 'Ankr', //'Infura',
+		innerHTML: using_window ? 'Browser' : active_chain.rpc ? 'Public RPC' : 'dRPC',
 		title: 'ENS Registry Contract',
 		contract: true
 	})));
@@ -2941,7 +2961,7 @@ function create_link(url, {button, buttonClass, ...args} = {}) {
 function create_ens_link(name, title = 'ENS') {
 	try {
 		if (ens_normalize(name) === name) {
-			return create_link(`https://app.ens.domains/${encode_uri_component_ens_escaped(name)}`, {button: title, buttonClass: 'ens', className: 'ens'});
+			return create_link(`${active_chain.manager}/${encode_uri_component_ens_escaped(name)}`, {button: title, buttonClass: 'ens', className: 'ens'});
 		}
 	} catch (err) {
 	}
@@ -3264,14 +3284,24 @@ async function add_resolver_info(row, resolver, context) {
 			async click() {
 				add_spinner(this);
 				this.disabled = true;
-				const res = await Promise.all([
+				const settled = await Promise.allSettled([
 					resolve(resolver.interface.encodeFunctionData('addr(bytes32,uint256)', [resolver.__node, 1n << 255n])),
-					resolve(resolver.interface.encodeFunctionData('addr(bytes32,uint256)', [resolver.__node, 60n]))
-				]).catch(x => x);
-				if (res instanceof Error && res.revert?.name === 'OffchainLookup') {
+					resolve(resolver.interface.encodeFunctionData('addr(bytes32,uint256)', [resolver.__node, 60n])),
+					resolve(resolver.interface.encodeFunctionData('text(bytes32,string)', [resolver.__node, '__dne'])),
+					resolve(resolver.interface.encodeFunctionData('name(bytes32)', [resolver.__node]))
+				]);
+				const gateways = new Set();
+				for (const res of settled) {
+					if (res.reason instanceof Error && res.reason.revert?.name === 'OffchainLookup') {
+						for (let g of res.reason.revert.args.gateways) {
+							gateways.add(g.replace(/data\=0x[0-9a-f]*/i, 'data=0x'));
+						}
+					}
+				}
+				if (gateways.size) {
 					this.remove();
-					for (let x of res.revert.args.gateways) {
-						add_row_tag(row, create('span', {className: ['raw', 'long'], innerText: x}));
+					for (const g of gateways) {
+						add_row_tag(row, create('span', {className: ['raw', 'long'], innerText: g}));
 					}
 				} else {
 					this.innerText = `⚠️ Unknown Gateways`;
@@ -4086,6 +4116,9 @@ async function resolve1(input, skip_norm) {
 			add_row_tag(row, create_pretty_tag());
 		}
 		add_ensip1_tag(row, form);
+		if (!pretty) {
+			input_row.querySelector('.ensip1')?.remove();
+		}
 		output_div.append(row);
 		output_div.append(create_dns_row(name_norm));
 	}
@@ -4612,7 +4645,7 @@ async function resolve1(input, skip_norm) {
 			//	add_row_tag(records_row, `Wildcard DNSSEC resolver only supports <code>addr()</code>`);
 			} else {
 				let records = [...RECORDS];
-				if (name_norm.endsWith(REVERSE_DOMAIN)) {
+				if (rev_match) {
 					records = [{type: TYPE_NAME}];
 				}
 				if (resolver.__info.tor) {
