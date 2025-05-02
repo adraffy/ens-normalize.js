@@ -515,7 +515,7 @@ button.copy.copied {
 	order: 50;
 	margin-left: auto;
 }
-.calls {
+.requests {
 	opacity: .5;
 	padding-right: 4px;
 }
@@ -1914,7 +1914,9 @@ let resolve_timer = RESOLVE_MODE_IDLE;
 let resolve_state;
 let network_state;
 let history_timer;
-let request_count = 0;
+let rpc_count = 0;
+let lookup_count = 0;
+let last_fetch_request;
 
 version_span.innerHTML = `v${versions.version}`;
 version_span.title = `Library: ${versions.version} (${versions.built})\nUnicode: ${versions.unicode}\nCLDR: ${versions.cldr}`;
@@ -2358,6 +2360,7 @@ input_field.focus();
 
 const ccipReadFetchOld = ethers.AbstractProvider.prototype.ccipReadFetch;
 ethers.AbstractProvider.prototype.ccipReadFetch = function(tx, calldata, urls) {
+	lookup_count++;
 	try {
 		let rewrite = resolve_state.debug.ccip[tx.to];
 		if (rewrite) urls = [rewrite];
@@ -2386,12 +2389,13 @@ if (window.ethereum) {
 	}
 	function init() {
 		window_provider = new ethers.BrowserProvider(ethereum, 'any');
+		add_ccip_timeout(window_provider);
 		window.__provider = window_provider;
 		window.__ethereum = ethereum;
 		// we cant access request.preflightFunc, this is the next best thing
 		let send = window_provider.send.bind(window_provider);
 		window_provider.send = async (...a) => {
-			if (a[0] === 'eth_call') ++request_count;
+			if (a[0] === 'eth_call') ++rpc_count;
 			try {
 				return await send(...a);
 			} catch (err) {
@@ -2477,7 +2481,8 @@ function update_network() {
 			//let request = new ethers.FetchRequest(`https://rpc.ankr.com/${chain.ankr}/4f33b3901537986c548375fa2d307572637cca0f4a4f17d5a4944ca27fee5ea9`)
 			let request = new ethers.FetchRequest(chain.drpc);
 			request.preflightFunc = req => {
-				++request_count;
+				last_fetch_request = req;
+				++rpc_count;
 				return req;
 			};
 			active_provider = new ethers.JsonRpcProvider(request, chain.id, {
@@ -2485,6 +2490,7 @@ function update_network() {
 				//batchStallTime: 0,
 				staticNetwork: true
 			});
+			add_ccip_timeout(active_provider);
 		}
 		if (old && old !== window_provider && old !== active_provider) {
 			setTimeout(() => old.destroy(), 0);
@@ -2547,6 +2553,15 @@ function update_network() {
 		}
 	}
 	return changed;
+}
+function add_ccip_timeout(provider) {
+	provider.on('debug', x => {
+		if (x.action === 'sendCcipReadFetchRequest') {
+			//x.request.timeout = 10000; // currently 5 minutes (doesn't work)
+			setTimeout(() => x.request.cancel(), 10000);
+			last_fetch_request = x.request;
+		}
+	});
 }
 
 function should_stop_resolving() {
@@ -2980,7 +2995,7 @@ function create_link(url, {button, buttonClass, ...args} = {}) {
 function create_ens_link(name, title = 'ENS') {
 	try {
 		if (ens_normalize(name) === name) {
-			return create_link(`${active_chain.manager}/${encode_uri_component_ens_escaped(name)}`, {button: title, buttonClass: 'ens', className: 'ens'});
+			return create_link(`${active_chain.manager}/${encode_uri_component_surrogate_escaped(name)}`, {button: title, buttonClass: 'ens', className: 'ens'});
 		}
 	} catch (err) {
 	}
@@ -3504,22 +3519,26 @@ function create_dot_eth_button(name) {
 		return btn;
 	}
 }
-function create_elapsed(dt, reqs, final) {
+function create_elapsed(dt, rpcs, lookups, final) {
 	let tag = create_tag('elapsed', format_dur(dt, final ? 2 : 1));
-	if (reqs || final) {
-		tag.prepend(create('span', {innerText: `${reqs}⇅`, className: 'calls'}));
+	if (lookups || final) {
+		tag.prepend(create('span', {innerText: `${lookups}✈`, className: 'requests', title: 'Offchain Lookups'}));
+	}
+	if (rpcs || final) {
+		tag.prepend(create('span', {innerText: `${rpcs}⇅`, className: 'requests', title: 'RPC Requests'}));
 	}
 	return tag;
 }
 function create_elapsed_since() {
 	const now = Date.now();
-	let {t, r} = resolve_state;
+	let {t, r, l} = resolve_state;
 	let dt = now - t;
-	let reqs = request_count - r;
-	if (!dt) return; // 0ms is stupid
+	let dr = rpc_count - r;
+	let dl = lookup_count - l;
 	resolve_state.t = now;
-	resolve_state.r = request_count;
-	return create_elapsed(dt, reqs);
+	resolve_state.r = rpc_count;
+	resolve_state.l = lookup_count;
+	if (dt || dr || dl) return create_elapsed(dt, dr, dl);
 }
 function create_pretty_tag() {
 	return create_tag('clean', PRETTY_NAME, 'Beautified Form');
@@ -3744,6 +3763,7 @@ function is_working() {
 function resolve() {
 	if (!active_chain) return;
 	if (is_working()) {
+		last_fetch_request?.cancel();
 		resolve_timer = [0]; // ASAP
 		return;
 	}
@@ -3861,17 +3881,19 @@ function resolve() {
 	resolve_btn.disabled = true;
 	primary_loader.classList.remove('hide');
 	const t0 = Date.now();
-	const r0 = request_count;
+	const r0 = rpc_count;
+	const l0 = lookup_count;
 	resolve_state = {
 		name, input, skip, url,
 		addrs: new Map(),
 		chain: active_chain,
 		t0, t: t0,
-		r0, r: r0
+		r0, r: r0,
+		l0, l: l0,
 	};
 	if (debug_enabled) resolve_state.debug = debug_settings;
 	resolve1(name, skip).catch(err => console.error(err)).then(() => {
-		clock_span.innerHTML = create_elapsed(Date.now() - t0, request_count - r0, 3).innerHTML;
+		clock_span.innerHTML = create_elapsed(Date.now() - t0, rpc_count - r0, lookup_count - l0, true).innerHTML;
 		resolve_btn.disabled = false;
 		if (Array.isArray(resolve_timer)) {
 			setTimeout(resolve, Math.max(0, resolve_timer[0] - Date.now()));
@@ -4349,6 +4371,7 @@ async function resolve1(input, skip_norm) {
 		if (nft_contract) {
 			avail_row.querySelector('.row-label').title = `Grace: ${format_dur(network_state.grace_period)}\nPremium: ${format_dur(network_state.premium_period)}`;
 		}
+		avail_row.append(create('div', {className: ['grouped', 'external']}, create_link(`https://www.ensvolution.xyz/?name=${encode_uri_component_surrogate_escaped(name_norm)}`, {innerHTML: 'ENSvolution'})));
 	} else if (nft_backed) {
 		let label = name_norm.slice(0, sep_pos);
 		nft_token = labelhash(label);
@@ -4429,7 +4452,7 @@ async function resolve1(input, skip_norm) {
 						let slot = ethers.solidityPackedKeccak256(['uint256', 'uint256'], [node, 1]);
 						let raw = await active_provider.getStorage(network_state.wrapper.target, slot);
 						if (should_stop_resolving()) return;
-						owner = ethers.dataSlice(raw, 12, 32);
+						owner = ethers.getAddress(ethers.dataSlice(raw, 12, 32));
 						let now = Date.now();
 						let exp = parseInt(ethers.dataSlice(raw, 0, 8)) * 1000;
 						let fuses = parseInt(ethers.dataSlice(raw, 8, 12));
@@ -5050,12 +5073,12 @@ async function resolve1(input, skip_norm) {
 					innerText: 'Check Interfaces',
 					click() {
 						const t0 = Date.now();
-						const reqs = request_count;
+						const reqs = rpc_count;
 						this.remove();
 						add_spinner(row);
 						load_known_interfaces(row, resolver, owner).then(() => {
 							remove_temporary(row);
-							add_row_tag(row, create_elapsed(Date.now() - t0, request_count - reqs));
+							add_row_tag(row, create_elapsed(Date.now() - t0, rpc_count - reqs));
 						});
 					}
 				}))
