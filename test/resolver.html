@@ -29,6 +29,9 @@
 a, button, select {
 	cursor: pointer;
 }
+select {
+	font-size: 100%;
+}
 a.button {
 	text-decoration: none;
 }
@@ -261,9 +264,6 @@ body.testnet {
 }
 #chain_select:empty {
 	display: none;
-}
-#chain_select {
-	font-size: 100%;
 }
 #copy_link_btn {
 	margin-left: auto;
@@ -877,7 +877,6 @@ span.tally {
 	margin: 0;
 	border: 1px solid var(--btn-border-color);
 	border-radius: 4px;
-	font-size: 100%;
 	appearance: none;
 	background: no-repeat center url("data:image/svg+xml,%3Csvg height='21' width='20' version='1.1' viewBox='0 0 20 21' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10.5,0 C7,0 3.9,1.9 2.3,4.8 L0,2.5 L0,9 L6.5,9 L3.7,6.2 C5,3.7 7.5,2 10.5,2 C14.6,2 18,5.4 18,9.5 C18,13.6 14.6,17 10.5,17 C7.2,17 4.5,14.9 3.4,12 L1.3,12 C2.4,16 6.1,19 10.5,19 C15.8,19 20,14.7 20,9.5 C20,4.3 15.7,0 10.5,0 L10.5,0 Z M9,5 L9,10.1 L13.7,12.9 L14.5,11.6 L10.5,9.2 L10.5,5 L9,5 L9,5 Z'/%3E%3C/svg%3E"), no-repeat bottom 3px right 2px url("data:image/svg+xml,%3Csvg style='fill: currentColor' width='8' height='4' viewBox='0 0 8 4' version='1.1' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h8l-4 4Z' /%3E%3C/svg%3E") var(--btn-fill-color);
 }
@@ -1494,10 +1493,9 @@ CHAINS.forEach(chain => {
 	chain.resolvers = new Map();
 });
 
-const COINTYPE_EVM_BIT = 1n << 31n;
+const EVM_BIT = 1n << 31n;
 const MIN_ETH_LENGTH = 3;
 const IFACE_ETH_CONTROLLER = '0x612e8c09';
-const REVERSE_DOMAIN = 'addr.reverse';
 const NFT_DOMAINS = new Set(['eth', 'art']); //, 'box']);
 const RESOLVER_NAMES = {
 	'0x1da022710dF5002339274AaDEe8D58218e9D6AB5': 'Old Public (v0)',  // 3648359: just addr()
@@ -1522,9 +1520,6 @@ const ERROR_ABI = new ethers.Interface([
 	'error Unauthorized(address owner)',
 	'error InvalidContext(bytes context)',
 	'error Unreachable(bytes name)',
-	// standard stuff?
-	'error UnreachableName(bytes name)',
-	'error UnsupportedResolverProfile(bytes4 selector)',
 	// IUniversalResolver
 	'error ResolverNotFound(bytes name)',
 	'error ResolverNotContract(bytes name, address resolver)',
@@ -1534,6 +1529,30 @@ const ERROR_ABI = new ethers.Interface([
 	// NameCoder
 	'error DNSDecodingFailed(bytes dns)',
 	'error DNSEncodingFailed(string ens)',
+	// https://github.com/ensdomains/ensips/pull/18
+	'error UnreachableName(bytes name)',
+	'error UnknownResolverProfile(bytes4 selector)',
+]);
+
+const CHAIN_NAMES = new Map([
+	[0n, 'Default EVM'],
+	[1n, 'Ethereum (Mainnet)'],
+	[11155111n, "Ethereum (Sepolia)"],
+	[17000n, "Ethereum (Holesky)"],
+	[42161n, "Arbitrum"],
+	[421614n, "Arbitrum (Sepolia)"],
+	[8453n, "Base"],
+	[84532n, "Base (Sepolia)"],
+	[10n, "Optimism"],
+	[11155420n, "Optimism (Sepolia)"],
+	[534352n, "Scroll"],
+	[534351n, "Scroll  (Sepolia)"],
+	[59144n, "Linea"],
+	[59141n, "Linea (Sepolia)"],
+	// [324n, "ZKsync"],
+	// [300n, "ZKsync (Sepolia)"],
+	// [167000n, "Taiko"],
+	// [167009n, "Taiko (Sepolia)"],
 ]);
 
 // https://docs.ens.domains/ensip/9
@@ -1872,9 +1891,9 @@ function prepare_record(rec) {
 		} else if (typeof rec.evm !== 'undefined') {
 			rec.evm = BigInt(rec.evm);
 			// https://docs.ens.domains/ensip/11
-			if (rec.evm >= COINTYPE_EVM_BIT) throw new Error('invalid chain');
+			if (rec.evm >= EVM_BIT) throw new Error('invalid chain');
 			rec.type = TYPE_ADDR;
-			rec.coin = rec.evm + COINTYPE_EVM_BIT;
+			rec.coin = rec.evm + EVM_BIT;
 		} else if (!rec.type) {
 			throw new Error('unknown type');
 		}
@@ -3019,14 +3038,22 @@ function make_exploded_utf8_title(raw) {
 		`[SHIFT] UTF-8 Bytes (${bytes_from_utf8(raw).length})`,
 	].join('\n');
 }
-function reverse_name(addr) {
-	return `${addr.slice(2).toLowerCase()}.${REVERSE_DOMAIN}`;
+function get_reverse_name(addr, chain = 1n) {
+	let slug;
+	if (chain === 1n) {
+		slug = 'addr';
+	} else if (chain === 0n) {
+		slug = 'default';
+	} else {
+		slug = (EVM_BIT + chain).toString(16);
+	}
+	return `${addr.slice(2).toLowerCase()}.${slug}.reverse`;
 }
 function parse_reverse_name(name) {
 	return name.match(/(?:\b|\.)([a-f0-9]+)\.(addr|default|[0-9a-f]+)\.reverse$/);
 }
 function create_reverse_resolve_btn(addr) {
-	return create_resolve_btn(reverse_name(addr), '♻️ Reverse Name');
+	return create_resolve_btn(get_reverse_name(addr), '♻️ Reverse Name');
 }
 function create_resolve_btn(name, innerHTML = '↩️ Resolve') {
 	let title = `Resolve: ${name}`;
@@ -3038,7 +3065,7 @@ function create_resolve_btn(name, innerHTML = '↩️ Resolve') {
 		innerHTML,
 		title,
 		click(e) {
-			input_field.value = addr && e.altKey ? reverse_name(name) : name;
+			input_field.value = addr && e.altKey ? get_reverse_name(name) : name;
 			resolve();
 		}
 	});
@@ -3874,7 +3901,7 @@ async function resolve1(input, skip_norm) {
 		add_row_tag(input_row, create_reverse_resolve_btn(input));
 		add_owner_links(input_row, input);
 
-		let rev_name = reverse_name(input);
+		let rev_name = get_reverse_name(input);
 
 		let rev_details = create('div', {className: ['breakdown']});
 		make_detailed(rev_details);
@@ -4058,30 +4085,36 @@ async function resolve1(input, skip_norm) {
 	let rev_match = parse_reverse_name(name_norm);
 	if (rev_match) {
 		let row = create_row('Reverse Address');
-		let name, coin;
-		if (rev_match[2] === 'default') {
-			coin = COINTYPE_EVM_BIT;
-			name = 'default';
-		} else if (rev_match[2] === 'addr') {
+		let [_, addr, coin] = rev_match;
+		addr = `${addr.length & 1 ? '0x0' : '0x'}${addr}`;
+		if (coin === 'default') {
+			coin = EVM_BIT;
+		} else if (coin === 'addr') {
 			coin = 60n;
-			name = 'eth';
 		} else {
-			coin = BigInt('0x' + rev_match[2]);
+			coin = BigInt('0x' + coin);
 		}
-		if (!name) name = RECORDS.find(x => x.coin == coin)?.name;
-		if (name) {
-			row.append(create_tag('good', name));
+		const evm = chain_from_coin(coin);
+		const is_evm = typeof evm === 'bigint';
+		const network = is_evm ? CHAIN_NAMES.get(evm) : RECORDS.find(x => x.coin == coin)?.name;
+		const select = create('select', {
+			change() {
+				input_field.value = get_reverse_name(addr, BigInt(this.value));
+				resolve();
+			},
+		});
+		for (const [id, name] of CHAIN_NAMES) {
+			select.append(create('option', {value: id.toString(10)}, name));
 		}
-		let evm = chain_from_coin(coin);
-		let is_evm = typeof evm === 'bigint';
-		row.append(create_tag('raw', is_evm ? `chain(${evm || '*'})` : `coin(${coin})`, `CoinType: ${format_dec_hex(coin)}`));
+		if (!is_evm || !network) {
+			select.prepend(create('option', {disabled: true}, network ? `Non-EVM: ${network}` : 'Unknown EVM'));
+			select.selectedIndex = 0;
+		} else {
+			select.value = evm;
+		}
+		row.append(select, create_tag('raw', is_evm ? `chain(${evm || '0'})` : `coin(${coin})`, `CoinType: ${format_dec_hex(coin)}`));
 		try {
-			let addr = rev_match[1];
-			if (is_evm) {
-				addr = ethers.getAddress(addr);
-			} else{
-				addr = `${addr.length & 1 ? '0x0' : '0x'}${addr}`;
-			}
+			if (is_evm) addr = ethers.getAddress(addr);
 			add_row_tag(row, create_copy_btn(addr));
 			if (is_evm) {
 				//row.append(create_main_span(addr));
@@ -4584,7 +4617,7 @@ async function resolve1(input, skip_norm) {
 		}
 		if (should_stop_resolving()) return;
 		if (address_err) {
-			if (name_norm.endsWith(REVERSE_DOMAIN) && address_err.code === 'CALL_EXCEPTION') {
+			if (name_norm.endsWith('.reverse') && address_err.code === 'CALL_EXCEPTION') {
 				add_row_tag(address_row, 'Not Supported');
 			} else if (address_err.code === 'BAD_DATA' && address_err.value === '0x') {
 				add_row_tag(address_row, create_tag('fail', 'No Response'));
@@ -5040,7 +5073,7 @@ async function resolve1(input, skip_norm) {
 	output_div.append(primary_row);
 	//primary_row.append(create_jazz_icon(address)); // only true in the forward direction
 	try {
-		rev_resolver = await get_resolver(reverse_name(address));
+		rev_resolver = await get_resolver(get_reverse_name(address));
 		if (rev_resolver) {
 			if (should_stop_resolving()) return;
 			let [{data, error}] = await fetch_records(rev_resolver, [{type: TYPE_NAME}]);
@@ -5458,7 +5491,7 @@ async function try_reverse_registrar() {
 	let {reverse} = network_state;
 	if (reverse === undefined) {
 		try {
-			reverse = await network_state.ens.owner(namehash(REVERSE_DOMAIN));
+			reverse = await network_state.ens.owner(namehash('addr.reverse'));
 			if (is_null_hex(reverse)) reverse = null;
 		} catch (err) {
 			reverse = false;
@@ -5854,7 +5887,7 @@ async function get_resolver(name0) {
 }
 async function get_safe_primary(owner, alt_owner) {
 	// return normalized primary if resolve(reverse(owner)) is owner or alt_owner | throws
-	let rev_resolver = await get_resolver(reverse_name(owner));
+	let rev_resolver = await get_resolver(get_reverse_name(owner));
 	if (!rev_resolver) throw new Error('Primary not set');
 	let [{data: primary, error}] = await fetch_records(rev_resolver, [{type: TYPE_NAME}]);
 	check_abort();
@@ -5990,7 +6023,7 @@ function is_object(x) {
 }
 function chain_from_coin(x) {
 	if (x === 60n) return 1n;
-	if (x & COINTYPE_EVM_BIT && BigInt.asUintN(32, x) === x) {
+	if (x & EVM_BIT && BigInt.asUintN(32, x) === x) {
 		return BigInt.asUintN(31, x);
 	}
 }
