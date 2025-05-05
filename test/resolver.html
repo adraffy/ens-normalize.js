@@ -1270,7 +1270,7 @@ Hebrew:
 	<input type="checkbox" id="show_records_check" checked>
 	<label for="show_records_check" title="Include common text and address records">Records</label>
 	<input type="checkbox" id="show_details_check">
-	<label for="show_details_check">Details</label>
+	<label for="show_details_check">Labels</label>
 	<input type="checkbox" id="skip_norm_check">
 	<label for="skip_norm_check"  title="When active, normalization is not applied"><svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="var(--geist-fill)"></circle><path d="M15 9L9 15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M9 9L15 15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>Norm</label>
 	<input type="checkbox" id="force_ltr_check">
@@ -1328,8 +1328,9 @@ Hebrew:
 <li><a class="internal" href="./report-nf.html">Unicode NormalizationTest</a></li>
 <li><a href="../../ens-norm-tests/test-breakdown/output-20230226/">ENSIP-1→15 Breakdown</a></li>
 <li><a href="https://docs.ens.domains/learn/deployments">ENS Deployments</a></li>
-<li><a href="../../ens-labels/demo.html" data-badge="js">Labelhash⁻¹</a></li>
+<li><a href="../../ens-labels/demo.html">Labelhash⁻¹</a></li>
 <li><a href="https://github.com/adraffy/ens-labels/" data-badge="json">Label Database</a></li>
+<li><a href="https://raffy.antistupid.com/eth/ens-brute.html">Brute-force</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-regs.html">Recent Registrations</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-renews.html">Recent Renews</a></li>
 <li><a href="https://raffy.antistupid.com/eth/ens-exp.html">Expirations</a></li>
@@ -2229,8 +2230,13 @@ function apply_debug() {
 		if (!is_object(settings)) throw new Error('expected object');
 		let {ccip, records, resolver} = settings;
 		if (ccip) {
-			if (!is_object(ccip)) throw new Error('expected "ccip" {address: endpoint}');
-			settings.ccip = Object.fromEntries(Object.entries(ccip).map(([k, v]) => [ethers.getAddress(k), new URL(v).toString()])); // validate and format
+			if (typeof ccip === 'string') {
+				settings.ccip = {'*': ccip};
+			} else if (is_object(ccip)) {
+				settings.ccip = Object.fromEntries(Object.entries(ccip).map(([k, v]) => [ethers.getAddress(k), new URL(v).toString()])); // validate and format
+			} else {
+				throw new Error('expected "ccip" {address: endpoint}');
+			}
 		}
 		if (resolver) {
 			if (!is_object(resolver)) throw new Error('expected "resolver" {name: address}');
@@ -2362,7 +2368,7 @@ const ccipReadFetchOld = ethers.AbstractProvider.prototype.ccipReadFetch;
 ethers.AbstractProvider.prototype.ccipReadFetch = function(tx, calldata, urls) {
 	lookup_count++;
 	try {
-		let rewrite = resolve_state.debug.ccip[tx.to];
+		let rewrite = resolve_state.debug.ccip[tx.to] || resolve_state.debug.ccip['*'];
 		if (rewrite) urls = [rewrite];
 	} catch (err) {
 	}
