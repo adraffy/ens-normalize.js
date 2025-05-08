@@ -1533,6 +1533,10 @@ const ERROR_ABI = new ethers.Interface([
 	// https://github.com/ensdomains/ensips/pull/18
 	'error UnreachableName(bytes name)',
 	'error UnknownResolverProfile(bytes4 selector)',
+	// urg
+	'error CommitTooOld(uint256 latest, uint256 got, uint256 window)',
+	'error CommitTooNew(uint256 latest, uint256 got)',
+	'error UnexpectedString()'
 ]);
 
 const CHAIN_NAMES = new Map([
@@ -2233,7 +2237,7 @@ function apply_debug() {
 			if (typeof ccip === 'string') {
 				settings.ccip = {'*': ccip};
 			} else if (is_object(ccip)) {
-				settings.ccip = Object.fromEntries(Object.entries(ccip).map(([k, v]) => [ethers.getAddress(k), new URL(v).toString()])); // validate and format
+				settings.ccip = Object.fromEntries(Object.entries(ccip).map(([k, v]) => [k === '*' ? k : ethers.getAddress(k.toLowerCase()), new URL(v).toString()])); // validate and format
 			} else {
 				throw new Error('expected "ccip" {address: endpoint}');
 			}
@@ -4743,6 +4747,7 @@ async function resolve1(input, skip_norm) {
 								a.append(create_tag('fail', error));
 								a.classList.add('rtrim');
 								records_row.append(a);
+								console.debug(error);
 							}
 						}
 						continue;
@@ -5267,11 +5272,15 @@ function parse_call_error(calldata) {
 		error.desc = desc;
 		if (desc.name === 'Error') {
 			entity_span.innerText = desc.args[0];
-			message = `<b>${desc.signature}</b> ${entity_span.innerHTML}`;
+			message = `<strong>${desc.signature}</strong> ${entity_span.innerHTML}`;
 		} else if (desc.name === 'Panic') {
-			message = `<b>${desc.signature}</b> → ${desc.args[0]}`;
+			message = `<strong>${desc.signature}</strong> → ${desc.args[0]}`;
 		} else {
-			message = `<b>${desc.name}(</b>${[...desc.args].map(x => `<code>${x}</code>`).join(', ')}<b>)</b>`
+			message = `<strong>${desc.name}(</strong>${[...desc.args].map((x, i) => {
+				let rep = `<code>${x}</code>`;
+				const {name} = desc.fragment.inputs[i];
+				return name ? `${name}:${rep}` : rep;
+			}).join(', ')}<strong>)</strong>`
 		}
 	}
 	return Object.assign(new Error(`Call error: ${message}`), error);
