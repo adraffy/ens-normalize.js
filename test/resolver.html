@@ -282,8 +282,7 @@ body.testnet {
 #output.hide_recs .avatar,
 #output.hide_recs .row.records,
 #output.hide_recs .row.efp,
-#output.hide_recs .row.verifications,
-#output.hide_recs .row.impls {
+#output.hide_recs .row.verifications {
 	display: none;
 }
 #output.hide_details .detailed { display: none; }
@@ -1439,6 +1438,23 @@ const SAME_AS_NORM = 'Same as Norm';
 const ALT_RAW = '[ALT] Raw Value';
 const EMOJI_INSPECT = '🔍️ Inspect';
 const EMOJI_CHECK = '✅️ Check';
+
+const RESOLVER_ABI = new ethers.Interface([
+	'function interfaceImplementer(bytes32 node, bytes4 interfaceID) external view returns (address)',
+	'function resolve(bytes name, bytes data) view returns (bytes)',
+	'function resolve(bytes name, bytes data, bytes context) view returns (bytes)',
+	'function addr(bytes32 node, uint coinType) view returns (bytes)',
+	'function addr(bytes32 node) view returns (address)',
+	'function text(bytes32 node, string key) view returns (string)',
+	'function contenthash(bytes32 node) view returns (bytes)',
+	'function pubkey(bytes32 node) view returns (bytes32 x, bytes32 y)',
+	'function name(bytes32 node) view returns (string)',
+	'function recordVersions(bytes32 node) external view returns (uint64)',
+	'function multicall(bytes[] calldata data) external returns (bytes[] memory results)',
+	'error OffchainLookup(address sender, string[] gateways, bytes request, bytes4 callback, bytes carry)',
+	'function supportsInterface(bytes4 interfaceID) external view returns (bool)',
+	'function oracle() view returns (address)',
+]);
 
 const CHAINS = [
 	{
@@ -5070,30 +5086,28 @@ async function resolve1(input, skip_norm) {
 			add_row_tag(records_row, create_elapsed_since());
 		}
 
-		if (show_recs && resolver.__info.impl) {
-			let row = create_row(create_link('https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar#discovery', {innerHTML: 'Interfaces'}));
-			row.classList.add('impls');
-			output_div.append(row);
-			if (name_norm === 'eth') {
-				add_spinner(row);
-				await load_known_interfaces(row, resolver, owner);
-				remove_temporary(row);
-				add_row_tag(row, create_elapsed_since());
-			} else {
-				row.append(create('button', {
-					innerText: 'Check Interfaces',
-					click() {
-						const t0 = Date.now();
-						const reqs = rpc_count;
-						this.remove();
-						add_spinner(row);
-						load_known_interfaces(row, resolver, owner).then(() => {
-							remove_temporary(row);
-							add_row_tag(row, create_elapsed(Date.now() - t0, rpc_count - reqs));
-						});
-					}
-				}))
-			}
+		let row = create_row(create_link('https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar#discovery', {innerHTML: 'Interfaces'}));
+		row.classList.add('impls');
+		output_div.append(row);
+		if (name_norm === 'eth') {
+			add_spinner(row);
+			await load_known_interfaces(row, resolver, owner);
+			remove_temporary(row);
+			add_row_tag(row, create_elapsed_since());
+		} else {
+			row.append(create('button', {
+				innerText: 'Check Interfaces',
+				click() {
+					const t0 = Date.now();
+					const reqs = rpc_count;
+					this.remove();
+					add_spinner(row);
+					load_known_interfaces(row, resolver, owner).then(() => {
+						remove_temporary(row);
+						add_row_tag(row, create_elapsed(Date.now() - t0, rpc_count - reqs));
+					});
+				}
+			}))
 		}
 	}
 
@@ -5673,7 +5687,8 @@ async function load_known_interfaces(row, resolver, owner) {
 	// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar
 	const TITLE_WRAPPER = 'Wrapper';
 	const TITLE_NFT = 'NFT';
-	let interfaces = [
+	const dynamic_frag = RESOLVER_ABI.getFunction('interfaceImplementer');
+	const dynamic_ifaces = resolver.__info.impl ? [
 		//{iface: IFACE_ETH_NFT, name: 'NFT'},
 		{iface: '0x019a38fe', title: TITLE_WRAPPER},
 		{iface: IFACE_ETH_CONTROLLER, title: 'Controller'},
@@ -5681,13 +5696,27 @@ async function load_known_interfaces(row, resolver, owner) {
 		{iface: '0x6ccb2df4', title: 'NFT ERC-721'},
 		{iface: '0x7ba18ba1', title: 'Old Registrar'},
 		{iface: '0xd1a70fd3', title: 'Bulk Renewal'},
+	] : [];
+	const supports_frag = RESOLVER_ABI.getFunction('supportsInterface');
+	const supports_ifaces = [
+		{iface: '0x3b3b57de', title: 'AddrResolver', url: 'https://docs.ens.domains/ensip/1#contract-address-interface-'},
+		{iface: '0xf1cb7e06', title: 'AddressResolver', url: 'https://docs.ens.domains/ensip/9'},
+		{iface: '0x59d1d43c', title: 'TextResolver', url: 'https://docs.ens.domains/ensip/5'},
+		{iface: '0xbc1c58d1', title: 'ContentHashResolver', url: 'https://docs.ens.domains/ensip/7'},
+		{iface: '0x691f3431', title: 'NameResolver', url: 'https://docs.ens.domains/ensip/3'},
+		{iface: '0xc8690233', title: 'PubkeyResolver', url: 'https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IPubkeyResolver.sol'},
+		{iface: '0x2203ab56', title: 'ABIResolver', url: 'https://docs.ens.domains/ensip/4'},
+		{iface: '0x124a319c', title: 'InterfaceResolver', url: 'https://docs.ens.domains/ensip/8', supports: resolver.__info.impl},
+		{iface: '0x9061b923', title: 'ExtendedResolver', url: 'https://docs.ens.domains/ensip/10', supports: resolver.__info.wild},
+		{iface: '0x8ef98a7e', title: 'ExtendedDNSResolver', url: 'https://docs.ens.domains/ensip/17', supports: resolver.__info.edns},
+		{iface: '0x73302a25', title: 'TheOffchainResolver', url: 'https://github.com/namestonehq/TheOffchainResolver.sol', supports: resolver.__info.edns},
 	];
-	let discovered = new Set();
+	const discovered = new Set();
 	function add_iface(html, address, iface) {
 		if (is_null_hex(address)) return;
 		if (discovered.has(address)) return;
 		discovered.add(address);
-		let lines = [`Contract: ${address}`];
+		const lines = [`Contract: ${address}`];
 		if (iface) {
 			html += ` <code>${iface.slice(2)}</code>`;
 			lines.push(`Interface: ${iface}`);
@@ -5695,22 +5724,25 @@ async function load_known_interfaces(row, resolver, owner) {
 		html += ` <code class="prefix">${address.slice(0, 6)}</code>`;
 		add_row_tag(row, create_explorer_address_link(address, {innerHTML: html, contract: true, className: 'iface', title: lines.join('\n')}));
 	}
-	const {target, interface: abi, __node} = resolver;
-	let frag = abi.getFunction('interfaceImplementer');
+	const {target, __node} = resolver;
 	try {
-		let multi = await multicall_tryAggregate(interfaces.map(x => {
-			return {target, data: abi.encodeFunctionData(frag, [__node, x.iface])};
-		}));
-		for (let i = 0; i < interfaces.length; i++) {
-			let {iface, title} = interfaces[i];
-			let [ok, data] = multi[i];
+		const multi = [...await multicall_tryAggregate([
+			...dynamic_ifaces.map(x => {
+				return {target, data: RESOLVER_ABI.encodeFunctionData(dynamic_frag, [__node, x.iface])};
+			}),
+			...supports_ifaces.filter(x => !('supports' in x)).map(x => {
+				return {target, data: RESOLVER_ABI.encodeFunctionData(supports_frag, [x.iface])};
+			})
+		])];
+		for (const x of dynamic_ifaces) {
+			const [ok, data] = multi.shift();
 			if (!ok) continue;
-			let [addr] = abi.decodeFunctionResult(frag, data);
+			const [addr] = RESOLVER_ABI.decodeFunctionResult(dynamic_frag, data);
 			if (is_null_hex(addr)) continue;
-			add_iface(title, addr, iface);
-			if (iface === IFACE_ETH_CONTROLLER) {
-				let controller = contract_for_controller(addr);
-				let oracle = await controller.prices().catch(() => {});
+			add_iface(x.title, addr, x.iface);
+			if (x.iface === IFACE_ETH_CONTROLLER) {
+				const controller = contract_for_controller(addr);
+				const oracle = await controller.prices().catch(() => {});
 				if (!is_null_hex(oracle)) {
 					add_iface('Price Oracle', oracle);
 					add_iface('USD Oracle', await contract_for_price_oracle(oracle).usdOracle().catch(() => {}));
@@ -5720,6 +5752,18 @@ async function load_known_interfaces(row, resolver, owner) {
 				add_iface('Public Resolver', await network_state.ens.resolver(namehash('resolver.eth')));
 				//add_iface('DAO Wallet', await contract.owner().catch(() => ''));
 			}
+		}
+		for (const x of supports_ifaces) {
+			if ('supports' in x) {
+				if (!x.supports) continue;
+			} else {
+				const [ok, data] = multi.shift();
+				if (!ok) continue;
+				const [supports] = RESOLVER_ABI.decodeFunctionResult(supports_frag, data);
+				if (is_null_hex(supports)) continue;
+			}
+			add_row_tag(row, create_link(x.url, {innerHTML: `${x.title} <code>${x.iface.slice(2)}</code>`, className: 'iface'}));
+			discovered.add(x.iface);
 		}
 		if (!discovered.size) {
 			add_row_tag(row, 'None');
@@ -5829,28 +5873,24 @@ async function get_resolver_info(target) {
 	if (info === undefined) {
 		info = {};
 		if (contracts.get(target) !== false) { // isn't an EoA
-			let abi = new ethers.Interface([
-				'function supportsInterface(bytes4 interfaceID) external view returns (bool)',
-				'function oracle() view returns (address)',
-			]);
-			let multi = await multicall_tryAggregate([
-				{target, data: abi.encodeFunctionData('supportsInterface', ['0x124a319c'])}, // IInterfaceResolver:   interfaceImplementer(bytes32,bytes4)
-				{target, data: abi.encodeFunctionData('supportsInterface', ['0x9061b923'])}, // IExtendedResolver:    resolve(bytes,bytes)
-				{target, data: abi.encodeFunctionData('supportsInterface', ['0x8ef98a7e'])}, // IExtendedDNSResolver: resolve(bytes,bytes,bytes)
-				{target, data: abi.encodeFunctionData('supportsInterface', ['0x73302a25'])}, // TheOffchainResolver.sol
-				{target, data: abi.encodeFunctionData('oracle')}
+			const multi = await multicall_tryAggregate([
+				{target, data: RESOLVER_ABI.encodeFunctionData('supportsInterface', ['0x124a319c'])}, // IInterfaceResolver:   interfaceImplementer(bytes32,bytes4)
+				{target, data: RESOLVER_ABI.encodeFunctionData('supportsInterface', ['0x9061b923'])}, // IExtendedResolver:    resolve(bytes,bytes)
+				{target, data: RESOLVER_ABI.encodeFunctionData('supportsInterface', ['0x8ef98a7e'])}, // IExtendedDNSResolver: resolve(bytes,bytes,bytes)
+				{target, data: RESOLVER_ABI.encodeFunctionData('supportsInterface', ['0x73302a25'])}, // TheOffchainResolver.sol
+				{target, data: RESOLVER_ABI.encodeFunctionData('oracle')}
 			]);
 			check_abort();
 			if (multi) {
 				if (multi.some(x => x.ok)) contracts.set(target, true); // any success => is contract
-				let [impl, wild, edns, tor, oracle] = multi;
+				const [impl, wild, edns, tor, oracle] = multi;
 				info.impl = impl.ok && !is_null_hex(impl.data);
 				info.wild = wild.ok && !is_null_hex(wild.data);
 				info.edns = edns.ok && !is_null_hex(edns.data);
 				info.tor  =  tor.ok && !is_null_hex(tor.data );
 				try {
 					if (oracle.ok) {
-						let [address] = abi.decodeFunctionResult('oracle', oracle.data);
+						const [address] = abi.decodeFunctionResult('oracle', oracle.data);
 						if (!is_null_hex(address)) {
 							info.dnssec_oracle = address;
 						}
@@ -5864,20 +5904,7 @@ async function get_resolver_info(target) {
 	return info;
 }
 function contract_for_resolver(address) {
-	return new ethers.Contract(address, [
-		'function interfaceImplementer(bytes32 node, bytes4 interfaceID) external view returns (address)',
-		'function resolve(bytes name, bytes data) view returns (bytes)',
-		'function resolve(bytes name, bytes data, bytes context) view returns (bytes)',
-		'function addr(bytes32 node, uint coinType) view returns (bytes)',
-		'function addr(bytes32 node) view returns (address)',
-		'function text(bytes32 node, string key) view returns (string)',
-		'function contenthash(bytes32 node) view returns (bytes)',
-		'function pubkey(bytes32 node) view returns (bytes32 x, bytes32 y)',
-		'function name(bytes32 node) view returns (string)',
-		'function recordVersions(bytes32 node) external view returns (uint64)',
-		'function multicall(bytes[] calldata data) external returns (bytes[] memory results)',
-		'error OffchainLookup(address sender, string[] gateways, bytes request, bytes4 callback, bytes carry)',
-	], active_provider);
+	return new ethers.Contract(address, RESOLVER_ABI, active_provider);
 }
 async function get_resolver(name0) {
 	// returns resolver | null | throws
