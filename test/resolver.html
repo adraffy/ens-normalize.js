@@ -567,6 +567,9 @@ button.copy.copied {
 	white-space: pre;
 	color: #000;
 }
+.tags.iface.supports {
+	background-color: #edf;
+}
 .tags.iface:hover {
 	outline: 2px solid #00f;
 }
@@ -1567,7 +1570,7 @@ const CHAIN_NAMES = new Map([
 	[10n, "Optimism"],
 	[11155420n, "Optimism (Sepolia)"],
 	[534352n, "Scroll"],
-	[534351n, "Scroll  (Sepolia)"],
+	[534351n, "Scroll (Sepolia)"],
 	[59144n, "Linea"],
 	[59141n, "Linea (Sepolia)"],
 	// [324n, "ZKsync"],
@@ -1726,11 +1729,63 @@ const RECORDS = [
 		//bonus: true,
 	},
 	{
+		evm: 10,
+		name: 'op-sepolia',
+		chain: 11155111,
+		icon: '<img src="https://assets-global.website-files.com/611dbb3c82ba72fbc285d4e2/612d2f8f988b5f801bd0cf1e_favicon.png">',
+		url(x) { return `https://sepolia-optimistic.etherscan.io/address/${x}`; },
+	},
+	{
+		evm: 8453,
+		name: 'base',
+		icon: '<img src="https://base.org/document/favicon-32x32.png">',
+		url(x) { return `https://basescan.org/address/${x}`; },
+	},
+	{
+		evm: 84532,
+		name: 'base-sepolia',
+		chain: 11155111,
+		icon: '<img src="https://base.org/document/favicon-32x32.png">',
+		url(x) { return `https://sepolia.basescan.org/address/${x}`; },
+	},
+	{
 		evm: 42161,
-		name: 'arb',
+		name: 'arb1',
 		icon: '<img src="https://arbitrum.foundation/favicon.ico">',
 		url(x) { return `https://arbiscan.io/address/${x}`; },
-		//bonus: true,
+	},
+	{
+		evm: 421614,
+		name: 'arb1-sepolia',
+		chain: 11155111,
+		icon: '<img src="https://arbitrum.foundation/favicon.ico">',
+		url(x) { return `https://sepolia.arbiscan.io/address/${x}`; },
+	},
+	{
+		evm: 59144,
+		name: 'linea',
+		icon: '<img src="https://linea.build/favicon-32x32.png">',
+		url(x) { return `https://lineascan.build/address/${x}`; },
+	},
+	{
+		evm: 59141,
+		name: 'linea-sepolia',
+		chain: 11155111,
+		icon: '<img src="https://linea.build/favicon-32x32.png">',
+		url(x) { return `https://sepolia.lineascan.build/address/${x}`; },
+	},
+	{
+		evm: 534352,
+		name: 'scroll',
+		icon: '<img src="https://scroll.io/logo.png">',
+		url(x) { return `https://scrollscan.com/address/${x}`; },
+	},
+	{
+		evm: 534351,
+		chain: 11155111,
+		name: 'scroll-sepolia',
+		icon: '<img src="https://scroll.io/logo.png">',
+		url(x) { return `https://sepolia.scrollscan.com/address/${x}`; },
 	},
 	{
 		evm: 43114,
@@ -1738,13 +1793,6 @@ const RECORDS = [
 		icon: '<img src="https://assets-global.website-files.com/632993e1d1acbfa5635afd0b/63515267b3214c6dda03ea97_Favicon.png">',
 		url(x) { return `https://snowtrace.dev/address/${x}`; },
 		bonus: true,
-	},
-	{
-		evm: 8453,
-		name: 'base',
-		icon: '<img src="https://base.org/document/favicon-32x32.png">',
-		url(x) { return `https://basescan.org/address/${x}`; },
-		//bonus: true,
 	},
 	{
 		evm: 100,
@@ -1755,14 +1803,8 @@ const RECORDS = [
 		bonus: true,
 	},
 	{
-		evm: 534352,
-		name: 'scroll',
-		url(x) { return `https://scrollscan.com/address/${x}`; },
-		bonus: true,
-	},
-	{
 		evm: 324,
-		name: 'zkSync',
+		name: 'zksync',
 		url(x) { return `https://explorer.zksync.io/address/${x}`; },
 		bonus: true,
 	},
@@ -3323,7 +3365,7 @@ async function add_resolver_info(row, resolver, context) {
 	if (name && active_chain.is_mainnet) {
 		add_row_tag(row, create_tag('good', name));
 	} else if (resolver.__info.tor) {
-		add_row_tag(row, create_tag('good', 'TheOffchainResolver'));
+		add_row_tag(row, create_tag('good', 'TOR'));
 	}
 	if (resolver.__info.dnssec_oracle) {
 		add_row_tag(row, create_tag('good', 'DNSSEC', resolver.__info.dnssec_oracle));
@@ -3376,6 +3418,15 @@ async function add_resolver_info(row, resolver, context) {
 				}
 			}
 		}));
+	}
+	if (resolve) {
+		add_spinner(row);
+		get_safe_primary(resolver.target).catch(() => {}).then((name) => {
+			remove_temporary(row);
+			if (name) {
+				row.querySelector('.addr').innerHTML = name;
+			}
+		});
 	}
 }
 
@@ -4726,7 +4777,7 @@ async function resolve1(input, skip_norm) {
 			//} else if (resolver.__only_addr) {
 			//	add_row_tag(records_row, `Wildcard DNSSEC resolver only supports <code>addr()</code>`);
 			} else {
-				let records = [...RECORDS];
+				let records = [...RECORDS.filter(x => !x.chain || x.chain === active_chain.id)];
 				if (rev_match) {
 					records = [{type: TYPE_NAME}];
 				}
@@ -5762,7 +5813,7 @@ async function load_known_interfaces(row, resolver, owner) {
 				const [supports] = RESOLVER_ABI.decodeFunctionResult(supports_frag, data);
 				if (is_null_hex(supports)) continue;
 			}
-			add_row_tag(row, create_link(x.url, {innerHTML: `${x.title} <code>${x.iface.slice(2)}</code>`, className: 'iface'}));
+			add_row_tag(row, create_link(x.url, {innerHTML: `${x.title} <code>${x.iface.slice(2)}</code>`, className: ['iface', 'supports']}));
 			discovered.add(x.iface);
 		}
 		if (!discovered.size) {
@@ -5806,7 +5857,17 @@ function fetch_verifications(data, ens_name) {
 			(async () => {
 				try {
 					let res = await fetch(url);
-					if (!res.ok) throw new Error(`HTTP ${res.status}`);
+					if (!res.ok) {
+						let error;
+						try {
+							const {message} = await res.json();
+							if (message) {
+								error = message;
+							}
+						} catch (ignored) {
+						}
+						throw new Error(error ?? `HTTP ${res.status}`);
+					}
 					let json = await res.json();
 					if (!row.isConnected) return;
 					let {vp_token} = json;
