@@ -30,7 +30,8 @@ a, button, select {
 	cursor: pointer;
 }
 select {
-	font-size: 100%;
+	font-size: 85%;
+	align-self: stretch;
 }
 a.button {
 	text-decoration: none;
@@ -1436,6 +1437,7 @@ const VISION_NAME = 'Vision';
 const VISION_HOST = 'vision.io';
 const PRETTY_NAME = '💖️';
 const MANAGER_NAME = 'Manager';
+const WRAPPER_NAME = 'Wrapper';
 const NFT_OWNER_NAME = 'NFT Owner';
 const SAME_AS_INPUT = 'Same as Input';
 const SAME_AS_NORM = 'Same as Norm';
@@ -3159,7 +3161,18 @@ function parse_reverse_name(name) {
 	return {address, coin, evm, is_evm, network};
 }
 function create_reverse_resolve_btn(addr) {
-	return create_resolve_btn(get_reverse_name(addr), '♻️ Reverse Name');
+	const select = create('select', {
+		change() {
+			input_field.value = get_reverse_name(addr, BigInt(this.value));
+			resolve();
+		},
+	});
+	select.append(create('option', {disabled: true, selected: true}, 'Reverse Name'));
+	for (const [id, name] of CHAIN_NAMES) {
+		select.append(create('option', {value: id.toString(10)}, name));
+	}
+	return select;
+	//return create_resolve_btn(get_reverse_name(addr), '♻️ Reverse Name');
 }
 function create_resolve_btn(name, innerHTML = '↩️ Resolve') {
 	let title = `Resolve: ${name}`;
@@ -3491,15 +3504,16 @@ function add_nft_links(row, name, contract, token) {
 	if (active_chain.opensea) {
 		add_row_tag(group, create_link(`${active_chain.opensea}${contract}/${BigInt(token)}`, {innerHTML: OPENSEA_NAME}));
 	}
-	if (!active_chain.is_mainnet) return;
-	try {
-		let encoded = encodeURIComponent(name);
-		if (encoded.endsWith('.eth')) {
-			add_row_tag(group, create_link(`https://${VISION_HOST}/name/${encoded.slice(0, -4)}`, {innerHTML: VISION_NAME}));
+	if (active_chain.is_mainnet) {
+		try {
+			let encoded = encodeURIComponent(name);
+			if (encoded.endsWith('.eth')) {
+				add_row_tag(group, create_link(`https://${VISION_HOST}/name/${encoded.slice(0, -4)}`, {innerHTML: VISION_NAME}));
+			}
+			//add_row_tag(group, create_link(`http://predomain.eth.limo/#/domain/${encoded}`, {innerHTML: 'Predomain'}));
+			add_row_tag(group, create_link(`http://ethfollow.xyz/${encoded}`, {innerHTML: 'EFP'}));
+		} catch (err) {
 		}
-		//add_row_tag(group, create_link(`http://predomain.eth.limo/#/domain/${encoded}`, {innerHTML: 'Predomain'}));
-		add_row_tag(group, create_link(`http://ethfollow.xyz/${encoded}`, {innerHTML: 'EFP'}));
-	} catch (err) {
 	}
 	row.append(group);
 }
@@ -4226,10 +4240,10 @@ async function resolve1(input, skip_norm) {
 		if (address) {
 			try {
 				const addr = is_evm ? ethers.getAddress(address) : address;
-				add_row_tag(row, create_copy_btn(address));
+				add_row_tag(row, create_copy_btn(addr));
 				if (is_evm) {
 					//row.append(create_main_span(addr));
-					add_row_tag(row, create_resolve_btn(address));
+					add_row_tag(row, create_resolve_btn(addr));
 				}
 			} catch (err) {
 				row.classList.add('error');
@@ -4520,7 +4534,7 @@ async function resolve1(input, skip_norm) {
 	if ((!resolver || !resolver.__dropped) && (!nft_backed || available !== undefined)) {
 		let node = namehash(name_norm);
 		let wrapped_data;
-		let wrapped_row = create_row('Wrapper');
+		let wrapped_row = create_row(TITLE_WRAPPER);
 		add_spinner(wrapped_row);
 		let unwrappable;
 		try {
@@ -4569,8 +4583,11 @@ async function resolve1(input, skip_norm) {
 				add_row_tag(wrapped_row, 'Unwrapped');
 			}
 			if (network_state.wrapper) {
-				let old = wrapped_row.querySelector('.row-label');
-				old.replaceChildren(create_explorer_address_link(network_state.wrapper.target, {innerHTML: old.innerHTML, contract: true}));
+				const old = wrapped_row.querySelector('.row-label');
+				old.replaceChildren(create_explorer_address_link(network_state.wrapper.target, {
+					innerHTML: is_wrapped ? 'Wrapped' : WRAPPER_NAME, 
+					contract: true
+				}));
 			}
 			if (is_wrapped) {
 				add_nft_links(normed_row, name_norm, network_state.wrapper.target, node);
@@ -5773,11 +5790,10 @@ async function multicall_tryAggregate(calls) {
 }
 async function load_known_interfaces(row, resolver, owner) {
 	// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar
-	const TITLE_WRAPPER = 'Wrapper';
 	const dynamic_frag = RESOLVER_ABI.getFunction('interfaceImplementer');
 	const dynamic_ifaces = resolver.__info.impl ? [
 		//{iface: IFACE_ETH_NFT, name: 'NFT'},
-		{iface: '0x019a38fe', title: TITLE_WRAPPER},
+		{iface: '0x019a38fe', title: WRAPPER_NAME},
 		{iface: IFACE_ETH_CONTROLLER, title: 'Controller'},
 		{iface: '0x018fac06', title: 'Old Controller'},
 		{iface: '0x6ccb2df4', title: 'NFT ERC-721'},
@@ -5838,7 +5854,7 @@ async function load_known_interfaces(row, resolver, owner) {
 					add_iface('USD Oracle', await contract_for_price_oracle(oracle).usdOracle().catch(() => {}));
 				}
 				add_iface('Registrar', owner);
-				add_iface(TITLE_WRAPPER, await controller.nameWrapper().catch(() => {}));
+				add_iface(WRAPPER_NAME, await controller.nameWrapper().catch(() => {}));
 				add_iface('Public Resolver', await network_state.ens.resolver(namehash('resolver.eth')));
 				//add_iface('DAO Wallet', await contract.owner().catch(() => ''));
 			}
