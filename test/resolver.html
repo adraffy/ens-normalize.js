@@ -4534,7 +4534,7 @@ async function resolve1(input, skip_norm) {
 	if ((!resolver || !resolver.__dropped) && (!nft_backed || available !== undefined)) {
 		let node = namehash(name_norm);
 		let wrapped_data;
-		let wrapped_row = create_row(TITLE_WRAPPER);
+		let wrapped_row = create_row(WRAPPER_NAME);
 		add_spinner(wrapped_row);
 		let unwrappable;
 		try {
