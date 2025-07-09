@@ -4445,7 +4445,6 @@ async function resolve1(input, skip_norm) {
 		if (should_stop_resolving()) return;
 		add_row_tag(avail_row, create_elapsed_since());
 		add_row_tag(avail_row, create_tag('length', len));
-
 		if (avail_err) {
 			avail_row.classList.add('error');
 			add_row_tag(avail_row, create_tag('warn', avail_err));
@@ -4473,6 +4472,14 @@ async function resolve1(input, skip_norm) {
 			} else {
 				add_reg_exp_tags(avail_row, exp, now);
 			}
+		}
+		if (expiry) {
+			const exp = Number(expiry);
+			const exp_gr = exp + network_state.grace_period / 1000;
+			add_row_tag(avail_row, create_copy_btn([
+				`Expiry: ${new Date(exp * 1000).toISOString()} (${expiry})`,
+				`Grace: ${new Date(exp_gr * 1000).toISOString()} (${exp_gr})`,
+			].join('\n'), {value: true}));
 		}
 		if (nft_contract) {
 			avail_row.querySelector('.row-label').title = `Grace: ${format_dur(network_state.grace_period)}\nPremium: ${format_dur(network_state.premium_period)}`;
