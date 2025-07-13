@@ -1376,7 +1376,7 @@ Hebrew:
 	<span id="enable_debug_btn" title="Enable Debugging">🛠️</span>
 </footer>
 <script type="module">
-import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.min.js';
+import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.15.0/ethers.min.js';
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
 	nfc, nfd, hex_cp, quote_cp, explode_cp, str_from_cps, safe_str_from_cps,
@@ -1785,14 +1785,14 @@ const RECORDS = [
 	{
 		evm: 534352,
 		name: 'scroll',
-		icon: '<img src="https://scroll.io/logo.png">',
+		icon: '<img src="https://scroll.io/favicon.ico">',
 		url(x) { return `https://scrollscan.com/address/${x}`; },
 	},
 	{
 		evm: 534351,
 		chain: 11155111,
 		name: 'scroll-sepolia',
-		icon: '<img src="https://scroll.io/logo.png">',
+		icon: '<img src="https://scroll.io/favicon.ico">',
 		url(x) { return `https://sepolia.scrollscan.com/address/${x}`; },
 	},
 	{
@@ -1806,7 +1806,6 @@ const RECORDS = [
 		evm: 100,
 		legacy: 700,
 		name: 'gnosis', // xdai
-		icon: '<img src="https://cryptologos.cc/logos/gnosis-gno-gno-logo.svg">',
 		url(x) { return `https://gnosisscan.io/address/${x}`; },
 		bonus: true,
 	},
@@ -1825,7 +1824,6 @@ const RECORDS = [
 	{
 		coin: 714,
 		name: 'bnb',
-		icon: '<img src="https://explorer.bnbchain.org/static/images/favicon.ico">',
 		bech32: {hrp: 'bnb', type: 1},
 		url(x) { return `https://explorer.bnbchain.org/address/${x}`; },
 		bonus: true,
@@ -2452,7 +2450,7 @@ if (window.ethereum) {
 	// 20240913: on browser launch, window.ethereum is wonky
 	// https://github.com/MetaMask/metamask-extension/issues/27150
 	if (ethereum._state) {
-		let killer = setTimeout(() => window.location.reload(), 2000);
+		let killer = setTimeout(() => window.location.reload(), 1000);
 		let monitor = setInterval(() => {
 			if (ethereum._state.initialized) {
 				clearInterval(monitor);
@@ -2482,6 +2480,7 @@ if (window.ethereum) {
 				throw err;
 			}
 		};
+		const timer = setTimeout(() => set_window_network(), 2000);
 		if (ethereum.isConnected()) {
 			window_provider._detectNetwork().then(connected, () => {});
 		}
@@ -2489,6 +2488,7 @@ if (window.ethereum) {
 			connected(ethers.Network.from(parseInt(chainId)));
 		});
 		function connected(network) {
+			clearTimeout(timer);
 			ethereum.on('chainChanged', chainId => set_window_network(ethers.Network.from(parseInt(chainId))));
 			ethereum.once('disconnect', () => set_window_network());
 			set_window_network(network);
@@ -4849,24 +4849,10 @@ async function resolve1(input, skip_norm) {
 				let skip_count = 0;
 				for (let {rec, data, error, skipped} of results) {
 					let a = create('a', {className: 'record', target: '_blank'});
-					if (error) {
-						if (skipped) {
-							skip_count++;
-						} else {
-							fail_count++;
-							if (resolve_state.debug) {
-								a.append(create('b', {innerText: `${rec.key || rec.coin || rec.type}`}));
-								a.append(create_tag('fail', error));
-								a.classList.add('rtrim');
-								records_row.append(a);
-								console.debug(error);
-							}
-						}
-						continue;
-					}
 					switch (rec.type) {
 						case TYPE_NAME: {
 							a.innerHTML = `<b>primary</b>`;
+							if (error) break;
 							if (!data) {
 								if (!rec.force) continue;
 								a.append(create_tag('warn', 'Not Set'));
@@ -4888,13 +4874,14 @@ async function resolve1(input, skip_norm) {
 						}
 						// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IAddressResolver.sol
 						case TYPE_ADDR: {
-							if (is_null_hex(data)) continue;
 							let {name, coin, evm} = rec;
 							const is_evm = typeof evm !== 'undefined';
 							if (!name && is_evm) name = `chain(${evm})`;
 							if (!name) name = `coin(${coin})`;
 							if (rec.icon) a.innerHTML = rec.icon;
 							a.append(create('b', {innerText: name}));
+							if (error) break;
+							if (is_null_hex(data)) continue;
 							try {
 								let v = ethers.getBytes(data);
 								let lines = [`Name: ${name}`, `Type: ${format_dec_hex(coin)}`];
@@ -4947,14 +4934,15 @@ async function resolve1(input, skip_norm) {
 						}
 						// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/ITextResolver.sol
 						case TYPE_TEXT: {
+							if (rec.icon) a.innerHTML = rec.icon;
+							a.append(create('b', {innerText: rec.key}));
+							if (error) break;
 							data = data.trim(); // silent error for empty-able string
 							if (!data) continue;
 							if (rec.key === 'verifications') {
 								fetch_verifications(data, name_norm);
 								//continue;
 							}
-							if (rec.icon) a.innerHTML = rec.icon;
-							a.append(create('b', {innerText: rec.key}));
 							//a.innerHTML = rec.icon || `<b>${rec.key}</b>`;
 							let fixed = data;
 							if (rec.url) {
@@ -5041,9 +5029,10 @@ async function resolve1(input, skip_norm) {
 						}
 						// https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/IPubkeyResolver.sol
 						case TYPE_PUBKEY: {
+							a.innerHTML = `<b>pubkey</b>`;
+							if (error) break;
 							let [x, y] = data;
 							if (is_null_hex(x) && is_null_hex(y)) continue;
-							a.innerHTML = `<b>pubkey</b>`;
 							a.classList.add('rtrim');
 							let raw = ethers.concat([x, y]);
 							let addr = ethers.getAddress('0x' + ethers.keccak256(ethers.concat([x, y])).slice(-40));
@@ -5073,8 +5062,9 @@ async function resolve1(input, skip_norm) {
 						// https://docs.ens.domains/ensip/7
 						// https://github.com/multiformats/multicodec/blob/master/table.csv
 						case TYPE_CONTENTHASH: {
-							if (is_null_hex(data)) continue;
 							a.innerHTML = `<b>${rec.type}</b>`;
+							if (error) break;
+							if (is_null_hex(data)) continue;
 							a.classList.add('rtrim');
 							let buf = ethers.getBytes(data);
 							let rep, url;
@@ -5165,8 +5155,22 @@ async function resolve1(input, skip_norm) {
 							break;
 						}
 					}
-					records_row.append(a);
-					good_count++;
+					if (error) {
+						if (skipped) {
+							skip_count++;
+						} else {
+							fail_count++;
+							if (resolve_state.debug) {
+								a.append(create_tag('fail', error));
+								a.classList.add('rtrim');
+								records_row.append(a);
+								console.debug(error);
+							}
+						}
+					} else {
+						records_row.append(a);
+						good_count++;
+					}
 				}
 				let null_count = results.length - good_count - fail_count - skip_count;
 
