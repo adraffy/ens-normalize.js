@@ -2306,13 +2306,10 @@ function apply_debug() {
 			}
 		}
 		if (resolver) {
-			if (typeof resolver === 'string') {
-				settings.resolver = {'*': ethers.getAddress(resolver)};
-			} else if (is_object(resolver)) {
-				settings.resolver = Object.fromEntries(Object.entries(resolver).map(([k, v]) => [k === '*' ? k : ens_normalize(k), ethers.getAddress(v)])); // validate and format
-			} else {
+			if (!is_object(resolver)) {
 				throw new Error('expected "resolver" {name: address}');
 			}
+			settings.resolver = Object.fromEntries(Object.entries(resolver).map(([k, v]) => [ens_normalize(k), ethers.getAddress(v)])); // validate and format
 		}
 		if (records) {
 			if (!Array.isArray(records)) throw new Error('expected "records" array');
@@ -5676,7 +5673,7 @@ async function ensure_eth_resolver() {
 	let {eth} = network_state;
 	if (eth) return;
 	if (eth === false) throw new Error(`No "eth" resolver`);
-	network_state.eth = await get_resolver('eth') || false;
+	network_state.eth = await get_resolver('eth', true) || false;
 	return ensure_eth_resolver();
 }
 function contract_for_controller(address) {
@@ -6041,7 +6038,7 @@ async function get_resolver_info(target) {
 function contract_for_resolver(address) {
 	return new ethers.Contract(address, RESOLVER_ABI, active_provider);
 }
-async function get_resolver(name0) {
+async function get_resolver(name0, skip_rewrite) {
 	// returns resolver | null | throws
 	const {ens} = network_state;
 	let func = ens.interface.getFunction('resolver');
@@ -6056,10 +6053,18 @@ async function get_resolver(name0) {
 	for (let i = 0; i < domains.length; i++) {
 		let {name, node} = domains[i];
 		let [address] = ens.interface.decodeFunctionResult(func, multi[i].data);
-		try {
-			let rewrite = resolve_state.debug.resolver[name] || resolve_state.debug.resolver['*'];
-			if (rewrite) address = rewrite;
-		} catch (err) {
+		if (!skip_rewrite) {
+			try {
+				let last = -1;
+				for (const [suffix, rewrite] of Object.entries(resolve_state.debug.resolver)) {
+					if (suffix.length > last && name === suffix || name.endsWith(`.${suffix}`)) {
+						address = rewrite;
+						last = suffix.length;
+						break;
+					}
+				}
+			} catch (err) {
+			}
 		}
 		check_abort();
 		if (is_null_hex(address)) continue;
