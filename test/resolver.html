@@ -1558,7 +1558,8 @@ const ERROR_ABI = new ethers.Interface([
 	// urg
 	'error CommitTooOld(uint256 latest, uint256 got, uint256 window)',
 	'error CommitTooNew(uint256 latest, uint256 got)',
-	'error UnexpectedString()'
+	'error UnexpectedString()',
+	'error InvalidProof()',
 ]);
 
 const CHAIN_NAMES = new Map([
@@ -1785,14 +1786,12 @@ const RECORDS = [
 	{
 		evm: 534352,
 		name: 'scroll',
-		icon: '<img src="https://scroll.io/favicon.ico">',
 		url(x) { return `https://scrollscan.com/address/${x}`; },
 	},
 	{
 		evm: 534351,
 		chain: 11155111,
 		name: 'scroll-sepolia',
-		icon: '<img src="https://scroll.io/favicon.ico">',
 		url(x) { return `https://sepolia.scrollscan.com/address/${x}`; },
 	},
 	{
@@ -2307,8 +2306,13 @@ function apply_debug() {
 			}
 		}
 		if (resolver) {
-			if (!is_object(resolver)) throw new Error('expected "resolver" {name: address}');
-			settings.resolver = Object.fromEntries(Object.entries(resolver).map(([k, v]) => [ens_normalize(k), ethers.getAddress(v)])); // validate and format
+			if (typeof resolver === 'string') {
+				settings.resolver = {'*': ethers.getAddress(resolver)};
+			} else if (is_object(resolver)) {
+				settings.resolver = Object.fromEntries(Object.entries(resolver).map(([k, v]) => [k === '*' ? k : ens_normalize(k), ethers.getAddress(v)])); // validate and format
+			} else {
+				throw new Error('expected "resolver" {name: address}');
+			}
 		}
 		if (records) {
 			if (!Array.isArray(records)) throw new Error('expected "records" array');
@@ -6053,7 +6057,7 @@ async function get_resolver(name0) {
 		let {name, node} = domains[i];
 		let [address] = ens.interface.decodeFunctionResult(func, multi[i].data);
 		try {
-			let rewrite = resolve_state.debug.resolver[name];
+			let rewrite = resolve_state.debug.resolver[name] || resolve_state.debug.resolver['*'];
 			if (rewrite) address = rewrite;
 		} catch (err) {
 		}
