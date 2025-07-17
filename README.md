@@ -6,9 +6,10 @@
 * 🏛️ Follows [**ENSIP-15**: ENS Name Normalization Standard](https://docs.ens.domains/ensip/15)
 	* Unicode: [`16.0.0`](./derive/data/16.0.0/) • CLDR: [`45`](./derive/data/CLDR-45/)
 	* Other implementations:
-		* Python — [namehash/**ens-normalize-python**](https://github.com/namehash/ens-normalize-python)
-		* Rust — [sevenzing/**ens-normalize-rs**](https://github.com/sevenzing/ens-normalize-rs)
-		* C# — [adraffy/**ENSNormalize.cs**](https://github.com/adraffy/ENSNormalize.cs)
+		* Python — [namehash/**ens-normalize-python**](https://github.com/namehash/ens-normalize-python)
+		* Rust — [sevenzing/**ens-normalize-rs**](https://github.com/sevenzing/ens-normalize-rs)
+		* Zig — [evmts/**z-ens-normalize**](https://github.com/evmts/z-ens-normalize)
+		* C# — [adraffy/**ENSNormalize.cs**](https://github.com/adraffy/ENSNormalize.cs)
 		* Java — [adraffy/**ENSNormalize.java**](https://github.com/adraffy/ENSNormalize.java)
 		* Go — [adraffy/**go-ens-normalize**](https://github.com/adraffy/go-ens-normalize)
 		* Javascript — [ensdomains/**eth-ens-namehash**](https://github.com/ensdomains/eth-ens-namehash)
