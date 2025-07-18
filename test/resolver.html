@@ -1446,7 +1446,7 @@ const EMOJI_INSPECT = '🔍️ Inspect';
 const EMOJI_CHECK = '✅️ Check';
 
 const RESOLVER_ABI = new ethers.Interface([
-	'function interfaceImplementer(bytes32 node, bytes4 interfaceID) external view returns (address)',
+	'function interfaceImplementer(bytes32 node, bytes4 interfaceID) view returns (address)',
 	'function resolve(bytes name, bytes data) view returns (bytes)',
 	'function resolve(bytes name, bytes data, bytes context) view returns (bytes)',
 	'function addr(bytes32 node, uint coinType) view returns (bytes)',
@@ -1455,11 +1455,12 @@ const RESOLVER_ABI = new ethers.Interface([
 	'function contenthash(bytes32 node) view returns (bytes)',
 	'function pubkey(bytes32 node) view returns (bytes32 x, bytes32 y)',
 	'function name(bytes32 node) view returns (string)',
-	'function recordVersions(bytes32 node) external view returns (uint64)',
-	'function multicall(bytes[] calldata data) external returns (bytes[] memory results)',
+	'function recordVersions(bytes32 node) view returns (uint64)',
+	'function multicall(bytes[] calldata data) returns (bytes[] memory results)',
 	'error OffchainLookup(address sender, string[] gateways, bytes request, bytes4 callback, bytes carry)',
-	'function supportsInterface(bytes4 interfaceID) external view returns (bool)',
+	'function supportsInterface(bytes4 interfaceID) view returns (bool)',
 	'function oracle() view returns (address)',
+	'function setAddr(bytes32 node, uint256 coinType, bytes addr)',
 ]);
 
 const CHAINS = [
@@ -4598,6 +4599,25 @@ async function resolve1(input, skip_norm) {
 				}));
 			}
 			if (is_wrapped) {
+				resolver_row.append(create('button', {
+					innerHTML: '🔍️ Wrapper Aware',
+					title: 'According to ENS Manager App',
+					style: { order: 10 },
+					async click() {
+						add_spinner(this);
+						this.disabled = true;
+						try {
+							// https://github.com/ensdomains/ens-app-v3/blob/main/src/hooks/resolver/useResolverIsAuthorised.ts#L54-L60
+							await resolver.setAddr.estimateGas(node, 60n, ethers.ZeroAddress, {
+								from: owner
+							});
+							add_row_tag(resolver_row, create_tag('good', '✅️ Wrapper Aware'));
+						} catch (err) {
+							add_row_tag(resolver_row, create_tag('stop', 'Not Wrapper Aware'));
+						}
+						this.remove();
+					}
+				}));
 				add_nft_links(normed_row, name_norm, network_state.wrapper.target, node);
 			} else if (nft_contract) {
 				add_nft_links(normed_row, name_norm, nft_contract.target, nft_token);
