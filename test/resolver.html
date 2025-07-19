@@ -4310,6 +4310,35 @@ async function resolve1(input, skip_norm) {
 		add_row_tag(resolver_row, create_tag('warn', `Not Set`));
 	}
 
+	const impls_row = create_row(create_link('https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar#discovery', {innerHTML: 'Interfaces'}));
+	impls_row.classList.add('impls');
+	output_div.append(impls_row);
+	let owner;
+	if (name_norm === 'eth') {
+		add_spinner(impls_row);
+		await load_known_interfaces(impls_row, resolver);
+		if (should_stop_resolving()) return;
+		remove_temporary(impls_row);
+		add_row_tag(impls_row, create_elapsed_since());
+	} else {
+		impls_row.classList.add('hide');
+		resolver_row.append(create('button', {
+			innerText: '🔍️ Interfaces',
+			style: { order: 10 },
+			async click() {
+				const t0 = Date.now();
+				const reqs = rpc_count;
+				this.remove();
+				impls_row.classList.remove('hide');
+				add_spinner(impls_row);
+				await load_known_interfaces(impls_row, resolver, owner);
+				if (!impls_row.isConnected) return;
+				remove_temporary(impls_row);
+				add_row_tag(impls_row, create_elapsed(Date.now() - t0, rpc_count - reqs));
+			}
+		}))
+	}
+
 	//let dns_txt_address;
 	if (resolver && resolver.__info.dnssec_oracle) {
 		// https://blog.ens.domains/post/gasless-dnssec
@@ -4539,7 +4568,7 @@ async function resolve1(input, skip_norm) {
 	resolve_state.available = available; // true|false|undefined
 
 	// get the owner
-	let is_wrapped, owner, nft_owner;
+	let is_wrapped, nft_owner;
 	if ((!resolver || !resolver.__dropped) && (!nft_backed || available !== undefined)) {
 		let node = namehash(name_norm);
 		let wrapped_data;
@@ -5215,30 +5244,6 @@ async function resolve1(input, skip_norm) {
 			remove_temporary(records_row);
 			add_row_tag(records_row, create_elapsed_since());
 		}
-
-		let row = create_row(create_link('https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar#discovery', {innerHTML: 'Interfaces'}));
-		row.classList.add('impls');
-		output_div.append(row);
-		if (name_norm === 'eth') {
-			add_spinner(row);
-			await load_known_interfaces(row, resolver, owner);
-			remove_temporary(row);
-			add_row_tag(row, create_elapsed_since());
-		} else {
-			row.append(create('button', {
-				innerText: 'Check Interfaces',
-				click() {
-					const t0 = Date.now();
-					const reqs = rpc_count;
-					this.remove();
-					add_spinner(row);
-					load_known_interfaces(row, resolver, owner).then(() => {
-						remove_temporary(row);
-						add_row_tag(row, create_elapsed(Date.now() - t0, rpc_count - reqs));
-					});
-				}
-			}))
-		}
 	}
 
 	if (input_is_address || !address) return; // nothing more to do
@@ -5821,16 +5826,16 @@ async function multicall_tryAggregate(calls) {
 	}));
 }
 async function load_known_interfaces(row, resolver, owner) {
+	const iface_nft = {iface: '0x6ccb2df4', title: 'NFT (721)'};
 	// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar
 	const dynamic_frag = RESOLVER_ABI.getFunction('interfaceImplementer');
 	const dynamic_ifaces = resolver.__info.impl ? [
-		//{iface: IFACE_ETH_NFT, name: 'NFT'},
-		{iface: '0x019a38fe', title: WRAPPER_NAME},
+		{iface: '0x019a38fe', title: `${WRAPPER_NAME} (1155)`},
 		{iface: IFACE_ETH_CONTROLLER, title: 'Controller'},
 		{iface: '0x018fac06', title: 'Old Controller'},
-		{iface: '0x6ccb2df4', title: 'NFT ERC-721'},
 		{iface: '0x7ba18ba1', title: 'Old Registrar'},
 		{iface: '0xd1a70fd3', title: 'Bulk Renewal'},
+		iface_nft,
 	] : [];
 	const supports_frag = RESOLVER_ABI.getFunction('supportsInterface');
 	const supports_ifaces = [
@@ -5872,6 +5877,10 @@ async function load_known_interfaces(row, resolver, owner) {
 				return {target, data: RESOLVER_ABI.encodeFunctionData(supports_frag, [x.iface])};
 			})
 		])];
+		if (should_stop_resolving()) return;
+		if (!owner) {
+			add_iface(iface_nft.title, await network_state.ens.owner(resolver.__basenode));
+		}
 		for (const x of dynamic_ifaces) {
 			const [ok, data] = multi.shift();
 			if (!ok) continue;
@@ -5885,7 +5894,6 @@ async function load_known_interfaces(row, resolver, owner) {
 					add_iface('Price Oracle', oracle);
 					add_iface('USD Oracle', await contract_for_price_oracle(oracle).usdOracle().catch(() => {}));
 				}
-				add_iface('Registrar', owner);
 				add_iface(WRAPPER_NAME, await controller.nameWrapper().catch(() => {}));
 				add_iface('Public Resolver', await network_state.ens.resolver(namehash('resolver.eth')));
 				//add_iface('DAO Wallet', await contract.owner().catch(() => ''));
