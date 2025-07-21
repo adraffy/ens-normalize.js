@@ -532,8 +532,10 @@ footer span:hover {
 	<button>Doubles</button>
 	<button>Triples</button>
 	<b>Norm:</b>
-	<button data-query="Already-norm" title="Already Normalized">✅️</button>
-	<button data-query="Needs-norm" title="Requires Normalization">☑️</button>
+	<button data-query="normalized" title="Valid Emoji">✅️ Emoji</button>
+	<button data-query="normalizes !normalized" title="Not Emoji">🆎️ Text</button>
+	<button style="background-color: #cfc" data-query="already-norm" title="Already Normalized">❤️=✅️</button>
+	<button style="background-color: #ccf" data-query="needs-norm" title="Requires Normalization">❤️≠✅️</button>
 	<b>Codepoints:</b>
 	<button data-query="!{200D}" class="raw" style="text-decoration: line-through">ZWJ</button>
 	<button data-query="{200D}" class="raw">ZWJ</button>
@@ -627,6 +629,7 @@ document.querySelector('footer span').addEventListener('click', () => {
 });
 
 top_btn.addEventListener('click', () => window.scrollTo(0, 0));
+window.EMOJI = all_emoji;
 
 (async () => {
 	try {
@@ -921,9 +924,11 @@ function update_search() {
 			arg = arg.slice(1);
 		}
 		let test_fn;
-		if (arg === 'normalized' || arg === 'is-norm') {
+		if (arg === 'normalized') {
 			test_fn = x => x.min_repeat;
-		} else if (arg === 'needs-norm' || arg === 'gets-normed') {
+		} else if (arg === 'normalizes') {
+			test_fn = x => x.is_norm;
+		} else if (arg === 'needs-norm') {
 			test_fn = x => x.min_repeat && x.form !== x.norm;
 		} else if (arg === 'already-norm') {
 			test_fn = x => x.min_repeat && x.form === x.norm;
@@ -975,7 +980,7 @@ function update_search() {
 			}
 			test_fn = x => (x.info && x.info.query.includes(arg)) || x.norm.includes(arg) || x.form.includes(arg);
 		}
-		results = test_fn ? results.filter(x => test_fn(x) === expect) : []; 
+		results = test_fn ? results.filter(x => !!test_fn(x) === expect) : [];
 	}
 	stack.push(results);
 	let set = new Set(stack.flat());
