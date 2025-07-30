@@ -1264,6 +1264,9 @@ Hebrew:
 <button data-name="‑888">Remapped Hyphen</button>
 <button data-name="۰۱۲۳۷۸۹">Mapped Arabic</button>
 
+<a href="https://www.dentity.com/"><b>Verifications:</b></a>
+<button>evanmoyer.eth</button>
+
 </div>
 <div id="options">
 	<button id="examples_btn">👀 Examples</button>
@@ -6020,6 +6023,7 @@ function extract_verificiation_kv(token) {
 		case 'Verified Account': {
 			let key = subj.verificationSource;
 			if (key === 'X') key = 'com.twitter';
+			if (key === 'Telegram') key = 'org.telegram';
 			if (key === 'Discord') key = 'com.discord';
 			return [key, subj.username ?? subj.name];
 		}
