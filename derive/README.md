@@ -56,10 +56,21 @@
 
 ## Upgrade Notes
 
+### 16.0.0 → 17.0.0
+
+* TODO
+	* Using 16.0.0 Security Files: `IdentifierStatus.txt`, `IdentifierType.txt`, `confusables.txt`, `intentional.txt`
+	* Script: Chisoi is incomplete
+* [Diff](./diffs/16.0.0-vs-17.0.0.txt) `node unicode-diff.js 16 17`
+* UAX-31: 
+	* **New** 5 Scripts: Berf, Chis, Sidt, Tayo, Tols
+* UTS-51:
+	* **New** 164 Emoji `node derive/dump-emoji-new.js`
+
 ### 15.1.0 → 16.0.0
 
 * [Release](https://www.unicode.org/versions/Unicode16.0.0/#Character_Additions)
-* [Diff](./diffs/15.1.0-vs-16.0.0.txt) `node unicode.diff.js 15.1 16`
+* [Diff](./diffs/15.1.0-vs-16.0.0.txt) `node unicode-diff.js 15.1 16`
 * CLDR
 	* `short-names.json` **Unchanged**
 	* `regions.json` **New** `"CQ"`
@@ -85,7 +96,7 @@
 ### 15.0.0 → 15.1.0
 
 * [Release](https://www.unicode.org/versions/Unicode15.1.0)
-* [Diff](./diffs/15.0.0-vs-15.1.0.txt) `node unicode.diff.js 15 15.1`
+* [Diff](./diffs/15.0.0-vs-15.1.0.txt) `node unicode-diff.js 15 15.1`
 * CLDR
 	* `short-names.json` **Unchanged**
 * UCD:
