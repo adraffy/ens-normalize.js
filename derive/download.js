@@ -2,6 +2,10 @@ import {readFile, writeFile, mkdir, access} from 'node:fs/promises';
 import {parse_version} from './utils.js';
 import {fetch_UAX31_script_kinds} from './script-kinds.js';
 
+//   latest: $ node download.js
+//    draft: $ node download.js draft
+// specific: $ node download.js 16.0.0
+
 const FILES = [
 	// UCD
 	['{SPEC}/ucd/UnicodeData.txt'],
@@ -29,13 +33,13 @@ const FILES = [
 	['{SECURITY}/intentional.txt'],
 ];
 
-function url_from_source(source, {major, minor = 0, patch = 0}) {
+function urls_from_source(source, {major, minor = 0, patch = 0, draft}) {
 	const UNICODE_BASE = `https://www.unicode.org/Public`;
 	let bases = {
-		'SPEC': `${UNICODE_BASE}/${major}.${minor}.${patch}`,
-		'IDNA': `${UNICODE_BASE}/idna/${major}.${minor}.${patch}`,
-		'EMOJI': `${UNICODE_BASE}/emoji/${major}.${minor}`,
-		'SECURITY': `${UNICODE_BASE}/security/${major}.${minor}.${patch}`,
+		SPEC: draft ? `${UNICODE_BASE}/draft/` : `${UNICODE_BASE}/${major}.${minor}.${patch}`,
+		IDNA: draft ? `${UNICODE_BASE}/draft/idna/` : `${UNICODE_BASE}/idna/${major}.${minor}.${patch}`,
+		EMOJI: draft ? `${UNICODE_BASE}/draft/emoji/` : `${UNICODE_BASE}/emoji/${major}.${minor}`,
+		SECURITY: draft ? `${UNICODE_BASE}/draft/security` : `${UNICODE_BASE}/security/${major}.${minor}.${patch}`
 	};
 	return new URL(source.replace(/\{([A-Z]+)\}/g, (_, key) => {
 		let base = bases[key];
@@ -45,28 +49,33 @@ function url_from_source(source, {major, minor = 0, patch = 0}) {
 }
 
 let force = false;
+let use_draft = false;
 let versions = process.argv.slice(2).filter(x => {
 	if (x === '--force') {
 		force = true;
-		return false;
+	} else if (x === 'draft') {
+		use_draft = true;
+	} else {
+		return true;
 	}
-	return true;
 }).map(parse_version);
 
 if (!versions.length) {
 	// if no version is provided
 	// attempt to determine the latest version
 	// by finding a version string in the UCD readme
-	console.log(`Determining latest version...`);
+	console.log(`Determining ${use_draft ? 'draft' : 'latest'} version...`);
 	try {
-		let res = await fetch('https://www.unicode.org/Public/UCD/latest/ReadMe.txt');
+		let res = await fetch(`https://www.unicode.org/Public/${use_draft ? 'draft' : 'UCD/latest'}/ReadMe.txt`);
 		if (res.status != 200) throw new Error(`HTTP error ${res.status}`);
 		let text = await res.text();
 		let match = text.match(/Version (\d+\.\d+\.\d+)/);
 		if (!match) throw new Error(`no match`);
-		let version = match[1];
-		console.log(`Latest version: ${version}`);
-		versions.push(parse_version(version));
+		let version_str = match[1];
+		console.log(`Latest version: ${version_str}`);
+		let version = parse_version(version_str);
+		if (use_draft) version.draft = true;
+		versions.push(version);
 	} catch (err) {
 		throw new Error(`Unable to determine latest Unicode version: ${err.message}`);
 	}
@@ -78,14 +87,14 @@ for (let version of versions) {
 	await download(version);
 }
 
-async function download({major, minor, patch}) {
-	let version = `${major}.${minor}.${patch}`;
-	let dir = new URL(`./data/${major}.${minor}.${patch}/`, import.meta.url);
+async function download(version) {
+	let version_str = `${version.major}.${version.minor}.${version.patch}`;
+	let dir = new URL(`./data/${version_str}/`, import.meta.url);
 	let changed = 0;
 	let cause;
-	console.log(`Downloading ${version} (${FILES.length} files)`);
+	console.log(`Downloading ${version_str} (${FILES.length} files)`);
 	for (let sources of FILES) {
-		let urls = sources.map(s => url_from_source(s, {major, minor, patch}));
+		let urls = sources.flatMap(s => urls_from_source(s, version));
 		try {
 			let [i, buf] = await Promise.any(urls.map(async (url, i) => {
 				let res = await fetch(url);
@@ -108,7 +117,7 @@ async function download({major, minor, patch}) {
 	// 20231023: include excluded/limited/recommended
 	// shitty but these are now versioned with the spec
 	try {
-		let kinds = await fetch_UAX31_script_kinds(version);
+		let kinds = await fetch_UAX31_script_kinds(version_str);
 		let name = `script-kinds.json`;
 		await write(name, Buffer.from(JSON.stringify(kinds)), `<${name}>`);
 	} catch (err) {
@@ -119,7 +128,7 @@ async function download({major, minor, patch}) {
 	const version_file = new URL('./version.json', dir);
 	if (changed || await access(version_file).catch(() => true)) {
 		// only bump the version if something changed
-		await writeFile(version_file, JSON.stringify({version, major, minor, patch, date: new Date()}));	
+		await writeFile(version_file, JSON.stringify({version: version_str, ...version, date: new Date()}));	
 		console.log(`Wrote: ${version_file}`);
 	}
 	async function write(name, buf, desc) {

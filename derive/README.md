@@ -20,11 +20,11 @@
 * [Unicode data files](https://www.unicode.org/Public/)
 	* Download Latest: `node download.js` 
 	* To download older version: `node download.js 12.1.0` 
-	* Already included: [Unicode 11-16](./data/)
+	* Already included: [Unicode 11-17](./data/)
 * [CLDR data files](https://github.com/unicode-org/cldr)
 	* Download Latest: `node parse-cldr.js`
 	* To download older version: `node parse-cldr.js 42` 
-	* Already included: [CLDR 42-45](./data/)
+	* Already included: [CLDR 42-47](./data/)
 	* ⚠️ Versioned separately from Unicode!
 
 ## Instructions
@@ -59,17 +59,25 @@
 ### 16.0.0 → 17.0.0
 
 * TODO
-	* Using 16.0.0 Security Files: `IdentifierStatus.txt`, `IdentifierType.txt`, `confusables.txt`, `intentional.txt`
 	* Script: Chisoi is incomplete
+	* Review all changes
+	* Check notes from 16
+* [**Release**](https://www.unicode.org/versions/Unicode17.0.0)
 * [Diff](./diffs/16.0.0-vs-17.0.0.txt) `node unicode-diff.js 16 17`
+* CLDR
+	* **Unchanged**
 * UAX-31: 
 	* **New** 5 Scripts: Berf, Chis, Sidt, Tayo, Tols
+* UTS-46:
+	* **New** [Miscellaneous Symbols Supplement](https://www.unicode.org/charts/PDF/Unicode-17.0/U170-1CEC0.pdf)
 * UTS-51:
 	* **New** 164 Emoji `node derive/dump-emoji-new.js`
+* Prior Validation: `node test/validate.js 1.11.0`
+	* Fails on new emoji
 
 ### 15.1.0 → 16.0.0
 
-* [Release](https://www.unicode.org/versions/Unicode16.0.0/#Character_Additions)
+* [**Release**](https://www.unicode.org/versions/Unicode16.0.0)
 * [Diff](./diffs/15.1.0-vs-16.0.0.txt) `node unicode-diff.js 15.1 16`
 * CLDR
 	* `short-names.json` **Unchanged**
@@ -95,7 +103,7 @@
 
 ### 15.0.0 → 15.1.0
 
-* [Release](https://www.unicode.org/versions/Unicode15.1.0)
+* [**Release**](https://www.unicode.org/versions/Unicode15.1.0)
 * [Diff](./diffs/15.0.0-vs-15.1.0.txt) `node unicode-diff.js 15 15.1`
 * CLDR
 	* `short-names.json` **Unchanged**

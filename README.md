@@ -26,10 +26,9 @@
 	* [Character Viewer](https://adraffy.github.io/ens-normalize.js/test/chars.html)
 	* [Confused Explainer](https://adraffy.github.io/ens-normalize.js/test/confused.html)
 * Related Projects:
-	* [Recent .eth Registrations](https://raffy.antistupid.com/eth/ens-regs.html) • [.eth Renews](https://raffy.antistupid.com/eth/ens-renews.html)
-	* [.eth Expirations](https://raffy.antistupid.com/eth/ens-exp.html)
+	* [Recent .eth Registrations](https://raffy.antistupid.com/eth/ens-regs.html) • [Renews](https://raffy.antistupid.com/eth/ens-renews.html) • [Expirations](https://raffy.antistupid.com/eth/ens-exp.html)
+	* [Label Database](https://github.com/adraffy/ens-labels/) • [Labelhash⁻¹](https://adraffy.github.io/ens-labels/demo.html) • [Brute-force](https://raffy.antistupid.com/eth/ens-brute.html)
 	* [Emoji Frequency Explorer](https://raffy.antistupid.com/eth/ens-emoji-freq.html)
-	* [Label Database](https://github.com/adraffy/ens-labels/) • [Labelhash⁻¹](https://adraffy.github.io/ens-labels/demo.html)
 	* [adraffy/**punycode.js**](https://github.com/adraffy/punycode.js/) • [Punycode Coder](https://adraffy.github.io/punycode.js/test/demo.html)
 	* [adraffy/**keccak.js**](https://github.com/adraffy/keccak.js/) • [Keccak Hasher](https://adraffy.github.io/keccak.js/test/demo.html)
 	* [adraffy/**emoji.js**](https://github.com/adraffy/emoji.js/) • [Emoji Parser](https://adraffy.github.io/emoji.js/test/demo.html)

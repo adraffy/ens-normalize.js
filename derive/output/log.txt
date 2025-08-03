@@ -1,5 +1,5 @@
-Build Date: 2025-08-02T21:07:46.900Z
-Unicode Version: 17.0.0 (2025-02-18T17:50:23.577Z)
+Build Date: 2025-08-03T22:55:28.313Z
+Unicode Version: 17.0.0 (2025-08-03T22:52:16.129Z)
 CLDR Version: 47 (2025-08-02T20:26:29.295Z)
 ==== RGI Emoji ZWJ Sequences ====
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
@@ -9072,6 +9072,7 @@ Removed Valid: 29B2 (⦲) EMPTY SET WITH SMALL CIRCLE ABOVE
 Removed Valid: 29B3 (⦳) EMPTY SET WITH RIGHT ARROW ABOVE
 Removed Valid: 29B4 (⦴) EMPTY SET WITH LEFT ARROW ABOVE
 Removed Valid: 29B5 (⦵) CIRCLE WITH HORIZONTAL BAR
+Removed Valid: 1CEF0 (𜻰) MEDIUM SMALL WHITE CIRCLE WITH HORIZONTAL BAR
 Removed Valid: 29B6 (⦶) CIRCLED VERTICAL BAR
 Removed Valid: 29B7 (⦷) CIRCLED PARALLEL
 Removed Valid: 29B8 (⦸) CIRCLED REVERSE SOLIDUS
@@ -12044,6 +12045,22 @@ Removed Ignored: 206E (⁮) NATIONAL DIGIT SHAPES
 Removed Ignored: 206F (⁯) NOMINAL DIGIT SHAPES
 Removed Ignored: 3164 (ㅤ) HANGUL FILLER
 Removed Ignored: FFA0 (ﾠ) HALFWIDTH HANGUL FILLER
+Removed Valid: 1CEE0 (𜻠) GEOMANTIC FIGURE POPULUS
+Removed Valid: 1CEE1 (𜻡) GEOMANTIC FIGURE TRISTITIA
+Removed Valid: 1CEE2 (𜻢) GEOMANTIC FIGURE ALBUS
+Removed Valid: 1CEE3 (𜻣) GEOMANTIC FIGURE FORTUNA MAJOR
+Removed Valid: 1CEE4 (𜻤) GEOMANTIC FIGURE RUBEUS
+Removed Valid: 1CEE5 (𜻥) GEOMANTIC FIGURE ACQUISITIO
+Removed Valid: 1CEE6 (𜻦) GEOMANTIC FIGURE CONJUNCTIO
+Removed Valid: 1CEE7 (𜻧) GEOMANTIC FIGURE CAPUT DRACONIS
+Removed Valid: 1CEE8 (𜻨) GEOMANTIC FIGURE LAETITIA
+Removed Valid: 1CEE9 (𜻩) GEOMANTIC FIGURE CARCER
+Removed Valid: 1CEEA (𜻪) GEOMANTIC FIGURE AMISSIO
+Removed Valid: 1CEEB (𜻫) GEOMANTIC FIGURE PUELLA
+Removed Valid: 1CEEC (𜻬) GEOMANTIC FIGURE FORTUNA MINOR
+Removed Valid: 1CEED (𜻭) GEOMANTIC FIGURE PUER
+Removed Valid: 1CEEE (𜻮) GEOMANTIC FIGURE CAUDA DRACONIS
+Removed Valid: 1CEEF (𜻯) GEOMANTIC FIGURE VIA
 Removed Valid: 2E (.) FULL STOP
 ==== Apply ScriptExt ====
 3BE (ξ) GREEK SMALL LETTER XI [Grek => Zyyy]
@@ -12053,13 +12070,13 @@ Disallowed Script: [Lina] Linear A [X]
 Disallowed Script: [Linb] Linear B [X]
 Disallowed Script: [Sgnw] SignWriting [X]
 Valid  | Name       | Test      | Rest      | Extra                     
-103582 | Japanese   | Kana+Hira | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
-114899 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
-103372 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
+103565 | Japanese   | Kana+Hira | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+114882 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+103355 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
 102201 | Bopomofo   | Bopo      | Hani      |                           
-  1538 | Latin      | Latn+Zyyy | Zinh      | π                         
-  1377 | Cyrillic   | Cyrl      | Zyyy+Zinh |                           
-  1363 | Greek      | Grek      | Zyyy+Zinh |                           
+  1521 | Latin      | Latn+Zyyy | Zinh      | π                         
+  1360 | Cyrillic   | Cyrl      | Zyyy+Zinh |                           
+  1346 | Greek      | Grek      | Zyyy+Zinh |                           
    450 | Arabic     | Arab      |           | -                         
    120 | Devanagari | Deva      |           |                           
     86 | Hebrew     | Hebr      |           | ₪                         
@@ -16022,8 +16039,8 @@ Removed Group: Chis
 [✓] Fastpath ASCII
 [✓] Groups Names are A-Z
 ==== Find Unique Characters ====
-Valid: 143515
-Multi: 103490
+Valid: 143498
+Multi: 103473
 Unique: 40025
 [✓] Matching Groups have Same CM Style
 [✓] Wholes are Valid
@@ -16037,102 +16054,102 @@ Non-Confusable Non-Unique: 44
 [✓] Ordered by Registration Likelihood
 ==== Group Summary ====
 Ord | Valid  | Uniqu | Primar | Second | CM   | Group     
-  1 |   1302 |    56 |   1301 |      1 | 0/51 | Latin     
-  2 | 103372 |     0 | 102127 |   1245 | 0/0  | Han       
-  3 |    440 |   417 |    439 |      1 |      | Arabic    
+  1 |   1285 |    56 |   1284 |      1 | 0/51 | Latin     
+  2 |    440 |   417 |    439 |      1 |      | Arabic    
+  3 | 103355 |     0 | 102127 |   1228 | 0/0  | Han       
   4 |    120 |   110 |    120 |      0 |      | Devanagari
-  5 | 103579 |   207 |    209 | 103370 | 0/58 | Japanese  
-  6 | 114898 | 11526 |  11528 | 103370 | 0/0  | Korean    
-  7 |   1324 |   105 |    105 |   1219 | 0/8  | Cyrillic  
+  5 | 114881 | 11526 |  11528 | 103353 | 0/0  | Korean    
+  6 | 103562 |   207 |    209 | 103353 | 0/58 | Japanese  
+  7 |   1307 |   105 |    105 |   1202 | 0/8  | Cyrillic  
   8 |     86 |    83 |     85 |      1 |      | Hebrew    
   9 |     87 |    85 |     86 |      1 |      | Thai      
  10 |     91 |    81 |     91 |      0 |      | Bengali   
  11 |    126 |   105 |    126 |      0 |      | Tamil     
- 12 |   1254 |    34 |     35 |   1219 | 0/11 | Greek     
+ 12 |   1237 |    34 |     35 |   1202 | 0/11 | Greek     
  13 |    186 |   186 |    186 |      0 |      | Tibetan   
  14 |     74 |    64 |     74 |      0 |      | Gurmukhi  
  15 |     80 |    80 |     80 |      0 |      | Lao       
  16 |     97 |    97 |     97 |      0 |      | Telugu    
- 17 | 102201 |    74 |     76 | 102125 | 0/0  | Bopomofo  
- 18 |     91 |    81 |     91 |      0 |      | Gujarati  
- 19 |    233 |   223 |    233 |      0 |      | Myanmar   
+ 17 |     91 |    81 |     91 |      0 |      | Gujarati  
+ 18 |    233 |   223 |    233 |      0 |      | Myanmar   
+ 19 | 102201 |    74 |     76 | 102125 | 0/0  | Bopomofo  
  20 |     42 |    42 |     42 |      0 |      | Georgian  
  21 |     44 |    43 |     44 |      0 |      | Armenian  
- 22 |    113 |   113 |    113 |      0 |      | Malayalam 
- 23 |    137 |   137 |    137 |      0 |      | Khmer     
- 24 |     90 |    80 |     90 |      0 |      | Kannada   
+ 22 |    137 |   137 |    137 |      0 |      | Khmer     
+ 23 |     90 |    80 |     90 |      0 |      | Kannada   
+ 24 |    113 |   113 |    113 |      0 |      | Malayalam 
  25 |    515 |   515 |    515 |      0 |      | Ethiopic  
  26 |    111 |   111 |    111 |      0 |      | Sinhala   
  27 |     89 |    89 |     89 |      0 |      | Oriya     
  28 |     61 |    50 |     61 |      0 |      | Thaana    
  29 |     91 |    75 |     91 |      0 |      | Syrc      
  30 |     54 |    54 |     54 |      0 |      | Nkoo      
- 31 |     29 |    29 |     29 |      0 |      | Phnx      
- 32 |     92 |    86 |     92 |      0 |      | Cher      
- 33 |    722 |   722 |    722 |      0 |      | Cans      
- 34 |     86 |    86 |     86 |      0 |      | Runr      
- 35 |    155 |   155 |    155 |      0 |      | Mong      
- 36 |     66 |    66 |     66 |      0 |      | Limb      
- 37 |     83 |    83 |     83 |      0 |      | Talu      
- 38 |   5089 |  5089 |   5089 |      0 |      | Egyp      
- 39 |     80 |    80 |     80 |      0 |      | Cham      
- 40 |   1234 |  1234 |   1234 |      0 |      | Xsux      
- 41 |     39 |    39 |     39 |      0 |      | Ital      
- 42 |     40 |    40 |     40 |      0 |      | Dsrt      
- 43 |     32 |    32 |     32 |      0 |      | Mero      
- 44 |     28 |    28 |     28 |      0 |      | Ogam      
- 45 |     23 |    23 |     23 |      0 |      | Tglg      
- 46 |     75 |    75 |     75 |      0 |      | Gonm      
+ 31 |     92 |    86 |     92 |      0 |      | Cher      
+ 32 |    722 |   722 |    722 |      0 |      | Cans      
+ 33 |     86 |    86 |     86 |      0 |      | Runr      
+ 34 |    155 |   155 |    155 |      0 |      | Mong      
+ 35 |     66 |    66 |     66 |      0 |      | Limb      
+ 36 |     83 |    83 |     83 |      0 |      | Talu      
+ 37 |   1221 |  1220 |   1221 |      0 |      | Yiii      
+ 38 |     80 |    80 |     80 |      0 |      | Cham      
+ 39 |     29 |    29 |     29 |      0 |      | Phnx      
+ 40 |   5089 |  5089 |   5089 |      0 |      | Egyp      
+ 41 |     73 |    73 |     73 |      0 |      | Orkh      
+ 42 |   1234 |  1234 |   1234 |      0 |      | Xsux      
+ 43 |     28 |    28 |     28 |      0 |      | Ogam      
+ 44 |     23 |    23 |     23 |      0 |      | Tglg      
+ 45 |    123 |   123 |    123 |      0 |      | Lana      
+ 46 |     88 |    86 |     88 |      0 |      | Glag      
  47 |     64 |    59 |     64 |      0 |      | Tfng      
- 48 |    654 |   654 |    654 |      0 |      | Bamu      
- 49 |     41 |    41 |     41 |      0 |      | Mroo      
- 50 |   1221 |  1220 |   1221 |      0 |      | Yiii      
- 51 |    292 |   292 |    292 |      0 |      | Vaii      
- 52 |     89 |    88 |     89 |      0 |      | Java      
- 53 |     77 |    73 |     77 |      0 |      | Copt      
- 54 |     50 |    50 |     50 |      0 |      | Xpeo      
- 55 |     73 |    73 |     73 |      0 |      | Orkh      
- 56 |     52 |    52 |     52 |      0 |      | Adlm      
- 57 |     90 |    90 |     90 |      0 |      | Bali      
- 58 |     56 |    56 |     56 |      0 |      | Batk      
- 59 |     88 |    68 |     88 |      0 |      | Cakm      
- 60 |     71 |    71 |     71 |      0 |      | Hmnp      
- 61 |     46 |    46 |     46 |      0 |      | Kali      
- 62 |    123 |   123 |    123 |      0 |      | Lana      
- 63 |     72 |    72 |     72 |      0 |      | Lepc      
- 64 |     41 |    41 |     41 |      0 |      | Lisu      
- 65 |     29 |    29 |     29 |      0 |      | Mand      
- 66 |     76 |    76 |     76 |      0 |      | Mtei      
- 67 |     93 |    93 |     93 |      0 |      | Newa      
- 68 |     46 |    46 |     46 |      0 |      | Olck      
- 69 |     39 |    36 |     39 |      0 |      | Osge      
- 70 |    149 |   149 |    149 |      0 |      | Plrd      
- 71 |     50 |    50 |     50 |      0 |      | Rohg      
- 72 |     80 |    80 |     80 |      0 |      | Saur      
- 73 |     72 |    72 |     72 |      0 |      | Sund      
- 74 |     55 |    45 |     55 |      0 |      | Sylo      
- 75 |     50 |    35 |     50 |      0 |      | Tale      
- 76 |     72 |    72 |     72 |      0 |      | Tavt      
- 77 |     59 |    59 |     59 |      0 |      | Wcho      
- 78 |     54 |    53 |     54 |      0 |      | Aghb      
- 79 |     62 |    62 |     62 |      0 |      | Ahom      
- 80 |     31 |    31 |     31 |      0 |      | Armi      
- 81 |     61 |    61 |     61 |      0 |      | Avst      
- 82 |     35 |    35 |     35 |      0 |      | Bass      
- 83 |     95 |    95 |     95 |      0 |      | Bhks      
- 84 |    113 |   113 |    113 |      0 |      | Brah      
- 85 |     31 |    30 |     31 |      0 |      | Bugi      
- 86 |     20 |    20 |     20 |      0 |      | Buhd      
- 87 |     49 |    49 |     49 |      0 |      | Cari      
- 88 |     28 |    28 |     28 |      0 |      | Chrs      
- 89 |     99 |    99 |     99 |      0 |      | Cpmn      
- 90 |     55 |    55 |     55 |      0 |      | Cprt      
- 91 |     70 |    70 |     70 |      0 |      | Diak      
- 92 |     70 |    60 |     70 |      0 |      | Dogr      
- 93 |    145 |   142 |    145 |      0 |      | Dupl      
- 94 |     41 |    40 |     41 |      0 |      | Elba      
- 95 |     23 |    23 |     23 |      0 |      | Elym      
- 96 |     88 |    86 |     88 |      0 |      | Glag      
+ 48 |    292 |   292 |    292 |      0 |      | Vaii      
+ 49 |     49 |    49 |     49 |      0 |      | Cari      
+ 50 |     39 |    39 |     39 |      0 |      | Ital      
+ 51 |     50 |    50 |     50 |      0 |      | Xpeo      
+ 52 |     40 |    40 |     40 |      0 |      | Dsrt      
+ 53 |     32 |    32 |     32 |      0 |      | Mero      
+ 54 |    113 |   113 |    113 |      0 |      | Brah      
+ 55 |     75 |    75 |     75 |      0 |      | Gonm      
+ 56 |    654 |   654 |    654 |      0 |      | Bamu      
+ 57 |     41 |    41 |     41 |      0 |      | Mroo      
+ 58 |     89 |    88 |     89 |      0 |      | Java      
+ 59 |     77 |    73 |     77 |      0 |      | Copt      
+ 60 |     52 |    52 |     52 |      0 |      | Adlm      
+ 61 |     90 |    90 |     90 |      0 |      | Bali      
+ 62 |     56 |    56 |     56 |      0 |      | Batk      
+ 63 |     88 |    68 |     88 |      0 |      | Cakm      
+ 64 |     71 |    71 |     71 |      0 |      | Hmnp      
+ 65 |     46 |    46 |     46 |      0 |      | Kali      
+ 66 |     72 |    72 |     72 |      0 |      | Lepc      
+ 67 |     41 |    41 |     41 |      0 |      | Lisu      
+ 68 |     29 |    29 |     29 |      0 |      | Mand      
+ 69 |     76 |    76 |     76 |      0 |      | Mtei      
+ 70 |     93 |    93 |     93 |      0 |      | Newa      
+ 71 |     46 |    46 |     46 |      0 |      | Olck      
+ 72 |     39 |    36 |     39 |      0 |      | Osge      
+ 73 |    149 |   149 |    149 |      0 |      | Plrd      
+ 74 |     50 |    50 |     50 |      0 |      | Rohg      
+ 75 |     80 |    80 |     80 |      0 |      | Saur      
+ 76 |     72 |    72 |     72 |      0 |      | Sund      
+ 77 |     55 |    45 |     55 |      0 |      | Sylo      
+ 78 |     50 |    35 |     50 |      0 |      | Tale      
+ 79 |     72 |    72 |     72 |      0 |      | Tavt      
+ 80 |     59 |    59 |     59 |      0 |      | Wcho      
+ 81 |     54 |    53 |     54 |      0 |      | Aghb      
+ 82 |     62 |    62 |     62 |      0 |      | Ahom      
+ 83 |     31 |    31 |     31 |      0 |      | Armi      
+ 84 |     61 |    61 |     61 |      0 |      | Avst      
+ 85 |     35 |    35 |     35 |      0 |      | Bass      
+ 86 |     95 |    95 |     95 |      0 |      | Bhks      
+ 87 |     31 |    30 |     31 |      0 |      | Bugi      
+ 88 |     20 |    20 |     20 |      0 |      | Buhd      
+ 89 |     28 |    28 |     28 |      0 |      | Chrs      
+ 90 |     99 |    99 |     99 |      0 |      | Cpmn      
+ 91 |     55 |    55 |     55 |      0 |      | Cprt      
+ 92 |     70 |    70 |     70 |      0 |      | Diak      
+ 93 |     70 |    60 |     70 |      0 |      | Dogr      
+ 94 |    145 |   142 |    145 |      0 |      | Dupl      
+ 95 |     41 |    40 |     41 |      0 |      | Elba      
+ 96 |     23 |    23 |     23 |      0 |      | Elym      
  97 |     63 |    63 |     63 |      0 |      | Gong      
  98 |     30 |    27 |     30 |      0 |      | Goth      
  99 |    103 |    82 |    103 |      0 |      | Gran      

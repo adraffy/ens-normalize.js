@@ -927,8 +927,8 @@ function write_json(name, json, indent) {
 	let str = JSON.stringify(json, null, indent ? '\t' : null); // 20240123: added optional indent for better diffs
 	try {
 		// 20230220: dont bump the file if nothing has changed
-		// 20250802: deepStrictEqual appears bugged on node 24.4.1, fixed in 24.5.0
-		deepStrictEqual(...[readFileSync(file), str].map(x => {
+		// 20250802: deepStrictEqual appears bugged on node 24.x
+		deepEqual(...[readFileSync(file), str].map(x => {
 			let json = JSON.parse(x);
 			if (Array.isArray(json)) return json;
 			let {created, ...rest} = json; // remove dated keys
