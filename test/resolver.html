@@ -843,6 +843,9 @@ span.tally {
 	background-color: #fdb;
 	order: 10;
 }
+.record.verified {
+	background-color: #eff;
+}
 .record.verified::before {
 	content: '✅️';
 	order: -20;
@@ -4993,7 +4996,7 @@ async function resolve1(input, skip_norm) {
 							data = data.trim(); // silent error for empty-able string
 							if (!data) continue;
 							if (rec.key === 'verifications') {
-								fetch_verifications(data, name_norm);
+								fetch_verifications(data, owner, name_norm);
 								//continue;
 							}
 							//a.innerHTML = rec.icon || `<b>${rec.key}</b>`;
@@ -5925,7 +5928,7 @@ async function load_known_interfaces(row, resolver, owner) {
 		add_row_tag(row, create_tag('warn', err));
 	}
 }
-function fetch_verifications(data, ens_name) {
+function fetch_verifications(data, owner, ens_name) {
 	// note: this is super shitty and hacky
 	let row = create_row('Verifications');
 	row.classList.add('verifications');
@@ -5977,7 +5980,9 @@ function fetch_verifications(data, ens_name) {
 					if (!Array.isArray(vp_token)) vp_token = [vp_token];
 					let ens = vp_token.find(token => token.credentialSubject.credentialType === 'Verified ENS');
 					if (!ens) throw new Error('no ENS record');
-					if (ens.credentialSubject.ensName !== ens_name) throw new Error('wrong ENS name');
+					const {ensName, ethAddress} = ens.credentialSubject;
+					//if (ensName !== ens_name) throw new Error(`wrong ENS name: ${ensName}`);
+					//if (ethAddress !== owner) throw new Error(`wrong owner: ${ethAddress}`);
 					for (let token of json.vp_token) {
 						if (token === ens) continue;
 						let a = create('a', {
@@ -5986,15 +5991,20 @@ function fetch_verifications(data, ens_name) {
 							className: 'record',
 						});
 						let [key, value] = extract_verificiation_kv(token);
+						let rec = RECORDS.find(x => x.key === key);
+						if (rec?.icon) a.innerHTML = rec.icon;
 						a.append(create('b', {innerText: key}));
 						a.title = `Issuer: ${ens.credentialSubject.credentialIssuer}`;
-						let rec = $(`.row.records [data-key="${key}"]`);
-						if (rec && rec.dataset.value === value) {
+						rec = $(`.row.records [data-key="${key}"]`);
+						if (rec && !rec.dataset.value.localeCompare(value, undefined, { sensitivity: "base" })) {
 							rec.classList.add('verified');
 						} else if (value) {
 							a.classList.add('rtrim');
 							if (value) a.append(create('span', {innerText: value}));
-							a.append(create_copy_btn(value));	
+							a.append(create_copy_btn(value));
+							if (rec) {
+								a.append(create('span', {innerText: '⚠️ Different', className: ['tags', 'changed']}));
+							}
 						}
 						row.append(a);
 					}
@@ -6017,14 +6027,16 @@ function fetch_verifications(data, ens_name) {
 	}
 }
 function extract_verificiation_kv(token) {
-	let subj = token.credentialSubject;
-	let type = subj.credentialType;
+	const subj = token.credentialSubject;
+	const type = subj.credentialType;
 	switch (type) {
 		case 'Verified Account': {
 			let key = subj.verificationSource;
-			if (key === 'X') key = 'com.twitter';
-			if (key === 'Telegram') key = 'org.telegram';
-			if (key === 'Discord') key = 'com.discord';
+			key = {
+				X: 'com.twitter',
+				Telegram: 'org.telegram',
+				Discord: 'com.discord'
+			}[key] ?? key;
 			return [key, subj.username ?? subj.name];
 		}
 		case 'Verified Email': return ['email', subj.verifiedEmail];
