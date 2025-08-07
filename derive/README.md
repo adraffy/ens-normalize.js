@@ -1,6 +1,7 @@
 # Derive Data Files
 
 * [Unicode Standard](https://www.unicode.org/versions/latest/)
+	* [Release Dates](https://www.unicode.org/history/publicationdates.html#Release_Dates)
 * [Unicode Technical Standard #46: IDNA](https://www.unicode.org/reports/tr46/)
 	* [unicode-logic.js/`derive_idna_rules()`](./unicode-logic.js#L581) — [spec](https://unicode.org/reports/tr46/#Implementation_Notes)
 	* [idna.js/`ens_idna_rules()`](./idna.js)
@@ -68,8 +69,10 @@
 	* **Unchanged**
 * UAX-31: 
 	* **New** 5 Scripts: Berf, Chis, Sidt, Tayo, Tols
+	* **Changed** Bopo &rarr; Limited Use
 * UTS-46:
 	* **New** [Miscellaneous Symbols Supplement](https://www.unicode.org/charts/PDF/Unicode-17.0/U170-1CEC0.pdf)
+	* **Fixed** Missing Disallowed from Unicode 16
 * UTS-51:
 	* **New** 164 Emoji `node derive/dump-emoji-new.js`
 * Prior Validation: `node test/validate.js 1.11.0`

@@ -1,5 +1,5 @@
 # IdentifierType.txt
-# Date: 2025-07-07, 20:15:34 GMT
+# Date: 2025-08-04, 21:58:43 GMT
 # © 2025 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use and license, see https://www.unicode.org/terms_of_use.html
@@ -12,7 +12,10 @@
 # Format
 #
 # Field 0: code point
-# Field 1: set of Identifier_Type values (see Table 1 of http://www.unicode.org/reports/tr39)
+# Field 1: set of Identifier_Type values
+#          See the "Identifier_Status and Identifier_Type" table of UTS #39:
+#          https://www.unicode.org/reports/tr39/#Identifier_Status_and_Type
+
 #
 # For the purpose of regular expressions, the property Identifier_Type is defined as
 # mapping each code point to a set of enumerated values.
@@ -145,7 +148,6 @@
 08BB..08BD    ; Recommended                    # 9.0    [3] ARABIC LETTER AFRICAN FEH..ARABIC LETTER AFRICAN NOON
 08BE..08C2    ; Recommended                    # 13.0   [5] ARABIC LETTER PEH WITH SMALL V..ARABIC LETTER KEHEH WITH SMALL V
 08C7          ; Recommended                    # 13.0       ARABIC LETTER LAM WITH SMALL ARABIC LETTER TAH ABOVE
-08C9          ; Recommended                    # 14.0       ARABIC SMALL FARSI YEH
 0901..0903    ; Recommended                    # 1.1    [3] DEVANAGARI SIGN CANDRABINDU..DEVANAGARI SIGN VISARGA
 0905..090B    ; Recommended                    # 1.1    [7] DEVANAGARI LETTER A..DEVANAGARI LETTER VOCALIC R
 090D..0928    ; Recommended                    # 1.1   [28] DEVANAGARI LETTER CANDRA E..DEVANAGARI LETTER NA
@@ -1609,7 +1611,6 @@ AC00..D7A3    ; Recommended                    # 2.0 [11172] HANGUL SYLLABLE GA.
 11301         ; Recommended                    # 7.0        GRANTHA SIGN CANDRABINDU
 11303         ; Recommended                    # 7.0        GRANTHA SIGN VISARGA
 1133C         ; Recommended                    # 7.0        GRANTHA SIGN NUKTA
-16FF0..16FF1  ; Recommended                    # 13.0   [2] VIETNAMESE ALTERNATE READING MARK CA..VIETNAMESE ALTERNATE READING MARK NHAY
 1E7E0..1E7E6  ; Recommended                    # 14.0   [7] ETHIOPIC SYLLABLE HHYA..ETHIOPIC SYLLABLE HHYO
 1E7E8..1E7EB  ; Recommended                    # 14.0   [4] ETHIOPIC SYLLABLE GURAGE HHWA..ETHIOPIC SYLLABLE HHWE
 1E7ED..1E7EE  ; Recommended                    # 14.0   [2] ETHIOPIC SYLLABLE GURAGE MWI..ETHIOPIC SYLLABLE GURAGE MWEE
@@ -1673,7 +1674,7 @@ AC00..D7A3    ; Recommended                    # 2.0 [11172] HANGUL SYLLABLE GA.
 28CD2         ; Recommended                    # 3.1        CJK UNIFIED IDEOGRAPH-28CD2
 29D98         ; Recommended                    # 3.1        CJK UNIFIED IDEOGRAPH-29D98
 
-# Total code points: 33776
+# Total code points: 33773
 
 #	Identifier_Type:	Inclusion
 
@@ -1786,12 +1787,6 @@ ABF0..ABF9    ; Limited_Use                    # 5.2   [10] MEETEI MAYEK DIGIT Z
 1145F         ; Limited_Use                    # 12.0       NEWA LETTER VEDIC ANUSVARA
 11460..11461  ; Limited_Use                    # 13.0   [2] NEWA SIGN JIHVAMULIYA..NEWA SIGN UPADHMANIYA
 11AB0..11ABF  ; Limited_Use                    # 14.0  [16] CANADIAN SYLLABICS NATTILIK HI..CANADIAN SYLLABICS SPA
-11D60..11D65  ; Limited_Use                    # 11.0   [6] GUNJALA GONDI LETTER A..GUNJALA GONDI LETTER UU
-11D67..11D68  ; Limited_Use                    # 11.0   [2] GUNJALA GONDI LETTER EE..GUNJALA GONDI LETTER AI
-11D6A..11D8E  ; Limited_Use                    # 11.0  [37] GUNJALA GONDI LETTER OO..GUNJALA GONDI VOWEL SIGN UU
-11D90..11D91  ; Limited_Use                    # 11.0   [2] GUNJALA GONDI VOWEL SIGN EE..GUNJALA GONDI VOWEL SIGN AI
-11D93..11D98  ; Limited_Use                    # 11.0   [6] GUNJALA GONDI VOWEL SIGN OO..GUNJALA GONDI OM
-11DA0..11DA9  ; Limited_Use                    # 11.0  [10] GUNJALA GONDI DIGIT ZERO..GUNJALA GONDI DIGIT NINE
 11FB0         ; Limited_Use                    # 13.0       LISU LETTER YHA
 16800..16A38  ; Limited_Use                    # 6.0  [569] BAMUM LETTER PHASE-A NGKUE MFON..BAMUM LETTER PHASE-F VUEQ
 16F00..16F44  ; Limited_Use                    # 6.1   [69] MIAO LETTER PA..MIAO LETTER HHA
@@ -1809,7 +1804,7 @@ ABF0..ABF9    ; Limited_Use                    # 5.2   [10] MEETEI MAYEK DIGIT Z
 1E94B         ; Limited_Use                    # 12.0       ADLAM NASALIZATION MARK
 1E950..1E959  ; Limited_Use                    # 9.0   [10] ADLAM DIGIT ZERO..ADLAM DIGIT NINE
 
-# Total code points: 5107
+# Total code points: 5044
 
 #	Identifier_Type:	Limited_Use Uncommon_Use
 
@@ -3550,6 +3545,7 @@ A8FC          ; Uncommon_Use Obsolete Not_XID  # 8.0        DEVANAGARI SIGN SIDD
 0671          ; Technical                      # 1.1        ARABIC LETTER ALEF WASLA
 06E5..06E6    ; Technical                      # 1.1    [2] ARABIC SMALL WAW..ARABIC SMALL YEH
 0870..0887    ; Technical                      # 14.0  [24] ARABIC LETTER ALEF WITH ATTACHED FATHA..ARABIC BASELINE ROUND DOT
+08C9          ; Technical                      # 14.0       ARABIC SMALL FARSI YEH
 0950          ; Technical                      # 1.1        DEVANAGARI OM
 0953..0954    ; Technical                      # 1.1    [2] DEVANAGARI GRAVE ACCENT..DEVANAGARI ACUTE ACCENT
 097D          ; Technical                      # 4.1        DEVANAGARI LETTER GLOTTAL STOP
@@ -3635,7 +3631,7 @@ FE73          ; Technical                      # 3.2        ARABIC TAIL FRAGMENT
 1DF00..1DF1E  ; Technical                      # 14.0  [31] LATIN SMALL LETTER FENG DIGRAPH WITH TRILL..LATIN SMALL LETTER S WITH CURL
 1DF25..1DF2A  ; Technical                      # 15.0   [6] LATIN SMALL LETTER D WITH MID-HEIGHT LEFT HOOK..LATIN SMALL LETTER T WITH MID-HEIGHT LEFT HOOK
 
-# Total code points: 681
+# Total code points: 682
 
 #	Identifier_Type:	Technical Exclusion
 
@@ -3943,6 +3939,12 @@ A930..A953    ; Exclusion                      # 5.1   [36] REJANG LETTER KA..RE
 11D3C..11D3D  ; Exclusion                      # 10.0   [2] MASARAM GONDI VOWEL SIGN AI..MASARAM GONDI VOWEL SIGN O
 11D3F..11D47  ; Exclusion                      # 10.0   [9] MASARAM GONDI VOWEL SIGN AU..MASARAM GONDI RA-KARA
 11D50..11D59  ; Exclusion                      # 10.0  [10] MASARAM GONDI DIGIT ZERO..MASARAM GONDI DIGIT NINE
+11D60..11D65  ; Exclusion                      # 11.0   [6] GUNJALA GONDI LETTER A..GUNJALA GONDI LETTER UU
+11D67..11D68  ; Exclusion                      # 11.0   [2] GUNJALA GONDI LETTER EE..GUNJALA GONDI LETTER AI
+11D6A..11D8E  ; Exclusion                      # 11.0  [37] GUNJALA GONDI LETTER OO..GUNJALA GONDI VOWEL SIGN UU
+11D90..11D91  ; Exclusion                      # 11.0   [2] GUNJALA GONDI VOWEL SIGN EE..GUNJALA GONDI VOWEL SIGN AI
+11D93..11D98  ; Exclusion                      # 11.0   [6] GUNJALA GONDI VOWEL SIGN OO..GUNJALA GONDI OM
+11DA0..11DA9  ; Exclusion                      # 11.0  [10] GUNJALA GONDI DIGIT ZERO..GUNJALA GONDI DIGIT NINE
 11DB0..11DDB  ; Exclusion                      # 17.0  [44] TOLONG SIKI LETTER I..TOLONG SIKI UNGGA
 11DE0..11DE9  ; Exclusion                      # 17.0  [10] TOLONG SIKI DIGIT ZERO..TOLONG SIKI DIGIT NINE
 11EE0..11EF6  ; Exclusion                      # 11.0  [23] MAKASAR LETTER KA..MAKASAR VOWEL SIGN O
@@ -4017,7 +4019,7 @@ A930..A953    ; Exclusion                      # 5.1   [36] REJANG LETTER KA..RE
 1E800..1E8C4  ; Exclusion                      # 7.0  [197] MENDE KIKAKUI SYLLABLE M001 KI..MENDE KIKAKUI SYLLABLE M060 NYON
 1E8D0..1E8D6  ; Exclusion                      # 7.0    [7] MENDE KIKAKUI COMBINING NUMBER TEENS..MENDE KIKAKUI COMBINING NUMBER MILLIONS
 
-# Total code points: 20799
+# Total code points: 20862
 
 #	Identifier_Type:	Exclusion Not_XID
 
@@ -4316,6 +4318,7 @@ D7CB..D7FB    ; Obsolete                       # 5.2   [49] HANGUL JONGSEONG NIE
 101FD         ; Obsolete                       # 5.1        PHAISTOS DISC SIGN COMBINING OBLIQUE STROKE
 102E0         ; Obsolete                       # 7.0        COPTIC EPACT THOUSANDS MARK
 16FE3         ; Obsolete                       # 12.0       OLD CHINESE ITERATION MARK
+16FF0..16FF1  ; Obsolete                       # 13.0   [2] VIETNAMESE ALTERNATE READING MARK CA..VIETNAMESE ALTERNATE READING MARK NHAY
 1B000..1B001  ; Obsolete                       # 6.0    [2] KATAKANA LETTER ARCHAIC E..HIRAGANA LETTER ARCHAIC YE
 1B002..1B11E  ; Obsolete                       # 10.0 [285] HENTAIGANA LETTER A-1..HENTAIGANA LETTER N-MU-MO-2
 1B11F..1B122  ; Obsolete                       # 14.0   [4] HIRAGANA LETTER ARCHAIC WU..KATAKANA LETTER ARCHAIC WU
@@ -4325,7 +4328,7 @@ D7CB..D7FB    ; Obsolete                       # 5.2   [49] HANGUL JONGSEONG NIE
 1B164..1B167  ; Obsolete                       # 12.0   [4] KATAKANA LETTER SMALL WI..KATAKANA LETTER SMALL N
 1E08F         ; Obsolete                       # 15.0       COMBINING CYRILLIC SMALL LETTER BYELORUSSIAN-UKRAINIAN I
 
-# Total code points: 1637
+# Total code points: 1639
 
 #	Identifier_Type:	Obsolete Not_XID
 
@@ -4900,7 +4903,6 @@ FFFD          ; Not_XID                        # 1.1        REPLACEMENT CHARACTE
 1FAD7..1FAD9  ; Not_XID                        # 14.0   [3] POURING LIQUID..JAR
 1FADA..1FADB  ; Not_XID                        # 15.0   [2] GINGER ROOT..PEA POD
 1FADC         ; Not_XID                        # 16.0       ROOT VEGETABLE
-1FADD         ; Not_XID                        # 17.0       APPLE CORE
 1FADF         ; Not_XID                        # 16.0       SPLATTER
 1FAE0..1FAE7  ; Not_XID                        # 14.0   [8] MELTING FACE..BUBBLES
 1FAE8         ; Not_XID                        # 15.0       SHAKING FACE
@@ -4914,7 +4916,7 @@ FFFD          ; Not_XID                        # 1.1        REPLACEMENT CHARACTE
 1FBCB..1FBEF  ; Not_XID                        # 16.0  [37] WHITE CROSS MARK..TOP LEFT JUSTIFIED LOWER RIGHT QUARTER BLACK CIRCLE
 1FBFA         ; Not_XID                        # 17.0       ALARM BELL SYMBOL
 
-# Total code points: 6488
+# Total code points: 6487
 
 #	Identifier_Type:	Not_NFKC
 

@@ -254,4 +254,5 @@ export const RESTRICTED_SCRIPTS = [
 	'Sidt', // Sidetic
 	'Tayo', // Tai Yo
 	'Tols', // Tolong Siki
+	// Bopo is now Limited Use
 ];
