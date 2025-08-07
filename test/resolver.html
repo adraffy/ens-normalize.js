@@ -1217,18 +1217,19 @@ Hebrew Geresh:
 <button data-name="あー.〇一.一ー.一.ー.ᅳ">CJK Dash</button>
 
 <a href="https://www.unicode.org/versions/Unicode15.0.0/"><b>Unicode 15.0:</b></a>
-<button data-name="{1F6DC}{1FA75}{1FA76}{1FA77}{1FA87}{1FA88}{1FAAD}{1FAAE}{1FAAF}{1FABB}{1FABC}{1FABD}{1FABF}{1FACE}{1FACF}{1FADA}{1FADB}{1FAE8}{1FAF7}{1FAF8}">Single Emoji (20)</button>
-<button data-name="{1FAF7}{1F3FB}{1FAF7}{1F3FC}{1FAF7}{1F3FD}{1FAF7}{1F3FE}{1FAF7}{1F3FF}{1FAF8}{1F3FB}{1FAF8}{1F3FC}{1FAF8}{1F3FD}{1FAF8}{1F3FE}{1FAF8}{1F3FF}">Sequences (10)</button>
-<button data-name="{1F426}{200D}{2B1B}">Black Bird</button>
+<a href="./emoji.html#q=v15"><button>Emoji (31)</button></a>
 
 <a href="https://www.unicode.org/versions/Unicode15.1.0/"><b>Unicode 15.1:</b></a>
 <button>≠.≮.≯</button>
-<button data-name="{26D3}{200D}{1F4A5}.{1F344}{200D}{1F7EB}.{1F34B}{200D}{1F7E9}.{1F426}{200D}{1F525}.{1F642}{200D}{2194}.{1F642}{200D}{2195}.{1F9D1}{200D}{1F9D2}.{1F9D1}{200D}{1F9D1}{200D}{1F9D2}.{1F9D1}{200D}{1F9D2}{200D}{1F9D2}.{1F9D1}{200D}{1F9D1}{200D}{1F9D2}{200D}{1F9D2}">ZWJ Sequences (10)</button>
-<button data-name="{1F3C3}{1F3FB}{200D}{27A1}.{1F3C3}{1F3FB}{200D}{27A1}.{1F3C3}{1F3FC}{200D}{27A1}.{1F3C3}{1F3FD}{200D}{27A1}.{1F3C3}{1F3FE}{200D}{27A1}.{1F3C3}{1F3FF}{200D}{27A1}">Directional (108)</button>
+<a href="./emoji.html#q=v15.1"><button>Emoji (118)</button></a>
 
-<a href="https://www.unicode.org/versions/Unicode15.1.0/"><b>Unicode 16.0:</b></a>
-<button data-name="{1FA89}{1FA8F}{1FABE}{1FAC6}{1FADC}{1FADF}{1FAE9}.{1F1E8}{1F1F6}">Emoji (8)</button>
+<a href="https://www.unicode.org/versions/Unicode16.0.0/"><b>Unicode 16.0:</b></a>
+<a href="./emoji.html#q=v16"><button>Emoji (8)</button></a>
 <button data-name="{1CC4A}{1CC6D}{1CC96}">Legacy Computing</button>
+
+<a href="https://www.unicode.org/versions/Unicode17.0.0/"><b>Unicode 17.0:</b></a>
+<a href="./emoji.html#q=v17"><button>Emoji (163)</button></a>
+<button data-name="{1CEC0}{1CEC1}{1CEC2}{1CEC3}{1CEC4}{1CEC5}{1CEC6}{1CEC7}{1CEC8}{1CEC9}{1CECA}{1CECB}{1CECC}{1CECD}{1CECE}{1CECF}{1CED0}">Miscellaneous Symbols</button>
 
 <b>Fenced:</b>
 <button>O'Brian</button>
@@ -2024,7 +2025,7 @@ add_digits('Thai', '๐๑๒๓๔๕๖๗๘๙');
 //add_digits('Bengali', '০১২৩৪৫৬৭৮৯');
 //add_digits('Tamil', '௦௧௨௩௪௫௬௭௮௯');
 
-for (let btn of $$('#examples button:not([id]), button[data-name]')) {
+for (let btn of $$('#examples > button:not([id]), button[data-name]')) {
 	let name = btn.innerText;
 	if (btn.dataset.name) name = btn.dataset.name;
 	if (typeof btn.dataset.raw !== 'string') name = replace_escapes(name);

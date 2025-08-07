@@ -60,9 +60,8 @@
 ### 16.0.0 → 17.0.0
 
 * TODO
-	* Script: Chisoi is incomplete
+	* Script: Chisoi is [incomplete](https://bsky.app/profile/adraffy.bsky.social/post/3lvrroos2ck25)
 	* Review all changes
-	* Check notes from 16
 * [**Release**](https://www.unicode.org/versions/Unicode17.0.0)
 * [Diff](./diffs/16.0.0-vs-17.0.0.txt) `node unicode-diff.js 16 17`
 * CLDR
