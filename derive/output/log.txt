@@ -1,4 +1,4 @@
-Build Date: 2025-08-07T02:23:11.441Z
+Build Date: 2025-08-10T04:01:24.086Z
 Unicode Version: 17.0.0 (2025-08-07T02:22:49.397Z)
 CLDR Version: 47 (2025-08-02T20:26:29.295Z)
 ==== RGI Emoji ZWJ Sequences ====
@@ -6838,6 +6838,10 @@ Removed Valid: 1FA50 (🩐) WHITE CHESS KNIGHT-BISHOP
 Removed Valid: 1FA51 (🩑) BLACK CHESS KNIGHT-QUEEN
 Removed Valid: 1FA52 (🩒) BLACK CHESS KNIGHT-ROOK
 Removed Valid: 1FA53 (🩓) BLACK CHESS KNIGHT-BISHOP
+Removed Valid: 1FA54 (🩔) WHITE CHESS FERZ
+Removed Valid: 1FA55 (🩕) WHITE CHESS ALFIL
+Removed Valid: 1FA56 (🩖) BLACK CHESS FERZ
+Removed Valid: 1FA57 (🩗) BLACK CHESS ALFIL
 Removed Mapped: 2B0 (ʰ) MODIFIER LETTER SMALL H => [68] (h) LATIN SMALL LETTER H
 Removed Mapped: 2B1 (ʱ) MODIFIER LETTER SMALL H WITH HOOK => [266] (ɦ) LATIN SMALL LETTER H WITH HOOK
 Removed Mapped: 2B2 (ʲ) MODIFIER LETTER SMALL J => [6A] (j) LATIN SMALL LETTER J
@@ -8209,6 +8213,7 @@ Removed Valid: 22FD (⋽) CONTAINS WITH OVERBAR
 Removed Valid: 22FE (⋾) SMALL CONTAINS WITH OVERBAR
 Removed Valid: 22FF (⋿) Z NOTATION BAG MEMBERSHIP
 Removed Valid: 2BF9 (⯹) EQUALS SIGN WITH INFINITY BELOW
+Removed Valid: 2B96 (⮖) EQUALS SIGN WITH INFINITY ABOVE
 Removed Valid: 2B41 (⭁) REVERSE TILDE OPERATOR ABOVE LEFTWARDS ARROW
 Removed Valid: 2B47 (⭇) REVERSE TILDE OPERATOR ABOVE RIGHTWARDS ARROW
 Removed Valid: 2B49 (⭉) TILDE OPERATOR ABOVE LEFTWARDS ARROW
@@ -12232,6 +12237,9 @@ Removed Valid: 1AE8 (◌᫨) COMBINING EQUALS SIGN ABOVE
 Removed Valid: 1AE9 (◌᫩) COMBINING LEFT ANGLE CENTRED ABOVE
 Removed Valid: 1AEA (◌᫪) COMBINING UPWARDS ARROW ABOVE
 Removed Valid: 1AEB (◌᫫) COMBINING DOUBLE RIGHTWARDS ARROW ABOVE
+Removed Mapped: A7CE (꟎) LATIN CAPITAL LETTER PHARYNGEAL VOICED FRICATIVE => [A7CF] (꟏) LATIN SMALL LETTER PHARYNGEAL VOICED FRICATIVE
+Removed Valid: A7CF (꟏) LATIN SMALL LETTER PHARYNGEAL VOICED FRICATIVE
+Removed Mapped: A7F1 (꟱) MODIFIER LETTER CAPITAL S => [73] (s) LATIN SMALL LETTER S
 Removed Valid: 2E (.) FULL STOP
 ==== Apply ScriptExt ====
 3BE (ξ) GREEK SMALL LETTER XI [Grek => Zyyy]
@@ -12241,13 +12249,13 @@ Disallowed Script: [Lina] Linear A [X]
 Disallowed Script: [Linb] Linear B [X]
 Disallowed Script: [Sgnw] SignWriting [X]
 Valid  | Name       | Test      | Rest      | Extra                     
-103430 | Japanese   | Kana+Hira | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
-114747 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
-103220 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
+103425 | Japanese   | Kana+Hira | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+114742 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+103215 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
 102201 | Bopomofo   | Bopo      | Hani      |                           
-  1359 | Latin      | Latn+Zyyy | Zinh      | π                         
-  1198 | Cyrillic   | Cyrl      | Zyyy+Zinh |                           
-  1184 | Greek      | Grek      | Zyyy+Zinh |                           
+  1353 | Latin      | Latn+Zyyy | Zinh      | π                         
+  1193 | Cyrillic   | Cyrl      | Zyyy+Zinh |                           
+  1179 | Greek      | Grek      | Zyyy+Zinh |                           
    450 | Arabic     | Arab      |           | -                         
    120 | Devanagari | Deva      |           |                           
     86 | Hebrew     | Hebr      |           | ₪                         
@@ -16102,9 +16110,9 @@ Removed Group: Chis
 [✓] Fastpath ASCII
 [✓] Groups Names are A-Z
 ==== Find Unique Characters ====
-Valid: 143353
-Multi: 103338
-Unique: 40015
+Valid: 143347
+Multi: 103333
+Unique: 40014
 [✓] Matching Groups have Same CM Style
 [✓] Wholes are Valid
 Confusable: 490
@@ -16117,18 +16125,18 @@ Non-Confusable Non-Unique: 44
 [✓] Ordered by Registration Likelihood
 ==== Group Summary ====
 Ord | Valid  | Uniqu | Primar | Second | CM   | Group     
-  1 |   1150 |    56 |   1149 |      1 | 0/51 | Latin     
+  1 |   1144 |    55 |   1143 |      1 | 0/51 | Latin     
   2 |    440 |   417 |    439 |      1 |      | Arabic    
-  3 | 103220 |     0 | 102127 |   1093 | 0/0  | Han       
+  3 | 103215 |     0 | 102127 |   1088 | 0/0  | Han       
   4 |    120 |   110 |    120 |      0 |      | Devanagari
-  5 | 114746 | 11526 |  11528 | 103218 | 0/0  | Korean    
-  6 | 103427 |   207 |    209 | 103218 | 0/58 | Japanese  
-  7 |   1172 |   105 |    105 |   1067 | 0/8  | Cyrillic  
+  5 | 114741 | 11526 |  11528 | 103213 | 0/0  | Korean    
+  6 | 103422 |   207 |    209 | 103213 | 0/58 | Japanese  
+  7 |   1167 |   105 |    105 |   1062 | 0/8  | Cyrillic  
   8 |     86 |    83 |     85 |      1 |      | Hebrew    
   9 |     87 |    85 |     86 |      1 |      | Thai      
  10 |     91 |    81 |     91 |      0 |      | Bengali   
  11 |    126 |   105 |    126 |      0 |      | Tamil     
- 12 |   1102 |    34 |     35 |   1067 | 0/11 | Greek     
+ 12 |   1097 |    34 |     35 |   1062 | 0/11 | Greek     
  13 |    186 |   186 |    186 |      0 |      | Tibetan   
  14 |     74 |    64 |     74 |      0 |      | Gurmukhi  
  15 |     80 |    80 |     80 |      0 |      | Lao       
@@ -16290,9 +16298,9 @@ Optimized: 2177 => 581
 CM(2543) => NSM(2072) => 1107
 Per Group Max: 61
 ==== Write Output ====
-Wrote: spec.json [3299545]
-Wrote: nf.json [49219]
+Wrote: spec.json [3299305]
+Unchanged: nf.json
 Unchanged: nf-tests.json
-Wrote: emoji-info.json [768442]
-Wrote: names.json [3608100]
+Unchanged: emoji-info.json
+Unchanged: names.json
 Unchanged: confused.json

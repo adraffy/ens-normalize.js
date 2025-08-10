@@ -1,13 +1,13 @@
 [
 	{
 		"name": "version",
-		"validated": "2025-08-07T02:23:23.616Z",
-		"built": "2025-08-07T02:23:16.240Z",
+		"validated": "2025-08-10T04:01:39.200Z",
+		"built": "2025-08-10T04:01:30.137Z",
 		"cldr": "47 (2025-08-02T20:26:29.295Z)",
-		"derived": "2025-08-07T02:23:14.569Z",
-		"ens_hash_base64": "620cf9955fe047b920a82f3c6c44cd27c6e9951119381ceb6ca07cba2825e54d",
+		"derived": "2025-08-10T04:01:28.394Z",
+		"ens_hash_base64": "a1f3363be9b98ee4d972bd7fdf925620e60f7a7bd0a402499574d2d9942c850c",
 		"nf_hash_base64": "9ef43cc7215aa7a53e4ed9afa3b4f2f8ce00a2c708b9eb96aa409ae6fa3fb6af",
-		"spec_hash": "e238f8734e83a3d3b8999acdb0bf696e8a4bcba8c64988e87a0f1a3006654584",
+		"spec_hash": "7e837241274dc7312b2a4d3127d73b608dfc43b9f21bc9053f47fe16db925651",
 		"unicode": "17.0.0 (2025-08-07T02:22:49.397Z)",
 		"version": "1.11.1"
 	},
@@ -29065,6 +29065,26 @@
 		"comment": "disallowed character: \"🩓\"‎ {1FA53}"
 	},
 	{
+		"name": "🩔",
+		"error": true,
+		"comment": "disallowed character: \"🩔\"‎ {1FA54}"
+	},
+	{
+		"name": "🩕",
+		"error": true,
+		"comment": "disallowed character: \"🩕\"‎ {1FA55}"
+	},
+	{
+		"name": "🩖",
+		"error": true,
+		"comment": "disallowed character: \"🩖\"‎ {1FA56}"
+	},
+	{
+		"name": "🩗",
+		"error": true,
+		"comment": "disallowed character: \"🩗\"‎ {1FA57}"
+	},
+	{
 		"name": "ʰ",
 		"error": true,
 		"comment": "disallowed character: \"ʰ\"‎ {2B0}"
@@ -35888,6 +35908,11 @@
 		"name": "⯹",
 		"error": true,
 		"comment": "disallowed character: \"⯹\"‎ {2BF9}"
+	},
+	{
+		"name": "⮖",
+		"error": true,
+		"comment": "disallowed character: \"⮖\"‎ {2B96}"
 	},
 	{
 		"name": "⭁",
@@ -55968,6 +55993,21 @@
 		"name": "᫫",
 		"error": true,
 		"comment": "disallowed character: \"◌᫫\"‎ {1AEB}"
+	},
+	{
+		"name": "꟎",
+		"error": true,
+		"comment": "disallowed character: \"꟎\"‎ {A7CE}"
+	},
+	{
+		"name": "꟏",
+		"error": true,
+		"comment": "disallowed character: \"꟏\"‎ {A7CF}"
+	},
+	{
+		"name": "꟱",
+		"error": true,
+		"comment": "disallowed character: \"꟱\"‎ {A7F1}"
 	},
 	{
 		"name": "‼",

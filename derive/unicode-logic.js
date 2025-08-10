@@ -37,7 +37,7 @@ export function parse_semicolon_file(file, impl = {}) {
 	let scope = {
 		root: {},
 		row([src, cls]) {
-			this.get_bucket(cls).push(src);
+			this.get_bucket(cls).push(src);33333333333
 		},
 		...impl,
 		get_bucket(key) {
@@ -191,9 +191,9 @@ export class UnicodeSpec {
 		let {sc} = this.read_prop_values(); // sc = Script
 		// this.names = new Map(sc.map(v => [v[0], v[1]])); // abbr -> name
 		let name2abbr = new Map(sc.map(v => [v[1], v[0]])); // name -> abbr
-		//name2abbr.set('Chisoi', 'Chis'); // TODO: REMOVE THIS
-		//for (let [name, cps] of [...this.read_scripts(), ['Chisoi', []]]) { // TODO: REMOVE THIS
-		for (let [name, cps] of this.read_scripts()) {
+		name2abbr.set('Chisoi', 'Chis'); // TODO: REMOVE THIS
+		for (let [name, cps] of [...this.read_scripts(), ['Chisoi', []]]) { // TODO: REMOVE THIS
+		//for (let [name, cps] of this.read_scripts()) {
 			let abbr = name2abbr.get(name);
 			if (!abbr) throw new TypeError(`unknown script: ${name}`);
 			name = name.replaceAll('_', ' '); // fix name
