@@ -248,4 +248,11 @@ export const RESTRICTED_SCRIPTS = [
 	'Todr', // Todhri
 	'Tutg', // Tulu Tigalari
 
+	// 17.0.0
+	'Berf', // Beria Erfe
+	'Chis', // Chisoi
+	'Sidt', // Sidetic
+	'Tayo', // Tai Yo
+	'Tols', // Tolong Siki
+	// Bopo is now Limited Use
 ];
