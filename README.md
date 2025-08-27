@@ -11,6 +11,7 @@
 		* Zig — [evmts/**z-ens-normalize**](https://github.com/evmts/z-ens-normalize)
 		* C# — [adraffy/**ENSNormalize.cs**](https://github.com/adraffy/ENSNormalize.cs)
 		* Java — [adraffy/**ENSNormalize.java**](https://github.com/adraffy/ENSNormalize.java)
+		* Swift – [adraffy/**ENSNormalize.swift**](https://github.com/adraffy/ENSNormalize.swift)
 		* Go — [adraffy/**go-ens-normalize**](https://github.com/adraffy/go-ens-normalize)
 		* Javascript — [ensdomains/**eth-ens-namehash**](https://github.com/ensdomains/eth-ens-namehash)
 	* [Breakdown Reports from ENSIP-1](https://adraffy.github.io/ens-norm-tests/test-breakdown/output-20230226/)	
