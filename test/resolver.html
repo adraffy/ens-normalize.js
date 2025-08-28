@@ -6057,22 +6057,20 @@ async function get_resolver_info(target) {
 				{target, data: RESOLVER_ABI.encodeFunctionData('oracle')}
 			]);
 			check_abort();
-			if (multi) {
-				if (multi.some(x => x.ok)) contracts.set(target, true); // any success => is contract
-				const [impl, wild, edns, tor, oracle] = multi;
-				info.impl = impl.ok && !is_null_hex(impl.data);
-				info.wild = wild.ok && !is_null_hex(wild.data);
-				info.edns = edns.ok && !is_null_hex(edns.data);
-				info.tor  =  tor.ok && !is_null_hex(tor.data );
-				try {
-					if (oracle.ok) {
-						const [address] = abi.decodeFunctionResult('oracle', oracle.data);
-						if (!is_null_hex(address)) {
-							info.dnssec_oracle = address;
-						}
+			if (multi.some(x => x.ok)) contracts.set(target, true); // any success => is contract
+			const [impl, wild, edns, tor, oracle] = multi;
+			info.impl = impl.ok && !is_null_hex(impl.data);
+			info.wild = wild.ok && !is_null_hex(wild.data);
+			info.edns = edns.ok && !is_null_hex(edns.data);
+			info.tor  =  tor.ok && !is_null_hex(tor.data );
+			try {
+				if (oracle.ok) {
+					const [address] = RESOLVER_ABI.decodeFunctionResult('oracle', oracle.data);
+					if (!is_null_hex(address)) {
+						info.dnssec_oracle = address;
 					}
-				} catch (err) {
 				}
+			} catch (err) {
 			}
 		}
 		resolvers.set(target, info);
