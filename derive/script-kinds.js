@@ -8,7 +8,7 @@ export async function fetch_UAX31_script_kinds(version) {
 	// eg. https://www.unicode.org/reports/tr31/tr31-39.html
 	// eg. https://www.unicode.org/reports/tr31/proposed.html
 	let report_name;
-	if (html.includes('(REVIEW DRAFT)')) {
+	if (/<h1>.*?Draft.*?<\/h1>/m.test(html)) { // (Review Draft) | (Draft)
 		report_name = 'proposed';
 	} else {
 		let revision = 0;

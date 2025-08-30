@@ -3202,12 +3202,6 @@ function create_main_span(text) {
 	return create('span', {className: 'maxh'}, create('span', {innerText: text, className: ['main', 'long']}));
 }
 function upgrade_split_type(info) {
-	if (info.type === 'Latin') {
-		let cps = info.tokens.flatMap(x => x.is_emoji ? [] : x); // ascii+emoji
-		if (cps.every(cp => cp < 0x80)) {
-			info.type = 'ASCII';
-		}
-	}
 	let flat = flatten_tokens(info.tokens);
 	info.confusing = determine_confusion(str_from_cps(info.input), flat);
 	info.style = determine_style(flat);
