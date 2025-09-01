@@ -1,9 +1,9 @@
 // see: https://github.com/adraffy/ens-normalize.js#security
-export const derived = "2024-09-13T06:42:44.238Z";
-export const unicode = "16.0.0 (2024-09-10T20:47:54.200Z)";
-export const cldr = "45 (2024-04-19T05:36:55.332Z)";
-export const ens_hash_base64 = "0ca3917bee1eee342d64c631cb1dbaac37b167d848887d59f6d68328dc99ac09";
-export const nf_hash_base64 = "a79d5f9b1879a7b416aa659f4a3d788f80a8cf5f0ab955a456592c02f556a28c";
-export const spec_hash = "4b3c5210a328d7097500b413bf075ec210bbac045cd804deae5d1ed771304825";
-export const built = "2024-09-13T06:42:45.675Z";
-export const version = "1.11.0";
+export const derived = "2025-08-10T04:01:28.394Z";
+export const unicode = "17.0.0 (2025-08-07T02:22:49.397Z)";
+export const cldr = "47 (2025-08-02T20:26:29.295Z)";
+export const ens_hash_base64 = "a1f3363be9b98ee4d972bd7fdf925620e60f7a7bd0a402499574d2d9942c850c";
+export const nf_hash_base64 = "9ef43cc7215aa7a53e4ed9afa3b4f2f8ce00a2c708b9eb96aa409ae6fa3fb6af";
+export const spec_hash = "7e837241274dc7312b2a4d3127d73b608dfc43b9f21bc9053f47fe16db925651";
+export const built = "2025-08-10T04:01:30.137Z";
+export const version = "1.11.1";
