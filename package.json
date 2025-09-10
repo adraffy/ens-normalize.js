@@ -1,6 +1,6 @@
 {
 	"name": "@adraffy/ens-normalize",
-	"version": "1.11.0",
+	"version": "1.11.1",
 	"description": "Ethereum Name Service (ENS) Name Normalizer",
 	"keywords": [
 		"ENS",
@@ -52,14 +52,14 @@
 		"validate": "node validate/make.js",
 		"test": "node test/all.js",
 		"types": "cp dist/index.d.mts dist/index.d.cts && cp dist/index.d.mts dist/index-xnf.d.mts && cp dist/index.d.mts dist/index-xnf.d.cts",
-		"build": "npm run types && rollup -c",
+		"build": "npm run types && npx rollup -c",
 		"rebuild": "npm run derive && npm run make && npm run validate && npm run test && npm run build",
 		"order": "node validate/dump-group-order.js save && npm run rebuild"
 	},
 	"devDependencies": {
-		"@rollup/plugin-alias": "^5.1.0",
+		"@rollup/plugin-alias": "^5.1.1",
 		"@rollup/plugin-terser": "^0.4.4",
-		"rollup": "^3.24.1"
+		"rollup": "^4.46.2"
 	},
 	"type": "module"
 }
