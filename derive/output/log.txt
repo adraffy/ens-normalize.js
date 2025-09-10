@@ -1,5 +1,5 @@
-Build Date: 2025-08-10T04:01:24.086Z
-Unicode Version: 17.0.0 (2025-08-07T02:22:49.397Z)
+Build Date: 2025-09-10T17:21:07.723Z
+Unicode Version: 17.0.0 (2025-09-10T16:58:18.331Z)
 CLDR Version: 47 (2025-08-02T20:26:29.295Z)
 ==== RGI Emoji ZWJ Sequences ====
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
@@ -12413,7 +12413,6 @@ Valid  | Name       | Test      | Rest      | Extra
     55 | Todr [R]   | Todr      |           |                           
     88 | Tutg [R]   | Tutg      |           |                           
     25 | Berf [R]   | Berf      |           |                           
-     0 | Chis [R]   | Chis      |           |                           
     26 | Sidt [R]   | Sidt      |           |                           
     55 | Tayo [R]   | Tayo      |           |                           
     54 | Tols [R]   | Tols      |           |                           
@@ -16094,7 +16093,6 @@ Removed Mapping: 1F246 (🉆) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-76D
 Removed Mapping: 1F247 (🉇) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-52DD => [3014 52DD 3015] (〔勝〕) LEFT TORTOISE SHELL BRACKET + CJK Ideograph-52DD [1246/20992] + RIGHT TORTOISE SHELL BRACKET
 Removed Mapping: 1F248 (🉈) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-6557 => [3014 6557 3015] (〔敗〕) LEFT TORTOISE SHELL BRACKET + CJK Ideograph-6557 [5976/20992] + RIGHT TORTOISE SHELL BRACKET
 ==== Remove Empty Groups ====
-Removed Group: Chis
 ==== Assert Invariants ====
 [✓] Ignored
 [✓] Mapped is Valid
@@ -16115,9 +16113,9 @@ Multi: 103333
 Unique: 40014
 [✓] Matching Groups have Same CM Style
 [✓] Wholes are Valid
-Confusable: 490
-Not Confusable: 106
-Non-Confusable Non-Unique: 44
+Confusable: 496
+Not Confusable: 119
+Non-Confusable Non-Unique: 51
 ==== Compress Wholes ====
 ==== Compress Groups ====
 ==== Order Groups ====
@@ -16161,15 +16159,15 @@ Ord | Valid  | Uniqu | Primar | Second | CM   | Group
  34 |    155 |   155 |    155 |      0 |      | Mong      
  35 |     66 |    66 |     66 |      0 |      | Limb      
  36 |     83 |    83 |     83 |      0 |      | Talu      
- 37 |   1221 |  1220 |   1221 |      0 |      | Yiii      
- 38 |     80 |    80 |     80 |      0 |      | Cham      
- 39 |     29 |    29 |     29 |      0 |      | Phnx      
- 40 |   5089 |  5089 |   5089 |      0 |      | Egyp      
- 41 |     73 |    73 |     73 |      0 |      | Orkh      
- 42 |   1234 |  1234 |   1234 |      0 |      | Xsux      
- 43 |     28 |    28 |     28 |      0 |      | Ogam      
- 44 |     23 |    23 |     23 |      0 |      | Tglg      
- 45 |    123 |   123 |    123 |      0 |      | Lana      
+ 37 |    123 |   123 |    123 |      0 |      | Lana      
+ 38 |   1221 |  1220 |   1221 |      0 |      | Yiii      
+ 39 |     80 |    80 |     80 |      0 |      | Cham      
+ 40 |     29 |    29 |     29 |      0 |      | Phnx      
+ 41 |   5089 |  5089 |   5089 |      0 |      | Egyp      
+ 42 |     73 |    73 |     73 |      0 |      | Orkh      
+ 43 |   1234 |  1234 |   1234 |      0 |      | Xsux      
+ 44 |     28 |    28 |     28 |      0 |      | Ogam      
+ 45 |     23 |    23 |     23 |      0 |      | Tglg      
  46 |     88 |    86 |     88 |      0 |      | Glag      
  47 |     64 |    59 |     64 |      0 |      | Tfng      
  48 |    292 |   292 |    292 |      0 |      | Vaii      
@@ -16303,4 +16301,4 @@ Unchanged: nf.json
 Unchanged: nf-tests.json
 Unchanged: emoji-info.json
 Unchanged: names.json
-Unchanged: confused.json
+Wrote: confused.json [71880]

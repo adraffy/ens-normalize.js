@@ -2025,7 +2025,7 @@ add_digits('Thai', '๐๑๒๓๔๕๖๗๘๙');
 //add_digits('Bengali', '০১২৩৪৫৬৭৮৯');
 //add_digits('Tamil', '௦௧௨௩௪௫௬௭௮௯');
 
-for (let btn of $$('#examples > button:not([id]), button[data-name]')) {
+for (let btn of $$('#examples button:not([id]), button[data-name]')) {
 	let name = btn.innerText;
 	if (btn.dataset.name) name = btn.dataset.name;
 	if (typeof btn.dataset.raw !== 'string') name = replace_escapes(name);
@@ -4447,6 +4447,7 @@ async function resolve1(input, skip_norm) {
 	let nft_contract;
 	let nft_token;
 
+	let in_grace;
 	let available;
 	let avail_row = create_row('Availability');
 	add_spinner(avail_row);
@@ -4500,6 +4501,7 @@ async function resolve1(input, skip_norm) {
 			let end = exp + grace_period;
 			let now = Date.now();
 			if (now >= exp && now <= end) {
+				in_grace = true;
 				add_row_tag(avail_row, create_tag('warn', `Grace period (${format_dur(grace_period)}) ends in ${format_dur(end - now)}`));
 			} else {
 				add_reg_exp_tags(avail_row, exp, now);
@@ -4588,7 +4590,11 @@ async function resolve1(input, skip_norm) {
 				await ensure_wrapper();
 				if (should_stop_resolving()) return;
 				if (!unwrappable) {
-					is_wrapped = await network_state.wrapper.isWrapped(node);
+					if (in_grace) {
+						is_wrapped = await network_state.ens.owner(node) === network_state.wrapper.target;
+					} else {
+						is_wrapped = await network_state.wrapper.isWrapped(node);
+					}
 					if (should_stop_resolving()) return;
 					if (is_wrapped) {
 						// 0x000000006433a888000000005c7b61a99d922e9a4451ed62ebbbedbf1627ab47

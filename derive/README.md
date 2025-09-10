@@ -59,15 +59,12 @@
 
 ### 16.0.0 → 17.0.0
 
-* TODO
-	* Script: Chisoi is [incomplete](https://bsky.app/profile/adraffy.bsky.social/post/3lvrroos2ck25)
-	* Review all changes
 * [**Release**](https://www.unicode.org/versions/Unicode17.0.0)
 * [Diff](./diffs/16.0.0-vs-17.0.0.txt) `node unicode-diff.js 16 17`
 * CLDR
 	* **Unchanged**
 * UAX-31: 
-	* **New** 5 Scripts: Berf, Chis, Sidt, Tayo, Tols
+	* **New** 4 Scripts: Berf, Sidt, Tayo, Tols
 	* **Changed** Bopo &rarr; Limited Use
 * UTS-46:
 	* **New** [Miscellaneous Symbols Supplement](https://www.unicode.org/charts/PDF/Unicode-17.0/U170-1CEC0.pdf)

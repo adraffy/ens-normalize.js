@@ -19,8 +19,9 @@
 		"tag": "prior"
 	},
 	{
-		"unicode": "17.0.0",
+		"spec_hash": "478d81169a672c114d441ad59a895022bd7a15e71e97f066784a70287afeed7f",
 		"library": "1.11.1",
+		"unicode": "17.0.0",
 		"cldr": "47",
 		"tag": "current"
 	}

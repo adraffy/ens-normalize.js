@@ -7,30 +7,63 @@ import {fetch_UAX31_script_kinds} from './script-kinds.js';
 // specific: $ node download.js 16.0.0
 
 const FILES = [
+	// 20250910: unicode 17+ moved the {emoji, idna, security} directories inside the spec directory
 	// UCD
 	['{SPEC}/ucd/UnicodeData.txt'],
 	['{SPEC}/ucd/PropList.txt'],
 	['{SPEC}/ucd/DerivedCoreProperties.txt'],
 	// IDNA
-	['{IDNA}/IdnaMappingTable.txt'],
-	['{IDNA}/IdnaTestV2.txt', /*old*/'{IDNA}/IdnaTest.txt'],
+	[
+		'{SPEC}/idna/IdnaMappingTable.txt',
+		'{IDNA}/IdnaMappingTable.txt', // old
+	],
+	[
+		'{SPEC}/idna/IdnaTestV2.txt', 
+		'{IDNA}/IdnaTestV2.txt', // old
+		'{IDNA}/IdnaTest.txt', // old^2
+	],
 	// NF
 	['{SPEC}/ucd/CompositionExclusions.txt'],
 	['{SPEC}/ucd/DerivedNormalizationProps.txt'],
 	['{SPEC}/ucd/NormalizationTest.txt'],
 	// Emoji
-	['{SPEC}/ucd/emoji/emoji-data.txt', /*old*/'{EMOJI}/emoji-data.txt'],
-	['{EMOJI}/emoji-sequences.txt'],
-	['{EMOJI}/emoji-zwj-sequences.txt'],
-	['{EMOJI}/emoji-test.txt'],
+	[
+		'{SPEC}/ucd/emoji/emoji-data.txt',
+		'{EMOJI}/emoji-data.txt', // old
+	],
+	[
+		'{SPEC}/emoji/emoji-sequences.txt',
+		'{EMOJI}/emoji-sequences.txt', // old
+	],
+	[
+		'{SPEC}/emoji/emoji-zwj-sequences.txt',
+		'{EMOJI}/emoji-zwj-sequences.txt', // old
+	],
+	[
+		'{SPEC}/emoji/emoji-test.txt',
+		'{EMOJI}/emoji-test.txt', // old
+	],
 	// Confusables
 	['{SPEC}/ucd/Scripts.txt'],
 	['{SPEC}/ucd/ScriptExtensions.txt'],
 	['{SPEC}/ucd/PropertyValueAliases.txt'],
-	['{SECURITY}/confusables.txt'],
-	['{SECURITY}/IdentifierStatus.txt'],
-	['{SECURITY}/IdentifierType.txt'],
-	['{SECURITY}/intentional.txt'],
+	// Security
+	[
+		'{SPEC}/security/confusables.txt',
+		'{SECURITY}/confusables.txt', // old
+	],
+	[
+		'{SPEC}/security/IdentifierStatus.txt',
+		'{SECURITY}/IdentifierStatus.txt', // old
+	],
+	[
+		'{SPEC}/security/IdentifierType.txt',
+		'{SECURITY}/IdentifierType.txt', // old
+	],
+	[
+		'{SPEC}/security/intentional.txt',
+		'{SECURITY}/intentional.txt', // old
+	],
 ];
 
 function urls_from_source(source, {major, minor = 0, patch = 0, draft}) {
@@ -126,7 +159,7 @@ async function download(version) {
 	if (!force && cause) throw new Error('incomplete download', {cause});
 	console.log(`Changes: ${changed}`);
 	const version_file = new URL('./version.json', dir);
-	if (changed || await access(version_file).catch(() => true)) {
+	if (force || changed || await access(version_file).catch(() => true)) {
 		// only bump the version if something changed
 		await writeFile(version_file, JSON.stringify({version: version_str, ...version, date: new Date()}));	
 		console.log(`Wrote: ${version_file}`);

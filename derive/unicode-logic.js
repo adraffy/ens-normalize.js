@@ -12,6 +12,7 @@ export const SCRIPT_TYPE_LIMITED_USE = 'LimitedUse';
 
 // https://www.unicode.org/reports/tr39/#def-augmented-script-set
 // 20240910: no change (16.0.0)
+// 20240910: no change (17.0.0)
 export function augment_script_set(set) {
 	if (set.has('Hani')) {
 		set.add('Hanb');
@@ -191,9 +192,7 @@ export class UnicodeSpec {
 		let {sc} = this.read_prop_values(); // sc = Script
 		// this.names = new Map(sc.map(v => [v[0], v[1]])); // abbr -> name
 		let name2abbr = new Map(sc.map(v => [v[1], v[0]])); // name -> abbr
-		name2abbr.set('Chisoi', 'Chis'); // TODO: REMOVE THIS
-		for (let [name, cps] of [...this.read_scripts(), ['Chisoi', []]]) { // TODO: REMOVE THIS
-		//for (let [name, cps] of this.read_scripts()) {
+		for (let [name, cps] of this.read_scripts()) {
 			let abbr = name2abbr.get(name);
 			if (!abbr) throw new TypeError(`unknown script: ${name}`);
 			name = name.replaceAll('_', ' '); // fix name
@@ -226,7 +225,7 @@ export class UnicodeSpec {
 			}
 			*/
 		}
-		script0.type = SCRIPT_TYPE_EXCLUDED;		
+		script0.type = SCRIPT_TYPE_EXCLUDED;
 		let {limited_use, excluded} = this.read_script_kinds();
 		for (let abbr of excluded) {
 			this.require_script(abbr).type = SCRIPT_TYPE_EXCLUDED;
@@ -242,7 +241,7 @@ export class UnicodeSpec {
 		// 00C0;LATIN CAPITAL LETTER A WITH GRAVE;Lu;0;L;0041 0300;;;;N;LATIN CAPITAL LETTER A GRAVE;;;00E0;
 		// 4E00;<CJK Ideograph, First>;Lo;0;L;;;;;N;;;;;
 		// 9FFF;<CJK Ideograph, Last>;Lo;0;L;;;;;N;;;;;
-		return parse_semicolon_file(new URL('./UnicodeData.txt', this.data_dir), {		
+		return parse_semicolon_file(new URL('./UnicodeData.txt', this.data_dir), {
 			root: [],
 			row(v) {
 				let char = new UnicodeChar(v);
