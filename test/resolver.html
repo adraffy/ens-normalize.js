@@ -2957,7 +2957,7 @@ function create_dns_row(name, {replaced, contenthash} = {}) {
 			if (encoded.endsWith('.eth')) {
 				let group = create('div', {className: ['grouped', 'external']});
 				if (contenthash) {
-					add_row_tag(row, create_link(`https://${encoded}.limo`, {button: '↗️ Website', className: 'external'}));
+					add_row_tag(row, create_link(`https://${encoded}.limo`, {button: '↗️ .limo', className: 'external'}));
 				} else {
 					add_row_tag(group, create_link(`https://${encoded}.limo`, {innerHTML: '.limo'}));
 				}
@@ -3156,17 +3156,19 @@ function parse_reverse_name(name) {
 	if (!match) return;
 	let [_, address, coin] = match;
 	if (address) address = `0x${address}`;
+	let offchain;
 	if (coin === 'default') {
 		coin = EVM_BIT;
 	} else if (coin === 'addr') {
 		coin = 60n;
 	} else {
 		coin = BigInt('0x' + coin);
+		offchain = true;
 	}
 	const evm = chain_from_coin(coin);
 	const is_evm = typeof evm === 'bigint';
 	const network = is_evm ? CHAIN_NAMES.get(evm) : RECORDS.find(x => x.coin == coin)?.name;
-	return {address, coin, evm, is_evm, network};
+	return {address, coin, evm, is_evm, network, offchain};
 }
 function create_reverse_resolve_btn(addr) {
 	const select = create('select', {
@@ -3408,6 +3410,10 @@ async function add_resolver_info(row, resolver, context) {
 	if (resolver.__info.dnssec_oracle) {
 		add_row_tag(row, create_tag('good', 'DNSSEC', resolver.__info.dnssec_oracle));
 	}
+	const rev_match = parse_reverse_name(resolver.__name);
+	if (rev_match) {
+		add_row_tag(row, create_tag('good', rev_match.offchain ? 'Offchain Reverse' : 'Reverse'));
+	}
 	let resolve;
 	if (context && resolver.__info.edns) {
 		resolve = async x => resolver['resolve(bytes,bytes,bytes)'](resolver.__dns_encoded, x, context);
@@ -3432,25 +3438,47 @@ async function add_resolver_info(row, resolver, context) {
 			async click() {
 				add_spinner(this);
 				this.disabled = true;
-				const settled = await Promise.allSettled([
-					resolve(resolver.interface.encodeFunctionData('addr(bytes32,uint256)', [resolver.__node, 1n << 255n])),
-					resolve(resolver.interface.encodeFunctionData('addr(bytes32,uint256)', [resolver.__node, 60n])),
-					resolve(resolver.interface.encodeFunctionData('text(bytes32,string)', [resolver.__node, '__dne'])),
-					resolve(resolver.interface.encodeFunctionData('name(bytes32)', [resolver.__node]))
-				]);
+				const calls = [];
+				if (rev_match?.offchain) {
+					const name = get_reverse_name(ethers.ZeroAddress, rev_match.evm);
+					const calldata = resolver.interface.encodeFunctionData('name(bytes32)', [namehash(name)]);
+					calls.push(resolver['resolve(bytes,bytes)'](dns_encoded_from(name), calldata));
+				} else {
+					calls.push(resolve(resolver.interface.encodeFunctionData('addr(bytes32,uint256)', [resolver.__node, 1n << 255n])));
+					calls.push(resolve(resolver.interface.encodeFunctionData('addr(bytes32,uint256)', [resolver.__node, 60n])));
+					calls.push(resolve(resolver.interface.encodeFunctionData('text(bytes32,string)', [resolver.__node, '__dne'])));
+					calls.push(resolve(resolver.interface.encodeFunctionData('name(bytes32)', [resolver.__node])));
+				}
+				const settled = await Promise.allSettled(calls);
 				const gateways = new Set();
+				const verifiers = new Set();
 				for (const res of settled) {
 					if (res.reason instanceof Error && res.reason.revert?.name === 'OffchainLookup') {
 						for (let g of res.reason.revert.args.gateways) {
 							gateways.add(g.replace(/data\=0x[0-9a-f]*/i, 'data=0x'));
 						}
+						try {
+							const [verifier] = ethers.AbiCoder.defaultAbiCoder().decode(['(address, bytes, (bytes), bytes4, bytes)'], res.reason.revert.args.carry)[0]; 
+							verifiers.add(verifier);
+						} catch (err) {
+						}
+					}
+				}
+				if (verifiers.size) {
+					const sub_row = create_row('Unruggable Verifier');
+					row.insertAdjacentElement('afterend', sub_row);
+					for (const x of verifiers) {
+						add_row_tag(sub_row, create_explorer_address_link(x, {contract: true}));
+						add_row_tag(sub_row, create_copy_btn(resolver.target, {value: true}));
 					}
 				}
 				if (gateways.size) {
-					this.remove();
-					for (const g of gateways) {
-						add_row_tag(row, create('span', {className: ['raw', 'long'], innerText: g}));
+					const sub_row = create_row('Gateways');
+					row.insertAdjacentElement('afterend', sub_row);
+					for (const x of gateways) {
+						add_row_tag(sub_row, create('span', {className: ['raw', 'long'], innerText: x}));
 					}
+					this.remove();
 				} else {
 					this.innerText = `⚠️ Unknown Gateways`;
 				}
@@ -4331,7 +4359,7 @@ async function resolve1(input, skip_norm) {
 				this.remove();
 				impls_row.classList.remove('hide');
 				add_spinner(impls_row);
-				await load_known_interfaces(impls_row, resolver, owner);
+				await load_known_interfaces(impls_row, resolver);
 				if (!impls_row.isConnected) return;
 				remove_temporary(impls_row);
 				add_row_tag(impls_row, create_elapsed(Date.now() - t0, rpc_count - reqs));
@@ -4816,6 +4844,8 @@ async function resolve1(input, skip_norm) {
 		} else if (address_err) {
 			if (address_err.code === 'BAD_DATA' && address_err.value === '0x') {
 				add_row_tag(address_row, create_tag('fail', 'No Response'));
+			} else if (address_err.code === 'CALL_EXCEPTION' && address_err.shortMessage == 'missing revert data') {
+				add_row_tag(address_row, create_tag('fail', 'Empty Revert'));
 			} else {
 				address_row.classList.add('error');
 				add_row_tag(address_row, create_tag('warn', address_err));
@@ -4876,8 +4906,6 @@ async function resolve1(input, skip_norm) {
 				if (rev_match) {
 					if (rev_match.address) {
 						records = [{type: TYPE_NAME, force: true}];
-					} else if (resolver.__basename === 'reverse') {
-						records = RECORDS.filter(x => x.coin === EVM_BIT);
 					} else {
 						records = RECORDS.filter(x => x.coin === rev_match.coin);
 					}
@@ -5831,7 +5859,7 @@ async function multicall_tryAggregate(calls) {
 		}
 	}));
 }
-async function load_known_interfaces(row, resolver, owner) {
+async function load_known_interfaces(row, resolver) {
 	const iface_nft = {iface: '0x6ccb2df4', title: 'NFT (721)'};
 	// https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar
 	const dynamic_frag = RESOLVER_ABI.getFunction('interfaceImplementer');
@@ -5884,14 +5912,16 @@ async function load_known_interfaces(row, resolver, owner) {
 			})
 		])];
 		if (should_stop_resolving()) return;
-		if (!owner) {
-			add_iface(iface_nft.title, await network_state.ens.owner(resolver.__basenode));
-		}
 		for (const x of dynamic_ifaces) {
 			const [ok, data] = multi.shift();
 			if (!ok) continue;
 			const [addr] = RESOLVER_ABI.decodeFunctionResult(dynamic_frag, data);
-			if (is_null_hex(addr)) continue;
+			if (is_null_hex(addr)) {
+				if (x === iface_nft) {
+					add_iface(iface_nft.title, await network_state.ens.owner(__node));
+				}
+				continue;
+			}
 			add_iface(x.title, addr, x.iface);
 			if (x.iface === IFACE_ETH_CONTROLLER) {
 				const controller = contract_for_controller(addr);
