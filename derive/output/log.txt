@@ -1,4 +1,4 @@
-Build Date: 2025-09-10T17:21:07.723Z
+Build Date: 2025-09-14T17:56:19.848Z
 Unicode Version: 17.0.0 (2025-09-10T16:58:18.331Z)
 CLDR Version: 47 (2025-08-02T20:26:29.295Z)
 ==== RGI Emoji ZWJ Sequences ====
@@ -12050,7 +12050,6 @@ Removed Ignored: 3164 (ㅤ) HANGUL FILLER
 Removed Ignored: FFA0 (ﾠ) HALFWIDTH HANGUL FILLER
 Removed Valid: 2798 (➘) HEAVY SOUTH EAST ARROW
 Removed Valid: 2799 (➙) HEAVY RIGHTWARDS ARROW
-Removed Valid: 279A (➚) HEAVY NORTH EAST ARROW
 Removed Valid: 279B (➛) DRAFTING POINT RIGHTWARDS ARROW
 Removed Valid: 279C (➜) HEAVY ROUND-TIPPED RIGHTWARDS ARROW
 Removed Valid: 279D (➝) TRIANGLE-HEADED RIGHTWARDS ARROW
@@ -12059,7 +12058,6 @@ Removed Valid: 279F (➟) DASHED TRIANGLE-HEADED RIGHTWARDS ARROW
 Removed Valid: 27A0 (➠) HEAVY DASHED TRIANGLE-HEADED RIGHTWARDS ARROW
 Removed Valid: 27A2 (➢) THREE-D TOP-LIGHTED RIGHTWARDS ARROWHEAD
 Removed Valid: 27A3 (➣) THREE-D BOTTOM-LIGHTED RIGHTWARDS ARROWHEAD
-Removed Valid: 27A4 (➤) BLACK RIGHTWARDS ARROWHEAD
 Removed Valid: 27A5 (➥) HEAVY BLACK CURVED DOWNWARDS AND RIGHTWARDS ARROW
 Removed Valid: 27A6 (➦) HEAVY BLACK CURVED UPWARDS AND RIGHTWARDS ARROW
 Removed Valid: 27A7 (➧) SQUAT BLACK RIGHTWARDS ARROW
@@ -12249,13 +12247,13 @@ Disallowed Script: [Lina] Linear A [X]
 Disallowed Script: [Linb] Linear B [X]
 Disallowed Script: [Sgnw] SignWriting [X]
 Valid  | Name       | Test      | Rest      | Extra                     
-103425 | Japanese   | Kana+Hira | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
-114742 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
-103215 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
+103427 | Japanese   | Kana+Hira | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+114744 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+103217 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
 102201 | Bopomofo   | Bopo      | Hani      |                           
-  1353 | Latin      | Latn+Zyyy | Zinh      | π                         
-  1193 | Cyrillic   | Cyrl      | Zyyy+Zinh |                           
-  1179 | Greek      | Grek      | Zyyy+Zinh |                           
+  1355 | Latin      | Latn+Zyyy | Zinh      | π                         
+  1195 | Cyrillic   | Cyrl      | Zyyy+Zinh |                           
+  1181 | Greek      | Grek      | Zyyy+Zinh |                           
    450 | Arabic     | Arab      |           | -                         
    120 | Devanagari | Deva      |           |                           
     86 | Hebrew     | Hebr      |           | ₪                         
@@ -16108,8 +16106,8 @@ Removed Mapping: 1F248 (🉈) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-655
 [✓] Fastpath ASCII
 [✓] Groups Names are A-Z
 ==== Find Unique Characters ====
-Valid: 143347
-Multi: 103333
+Valid: 143349
+Multi: 103335
 Unique: 40014
 [✓] Matching Groups have Same CM Style
 [✓] Wholes are Valid
@@ -16123,18 +16121,18 @@ Non-Confusable Non-Unique: 51
 [✓] Ordered by Registration Likelihood
 ==== Group Summary ====
 Ord | Valid  | Uniqu | Primar | Second | CM   | Group     
-  1 |   1144 |    55 |   1143 |      1 | 0/51 | Latin     
+  1 |   1146 |    55 |   1145 |      1 | 0/51 | Latin     
   2 |    440 |   417 |    439 |      1 |      | Arabic    
-  3 | 103215 |     0 | 102127 |   1088 | 0/0  | Han       
+  3 | 103217 |     0 | 102127 |   1090 | 0/0  | Han       
   4 |    120 |   110 |    120 |      0 |      | Devanagari
-  5 | 114741 | 11526 |  11528 | 103213 | 0/0  | Korean    
-  6 | 103422 |   207 |    209 | 103213 | 0/58 | Japanese  
-  7 |   1167 |   105 |    105 |   1062 | 0/8  | Cyrillic  
+  5 | 114743 | 11526 |  11528 | 103215 | 0/0  | Korean    
+  6 | 103424 |   207 |    209 | 103215 | 0/58 | Japanese  
+  7 |   1169 |   105 |    105 |   1064 | 0/8  | Cyrillic  
   8 |     86 |    83 |     85 |      1 |      | Hebrew    
   9 |     87 |    85 |     86 |      1 |      | Thai      
  10 |     91 |    81 |     91 |      0 |      | Bengali   
  11 |    126 |   105 |    126 |      0 |      | Tamil     
- 12 |   1097 |    34 |     35 |   1062 | 0/11 | Greek     
+ 12 |   1099 |    34 |     35 |   1064 | 0/11 | Greek     
  13 |    186 |   186 |    186 |      0 |      | Tibetan   
  14 |     74 |    64 |     74 |      0 |      | Gurmukhi  
  15 |     80 |    80 |     80 |      0 |      | Lao       
@@ -16296,9 +16294,9 @@ Optimized: 2177 => 581
 CM(2543) => NSM(2072) => 1107
 Per Group Max: 61
 ==== Write Output ====
-Wrote: spec.json [3299305]
+Wrote: spec.json [3299377]
 Unchanged: nf.json
 Unchanged: nf-tests.json
 Unchanged: emoji-info.json
 Unchanged: names.json
-Wrote: confused.json [71880]
+Unchanged: confused.json

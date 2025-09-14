@@ -38,7 +38,7 @@ export function parse_semicolon_file(file, impl = {}) {
 	let scope = {
 		root: {},
 		row([src, cls]) {
-			this.get_bucket(cls).push(src);33333333333
+			this.get_bucket(cls).push(src);
 		},
 		...impl,
 		get_bucket(key) {
