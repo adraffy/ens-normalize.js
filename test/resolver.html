@@ -5917,7 +5917,7 @@ async function load_known_interfaces(row, resolver) {
 			if (!ok) continue;
 			const [addr] = RESOLVER_ABI.decodeFunctionResult(dynamic_frag, data);
 			if (is_null_hex(addr)) {
-				if (x === iface_nft) {
+				if (x === iface_nft && resolver.__name === "eth") {
 					add_iface(iface_nft.title, await network_state.ens.owner(__node));
 				}
 				continue;
