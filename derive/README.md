@@ -1,6 +1,7 @@
 # Derive Data Files
 
 * [Unicode Standard](https://www.unicode.org/versions/latest/)
+	* [Release Dates](https://www.unicode.org/history/publicationdates.html#Release_Dates)
 * [Unicode Technical Standard #46: IDNA](https://www.unicode.org/reports/tr46/)
 	* [unicode-logic.js/`derive_idna_rules()`](./unicode-logic.js#L581) — [spec](https://unicode.org/reports/tr46/#Implementation_Notes)
 	* [idna.js/`ens_idna_rules()`](./idna.js)
@@ -20,11 +21,11 @@
 * [Unicode data files](https://www.unicode.org/Public/)
 	* Download Latest: `node download.js` 
 	* To download older version: `node download.js 12.1.0` 
-	* Already included: [Unicode 11-16](./data/)
+	* Already included: [Unicode 11-17](./data/)
 * [CLDR data files](https://github.com/unicode-org/cldr)
 	* Download Latest: `node parse-cldr.js`
 	* To download older version: `node parse-cldr.js 42` 
-	* Already included: [CLDR 42-45](./data/)
+	* Already included: [CLDR 42-47](./data/)
 	* ⚠️ Versioned separately from Unicode!
 
 ## Instructions
@@ -56,10 +57,27 @@
 
 ## Upgrade Notes
 
+### 16.0.0 → 17.0.0
+
+* [**Release**](https://www.unicode.org/versions/Unicode17.0.0)
+* [Diff](./diffs/16.0.0-vs-17.0.0.txt) `node unicode-diff.js 16 17`
+* CLDR
+	* **Unchanged**
+* UAX-31: 
+	* **New** 4 Scripts: Berf, Sidt, Tayo, Tols
+	* **Changed** Bopo &rarr; Limited Use
+* UTS-46:
+	* **New** [Miscellaneous Symbols Supplement](https://www.unicode.org/charts/PDF/Unicode-17.0/U170-1CEC0.pdf)
+	* **Fixed** Missing Disallowed from Unicode 16
+* UTS-51:
+	* **New** 164 Emoji `node derive/dump-emoji-new.js`
+* Prior Validation: `node test/validate.js 1.11.0`
+	* Fails on new emoji
+
 ### 15.1.0 → 16.0.0
 
-* [Release](https://www.unicode.org/versions/Unicode16.0.0/#Character_Additions)
-* [Diff](./diffs/15.1.0-vs-16.0.0.txt) `node unicode.diff.js 15.1 16`
+* [**Release**](https://www.unicode.org/versions/Unicode16.0.0)
+* [Diff](./diffs/15.1.0-vs-16.0.0.txt) `node unicode-diff.js 15.1 16`
 * CLDR
 	* `short-names.json` **Unchanged**
 	* `regions.json` **New** `"CQ"`
@@ -84,8 +102,8 @@
 
 ### 15.0.0 → 15.1.0
 
-* [Release](https://www.unicode.org/versions/Unicode15.1.0)
-* [Diff](./diffs/15.0.0-vs-15.1.0.txt) `node unicode.diff.js 15 15.1`
+* [**Release**](https://www.unicode.org/versions/Unicode15.1.0)
+* [Diff](./diffs/15.0.0-vs-15.1.0.txt) `node unicode-diff.js 15 15.1`
 * CLDR
 	* `short-names.json` **Unchanged**
 * UCD:

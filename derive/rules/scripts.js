@@ -248,4 +248,11 @@ export const RESTRICTED_SCRIPTS = [
 	'Todr', // Todhri
 	'Tutg', // Tulu Tigalari
 
+	// 17.0.0
+	'Berf', // Beria Erfe
+	'Sidt', // Sidetic
+	'Tayo', // Tai Yo
+	'Tols', // Tolong Siki
+	// Chisoi didn't make the cut: https://bsky.app/profile/adraffy.bsky.social/post/3lvrroos2ck25
+	// Bopo is now Limited Use ==> fix in 18.0.0
 ];

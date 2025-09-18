@@ -1,5 +1,5 @@
 import {mkdirSync, writeFileSync, createWriteStream, readFileSync} from 'node:fs';
-import {deepStrictEqual} from 'node:assert';
+import {deepEqual, deepStrictEqual} from 'node:assert';
 import {compare_arrays, explode_cp, parse_cp_sequence, print_section, print_checked, print_table, group_by} from './utils.js';
 import {UNICODE, NF, IDNA, PRINTER} from './unicode-version.js';
 import CHARS_VALID from './rules/chars-valid.js';
@@ -638,15 +638,12 @@ script_groups = script_groups.filter(g => {
 	console.log(`Removed Group: ${g.name}`);
 	// remove whole links
 	wholes_list = wholes_list.filter(w => {
-		if (w.union.delete(g)) {
-			if (!w.union.size) return false; // empty
-			for (let [cp, set] of w.map) {
-				if (set.delete(g) && set.size == 0) {
-					w.map.delete(cp);
-				}
+		for (let [cp, set] of w.map) {
+			if (set.delete(g) && set.size == 0) {
+				w.map.delete(cp);
 			}
 		}
-		return true;
+		return w.map.size;
 	});
 });
 
@@ -930,7 +927,8 @@ function write_json(name, json, indent) {
 	let str = JSON.stringify(json, null, indent ? '\t' : null); // 20240123: added optional indent for better diffs
 	try {
 		// 20230220: dont bump the file if nothing has changed
-		deepStrictEqual(...[readFileSync(file), str].map(x => {
+		// 20250802: deepStrictEqual appears bugged on node 24.x
+		deepEqual(...[readFileSync(file), str].map(x => {
 			let json = JSON.parse(x);
 			if (Array.isArray(json)) return json;
 			let {created, ...rest} = json; // remove dated keys

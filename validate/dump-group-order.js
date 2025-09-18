@@ -46,7 +46,7 @@ if (args[0] === 'save') {
 			let index = group.indexOf('[');
 			if (index >= 0) group = group.slice(index+1, -1);
 			let extra = `${String(count).padStart(count_len)} | ${perc(count)}`;
-			if (restricted) extra += ` ${RESTRICTED};`
+			if (restricted) extra += ` ${RESTRICTED}`;
 			return `\t'${group}',${' '.repeat(group_len - group.length)} // ${extra}`;
 		}),
 		`];`,

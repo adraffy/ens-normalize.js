@@ -1,6 +1,6 @@
-Build Date: 2024-09-13T06:42:41.079Z
-Unicode Version: 16.0.0 (2024-09-10T20:47:54.200Z)
-CLDR Version: 45 (2024-04-19T05:36:55.332Z)
+Build Date: 2025-09-14T17:56:19.848Z
+Unicode Version: 17.0.0 (2025-09-10T16:58:18.331Z)
+CLDR Version: 47 (2025-08-02T20:26:29.295Z)
 ==== RGI Emoji ZWJ Sequences ====
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -29,10 +29,18 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 2764 FE0F 200D 1F48B 
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 2764 FE0F 200D 1F48B 200D 1F468 1F3FD] (👨🏻‍❤️‍💋‍👨🏽) kiss: man, man, light skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 2764 FE0F 200D 1F48B 200D 1F468 1F3FE] (👨🏻‍❤️‍💋‍👨🏾) kiss: man, man, light skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 2764 FE0F 200D 1F48B 200D 1F468 1F3FF] (👨🏻‍❤️‍💋‍👨🏿) kiss: man, man, light skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1F430 200D 1F468 1F3FC] (👨🏻‍🐰‍👨🏼) men with bunny ears: light skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1F430 200D 1F468 1F3FD] (👨🏻‍🐰‍👨🏽) men with bunny ears: light skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1F430 200D 1F468 1F3FE] (👨🏻‍🐰‍👨🏾) men with bunny ears: light skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1F430 200D 1F468 1F3FF] (👨🏻‍🐰‍👨🏿) men with bunny ears: light skin tone, dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1F91D 200D 1F468 1F3FC] (👨🏻‍🤝‍👨🏼) men holding hands: light skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1F91D 200D 1F468 1F3FD] (👨🏻‍🤝‍👨🏽) men holding hands: light skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1F91D 200D 1F468 1F3FE] (👨🏻‍🤝‍👨🏾) men holding hands: light skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1F91D 200D 1F468 1F3FF] (👨🏻‍🤝‍👨🏿) men holding hands: light skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1FAEF 200D 1F468 1F3FC] (👨🏻‍🫯‍👨🏼) men wrestling: light skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1FAEF 200D 1F468 1F3FD] (👨🏻‍🫯‍👨🏽) men wrestling: light skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1FAEF 200D 1F468 1F3FE] (👨🏻‍🫯‍👨🏾) men wrestling: light skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FB 200D 1FAEF 200D 1F468 1F3FF] (👨🏻‍🫯‍👨🏿) men wrestling: light skin tone, dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 2764 FE0F 200D 1F468 1F3FB] (👨🏼‍❤️‍👨🏻) couple with heart: man, man, medium-light skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 2764 FE0F 200D 1F468 1F3FC] (👨🏼‍❤️‍👨🏼) couple with heart: man, man, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 2764 FE0F 200D 1F468 1F3FD] (👨🏼‍❤️‍👨🏽) couple with heart: man, man, medium-light skin tone, medium skin tone
@@ -43,10 +51,18 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 2764 FE0F 200D 1F48B 
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 2764 FE0F 200D 1F48B 200D 1F468 1F3FD] (👨🏼‍❤️‍💋‍👨🏽) kiss: man, man, medium-light skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 2764 FE0F 200D 1F48B 200D 1F468 1F3FE] (👨🏼‍❤️‍💋‍👨🏾) kiss: man, man, medium-light skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 2764 FE0F 200D 1F48B 200D 1F468 1F3FF] (👨🏼‍❤️‍💋‍👨🏿) kiss: man, man, medium-light skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1F430 200D 1F468 1F3FB] (👨🏼‍🐰‍👨🏻) men with bunny ears: medium-light skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1F430 200D 1F468 1F3FD] (👨🏼‍🐰‍👨🏽) men with bunny ears: medium-light skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1F430 200D 1F468 1F3FE] (👨🏼‍🐰‍👨🏾) men with bunny ears: medium-light skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1F430 200D 1F468 1F3FF] (👨🏼‍🐰‍👨🏿) men with bunny ears: medium-light skin tone, dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1F91D 200D 1F468 1F3FB] (👨🏼‍🤝‍👨🏻) men holding hands: medium-light skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1F91D 200D 1F468 1F3FD] (👨🏼‍🤝‍👨🏽) men holding hands: medium-light skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1F91D 200D 1F468 1F3FE] (👨🏼‍🤝‍👨🏾) men holding hands: medium-light skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1F91D 200D 1F468 1F3FF] (👨🏼‍🤝‍👨🏿) men holding hands: medium-light skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1FAEF 200D 1F468 1F3FB] (👨🏼‍🫯‍👨🏻) men wrestling: medium-light skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1FAEF 200D 1F468 1F3FD] (👨🏼‍🫯‍👨🏽) men wrestling: medium-light skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1FAEF 200D 1F468 1F3FE] (👨🏼‍🫯‍👨🏾) men wrestling: medium-light skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FC 200D 1FAEF 200D 1F468 1F3FF] (👨🏼‍🫯‍👨🏿) men wrestling: medium-light skin tone, dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 2764 FE0F 200D 1F468 1F3FB] (👨🏽‍❤️‍👨🏻) couple with heart: man, man, medium skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 2764 FE0F 200D 1F468 1F3FC] (👨🏽‍❤️‍👨🏼) couple with heart: man, man, medium skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 2764 FE0F 200D 1F468 1F3FD] (👨🏽‍❤️‍👨🏽) couple with heart: man, man, medium skin tone
@@ -57,10 +73,18 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 2764 FE0F 200D 1F48B 
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 2764 FE0F 200D 1F48B 200D 1F468 1F3FD] (👨🏽‍❤️‍💋‍👨🏽) kiss: man, man, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 2764 FE0F 200D 1F48B 200D 1F468 1F3FE] (👨🏽‍❤️‍💋‍👨🏾) kiss: man, man, medium skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 2764 FE0F 200D 1F48B 200D 1F468 1F3FF] (👨🏽‍❤️‍💋‍👨🏿) kiss: man, man, medium skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1F430 200D 1F468 1F3FB] (👨🏽‍🐰‍👨🏻) men with bunny ears: medium skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1F430 200D 1F468 1F3FC] (👨🏽‍🐰‍👨🏼) men with bunny ears: medium skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1F430 200D 1F468 1F3FE] (👨🏽‍🐰‍👨🏾) men with bunny ears: medium skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1F430 200D 1F468 1F3FF] (👨🏽‍🐰‍👨🏿) men with bunny ears: medium skin tone, dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1F91D 200D 1F468 1F3FB] (👨🏽‍🤝‍👨🏻) men holding hands: medium skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1F91D 200D 1F468 1F3FC] (👨🏽‍🤝‍👨🏼) men holding hands: medium skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1F91D 200D 1F468 1F3FE] (👨🏽‍🤝‍👨🏾) men holding hands: medium skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1F91D 200D 1F468 1F3FF] (👨🏽‍🤝‍👨🏿) men holding hands: medium skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1FAEF 200D 1F468 1F3FB] (👨🏽‍🫯‍👨🏻) men wrestling: medium skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1FAEF 200D 1F468 1F3FC] (👨🏽‍🫯‍👨🏼) men wrestling: medium skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1FAEF 200D 1F468 1F3FE] (👨🏽‍🫯‍👨🏾) men wrestling: medium skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FD 200D 1FAEF 200D 1F468 1F3FF] (👨🏽‍🫯‍👨🏿) men wrestling: medium skin tone, dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 2764 FE0F 200D 1F468 1F3FB] (👨🏾‍❤️‍👨🏻) couple with heart: man, man, medium-dark skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 2764 FE0F 200D 1F468 1F3FC] (👨🏾‍❤️‍👨🏼) couple with heart: man, man, medium-dark skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 2764 FE0F 200D 1F468 1F3FD] (👨🏾‍❤️‍👨🏽) couple with heart: man, man, medium-dark skin tone, medium skin tone
@@ -71,10 +95,18 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 2764 FE0F 200D 1F48B 
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 2764 FE0F 200D 1F48B 200D 1F468 1F3FD] (👨🏾‍❤️‍💋‍👨🏽) kiss: man, man, medium-dark skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 2764 FE0F 200D 1F48B 200D 1F468 1F3FE] (👨🏾‍❤️‍💋‍👨🏾) kiss: man, man, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 2764 FE0F 200D 1F48B 200D 1F468 1F3FF] (👨🏾‍❤️‍💋‍👨🏿) kiss: man, man, medium-dark skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1F430 200D 1F468 1F3FB] (👨🏾‍🐰‍👨🏻) men with bunny ears: medium-dark skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1F430 200D 1F468 1F3FC] (👨🏾‍🐰‍👨🏼) men with bunny ears: medium-dark skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1F430 200D 1F468 1F3FD] (👨🏾‍🐰‍👨🏽) men with bunny ears: medium-dark skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1F430 200D 1F468 1F3FF] (👨🏾‍🐰‍👨🏿) men with bunny ears: medium-dark skin tone, dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1F91D 200D 1F468 1F3FB] (👨🏾‍🤝‍👨🏻) men holding hands: medium-dark skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1F91D 200D 1F468 1F3FC] (👨🏾‍🤝‍👨🏼) men holding hands: medium-dark skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1F91D 200D 1F468 1F3FD] (👨🏾‍🤝‍👨🏽) men holding hands: medium-dark skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1F91D 200D 1F468 1F3FF] (👨🏾‍🤝‍👨🏿) men holding hands: medium-dark skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1FAEF 200D 1F468 1F3FB] (👨🏾‍🫯‍👨🏻) men wrestling: medium-dark skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1FAEF 200D 1F468 1F3FC] (👨🏾‍🫯‍👨🏼) men wrestling: medium-dark skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1FAEF 200D 1F468 1F3FD] (👨🏾‍🫯‍👨🏽) men wrestling: medium-dark skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FE 200D 1FAEF 200D 1F468 1F3FF] (👨🏾‍🫯‍👨🏿) men wrestling: medium-dark skin tone, dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 2764 FE0F 200D 1F468 1F3FB] (👨🏿‍❤️‍👨🏻) couple with heart: man, man, dark skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 2764 FE0F 200D 1F468 1F3FC] (👨🏿‍❤️‍👨🏼) couple with heart: man, man, dark skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 2764 FE0F 200D 1F468 1F3FD] (👨🏿‍❤️‍👨🏽) couple with heart: man, man, dark skin tone, medium skin tone
@@ -85,10 +117,18 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 2764 FE0F 200D 1F48B 
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 2764 FE0F 200D 1F48B 200D 1F468 1F3FD] (👨🏿‍❤️‍💋‍👨🏽) kiss: man, man, dark skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 2764 FE0F 200D 1F48B 200D 1F468 1F3FE] (👨🏿‍❤️‍💋‍👨🏾) kiss: man, man, dark skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 2764 FE0F 200D 1F48B 200D 1F468 1F3FF] (👨🏿‍❤️‍💋‍👨🏿) kiss: man, man, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1F430 200D 1F468 1F3FB] (👨🏿‍🐰‍👨🏻) men with bunny ears: dark skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1F430 200D 1F468 1F3FC] (👨🏿‍🐰‍👨🏼) men with bunny ears: dark skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1F430 200D 1F468 1F3FD] (👨🏿‍🐰‍👨🏽) men with bunny ears: dark skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1F430 200D 1F468 1F3FE] (👨🏿‍🐰‍👨🏾) men with bunny ears: dark skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1F91D 200D 1F468 1F3FB] (👨🏿‍🤝‍👨🏻) men holding hands: dark skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1F91D 200D 1F468 1F3FC] (👨🏿‍🤝‍👨🏼) men holding hands: dark skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1F91D 200D 1F468 1F3FD] (👨🏿‍🤝‍👨🏽) men holding hands: dark skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1F91D 200D 1F468 1F3FE] (👨🏿‍🤝‍👨🏾) men holding hands: dark skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1FAEF 200D 1F468 1F3FB] (👨🏿‍🫯‍👨🏻) men wrestling: dark skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1FAEF 200D 1F468 1F3FC] (👨🏿‍🫯‍👨🏼) men wrestling: dark skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1FAEF 200D 1F468 1F3FD] (👨🏿‍🫯‍👨🏽) men wrestling: dark skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 1F3FF 200D 1FAEF 200D 1F468 1F3FE] (👨🏿‍🫯‍👨🏾) men wrestling: dark skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 200D 2764 FE0F 200D 1F468] (👩‍❤️‍👨) couple with heart: woman, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 200D 2764 FE0F 200D 1F469] (👩‍❤️‍👩) couple with heart: woman, woman
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 200D 2764 FE0F 200D 1F48B 200D 1F468] (👩‍❤️‍💋‍👨) kiss: woman, man
@@ -123,6 +163,10 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 2764 FE0F 200D 1F48B 
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 2764 FE0F 200D 1F48B 200D 1F469 1F3FD] (👩🏻‍❤️‍💋‍👩🏽) kiss: woman, woman, light skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 2764 FE0F 200D 1F48B 200D 1F469 1F3FE] (👩🏻‍❤️‍💋‍👩🏾) kiss: woman, woman, light skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 2764 FE0F 200D 1F48B 200D 1F469 1F3FF] (👩🏻‍❤️‍💋‍👩🏿) kiss: woman, woman, light skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F430 200D 1F469 1F3FC] (👩🏻‍🐰‍👩🏼) women with bunny ears: light skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F430 200D 1F469 1F3FD] (👩🏻‍🐰‍👩🏽) women with bunny ears: light skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F430 200D 1F469 1F3FE] (👩🏻‍🐰‍👩🏾) women with bunny ears: light skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F430 200D 1F469 1F3FF] (👩🏻‍🐰‍👩🏿) women with bunny ears: light skin tone, dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F91D 200D 1F468 1F3FC] (👩🏻‍🤝‍👨🏼) woman and man holding hands: light skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F91D 200D 1F468 1F3FD] (👩🏻‍🤝‍👨🏽) woman and man holding hands: light skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F91D 200D 1F468 1F3FE] (👩🏻‍🤝‍👨🏾) woman and man holding hands: light skin tone, medium-dark skin tone
@@ -131,6 +175,10 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F91D 200D 1F469 1F3F
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F91D 200D 1F469 1F3FD] (👩🏻‍🤝‍👩🏽) women holding hands: light skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F91D 200D 1F469 1F3FE] (👩🏻‍🤝‍👩🏾) women holding hands: light skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1F91D 200D 1F469 1F3FF] (👩🏻‍🤝‍👩🏿) women holding hands: light skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1FAEF 200D 1F469 1F3FC] (👩🏻‍🫯‍👩🏼) women wrestling: light skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1FAEF 200D 1F469 1F3FD] (👩🏻‍🫯‍👩🏽) women wrestling: light skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1FAEF 200D 1F469 1F3FE] (👩🏻‍🫯‍👩🏾) women wrestling: light skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FB 200D 1FAEF 200D 1F469 1F3FF] (👩🏻‍🫯‍👩🏿) women wrestling: light skin tone, dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 2764 FE0F 200D 1F468 1F3FB] (👩🏼‍❤️‍👨🏻) couple with heart: woman, man, medium-light skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 2764 FE0F 200D 1F468 1F3FC] (👩🏼‍❤️‍👨🏼) couple with heart: woman, man, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 2764 FE0F 200D 1F468 1F3FD] (👩🏼‍❤️‍👨🏽) couple with heart: woman, man, medium-light skin tone, medium skin tone
@@ -151,6 +199,10 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 2764 FE0F 200D 1F48B 
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 2764 FE0F 200D 1F48B 200D 1F469 1F3FD] (👩🏼‍❤️‍💋‍👩🏽) kiss: woman, woman, medium-light skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 2764 FE0F 200D 1F48B 200D 1F469 1F3FE] (👩🏼‍❤️‍💋‍👩🏾) kiss: woman, woman, medium-light skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 2764 FE0F 200D 1F48B 200D 1F469 1F3FF] (👩🏼‍❤️‍💋‍👩🏿) kiss: woman, woman, medium-light skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F430 200D 1F469 1F3FB] (👩🏼‍🐰‍👩🏻) women with bunny ears: medium-light skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F430 200D 1F469 1F3FD] (👩🏼‍🐰‍👩🏽) women with bunny ears: medium-light skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F430 200D 1F469 1F3FE] (👩🏼‍🐰‍👩🏾) women with bunny ears: medium-light skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F430 200D 1F469 1F3FF] (👩🏼‍🐰‍👩🏿) women with bunny ears: medium-light skin tone, dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F91D 200D 1F468 1F3FB] (👩🏼‍🤝‍👨🏻) woman and man holding hands: medium-light skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F91D 200D 1F468 1F3FD] (👩🏼‍🤝‍👨🏽) woman and man holding hands: medium-light skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F91D 200D 1F468 1F3FE] (👩🏼‍🤝‍👨🏾) woman and man holding hands: medium-light skin tone, medium-dark skin tone
@@ -159,6 +211,10 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F91D 200D 1F469 1F3F
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F91D 200D 1F469 1F3FD] (👩🏼‍🤝‍👩🏽) women holding hands: medium-light skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F91D 200D 1F469 1F3FE] (👩🏼‍🤝‍👩🏾) women holding hands: medium-light skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1F91D 200D 1F469 1F3FF] (👩🏼‍🤝‍👩🏿) women holding hands: medium-light skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1FAEF 200D 1F469 1F3FB] (👩🏼‍🫯‍👩🏻) women wrestling: medium-light skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1FAEF 200D 1F469 1F3FD] (👩🏼‍🫯‍👩🏽) women wrestling: medium-light skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1FAEF 200D 1F469 1F3FE] (👩🏼‍🫯‍👩🏾) women wrestling: medium-light skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FC 200D 1FAEF 200D 1F469 1F3FF] (👩🏼‍🫯‍👩🏿) women wrestling: medium-light skin tone, dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 2764 FE0F 200D 1F468 1F3FB] (👩🏽‍❤️‍👨🏻) couple with heart: woman, man, medium skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 2764 FE0F 200D 1F468 1F3FC] (👩🏽‍❤️‍👨🏼) couple with heart: woman, man, medium skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 2764 FE0F 200D 1F468 1F3FD] (👩🏽‍❤️‍👨🏽) couple with heart: woman, man, medium skin tone
@@ -179,6 +235,10 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 2764 FE0F 200D 1F48B 
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 2764 FE0F 200D 1F48B 200D 1F469 1F3FD] (👩🏽‍❤️‍💋‍👩🏽) kiss: woman, woman, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 2764 FE0F 200D 1F48B 200D 1F469 1F3FE] (👩🏽‍❤️‍💋‍👩🏾) kiss: woman, woman, medium skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 2764 FE0F 200D 1F48B 200D 1F469 1F3FF] (👩🏽‍❤️‍💋‍👩🏿) kiss: woman, woman, medium skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F430 200D 1F469 1F3FB] (👩🏽‍🐰‍👩🏻) women with bunny ears: medium skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F430 200D 1F469 1F3FC] (👩🏽‍🐰‍👩🏼) women with bunny ears: medium skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F430 200D 1F469 1F3FE] (👩🏽‍🐰‍👩🏾) women with bunny ears: medium skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F430 200D 1F469 1F3FF] (👩🏽‍🐰‍👩🏿) women with bunny ears: medium skin tone, dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F91D 200D 1F468 1F3FB] (👩🏽‍🤝‍👨🏻) woman and man holding hands: medium skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F91D 200D 1F468 1F3FC] (👩🏽‍🤝‍👨🏼) woman and man holding hands: medium skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F91D 200D 1F468 1F3FE] (👩🏽‍🤝‍👨🏾) woman and man holding hands: medium skin tone, medium-dark skin tone
@@ -187,6 +247,10 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F91D 200D 1F469 1F3F
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F91D 200D 1F469 1F3FC] (👩🏽‍🤝‍👩🏼) women holding hands: medium skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F91D 200D 1F469 1F3FE] (👩🏽‍🤝‍👩🏾) women holding hands: medium skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1F91D 200D 1F469 1F3FF] (👩🏽‍🤝‍👩🏿) women holding hands: medium skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1FAEF 200D 1F469 1F3FB] (👩🏽‍🫯‍👩🏻) women wrestling: medium skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1FAEF 200D 1F469 1F3FC] (👩🏽‍🫯‍👩🏼) women wrestling: medium skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1FAEF 200D 1F469 1F3FE] (👩🏽‍🫯‍👩🏾) women wrestling: medium skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FD 200D 1FAEF 200D 1F469 1F3FF] (👩🏽‍🫯‍👩🏿) women wrestling: medium skin tone, dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 2764 FE0F 200D 1F468 1F3FB] (👩🏾‍❤️‍👨🏻) couple with heart: woman, man, medium-dark skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 2764 FE0F 200D 1F468 1F3FC] (👩🏾‍❤️‍👨🏼) couple with heart: woman, man, medium-dark skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 2764 FE0F 200D 1F468 1F3FD] (👩🏾‍❤️‍👨🏽) couple with heart: woman, man, medium-dark skin tone, medium skin tone
@@ -207,6 +271,10 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 2764 FE0F 200D 1F48B 
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 2764 FE0F 200D 1F48B 200D 1F469 1F3FD] (👩🏾‍❤️‍💋‍👩🏽) kiss: woman, woman, medium-dark skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 2764 FE0F 200D 1F48B 200D 1F469 1F3FE] (👩🏾‍❤️‍💋‍👩🏾) kiss: woman, woman, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 2764 FE0F 200D 1F48B 200D 1F469 1F3FF] (👩🏾‍❤️‍💋‍👩🏿) kiss: woman, woman, medium-dark skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F430 200D 1F469 1F3FB] (👩🏾‍🐰‍👩🏻) women with bunny ears: medium-dark skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F430 200D 1F469 1F3FC] (👩🏾‍🐰‍👩🏼) women with bunny ears: medium-dark skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F430 200D 1F469 1F3FD] (👩🏾‍🐰‍👩🏽) women with bunny ears: medium-dark skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F430 200D 1F469 1F3FF] (👩🏾‍🐰‍👩🏿) women with bunny ears: medium-dark skin tone, dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F91D 200D 1F468 1F3FB] (👩🏾‍🤝‍👨🏻) woman and man holding hands: medium-dark skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F91D 200D 1F468 1F3FC] (👩🏾‍🤝‍👨🏼) woman and man holding hands: medium-dark skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F91D 200D 1F468 1F3FD] (👩🏾‍🤝‍👨🏽) woman and man holding hands: medium-dark skin tone, medium skin tone
@@ -215,6 +283,10 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F91D 200D 1F469 1F3F
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F91D 200D 1F469 1F3FC] (👩🏾‍🤝‍👩🏼) women holding hands: medium-dark skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F91D 200D 1F469 1F3FD] (👩🏾‍🤝‍👩🏽) women holding hands: medium-dark skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1F91D 200D 1F469 1F3FF] (👩🏾‍🤝‍👩🏿) women holding hands: medium-dark skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1FAEF 200D 1F469 1F3FB] (👩🏾‍🫯‍👩🏻) women wrestling: medium-dark skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1FAEF 200D 1F469 1F3FC] (👩🏾‍🫯‍👩🏼) women wrestling: medium-dark skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1FAEF 200D 1F469 1F3FD] (👩🏾‍🫯‍👩🏽) women wrestling: medium-dark skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FE 200D 1FAEF 200D 1F469 1F3FF] (👩🏾‍🫯‍👩🏿) women wrestling: medium-dark skin tone, dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 2764 FE0F 200D 1F468 1F3FB] (👩🏿‍❤️‍👨🏻) couple with heart: woman, man, dark skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 2764 FE0F 200D 1F468 1F3FC] (👩🏿‍❤️‍👨🏼) couple with heart: woman, man, dark skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 2764 FE0F 200D 1F468 1F3FD] (👩🏿‍❤️‍👨🏽) couple with heart: woman, man, dark skin tone, medium skin tone
@@ -235,6 +307,10 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 2764 FE0F 200D 1F48B 
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 2764 FE0F 200D 1F48B 200D 1F469 1F3FD] (👩🏿‍❤️‍💋‍👩🏽) kiss: woman, woman, dark skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 2764 FE0F 200D 1F48B 200D 1F469 1F3FE] (👩🏿‍❤️‍💋‍👩🏾) kiss: woman, woman, dark skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 2764 FE0F 200D 1F48B 200D 1F469 1F3FF] (👩🏿‍❤️‍💋‍👩🏿) kiss: woman, woman, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F430 200D 1F469 1F3FB] (👩🏿‍🐰‍👩🏻) women with bunny ears: dark skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F430 200D 1F469 1F3FC] (👩🏿‍🐰‍👩🏼) women with bunny ears: dark skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F430 200D 1F469 1F3FD] (👩🏿‍🐰‍👩🏽) women with bunny ears: dark skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F430 200D 1F469 1F3FE] (👩🏿‍🐰‍👩🏾) women with bunny ears: dark skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F91D 200D 1F468 1F3FB] (👩🏿‍🤝‍👨🏻) woman and man holding hands: dark skin tone, light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F91D 200D 1F468 1F3FC] (👩🏿‍🤝‍👨🏼) woman and man holding hands: dark skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F91D 200D 1F468 1F3FD] (👩🏿‍🤝‍👨🏽) woman and man holding hands: dark skin tone, medium skin tone
@@ -243,6 +319,10 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F91D 200D 1F469 1F3F
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F91D 200D 1F469 1F3FC] (👩🏿‍🤝‍👩🏼) women holding hands: dark skin tone, medium-light skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F91D 200D 1F469 1F3FD] (👩🏿‍🤝‍👩🏽) women holding hands: dark skin tone, medium skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1F91D 200D 1F469 1F3FE] (👩🏿‍🤝‍👩🏾) women holding hands: dark skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1FAEF 200D 1F469 1F3FB] (👩🏿‍🫯‍👩🏻) women wrestling: dark skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1FAEF 200D 1F469 1F3FC] (👩🏿‍🫯‍👩🏼) women wrestling: dark skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1FAEF 200D 1F469 1F3FD] (👩🏿‍🫯‍👩🏽) women wrestling: dark skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F469 1F3FF 200D 1FAEF 200D 1F469 1F3FE] (👩🏿‍🫯‍👩🏾) women wrestling: dark skin tone, medium-dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F91D 200D 1F9D1] (🧑‍🤝‍🧑) people holding hands
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F9D1 200D 1F9D2] (🧑‍🧑‍🧒) family: adult, adult, child
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1F9D1 200D 1F9D2 200D 1F9D2] (🧑‍🧑‍🧒‍🧒) family: adult, adult, child, child
@@ -869,6 +949,16 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F46E 1F3FF 200D 2640 FE0F] (👮🏿�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F46E 1F3FF 200D 2642 FE0F] (👮🏿‍♂️) man police officer: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F46F 200D 2640 FE0F] (👯‍♀️) women with bunny ears
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F46F 200D 2642 FE0F] (👯‍♂️) men with bunny ears
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F46F 1F3FB 200D 2640 FE0F] (👯🏻‍♀️) women with bunny ears: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F46F 1F3FB 200D 2642 FE0F] (👯🏻‍♂️) men with bunny ears: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F46F 1F3FC 200D 2640 FE0F] (👯🏼‍♀️) women with bunny ears: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F46F 1F3FC 200D 2642 FE0F] (👯🏼‍♂️) men with bunny ears: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F46F 1F3FD 200D 2640 FE0F] (👯🏽‍♀️) women with bunny ears: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F46F 1F3FD 200D 2642 FE0F] (👯🏽‍♂️) men with bunny ears: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F46F 1F3FE 200D 2640 FE0F] (👯🏾‍♀️) women with bunny ears: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F46F 1F3FE 200D 2642 FE0F] (👯🏾‍♂️) men with bunny ears: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F46F 1F3FF 200D 2640 FE0F] (👯🏿‍♀️) women with bunny ears: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F46F 1F3FF 200D 2642 FE0F] (👯🏿‍♂️) men with bunny ears: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F470 200D 2640 FE0F] (👰‍♀️) woman with veil
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F470 200D 2642 FE0F] (👰‍♂️) man with veil
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F470 1F3FB 200D 2640 FE0F] (👰🏻‍♀️) woman with veil: light skin tone
@@ -1171,6 +1261,16 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F939 1F3FF 200D 2640 FE0F] (🤹🏿�
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F939 1F3FF 200D 2642 FE0F] (🤹🏿‍♂️) man juggling: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F93C 200D 2640 FE0F] (🤼‍♀️) women wrestling
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F93C 200D 2642 FE0F] (🤼‍♂️) men wrestling
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F93C 1F3FB 200D 2640 FE0F] (🤼🏻‍♀️) women wrestling: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F93C 1F3FB 200D 2642 FE0F] (🤼🏻‍♂️) men wrestling: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F93C 1F3FC 200D 2640 FE0F] (🤼🏼‍♀️) women wrestling: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F93C 1F3FC 200D 2642 FE0F] (🤼🏼‍♂️) men wrestling: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F93C 1F3FD 200D 2640 FE0F] (🤼🏽‍♀️) women wrestling: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F93C 1F3FD 200D 2642 FE0F] (🤼🏽‍♂️) men wrestling: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F93C 1F3FE 200D 2640 FE0F] (🤼🏾‍♀️) women wrestling: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F93C 1F3FE 200D 2642 FE0F] (🤼🏾‍♂️) men wrestling: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F93C 1F3FF 200D 2640 FE0F] (🤼🏿‍♀️) women wrestling: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F93C 1F3FF 200D 2642 FE0F] (🤼🏿‍♂️) men wrestling: dark skin tone
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F93D 200D 2640 FE0F] (🤽‍♀️) woman playing water polo
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F93D 200D 2642 FE0F] (🤽‍♂️) man playing water polo
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F93D 1F3FB 200D 2640 FE0F] (🤽🏻‍♀️) woman playing water polo: light skin tone
@@ -1470,6 +1570,52 @@ Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F635 200D 1F4AB] (😵‍💫) face w
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F636 200D 1F32B FE0F] (😶‍🌫️) face in clouds
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F642 200D 2194 FE0F] (🙂‍↔️) head shaking horizontally
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F642 200D 2195 FE0F] (🙂‍↕️) head shaking vertically
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 200D 1FA70] (🧑‍🩰) ballet dancer
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F430 200D 1F9D1 1F3FC] (🧑🏻‍🐰‍🧑🏼) people with bunny ears: light skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F430 200D 1F9D1 1F3FD] (🧑🏻‍🐰‍🧑🏽) people with bunny ears: light skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F430 200D 1F9D1 1F3FE] (🧑🏻‍🐰‍🧑🏾) people with bunny ears: light skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1F430 200D 1F9D1 1F3FF] (🧑🏻‍🐰‍🧑🏿) people with bunny ears: light skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1FA70] (🧑🏻‍🩰) ballet dancer: light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1FAEF 200D 1F9D1 1F3FC] (🧑🏻‍🫯‍🧑🏼) people wrestling: light skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1FAEF 200D 1F9D1 1F3FD] (🧑🏻‍🫯‍🧑🏽) people wrestling: light skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1FAEF 200D 1F9D1 1F3FE] (🧑🏻‍🫯‍🧑🏾) people wrestling: light skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FB 200D 1FAEF 200D 1F9D1 1F3FF] (🧑🏻‍🫯‍🧑🏿) people wrestling: light skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F430 200D 1F9D1 1F3FB] (🧑🏼‍🐰‍🧑🏻) people with bunny ears: medium-light skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F430 200D 1F9D1 1F3FD] (🧑🏼‍🐰‍🧑🏽) people with bunny ears: medium-light skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F430 200D 1F9D1 1F3FE] (🧑🏼‍🐰‍🧑🏾) people with bunny ears: medium-light skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1F430 200D 1F9D1 1F3FF] (🧑🏼‍🐰‍🧑🏿) people with bunny ears: medium-light skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1FA70] (🧑🏼‍🩰) ballet dancer: medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1FAEF 200D 1F9D1 1F3FB] (🧑🏼‍🫯‍🧑🏻) people wrestling: medium-light skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1FAEF 200D 1F9D1 1F3FD] (🧑🏼‍🫯‍🧑🏽) people wrestling: medium-light skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1FAEF 200D 1F9D1 1F3FE] (🧑🏼‍🫯‍🧑🏾) people wrestling: medium-light skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FC 200D 1FAEF 200D 1F9D1 1F3FF] (🧑🏼‍🫯‍🧑🏿) people wrestling: medium-light skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F430 200D 1F9D1 1F3FB] (🧑🏽‍🐰‍🧑🏻) people with bunny ears: medium skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F430 200D 1F9D1 1F3FC] (🧑🏽‍🐰‍🧑🏼) people with bunny ears: medium skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F430 200D 1F9D1 1F3FE] (🧑🏽‍🐰‍🧑🏾) people with bunny ears: medium skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1F430 200D 1F9D1 1F3FF] (🧑🏽‍🐰‍🧑🏿) people with bunny ears: medium skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1FA70] (🧑🏽‍🩰) ballet dancer: medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1FAEF 200D 1F9D1 1F3FB] (🧑🏽‍🫯‍🧑🏻) people wrestling: medium skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1FAEF 200D 1F9D1 1F3FC] (🧑🏽‍🫯‍🧑🏼) people wrestling: medium skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1FAEF 200D 1F9D1 1F3FE] (🧑🏽‍🫯‍🧑🏾) people wrestling: medium skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FD 200D 1FAEF 200D 1F9D1 1F3FF] (🧑🏽‍🫯‍🧑🏿) people wrestling: medium skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F430 200D 1F9D1 1F3FB] (🧑🏾‍🐰‍🧑🏻) people with bunny ears: medium-dark skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F430 200D 1F9D1 1F3FC] (🧑🏾‍🐰‍🧑🏼) people with bunny ears: medium-dark skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F430 200D 1F9D1 1F3FD] (🧑🏾‍🐰‍🧑🏽) people with bunny ears: medium-dark skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1F430 200D 1F9D1 1F3FF] (🧑🏾‍🐰‍🧑🏿) people with bunny ears: medium-dark skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1FA70] (🧑🏾‍🩰) ballet dancer: medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1FAEF 200D 1F9D1 1F3FB] (🧑🏾‍🫯‍🧑🏻) people wrestling: medium-dark skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1FAEF 200D 1F9D1 1F3FC] (🧑🏾‍🫯‍🧑🏼) people wrestling: medium-dark skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1FAEF 200D 1F9D1 1F3FD] (🧑🏾‍🫯‍🧑🏽) people wrestling: medium-dark skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FE 200D 1FAEF 200D 1F9D1 1F3FF] (🧑🏾‍🫯‍🧑🏿) people wrestling: medium-dark skin tone, dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F430 200D 1F9D1 1F3FB] (🧑🏿‍🐰‍🧑🏻) people with bunny ears: dark skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F430 200D 1F9D1 1F3FC] (🧑🏿‍🐰‍🧑🏼) people with bunny ears: dark skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F430 200D 1F9D1 1F3FD] (🧑🏿‍🐰‍🧑🏽) people with bunny ears: dark skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1F430 200D 1F9D1 1F3FE] (🧑🏿‍🐰‍🧑🏾) people with bunny ears: dark skin tone, medium-dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1FA70] (🧑🏿‍🩰) ballet dancer: dark skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1FAEF 200D 1F9D1 1F3FB] (🧑🏿‍🫯‍🧑🏻) people wrestling: dark skin tone, light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1FAEF 200D 1F9D1 1F3FC] (🧑🏿‍🫯‍🧑🏼) people wrestling: dark skin tone, medium-light skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1FAEF 200D 1F9D1 1F3FD] (🧑🏿‍🫯‍🧑🏽) people wrestling: dark skin tone, medium skin tone
+Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F9D1 1F3FF 200D 1FAEF 200D 1F9D1 1F3FE] (🧑🏿‍🫯‍🧑🏾) people wrestling: dark skin tone, medium-dark skin tone
 ==== RGI Emoji Keycap Sequences ====
 Register Emoji [Emoji_Keycap_Sequence]: [23 FE0F 20E3] (#️⃣) keycap: #
 Register Emoji [Emoji_Keycap_Sequence]: [2A FE0F 20E3] (*️⃣) keycap: *
@@ -1663,6 +1809,11 @@ Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F46E 1F3FC] (👮🏼) police of
 Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F46E 1F3FD] (👮🏽) police officer: medium skin tone
 Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F46E 1F3FE] (👮🏾) police officer: medium-dark skin tone
 Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F46E 1F3FF] (👮🏿) police officer: dark skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F46F 1F3FB] (👯🏻) people with bunny ears: light skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F46F 1F3FC] (👯🏼) people with bunny ears: medium-light skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F46F 1F3FD] (👯🏽) people with bunny ears: medium skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F46F 1F3FE] (👯🏾) people with bunny ears: medium-dark skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F46F 1F3FF] (👯🏿) people with bunny ears: dark skin tone
 Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F470 1F3FB] (👰🏻) person with veil: light skin tone
 Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F470 1F3FC] (👰🏼) person with veil: medium-light skin tone
 Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F470 1F3FD] (👰🏽) person with veil: medium skin tone
@@ -1963,6 +2114,11 @@ Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F939 1F3FC] (🤹🏼) person ju
 Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F939 1F3FD] (🤹🏽) person juggling: medium skin tone
 Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F939 1F3FE] (🤹🏾) person juggling: medium-dark skin tone
 Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F939 1F3FF] (🤹🏿) person juggling: dark skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F93C 1F3FB] (🤼🏻) people wrestling: light skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F93C 1F3FC] (🤼🏼) people wrestling: medium-light skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F93C 1F3FD] (🤼🏽) people wrestling: medium skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F93C 1F3FE] (🤼🏾) people wrestling: medium-dark skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F93C 1F3FF] (🤼🏿) people wrestling: dark skin tone
 Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F93D 1F3FB] (🤽🏻) person playing water polo: light skin tone
 Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F93D 1F3FC] (🤽🏼) person playing water polo: medium-light skin tone
 Register Emoji [RGI_Emoji_Modifier_Sequence]: [1F93D 1F3FD] (🤽🏽) person playing water polo: medium skin tone
@@ -3444,6 +3600,7 @@ Removed Valid: 1F6D2 (🛒) SHOPPING TROLLEY
 Removed Valid: 1F6D5 (🛕) HINDU TEMPLE
 Removed Valid: 1F6D6 (🛖) HUT
 Removed Valid: 1F6D7 (🛗) ELEVATOR
+Removed Valid: 1F6D8 (🛘) LANDSLIDE
 Removed Valid: 1F6DC (🛜) WIRELESS
 Removed Valid: 1F6DD (🛝) PLAYGROUND SLIDE
 Removed Valid: 1F6DE (🛞) WHEEL
@@ -3746,6 +3903,8 @@ Removed Valid: 1FA86 (🪆) NESTING DOLLS
 Removed Valid: 1FA87 (🪇) MARACAS
 Removed Valid: 1FA88 (🪈) FLUTE
 Removed Valid: 1FA89 (🪉) HARP
+Removed Valid: 1FA8A (🪊) TROMBONE
+Removed Valid: 1FA8E (🪎) TREASURE CHEST
 Removed Valid: 1FA8F (🪏) SHOVEL
 Removed Valid: 1FA90 (🪐) RINGED PLANET
 Removed Valid: 1FA91 (🪑) CHAIR
@@ -3802,6 +3961,8 @@ Removed Valid: 1FAC3 (🫃) PREGNANT MAN
 Removed Valid: 1FAC4 (🫄) PREGNANT PERSON
 Removed Valid: 1FAC5 (🫅) PERSON WITH CROWN
 Removed Valid: 1FAC6 (🫆) FINGERPRINT
+Removed Valid: 1FAC8 (🫈) HAIRY CREATURE
+Removed Valid: 1FACD (🫍) ORCA
 Removed Valid: 1FACE (🫎) MOOSE
 Removed Valid: 1FACF (🫏) DONKEY
 Removed Valid: 1FAD0 (🫐) BLUEBERRIES
@@ -3828,6 +3989,8 @@ Removed Valid: 1FAE6 (🫦) BITING LIP
 Removed Valid: 1FAE7 (🫧) BUBBLES
 Removed Valid: 1FAE8 (🫨) SHAKING FACE
 Removed Valid: 1FAE9 (🫩) FACE WITH BAGS UNDER EYES
+Removed Valid: 1FAEA (🫪) DISTORTED FACE
+Removed Valid: 1FAEF (🫯) FIGHT CLOUD
 Removed Valid: 1FAF0 (🫰) HAND WITH INDEX FINGER AND THUMB CROSSED
 Removed Valid: 1FAF1 (🫱) RIGHTWARDS HAND
 Removed Valid: 1FAF2 (🫲) LEFTWARDS HAND
@@ -4821,6 +4984,7 @@ Register Emoji [Emoji_Presentation]: [1F6D2 FE0F] (🛒️) shopping cart / SHOP
 Register Emoji [Emoji_Presentation]: [1F6D5 FE0F] (🛕️) hindu temple / HINDU TEMPLE
 Register Emoji [Emoji_Presentation]: [1F6D6 FE0F] (🛖️) hut / HUT
 Register Emoji [Emoji_Presentation]: [1F6D7 FE0F] (🛗️) elevator / ELEVATOR
+Register Emoji [Emoji_Presentation]: [1F6D8 FE0F] (🛘️) LANDSLIDE
 Register Emoji [Emoji_Presentation]: [1F6DC FE0F] (🛜️) wireless / WIRELESS
 Register Emoji [Emoji_Presentation]: [1F6DD FE0F] (🛝️) playground slide / PLAYGROUND SLIDE
 Register Emoji [Emoji_Presentation]: [1F6DE FE0F] (🛞️) wheel / WHEEL
@@ -5113,8 +5277,10 @@ Register Emoji [Emoji_Presentation]: [1FA85 FE0F] (🪅️) piñata / PINATA
 Register Emoji [Emoji_Presentation]: [1FA86 FE0F] (🪆️) nesting dolls / NESTING DOLLS
 Register Emoji [Emoji_Presentation]: [1FA87 FE0F] (🪇️) maracas / MARACAS
 Register Emoji [Emoji_Presentation]: [1FA88 FE0F] (🪈️) flute / FLUTE
-Register Emoji [Emoji_Presentation]: [1FA89 FE0F] (🪉️) HARP
-Register Emoji [Emoji_Presentation]: [1FA8F FE0F] (🪏️) SHOVEL
+Register Emoji [Emoji_Presentation]: [1FA89 FE0F] (🪉️) harp / HARP
+Register Emoji [Emoji_Presentation]: [1FA8A FE0F] (🪊️) TROMBONE
+Register Emoji [Emoji_Presentation]: [1FA8E FE0F] (🪎️) TREASURE CHEST
+Register Emoji [Emoji_Presentation]: [1FA8F FE0F] (🪏️) shovel / SHOVEL
 Register Emoji [Emoji_Presentation]: [1FA90 FE0F] (🪐️) ringed planet / RINGED PLANET
 Register Emoji [Emoji_Presentation]: [1FA91 FE0F] (🪑️) chair / CHAIR
 Register Emoji [Emoji_Presentation]: [1FA92 FE0F] (🪒️) razor / RAZOR
@@ -5161,7 +5327,7 @@ Register Emoji [Emoji_Presentation]: [1FABA FE0F] (🪺️) nest with eggs / NES
 Register Emoji [Emoji_Presentation]: [1FABB FE0F] (🪻️) hyacinth / HYACINTH
 Register Emoji [Emoji_Presentation]: [1FABC FE0F] (🪼️) jellyfish / JELLYFISH
 Register Emoji [Emoji_Presentation]: [1FABD FE0F] (🪽️) wing / WING
-Register Emoji [Emoji_Presentation]: [1FABE FE0F] (🪾️) LEAFLESS TREE
+Register Emoji [Emoji_Presentation]: [1FABE FE0F] (🪾️) leafless tree / LEAFLESS TREE
 Register Emoji [Emoji_Presentation]: [1FABF FE0F] (🪿️) goose / GOOSE
 Register Emoji [Emoji_Presentation]: [1FAC0 FE0F] (🫀️) anatomical heart / ANATOMICAL HEART
 Register Emoji [Emoji_Presentation]: [1FAC1 FE0F] (🫁️) lungs / LUNGS
@@ -5169,7 +5335,9 @@ Register Emoji [Emoji_Presentation]: [1FAC2 FE0F] (🫂️) people hugging / PEO
 Register Emoji [Emoji_Presentation]: [1FAC3 FE0F] (🫃️) pregnant man / PREGNANT MAN
 Register Emoji [Emoji_Presentation]: [1FAC4 FE0F] (🫄️) pregnant person / PREGNANT PERSON
 Register Emoji [Emoji_Presentation]: [1FAC5 FE0F] (🫅️) person with crown / PERSON WITH CROWN
-Register Emoji [Emoji_Presentation]: [1FAC6 FE0F] (🫆️) FINGERPRINT
+Register Emoji [Emoji_Presentation]: [1FAC6 FE0F] (🫆️) fingerprint / FINGERPRINT
+Register Emoji [Emoji_Presentation]: [1FAC8 FE0F] (🫈️) HAIRY CREATURE
+Register Emoji [Emoji_Presentation]: [1FACD FE0F] (🫍️) ORCA
 Register Emoji [Emoji_Presentation]: [1FACE FE0F] (🫎️) moose / MOOSE
 Register Emoji [Emoji_Presentation]: [1FACF FE0F] (🫏️) donkey / DONKEY
 Register Emoji [Emoji_Presentation]: [1FAD0 FE0F] (🫐️) blueberries / BLUEBERRIES
@@ -5184,8 +5352,8 @@ Register Emoji [Emoji_Presentation]: [1FAD8 FE0F] (🫘️) beans / BEANS
 Register Emoji [Emoji_Presentation]: [1FAD9 FE0F] (🫙️) jar / JAR
 Register Emoji [Emoji_Presentation]: [1FADA FE0F] (🫚️) ginger root / GINGER ROOT
 Register Emoji [Emoji_Presentation]: [1FADB FE0F] (🫛️) pea pod / PEA POD
-Register Emoji [Emoji_Presentation]: [1FADC FE0F] (🫜️) ROOT VEGETABLE
-Register Emoji [Emoji_Presentation]: [1FADF FE0F] (🫟️) SPLATTER
+Register Emoji [Emoji_Presentation]: [1FADC FE0F] (🫜️) root vegetable / ROOT VEGETABLE
+Register Emoji [Emoji_Presentation]: [1FADF FE0F] (🫟️) splatter / SPLATTER
 Register Emoji [Emoji_Presentation]: [1FAE0 FE0F] (🫠️) melting face / MELTING FACE
 Register Emoji [Emoji_Presentation]: [1FAE1 FE0F] (🫡️) saluting face / SALUTING FACE
 Register Emoji [Emoji_Presentation]: [1FAE2 FE0F] (🫢️) face with open eyes and hand over mouth / FACE WITH OPEN EYES AND HAND OVER MOUTH
@@ -5195,7 +5363,9 @@ Register Emoji [Emoji_Presentation]: [1FAE5 FE0F] (🫥️) dotted line face / D
 Register Emoji [Emoji_Presentation]: [1FAE6 FE0F] (🫦️) biting lip / BITING LIP
 Register Emoji [Emoji_Presentation]: [1FAE7 FE0F] (🫧️) bubbles / BUBBLES
 Register Emoji [Emoji_Presentation]: [1FAE8 FE0F] (🫨️) shaking face / SHAKING FACE
-Register Emoji [Emoji_Presentation]: [1FAE9 FE0F] (🫩️) FACE WITH BAGS UNDER EYES
+Register Emoji [Emoji_Presentation]: [1FAE9 FE0F] (🫩️) face with bags under eyes / FACE WITH BAGS UNDER EYES
+Register Emoji [Emoji_Presentation]: [1FAEA FE0F] (🫪️) DISTORTED FACE
+Register Emoji [Emoji_Presentation]: [1FAEF FE0F] (🫯️) FIGHT CLOUD
 Register Emoji [Emoji_Presentation]: [1FAF0 FE0F] (🫰️) hand with index finger and thumb crossed / HAND WITH INDEX FINGER AND THUMB CROSSED
 Register Emoji [Emoji_Presentation]: [1FAF1 FE0F] (🫱️) rightwards hand / RIGHTWARDS HAND
 Register Emoji [Emoji_Presentation]: [1FAF2 FE0F] (🫲️) leftwards hand / LEFTWARDS HAND
@@ -6668,6 +6838,10 @@ Removed Valid: 1FA50 (🩐) WHITE CHESS KNIGHT-BISHOP
 Removed Valid: 1FA51 (🩑) BLACK CHESS KNIGHT-QUEEN
 Removed Valid: 1FA52 (🩒) BLACK CHESS KNIGHT-ROOK
 Removed Valid: 1FA53 (🩓) BLACK CHESS KNIGHT-BISHOP
+Removed Valid: 1FA54 (🩔) WHITE CHESS FERZ
+Removed Valid: 1FA55 (🩕) WHITE CHESS ALFIL
+Removed Valid: 1FA56 (🩖) BLACK CHESS FERZ
+Removed Valid: 1FA57 (🩗) BLACK CHESS ALFIL
 Removed Mapped: 2B0 (ʰ) MODIFIER LETTER SMALL H => [68] (h) LATIN SMALL LETTER H
 Removed Mapped: 2B1 (ʱ) MODIFIER LETTER SMALL H WITH HOOK => [266] (ɦ) LATIN SMALL LETTER H WITH HOOK
 Removed Mapped: 2B2 (ʲ) MODIFIER LETTER SMALL J => [6A] (j) LATIN SMALL LETTER J
@@ -8039,6 +8213,7 @@ Removed Valid: 22FD (⋽) CONTAINS WITH OVERBAR
 Removed Valid: 22FE (⋾) SMALL CONTAINS WITH OVERBAR
 Removed Valid: 22FF (⋿) Z NOTATION BAG MEMBERSHIP
 Removed Valid: 2BF9 (⯹) EQUALS SIGN WITH INFINITY BELOW
+Removed Valid: 2B96 (⮖) EQUALS SIGN WITH INFINITY ABOVE
 Removed Valid: 2B41 (⭁) REVERSE TILDE OPERATOR ABOVE LEFTWARDS ARROW
 Removed Valid: 2B47 (⭇) REVERSE TILDE OPERATOR ABOVE RIGHTWARDS ARROW
 Removed Valid: 2B49 (⭉) TILDE OPERATOR ABOVE LEFTWARDS ARROW
@@ -8900,6 +9075,7 @@ Removed Valid: 29B2 (⦲) EMPTY SET WITH SMALL CIRCLE ABOVE
 Removed Valid: 29B3 (⦳) EMPTY SET WITH RIGHT ARROW ABOVE
 Removed Valid: 29B4 (⦴) EMPTY SET WITH LEFT ARROW ABOVE
 Removed Valid: 29B5 (⦵) CIRCLE WITH HORIZONTAL BAR
+Removed Valid: 1CEF0 (𜻰) MEDIUM SMALL WHITE CIRCLE WITH HORIZONTAL BAR
 Removed Valid: 29B6 (⦶) CIRCLED VERTICAL BAR
 Removed Valid: 29B7 (⦷) CIRCLED PARALLEL
 Removed Valid: 29B8 (⦸) CIRCLED REVERSE SOLIDUS
@@ -11872,6 +12048,196 @@ Removed Ignored: 206E (⁮) NATIONAL DIGIT SHAPES
 Removed Ignored: 206F (⁯) NOMINAL DIGIT SHAPES
 Removed Ignored: 3164 (ㅤ) HANGUL FILLER
 Removed Ignored: FFA0 (ﾠ) HALFWIDTH HANGUL FILLER
+Removed Valid: 2798 (➘) HEAVY SOUTH EAST ARROW
+Removed Valid: 2799 (➙) HEAVY RIGHTWARDS ARROW
+Removed Valid: 279B (➛) DRAFTING POINT RIGHTWARDS ARROW
+Removed Valid: 279C (➜) HEAVY ROUND-TIPPED RIGHTWARDS ARROW
+Removed Valid: 279D (➝) TRIANGLE-HEADED RIGHTWARDS ARROW
+Removed Valid: 279E (➞) HEAVY TRIANGLE-HEADED RIGHTWARDS ARROW
+Removed Valid: 279F (➟) DASHED TRIANGLE-HEADED RIGHTWARDS ARROW
+Removed Valid: 27A0 (➠) HEAVY DASHED TRIANGLE-HEADED RIGHTWARDS ARROW
+Removed Valid: 27A2 (➢) THREE-D TOP-LIGHTED RIGHTWARDS ARROWHEAD
+Removed Valid: 27A3 (➣) THREE-D BOTTOM-LIGHTED RIGHTWARDS ARROWHEAD
+Removed Valid: 27A5 (➥) HEAVY BLACK CURVED DOWNWARDS AND RIGHTWARDS ARROW
+Removed Valid: 27A6 (➦) HEAVY BLACK CURVED UPWARDS AND RIGHTWARDS ARROW
+Removed Valid: 27A7 (➧) SQUAT BLACK RIGHTWARDS ARROW
+Removed Valid: 27A8 (➨) HEAVY CONCAVE-POINTED BLACK RIGHTWARDS ARROW
+*** Already disallowed: 27B1 (➱) NOTCHED UPPER RIGHT-SHADOWED WHITE RIGHTWARDS ARROW
+Removed Valid: 27B2 (➲) CIRCLED HEAVY WHITE RIGHTWARDS ARROW
+Removed Valid: 27B3 (➳) WHITE-FEATHERED RIGHTWARDS ARROW
+Removed Valid: 27B4 (➴) BLACK-FEATHERED SOUTH EAST ARROW
+Removed Valid: 27B5 (➵) BLACK-FEATHERED RIGHTWARDS ARROW
+Removed Valid: 27B6 (➶) BLACK-FEATHERED NORTH EAST ARROW
+Removed Valid: 27B7 (➷) HEAVY BLACK-FEATHERED SOUTH EAST ARROW
+Removed Valid: 27B8 (➸) HEAVY BLACK-FEATHERED RIGHTWARDS ARROW
+Removed Valid: 27B9 (➹) HEAVY BLACK-FEATHERED NORTH EAST ARROW
+Removed Valid: 27BA (➺) TEARDROP-BARBED RIGHTWARDS ARROW
+Removed Valid: 27BB (➻) HEAVY TEARDROP-SHANKED RIGHTWARDS ARROW
+Removed Valid: 27BC (➼) WEDGE-TAILED RIGHTWARDS ARROW
+Removed Valid: 27BD (➽) HEAVY WEDGE-TAILED RIGHTWARDS ARROW
+Removed Valid: 2B00 (⬀) NORTH EAST WHITE ARROW
+Removed Valid: 2B01 (⬁) NORTH WEST WHITE ARROW
+Removed Valid: 2B02 (⬂) SOUTH EAST WHITE ARROW
+Removed Valid: 2B03 (⬃) SOUTH WEST WHITE ARROW
+Removed Valid: 2B04 (⬄) LEFT RIGHT WHITE ARROW
+Removed Valid: 2B08 (⬈) NORTH EAST BLACK ARROW
+Removed Valid: 2B09 (⬉) NORTH WEST BLACK ARROW
+Removed Valid: 2B0A (⬊) SOUTH EAST BLACK ARROW
+Removed Valid: 2B0B (⬋) SOUTH WEST BLACK ARROW
+Removed Valid: 2B0C (⬌) LEFT RIGHT BLACK ARROW
+Removed Valid: 2B0D (⬍) UP DOWN BLACK ARROW
+Removed Valid: 2B0E (⬎) RIGHTWARDS ARROW WITH TIP DOWNWARDS
+Removed Valid: 2B0F (⬏) RIGHTWARDS ARROW WITH TIP UPWARDS
+Removed Valid: 2B10 (⬐) LEFTWARDS ARROW WITH TIP DOWNWARDS
+Removed Valid: 2B11 (⬑) LEFTWARDS ARROW WITH TIP UPWARDS
+Removed Valid: 2B5A (⭚) SLANTED NORTH ARROW WITH HOOKED HEAD
+Removed Valid: 2B5B (⭛) BACKSLANTED SOUTH ARROW WITH HOOKED TAIL
+Removed Valid: 2B5C (⭜) SLANTED NORTH ARROW WITH HORIZONTAL TAIL
+Removed Valid: 2B5D (⭝) BACKSLANTED SOUTH ARROW WITH HORIZONTAL TAIL
+Removed Valid: 2B5E (⭞) BENT ARROW POINTING DOWNWARDS THEN NORTH EAST
+Removed Valid: 2B5F (⭟) SHORT BENT ARROW POINTING DOWNWARDS THEN NORTH EAST
+Removed Valid: 2B60 (⭠) LEFTWARDS TRIANGLE-HEADED ARROW
+Removed Valid: 2B61 (⭡) UPWARDS TRIANGLE-HEADED ARROW
+Removed Valid: 2B62 (⭢) RIGHTWARDS TRIANGLE-HEADED ARROW
+Removed Valid: 2B63 (⭣) DOWNWARDS TRIANGLE-HEADED ARROW
+Removed Valid: 2B64 (⭤) LEFT RIGHT TRIANGLE-HEADED ARROW
+Removed Valid: 2B65 (⭥) UP DOWN TRIANGLE-HEADED ARROW
+Removed Valid: 2B66 (⭦) NORTH WEST TRIANGLE-HEADED ARROW
+Removed Valid: 2B67 (⭧) NORTH EAST TRIANGLE-HEADED ARROW
+Removed Valid: 2B68 (⭨) SOUTH EAST TRIANGLE-HEADED ARROW
+Removed Valid: 2B69 (⭩) SOUTH WEST TRIANGLE-HEADED ARROW
+Removed Valid: 2B6A (⭪) LEFTWARDS TRIANGLE-HEADED DASHED ARROW
+Removed Valid: 2B6B (⭫) UPWARDS TRIANGLE-HEADED DASHED ARROW
+Removed Valid: 2B6C (⭬) RIGHTWARDS TRIANGLE-HEADED DASHED ARROW
+Removed Valid: 2B6D (⭭) DOWNWARDS TRIANGLE-HEADED DASHED ARROW
+Removed Valid: 2B6E (⭮) CLOCKWISE TRIANGLE-HEADED OPEN CIRCLE ARROW
+Removed Valid: 2B6F (⭯) ANTICLOCKWISE TRIANGLE-HEADED OPEN CIRCLE ARROW
+Removed Valid: 2B70 (⭰) LEFTWARDS TRIANGLE-HEADED ARROW TO BAR
+Removed Valid: 2B71 (⭱) UPWARDS TRIANGLE-HEADED ARROW TO BAR
+Removed Valid: 2B72 (⭲) RIGHTWARDS TRIANGLE-HEADED ARROW TO BAR
+Removed Valid: 2B73 (⭳) DOWNWARDS TRIANGLE-HEADED ARROW TO BAR
+Removed Valid: 2B76 (⭶) NORTH WEST TRIANGLE-HEADED ARROW TO BAR
+Removed Valid: 2B77 (⭷) NORTH EAST TRIANGLE-HEADED ARROW TO BAR
+Removed Valid: 2B78 (⭸) SOUTH EAST TRIANGLE-HEADED ARROW TO BAR
+Removed Valid: 2B79 (⭹) SOUTH WEST TRIANGLE-HEADED ARROW TO BAR
+Removed Valid: 2B7A (⭺) LEFTWARDS TRIANGLE-HEADED ARROW WITH DOUBLE HORIZONTAL STROKE
+Removed Valid: 2B7B (⭻) UPWARDS TRIANGLE-HEADED ARROW WITH DOUBLE HORIZONTAL STROKE
+Removed Valid: 2B7C (⭼) RIGHTWARDS TRIANGLE-HEADED ARROW WITH DOUBLE HORIZONTAL STROKE
+Removed Valid: 2B7D (⭽) DOWNWARDS TRIANGLE-HEADED ARROW WITH DOUBLE HORIZONTAL STROKE
+Removed Valid: 2B7E (⭾) HORIZONTAL TAB KEY
+Removed Valid: 2B7F (⭿) VERTICAL TAB KEY
+Removed Valid: 2B80 (⮀) LEFTWARDS TRIANGLE-HEADED ARROW OVER RIGHTWARDS TRIANGLE-HEADED ARROW
+Removed Valid: 2B81 (⮁) UPWARDS TRIANGLE-HEADED ARROW LEFTWARDS OF DOWNWARDS TRIANGLE-HEADED ARROW
+Removed Valid: 2B82 (⮂) RIGHTWARDS TRIANGLE-HEADED ARROW OVER LEFTWARDS TRIANGLE-HEADED ARROW
+Removed Valid: 2B83 (⮃) DOWNWARDS TRIANGLE-HEADED ARROW LEFTWARDS OF UPWARDS TRIANGLE-HEADED ARROW
+Removed Valid: 2B84 (⮄) LEFTWARDS TRIANGLE-HEADED PAIRED ARROWS
+Removed Valid: 2B85 (⮅) UPWARDS TRIANGLE-HEADED PAIRED ARROWS
+Removed Valid: 2B86 (⮆) RIGHTWARDS TRIANGLE-HEADED PAIRED ARROWS
+Removed Valid: 2B87 (⮇) DOWNWARDS TRIANGLE-HEADED PAIRED ARROWS
+Removed Valid: 2B88 (⮈) LEFTWARDS BLACK CIRCLED WHITE ARROW
+Removed Valid: 2B89 (⮉) UPWARDS BLACK CIRCLED WHITE ARROW
+Removed Valid: 2B8A (⮊) RIGHTWARDS BLACK CIRCLED WHITE ARROW
+Removed Valid: 2B8B (⮋) DOWNWARDS BLACK CIRCLED WHITE ARROW
+Removed Valid: 2B8C (⮌) ANTICLOCKWISE TRIANGLE-HEADED RIGHT U-SHAPED ARROW
+Removed Valid: 2B8D (⮍) ANTICLOCKWISE TRIANGLE-HEADED BOTTOM U-SHAPED ARROW
+Removed Valid: 2B8E (⮎) ANTICLOCKWISE TRIANGLE-HEADED LEFT U-SHAPED ARROW
+Removed Valid: 2B8F (⮏) ANTICLOCKWISE TRIANGLE-HEADED TOP U-SHAPED ARROW
+Removed Valid: 2B90 (⮐) RETURN LEFT
+Removed Valid: 2B91 (⮑) RETURN RIGHT
+Removed Valid: 2B92 (⮒) NEWLINE LEFT
+Removed Valid: 2B93 (⮓) NEWLINE RIGHT
+Removed Valid: 2B94 (⮔) FOUR CORNER ARROWS CIRCLING ANTICLOCKWISE
+Removed Valid: 2B95 (⮕) RIGHTWARDS BLACK ARROW
+Removed Valid: 2B97 (⮗) SYMBOL FOR TYPE A ELECTRONICS
+Removed Valid: 2B98 (⮘) THREE-D TOP-LIGHTED LEFTWARDS EQUILATERAL ARROWHEAD
+Removed Valid: 2B99 (⮙) THREE-D RIGHT-LIGHTED UPWARDS EQUILATERAL ARROWHEAD
+Removed Valid: 2B9A (⮚) THREE-D TOP-LIGHTED RIGHTWARDS EQUILATERAL ARROWHEAD
+Removed Valid: 2B9B (⮛) THREE-D LEFT-LIGHTED DOWNWARDS EQUILATERAL ARROWHEAD
+Removed Valid: 2B9C (⮜) BLACK LEFTWARDS EQUILATERAL ARROWHEAD
+Removed Valid: 2B9D (⮝) BLACK UPWARDS EQUILATERAL ARROWHEAD
+Removed Valid: 2B9E (⮞) BLACK RIGHTWARDS EQUILATERAL ARROWHEAD
+Removed Valid: 2B9F (⮟) BLACK DOWNWARDS EQUILATERAL ARROWHEAD
+Removed Valid: 2BA0 (⮠) DOWNWARDS TRIANGLE-HEADED ARROW WITH LONG TIP LEFTWARDS
+Removed Valid: 2BA1 (⮡) DOWNWARDS TRIANGLE-HEADED ARROW WITH LONG TIP RIGHTWARDS
+Removed Valid: 2BA2 (⮢) UPWARDS TRIANGLE-HEADED ARROW WITH LONG TIP LEFTWARDS
+Removed Valid: 2BA3 (⮣) UPWARDS TRIANGLE-HEADED ARROW WITH LONG TIP RIGHTWARDS
+Removed Valid: 2BA4 (⮤) LEFTWARDS TRIANGLE-HEADED ARROW WITH LONG TIP UPWARDS
+Removed Valid: 2BA5 (⮥) RIGHTWARDS TRIANGLE-HEADED ARROW WITH LONG TIP UPWARDS
+Removed Valid: 2BA6 (⮦) LEFTWARDS TRIANGLE-HEADED ARROW WITH LONG TIP DOWNWARDS
+Removed Valid: 2BA7 (⮧) RIGHTWARDS TRIANGLE-HEADED ARROW WITH LONG TIP DOWNWARDS
+Removed Valid: 2BA8 (⮨) BLACK CURVED DOWNWARDS AND LEFTWARDS ARROW
+Removed Valid: 2BA9 (⮩) BLACK CURVED DOWNWARDS AND RIGHTWARDS ARROW
+Removed Valid: 2BAA (⮪) BLACK CURVED UPWARDS AND LEFTWARDS ARROW
+Removed Valid: 2BAB (⮫) BLACK CURVED UPWARDS AND RIGHTWARDS ARROW
+Removed Valid: 2BAC (⮬) BLACK CURVED LEFTWARDS AND UPWARDS ARROW
+Removed Valid: 2BAD (⮭) BLACK CURVED RIGHTWARDS AND UPWARDS ARROW
+Removed Valid: 2BAE (⮮) BLACK CURVED LEFTWARDS AND DOWNWARDS ARROW
+Removed Valid: 2BAF (⮯) BLACK CURVED RIGHTWARDS AND DOWNWARDS ARROW
+Removed Valid: 2BB0 (⮰) RIBBON ARROW DOWN LEFT
+Removed Valid: 2BB1 (⮱) RIBBON ARROW DOWN RIGHT
+Removed Valid: 2BB2 (⮲) RIBBON ARROW UP LEFT
+Removed Valid: 2BB3 (⮳) RIBBON ARROW UP RIGHT
+Removed Valid: 2BB4 (⮴) RIBBON ARROW LEFT UP
+Removed Valid: 2BB5 (⮵) RIBBON ARROW RIGHT UP
+Removed Valid: 2BB6 (⮶) RIBBON ARROW LEFT DOWN
+Removed Valid: 2BB7 (⮷) RIBBON ARROW RIGHT DOWN
+Removed Valid: 2BB8 (⮸) UPWARDS WHITE ARROW FROM BAR WITH HORIZONTAL BAR
+Removed Valid: 1390 (᎐) ETHIOPIC TONAL MARK YIZET
+Removed Valid: 1391 (᎑) ETHIOPIC TONAL MARK DERET
+Removed Valid: 1392 (᎒) ETHIOPIC TONAL MARK RIKRIK
+Removed Valid: 1393 (᎓) ETHIOPIC TONAL MARK SHORT RIKRIK
+Removed Valid: 1394 (᎔) ETHIOPIC TONAL MARK DIFAT
+Removed Valid: 1395 (᎕) ETHIOPIC TONAL MARK KENAT
+Removed Valid: 1396 (᎖) ETHIOPIC TONAL MARK CHIRET
+Removed Valid: 1397 (᎗) ETHIOPIC TONAL MARK HIDET
+Removed Valid: 1398 (᎘) ETHIOPIC TONAL MARK DERET-HIDET
+Removed Valid: 1399 (᎙) ETHIOPIC TONAL MARK KURT
+Removed Valid: 1CEE0 (𜻠) GEOMANTIC FIGURE POPULUS
+Removed Valid: 1CEE1 (𜻡) GEOMANTIC FIGURE TRISTITIA
+Removed Valid: 1CEE2 (𜻢) GEOMANTIC FIGURE ALBUS
+Removed Valid: 1CEE3 (𜻣) GEOMANTIC FIGURE FORTUNA MAJOR
+Removed Valid: 1CEE4 (𜻤) GEOMANTIC FIGURE RUBEUS
+Removed Valid: 1CEE5 (𜻥) GEOMANTIC FIGURE ACQUISITIO
+Removed Valid: 1CEE6 (𜻦) GEOMANTIC FIGURE CONJUNCTIO
+Removed Valid: 1CEE7 (𜻧) GEOMANTIC FIGURE CAPUT DRACONIS
+Removed Valid: 1CEE8 (𜻨) GEOMANTIC FIGURE LAETITIA
+Removed Valid: 1CEE9 (𜻩) GEOMANTIC FIGURE CARCER
+Removed Valid: 1CEEA (𜻪) GEOMANTIC FIGURE AMISSIO
+Removed Valid: 1CEEB (𜻫) GEOMANTIC FIGURE PUELLA
+Removed Valid: 1CEEC (𜻬) GEOMANTIC FIGURE FORTUNA MINOR
+Removed Valid: 1CEED (𜻭) GEOMANTIC FIGURE PUER
+Removed Valid: 1CEEE (𜻮) GEOMANTIC FIGURE CAUDA DRACONIS
+Removed Valid: 1CEEF (𜻯) GEOMANTIC FIGURE VIA
+Removed Valid: 1ACF (◌᫏) COMBINING DOUBLE CARON
+Removed Valid: 1AD0 (◌᫐) COMBINING VERTICAL-LINE-ACUTE
+Removed Valid: 1AD1 (◌᫑) COMBINING GRAVE-VERTICAL-LINE
+Removed Valid: 1AD2 (◌᫒) COMBINING VERTICAL-LINE-GRAVE
+Removed Valid: 1AD3 (◌᫓) COMBINING ACUTE-VERTICAL-LINE
+Removed Valid: 1AD4 (◌᫔) COMBINING VERTICAL-LINE-MACRON
+Removed Valid: 1AD5 (◌᫕) COMBINING MACRON-VERTICAL-LINE
+Removed Valid: 1AD6 (◌᫖) COMBINING VERTICAL-LINE-ACUTE-GRAVE
+Removed Valid: 1AD7 (◌᫗) COMBINING VERTICAL-LINE-GRAVE-ACUTE
+Removed Valid: 1AD8 (◌᫘) COMBINING MACRON-ACUTE-GRAVE
+Removed Valid: 1AD9 (◌᫙) COMBINING SHARP SIGN
+Removed Valid: 1ADA (◌᫚) COMBINING FLAT SIGN
+Removed Valid: 1ADB (◌᫛) COMBINING DOWN TACK ABOVE
+Removed Valid: 1ADC (◌᫜) COMBINING DIAERESIS WITH RAISED LEFT DOT
+Removed Valid: 1ADD (◌᫝) COMBINING DOT-AND-RING BELOW
+Removed Valid: 1AE0 (◌᫠) COMBINING LEFT TACK ABOVE
+Removed Valid: 1AE1 (◌᫡) COMBINING RIGHT TACK ABOVE
+Removed Valid: 1AE2 (◌᫢) COMBINING MINUS SIGN ABOVE
+Removed Valid: 1AE3 (◌᫣) COMBINING INVERTED BRIDGE ABOVE
+Removed Valid: 1AE4 (◌᫤) COMBINING SQUARE ABOVE
+Removed Valid: 1AE5 (◌᫥) COMBINING SEAGULL ABOVE
+Removed Valid: 1AE6 (◌᫦) COMBINING DOUBLE ARCH BELOW
+Removed Valid: 1AE7 (◌᫧) COMBINING DOUBLE ARCH ABOVE
+Removed Valid: 1AE8 (◌᫨) COMBINING EQUALS SIGN ABOVE
+Removed Valid: 1AE9 (◌᫩) COMBINING LEFT ANGLE CENTRED ABOVE
+Removed Valid: 1AEA (◌᫪) COMBINING UPWARDS ARROW ABOVE
+Removed Valid: 1AEB (◌᫫) COMBINING DOUBLE RIGHTWARDS ARROW ABOVE
+Removed Mapped: A7CE (꟎) LATIN CAPITAL LETTER PHARYNGEAL VOICED FRICATIVE => [A7CF] (꟏) LATIN SMALL LETTER PHARYNGEAL VOICED FRICATIVE
+Removed Valid: A7CF (꟏) LATIN SMALL LETTER PHARYNGEAL VOICED FRICATIVE
+Removed Mapped: A7F1 (꟱) MODIFIER LETTER CAPITAL S => [73] (s) LATIN SMALL LETTER S
 Removed Valid: 2E (.) FULL STOP
 ==== Apply ScriptExt ====
 3BE (ξ) GREEK SMALL LETTER XI [Grek => Zyyy]
@@ -11881,14 +12247,14 @@ Disallowed Script: [Lina] Linear A [X]
 Disallowed Script: [Linb] Linear B [X]
 Disallowed Script: [Sgnw] SignWriting [X]
 Valid  | Name       | Test      | Rest      | Extra                     
- 99198 | Japanese   | Kana+Hira | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
-110515 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
- 98988 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
- 97880 | Bopomofo   | Bopo      | Hani      |                           
-  1447 | Latin      | Latn+Zyyy | Zinh      | π                         
-  1287 | Cyrillic   | Cyrl      | Zyyy+Zinh |                           
-  1273 | Greek      | Grek      | Zyyy+Zinh |                           
-   410 | Arabic     | Arab      |           | -                         
+103427 | Japanese   | Kana+Hira | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+114744 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+103217 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
+102201 | Bopomofo   | Bopo      | Hani      |                           
+  1355 | Latin      | Latn+Zyyy | Zinh      | π                         
+  1195 | Cyrillic   | Cyrl      | Zyyy+Zinh |                           
+  1181 | Greek      | Grek      | Zyyy+Zinh |                           
+   450 | Arabic     | Arab      |           | -                         
    120 | Devanagari | Deva      |           |                           
     86 | Hebrew     | Hebr      |           | ₪                         
     87 | Thai       | Thai      |           | ฿                         
@@ -11900,13 +12266,13 @@ Valid  | Name       | Test      | Rest      | Extra
     89 | Oriya      | Orya      |           |                           
    111 | Sinhala    | Sinh      |           |                           
     91 | Gujarati   | Gujr      |           |                           
-    96 | Telugu     | Telu      |           |                           
-    89 | Kannada    | Knda      |           |                           
+    97 | Telugu     | Telu      |           |                           
+    90 | Kannada    | Knda      |           |                           
    113 | Malayalam  | Mlym      |           |                           
     80 | Lao        | Laoo      |           |                           
     42 | Georgian   | Geor      |           |                           
    234 | Myanmar    | Mymr      |           |                           
-   515 | Ethiopic   | Ethi      |           |                           
+   505 | Ethiopic   | Ethi      |           |                           
    137 | Khmer      | Khmr      |           |                           
     44 | Armenian   | Armn      |           |                           
     52 | Adlm [R]   | Adlm      |           |                           
@@ -11939,7 +12305,7 @@ Valid  | Name       | Test      | Rest      | Extra
     50 | Tale [R]   | Tale      |           |                           
     83 | Talu [R]   | Talu      |           |                           
     72 | Tavt [R]   | Tavt      |           |                           
-    62 | Tfng [R]   | Tfng      |           |                           
+    64 | Tfng [R]   | Tfng      |           |                           
    292 | Vaii [R]   | Vaii      |           |                           
     59 | Wcho [R]   | Wcho      |           |                           
   1221 | Yiii [R]   | Yiii      |           |                           
@@ -12016,7 +12382,7 @@ Valid  | Name       | Test      | Rest      | Extra
     57 | Samr [R]   | Samr      |           |                           
     32 | Sarb [R]   | Sarb      |           |                           
     48 | Shaw [R]   | Shaw      |           |                           
-    91 | Shrd [R]   | Shrd      |           |                           
+    99 | Shrd [R]   | Shrd      |           |                           
     75 | Sidd [R]   | Sidd      |           |                           
     69 | Sind [R]   | Sind      |           |                           
     35 | Sora [R]   | Sora      |           |                           
@@ -12025,7 +12391,7 @@ Valid  | Name       | Test      | Rest      | Extra
     81 | Soyo [R]   | Soyo      |           |                           
     18 | Tagb [R]   | Tagb      |           |                           
     68 | Takr [R]   | Takr      |           |                           
-  6914 | Tang [R]   | Tang      |           |                           
+  7059 | Tang [R]   | Tang      |           |                           
     23 | Tglg [R]   | Tglg      |           |                           
     82 | Tirh [R]   | Tirh      |           |                           
     89 | Tnsa [R]   | Tnsa      |           |                           
@@ -12044,6 +12410,10 @@ Valid  | Name       | Test      | Rest      | Extra
     47 | Sunu [R]   | Sunu      |           |                           
     55 | Todr [R]   | Todr      |           |                           
     88 | Tutg [R]   | Tutg      |           |                           
+    25 | Berf [R]   | Berf      |           |                           
+    26 | Sidt [R]   | Sidt      |           |                           
+    55 | Tayo [R]   | Tayo      |           |                           
+    54 | Tols [R]   | Tols      |           |                           
 ==== Compute CM Whitelist ====
 [E0] (à) LATIN SMALL LETTER A WITH GRAVE <0> "a+◌̀" [Latin]
 [E1] (á) LATIN SMALL LETTER A WITH ACUTE <0> "a+◌́" [Latin]
@@ -15559,6 +15929,8 @@ Removed Mapping: A7C9 (Ꟊ) LATIN CAPITAL LETTER S WITH SHORT STROKE OVERLAY => 
 Removed Mapping: A7CB (Ɤ) LATIN CAPITAL LETTER RAMS HORN => [264] (ɤ) LATIN SMALL LETTER RAMS HORN
 Removed Mapping: A7CC (Ꟍ) LATIN CAPITAL LETTER S WITH DIAGONAL STROKE => [A7CD] (ꟍ) LATIN SMALL LETTER S WITH DIAGONAL STROKE
 Removed Mapping: A7D0 (Ꟑ) LATIN CAPITAL LETTER CLOSED INSULAR G => [A7D1] (ꟑ) LATIN SMALL LETTER CLOSED INSULAR G
+Removed Mapping: A7D2 (꟒) LATIN CAPITAL LETTER DOUBLE THORN => [A7D3] (ꟓ) LATIN SMALL LETTER DOUBLE THORN
+Removed Mapping: A7D4 (꟔) LATIN CAPITAL LETTER DOUBLE WYNN => [A7D5] (ꟕ) LATIN SMALL LETTER DOUBLE WYNN
 Removed Mapping: A7D6 (Ꟗ) LATIN CAPITAL LETTER MIDDLE SCOTS S => [A7D7] (ꟗ) LATIN SMALL LETTER MIDDLE SCOTS S
 Removed Mapping: A7D8 (Ꟙ) LATIN CAPITAL LETTER SIGMOID S => [A7D9] (ꟙ) LATIN SMALL LETTER SIGMOID S
 Removed Mapping: A7DA (Ꟛ) LATIN CAPITAL LETTER LAMBDA => [A7DB] (ꟛ) LATIN SMALL LETTER LAMBDA
@@ -15734,9 +16106,9 @@ Removed Mapping: 1F248 (🉈) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-655
 [✓] Fastpath ASCII
 [✓] Groups Names are A-Z
 ==== Find Unique Characters ====
-Valid: 138775
-Multi: 99105
-Unique: 39670
+Valid: 143349
+Multi: 103335
+Unique: 40014
 [✓] Matching Groups have Same CM Style
 [✓] Wholes are Valid
 Confusable: 496
@@ -15748,177 +16120,181 @@ Non-Confusable Non-Unique: 51
 [✓] All Unrestricted before Restricted
 [✓] Ordered by Registration Likelihood
 ==== Group Summary ====
-Ord | Valid  | Uniqu | Prima | Secon | CM   | Group     
-  1 |   1238 |    55 |  1237 |     1 | 0/51 | Latin     
-  2 |  98988 |     0 | 97806 |  1182 | 0/0  | Han       
-  3 |    400 |   377 |   399 |     1 |      | Arabic    
-  4 |    120 |   110 |   120 |     0 |      | Devanagari
-  5 |  99195 |   207 |   209 | 98986 | 0/58 | Japanese  
-  6 | 110514 | 11526 | 11528 | 98986 | 0/0  | Korean    
-  7 |   1261 |   105 |   105 |  1156 | 0/8  | Cyrillic  
-  8 |     86 |    83 |    85 |     1 |      | Hebrew    
-  9 |     87 |    85 |    86 |     1 |      | Thai      
- 10 |     91 |    81 |    91 |     0 |      | Bengali   
- 11 |    126 |   105 |   126 |     0 |      | Tamil     
- 12 |   1191 |    34 |    35 |  1156 | 0/11 | Greek     
- 13 |    186 |   186 |   186 |     0 |      | Tibetan   
- 14 |     74 |    64 |    74 |     0 |      | Gurmukhi  
- 15 |     80 |    80 |    80 |     0 |      | Lao       
- 16 |     96 |    96 |    96 |     0 |      | Telugu    
- 17 |  97880 |    74 |    76 | 97804 | 0/0  | Bopomofo  
- 18 |     91 |    81 |    91 |     0 |      | Gujarati  
- 19 |    233 |   223 |   233 |     0 |      | Myanmar   
- 20 |     42 |    42 |    42 |     0 |      | Georgian  
- 21 |     44 |    43 |    44 |     0 |      | Armenian  
- 22 |    113 |   113 |   113 |     0 |      | Malayalam 
- 23 |    137 |   137 |   137 |     0 |      | Khmer     
- 24 |     89 |    79 |    89 |     0 |      | Kannada   
- 25 |    515 |   515 |   515 |     0 |      | Ethiopic  
- 26 |    111 |   111 |   111 |     0 |      | Sinhala   
- 27 |     89 |    89 |    89 |     0 |      | Oriya     
- 28 |     61 |    50 |    61 |     0 |      | Thaana    
- 29 |     91 |    75 |    91 |     0 |      | Syrc      
- 30 |     54 |    54 |    54 |     0 |      | Nkoo      
- 31 |     29 |    29 |    29 |     0 |      | Phnx      
- 32 |     92 |    86 |    92 |     0 |      | Cher      
- 33 |    722 |   722 |   722 |     0 |      | Cans      
- 34 |     86 |    86 |    86 |     0 |      | Runr      
- 35 |    155 |   155 |   155 |     0 |      | Mong      
- 36 |     66 |    66 |    66 |     0 |      | Limb      
- 37 |     83 |    83 |    83 |     0 |      | Talu      
- 38 |   5089 |  5089 |  5089 |     0 |      | Egyp      
- 39 |     80 |    80 |    80 |     0 |      | Cham      
- 40 |   1234 |  1234 |  1234 |     0 |      | Xsux      
- 41 |     39 |    39 |    39 |     0 |      | Ital      
- 42 |     40 |    40 |    40 |     0 |      | Dsrt      
- 43 |     32 |    32 |    32 |     0 |      | Mero      
- 44 |     28 |    28 |    28 |     0 |      | Ogam      
- 45 |     23 |    23 |    23 |     0 |      | Tglg      
- 46 |     75 |    75 |    75 |     0 |      | Gonm      
- 47 |     62 |    59 |    62 |     0 |      | Tfng      
- 48 |    654 |   654 |   654 |     0 |      | Bamu      
- 49 |     41 |    41 |    41 |     0 |      | Mroo      
- 50 |   1221 |  1220 |  1221 |     0 |      | Yiii      
- 51 |    292 |   292 |   292 |     0 |      | Vaii      
- 52 |     89 |    88 |    89 |     0 |      | Java      
- 53 |     77 |    73 |    77 |     0 |      | Copt      
- 54 |     50 |    50 |    50 |     0 |      | Xpeo      
- 55 |     73 |    73 |    73 |     0 |      | Orkh      
- 56 |     52 |    52 |    52 |     0 |      | Adlm      
- 57 |     90 |    90 |    90 |     0 |      | Bali      
- 58 |     56 |    56 |    56 |     0 |      | Batk      
- 59 |     88 |    68 |    88 |     0 |      | Cakm      
- 60 |     71 |    71 |    71 |     0 |      | Hmnp      
- 61 |     46 |    46 |    46 |     0 |      | Kali      
- 62 |    123 |   123 |   123 |     0 |      | Lana      
- 63 |     72 |    72 |    72 |     0 |      | Lepc      
- 64 |     41 |    41 |    41 |     0 |      | Lisu      
- 65 |     29 |    29 |    29 |     0 |      | Mand      
- 66 |     76 |    76 |    76 |     0 |      | Mtei      
- 67 |     93 |    93 |    93 |     0 |      | Newa      
- 68 |     46 |    46 |    46 |     0 |      | Olck      
- 69 |     39 |    36 |    39 |     0 |      | Osge      
- 70 |    149 |   149 |   149 |     0 |      | Plrd      
- 71 |     50 |    50 |    50 |     0 |      | Rohg      
- 72 |     80 |    80 |    80 |     0 |      | Saur      
- 73 |     72 |    72 |    72 |     0 |      | Sund      
- 74 |     55 |    45 |    55 |     0 |      | Sylo      
- 75 |     50 |    35 |    50 |     0 |      | Tale      
- 76 |     72 |    72 |    72 |     0 |      | Tavt      
- 77 |     59 |    59 |    59 |     0 |      | Wcho      
- 78 |     54 |    53 |    54 |     0 |      | Aghb      
- 79 |     62 |    62 |    62 |     0 |      | Ahom      
- 80 |     31 |    31 |    31 |     0 |      | Armi      
- 81 |     61 |    61 |    61 |     0 |      | Avst      
- 82 |     35 |    35 |    35 |     0 |      | Bass      
- 83 |     95 |    95 |    95 |     0 |      | Bhks      
- 84 |    113 |   113 |   113 |     0 |      | Brah      
- 85 |     31 |    30 |    31 |     0 |      | Bugi      
- 86 |     20 |    20 |    20 |     0 |      | Buhd      
- 87 |     49 |    49 |    49 |     0 |      | Cari      
- 88 |     28 |    28 |    28 |     0 |      | Chrs      
- 89 |     99 |    99 |    99 |     0 |      | Cpmn      
- 90 |     55 |    55 |    55 |     0 |      | Cprt      
- 91 |     70 |    70 |    70 |     0 |      | Diak      
- 92 |     70 |    60 |    70 |     0 |      | Dogr      
- 93 |    145 |   142 |   145 |     0 |      | Dupl      
- 94 |     41 |    40 |    41 |     0 |      | Elba      
- 95 |     23 |    23 |    23 |     0 |      | Elym      
- 96 |     88 |    86 |    88 |     0 |      | Glag      
- 97 |     63 |    63 |    63 |     0 |      | Gong      
- 98 |     30 |    27 |    30 |     0 |      | Goth      
- 99 |    103 |    82 |   103 |     0 |      | Gran      
-100 |     21 |    21 |    21 |     0 |      | Hano      
-101 |     26 |    26 |    26 |     0 |      | Hatr      
-102 |    583 |   583 |   583 |     0 |      | Hluw      
-103 |    124 |   124 |   124 |     0 |      | Hmng      
-104 |     57 |    57 |    57 |     0 |      | Hung      
-105 |     85 |    85 |    85 |     0 |      | Kawi      
-106 |     60 |    60 |    60 |     0 |      | Khar      
-107 |     71 |    61 |    71 |     0 |      | Khoj      
-108 |    472 |   472 |   472 |     0 |      | Kits      
-109 |     72 |    62 |    72 |     0 |      | Kthi      
-110 |     29 |    29 |    29 |     0 |      | Lyci      
-111 |     27 |    27 |    27 |     0 |      | Lydi      
-112 |     23 |    23 |    23 |     0 |      | Maka      
-113 |     49 |    39 |    49 |     0 |      | Mahj      
-114 |     51 |    50 |    51 |     0 |      | Mani      
-115 |     68 |    68 |    68 |     0 |      | Marc      
-116 |     57 |    57 |    57 |     0 |      | Medf      
-117 |    213 |   213 |   213 |     0 |      | Mend      
-118 |     90 |    90 |    90 |     0 |      | Merc      
-119 |     77 |    77 |    77 |     0 |      | Modi      
-120 |     47 |    37 |    47 |     0 |      | Mult      
-121 |     42 |    42 |    42 |     0 |      | Nagm      
-122 |     32 |    32 |    32 |     0 |      | Narb      
-123 |     76 |    66 |    76 |     0 |      | Nand      
-124 |     40 |    40 |    40 |     0 |      | Nbat      
-125 |    397 |   397 |   397 |     0 |      | Nshu      
-126 |     40 |    40 |    40 |     0 |      | Osma      
-127 |     23 |    22 |    23 |     0 |      | Ougr      
-128 |     32 |    32 |    32 |     0 |      | Palm      
-129 |     57 |    57 |    57 |     0 |      | Pauc      
-130 |     47 |    44 |    47 |     0 |      | Perm      
-131 |     54 |    54 |    54 |     0 |      | Phag      
-132 |     27 |    27 |    27 |     0 |      | Phli      
-133 |     29 |    29 |    29 |     0 |      | Phlp      
-134 |     30 |    30 |    30 |     0 |      | Prti      
-135 |     37 |    37 |    37 |     0 |      | Rjng      
-136 |     57 |    57 |    57 |     0 |      | Samr      
-137 |     32 |    32 |    32 |     0 |      | Sarb      
-138 |     48 |    48 |    48 |     0 |      | Shaw      
-139 |     91 |    91 |    91 |     0 |      | Shrd      
-140 |     75 |    75 |    75 |     0 |      | Sidd      
-141 |     69 |    69 |    69 |     0 |      | Sind      
-142 |     35 |    35 |    35 |     0 |      | Sora      
-143 |     37 |    37 |    37 |     0 |      | Sogd      
-144 |     40 |    40 |    40 |     0 |      | Sogo      
-145 |     81 |    81 |    81 |     0 |      | Soyo      
-146 |     18 |    18 |    18 |     0 |      | Tagb      
-147 |     68 |    68 |    68 |     0 |      | Takr      
-148 |   6914 |  6914 |  6914 |     0 |      | Tang      
-149 |     82 |    82 |    82 |     0 |      | Tirh      
-150 |     89 |    89 |    89 |     0 |      | Tnsa      
-151 |     31 |    31 |    31 |     0 |      | Toto      
-152 |     31 |    31 |    31 |     0 |      | Ugar      
-153 |     35 |    35 |    35 |     0 |      | Vith      
-154 |     52 |    52 |    52 |     0 |      | Wara      
-155 |     57 |    47 |    57 |     0 |      | Yezi      
-156 |     70 |    70 |    70 |     0 |      | Zanb      
-157 |     47 |    47 |    47 |     0 |      | Gara      
-158 |     55 |    55 |    55 |     0 |      | Gukh      
-159 |     56 |    56 |    56 |     0 |      | Krai      
-160 |     44 |    44 |    44 |     0 |      | Onao      
-161 |     47 |    44 |    47 |     0 |      | Sunu      
-162 |     55 |    52 |    55 |     0 |      | Todr      
-163 |     88 |    78 |    88 |     0 |      | Tutg      
+Ord | Valid  | Uniqu | Primar | Second | CM   | Group     
+  1 |   1146 |    55 |   1145 |      1 | 0/51 | Latin     
+  2 |    440 |   417 |    439 |      1 |      | Arabic    
+  3 | 103217 |     0 | 102127 |   1090 | 0/0  | Han       
+  4 |    120 |   110 |    120 |      0 |      | Devanagari
+  5 | 114743 | 11526 |  11528 | 103215 | 0/0  | Korean    
+  6 | 103424 |   207 |    209 | 103215 | 0/58 | Japanese  
+  7 |   1169 |   105 |    105 |   1064 | 0/8  | Cyrillic  
+  8 |     86 |    83 |     85 |      1 |      | Hebrew    
+  9 |     87 |    85 |     86 |      1 |      | Thai      
+ 10 |     91 |    81 |     91 |      0 |      | Bengali   
+ 11 |    126 |   105 |    126 |      0 |      | Tamil     
+ 12 |   1099 |    34 |     35 |   1064 | 0/11 | Greek     
+ 13 |    186 |   186 |    186 |      0 |      | Tibetan   
+ 14 |     74 |    64 |     74 |      0 |      | Gurmukhi  
+ 15 |     80 |    80 |     80 |      0 |      | Lao       
+ 16 |     97 |    97 |     97 |      0 |      | Telugu    
+ 17 |     91 |    81 |     91 |      0 |      | Gujarati  
+ 18 |    233 |   223 |    233 |      0 |      | Myanmar   
+ 19 | 102201 |    74 |     76 | 102125 | 0/0  | Bopomofo  
+ 20 |     42 |    42 |     42 |      0 |      | Georgian  
+ 21 |     44 |    43 |     44 |      0 |      | Armenian  
+ 22 |    137 |   137 |    137 |      0 |      | Khmer     
+ 23 |     90 |    80 |     90 |      0 |      | Kannada   
+ 24 |    113 |   113 |    113 |      0 |      | Malayalam 
+ 25 |    505 |   505 |    505 |      0 |      | Ethiopic  
+ 26 |    111 |   111 |    111 |      0 |      | Sinhala   
+ 27 |     89 |    89 |     89 |      0 |      | Oriya     
+ 28 |     61 |    50 |     61 |      0 |      | Thaana    
+ 29 |     91 |    75 |     91 |      0 |      | Syrc      
+ 30 |     54 |    54 |     54 |      0 |      | Nkoo      
+ 31 |     92 |    86 |     92 |      0 |      | Cher      
+ 32 |    722 |   722 |    722 |      0 |      | Cans      
+ 33 |     86 |    86 |     86 |      0 |      | Runr      
+ 34 |    155 |   155 |    155 |      0 |      | Mong      
+ 35 |     66 |    66 |     66 |      0 |      | Limb      
+ 36 |     83 |    83 |     83 |      0 |      | Talu      
+ 37 |    123 |   123 |    123 |      0 |      | Lana      
+ 38 |   1221 |  1220 |   1221 |      0 |      | Yiii      
+ 39 |     80 |    80 |     80 |      0 |      | Cham      
+ 40 |     29 |    29 |     29 |      0 |      | Phnx      
+ 41 |   5089 |  5089 |   5089 |      0 |      | Egyp      
+ 42 |     73 |    73 |     73 |      0 |      | Orkh      
+ 43 |   1234 |  1234 |   1234 |      0 |      | Xsux      
+ 44 |     28 |    28 |     28 |      0 |      | Ogam      
+ 45 |     23 |    23 |     23 |      0 |      | Tglg      
+ 46 |     88 |    86 |     88 |      0 |      | Glag      
+ 47 |     64 |    59 |     64 |      0 |      | Tfng      
+ 48 |    292 |   292 |    292 |      0 |      | Vaii      
+ 49 |     49 |    49 |     49 |      0 |      | Cari      
+ 50 |     39 |    39 |     39 |      0 |      | Ital      
+ 51 |     50 |    50 |     50 |      0 |      | Xpeo      
+ 52 |     40 |    40 |     40 |      0 |      | Dsrt      
+ 53 |     32 |    32 |     32 |      0 |      | Mero      
+ 54 |    113 |   113 |    113 |      0 |      | Brah      
+ 55 |     75 |    75 |     75 |      0 |      | Gonm      
+ 56 |    654 |   654 |    654 |      0 |      | Bamu      
+ 57 |     41 |    41 |     41 |      0 |      | Mroo      
+ 58 |     89 |    88 |     89 |      0 |      | Java      
+ 59 |     77 |    73 |     77 |      0 |      | Copt      
+ 60 |     52 |    52 |     52 |      0 |      | Adlm      
+ 61 |     90 |    90 |     90 |      0 |      | Bali      
+ 62 |     56 |    56 |     56 |      0 |      | Batk      
+ 63 |     88 |    68 |     88 |      0 |      | Cakm      
+ 64 |     71 |    71 |     71 |      0 |      | Hmnp      
+ 65 |     46 |    46 |     46 |      0 |      | Kali      
+ 66 |     72 |    72 |     72 |      0 |      | Lepc      
+ 67 |     41 |    41 |     41 |      0 |      | Lisu      
+ 68 |     29 |    29 |     29 |      0 |      | Mand      
+ 69 |     76 |    76 |     76 |      0 |      | Mtei      
+ 70 |     93 |    93 |     93 |      0 |      | Newa      
+ 71 |     46 |    46 |     46 |      0 |      | Olck      
+ 72 |     39 |    36 |     39 |      0 |      | Osge      
+ 73 |    149 |   149 |    149 |      0 |      | Plrd      
+ 74 |     50 |    50 |     50 |      0 |      | Rohg      
+ 75 |     80 |    80 |     80 |      0 |      | Saur      
+ 76 |     72 |    72 |     72 |      0 |      | Sund      
+ 77 |     55 |    45 |     55 |      0 |      | Sylo      
+ 78 |     50 |    35 |     50 |      0 |      | Tale      
+ 79 |     72 |    72 |     72 |      0 |      | Tavt      
+ 80 |     59 |    59 |     59 |      0 |      | Wcho      
+ 81 |     54 |    53 |     54 |      0 |      | Aghb      
+ 82 |     62 |    62 |     62 |      0 |      | Ahom      
+ 83 |     31 |    31 |     31 |      0 |      | Armi      
+ 84 |     61 |    61 |     61 |      0 |      | Avst      
+ 85 |     35 |    35 |     35 |      0 |      | Bass      
+ 86 |     95 |    95 |     95 |      0 |      | Bhks      
+ 87 |     31 |    30 |     31 |      0 |      | Bugi      
+ 88 |     20 |    20 |     20 |      0 |      | Buhd      
+ 89 |     28 |    28 |     28 |      0 |      | Chrs      
+ 90 |     99 |    99 |     99 |      0 |      | Cpmn      
+ 91 |     55 |    55 |     55 |      0 |      | Cprt      
+ 92 |     70 |    70 |     70 |      0 |      | Diak      
+ 93 |     70 |    60 |     70 |      0 |      | Dogr      
+ 94 |    145 |   142 |    145 |      0 |      | Dupl      
+ 95 |     41 |    40 |     41 |      0 |      | Elba      
+ 96 |     23 |    23 |     23 |      0 |      | Elym      
+ 97 |     63 |    63 |     63 |      0 |      | Gong      
+ 98 |     30 |    27 |     30 |      0 |      | Goth      
+ 99 |    103 |    82 |    103 |      0 |      | Gran      
+100 |     21 |    21 |     21 |      0 |      | Hano      
+101 |     26 |    26 |     26 |      0 |      | Hatr      
+102 |    583 |   583 |    583 |      0 |      | Hluw      
+103 |    124 |   124 |    124 |      0 |      | Hmng      
+104 |     57 |    57 |     57 |      0 |      | Hung      
+105 |     85 |    85 |     85 |      0 |      | Kawi      
+106 |     60 |    60 |     60 |      0 |      | Khar      
+107 |     71 |    61 |     71 |      0 |      | Khoj      
+108 |    472 |   472 |    472 |      0 |      | Kits      
+109 |     72 |    62 |     72 |      0 |      | Kthi      
+110 |     29 |    29 |     29 |      0 |      | Lyci      
+111 |     27 |    27 |     27 |      0 |      | Lydi      
+112 |     23 |    23 |     23 |      0 |      | Maka      
+113 |     49 |    39 |     49 |      0 |      | Mahj      
+114 |     51 |    50 |     51 |      0 |      | Mani      
+115 |     68 |    68 |     68 |      0 |      | Marc      
+116 |     57 |    57 |     57 |      0 |      | Medf      
+117 |    213 |   213 |    213 |      0 |      | Mend      
+118 |     90 |    90 |     90 |      0 |      | Merc      
+119 |     77 |    77 |     77 |      0 |      | Modi      
+120 |     47 |    37 |     47 |      0 |      | Mult      
+121 |     42 |    42 |     42 |      0 |      | Nagm      
+122 |     32 |    32 |     32 |      0 |      | Narb      
+123 |     76 |    66 |     76 |      0 |      | Nand      
+124 |     40 |    40 |     40 |      0 |      | Nbat      
+125 |    397 |   397 |    397 |      0 |      | Nshu      
+126 |     40 |    40 |     40 |      0 |      | Osma      
+127 |     23 |    22 |     23 |      0 |      | Ougr      
+128 |     32 |    32 |     32 |      0 |      | Palm      
+129 |     57 |    57 |     57 |      0 |      | Pauc      
+130 |     47 |    43 |     47 |      0 |      | Perm      
+131 |     54 |    54 |     54 |      0 |      | Phag      
+132 |     27 |    27 |     27 |      0 |      | Phli      
+133 |     29 |    29 |     29 |      0 |      | Phlp      
+134 |     30 |    30 |     30 |      0 |      | Prti      
+135 |     37 |    37 |     37 |      0 |      | Rjng      
+136 |     57 |    57 |     57 |      0 |      | Samr      
+137 |     32 |    32 |     32 |      0 |      | Sarb      
+138 |     48 |    48 |     48 |      0 |      | Shaw      
+139 |     99 |    99 |     99 |      0 |      | Shrd      
+140 |     75 |    75 |     75 |      0 |      | Sidd      
+141 |     69 |    69 |     69 |      0 |      | Sind      
+142 |     35 |    35 |     35 |      0 |      | Sora      
+143 |     37 |    37 |     37 |      0 |      | Sogd      
+144 |     40 |    40 |     40 |      0 |      | Sogo      
+145 |     81 |    81 |     81 |      0 |      | Soyo      
+146 |     18 |    18 |     18 |      0 |      | Tagb      
+147 |     68 |    68 |     68 |      0 |      | Takr      
+148 |   7059 |  7059 |   7059 |      0 |      | Tang      
+149 |     82 |    82 |     82 |      0 |      | Tirh      
+150 |     89 |    89 |     89 |      0 |      | Tnsa      
+151 |     31 |    31 |     31 |      0 |      | Toto      
+152 |     31 |    31 |     31 |      0 |      | Ugar      
+153 |     35 |    35 |     35 |      0 |      | Vith      
+154 |     52 |    52 |     52 |      0 |      | Wara      
+155 |     57 |    47 |     57 |      0 |      | Yezi      
+156 |     70 |    70 |     70 |      0 |      | Zanb      
+157 |     47 |    47 |     47 |      0 |      | Gara      
+158 |     55 |    55 |     55 |      0 |      | Gukh      
+159 |     56 |    56 |     56 |      0 |      | Krai      
+160 |     44 |    44 |     44 |      0 |      | Onao      
+161 |     47 |    44 |     47 |      0 |      | Sunu      
+162 |     55 |    52 |     55 |      0 |      | Todr      
+163 |     88 |    78 |     88 |      0 |      | Tutg      
+164 |     25 |    25 |     25 |      0 |      | Berf      
+165 |     26 |    26 |     26 |      0 |      | Sidt      
+166 |     55 |    55 |     55 |      0 |      | Tayo      
+167 |     54 |    54 |     54 |      0 |      | Tols      
 ==== NFC Quick Check ====
-Optimized: 2143 => 574
+Optimized: 2177 => 581
 ==== Compute NSM from Groups w/o CM Whitelist ====
-CM(2501) => NSM(2033) => 1095
+CM(2543) => NSM(2072) => 1107
 Per Group Max: 61
 ==== Write Output ====
-Wrote: spec.json [3171498]
+Wrote: spec.json [3299377]
 Unchanged: nf.json
 Unchanged: nf-tests.json
 Unchanged: emoji-info.json

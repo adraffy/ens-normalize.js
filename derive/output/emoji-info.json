@@ -216,6 +216,38 @@
 		"subgroup": "family"
 	},
 	{
+		"form": "👨🏻‍🐰‍👨🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: light skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👨🏻‍🐰‍👨🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: light skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👨🏻‍🐰‍👨🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: light skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👨🏻‍🐰‍👨🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: light skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
 		"form": "👨🏻‍🤝‍👨🏼",
 		"type": "RGI_Emoji_ZWJ_Sequence",
 		"name": "men holding hands: light skin tone, medium-light skin tone",
@@ -246,6 +278,38 @@
 		"version": "12.1",
 		"group": "People & Body",
 		"subgroup": "family"
+	},
+	{
+		"form": "👨🏻‍🫯‍👨🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: light skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👨🏻‍🫯‍👨🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: light skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👨🏻‍🫯‍👨🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: light skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👨🏻‍🫯‍👨🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: light skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
 	},
 	{
 		"form": "👨🏼‍❤️‍👨🏻",
@@ -328,6 +392,38 @@
 		"subgroup": "family"
 	},
 	{
+		"form": "👨🏼‍🐰‍👨🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: medium-light skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👨🏼‍🐰‍👨🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: medium-light skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👨🏼‍🐰‍👨🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: medium-light skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👨🏼‍🐰‍👨🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: medium-light skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
 		"form": "👨🏼‍🤝‍👨🏻",
 		"type": "RGI_Emoji_ZWJ_Sequence",
 		"name": "men holding hands: medium-light skin tone, light skin tone",
@@ -358,6 +454,38 @@
 		"version": "12.1",
 		"group": "People & Body",
 		"subgroup": "family"
+	},
+	{
+		"form": "👨🏼‍🫯‍👨🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: medium-light skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👨🏼‍🫯‍👨🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: medium-light skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👨🏼‍🫯‍👨🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: medium-light skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👨🏼‍🫯‍👨🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: medium-light skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
 	},
 	{
 		"form": "👨🏽‍❤️‍👨🏻",
@@ -440,6 +568,38 @@
 		"subgroup": "family"
 	},
 	{
+		"form": "👨🏽‍🐰‍👨🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: medium skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👨🏽‍🐰‍👨🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: medium skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👨🏽‍🐰‍👨🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: medium skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👨🏽‍🐰‍👨🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: medium skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
 		"form": "👨🏽‍🤝‍👨🏻",
 		"type": "RGI_Emoji_ZWJ_Sequence",
 		"name": "men holding hands: medium skin tone, light skin tone",
@@ -470,6 +630,38 @@
 		"version": "12.1",
 		"group": "People & Body",
 		"subgroup": "family"
+	},
+	{
+		"form": "👨🏽‍🫯‍👨🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: medium skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👨🏽‍🫯‍👨🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: medium skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👨🏽‍🫯‍👨🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: medium skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👨🏽‍🫯‍👨🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: medium skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
 	},
 	{
 		"form": "👨🏾‍❤️‍👨🏻",
@@ -552,6 +744,38 @@
 		"subgroup": "family"
 	},
 	{
+		"form": "👨🏾‍🐰‍👨🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: medium-dark skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👨🏾‍🐰‍👨🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: medium-dark skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👨🏾‍🐰‍👨🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: medium-dark skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👨🏾‍🐰‍👨🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: medium-dark skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
 		"form": "👨🏾‍🤝‍👨🏻",
 		"type": "RGI_Emoji_ZWJ_Sequence",
 		"name": "men holding hands: medium-dark skin tone, light skin tone",
@@ -582,6 +806,38 @@
 		"version": "12.1",
 		"group": "People & Body",
 		"subgroup": "family"
+	},
+	{
+		"form": "👨🏾‍🫯‍👨🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: medium-dark skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👨🏾‍🫯‍👨🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: medium-dark skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👨🏾‍🫯‍👨🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: medium-dark skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👨🏾‍🫯‍👨🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: medium-dark skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
 	},
 	{
 		"form": "👨🏿‍❤️‍👨🏻",
@@ -664,6 +920,38 @@
 		"subgroup": "family"
 	},
 	{
+		"form": "👨🏿‍🐰‍👨🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: dark skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👨🏿‍🐰‍👨🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: dark skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👨🏿‍🐰‍👨🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: dark skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👨🏿‍🐰‍👨🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: dark skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
 		"form": "👨🏿‍🤝‍👨🏻",
 		"type": "RGI_Emoji_ZWJ_Sequence",
 		"name": "men holding hands: dark skin tone, light skin tone",
@@ -694,6 +982,38 @@
 		"version": "12.0",
 		"group": "People & Body",
 		"subgroup": "family"
+	},
+	{
+		"form": "👨🏿‍🫯‍👨🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: dark skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👨🏿‍🫯‍👨🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: dark skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👨🏿‍🫯‍👨🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: dark skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👨🏿‍🫯‍👨🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: dark skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
 	},
 	{
 		"form": "👩‍❤️‍👨",
@@ -968,6 +1288,38 @@
 		"subgroup": "family"
 	},
 	{
+		"form": "👩🏻‍🐰‍👩🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: light skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👩🏻‍🐰‍👩🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: light skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👩🏻‍🐰‍👩🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: light skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👩🏻‍🐰‍👩🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: light skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
 		"form": "👩🏻‍🤝‍👨🏼",
 		"type": "RGI_Emoji_ZWJ_Sequence",
 		"name": "woman and man holding hands: light skin tone, medium-light skin tone",
@@ -1030,6 +1382,38 @@
 		"version": "12.1",
 		"group": "People & Body",
 		"subgroup": "family"
+	},
+	{
+		"form": "👩🏻‍🫯‍👩🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: light skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👩🏻‍🫯‍👩🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: light skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👩🏻‍🫯‍👩🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: light skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👩🏻‍🫯‍👩🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: light skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
 	},
 	{
 		"form": "👩🏼‍❤️‍👨🏻",
@@ -1192,6 +1576,38 @@
 		"subgroup": "family"
 	},
 	{
+		"form": "👩🏼‍🐰‍👩🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: medium-light skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👩🏼‍🐰‍👩🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: medium-light skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👩🏼‍🐰‍👩🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: medium-light skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👩🏼‍🐰‍👩🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: medium-light skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
 		"form": "👩🏼‍🤝‍👨🏻",
 		"type": "RGI_Emoji_ZWJ_Sequence",
 		"name": "woman and man holding hands: medium-light skin tone, light skin tone",
@@ -1254,6 +1670,38 @@
 		"version": "12.1",
 		"group": "People & Body",
 		"subgroup": "family"
+	},
+	{
+		"form": "👩🏼‍🫯‍👩🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: medium-light skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👩🏼‍🫯‍👩🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: medium-light skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👩🏼‍🫯‍👩🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: medium-light skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👩🏼‍🫯‍👩🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: medium-light skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
 	},
 	{
 		"form": "👩🏽‍❤️‍👨🏻",
@@ -1416,6 +1864,38 @@
 		"subgroup": "family"
 	},
 	{
+		"form": "👩🏽‍🐰‍👩🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: medium skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👩🏽‍🐰‍👩🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: medium skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👩🏽‍🐰‍👩🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: medium skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👩🏽‍🐰‍👩🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: medium skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
 		"form": "👩🏽‍🤝‍👨🏻",
 		"type": "RGI_Emoji_ZWJ_Sequence",
 		"name": "woman and man holding hands: medium skin tone, light skin tone",
@@ -1478,6 +1958,38 @@
 		"version": "12.1",
 		"group": "People & Body",
 		"subgroup": "family"
+	},
+	{
+		"form": "👩🏽‍🫯‍👩🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: medium skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👩🏽‍🫯‍👩🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: medium skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👩🏽‍🫯‍👩🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: medium skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👩🏽‍🫯‍👩🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: medium skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
 	},
 	{
 		"form": "👩🏾‍❤️‍👨🏻",
@@ -1640,6 +2152,38 @@
 		"subgroup": "family"
 	},
 	{
+		"form": "👩🏾‍🐰‍👩🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: medium-dark skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👩🏾‍🐰‍👩🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: medium-dark skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👩🏾‍🐰‍👩🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: medium-dark skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👩🏾‍🐰‍👩🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: medium-dark skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
 		"form": "👩🏾‍🤝‍👨🏻",
 		"type": "RGI_Emoji_ZWJ_Sequence",
 		"name": "woman and man holding hands: medium-dark skin tone, light skin tone",
@@ -1702,6 +2246,38 @@
 		"version": "12.1",
 		"group": "People & Body",
 		"subgroup": "family"
+	},
+	{
+		"form": "👩🏾‍🫯‍👩🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: medium-dark skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👩🏾‍🫯‍👩🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: medium-dark skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👩🏾‍🫯‍👩🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: medium-dark skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👩🏾‍🫯‍👩🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: medium-dark skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
 	},
 	{
 		"form": "👩🏿‍❤️‍👨🏻",
@@ -1864,6 +2440,38 @@
 		"subgroup": "family"
 	},
 	{
+		"form": "👩🏿‍🐰‍👩🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: dark skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👩🏿‍🐰‍👩🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: dark skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👩🏿‍🐰‍👩🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: dark skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👩🏿‍🐰‍👩🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: dark skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
 		"form": "👩🏿‍🤝‍👨🏻",
 		"type": "RGI_Emoji_ZWJ_Sequence",
 		"name": "woman and man holding hands: dark skin tone, light skin tone",
@@ -1926,6 +2534,38 @@
 		"version": "12.0",
 		"group": "People & Body",
 		"subgroup": "family"
+	},
+	{
+		"form": "👩🏿‍🫯‍👩🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: dark skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👩🏿‍🫯‍👩🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: dark skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👩🏿‍🫯‍👩🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: dark skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "👩🏿‍🫯‍👩🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: dark skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
 	},
 	{
 		"form": "🧑‍🤝‍🧑",
@@ -6936,6 +7576,86 @@
 		"subgroup": "person-activity"
 	},
 	{
+		"form": "👯🏻‍♀️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👯🏻‍♂️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👯🏼‍♀️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👯🏼‍♂️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👯🏽‍♀️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👯🏽‍♂️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👯🏾‍♀️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👯🏾‍♂️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👯🏿‍♀️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women with bunny ears: dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👯🏿‍♂️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men with bunny ears: dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
 		"form": "👰‍♀️",
 		"type": "RGI_Emoji_ZWJ_Sequence",
 		"name": "woman with veil",
@@ -9352,6 +10072,86 @@
 		"subgroup": "person-sport"
 	},
 	{
+		"form": "🤼🏻‍♀️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🤼🏻‍♂️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🤼🏼‍♀️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🤼🏼‍♂️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🤼🏽‍♀️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🤼🏽‍♂️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🤼🏾‍♀️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🤼🏾‍♂️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🤼🏿‍♀️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "women wrestling: dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🤼🏿‍♂️",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "men wrestling: dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
 		"form": "🤽‍♀️",
 		"type": "RGI_Emoji_ZWJ_Sequence",
 		"name": "woman playing water polo",
@@ -11744,6 +12544,374 @@
 		"subgroup": "face-neutral-skeptical"
 	},
 	{
+		"form": "🧑‍🩰",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "ballet dancer",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏻‍🐰‍🧑🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: light skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏻‍🐰‍🧑🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: light skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏻‍🐰‍🧑🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: light skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏻‍🐰‍🧑🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: light skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏻‍🩰",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "ballet dancer: light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏻‍🫯‍🧑🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: light skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🧑🏻‍🫯‍🧑🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: light skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🧑🏻‍🫯‍🧑🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: light skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🧑🏻‍🫯‍🧑🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: light skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🧑🏼‍🐰‍🧑🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: medium-light skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏼‍🐰‍🧑🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: medium-light skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏼‍🐰‍🧑🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: medium-light skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏼‍🐰‍🧑🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: medium-light skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏼‍🩰",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "ballet dancer: medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏼‍🫯‍🧑🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: medium-light skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🧑🏼‍🫯‍🧑🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: medium-light skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🧑🏼‍🫯‍🧑🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: medium-light skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🧑🏼‍🫯‍🧑🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: medium-light skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🧑🏽‍🐰‍🧑🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: medium skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏽‍🐰‍🧑🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: medium skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏽‍🐰‍🧑🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: medium skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏽‍🐰‍🧑🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: medium skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏽‍🩰",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "ballet dancer: medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏽‍🫯‍🧑🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: medium skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🧑🏽‍🫯‍🧑🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: medium skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🧑🏽‍🫯‍🧑🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: medium skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🧑🏽‍🫯‍🧑🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: medium skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🧑🏾‍🐰‍🧑🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: medium-dark skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏾‍🐰‍🧑🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: medium-dark skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏾‍🐰‍🧑🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: medium-dark skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏾‍🐰‍🧑🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: medium-dark skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏾‍🩰",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "ballet dancer: medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏾‍🫯‍🧑🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: medium-dark skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🧑🏾‍🫯‍🧑🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: medium-dark skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🧑🏾‍🫯‍🧑🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: medium-dark skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🧑🏾‍🫯‍🧑🏿",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: medium-dark skin tone, dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🧑🏿‍🐰‍🧑🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: dark skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏿‍🐰‍🧑🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: dark skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏿‍🐰‍🧑🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: dark skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏿‍🐰‍🧑🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people with bunny ears: dark skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏿‍🩰",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "ballet dancer: dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "🧑🏿‍🫯‍🧑🏻",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: dark skin tone, light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🧑🏿‍🫯‍🧑🏼",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: dark skin tone, medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🧑🏿‍🫯‍🧑🏽",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: dark skin tone, medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🧑🏿‍🫯‍🧑🏾",
+		"type": "RGI_Emoji_ZWJ_Sequence",
+		"name": "people wrestling: dark skin tone, medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
 		"form": "#️⃣",
 		"type": "Emoji_Keycap_Sequence",
 		"name": "keycap: #",
@@ -13262,6 +14430,46 @@
 		"version": "1.0",
 		"group": "People & Body",
 		"subgroup": "person-role"
+	},
+	{
+		"form": "👯🏻",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "people with bunny ears: light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👯🏼",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "people with bunny ears: medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👯🏽",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "people with bunny ears: medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👯🏾",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "people with bunny ears: medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
+	},
+	{
+		"form": "👯🏿",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "people with bunny ears: dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-activity"
 	},
 	{
 		"form": "👰🏻",
@@ -15660,6 +16868,46 @@
 		"type": "RGI_Emoji_Modifier_Sequence",
 		"name": "person juggling: dark skin tone",
 		"version": "3.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🤼🏻",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "people wrestling: light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🤼🏼",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "people wrestling: medium-light skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🤼🏽",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "people wrestling: medium skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🤼🏾",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "people wrestling: medium-dark skin tone",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-sport"
+	},
+	{
+		"form": "🤼🏿",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "people wrestling: dark skin tone",
+		"version": "17.0",
 		"group": "People & Body",
 		"subgroup": "person-sport"
 	},
@@ -27815,6 +29063,14 @@
 		"subgroup": "household"
 	},
 	{
+		"form": "🛘️",
+		"type": "Emoji_Presentation",
+		"name": "LANDSLIDE",
+		"version": "17.0",
+		"group": "Travel & Places",
+		"subgroup": "place-geographic"
+	},
+	{
 		"form": "🛜️",
 		"type": "Emoji_Presentation",
 		"name": "wireless",
@@ -30449,15 +31705,33 @@
 	{
 		"form": "🪉️",
 		"type": "Emoji_Presentation",
-		"name": "HARP",
+		"name": "harp",
+		"name0": "HARP",
 		"version": "16.0",
 		"group": "Objects",
 		"subgroup": "musical-instrument"
 	},
 	{
+		"form": "🪊️",
+		"type": "Emoji_Presentation",
+		"name": "TROMBONE",
+		"version": "17.0",
+		"group": "Objects",
+		"subgroup": "musical-instrument"
+	},
+	{
+		"form": "🪎️",
+		"type": "Emoji_Presentation",
+		"name": "TREASURE CHEST",
+		"version": "17.0",
+		"group": "Objects",
+		"subgroup": "money"
+	},
+	{
 		"form": "🪏️",
 		"type": "Emoji_Presentation",
-		"name": "SHOVEL",
+		"name": "shovel",
+		"name0": "SHOVEL",
 		"version": "16.0",
 		"group": "Objects",
 		"subgroup": "tool"
@@ -30879,7 +32153,8 @@
 	{
 		"form": "🪾️",
 		"type": "Emoji_Presentation",
-		"name": "LEAFLESS TREE",
+		"name": "leafless tree",
+		"name0": "LEAFLESS TREE",
 		"version": "16.0",
 		"group": "Animals & Nature",
 		"subgroup": "plant-other"
@@ -30950,10 +32225,27 @@
 	{
 		"form": "🫆️",
 		"type": "Emoji_Presentation",
-		"name": "FINGERPRINT",
+		"name": "fingerprint",
+		"name0": "FINGERPRINT",
 		"version": "16.0",
 		"group": "People & Body",
 		"subgroup": "person-symbol"
+	},
+	{
+		"form": "🫈️",
+		"type": "Emoji_Presentation",
+		"name": "HAIRY CREATURE",
+		"version": "17.0",
+		"group": "People & Body",
+		"subgroup": "person-fantasy"
+	},
+	{
+		"form": "🫍️",
+		"type": "Emoji_Presentation",
+		"name": "ORCA",
+		"version": "17.0",
+		"group": "Animals & Nature",
+		"subgroup": "animal-marine"
 	},
 	{
 		"form": "🫎️",
@@ -31084,7 +32376,8 @@
 	{
 		"form": "🫜️",
 		"type": "Emoji_Presentation",
-		"name": "ROOT VEGETABLE",
+		"name": "root vegetable",
+		"name0": "ROOT VEGETABLE",
 		"version": "16.0",
 		"group": "Food & Drink",
 		"subgroup": "food-vegetable"
@@ -31092,7 +32385,8 @@
 	{
 		"form": "🫟️",
 		"type": "Emoji_Presentation",
-		"name": "SPLATTER",
+		"name": "splatter",
+		"name0": "SPLATTER",
 		"version": "16.0",
 		"group": "Symbols",
 		"subgroup": "other-symbol"
@@ -31181,10 +32475,27 @@
 	{
 		"form": "🫩️",
 		"type": "Emoji_Presentation",
-		"name": "FACE WITH BAGS UNDER EYES",
+		"name": "face with bags under eyes",
+		"name0": "FACE WITH BAGS UNDER EYES",
 		"version": "16.0",
 		"group": "Smileys & Emotion",
 		"subgroup": "face-sleepy"
+	},
+	{
+		"form": "🫪️",
+		"type": "Emoji_Presentation",
+		"name": "DISTORTED FACE",
+		"version": "17.0",
+		"group": "Smileys & Emotion",
+		"subgroup": "face-concerned"
+	},
+	{
+		"form": "🫯️",
+		"type": "Emoji_Presentation",
+		"name": "FIGHT CLOUD",
+		"version": "17.0",
+		"group": "Smileys & Emotion",
+		"subgroup": "emotion"
 	},
 	{
 		"form": "🫰️",

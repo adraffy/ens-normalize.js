@@ -52,3 +52,5 @@ let t2 = performance.now();
 let t_custom = t1-t0;
 let t_native = t2-t1;
 console.log(`nf() Speed: ${(t_custom/t_native).toFixed(2)}x slower`)
+
+// 20240910: 3.09x slower

@@ -4,13 +4,14 @@
 `npm i @adraffy/ens-normalize` [&check;](https://www.npmjs.com/package/@adraffy/ens-normalize)
 
 * 🏛️ Follows [**ENSIP-15**: ENS Name Normalization Standard](https://docs.ens.domains/ensip/15)
-	* Unicode: [`16.0.0`](./derive/data/16.0.0/) • CLDR: [`45`](./derive/data/CLDR-45/)
+	* Unicode: [`17.0.0`](./derive/data/17.0.0/) • CLDR: [`47`](./derive/data/CLDR-47/)
 	* Other implementations:
 		* Python — [namehash/**ens-normalize-python**](https://github.com/namehash/ens-normalize-python)
 		* Rust — [sevenzing/**ens-normalize-rs**](https://github.com/sevenzing/ens-normalize-rs)
 		* Zig — [evmts/**z-ens-normalize**](https://github.com/evmts/z-ens-normalize)
 		* C# — [adraffy/**ENSNormalize.cs**](https://github.com/adraffy/ENSNormalize.cs)
 		* Java — [adraffy/**ENSNormalize.java**](https://github.com/adraffy/ENSNormalize.java)
+		* Swift – [adraffy/**ENSNormalize.swift**](https://github.com/adraffy/ENSNormalize.swift)
 		* Go — [adraffy/**go-ens-normalize**](https://github.com/adraffy/go-ens-normalize)
 		* Swift – [adraffy/**ENSNormalize.swift**](https://github.com/adraffy/ENSNormalize.swift)
 	* Prior implementation:
@@ -28,10 +29,9 @@
 	* [Character Viewer](https://adraffy.github.io/ens-normalize.js/test/chars.html)
 	* [Confused Explainer](https://adraffy.github.io/ens-normalize.js/test/confused.html)
 * Related Projects:
-	* [Recent .eth Registrations](https://raffy.antistupid.com/eth/ens-regs.html) • [.eth Renews](https://raffy.antistupid.com/eth/ens-renews.html)
-	* [.eth Expirations](https://raffy.antistupid.com/eth/ens-exp.html)
+	* [Recent .eth Registrations](https://raffy.antistupid.com/eth/ens-regs.html) • [Renews](https://raffy.antistupid.com/eth/ens-renews.html) • [Expirations](https://raffy.antistupid.com/eth/ens-exp.html)
+	* [Label Database](https://github.com/adraffy/ens-labels/) • [Labelhash⁻¹](https://adraffy.github.io/ens-labels/demo.html) • [Brute-force](https://raffy.antistupid.com/eth/ens-brute.html)
 	* [Emoji Frequency Explorer](https://raffy.antistupid.com/eth/ens-emoji-freq.html)
-	* [Label Database](https://github.com/adraffy/ens-labels/) • [Labelhash⁻¹](https://adraffy.github.io/ens-labels/demo.html)
 	* [adraffy/**punycode.js**](https://github.com/adraffy/punycode.js/) • [Punycode Coder](https://adraffy.github.io/punycode.js/test/demo.html)
 	* [adraffy/**keccak.js**](https://github.com/adraffy/keccak.js/) • [Keccak Hasher](https://adraffy.github.io/keccak.js/test/demo.html)
 	* [adraffy/**emoji.js**](https://github.com/adraffy/emoji.js/) • [Emoji Parser](https://adraffy.github.io/emoji.js/test/demo.html)
