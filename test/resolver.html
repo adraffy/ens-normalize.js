@@ -3466,7 +3466,7 @@ async function add_resolver_info(row, resolver, context) {
 					}
 				}
 				if (verifiers.size) {
-					const sub_row = create_row('Unruggable Verifier');
+					const sub_row = create_row(create_link('https://github.com/unruggable-labs/unruggable-gateways', {innerHTML: 'Unruggable Verifier'}));
 					row.insertAdjacentElement('afterend', sub_row);
 					for (const x of verifiers) {
 						add_row_tag(sub_row, create_explorer_address_link(x, {contract: true}));
@@ -5913,16 +5913,14 @@ async function load_known_interfaces(row, resolver) {
 			})
 		])];
 		if (should_stop_resolving()) return;
+		if (resolver.__name === "eth") {
+			add_iface(iface_nft.title, await network_state.ens.owner(__node));
+		}
 		for (const x of dynamic_ifaces) {
 			const [ok, data] = multi.shift();
 			if (!ok) continue;
 			const [addr] = RESOLVER_ABI.decodeFunctionResult(dynamic_frag, data);
-			if (is_null_hex(addr)) {
-				if (x === iface_nft && resolver.__name === "eth") {
-					add_iface(iface_nft.title, await network_state.ens.owner(__node));
-				}
-				continue;
-			}
+			if (is_null_hex(addr)) continue;
 			add_iface(x.title, addr, x.iface);
 			if (x.iface === IFACE_ETH_CONTROLLER) {
 				const controller = contract_for_controller(addr);

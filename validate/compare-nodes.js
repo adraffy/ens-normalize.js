@@ -22,6 +22,7 @@ const OLD_NODES = [
 	local_nvm('16.20.2'),  // U14.0 (lts)
 	local_nvm('18.13.0'),  // U14.0 
 	local_nvm('18.20.2'),  // U15.1 (lts)
+	local_nvm('24.5.0'),   // U16.0
 ].map(node => {
 	try {
 		let version = run(node, `process.versions`);
@@ -32,17 +33,17 @@ const OLD_NODES = [
 	}
 });
 
+console.log(new Date());
+print_section('Available Versions');
+console.log(OLD_NODES.map(x => ({node: x.version.node, unicode: x.version.unicode})));
+
 // require that the current node is using the appropriate version of unicode
-const UNICODE = UnicodeSpec.from_release('15.1');
+const UNICODE = UnicodeSpec.from_release('17');
 if (version_ordinal(parse_version(process.versions.unicode)) !== version_ordinal(UNICODE.unicode_version)) {
 	console.log('Expected:', UNICODE.unicode_version.version);
 	console.log('Process:', process.versions.unicode);
 	throw new Error('Unicode mismatch');
 }
-
-console.log(new Date());
-print_section('Available Versions');
-console.log(OLD_NODES.map(x => ({node: x.version.node, unicode: x.version.unicode})));
 
 console.log();
 print_section('toLowerCase()');
@@ -87,7 +88,7 @@ function test_string_function(fn) {
 	}
 }
 
-// 2024-09-11T05:57:03.431Z
+// 2025-09-18T19:07:52.479Z
 // ==== Available Versions ====
 // [
 //   { node: '11.15.0', unicode: '11.0' },
@@ -95,7 +96,8 @@ function test_string_function(fn) {
 //   { node: '12.22.12', unicode: '13.0' },
 //   { node: '16.20.2', unicode: '14.0' },
 //   { node: '18.13.0', unicode: '15.0' },
-//   { node: '18.20.2', unicode: '15.1' }
+//   { node: '18.20.2', unicode: '15.1' },
+//   { node: '24.5.0', unicode: '16.0' }
 // ]
 
 // ==== toLowerCase() ====

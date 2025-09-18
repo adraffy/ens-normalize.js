@@ -18,3 +18,4 @@ console.log(`${((t * 1000) / LABELS.length).toFixed(1)} μs/label`);
 // 20230111: 4.9 μs/label
 // 20230920: 3.8 μs/label
 // 20240910: 2.5 μs/label
+// 20250918: 2.2 μs/label
