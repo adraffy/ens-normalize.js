@@ -1440,8 +1440,6 @@ const STORAGE_SETTINGS = 'ens-norm.settings';
 
 const INPUT_NAME = 'Input';
 const OPENSEA_NAME = 'OpenSea';
-const VISION_NAME = 'Vision';
-const VISION_HOST = 'vision.io';
 const PRETTY_NAME = '💖️';
 const MANAGER_NAME = 'Manager';
 const WRAPPER_NAME = 'Wrapper';
@@ -3538,14 +3536,20 @@ function add_nft_links(row, name, contract, token) {
 	if (active_chain.is_mainnet) {
 		try {
 			let encoded = encodeURIComponent(name);
-			if (encoded.endsWith('.eth')) {
-				add_row_tag(group, create_link(`https://${VISION_HOST}/name/${encoded.slice(0, -4)}`, {innerHTML: VISION_NAME}));
-			}
+			// if (encoded.endsWith('.eth')) {
+			// 	add_row_tag(group, create_link(`https://vision.io/name/${encoded.slice(0, -4)}`, {innerHTML: VISION_NAME}));
+			// }
 			//add_row_tag(group, create_link(`http://predomain.eth.limo/#/domain/${encoded}`, {innerHTML: 'Predomain'}));
 			add_row_tag(group, create_link(`http://ethfollow.xyz/${encoded}`, {innerHTML: 'EFP'}));
 		} catch (err) {
 		}
 	}
+	row.append(group);
+}
+
+function add_reverse_links(row, name) {
+	let group = create('div', {className: ['grouped', 'external']});
+	add_row_tag(group, create_link(`https://app.enscribe.xyz/`, {innerHTML: 'Enscribe'}));
 	row.append(group);
 }
 
@@ -3920,7 +3924,7 @@ function resolve() {
 	if (input.includes('://')) {
 		try {
 			let url = new URL(input);
-			if ([VISION_HOST, 'ens.vision', 'www.ens.vision'].some(x => x === url.host)) {
+			if (['vision.io', 'ens.vision', 'www.ens.vision'].some(x => x === url.host)) {
 				// /name/%F0%9F%91%A9%F0%9F%8F%BC%E2%80%8D%F0%9F%A6%BC%E2%80%8D%E2%AC%85
 				let v = url.pathname.toLowerCase().split('/').filter(x => x);
 				if (v.length >= 2 && v[0] === 'name') {
@@ -4149,6 +4153,7 @@ async function resolve1(input, skip_norm) {
 		if (!norm_err) {
 			if (name_norm === primary) {
 				add_row_tag(reverse_row, create_resolve_btn(primary));
+				add_reverse_links(reverse_row, name_norm);
 				make_normalized(reverse_row, name_norm);
 			} else {
 				add_row_tag(reverse_row, create_tag('fail', 'Normalized'));
@@ -4157,6 +4162,7 @@ async function resolve1(input, skip_norm) {
 				add_row_tag(row, create_copy_btn(name_norm));
 				add_row_tag(row, create_resolve_btn(name_norm));
 				add_row_tag(row, create_namehash_button(name_norm));
+				add_reverse_links(row, name_norm);
 				make_normalized(row, name_norm);
 				output_div.append(row);
 				output_div.append(create_breakdown_row(name_norm));
@@ -5345,11 +5351,13 @@ async function resolve1(input, skip_norm) {
 
 	if (primary === name_norm) {
 		primary_row.classList.add('normalized');
+		add_reverse_links(primary_row, name_norm);
 		return;
 	}
 	output_div.append(create_breakdown_row(primary, true));
 	if (primary === primary_norm) {
 		make_normalized(primary_row, primary_norm);
+		add_reverse_links(primary_row, primary_norm);
 		return;
 	}
 	if (!primary_norm) return;
@@ -5357,6 +5365,7 @@ async function resolve1(input, skip_norm) {
 
 	let primary_norm_row = create_row('Normalized Primary');
 	make_exploded(primary_norm_row, primary_norm, true);
+	add_reverse_links(primary_norm_row, primary_norm);
 	output_div.append(primary_norm_row);
 	if (primary_norm === input) {
 		add_row_tag(primary_norm_row, SAME_AS_INPUT);
@@ -5437,9 +5446,9 @@ function add_epf_row(address) {
 function add_owner_links(row, owner) {
 	let group = create('div', {className: ['grouped', 'external']});
 	add_row_tag(group, create_link(`${active_chain.is_mainnet ? 'https://opensea.io/' : 'https://testnets.opensea.io/'}${owner}?tab=collected`, {innerHTML: OPENSEA_NAME}));
-	if (active_chain.is_mainnet) {
-		add_row_tag(group, create_link(`https://${VISION_HOST}/0x/${owner}`, {innerHTML: VISION_NAME}));
-	}
+	// if (active_chain.is_mainnet) {
+	// 	add_row_tag(group, create_link(`https://${VISION_HOST}/0x/${owner}`, {innerHTML: VISION_NAME}));
+	// }
 	add_row_tag(group, create_link(`https://rainbow.me/${owner}`, {innerHTML: 'Rainbow'}));
 	add_row_tag(group, create_link(`https://debank.com/profile/${owner}`, {innerHTML: 'Debank'}));
 	row.append(group);
