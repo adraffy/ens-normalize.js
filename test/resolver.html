@@ -799,6 +799,12 @@ span.tally {
 	border: 1px solid #ccc;
 	gap: 4px;
 }
+.record.defaulted {
+	background: #ddd;
+}
+.record.defaulted .addr {
+	display: none;
+}
 .record.notice {
 	font-weight: bold;
 }
@@ -1645,6 +1651,11 @@ const RECORDS = [
 		icon: `<svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 22 20"><path fill="var(--geist-fill, currentColor)" stroke="none" d="M16.99 0H20.298L13.071 8.26L21.573 19.5H14.916L9.702 12.683L3.736 19.5H0.426L8.156 10.665L0 0H6.826L11.539 6.231L16.99 0ZM15.829 17.52H17.662L5.83 1.876H3.863L15.829 17.52Z"/></svg>`,
 		url(x) { return `https://twitter.com/${x}`; },
 		fix: repair_social,
+	},
+	{
+		key: 'social.bsky',
+		icon: '<img src="https://web-cdn.bsky.app/static/favicon.png">',
+		url(x) { return `https://bsky.app/profile/${x}`; },
 	},
 	{
 		key: 'farcaster',
@@ -4939,6 +4950,7 @@ async function resolve1(input, skip_norm) {
 				let good_count = 0;
 				let fail_count = 0;
 				let skip_count = 0;
+				let evms = [];
 				for (let {rec, data, error, skipped} of results) {
 					let a = create('a', {className: 'record', target: '_blank'});
 					switch (rec.type) {
@@ -4996,6 +5008,7 @@ async function resolve1(input, skip_norm) {
 									if (is_evm) {
 										//show = !resolve_state.addrs.has(address);
 										a.append(create_jazz_icon(address));
+										evms.push({evm, a, address});
 									}
 									//if (show)
 									a.append(create('span', {innerHTML: address, className: ['addr', 'long']}));
@@ -5175,7 +5188,7 @@ async function resolve1(input, skip_norm) {
 									}
 									case 0xE5: { // IPNS
 										cid = CID.from(buf);
-										rep = cid.toString('k'); // base36 for urls
+										rep = cid.toString();
 										url = `ipns://${rep}`;
 										a.append(create_link(`https://${rep}.ipfs2.eth.limo/`, {button: '↗️ IPNS'}));
 										break;
@@ -5265,6 +5278,15 @@ async function resolve1(input, skip_norm) {
 					}
 				}
 				let null_count = results.length - good_count - fail_count - skip_count;
+
+				const def = evms.find(x => x.evm == 0);
+				if (def) {
+					for (const x of evms) {
+						if (x !== def && x.address === def.address) {
+							x.a.classList.add('defaulted');
+						}
+					}
+				}
 
 				if (records.length) {
 					let tally = create('span', {className: 'tally'});
