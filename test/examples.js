@@ -1,7 +1,7 @@
 // code that is not included in the library 
 // but might be useful
 
-import {ens_normalize, ens_split, ens_tokenize, ens_emoji} from '../src/lib.js';
+import {ens_normalize, ens_split, ens_tokenize} from '../src/lib.js';
 import {explode_cp, str_from_cps} from '../src/utils.js';
 
 function expect_fail(fn) {
@@ -230,28 +230,41 @@ console.log(is_rare_latin('ì')); // true
 // ********************************************************************************
 // truncate to byte limit
 // (assuming input normalization is unknown)
+// does not track combining marks
 function truncate(name, max) {
 	const te = new TextEncoder();
 	let len = 0;
 	let str = '';
-	for (const x of ens_tokenize(name)) {
-		let s;
-		switch (x.type) {
-			case 'nfc':
-			case 'emoji':
-			case 'valid': s = String.fromCodePoint(...x.cps); break;
-			// stop
-			// mapped
-			// ignored
-			// disallowed
-			default: s = String.fromCodePoint(x.cp); break;
-		}
-		len += te.encode(s).length;
-		if (len > max) break;
-		str += s;
-	}
+	assemble(ens_tokenize(name));
 	return str;
+	function assemble(tokens) {
+		for (const x of tokens) {
+			let m;
+			switch (x.type) {
+				case 'nfc': assemble(x.tokens); continue;
+				case 'emoji': m = [String.fromCodePoint(...x.cps)]; break;
+				case 'valid': m = x.cps.map(cp => String.fromCodePoint(cp)); break;
+				// stop
+				// mapped
+				// ignored
+				// disallowed
+				default: m = [String.fromCodePoint(x.cp)]; break; // pass through
+			}
+			for (const s of m) {
+				len += te.encode(s).length;
+				if (len > max) break;
+				str += s;
+			}
+		}
+	}
 }
 
-console.log(truncate('a'.repeat(40), 40) === 'a'.repeat(40)); // true @ 1byte/per
-console.log(truncate('👨🏻‍❤‍💋‍👨🏻'.repeat(2), 40) === '👨🏻‍❤‍💋‍👨🏻'.repeat(1)); // true @ 32byte/per
+console.log(truncate);
+console.log(truncate('a'.repeat(99), 63) === 'a'.repeat(63)); // true @ 1cp / 1byte each
+console.log(truncate('🇺🇸'.repeat(99), 63) === '🇺🇸'.repeat(7)); // true @ 2cp / 8byte each
+console.log(truncate('🍄‍🟫'.repeat(99), 63) === '🍄‍🟫'.repeat(5)); // true @ 3cp / 11byte each
+console.log(truncate('👨🏻‍🌾'.repeat(99), 63) === '👨🏻‍🌾'.repeat(4)); // true @ 4cp / 15byte each
+console.log(truncate('🧑‍🤝‍🧑'.repeat(99), 63) === '🧑‍🤝‍🧑'.repeat(3)); // true @ 5cp / 18byte each
+console.log(truncate('👨🏻‍🦯‍➡'.repeat(99), 63) === '👨🏻‍🦯‍➡'.repeat(3)); // true @ 6cp / 21byte each
+console.log(truncate('🏴󠁧󠁢󠁥󠁮󠁧󠁿'.repeat(99), 63) === '🏴󠁧󠁢󠁥󠁮󠁧󠁿'.repeat(2)); // true @ 7cp / 28byte each
+console.log(truncate('👨🏻‍❤‍💋‍👨🏻'.repeat(99), 63) === '👨🏻‍❤‍💋‍👨🏻'.repeat(1)); // true @ 9cp / 32byte each
