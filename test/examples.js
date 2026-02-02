@@ -1,7 +1,7 @@
 // code that is not included in the library 
 // but might be useful
 
-import {ens_normalize, ens_split, ens_tokenize} from '../src/lib.js';
+import {ens_normalize, ens_split, ens_tokenize, ens_emoji} from '../src/lib.js';
 import {explode_cp, str_from_cps} from '../src/utils.js';
 
 function expect_fail(fn) {
@@ -222,6 +222,36 @@ console.log(is_ascii_or_emoji('💩è')); // false (Latin)
 function is_rare_latin(s) {
 	return /[ąçęşìíîïǐł]/u.test(s);
 }
+
 console.log(is_rare_latin);
 console.log(is_rare_latin('è')); // false
 console.log(is_rare_latin('ì')); // true
+
+// ********************************************************************************
+// truncate to byte limit
+// (assuming input normalization is unknown)
+function truncate(name, max) {
+	const te = new TextEncoder();
+	let len = 0;
+	let str = '';
+	for (const x of ens_tokenize(name)) {
+		let s;
+		switch (x.type) {
+			case 'nfc':
+			case 'emoji':
+			case 'valid': s = String.fromCodePoint(...x.cps); break;
+			// stop
+			// mapped
+			// ignored
+			// disallowed
+			default: s = String.fromCodePoint(x.cp); break;
+		}
+		len += te.encode(s).length;
+		if (len > max) break;
+		str += s;
+	}
+	return str;
+}
+
+console.log(truncate('a'.repeat(40), 40) === 'a'.repeat(40)); // true @ 1byte/per
+console.log(truncate('👨🏻‍❤‍💋‍👨🏻'.repeat(2), 40) === '👨🏻‍❤‍💋‍👨🏻'.repeat(1)); // true @ 32byte/per
