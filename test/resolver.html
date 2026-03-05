@@ -1562,13 +1562,13 @@ const ERROR_ABI = new ethers.Interface([
 	'error ResolverNotContract(bytes name, address resolver)',
 	'error ResolverError(bytes errorData)',
 	'error ReverseAddressMismatch(string primary, bytes primaryAddress)',
+	'error UnsupportedResolverProfile(bytes4 selector)',
 	'error HttpError(uint16 status, string message)',
+	// ResolverCaller
+	'error UnreachableName(bytes name)',
 	// NameCoder
 	'error DNSDecodingFailed(bytes dns)',
 	'error DNSEncodingFailed(string ens)',
-	// https://github.com/ensdomains/ensips/pull/18
-	'error UnreachableName(bytes name)',
-	'error UnknownResolverProfile(bytes4 selector)',
 	// urg
 	'error CommitTooOld(uint256 latest, uint256 got, uint256 window)',
 	'error CommitTooNew(uint256 latest, uint256 got)',
@@ -5137,6 +5137,7 @@ async function resolve1(input, skip_norm) {
 						case TYPE_PUBKEY: {
 							a.innerHTML = `<b>pubkey</b>`;
 							if (error) break;
+							if (is_null_hex(data)) continue;
 							let [x, y] = data;
 							if (is_null_hex(x) && is_null_hex(y)) continue;
 							a.classList.add('rtrim');
@@ -5258,6 +5259,7 @@ async function resolve1(input, skip_norm) {
 								make_click_copy(a, data, {hint: true});
 							}
 							a.append(create_link(`../../cid.js/test/demo.html#${data}`, {button: EMOJI_CHECK}));
+							a.append(create_link(`https://${name_norm}.limo`, {button: '↗️ Visit'}));
 							break;
 						}
 					}
@@ -5561,7 +5563,9 @@ async function fetch_records(resolver, records, info = {}) {
 					let calldata = multi[i];
 					try {
 						let frag = abi.getFunction(rec.type);
-						if ((calldata.length - 2) & 63) {
+						if (calldata === '0x') {
+							return {rec};
+						} else if ((calldata.length - 2) & 63) {
 							return {rec, error: parse_call_error(calldata)};
 						} else {
 							let data = abi.decodeFunctionResult(frag, calldata);
