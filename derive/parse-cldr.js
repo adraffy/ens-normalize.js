@@ -20,6 +20,9 @@ let versions = process.argv.slice(2);
 // 20241024: v46
 // 20241218: v46.1
 // 20250313: v47
+// 20251029: v48
+// 20260108: v48.1
+// 20260317: v48.2
 
 if (!versions.length) {
 	// if no version is provided
