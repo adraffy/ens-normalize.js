@@ -1,61 +1,246 @@
 // upper bound on valid 3cp names
 
-import {ens_normalize, nfc} from '../src/lib.js';
-import {read_spec} from '../validate/data.js';
-import {random_sample, str_from_cps} from '../src/utils.js';
-import {tuples, explode_cp, compare_arrays} from '../derive/utils.js';
+import { ens_normalize } from "../src/lib.js";
+import { read_spec } from "../validate/data.js";
+import { str_from_cps } from "../src/utils.js";
+import { explode_cp } from "../derive/utils.js";
 
 const SPEC = read_spec();
 
 const CM = new Set(SPEC.cm);
-const NORM_EMOJI = SPEC.emoji.map(v => explode_cp(ens_normalize(str_from_cps(v))));
+const NORM_EMOJI = SPEC.emoji.map((v) =>
+	explode_cp(ens_normalize(str_from_cps(v))),
+);
 
-const EMOJI_1 = NORM_EMOJI.filter(v => v.length == 1);
-const EMOJI_2 = NORM_EMOJI.filter(v => v.length == 2);
-const EMOJI_3 = NORM_EMOJI.filter(v => v.length == 3);
+const EMOJI_1 = NORM_EMOJI.filter((v) => v.length == 1);
+const EMOJI_2 = NORM_EMOJI.filter((v) => v.length == 2);
+const EMOJI_3 = NORM_EMOJI.filter((v) => v.length == 3);
 
-console.log([EMOJI_1, EMOJI_2, EMOJI_3].map(v => [v[0].length, v.length]));
+const secondary = new Set();
 
-let total = EMOJI_3.length;
-for (let g of SPEC.groups) {
-	let valid = [...new Set([...EMOJI_1, ...g.primary, ...g.secondary])];	
+const m = SPEC.groups.map((g) => {
+	const more = [...new Set([...EMOJI_1, ...g.secondary])].filter((cp) => !secondary.has(cp));
+	const moreNotCM = [...g.primary, ...more].filter((cp) => !CM.has(cp));
+	const primaryNotCM = g.primary.filter((cp) => !CM.has(cp));
 	
-	let spaceAAA = [valid.filter(x => !CM.has(x)), valid, valid];	
-	let spaceAB = [valid.filter(x => !CM.has(x)), EMOJI_2];
-	let spaceBA = [EMOJI_2, valid];
+	g.secondary.forEach((cp) => secondary.add(cp));
 
-	let raw = product(spaceAAA) + product(spaceAB) + product(spaceBA);
-	total += raw;
-	console.log(g.name, g.primary.length, valid.length, raw);
+	const spaceAAA = [moreNotCM, g.primary, more];
+	const spaceBBB = [moreNotCM, more, g.primary];
+	const spaceAB = [primaryNotCM, EMOJI_2];
+	const spaceBA = [EMOJI_2, primaryNotCM];
 
-}
-console.log(Number.isSafeInteger(total))
-console.log(total);
-
+	const raw = [spaceAAA, spaceBBB, spaceAB, spaceBA].reduce((a, x) => a + product(x), 0n);
+	return {
+		name: g.name,
+		primary: g.primary.length,
+		valid: more.length,
+		raw,
+	};
+});
+console.log(new Date());
+console.table(m);
+console.log([EMOJI_1, EMOJI_2, EMOJI_3].map((v) => [v[0].length, v.length]));
+console.log(BigInt(EMOJI_3.length) + m.reduce((a, x) => a + BigInt(x.raw), 0n));
 
 function product(space) {
-	return space.reduce((a, x) => a * x.length, 1);
+	return space.reduce((a, x) => a * BigInt(x.length), 1n);
 }
 
-function count_nfc(space) {
-	let n = 0;
-	for (let v of tuples(space)) {
-		let cps = v.flat();
-		if (!compare_arrays(nfc(cps), cps)) {
-			++n;
-		}
-	}
-	return n;
-}
+// function count_nfc(space) {
+// 	let n = 0;
+// 	for (let v of tuples(space)) {
+// 		let cps = v.flat();
+// 		if (!compare_arrays(nfc(cps), cps)) {
+// 			++n;
+// 		}
+// 	}
+// 	return n;
+// }
 
-function count_norm(space) {
-	let n = 0;
-	for (let v of tuples(space)) {
-		try {
-			ens_normalize(str_from_cps(v.flat()));
-			++n;
-		} catch (err) {
-		}
-	}
-	return n;
-}
+// function count_norm(space) {
+// 	let n = 0;
+// 	for (let v of tuples(space)) {
+// 		try {
+// 			ens_normalize(str_from_cps(v.flat()));
+// 			++n;
+// 		} catch (err) {
+// 		}
+// 	}
+// 	return n;
+// }
+
+// 2026-04-12T18:00:31.853Z
+// ┌─────────┬──────────────┬─────────┬────────┬──────────────────┐
+// │ (index) │ name         │ primary │ valid  │ raw              │
+// ├─────────┼──────────────┼─────────┼────────┼──────────────────┤
+// │ 0       │ 'Latin'      │ 1145    │ 1374   │ 7928076180n      │
+// │ 1       │ 'Arabic'     │ 439     │ 1374   │ 2114271360n      │
+// │ 2       │ 'Han'        │ 102127  │ 2462   │ 52595211775716n  │
+// │ 3       │ 'Devanagari' │ 120     │ 1373   │ 482587632n       │
+// │ 4       │ 'Korean'     │ 11528   │ 103498 │ 274480801197504n │
+// │ 5       │ 'Japanese'   │ 209     │ 1373   │ 908323196n       │
+// │ 6       │ 'Cyrillic'   │ 105     │ 1373   │ 426348300n       │
+// │ 7       │ 'Hebrew'     │ 85      │ 1373   │ 328236236n       │
+// │ 8       │ 'Thai'       │ 86      │ 1373   │ 340666120n       │
+// │ 9       │ 'Bengali'    │ 91      │ 1373   │ 360968296n       │
+// │ 10      │ 'Tamil'      │ 126     │ 1373   │ 512970120n       │
+// │ 11      │ 'Greek'      │ 35      │ 1373   │ 135388400n       │
+// │ 12      │ 'Tibetan'    │ 186     │ 1373   │ 763808604n       │
+// │ 13      │ 'Gurmukhi'   │ 74      │ 1373   │ 290483348n       │
+// │ 14      │ 'Lao'        │ 80      │ 1373   │ 315578416n       │
+// │ 15      │ 'Telugu'     │ 97      │ 1373   │ 385564342n       │
+// │ 16      │ 'Gujarati'   │ 91      │ 1373   │ 359457748n       │
+// │ 17      │ 'Myanmar'    │ 233     │ 1373   │ 988840794n       │
+// │ 18      │ 'Bopomofo'   │ 76      │ 1373   │ 302542776n       │
+// │ 19      │ 'Georgian'   │ 42      │ 1373   │ 163273404n       │
+// │ 20      │ 'Armenian'   │ 44      │ 1373   │ 171167280n       │
+// │ 21      │ 'Khmer'      │ 137     │ 1373   │ 557735412n       │
+// │ 22      │ 'Kannada'    │ 90      │ 1373   │ 356256036n       │
+// │ 23      │ 'Malayalam'  │ 113     │ 1373   │ 455070964n       │
+// │ 24      │ 'Ethiopic'   │ 505     │ 1373   │ 2601058494n      │
+// │ 25      │ 'Sinhala'    │ 111     │ 1373   │ 446099658n       │
+// │ 26      │ 'Oriya'      │ 89      │ 1373   │ 352299050n       │
+// │ 27      │ 'Thaana'     │ 61      │ 1373   │ 238454638n       │
+// │ 28      │ 'Syrc'       │ 91      │ 1373   │ 355429620n       │
+// │ 29      │ 'Nkoo'       │ 54      │ 1373   │ 210200796n       │
+// │ 30      │ 'Cher'       │ 92      │ 1373   │ 368751080n       │
+// │ 31      │ 'Cans'       │ 722     │ 1373   │ 4154923724n      │
+// │ 32      │ 'Runr'       │ 86      │ 1373   │ 344712596n       │
+// │ 33      │ 'Mong'       │ 155     │ 1373   │ 649370294n       │
+// │ 34      │ 'Limb'       │ 66      │ 1373   │ 256527564n       │
+// │ 35      │ 'Talu'       │ 83      │ 1373   │ 332003984n       │
+// │ 36      │ 'Lana'       │ 123     │ 1373   │ 491931024n       │
+// │ 37      │ 'Yiii'       │ 1221    │ 1373   │ 8699620116n      │
+// │ 38      │ 'Cham'       │ 80      │ 1373   │ 315578416n       │
+// │ 39      │ 'Phnx'       │ 29      │ 1373   │ 111701156n       │
+// │ 40      │ 'Egyp'       │ 5089    │ 1373   │ 90088440380n     │
+// │ 41      │ 'Orkh'       │ 73      │ 1373   │ 289998924n       │
+// │ 42      │ 'Xsux'       │ 1234    │ 1373   │ 8836296396n      │
+// │ 43      │ 'Ogam'       │ 28      │ 1373   │ 107772504n       │
+// │ 44      │ 'Tglg'       │ 23      │ 1373   │ 87951504n        │
+// │ 45      │ 'Glag'       │ 88      │ 1373   │ 343471664n       │
+// │ 46      │ 'Tfng'       │ 64      │ 1373   │ 251420624n       │
+// │ 47      │ 'Vaii'       │ 292     │ 1373   │ 1335596904n      │
+// │ 48      │ 'Cari'       │ 49      │ 1373   │ 191427516n       │
+// │ 49      │ 'Ital'       │ 39      │ 1373   │ 151289736n       │
+// │ 50      │ 'Xpeo'       │ 50      │ 1373   │ 195471500n       │
+// │ 51      │ 'Dsrt'       │ 40      │ 1373   │ 155278800n       │
+// │ 52      │ 'Mero'       │ 32      │ 1373   │ 123520064n       │
+// │ 53      │ 'Brah'       │ 113     │ 1373   │ 454446624n       │
+// │ 54      │ 'Gonm'       │ 75      │ 1373   │ 294823026n       │
+// │ 55      │ 'Bamu'       │ 654     │ 1373   │ 3637885644n      │
+// │ 56      │ 'Mroo'       │ 41      │ 1373   │ 159273356n       │
+// │ 57      │ 'Java'       │ 89      │ 1373   │ 353037848n       │
+// │ 58      │ 'Copt'       │ 77      │ 1373   │ 305241846n       │
+// │ 59      │ 'Adlm'       │ 52      │ 1373   │ 202563296n       │
+// │ 60      │ 'Bali'       │ 90      │ 1373   │ 356256036n       │
+// │ 61      │ 'Batk'       │ 56      │ 1373   │ 217671664n       │
+// │ 62      │ 'Cakm'       │ 88      │ 1373   │ 348585584n       │
+// │ 63      │ 'Hmnp'       │ 71      │ 1373   │ 280285950n       │
+// │ 64      │ 'Kali'       │ 46      │ 1373   │ 178303012n       │
+// │ 65      │ 'Lepc'       │ 72      │ 1373   │ 281836944n       │
+// │ 66      │ 'Lisu'       │ 41      │ 1373   │ 159273356n       │
+// │ 67      │ 'Mand'       │ 29      │ 1373   │ 111456638n       │
+// │ 68      │ 'Mtei'       │ 76      │ 1373   │ 298963120n       │
+// │ 69      │ 'Newa'       │ 93      │ 1373   │ 369670494n       │
+// │ 70      │ 'Olck'       │ 46      │ 1373   │ 179328516n       │
+// │ 71      │ 'Osge'       │ 39      │ 1373   │ 150962838n       │
+// │ 72      │ 'Plrd'       │ 149     │ 1373   │ 598349756n       │
+// │ 73      │ 'Rohg'       │ 50      │ 1373   │ 194914812n       │
+// │ 74      │ 'Saur'       │ 80      │ 1373   │ 314913760n       │
+// │ 75      │ 'Sund'       │ 72      │ 1373   │ 282635280n       │
+// │ 76      │ 'Sylo'       │ 55      │ 1373   │ 214397682n       │
+// │ 77      │ 'Tale'       │ 50      │ 1373   │ 194775640n       │
+// │ 78      │ 'Tavt'       │ 72      │ 1373   │ 284032368n       │
+// │ 79      │ 'Wcho'       │ 59      │ 1373   │ 231458952n       │
+// │ 80      │ 'Aghb'       │ 54      │ 1373   │ 211552200n       │
+// │ 81      │ 'Ahom'       │ 62      │ 1373   │ 241845824n       │
+// │ 82      │ 'Armi'       │ 31      │ 1373   │ 119574936n       │
+// │ 83      │ 'Avst'       │ 61      │ 1373   │ 240317796n       │
+// │ 84      │ 'Bass'       │ 35      │ 1373   │ 134898490n       │
+// │ 85      │ 'Bhks'       │ 95      │ 1373   │ 378931128n       │
+// │ 86      │ 'Bugi'       │ 31      │ 1373   │ 119139946n       │
+// │ 87      │ 'Buhd'       │ 20      │ 1373   │ 76427416n        │
+// │ 88      │ 'Chrs'       │ 28      │ 1373   │ 107772504n       │
+// │ 89      │ 'Cpmn'       │ 99      │ 1373   │ 400354416n       │
+// │ 90      │ 'Cprt'       │ 55      │ 1373   │ 215773800n       │
+// │ 91      │ 'Diak'       │ 70      │ 1373   │ 274593120n       │
+// │ 92      │ 'Dogr'       │ 70      │ 1373   │ 274593120n       │
+// │ 93      │ 'Dupl'       │ 145     │ 1373   │ 602693290n       │
+// │ 94      │ 'Elba'       │ 41      │ 1373   │ 159158898n       │
+// │ 95      │ 'Elym'       │ 23      │ 1373   │ 88211624n        │
+// │ 96      │ 'Gong'       │ 63      │ 1373   │ 246444624n       │
+// │ 97      │ 'Goth'       │ 30      │ 1373   │ 115382544n       │
+// │ 98      │ 'Gran'       │ 103     │ 1373   │ 408266274n       │
+// │ 99      │ 'Hano'       │ 21      │ 1373   │ 80247102n        │
+// │ 100     │ 'Hatr'       │ 26      │ 1373   │ 99931676n        │
+// │ 101     │ 'Hluw'       │ 583     │ 1373   │ 3132486984n      │
+// │ 102     │ 'Hmng'       │ 124     │ 1373   │ 507569984n       │
+// │ 103     │ 'Hung'       │ 57      │ 1373   │ 223933164n       │
+// │ 104     │ 'Kawi'       │ 85      │ 1373   │ 336706388n       │
+// │ 105     │ 'Khar'       │ 60      │ 1373   │ 234047184n       │
+// │ 106     │ 'Khoj'       │ 71      │ 1373   │ 278908084n       │
+// │ 107     │ 'Kits'       │ 472     │ 1373   │ 2390912240n      │
+// │ 108     │ 'Kthi'       │ 72      │ 1373   │ 282834864n       │
+// │ 109     │ 'Lyci'       │ 29      │ 1373   │ 111701156n       │
+// │ 110     │ 'Lydi'       │ 27      │ 1373   │ 103849344n       │
+// │ 111     │ 'Maka'       │ 23      │ 1373   │ 87951504n        │
+// │ 112     │ 'Mahj'       │ 49      │ 1373   │ 191291090n       │
+// │ 113     │ 'Mani'       │ 51      │ 1373   │ 199237140n       │
+// │ 114     │ 'Marc'       │ 68      │ 1373   │ 262412744n       │
+// │ 115     │ 'Medf'       │ 57      │ 1373   │ 223933164n       │
+// │ 116     │ 'Mend'       │ 213     │ 1373   │ 923939574n       │
+// │ 117     │ 'Merc'       │ 90      │ 1373   │ 361734300n       │
+// │ 118     │ 'Modi'       │ 77      │ 1373   │ 303108706n       │
+// │ 119     │ 'Mult'       │ 47      │ 1373   │ 183356024n       │
+// │ 120     │ 'Nagm'       │ 42      │ 1373   │ 162804588n       │
+// │ 121     │ 'Narb'       │ 32      │ 1373   │ 123520064n       │
+// │ 122     │ 'Nand'       │ 76      │ 1373   │ 299384256n       │
+// │ 123     │ 'Nbat'       │ 40      │ 1373   │ 155278800n       │
+// │ 124     │ 'Nshu'       │ 397     │ 1373   │ 1930329924n      │
+// │ 125     │ 'Osma'       │ 40      │ 1373   │ 155278800n       │
+// │ 126     │ 'Ougr'       │ 23      │ 1373   │ 87951504n        │
+// │ 127     │ 'Palm'       │ 32      │ 1373   │ 123520064n       │
+// │ 128     │ 'Pauc'       │ 57      │ 1373   │ 223933164n       │
+// │ 129     │ 'Perm'       │ 47      │ 1373   │ 182177618n       │
+// │ 130     │ 'Phag'       │ 54      │ 1373   │ 211702356n       │
+// │ 131     │ 'Phli'       │ 27      │ 1373   │ 103849344n       │
+// │ 132     │ 'Phlp'       │ 29      │ 1373   │ 111701156n       │
+// │ 133     │ 'Prti'       │ 30      │ 1373   │ 115635300n       │
+// │ 134     │ 'Rjng'       │ 37      │ 1373   │ 141982922n       │
+// │ 135     │ 'Samr'       │ 57      │ 1373   │ 220606890n       │
+// │ 136     │ 'Sarb'       │ 32      │ 1373   │ 123520064n       │
+// │ 137     │ 'Shaw'       │ 48      │ 1373   │ 187389024n       │
+// │ 138     │ 'Shrd'       │ 99      │ 1373   │ 391868910n       │
+// │ 139     │ 'Sidd'       │ 75      │ 1373   │ 294615204n       │
+// │ 140     │ 'Sind'       │ 69      │ 1373   │ 271054524n       │
+// │ 141     │ 'Sora'       │ 35      │ 1373   │ 135388400n       │
+// │ 142     │ 'Sogd'       │ 37      │ 1373   │ 142189870n       │
+// │ 143     │ 'Sogo'       │ 40      │ 1373   │ 155278800n       │
+// │ 144     │ 'Soyo'       │ 81      │ 1373   │ 317502990n       │
+// │ 145     │ 'Tagb'       │ 18      │ 1373   │ 68685444n        │
+// │ 146     │ 'Takr'       │ 68      │ 1373   │ 266750544n       │
+// │ 147     │ 'Tang'       │ 7059    │ 1373   │ 163459220496n    │
+// │ 148     │ 'Tirh'       │ 82      │ 1373   │ 323237884n       │
+// │ 149     │ 'Tnsa'       │ 89      │ 1373   │ 357470636n       │
+// │ 150     │ 'Toto'       │ 31      │ 1373   │ 119487938n       │
+// │ 151     │ 'Ugar'       │ 31      │ 1373   │ 119574936n       │
+// │ 152     │ 'Vith'       │ 35      │ 1373   │ 135388400n       │
+// │ 153     │ 'Wara'       │ 52      │ 1373   │ 203575944n       │
+// │ 154     │ 'Yezi'       │ 57      │ 1373   │ 223616376n       │
+// │ 155     │ 'Zanb'       │ 70      │ 1373   │ 273234476n       │
+// │ 156     │ 'Gara'       │ 47      │ 1373   │ 182701354n       │
+// │ 157     │ 'Gukh'       │ 55      │ 1373   │ 213480270n       │
+// │ 158     │ 'Krai'       │ 56      │ 1373   │ 219850736n       │
+// │ 159     │ 'Onao'       │ 44      │ 1373   │ 171044584n       │
+// │ 160     │ 'Sunu'       │ 47      │ 1373   │ 182963222n       │
+// │ 161     │ 'Todr'       │ 55      │ 1373   │ 215315094n       │
+// │ 162     │ 'Tutg'       │ 88      │ 1373   │ 347611504n       │
+// │ 163     │ 'Berf'       │ 25      │ 1373   │ 96019500n        │
+// │ 164     │ 'Sidt'       │ 26      │ 1373   │ 99931676n        │
+// │ 165     │ 'Tayo'       │ 55      │ 1373   │ 215009290n       │
+// │ 166     │ 'Tols'       │ 54      │ 1373   │ 211702356n       │
+// └─────────┴──────────────┴─────────┴────────┴──────────────────┘
+// [ [ 1, 1373 ], [ 2, 936 ], [ 3, 203 ] ]
+// 327416412892717n

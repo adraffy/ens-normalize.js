@@ -4,17 +4,18 @@
 // (NameRegistered, NameRenewed, ReverseResolver scanning, etc.)
 // note: a very small percentage might not be registered
 // eg. "a.b".eth is invalid but results in ["a", "b"] fragments
-import {writeFileSync} from 'node:fs';
+import {readFileSync, writeFileSync} from 'node:fs';
 import {read_labels} from '../validate/data.js';
 import {ens_emoji, ens_normalize, ens_tokenize} from '../src/lib.js';
 import {hex_seq, explode_cp} from '../derive/utils.js';
-//import {random_sample} from '../src/utils.js';
 
 const MIN_LEN = 3;
 const MAX_LEN = 128;
 
-let labels = read_labels();
-//let labels = JSON.parse(readFileSync(new URL('../../ens-labels/labels.json', import.meta.url)));
+const labels = process.env.USER === 'raffy' 
+	? JSON.parse(readFileSync(new URL('../../ens-labels/labels.json', import.meta.url))) 
+	: read_labels();
+
 let tally = new Map(ens_emoji().map(cps => {
 	let form = String.fromCodePoint(...cps);
 	return [form, {form, names: []}];
