@@ -4368,7 +4368,7 @@ async function resolve1(input, skip_norm) {
 		if (should_stop_resolving()) return;
 		remove_temporary(impls_row);
 		add_row_tag(impls_row, create_elapsed_since());
-	} else {
+	} else if (resolver) {
 		impls_row.classList.add('hide');
 		resolver_row.append(create('button', {
 			innerText: '🔍️ Interfaces',
@@ -4619,7 +4619,7 @@ async function resolve1(input, skip_norm) {
 
 	// get the owner
 	let is_wrapped, nft_owner;
-	if ((!resolver || !resolver.__dropped) && (!nft_backed || available !== undefined)) {
+	if (!nft_backed || available !== undefined) {
 		let node = namehash(name_norm);
 		let wrapped_data;
 		let wrapped_row = create_row(WRAPPER_NAME);
