@@ -4,7 +4,7 @@
 `npm i @adraffy/ens-normalize` [&check;](https://www.npmjs.com/package/@adraffy/ens-normalize)
 
 * 🏛️ Follows [**ENSIP-15**: ENS Name Normalization Standard](https://docs.ens.domains/ensip/15)
-	* Unicode: [`17.0.0`](./derive/data/17.0.0/) • CLDR: [`47`](./derive/data/CLDR-47/)
+	* Unicode: [`18.0.0`](./derive/data/18.0.0/) • CLDR: [`47`](./derive/data/CLDR-48.2/)
 	* Other implementations:
 		* Python — [namehash/**ens-normalize-python**](https://github.com/namehash/ens-normalize-python)
 		* Rust — [sevenzing/**ens-normalize-rs**](https://github.com/sevenzing/ens-normalize-rs)
