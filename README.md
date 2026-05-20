@@ -1,3 +1,35 @@
+
+<div align="right">
+  <details>
+    <summary >🌐 Language</summary>
+    <div>
+      <div align="center">
+        <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=en">English</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=zh-CN">简体中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=zh-TW">繁體中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=ja">日本語</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=ko">한국어</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=hi">हिन्दी</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=th">ไทย</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=fr">Français</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=de">Deutsch</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=es">Español</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=it">Italiano</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=ru">Русский</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=pt">Português</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=nl">Nederlands</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=pl">Polski</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=ar">العربية</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=fa">فارسی</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=tr">Türkçe</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=vi">Tiếng Việt</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=id">Bahasa Indonesia</a>
+        | <a href="https://openaitx.github.io/view.html?user=adraffy&project=ens-normalize.js&lang=as">অসমীয়া</
+      </div>
+    </div>
+  </details>
+</div>
+
 # ens-normalize.js
 0-dependency [Ethereum Name Service](https://ens.domains/) (ENS) Name Normalizer.
 
