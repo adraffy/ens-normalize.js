@@ -1,6 +1,6 @@
-Build Date: 2025-09-14T17:56:19.848Z
-Unicode Version: 17.0.0 (2025-09-10T16:58:18.331Z)
-CLDR Version: 47 (2025-08-02T20:26:29.295Z)
+Build Date: 2026-05-20T19:21:49.162Z
+Unicode Version: 18.0.0 (2026-05-20T19:05:42.591Z)
+CLDR Version: 48.2 (2026-03-28T19:59:34.849Z)
 ==== RGI Emoji ZWJ Sequences ====
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F48B 200D 1F468] (👨‍❤️‍💋‍👨) kiss: man, man
@@ -2299,6 +2299,16 @@ Register Emoji [RGI_Emoji_Modifier_Sequence]: [1FAF8 1F3FC] (🫸🏼) rightward
 Register Emoji [RGI_Emoji_Modifier_Sequence]: [1FAF8 1F3FD] (🫸🏽) rightwards pushing hand: medium skin tone
 Register Emoji [RGI_Emoji_Modifier_Sequence]: [1FAF8 1F3FE] (🫸🏾) rightwards pushing hand: medium-dark skin tone
 Register Emoji [RGI_Emoji_Modifier_Sequence]: [1FAF8 1F3FF] (🫸🏿) rightwards pushing hand: dark skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1FAF9 1F3FB] (🫹🏻) leftwards thumb sign: light skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1FAF9 1F3FC] (🫹🏼) leftwards thumb sign: medium-light skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1FAF9 1F3FD] (🫹🏽) leftwards thumb sign: medium skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1FAF9 1F3FE] (🫹🏾) leftwards thumb sign: medium-dark skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1FAF9 1F3FF] (🫹🏿) leftwards thumb sign: dark skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1FAFA 1F3FB] (🫺🏻) rightwards thumb sign: light skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1FAFA 1F3FC] (🫺🏼) rightwards thumb sign: medium-light skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1FAFA 1F3FD] (🫺🏽) rightwards thumb sign: medium skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1FAFA 1F3FE] (🫺🏾) rightwards thumb sign: medium-dark skin tone
+Register Emoji [RGI_Emoji_Modifier_Sequence]: [1FAFA 1F3FF] (🫺🏿) rightwards thumb sign: dark skin tone
 ==== RGI Emoji Flag Sequences ====
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E6 1F1E8] (🇦🇨) flag: Ascension Island
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1E6 1F1E9] (🇦🇩) flag: Andorra
@@ -2401,7 +2411,7 @@ Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1FA] (🇬🇺) flag: Guam
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1FC] (🇬🇼) flag: Guinea-Bissau
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1EC 1F1FE] (🇬🇾) flag: Guyana
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1ED 1F1F0] (🇭🇰) flag: Hong Kong SAR China
-Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1ED 1F1F2] (🇭🇲) flag: Heard & McDonald Islands
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1ED 1F1F2] (🇭🇲) flag: Heard Island & McDonald Islands
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1ED 1F1F3] (🇭🇳) flag: Honduras
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1ED 1F1F7] (🇭🇷) flag: Croatia
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1ED 1F1F9] (🇭🇹) flag: Haiti
@@ -2505,7 +2515,7 @@ Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1E8] (🇸🇨) flag: Seychel
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1E9] (🇸🇩) flag: Sudan
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1EA] (🇸🇪) flag: Sweden
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1EC] (🇸🇬) flag: Singapore
-Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1ED] (🇸🇭) flag: St. Helena
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1ED] (🇸🇭) flag: St. Helena, Ascension & Tristan da Cunha
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1EE] (🇸🇮) flag: Slovenia
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1EF] (🇸🇯) flag: Svalbard & Jan Mayen
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1F0] (🇸🇰) flag: Slovakia
@@ -2523,7 +2533,7 @@ Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F8 1F1FF] (🇸🇿) flag: Eswatin
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1E6] (🇹🇦) flag: Tristan da Cunha
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1E8] (🇹🇨) flag: Turks & Caicos Islands
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1E9] (🇹🇩) flag: Chad
-Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1EB] (🇹🇫) flag: French Southern Territories
+Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1EB] (🇹🇫) flag: French Southern and Antarctic Lands
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1EC] (🇹🇬) flag: Togo
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1ED] (🇹🇭) flag: Thailand
 Register Emoji [RGI_Emoji_Flag_Sequence]: [1F1F9 1F1EF] (🇹🇯) flag: Tajikistan
@@ -3601,6 +3611,7 @@ Removed Valid: 1F6D5 (🛕) HINDU TEMPLE
 Removed Valid: 1F6D6 (🛖) HUT
 Removed Valid: 1F6D7 (🛗) ELEVATOR
 Removed Valid: 1F6D8 (🛘) LANDSLIDE
+Removed Valid: 1F6D9 (🛙) LIGHTHOUSE
 Removed Valid: 1F6DC (🛜) WIRELESS
 Removed Valid: 1F6DD (🛝) PLAYGROUND SLIDE
 Removed Valid: 1F6DE (🛞) WHEEL
@@ -3904,6 +3915,9 @@ Removed Valid: 1FA87 (🪇) MARACAS
 Removed Valid: 1FA88 (🪈) FLUTE
 Removed Valid: 1FA89 (🪉) HARP
 Removed Valid: 1FA8A (🪊) TROMBONE
+Removed Valid: 1FA8B (🪋) METEOR
+Removed Valid: 1FA8C (🪌) ERASER
+Removed Valid: 1FA8D (🪍) NET WITH HANDLE
 Removed Valid: 1FA8E (🪎) TREASURE CHEST
 Removed Valid: 1FA8F (🪏) SHOVEL
 Removed Valid: 1FA90 (🪐) RINGED PLANET
@@ -3962,6 +3976,7 @@ Removed Valid: 1FAC4 (🫄) PREGNANT PERSON
 Removed Valid: 1FAC5 (🫅) PERSON WITH CROWN
 Removed Valid: 1FAC6 (🫆) FINGERPRINT
 Removed Valid: 1FAC8 (🫈) HAIRY CREATURE
+Removed Valid: 1FACC (🫌) MONARCH BUTTERFLY
 Removed Valid: 1FACD (🫍) ORCA
 Removed Valid: 1FACE (🫎) MOOSE
 Removed Valid: 1FACF (🫏) DONKEY
@@ -3978,6 +3993,7 @@ Removed Valid: 1FAD9 (🫙) JAR
 Removed Valid: 1FADA (🫚) GINGER ROOT
 Removed Valid: 1FADB (🫛) PEA POD
 Removed Valid: 1FADC (🫜) ROOT VEGETABLE
+Removed Valid: 1FADD (🫝) PICKLE
 Removed Valid: 1FADF (🫟) SPLATTER
 Removed Valid: 1FAE0 (🫠) MELTING FACE
 Removed Valid: 1FAE1 (🫡) SALUTING FACE
@@ -3990,6 +4006,7 @@ Removed Valid: 1FAE7 (🫧) BUBBLES
 Removed Valid: 1FAE8 (🫨) SHAKING FACE
 Removed Valid: 1FAE9 (🫩) FACE WITH BAGS UNDER EYES
 Removed Valid: 1FAEA (🫪) DISTORTED FACE
+Removed Valid: 1FAEB (🫫) CRACKING FACE
 Removed Valid: 1FAEF (🫯) FIGHT CLOUD
 Removed Valid: 1FAF0 (🫰) HAND WITH INDEX FINGER AND THUMB CROSSED
 Removed Valid: 1FAF1 (🫱) RIGHTWARDS HAND
@@ -4000,6 +4017,8 @@ Removed Valid: 1FAF5 (🫵) INDEX POINTING AT THE VIEWER
 Removed Valid: 1FAF6 (🫶) HEART HANDS
 Removed Valid: 1FAF7 (🫷) LEFTWARDS PUSHING HAND
 Removed Valid: 1FAF8 (🫸) RIGHTWARDS PUSHING HAND
+Removed Valid: 1FAF9 (🫹) LEFTWARDS THUMB SIGN
+Removed Valid: 1FAFA (🫺) RIGHTWARDS THUMB SIGN
 ==== Register Basic Emoji with Forced Emoji-Presentation ====
 Register Emoji [Basic_Emoji]: [A9 FE0F] (©️) copyright
 Register Emoji [Basic_Emoji]: [AE FE0F] (®️) registered
@@ -4984,7 +5003,8 @@ Register Emoji [Emoji_Presentation]: [1F6D2 FE0F] (🛒️) shopping cart / SHOP
 Register Emoji [Emoji_Presentation]: [1F6D5 FE0F] (🛕️) hindu temple / HINDU TEMPLE
 Register Emoji [Emoji_Presentation]: [1F6D6 FE0F] (🛖️) hut / HUT
 Register Emoji [Emoji_Presentation]: [1F6D7 FE0F] (🛗️) elevator / ELEVATOR
-Register Emoji [Emoji_Presentation]: [1F6D8 FE0F] (🛘️) LANDSLIDE
+Register Emoji [Emoji_Presentation]: [1F6D8 FE0F] (🛘️) landslide / LANDSLIDE
+Register Emoji [Emoji_Presentation]: [1F6D9 FE0F] (🛙️) LIGHTHOUSE
 Register Emoji [Emoji_Presentation]: [1F6DC FE0F] (🛜️) wireless / WIRELESS
 Register Emoji [Emoji_Presentation]: [1F6DD FE0F] (🛝️) playground slide / PLAYGROUND SLIDE
 Register Emoji [Emoji_Presentation]: [1F6DE FE0F] (🛞️) wheel / WHEEL
@@ -5278,8 +5298,11 @@ Register Emoji [Emoji_Presentation]: [1FA86 FE0F] (🪆️) nesting dolls / NEST
 Register Emoji [Emoji_Presentation]: [1FA87 FE0F] (🪇️) maracas / MARACAS
 Register Emoji [Emoji_Presentation]: [1FA88 FE0F] (🪈️) flute / FLUTE
 Register Emoji [Emoji_Presentation]: [1FA89 FE0F] (🪉️) harp / HARP
-Register Emoji [Emoji_Presentation]: [1FA8A FE0F] (🪊️) TROMBONE
-Register Emoji [Emoji_Presentation]: [1FA8E FE0F] (🪎️) TREASURE CHEST
+Register Emoji [Emoji_Presentation]: [1FA8A FE0F] (🪊️) trombone / TROMBONE
+Register Emoji [Emoji_Presentation]: [1FA8B FE0F] (🪋️) METEOR
+Register Emoji [Emoji_Presentation]: [1FA8C FE0F] (🪌️) ERASER
+Register Emoji [Emoji_Presentation]: [1FA8D FE0F] (🪍️) NET WITH HANDLE
+Register Emoji [Emoji_Presentation]: [1FA8E FE0F] (🪎️) treasure chest / TREASURE CHEST
 Register Emoji [Emoji_Presentation]: [1FA8F FE0F] (🪏️) shovel / SHOVEL
 Register Emoji [Emoji_Presentation]: [1FA90 FE0F] (🪐️) ringed planet / RINGED PLANET
 Register Emoji [Emoji_Presentation]: [1FA91 FE0F] (🪑️) chair / CHAIR
@@ -5336,8 +5359,9 @@ Register Emoji [Emoji_Presentation]: [1FAC3 FE0F] (🫃️) pregnant man / PREGN
 Register Emoji [Emoji_Presentation]: [1FAC4 FE0F] (🫄️) pregnant person / PREGNANT PERSON
 Register Emoji [Emoji_Presentation]: [1FAC5 FE0F] (🫅️) person with crown / PERSON WITH CROWN
 Register Emoji [Emoji_Presentation]: [1FAC6 FE0F] (🫆️) fingerprint / FINGERPRINT
-Register Emoji [Emoji_Presentation]: [1FAC8 FE0F] (🫈️) HAIRY CREATURE
-Register Emoji [Emoji_Presentation]: [1FACD FE0F] (🫍️) ORCA
+Register Emoji [Emoji_Presentation]: [1FAC8 FE0F] (🫈️) hairy creature / HAIRY CREATURE
+Register Emoji [Emoji_Presentation]: [1FACC FE0F] (🫌️) MONARCH BUTTERFLY
+Register Emoji [Emoji_Presentation]: [1FACD FE0F] (🫍️) orca / ORCA
 Register Emoji [Emoji_Presentation]: [1FACE FE0F] (🫎️) moose / MOOSE
 Register Emoji [Emoji_Presentation]: [1FACF FE0F] (🫏️) donkey / DONKEY
 Register Emoji [Emoji_Presentation]: [1FAD0 FE0F] (🫐️) blueberries / BLUEBERRIES
@@ -5353,6 +5377,7 @@ Register Emoji [Emoji_Presentation]: [1FAD9 FE0F] (🫙️) jar / JAR
 Register Emoji [Emoji_Presentation]: [1FADA FE0F] (🫚️) ginger root / GINGER ROOT
 Register Emoji [Emoji_Presentation]: [1FADB FE0F] (🫛️) pea pod / PEA POD
 Register Emoji [Emoji_Presentation]: [1FADC FE0F] (🫜️) root vegetable / ROOT VEGETABLE
+Register Emoji [Emoji_Presentation]: [1FADD FE0F] (🫝️) PICKLE
 Register Emoji [Emoji_Presentation]: [1FADF FE0F] (🫟️) splatter / SPLATTER
 Register Emoji [Emoji_Presentation]: [1FAE0 FE0F] (🫠️) melting face / MELTING FACE
 Register Emoji [Emoji_Presentation]: [1FAE1 FE0F] (🫡️) saluting face / SALUTING FACE
@@ -5364,8 +5389,9 @@ Register Emoji [Emoji_Presentation]: [1FAE6 FE0F] (🫦️) biting lip / BITING 
 Register Emoji [Emoji_Presentation]: [1FAE7 FE0F] (🫧️) bubbles / BUBBLES
 Register Emoji [Emoji_Presentation]: [1FAE8 FE0F] (🫨️) shaking face / SHAKING FACE
 Register Emoji [Emoji_Presentation]: [1FAE9 FE0F] (🫩️) face with bags under eyes / FACE WITH BAGS UNDER EYES
-Register Emoji [Emoji_Presentation]: [1FAEA FE0F] (🫪️) DISTORTED FACE
-Register Emoji [Emoji_Presentation]: [1FAEF FE0F] (🫯️) FIGHT CLOUD
+Register Emoji [Emoji_Presentation]: [1FAEA FE0F] (🫪️) distorted face / DISTORTED FACE
+Register Emoji [Emoji_Presentation]: [1FAEB FE0F] (🫫️) CRACKING FACE
+Register Emoji [Emoji_Presentation]: [1FAEF FE0F] (🫯️) fight cloud / FIGHT CLOUD
 Register Emoji [Emoji_Presentation]: [1FAF0 FE0F] (🫰️) hand with index finger and thumb crossed / HAND WITH INDEX FINGER AND THUMB CROSSED
 Register Emoji [Emoji_Presentation]: [1FAF1 FE0F] (🫱️) rightwards hand / RIGHTWARDS HAND
 Register Emoji [Emoji_Presentation]: [1FAF2 FE0F] (🫲️) leftwards hand / LEFTWARDS HAND
@@ -5375,6 +5401,8 @@ Register Emoji [Emoji_Presentation]: [1FAF5 FE0F] (🫵️) index pointing at th
 Register Emoji [Emoji_Presentation]: [1FAF6 FE0F] (🫶️) heart hands / HEART HANDS
 Register Emoji [Emoji_Presentation]: [1FAF7 FE0F] (🫷️) leftwards pushing hand / LEFTWARDS PUSHING HAND
 Register Emoji [Emoji_Presentation]: [1FAF8 FE0F] (🫸️) rightwards pushing hand / RIGHTWARDS PUSHING HAND
+Register Emoji [Emoji_Presentation]: [1FAF9 FE0F] (🫹️) LEFTWARDS THUMB SIGN
+Register Emoji [Emoji_Presentation]: [1FAFA FE0F] (🫺️) RIGHTWARDS THUMB SIGN
 ==== Register Leftover Emoji ====
 ==== Whitelist Emoji ====
 ==== Blacklist Emoji ====
@@ -12247,23 +12275,22 @@ Disallowed Script: [Lina] Linear A [X]
 Disallowed Script: [Linb] Linear B [X]
 Disallowed Script: [Sgnw] SignWriting [X]
 Valid  | Name       | Test      | Rest      | Extra                     
-103427 | Japanese   | Kana+Hira | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
-114744 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
-103217 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
-102201 | Bopomofo   | Bopo      | Hani      |                           
-  1355 | Latin      | Latn+Zyyy | Zinh      | π                         
-  1195 | Cyrillic   | Cyrl      | Zyyy+Zinh |                           
-  1181 | Greek      | Grek      | Zyyy+Zinh |                           
-   450 | Arabic     | Arab      |           | -                         
-   120 | Devanagari | Deva      |           |                           
-    86 | Hebrew     | Hebr      |           | ₪                         
+103574 | Japanese   | Kana+Hira | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+114888 | Korean     | Hang      | Hani+Zyyy | abcdefghijklmnopqrstuvwxyz
+103361 | Han        | Hani      | Zyyy      | abcdefghijklmnopqrstuvwxyz
+  1592 | Latin      | Latn+Zyyy | Zinh      | π                         
+  1349 | Cyrillic   | Cyrl      | Zyyy+Zinh |                           
+  1335 | Greek      | Grek      | Zyyy+Zinh |                           
+   489 | Arabic     | Arab      |           | -                         
+   121 | Devanagari | Deva      |           |                           
+    88 | Hebrew     | Hebr      |           | ₪                         
     87 | Thai       | Thai      |           | ฿                         
-    91 | Bengali    | Beng      |           |                           
+    93 | Bengali    | Beng      |           |                           
     61 | Thaana     | Thaa      |           |                           
     74 | Gurmukhi   | Guru      |           |                           
    126 | Tamil      | Taml      |           |                           
    186 | Tibetan    | Tibt      |           |                           
-    89 | Oriya      | Orya      |           |                           
+    91 | Oriya      | Orya      |           |                           
    111 | Sinhala    | Sinh      |           |                           
     91 | Gujarati   | Gujr      |           |                           
     97 | Telugu     | Telu      |           |                           
@@ -12344,7 +12371,7 @@ Valid  | Name       | Test      | Rest      | Extra
     85 | Kawi [R]   | Kawi      |           |                           
     60 | Khar [R]   | Khar      |           |                           
     71 | Khoj [R]   | Khoj      |           |                           
-   472 | Kits [R]   | Kits      |           |                           
+   477 | Kits [R]   | Kits      |           |                           
     72 | Kthi [R]   | Kthi      |           |                           
     29 | Lyci [R]   | Lyci      |           |                           
     27 | Lydi [R]   | Lydi      |           |                           
@@ -12391,7 +12418,7 @@ Valid  | Name       | Test      | Rest      | Extra
     81 | Soyo [R]   | Soyo      |           |                           
     18 | Tagb [R]   | Tagb      |           |                           
     68 | Takr [R]   | Takr      |           |                           
-  7059 | Tang [R]   | Tang      |           |                           
+  7061 | Tang [R]   | Tang      |           |                           
     23 | Tglg [R]   | Tglg      |           |                           
     82 | Tirh [R]   | Tirh      |           |                           
     89 | Tnsa [R]   | Tnsa      |           |                           
@@ -12400,7 +12427,7 @@ Valid  | Name       | Test      | Rest      | Extra
     35 | Vith [R]   | Vith      |           |                           
     52 | Wara [R]   | Wara      |           |                           
     50 | Xpeo [R]   | Xpeo      |           |                           
-  1234 | Xsux [R]   | Xsux      |           |                           
+  1393 | Xsux [R]   | Xsux      |           |                           
     57 | Yezi [R]   | Yezi      |           |                           
     70 | Zanb [R]   | Zanb      |           |                           
     47 | Gara [R]   | Gara      |           |                           
@@ -12414,6 +12441,11 @@ Valid  | Name       | Test      | Rest      | Extra
     26 | Sidt [R]   | Sidt      |           |                           
     55 | Tayo [R]   | Tayo      |           |                           
     54 | Tols [R]   | Tols      |           |                           
+    40 | Chis [R]   | Chis      |           |                           
+   965 | Jurc [R]   | Jurc      |           |                           
+   235 | Pcun [R]   | Pcun      |           |                           
+ 11328 | Seal [R]   | Seal      |           |                           
+    76 | Bopo [R]   | Bopo      |           |                           
 ==== Compute CM Whitelist ====
 [E0] (à) LATIN SMALL LETTER A WITH GRAVE <0> "a+◌̀" [Latin]
 [E1] (á) LATIN SMALL LETTER A WITH ACUTE <0> "a+◌́" [Latin]
@@ -12543,11 +12575,31 @@ Valid  | Name       | Test      | Rest      | Extra
 [307D] (ぽ) HIRAGANA LETTER PO <0> "ほ+◌゚" [Japanese]
 [3094] (ゔ) HIRAGANA LETTER VU <0> "う+◌゙" [Japanese]
 [309E] (ゞ) HIRAGANA VOICED ITERATION MARK <0> "ゝ+◌゙" [Japanese]
-==== Purge CM: Japanese (3) ====
+==== Purge CM: Japanese (9) ====
 305 (◌̅) COMBINING OVERLINE => [305] (◌̅) COMBINING OVERLINE
 3099 (◌゙) COMBINING KATAKANA-HIRAGANA VOICED SOUND MARK => [3099] (◌゙) COMBINING KATAKANA-HIRAGANA VOICED SOUND MARK
 309A (◌゚) COMBINING KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK => [309A] (◌゚) COMBINING KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK
-==== Purge CM: Latin (209) ====
+1D250 (◌𝉐) MUSICAL SYMBOL COMBINING FLAG-6 => [1D250] (◌𝉐) MUSICAL SYMBOL COMBINING FLAG-6
+1D251 (◌𝉑) MUSICAL SYMBOL COMBINING FLAG-7 => [1D251] (◌𝉑) MUSICAL SYMBOL COMBINING FLAG-7
+1D252 (◌𝉒) MUSICAL SYMBOL COMBINING FLAG-8 => [1D252] (◌𝉒) MUSICAL SYMBOL COMBINING FLAG-8
+1D25F (◌𝉟) MUSICAL SYMBOL COMBINING BUZZ ROLL STEM => [1D25F] (◌𝉟) MUSICAL SYMBOL COMBINING BUZZ ROLL STEM
+1D280 (◌𝊀) MUSICAL SYMBOL COMBINING STEM BOW BEHIND BRIDGE => [1D280] (◌𝊀) MUSICAL SYMBOL COMBINING STEM BOW BEHIND BRIDGE
+1D281 (◌𝊁) MUSICAL SYMBOL COMBINING STEM BOW ON TOP OF BRIDGE => [1D281] (◌𝊁) MUSICAL SYMBOL COMBINING STEM BOW ON TOP OF BRIDGE
+==== Purge CM: Korean (6) ====
+1D250 (◌𝉐) MUSICAL SYMBOL COMBINING FLAG-6 => [1D250] (◌𝉐) MUSICAL SYMBOL COMBINING FLAG-6
+1D251 (◌𝉑) MUSICAL SYMBOL COMBINING FLAG-7 => [1D251] (◌𝉑) MUSICAL SYMBOL COMBINING FLAG-7
+1D252 (◌𝉒) MUSICAL SYMBOL COMBINING FLAG-8 => [1D252] (◌𝉒) MUSICAL SYMBOL COMBINING FLAG-8
+1D25F (◌𝉟) MUSICAL SYMBOL COMBINING BUZZ ROLL STEM => [1D25F] (◌𝉟) MUSICAL SYMBOL COMBINING BUZZ ROLL STEM
+1D280 (◌𝊀) MUSICAL SYMBOL COMBINING STEM BOW BEHIND BRIDGE => [1D280] (◌𝊀) MUSICAL SYMBOL COMBINING STEM BOW BEHIND BRIDGE
+1D281 (◌𝊁) MUSICAL SYMBOL COMBINING STEM BOW ON TOP OF BRIDGE => [1D281] (◌𝊁) MUSICAL SYMBOL COMBINING STEM BOW ON TOP OF BRIDGE
+==== Purge CM: Han (6) ====
+1D250 (◌𝉐) MUSICAL SYMBOL COMBINING FLAG-6 => [1D250] (◌𝉐) MUSICAL SYMBOL COMBINING FLAG-6
+1D251 (◌𝉑) MUSICAL SYMBOL COMBINING FLAG-7 => [1D251] (◌𝉑) MUSICAL SYMBOL COMBINING FLAG-7
+1D252 (◌𝉒) MUSICAL SYMBOL COMBINING FLAG-8 => [1D252] (◌𝉒) MUSICAL SYMBOL COMBINING FLAG-8
+1D25F (◌𝉟) MUSICAL SYMBOL COMBINING BUZZ ROLL STEM => [1D25F] (◌𝉟) MUSICAL SYMBOL COMBINING BUZZ ROLL STEM
+1D280 (◌𝊀) MUSICAL SYMBOL COMBINING STEM BOW BEHIND BRIDGE => [1D280] (◌𝊀) MUSICAL SYMBOL COMBINING STEM BOW BEHIND BRIDGE
+1D281 (◌𝊁) MUSICAL SYMBOL COMBINING STEM BOW ON TOP OF BRIDGE => [1D281] (◌𝊁) MUSICAL SYMBOL COMBINING STEM BOW ON TOP OF BRIDGE
+==== Purge CM: Latin (226) ====
 FF (ÿ) LATIN SMALL LETTER Y WITH DIAERESIS => [79 308] (ÿ) LATIN SMALL LETTER Y + COMBINING DIAERESIS
 10B (ċ) LATIN SMALL LETTER C WITH DOT ABOVE => [63 307] (ċ) LATIN SMALL LETTER C + COMBINING DOT ABOVE
 10F (ď) LATIN SMALL LETTER D WITH CARON => [64 30C] (ď) LATIN SMALL LETTER D + COMBINING CARON
@@ -12635,6 +12687,13 @@ FF (ÿ) LATIN SMALL LETTER Y WITH DIAERESIS => [79 308] (ÿ) LATIN SMALL LETTER
 30B (◌̋) COMBINING DOUBLE ACUTE ACCENT => [30B] (◌̋) COMBINING DOUBLE ACUTE ACCENT
 30C (◌̌) COMBINING CARON => [30C] (◌̌) COMBINING CARON
 327 (◌̧) COMBINING CEDILLA => [327] (◌̧) COMBINING CEDILLA
+1ADE (◌᫞) COMBINING GRAVE-DOT => [1ADE] (◌᫞) COMBINING GRAVE-DOT
+1ADF (◌᫟) COMBINING DOT-ACUTE => [1ADF] (◌᫟) COMBINING DOT-ACUTE
+1AEC (◌᫬) COMBINING CARON-ACUTE => [1AEC] (◌᫬) COMBINING CARON-ACUTE
+1AED (◌᫭) COMBINING VERTICAL-LINE-DOUBLE-ACUTE => [1AED] (◌᫭) COMBINING VERTICAL-LINE-DOUBLE-ACUTE
+1AEE (◌᫮) COMBINING DOUBLE GRAVE ACCENT BELOW => [1AEE] (◌᫮) COMBINING DOUBLE GRAVE ACCENT BELOW
+1AEF (◌᫯) COMBINING DOUBLE ACUTE ACCENT BELOW => [1AEF] (◌᫯) COMBINING DOUBLE ACUTE ACCENT BELOW
+1AF0 (◌᫰) COMBINING DOUBLE COMMA ABOVE => [1AF0] (◌᫰) COMBINING DOUBLE COMMA ABOVE
 1E01 (ḁ) LATIN SMALL LETTER A WITH RING BELOW => [61 325] (ḁ) LATIN SMALL LETTER A + COMBINING RING BELOW
 1E03 (ḃ) LATIN SMALL LETTER B WITH DOT ABOVE => [62 307] (ḃ) LATIN SMALL LETTER B + COMBINING DOT ABOVE
 1E05 (ḅ) LATIN SMALL LETTER B WITH DOT BELOW => [62 323] (ḅ) LATIN SMALL LETTER B + COMBINING DOT BELOW
@@ -12757,7 +12816,17 @@ FF (ÿ) LATIN SMALL LETTER Y WITH DIAERESIS => [79 308] (ÿ) LATIN SMALL LETTER
 1EF5 (ỵ) LATIN SMALL LETTER Y WITH DOT BELOW => [79 323] (ỵ) LATIN SMALL LETTER Y + COMBINING DOT BELOW
 1EF7 (ỷ) LATIN SMALL LETTER Y WITH HOOK ABOVE => [79 309] (ỷ) LATIN SMALL LETTER Y + COMBINING HOOK ABOVE
 1EF9 (ỹ) LATIN SMALL LETTER Y WITH TILDE => [79 303] (ỹ) LATIN SMALL LETTER Y + COMBINING TILDE
-==== Purge CM: Cyrillic (26) ====
+1D250 (◌𝉐) MUSICAL SYMBOL COMBINING FLAG-6 => [1D250] (◌𝉐) MUSICAL SYMBOL COMBINING FLAG-6
+1D251 (◌𝉑) MUSICAL SYMBOL COMBINING FLAG-7 => [1D251] (◌𝉑) MUSICAL SYMBOL COMBINING FLAG-7
+1D252 (◌𝉒) MUSICAL SYMBOL COMBINING FLAG-8 => [1D252] (◌𝉒) MUSICAL SYMBOL COMBINING FLAG-8
+1D25B (◌𝉛) MUSICAL SYMBOL COMBINING TREMOLO-4 => [1D25B] (◌𝉛) MUSICAL SYMBOL COMBINING TREMOLO-4
+1D25C (◌𝉜) MUSICAL SYMBOL COMBINING TREMOLO-5 => [1D25C] (◌𝉜) MUSICAL SYMBOL COMBINING TREMOLO-5
+1D25F (◌𝉟) MUSICAL SYMBOL COMBINING BUZZ ROLL STEM => [1D25F] (◌𝉟) MUSICAL SYMBOL COMBINING BUZZ ROLL STEM
+1D280 (◌𝊀) MUSICAL SYMBOL COMBINING STEM BOW BEHIND BRIDGE => [1D280] (◌𝊀) MUSICAL SYMBOL COMBINING STEM BOW BEHIND BRIDGE
+1D281 (◌𝊁) MUSICAL SYMBOL COMBINING STEM BOW ON TOP OF BRIDGE => [1D281] (◌𝊁) MUSICAL SYMBOL COMBINING STEM BOW ON TOP OF BRIDGE
+1D127 (◌𝄧) MUSICAL SYMBOL COMBINING STRESS => [1D127] (◌𝄧) MUSICAL SYMBOL COMBINING STRESS
+1D128 (◌𝄨) MUSICAL SYMBOL COMBINING UNSTRESS => [1D128] (◌𝄨) MUSICAL SYMBOL COMBINING UNSTRESS
+==== Purge CM: Cyrillic (43) ====
 300 (◌̀) COMBINING GRAVE ACCENT => [300] (◌̀) COMBINING GRAVE ACCENT
 301 (◌́) COMBINING ACUTE ACCENT => [301] (◌́) COMBINING ACUTE ACCENT
 302 (◌̂) COMBINING CIRCUMFLEX ACCENT => [302] (◌̂) COMBINING CIRCUMFLEX ACCENT
@@ -12784,13 +12853,37 @@ FF (ÿ) LATIN SMALL LETTER Y WITH DIAERESIS => [79 308] (ÿ) LATIN SMALL LETTER
 4F3 (ӳ) CYRILLIC SMALL LETTER U WITH DOUBLE ACUTE => [443 30B] (ӳ) CYRILLIC SMALL LETTER U + COMBINING DOUBLE ACUTE ACCENT
 4F5 (ӵ) CYRILLIC SMALL LETTER CHE WITH DIAERESIS => [447 308] (ӵ) CYRILLIC SMALL LETTER CHE + COMBINING DIAERESIS
 4F9 (ӹ) CYRILLIC SMALL LETTER YERU WITH DIAERESIS => [44B 308] (ӹ) CYRILLIC SMALL LETTER YERU + COMBINING DIAERESIS
-==== Purge CM: Greek (82) ====
+1ADE (◌᫞) COMBINING GRAVE-DOT => [1ADE] (◌᫞) COMBINING GRAVE-DOT
+1ADF (◌᫟) COMBINING DOT-ACUTE => [1ADF] (◌᫟) COMBINING DOT-ACUTE
+1AEC (◌᫬) COMBINING CARON-ACUTE => [1AEC] (◌᫬) COMBINING CARON-ACUTE
+1AED (◌᫭) COMBINING VERTICAL-LINE-DOUBLE-ACUTE => [1AED] (◌᫭) COMBINING VERTICAL-LINE-DOUBLE-ACUTE
+1AEE (◌᫮) COMBINING DOUBLE GRAVE ACCENT BELOW => [1AEE] (◌᫮) COMBINING DOUBLE GRAVE ACCENT BELOW
+1AEF (◌᫯) COMBINING DOUBLE ACUTE ACCENT BELOW => [1AEF] (◌᫯) COMBINING DOUBLE ACUTE ACCENT BELOW
+1AF0 (◌᫰) COMBINING DOUBLE COMMA ABOVE => [1AF0] (◌᫰) COMBINING DOUBLE COMMA ABOVE
+1D250 (◌𝉐) MUSICAL SYMBOL COMBINING FLAG-6 => [1D250] (◌𝉐) MUSICAL SYMBOL COMBINING FLAG-6
+1D251 (◌𝉑) MUSICAL SYMBOL COMBINING FLAG-7 => [1D251] (◌𝉑) MUSICAL SYMBOL COMBINING FLAG-7
+1D252 (◌𝉒) MUSICAL SYMBOL COMBINING FLAG-8 => [1D252] (◌𝉒) MUSICAL SYMBOL COMBINING FLAG-8
+1D25B (◌𝉛) MUSICAL SYMBOL COMBINING TREMOLO-4 => [1D25B] (◌𝉛) MUSICAL SYMBOL COMBINING TREMOLO-4
+1D25C (◌𝉜) MUSICAL SYMBOL COMBINING TREMOLO-5 => [1D25C] (◌𝉜) MUSICAL SYMBOL COMBINING TREMOLO-5
+1D25F (◌𝉟) MUSICAL SYMBOL COMBINING BUZZ ROLL STEM => [1D25F] (◌𝉟) MUSICAL SYMBOL COMBINING BUZZ ROLL STEM
+1D280 (◌𝊀) MUSICAL SYMBOL COMBINING STEM BOW BEHIND BRIDGE => [1D280] (◌𝊀) MUSICAL SYMBOL COMBINING STEM BOW BEHIND BRIDGE
+1D281 (◌𝊁) MUSICAL SYMBOL COMBINING STEM BOW ON TOP OF BRIDGE => [1D281] (◌𝊁) MUSICAL SYMBOL COMBINING STEM BOW ON TOP OF BRIDGE
+1D127 (◌𝄧) MUSICAL SYMBOL COMBINING STRESS => [1D127] (◌𝄧) MUSICAL SYMBOL COMBINING STRESS
+1D128 (◌𝄨) MUSICAL SYMBOL COMBINING UNSTRESS => [1D128] (◌𝄨) MUSICAL SYMBOL COMBINING UNSTRESS
+==== Purge CM: Greek (99) ====
 300 (◌̀) COMBINING GRAVE ACCENT => [300] (◌̀) COMBINING GRAVE ACCENT
 301 (◌́) COMBINING ACUTE ACCENT => [301] (◌́) COMBINING ACUTE ACCENT
 304 (◌̄) COMBINING MACRON => [304] (◌̄) COMBINING MACRON
 306 (◌̆) COMBINING BREVE => [306] (◌̆) COMBINING BREVE
 308 (◌̈) COMBINING DIAERESIS => [308] (◌̈) COMBINING DIAERESIS
 327 (◌̧) COMBINING CEDILLA => [327] (◌̧) COMBINING CEDILLA
+1ADE (◌᫞) COMBINING GRAVE-DOT => [1ADE] (◌᫞) COMBINING GRAVE-DOT
+1ADF (◌᫟) COMBINING DOT-ACUTE => [1ADF] (◌᫟) COMBINING DOT-ACUTE
+1AEC (◌᫬) COMBINING CARON-ACUTE => [1AEC] (◌᫬) COMBINING CARON-ACUTE
+1AED (◌᫭) COMBINING VERTICAL-LINE-DOUBLE-ACUTE => [1AED] (◌᫭) COMBINING VERTICAL-LINE-DOUBLE-ACUTE
+1AEE (◌᫮) COMBINING DOUBLE GRAVE ACCENT BELOW => [1AEE] (◌᫮) COMBINING DOUBLE GRAVE ACCENT BELOW
+1AEF (◌᫯) COMBINING DOUBLE ACUTE ACCENT BELOW => [1AEF] (◌᫯) COMBINING DOUBLE ACUTE ACCENT BELOW
+1AF0 (◌᫰) COMBINING DOUBLE COMMA ABOVE => [1AF0] (◌᫰) COMBINING DOUBLE COMMA ABOVE
 1F00 (ἀ) GREEK SMALL LETTER ALPHA WITH PSILI => [3B1 313] (ἀ) GREEK SMALL LETTER ALPHA + COMBINING COMMA ABOVE
 1F01 (ἁ) GREEK SMALL LETTER ALPHA WITH DASIA => [3B1 314] (ἁ) GREEK SMALL LETTER ALPHA + COMBINING REVERSED COMMA ABOVE
 1F02 (ἂ) GREEK SMALL LETTER ALPHA WITH PSILI AND VARIA => [3B1 313 300] (ἂ) GREEK SMALL LETTER ALPHA + COMBINING COMMA ABOVE + COMBINING GRAVE ACCENT
@@ -12867,6 +12960,16 @@ FF (ÿ) LATIN SMALL LETTER Y WITH DIAERESIS => [79 308] (ÿ) LATIN SMALL LETTER
 1FE6 (ῦ) GREEK SMALL LETTER UPSILON WITH PERISPOMENI => [3C5 342] (ῦ) GREEK SMALL LETTER UPSILON + COMBINING GREEK PERISPOMENI
 1FE7 (ῧ) GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND PERISPOMENI => [3C5 308 342] (ῧ) GREEK SMALL LETTER UPSILON + COMBINING DIAERESIS + COMBINING GREEK PERISPOMENI
 1FF6 (ῶ) GREEK SMALL LETTER OMEGA WITH PERISPOMENI => [3C9 342] (ῶ) GREEK SMALL LETTER OMEGA + COMBINING GREEK PERISPOMENI
+1D250 (◌𝉐) MUSICAL SYMBOL COMBINING FLAG-6 => [1D250] (◌𝉐) MUSICAL SYMBOL COMBINING FLAG-6
+1D251 (◌𝉑) MUSICAL SYMBOL COMBINING FLAG-7 => [1D251] (◌𝉑) MUSICAL SYMBOL COMBINING FLAG-7
+1D252 (◌𝉒) MUSICAL SYMBOL COMBINING FLAG-8 => [1D252] (◌𝉒) MUSICAL SYMBOL COMBINING FLAG-8
+1D25B (◌𝉛) MUSICAL SYMBOL COMBINING TREMOLO-4 => [1D25B] (◌𝉛) MUSICAL SYMBOL COMBINING TREMOLO-4
+1D25C (◌𝉜) MUSICAL SYMBOL COMBINING TREMOLO-5 => [1D25C] (◌𝉜) MUSICAL SYMBOL COMBINING TREMOLO-5
+1D25F (◌𝉟) MUSICAL SYMBOL COMBINING BUZZ ROLL STEM => [1D25F] (◌𝉟) MUSICAL SYMBOL COMBINING BUZZ ROLL STEM
+1D280 (◌𝊀) MUSICAL SYMBOL COMBINING STEM BOW BEHIND BRIDGE => [1D280] (◌𝊀) MUSICAL SYMBOL COMBINING STEM BOW BEHIND BRIDGE
+1D281 (◌𝊁) MUSICAL SYMBOL COMBINING STEM BOW ON TOP OF BRIDGE => [1D281] (◌𝊁) MUSICAL SYMBOL COMBINING STEM BOW ON TOP OF BRIDGE
+1D127 (◌𝄧) MUSICAL SYMBOL COMBINING STRESS => [1D127] (◌𝄧) MUSICAL SYMBOL COMBINING STRESS
+1D128 (◌𝄨) MUSICAL SYMBOL COMBINING UNSTRESS => [1D128] (◌𝄨) MUSICAL SYMBOL COMBINING UNSTRESS
 ==== Purge CM: Gukh (3) ====
 16121 (◌𖄡) GURUNG KHEMA VOWEL SIGN U => [1611E 1611E] (◌𖄡) GURUNG KHEMA VOWEL SIGN AA + GURUNG KHEMA VOWEL SIGN AA
 16126 (◌𖄦) GURUNG KHEMA VOWEL SIGN O => [1611E 1611E 1611F] (◌𖄦) GURUNG KHEMA VOWEL SIGN AA + GURUNG KHEMA VOWEL SIGN AA + GURUNG KHEMA VOWEL SIGN I
@@ -12963,7 +13066,7 @@ Auto-Override: 438 (и) CYRILLIC SMALL LETTER I [Cyrillic vs Dsrt]
 Override: 6F (o) LATIN SMALL LETTER O [Japanese,Korean,Han,Latin]
 Override: 665 (٥) ARABIC-INDIC DIGIT FIVE [Arabic,Thaana,Yezi]
 Override: 6F5 (۵) EXTENDED ARABIC-INDIC DIGIT FIVE [Arabic]
-Override: 3007 (〇) IDEOGRAPHIC NUMBER ZERO [Japanese,Korean,Han,Bopomofo]
+Override: 3007 (〇) IDEOGRAPHIC NUMBER ZERO [Japanese,Korean,Han]
 Unresolved: [Telugu] C02 (◌ం) TELUGU SIGN ANUSVARA vs C66 (౦) TELUGU DIGIT ZERO
 Unresolved: [Kannada] C82 (◌ಂ) KANNADA SIGN ANUSVARA vs CE6 (೦) KANNADA DIGIT ZERO
 Unresolved: [Malayalam] D02 (◌ം) MALAYALAM SIGN ANUSVARA vs D20 (ഠ) MALAYALAM LETTER TTHA vs D66 (൦) MALAYALAM DIGIT ZERO
@@ -13210,132 +13313,132 @@ Auto-Override: 25BD (▽) WHITE DOWN-POINTING TRIANGLE [Japanese,Korean,Han,Lati
 Unresolved: [Osma] 10486 (𐒆) OSMANYA LETTER DEEL vs 104A0 (𐒠) OSMANYA DIGIT ZERO
 Auto-Override: 2625 (☥) ANKH [Japanese,Korean,Han,Latin,Cyrillic,Greek vs Mero,Egyp]
 Unresolved: [Korean] 4E28 (丨) CJK Ideograph-4E28 [41/20992] vs 1175 (ᅵ) HANGUL JUNGSEONG I
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2E83 (⺃) CJK RADICAL SECOND TWO vs 4E5A (乚) CJK Ideograph-4E5A [91/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2E82 (⺂) CJK RADICAL SECOND ONE vs 4E5B (乛) CJK Ideograph-4E5B [92/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EF2 (⻲) CJK RADICAL J-SIMPLIFIED TURTLE vs 4E80 (亀) CJK Ideograph-4E80 [129/20992]
-Override: 4E8C (二) CJK Ideograph-4E8C [141/20992] [Japanese,Korean,Han,Bopomofo]
+Unresolved: [Japanese,Korean,Han] 2E83 (⺃) CJK RADICAL SECOND TWO vs 4E5A (乚) CJK Ideograph-4E5A [91/20992]
+Unresolved: [Japanese,Korean,Han] 2E82 (⺂) CJK RADICAL SECOND ONE vs 4E5B (乛) CJK Ideograph-4E5B [92/20992]
+Unresolved: [Japanese,Korean,Han] 2EF2 (⻲) CJK RADICAL J-SIMPLIFIED TURTLE vs 4E80 (亀) CJK Ideograph-4E80 [129/20992]
+Override: 4E8C (二) CJK Ideograph-4E8C [141/20992] [Japanese,Korean,Han]
 Override: 30CB (ニ) KATAKANA LETTER NI [Japanese]
 Unresolved: [Japanese] 2E85 (⺅) CJK RADICAL PERSON vs 30A4 (イ) KATAKANA LETTER I vs 4EBB (亻) CJK Ideograph-4EBB [188/20992]
-Unresolved: [Korean,Han,Bopomofo] 2E85 (⺅) CJK RADICAL PERSON vs 4EBB (亻) CJK Ideograph-4EBB [188/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 4F75 (併) CJK Ideograph-4F75 [374/20992] vs 5002 (倂) CJK Ideograph-5002 [515/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 5024 (値) CJK Ideograph-5024 [549/20992] vs 503C (值) CJK Ideograph-503C [573/20992]
-Unresolved: [Bopomofo] 3126 (ㄦ) BOPOMOFO LETTER ER vs 513F (儿) CJK Ideograph-513F [832/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2E8E (⺎) CJK RADICAL LAME ONE vs 5140 (兀) CJK Ideograph-5140 [833/20992]
-Override: 516B (八) CJK Ideograph-516B [876/20992] [Japanese,Korean,Han,Bopomofo]
+Unresolved: [Korean,Han] 2E85 (⺅) CJK RADICAL PERSON vs 4EBB (亻) CJK Ideograph-4EBB [188/20992]
+Unresolved: [Japanese,Korean,Han] 4F75 (併) CJK Ideograph-4F75 [374/20992] vs 5002 (倂) CJK Ideograph-5002 [515/20992]
+Unresolved: [Japanese,Korean,Han] 5024 (値) CJK Ideograph-5024 [549/20992] vs 503C (值) CJK Ideograph-503C [573/20992]
+Auto-Override: 513F (儿) CJK Ideograph-513F [832/20992] [Japanese,Korean,Han vs Bopo]
+Unresolved: [Japanese,Korean,Han] 2E8E (⺎) CJK RADICAL LAME ONE vs 5140 (兀) CJK Ideograph-5140 [833/20992]
+Override: 516B (八) CJK Ideograph-516B [876/20992] [Japanese,Korean,Han]
 Override: 30CF (ハ) KATAKANA LETTER HA [Japanese]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2E89 (⺉) CJK RADICAL KNIFE TWO vs 5202 (刂) CJK Ideograph-5202 [1027/20992]
+Unresolved: [Japanese,Korean,Han] 2E89 (⺉) CJK RADICAL KNIFE TWO vs 5202 (刂) CJK Ideograph-5202 [1027/20992]
 Unresolved: [Japanese] 30AB (カ) KATAKANA LETTER KA vs 529B (力) CJK Ideograph-529B [1180/20992]
 Unresolved: [Japanese] 30C8 (ト) KATAKANA LETTER TO vs 535C (卜) CJK Ideograph-535C [1373/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2E8B (⺋) CJK RADICAL SEAL vs 353E (㔾) CJK Ideograph Extension A-353E [319/6592]
+Unresolved: [Japanese,Korean,Han] 2E8B (⺋) CJK RADICAL SEAL vs 353E (㔾) CJK Ideograph Extension A-353E [319/6592]
 Unresolved: [Japanese] 30ED (ロ) KATAKANA LETTER RO vs 53E3 (口) CJK Ideograph-53E3 [1508/20992] vs 56D7 (囗) CJK Ideograph-56D7 [2264/20992]
-Unresolved: [Korean,Han,Bopomofo] 53E3 (口) CJK Ideograph-53E3 [1508/20992] vs 56D7 (囗) CJK Ideograph-56D7 [2264/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 3588 (㖈) CJK Ideograph Extension A-3588 [393/6592] vs 439B (䎛) CJK Ideograph Extension A-439B [3996/6592]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 5553 (啓) CJK Ideograph-5553 [1876/20992] vs 555F (啟) CJK Ideograph-555F [1888/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 571F (土) CJK Ideograph-571F [2336/20992] vs 58EB (士) CJK Ideograph-58EB [2796/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 363D (㘽) CJK Ideograph Extension A-363D [574/6592] vs 39B3 (㦳) CJK Ideograph Extension A-39B3 [1460/6592]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 5861 (塡) CJK Ideograph-5861 [2658/20992] vs 586B (填) CJK Ideograph-586B [2668/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 58AB (墫) CJK Ideograph-58AB [2732/20992] vs 58FF (壿) CJK Ideograph-58FF [2816/20992]
+Unresolved: [Korean,Han] 53E3 (口) CJK Ideograph-53E3 [1508/20992] vs 56D7 (囗) CJK Ideograph-56D7 [2264/20992]
+Unresolved: [Japanese,Korean,Han] 3588 (㖈) CJK Ideograph Extension A-3588 [393/6592] vs 439B (䎛) CJK Ideograph Extension A-439B [3996/6592]
+Unresolved: [Japanese,Korean,Han] 5553 (啓) CJK Ideograph-5553 [1876/20992] vs 555F (啟) CJK Ideograph-555F [1888/20992]
+Unresolved: [Japanese,Korean,Han] 571F (土) CJK Ideograph-571F [2336/20992] vs 58EB (士) CJK Ideograph-58EB [2796/20992]
+Unresolved: [Japanese,Korean,Han] 363D (㘽) CJK Ideograph Extension A-363D [574/6592] vs 39B3 (㦳) CJK Ideograph Extension A-39B3 [1460/6592]
+Unresolved: [Japanese,Korean,Han] 5861 (塡) CJK Ideograph-5861 [2658/20992] vs 586B (填) CJK Ideograph-586B [2668/20992]
+Unresolved: [Japanese,Korean,Han] 58AB (墫) CJK Ideograph-58AB [2732/20992] vs 58FF (壿) CJK Ideograph-58FF [2816/20992]
 Unresolved: [Japanese] 30BF (タ) KATAKANA LETTER TA vs 5915 (夕) CJK Ideograph-5915 [2838/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 5AAF (媯) CJK Ideograph-5AAF [3248/20992] vs 5B00 (嬀) CJK Ideograph-5B00 [3329/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2E90 (⺐) CJK RADICAL LAME THREE vs 5C22 (尢) CJK Ideograph-5C22 [3619/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2E8F (⺏) CJK RADICAL LAME TWO vs 5C23 (尣) CJK Ideograph-5C23 [3620/20992]
+Unresolved: [Japanese,Korean,Han] 5AAF (媯) CJK Ideograph-5AAF [3248/20992] vs 5B00 (嬀) CJK Ideograph-5B00 [3329/20992]
+Unresolved: [Japanese,Korean,Han] 2E90 (⺐) CJK RADICAL LAME THREE vs 5C22 (尢) CJK Ideograph-5C22 [3619/20992]
+Unresolved: [Japanese,Korean,Han] 2E8F (⺏) CJK RADICAL LAME TWO vs 5C23 (尣) CJK Ideograph-5C23 [3620/20992]
 Unresolved: [Japanese] 30A8 (エ) KATAKANA LETTER E vs 5DE5 (工) CJK Ideograph-5DE5 [4070/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2E92 (⺒) CJK RADICAL SNAKE vs 5DF3 (巳) CJK Ideograph-5DF3 [4084/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 5E21 (帡) CJK Ideograph-5E21 [4130/20992] vs 5E32 (帲) CJK Ideograph-5E32 [4147/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2E93 (⺓) CJK RADICAL THREAD vs 5E7A (幺) CJK Ideograph-5E7A [4219/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2E94 (⺔) CJK RADICAL SNOUT ONE vs 5F51 (彑) CJK Ideograph-5F51 [4434/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2E96 (⺖) CJK RADICAL HEART ONE vs 5FC4 (忄) CJK Ideograph-5FC4 [4549/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2E97 (⺗) CJK RADICAL HEART TWO vs 38FA (㣺) CJK Ideograph Extension A-38FA [1275/6592]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 6236 (戶) CJK Ideograph-6236 [5175/20992] vs 6238 (戸) CJK Ideograph-6238 [5177/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2E98 (⺘) CJK RADICAL HAND vs 624C (扌) CJK Ideograph-624C [5197/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 3A41 (㩁) CJK Ideograph Extension A-3A41 [1602/6592] vs 6409 (搉) CJK Ideograph-6409 [5642/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2E99 (⺙) CJK RADICAL RAP vs 6535 (攵) CJK Ideograph-6535 [5942/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EEB (⻫) CJK RADICAL J-SIMPLIFIED EVEN vs 6589 (斉) CJK Ideograph-6589 [6026/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2E9B (⺛) CJK RADICAL CHOKE vs 65E1 (旡) CJK Ideograph-65E1 [6114/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 3ADA (㫚) CJK Ideograph Extension A-3ADA [1755/6592] vs 66F6 (曶) CJK Ideograph-66F6 [6391/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 665A (晚) CJK Ideograph-665A [6235/20992] vs 6669 (晩) CJK Ideograph-6669 [6250/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 670C (朌) CJK Ideograph-670C [6413/20992] vs 80A6 (肦) CJK Ideograph-80A6 [12967/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 670F (朏) CJK Ideograph-670F [6416/20992] vs 80D0 (胐) CJK Ideograph-80D0 [13009/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 6710 (朐) CJK Ideograph-6710 [6417/20992] vs 80CA (胊) CJK Ideograph-80CA [13003/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 6713 (朓) CJK Ideograph-6713 [6420/20992] vs 8101 (脁) CJK Ideograph-8101 [13058/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 3B35 (㬵) CJK Ideograph Extension A-3B35 [1846/6592] vs 80F6 (胶) CJK Ideograph-80F6 [13047/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 6718 (朘) CJK Ideograph-6718 [6425/20992] vs 8127 (脧) CJK Ideograph-8127 [13096/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 3B3A (㬺) CJK Ideograph Extension A-3B3A [1851/6592] vs 5E50 (幐) CJK Ideograph-5E50 [4177/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 3B3B (㬻) CJK Ideograph Extension A-3B3B [1852/6592] vs 4420 (䐠) CJK Ideograph Extension A-4420 [4129/6592]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 6723 (朣) CJK Ideograph-6723 [6436/20992] vs 81A7 (膧) CJK Ideograph-81A7 [13224/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 676E (杮) CJK Ideograph-676E [6511/20992] vs 67FF (柿) CJK Ideograph-67FF [6656/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 3BA3 (㮣) CJK Ideograph Extension A-3BA3 [1956/6592] vs 69E9 (槩) CJK Ideograph-69E9 [7146/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 699D (榝) CJK Ideograph-699D [7070/20992] vs 6A27 (樧) CJK Ideograph-6A27 [7208/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EED (⻭) CJK RADICAL J-SIMPLIFIED TOOTH vs 6B6F (歯) CJK Ideograph-6B6F [7536/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2E9E (⺞) CJK RADICAL DEATH vs 6B7A (歺) CJK Ideograph-6B7A [7547/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EA0 (⺠) CJK RADICAL CIVILIAN vs 6C11 (民) CJK Ideograph-6C11 [7698/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EA1 (⺡) CJK RADICAL WATER ONE vs 6C35 (氵) CJK Ideograph-6C35 [7734/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EA2 (⺢) CJK RADICAL WATER TWO vs 6C3A (氺) CJK Ideograph-6C3A [7739/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 6E88 (溈) CJK Ideograph-6E88 [8329/20992] vs 6F59 (潙) CJK Ideograph-6F59 [8538/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EA3 (⺣) CJK RADICAL FIRE vs 706C (灬) CJK Ideograph-706C [8813/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EA4 (⺤) CJK RADICAL PAW ONE vs 722B (爫) CJK Ideograph-722B [9260/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EA6 (⺦) CJK RADICAL SIMPLIFIED HALF TREE TRUNK vs 4E2C (丬) CJK Ideograph-4E2C [45/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EA8 (⺨) CJK RADICAL DOG vs 72AD (犭) CJK Ideograph-72AD [9390/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 4039 (䀹) CJK Ideograph Extension A-4039 [3130/6592] vs 9FC3 (鿃) CJK Ideograph-9FC3 [20932/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 403F (䀿) CJK Ideograph Extension A-403F [3136/6592] vs 6663 (晣) CJK Ideograph-6663 [6244/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 7814 (研) CJK Ideograph-7814 [10773/20992] vs 784F (硏) CJK Ideograph-784F [10832/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EAD (⺭) CJK RADICAL SPIRIT TWO vs 793B (礻) CJK Ideograph-793B [11068/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EEF (⻯) CJK RADICAL J-SIMPLIFIED DRAGON vs 7ADC (竜) CJK Ideograph-7ADC [11485/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EAF (⺯) CJK RADICAL SILK vs 7CF9 (糹) CJK Ideograph-7CF9 [12026/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 7D55 (絕) CJK Ideograph-7D55 [12118/20992] vs 7D76 (絶) CJK Ideograph-7D76 [12151/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EAB (⺫) CJK RADICAL EYE vs 2EB2 (⺲) CJK RADICAL NET TWO vs 7F52 (罒) CJK Ideograph-7F52 [12627/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EB1 (⺱) CJK RADICAL NET ONE vs 7F53 (罓) CJK Ideograph-7F53 [12628/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EB9 (⺹) CJK RADICAL OLD vs 8002 (耂) CJK Ideograph-8002 [12803/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EBA (⺺) CJK RADICAL BRUSH ONE vs 8080 (肀) CJK Ideograph-8080 [12929/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 80FC (胼) CJK Ideograph-80FC [13053/20992] vs 8141 (腁) CJK Ideograph-8141 [13122/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 4443 (䑃) CJK Ideograph Extension A-4443 [4164/6592] vs 6726 (朦) CJK Ideograph-6726 [6439/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EBE (⺾) CJK RADICAL GRASS ONE vs 2EBF (⺿) CJK RADICAL GRASS TWO vs 2EC0 (⻀) CJK RADICAL GRASS THREE vs 8279 (艹) CJK Ideograph-8279 [13434/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 848D (蒍) CJK Ideograph-848D [13966/20992] vs 853F (蔿) CJK Ideograph-853F [14144/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 8637 (蘷) CJK Ideograph-8637 [14392/20992] vs 8641 (虁) CJK Ideograph-8641 [14402/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EC1 (⻁) CJK RADICAL TIGER vs 864E (虎) CJK Ideograph-864E [14415/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EC2 (⻂) CJK RADICAL CLOTHES vs 8864 (衤) CJK Ideograph-8864 [14949/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EC4 (⻄) CJK RADICAL WEST TWO vs 897F (西) CJK Ideograph-897F [15232/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EC3 (⻃) CJK RADICAL WEST ONE vs 8980 (覀) CJK Ideograph-8980 [15233/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EC5 (⻅) CJK RADICAL C-SIMPLIFIED SEE vs 89C1 (见) CJK Ideograph-89C1 [15298/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 8A2E (訮) CJK Ideograph-8A2E [15407/20992] vs 8A7D (詽) CJK Ideograph-8A7D [15486/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 46B6 (䚶) CJK Ideograph Extension A-46B6 [4791/6592] vs 8A1E (訞) CJK Ideograph-8A1E [15391/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 8B86 (讆) CJK Ideograph-8B86 [15751/20992] vs 8B8F (讏) CJK Ideograph-8B8F [15760/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EC8 (⻈) CJK RADICAL C-SIMPLIFIED SPEECH vs 8BA0 (讠) CJK Ideograph-8BA0 [15777/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 8C5C (豜) CJK Ideograph-8C5C [15965/20992] vs 8C63 (豣) CJK Ideograph-8C63 [15972/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EC9 (⻉) CJK RADICAL C-SIMPLIFIED SHELL vs 8D1D (贝) CJK Ideograph-8D1D [16158/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 8D7F (赿) CJK Ideograph-8D7F [16256/20992] vs 8D86 (趆) CJK Ideograph-8D86 [16263/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 8DE5 (跥) CJK Ideograph-8DE5 [16358/20992] vs 8DFA (跺) CJK Ideograph-8DFA [16379/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 8E97 (躗) CJK Ideograph-8E97 [16536/20992] vs 8E9B (躛) CJK Ideograph-8E9B [16540/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 8EFF (軿) CJK Ideograph-8EFF [16640/20992] vs 8F27 (輧) CJK Ideograph-8F27 [16680/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2ECB (⻋) CJK RADICAL C-SIMPLIFIED CART vs 8F66 (车) CJK Ideograph-8F66 [16743/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2ECC (⻌) CJK RADICAL SIMPLIFIED WALK vs 2ECD (⻍) CJK RADICAL WALK ONE vs 8FB6 (辶) CJK Ideograph-8FB6 [16823/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 90CE (郎) CJK Ideograph-90CE [17103/20992] vs 90DE (郞) CJK Ideograph-90DE [17119/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 93AD (鎭) CJK Ideograph-93AD [17838/20992] vs 93AE (鎮) CJK Ideograph-93AE [17839/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2ED0 (⻐) CJK RADICAL C-SIMPLIFIED GOLD vs 9485 (钅) CJK Ideograph-9485 [18054/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2ED1 (⻑) CJK RADICAL LONG ONE vs 9577 (長) CJK Ideograph-9577 [18296/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2ED2 (⻒) CJK RADICAL LONG TWO vs 9578 (镸) CJK Ideograph-9578 [18297/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2ED3 (⻓) CJK RADICAL C-SIMPLIFIED LONG vs 957F (长) CJK Ideograph-957F [18304/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2ED4 (⻔) CJK RADICAL C-SIMPLIFIED GATE vs 95E8 (门) CJK Ideograph-95E8 [18409/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2ECF (⻏) CJK RADICAL CITY vs 2ED6 (⻖) CJK RADICAL MOUND TWO vs 961D (阝) CJK Ideograph-961D [18462/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 96B7 (隷) CJK Ideograph-96B7 [18616/20992] vs 96B8 (隸) CJK Ideograph-96B8 [18617/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2ED8 (⻘) CJK RADICAL BLUE vs 9752 (青) CJK Ideograph-9752 [18771/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2ED9 (⻙) CJK RADICAL C-SIMPLIFIED TANNED LEATHER vs 97E6 (韦) CJK Ideograph-97E6 [18919/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EDA (⻚) CJK RADICAL C-SIMPLIFIED LEAF vs 9875 (页) CJK Ideograph-9875 [19062/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EDB (⻛) CJK RADICAL C-SIMPLIFIED WIND vs 98CE (风) CJK Ideograph-98CE [19151/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EDC (⻜) CJK RADICAL C-SIMPLIFIED FLY vs 98DE (飞) CJK Ideograph-98DE [19167/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EDD (⻝) CJK RADICAL EAT ONE vs 98DF (食) CJK Ideograph-98DF [19168/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EDF (⻟) CJK RADICAL EAT THREE vs 98E0 (飠) CJK Ideograph-98E0 [19169/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EE0 (⻠) CJK RADICAL C-SIMPLIFIED EAT vs 9963 (饣) CJK Ideograph-9963 [19300/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EE2 (⻢) CJK RADICAL C-SIMPLIFIED HORSE vs 9A6C (马) CJK Ideograph-9A6C [19565/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EE4 (⻤) CJK RADICAL GHOST vs 9B3C (鬼) CJK Ideograph-9B3C [19773/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EE5 (⻥) CJK RADICAL C-SIMPLIFIED FISH vs 9C7C (鱼) CJK Ideograph-9C7C [20093/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 9E42 (鹂) CJK Ideograph-9E42 [20547/20992] vs 9E43 (鹃) CJK Ideograph-9E43 [20548/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EE8 (⻨) CJK RADICAL SIMPLIFIED WHEAT vs 9EA6 (麦) CJK Ideograph-9EA6 [20647/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EE9 (⻩) CJK RADICAL SIMPLIFIED YELLOW vs 9EC4 (黄) CJK Ideograph-9EC4 [20677/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 9ED1 (黑) CJK Ideograph-9ED1 [20690/20992] vs 9ED2 (黒) CJK Ideograph-9ED2 [20691/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EEC (⻬) CJK RADICAL C-SIMPLIFIED EVEN vs 9F50 (齐) CJK Ideograph-9F50 [20817/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EEE (⻮) CJK RADICAL C-SIMPLIFIED TOOTH vs 9F7F (齿) CJK Ideograph-9F7F [20864/20992]
-Unresolved: [Japanese,Korean,Han,Bopomofo] 2EF0 (⻰) CJK RADICAL C-SIMPLIFIED DRAGON vs 9F99 (龙) CJK Ideograph-9F99 [20890/20992]
+Unresolved: [Japanese,Korean,Han] 2E92 (⺒) CJK RADICAL SNAKE vs 5DF3 (巳) CJK Ideograph-5DF3 [4084/20992]
+Unresolved: [Japanese,Korean,Han] 5E21 (帡) CJK Ideograph-5E21 [4130/20992] vs 5E32 (帲) CJK Ideograph-5E32 [4147/20992]
+Unresolved: [Japanese,Korean,Han] 2E93 (⺓) CJK RADICAL THREAD vs 5E7A (幺) CJK Ideograph-5E7A [4219/20992]
+Unresolved: [Japanese,Korean,Han] 2E94 (⺔) CJK RADICAL SNOUT ONE vs 5F51 (彑) CJK Ideograph-5F51 [4434/20992]
+Unresolved: [Japanese,Korean,Han] 2E96 (⺖) CJK RADICAL HEART ONE vs 5FC4 (忄) CJK Ideograph-5FC4 [4549/20992]
+Unresolved: [Japanese,Korean,Han] 2E97 (⺗) CJK RADICAL HEART TWO vs 38FA (㣺) CJK Ideograph Extension A-38FA [1275/6592]
+Unresolved: [Japanese,Korean,Han] 6236 (戶) CJK Ideograph-6236 [5175/20992] vs 6238 (戸) CJK Ideograph-6238 [5177/20992]
+Unresolved: [Japanese,Korean,Han] 2E98 (⺘) CJK RADICAL HAND vs 624C (扌) CJK Ideograph-624C [5197/20992]
+Unresolved: [Japanese,Korean,Han] 3A41 (㩁) CJK Ideograph Extension A-3A41 [1602/6592] vs 6409 (搉) CJK Ideograph-6409 [5642/20992]
+Unresolved: [Japanese,Korean,Han] 2E99 (⺙) CJK RADICAL RAP vs 6535 (攵) CJK Ideograph-6535 [5942/20992]
+Unresolved: [Japanese,Korean,Han] 2EEB (⻫) CJK RADICAL J-SIMPLIFIED EVEN vs 6589 (斉) CJK Ideograph-6589 [6026/20992]
+Unresolved: [Japanese,Korean,Han] 2E9B (⺛) CJK RADICAL CHOKE vs 65E1 (旡) CJK Ideograph-65E1 [6114/20992]
+Unresolved: [Japanese,Korean,Han] 3ADA (㫚) CJK Ideograph Extension A-3ADA [1755/6592] vs 66F6 (曶) CJK Ideograph-66F6 [6391/20992]
+Unresolved: [Japanese,Korean,Han] 665A (晚) CJK Ideograph-665A [6235/20992] vs 6669 (晩) CJK Ideograph-6669 [6250/20992]
+Unresolved: [Japanese,Korean,Han] 670C (朌) CJK Ideograph-670C [6413/20992] vs 80A6 (肦) CJK Ideograph-80A6 [12967/20992]
+Unresolved: [Japanese,Korean,Han] 670F (朏) CJK Ideograph-670F [6416/20992] vs 80D0 (胐) CJK Ideograph-80D0 [13009/20992]
+Unresolved: [Japanese,Korean,Han] 6710 (朐) CJK Ideograph-6710 [6417/20992] vs 80CA (胊) CJK Ideograph-80CA [13003/20992]
+Unresolved: [Japanese,Korean,Han] 6713 (朓) CJK Ideograph-6713 [6420/20992] vs 8101 (脁) CJK Ideograph-8101 [13058/20992]
+Unresolved: [Japanese,Korean,Han] 3B35 (㬵) CJK Ideograph Extension A-3B35 [1846/6592] vs 80F6 (胶) CJK Ideograph-80F6 [13047/20992]
+Unresolved: [Japanese,Korean,Han] 6718 (朘) CJK Ideograph-6718 [6425/20992] vs 8127 (脧) CJK Ideograph-8127 [13096/20992]
+Unresolved: [Japanese,Korean,Han] 3B3A (㬺) CJK Ideograph Extension A-3B3A [1851/6592] vs 5E50 (幐) CJK Ideograph-5E50 [4177/20992]
+Unresolved: [Japanese,Korean,Han] 3B3B (㬻) CJK Ideograph Extension A-3B3B [1852/6592] vs 4420 (䐠) CJK Ideograph Extension A-4420 [4129/6592]
+Unresolved: [Japanese,Korean,Han] 6723 (朣) CJK Ideograph-6723 [6436/20992] vs 81A7 (膧) CJK Ideograph-81A7 [13224/20992]
+Unresolved: [Japanese,Korean,Han] 676E (杮) CJK Ideograph-676E [6511/20992] vs 67FF (柿) CJK Ideograph-67FF [6656/20992]
+Unresolved: [Japanese,Korean,Han] 3BA3 (㮣) CJK Ideograph Extension A-3BA3 [1956/6592] vs 69E9 (槩) CJK Ideograph-69E9 [7146/20992]
+Unresolved: [Japanese,Korean,Han] 699D (榝) CJK Ideograph-699D [7070/20992] vs 6A27 (樧) CJK Ideograph-6A27 [7208/20992]
+Unresolved: [Japanese,Korean,Han] 2EED (⻭) CJK RADICAL J-SIMPLIFIED TOOTH vs 6B6F (歯) CJK Ideograph-6B6F [7536/20992]
+Unresolved: [Japanese,Korean,Han] 2E9E (⺞) CJK RADICAL DEATH vs 6B7A (歺) CJK Ideograph-6B7A [7547/20992]
+Unresolved: [Japanese,Korean,Han] 2EA0 (⺠) CJK RADICAL CIVILIAN vs 6C11 (民) CJK Ideograph-6C11 [7698/20992]
+Unresolved: [Japanese,Korean,Han] 2EA1 (⺡) CJK RADICAL WATER ONE vs 6C35 (氵) CJK Ideograph-6C35 [7734/20992]
+Unresolved: [Japanese,Korean,Han] 2EA2 (⺢) CJK RADICAL WATER TWO vs 6C3A (氺) CJK Ideograph-6C3A [7739/20992]
+Unresolved: [Japanese,Korean,Han] 6E88 (溈) CJK Ideograph-6E88 [8329/20992] vs 6F59 (潙) CJK Ideograph-6F59 [8538/20992]
+Unresolved: [Japanese,Korean,Han] 2EA3 (⺣) CJK RADICAL FIRE vs 706C (灬) CJK Ideograph-706C [8813/20992]
+Unresolved: [Japanese,Korean,Han] 2EA4 (⺤) CJK RADICAL PAW ONE vs 722B (爫) CJK Ideograph-722B [9260/20992]
+Unresolved: [Japanese,Korean,Han] 2EA6 (⺦) CJK RADICAL SIMPLIFIED HALF TREE TRUNK vs 4E2C (丬) CJK Ideograph-4E2C [45/20992]
+Unresolved: [Japanese,Korean,Han] 2EA8 (⺨) CJK RADICAL DOG vs 72AD (犭) CJK Ideograph-72AD [9390/20992]
+Unresolved: [Japanese,Korean,Han] 4039 (䀹) CJK Ideograph Extension A-4039 [3130/6592] vs 9FC3 (鿃) CJK Ideograph-9FC3 [20932/20992]
+Unresolved: [Japanese,Korean,Han] 403F (䀿) CJK Ideograph Extension A-403F [3136/6592] vs 6663 (晣) CJK Ideograph-6663 [6244/20992]
+Unresolved: [Japanese,Korean,Han] 7814 (研) CJK Ideograph-7814 [10773/20992] vs 784F (硏) CJK Ideograph-784F [10832/20992]
+Unresolved: [Japanese,Korean,Han] 2EAD (⺭) CJK RADICAL SPIRIT TWO vs 793B (礻) CJK Ideograph-793B [11068/20992]
+Unresolved: [Japanese,Korean,Han] 2EEF (⻯) CJK RADICAL J-SIMPLIFIED DRAGON vs 7ADC (竜) CJK Ideograph-7ADC [11485/20992]
+Unresolved: [Japanese,Korean,Han] 2EAF (⺯) CJK RADICAL SILK vs 7CF9 (糹) CJK Ideograph-7CF9 [12026/20992]
+Unresolved: [Japanese,Korean,Han] 7D55 (絕) CJK Ideograph-7D55 [12118/20992] vs 7D76 (絶) CJK Ideograph-7D76 [12151/20992]
+Unresolved: [Japanese,Korean,Han] 2EAB (⺫) CJK RADICAL EYE vs 2EB2 (⺲) CJK RADICAL NET TWO vs 7F52 (罒) CJK Ideograph-7F52 [12627/20992]
+Unresolved: [Japanese,Korean,Han] 2EB1 (⺱) CJK RADICAL NET ONE vs 7F53 (罓) CJK Ideograph-7F53 [12628/20992]
+Unresolved: [Japanese,Korean,Han] 2EB9 (⺹) CJK RADICAL OLD vs 8002 (耂) CJK Ideograph-8002 [12803/20992]
+Unresolved: [Japanese,Korean,Han] 2EBA (⺺) CJK RADICAL BRUSH ONE vs 8080 (肀) CJK Ideograph-8080 [12929/20992]
+Unresolved: [Japanese,Korean,Han] 80FC (胼) CJK Ideograph-80FC [13053/20992] vs 8141 (腁) CJK Ideograph-8141 [13122/20992]
+Unresolved: [Japanese,Korean,Han] 4443 (䑃) CJK Ideograph Extension A-4443 [4164/6592] vs 6726 (朦) CJK Ideograph-6726 [6439/20992]
+Unresolved: [Japanese,Korean,Han] 2EBE (⺾) CJK RADICAL GRASS ONE vs 2EBF (⺿) CJK RADICAL GRASS TWO vs 2EC0 (⻀) CJK RADICAL GRASS THREE vs 8279 (艹) CJK Ideograph-8279 [13434/20992]
+Unresolved: [Japanese,Korean,Han] 848D (蒍) CJK Ideograph-848D [13966/20992] vs 853F (蔿) CJK Ideograph-853F [14144/20992]
+Unresolved: [Japanese,Korean,Han] 8637 (蘷) CJK Ideograph-8637 [14392/20992] vs 8641 (虁) CJK Ideograph-8641 [14402/20992]
+Unresolved: [Japanese,Korean,Han] 2EC1 (⻁) CJK RADICAL TIGER vs 864E (虎) CJK Ideograph-864E [14415/20992]
+Unresolved: [Japanese,Korean,Han] 2EC2 (⻂) CJK RADICAL CLOTHES vs 8864 (衤) CJK Ideograph-8864 [14949/20992]
+Unresolved: [Japanese,Korean,Han] 2EC4 (⻄) CJK RADICAL WEST TWO vs 897F (西) CJK Ideograph-897F [15232/20992]
+Unresolved: [Japanese,Korean,Han] 2EC3 (⻃) CJK RADICAL WEST ONE vs 8980 (覀) CJK Ideograph-8980 [15233/20992]
+Unresolved: [Japanese,Korean,Han] 2EC5 (⻅) CJK RADICAL C-SIMPLIFIED SEE vs 89C1 (见) CJK Ideograph-89C1 [15298/20992]
+Unresolved: [Japanese,Korean,Han] 8A2E (訮) CJK Ideograph-8A2E [15407/20992] vs 8A7D (詽) CJK Ideograph-8A7D [15486/20992]
+Unresolved: [Japanese,Korean,Han] 46B6 (䚶) CJK Ideograph Extension A-46B6 [4791/6592] vs 8A1E (訞) CJK Ideograph-8A1E [15391/20992]
+Unresolved: [Japanese,Korean,Han] 8B86 (讆) CJK Ideograph-8B86 [15751/20992] vs 8B8F (讏) CJK Ideograph-8B8F [15760/20992]
+Unresolved: [Japanese,Korean,Han] 2EC8 (⻈) CJK RADICAL C-SIMPLIFIED SPEECH vs 8BA0 (讠) CJK Ideograph-8BA0 [15777/20992]
+Unresolved: [Japanese,Korean,Han] 8C5C (豜) CJK Ideograph-8C5C [15965/20992] vs 8C63 (豣) CJK Ideograph-8C63 [15972/20992]
+Unresolved: [Japanese,Korean,Han] 2EC9 (⻉) CJK RADICAL C-SIMPLIFIED SHELL vs 8D1D (贝) CJK Ideograph-8D1D [16158/20992]
+Unresolved: [Japanese,Korean,Han] 8D7F (赿) CJK Ideograph-8D7F [16256/20992] vs 8D86 (趆) CJK Ideograph-8D86 [16263/20992]
+Unresolved: [Japanese,Korean,Han] 8DE5 (跥) CJK Ideograph-8DE5 [16358/20992] vs 8DFA (跺) CJK Ideograph-8DFA [16379/20992]
+Unresolved: [Japanese,Korean,Han] 8E97 (躗) CJK Ideograph-8E97 [16536/20992] vs 8E9B (躛) CJK Ideograph-8E9B [16540/20992]
+Unresolved: [Japanese,Korean,Han] 8EFF (軿) CJK Ideograph-8EFF [16640/20992] vs 8F27 (輧) CJK Ideograph-8F27 [16680/20992]
+Unresolved: [Japanese,Korean,Han] 2ECB (⻋) CJK RADICAL C-SIMPLIFIED CART vs 8F66 (车) CJK Ideograph-8F66 [16743/20992]
+Unresolved: [Japanese,Korean,Han] 2ECC (⻌) CJK RADICAL SIMPLIFIED WALK vs 2ECD (⻍) CJK RADICAL WALK ONE vs 8FB6 (辶) CJK Ideograph-8FB6 [16823/20992]
+Unresolved: [Japanese,Korean,Han] 90CE (郎) CJK Ideograph-90CE [17103/20992] vs 90DE (郞) CJK Ideograph-90DE [17119/20992]
+Unresolved: [Japanese,Korean,Han] 93AD (鎭) CJK Ideograph-93AD [17838/20992] vs 93AE (鎮) CJK Ideograph-93AE [17839/20992]
+Unresolved: [Japanese,Korean,Han] 2ED0 (⻐) CJK RADICAL C-SIMPLIFIED GOLD vs 9485 (钅) CJK Ideograph-9485 [18054/20992]
+Unresolved: [Japanese,Korean,Han] 2ED1 (⻑) CJK RADICAL LONG ONE vs 9577 (長) CJK Ideograph-9577 [18296/20992]
+Unresolved: [Japanese,Korean,Han] 2ED2 (⻒) CJK RADICAL LONG TWO vs 9578 (镸) CJK Ideograph-9578 [18297/20992]
+Unresolved: [Japanese,Korean,Han] 2ED3 (⻓) CJK RADICAL C-SIMPLIFIED LONG vs 957F (长) CJK Ideograph-957F [18304/20992]
+Unresolved: [Japanese,Korean,Han] 2ED4 (⻔) CJK RADICAL C-SIMPLIFIED GATE vs 95E8 (门) CJK Ideograph-95E8 [18409/20992]
+Unresolved: [Japanese,Korean,Han] 2ECF (⻏) CJK RADICAL CITY vs 2ED6 (⻖) CJK RADICAL MOUND TWO vs 961D (阝) CJK Ideograph-961D [18462/20992]
+Unresolved: [Japanese,Korean,Han] 96B7 (隷) CJK Ideograph-96B7 [18616/20992] vs 96B8 (隸) CJK Ideograph-96B8 [18617/20992]
+Unresolved: [Japanese,Korean,Han] 2ED8 (⻘) CJK RADICAL BLUE vs 9752 (青) CJK Ideograph-9752 [18771/20992]
+Unresolved: [Japanese,Korean,Han] 2ED9 (⻙) CJK RADICAL C-SIMPLIFIED TANNED LEATHER vs 97E6 (韦) CJK Ideograph-97E6 [18919/20992]
+Unresolved: [Japanese,Korean,Han] 2EDA (⻚) CJK RADICAL C-SIMPLIFIED LEAF vs 9875 (页) CJK Ideograph-9875 [19062/20992]
+Unresolved: [Japanese,Korean,Han] 2EDB (⻛) CJK RADICAL C-SIMPLIFIED WIND vs 98CE (风) CJK Ideograph-98CE [19151/20992]
+Unresolved: [Japanese,Korean,Han] 2EDC (⻜) CJK RADICAL C-SIMPLIFIED FLY vs 98DE (飞) CJK Ideograph-98DE [19167/20992]
+Unresolved: [Japanese,Korean,Han] 2EDD (⻝) CJK RADICAL EAT ONE vs 98DF (食) CJK Ideograph-98DF [19168/20992]
+Unresolved: [Japanese,Korean,Han] 2EDF (⻟) CJK RADICAL EAT THREE vs 98E0 (飠) CJK Ideograph-98E0 [19169/20992]
+Unresolved: [Japanese,Korean,Han] 2EE0 (⻠) CJK RADICAL C-SIMPLIFIED EAT vs 9963 (饣) CJK Ideograph-9963 [19300/20992]
+Unresolved: [Japanese,Korean,Han] 2EE2 (⻢) CJK RADICAL C-SIMPLIFIED HORSE vs 9A6C (马) CJK Ideograph-9A6C [19565/20992]
+Unresolved: [Japanese,Korean,Han] 2EE4 (⻤) CJK RADICAL GHOST vs 9B3C (鬼) CJK Ideograph-9B3C [19773/20992]
+Unresolved: [Japanese,Korean,Han] 2EE5 (⻥) CJK RADICAL C-SIMPLIFIED FISH vs 9C7C (鱼) CJK Ideograph-9C7C [20093/20992]
+Unresolved: [Japanese,Korean,Han] 9E42 (鹂) CJK Ideograph-9E42 [20547/20992] vs 9E43 (鹃) CJK Ideograph-9E43 [20548/20992]
+Unresolved: [Japanese,Korean,Han] 2EE8 (⻨) CJK RADICAL SIMPLIFIED WHEAT vs 9EA6 (麦) CJK Ideograph-9EA6 [20647/20992]
+Unresolved: [Japanese,Korean,Han] 2EE9 (⻩) CJK RADICAL SIMPLIFIED YELLOW vs 9EC4 (黄) CJK Ideograph-9EC4 [20677/20992]
+Unresolved: [Japanese,Korean,Han] 9ED1 (黑) CJK Ideograph-9ED1 [20690/20992] vs 9ED2 (黒) CJK Ideograph-9ED2 [20691/20992]
+Unresolved: [Japanese,Korean,Han] 2EEC (⻬) CJK RADICAL C-SIMPLIFIED EVEN vs 9F50 (齐) CJK Ideograph-9F50 [20817/20992]
+Unresolved: [Japanese,Korean,Han] 2EEE (⻮) CJK RADICAL C-SIMPLIFIED TOOTH vs 9F7F (齿) CJK Ideograph-9F7F [20864/20992]
+Unresolved: [Japanese,Korean,Han] 2EF0 (⻰) CJK RADICAL C-SIMPLIFIED DRAGON vs 9F99 (龙) CJK Ideograph-9F99 [20890/20992]
 ==== Disallow Leftover Characters ====
 Removed Valid: FF (ÿ) LATIN SMALL LETTER Y WITH DIAERESIS
 Removed Valid: 10B (ċ) LATIN SMALL LETTER C WITH DOT ABOVE
@@ -13436,6 +13539,13 @@ Removed Valid: 6BE (ھ) ARABIC LETTER HEH DOACHASHMEE
 Removed Valid: 6C3 (ۃ) ARABIC LETTER TEH MARBUTA GOAL
 Removed Valid: 6D1 (ۑ) ARABIC LETTER YEH WITH THREE DOTS BELOW
 Removed Valid: 1065 (ၥ) MYANMAR LETTER WESTERN PWO KAREN THA
+Removed Valid: 1ADE (◌᫞) COMBINING GRAVE-DOT
+Removed Valid: 1ADF (◌᫟) COMBINING DOT-ACUTE
+Removed Valid: 1AEC (◌᫬) COMBINING CARON-ACUTE
+Removed Valid: 1AED (◌᫭) COMBINING VERTICAL-LINE-DOUBLE-ACUTE
+Removed Valid: 1AEE (◌᫮) COMBINING DOUBLE GRAVE ACCENT BELOW
+Removed Valid: 1AEF (◌᫯) COMBINING DOUBLE ACUTE ACCENT BELOW
+Removed Valid: 1AF0 (◌᫰) COMBINING DOUBLE COMMA ABOVE
 Removed Valid: 1E01 (ḁ) LATIN SMALL LETTER A WITH RING BELOW
 Removed Valid: 1E03 (ḃ) LATIN SMALL LETTER B WITH DOT ABOVE
 Removed Valid: 1E05 (ḅ) LATIN SMALL LETTER B WITH DOT BELOW
@@ -14189,6 +14299,14 @@ Removed Valid: 10767 (𐝧) LINEAR A SIGN A807
 Removed Valid: 16121 (◌𖄡) GURUNG KHEMA VOWEL SIGN U
 Removed Valid: 16126 (◌𖄦) GURUNG KHEMA VOWEL SIGN O
 Removed Valid: 16128 (◌𖄨) GURUNG KHEMA VOWEL SIGN AU
+Removed Valid: 1D250 (◌𝉐) MUSICAL SYMBOL COMBINING FLAG-6
+Removed Valid: 1D251 (◌𝉑) MUSICAL SYMBOL COMBINING FLAG-7
+Removed Valid: 1D252 (◌𝉒) MUSICAL SYMBOL COMBINING FLAG-8
+Removed Valid: 1D25B (◌𝉛) MUSICAL SYMBOL COMBINING TREMOLO-4
+Removed Valid: 1D25C (◌𝉜) MUSICAL SYMBOL COMBINING TREMOLO-5
+Removed Valid: 1D25F (◌𝉟) MUSICAL SYMBOL COMBINING BUZZ ROLL STEM
+Removed Valid: 1D280 (◌𝊀) MUSICAL SYMBOL COMBINING STEM BOW BEHIND BRIDGE
+Removed Valid: 1D281 (◌𝊁) MUSICAL SYMBOL COMBINING STEM BOW ON TOP OF BRIDGE
 Removed Valid: 1DA00 (◌𝨀) SIGNWRITING HEAD RIM
 Removed Valid: 1DA01 (◌𝨁) SIGNWRITING HEAD MOVEMENT-WALLPLANE STRAIGHT
 Removed Valid: 1DA02 (◌𝨂) SIGNWRITING HEAD MOVEMENT-WALLPLANE TILT
@@ -14573,6 +14691,8 @@ Removed Valid: 28FC (⣼) BRAILLE PATTERN DOTS-345678
 Removed Valid: 28FD (⣽) BRAILLE PATTERN DOTS-1345678
 Removed Valid: 28FE (⣾) BRAILLE PATTERN DOTS-2345678
 Removed Valid: 28FF (⣿) BRAILLE PATTERN DOTS-12345678
+Removed Valid: 1D127 (◌𝄧) MUSICAL SYMBOL COMBINING STRESS
+Removed Valid: 1D128 (◌𝄨) MUSICAL SYMBOL COMBINING UNSTRESS
 Removed Valid: 1D800 (𝠀) SIGNWRITING HAND-FIST INDEX
 Removed Valid: 1D801 (𝠁) SIGNWRITING HAND-CIRCLE INDEX
 Removed Valid: 1D802 (𝠂) SIGNWRITING HAND-CUP INDEX
@@ -15935,6 +16055,10 @@ Removed Mapping: A7D6 (Ꟗ) LATIN CAPITAL LETTER MIDDLE SCOTS S => [A7D7] (ꟗ) 
 Removed Mapping: A7D8 (Ꟙ) LATIN CAPITAL LETTER SIGMOID S => [A7D9] (ꟙ) LATIN SMALL LETTER SIGMOID S
 Removed Mapping: A7DA (Ꟛ) LATIN CAPITAL LETTER LAMBDA => [A7DB] (ꟛ) LATIN SMALL LETTER LAMBDA
 Removed Mapping: A7DC (Ƛ) LATIN CAPITAL LETTER LAMBDA WITH STROKE => [19B] (ƛ) LATIN SMALL LETTER LAMBDA WITH STROKE
+Removed Mapping: A7DD (꟝) LATIN CAPITAL LETTER CLOSED OMEGA => [277] (ɷ) LATIN SMALL LETTER CLOSED OMEGA
+Removed Mapping: A7E2 (꟢) LATIN CAPITAL LETTER R WITH LONG LEG => [27C] (ɼ) LATIN SMALL LETTER R WITH LONG LEG
+Removed Mapping: AB6C (꭬) LATIN CAPITAL LETTER SCRIPT R => [AB4B] (ꭋ) LATIN SMALL LETTER SCRIPT R
+Removed Mapping: AB6D (꭭) LATIN CAPITAL LETTER SCRIPT R WITH RING => [AB4C] (ꭌ) LATIN SMALL LETTER SCRIPT R WITH RING
 Removed Mapping: FB29 (﬩) HEBREW LETTER ALTERNATIVE PLUS SIGN => [2B] (+) PLUS SIGN
 Removed Mapping: FB50 (ﭐ) ARABIC LETTER ALEF WASLA ISOLATED FORM => [671] (ٱ) ARABIC LETTER ALEF WASLA
 Removed Mapping: FB51 (ﭑ) ARABIC LETTER ALEF WASLA FINAL FORM => [671] (ٱ) ARABIC LETTER ALEF WASLA
@@ -16029,6 +16153,11 @@ Removed Mapping: FFE4 (￤) FULLWIDTH BROKEN BAR => [A6] (¦) BROKEN BAR
 Removed Mapping: FFE8 (￨) HALFWIDTH FORMS LIGHT VERTICAL => [2502] (│) BOX DRAWINGS LIGHT VERTICAL
 Removed Mapping: FFED (￭) HALFWIDTH BLACK SQUARE => [25A0] (■) BLACK SQUARE
 Removed Mapping: FFEE (￮) HALFWIDTH WHITE CIRCLE => [25CB] (○) WHITE CIRCLE
+Removed Mapping: 107BB (𐞻) MODIFIER LETTER SMALL TURNED T => [287] (ʇ) LATIN SMALL LETTER TURNED T
+Removed Mapping: 107BC (𐞼) MODIFIER LETTER INVERTED GLOTTAL STOP => [296] (ʖ) LATIN LETTER INVERTED GLOTTAL STOP
+Removed Mapping: 107BD (𐞽) MODIFIER LETTER STRETCHED C => [297] (ʗ) LATIN LETTER STRETCHED C
+Removed Mapping: 107BE (𐞾) MODIFIER LETTER SMALL TURNED K => [29E] (ʞ) LATIN SMALL LETTER TURNED K
+Removed Mapping: 107BF (𐞿) MODIFIER LETTER SMALL ESH WITH DOUBLE BAR => [1DF0B] (𝼋) LATIN SMALL LETTER ESH WITH DOUBLE BAR
 Removed Mapping: 1D6A4 (𝚤) MATHEMATICAL ITALIC SMALL DOTLESS I => [131] (ı) LATIN SMALL LETTER DOTLESS I
 Removed Mapping: 1D6A5 (𝚥) MATHEMATICAL ITALIC SMALL DOTLESS J => [237] (ȷ) LATIN SMALL LETTER DOTLESS J
 Removed Mapping: 1D6C1 (𝛁) MATHEMATICAL BOLD NABLA => [2207] (∇) NABLA
@@ -16038,6 +16167,46 @@ Removed Mapping: 1D76F (𝝯) MATHEMATICAL SANS-SERIF BOLD NABLA => [2207] (∇)
 Removed Mapping: 1D7A9 (𝞩) MATHEMATICAL SANS-SERIF BOLD ITALIC NABLA => [2207] (∇) NABLA
 Removed Mapping: 1D7CA (𝟊) MATHEMATICAL BOLD CAPITAL DIGAMMA => [3DD] (ϝ) GREEK SMALL LETTER DIGAMMA
 Removed Mapping: 1D7CB (𝟋) MATHEMATICAL BOLD SMALL DIGAMMA => [3DD] (ϝ) GREEK SMALL LETTER DIGAMMA
+Removed Mapping: 1DFD0 (𝿐) LATIN SUBSCRIPT SMALL LETTER GAMMA => [263] (ɣ) LATIN SMALL LETTER GAMMA
+Removed Mapping: 1DFD1 (𝿑) MODIFIER LETTER SMALL CAPITAL P => [1D18] (ᴘ) LATIN LETTER SMALL CAPITAL P
+Removed Mapping: 1DFD2 (𝿒) MODIFIER LETTER SMALL B WITH STROKE => [180] (ƀ) LATIN SMALL LETTER B WITH STROKE
+Removed Mapping: 1DFD3 (𝿓) MODIFIER LETTER SMALL D WITH STROKE => [111] (đ) LATIN SMALL LETTER D WITH STROKE
+Removed Mapping: 1DFD4 (𝿔) MODIFIER LETTER SMALL G WITH STROKE => [1E5] (ǥ) LATIN SMALL LETTER G WITH STROKE
+Removed Mapping: 1DFD6 (𝿖) MODIFIER LETTER SMALL L WITH BAR => [19A] (ƚ) LATIN SMALL LETTER L WITH BAR
+Removed Mapping: 1DFD9 (𝿙) MODIFIER LETTER SMALL J WITH STROKE => [249] (ɉ) LATIN SMALL LETTER J WITH STROKE
+Removed Mapping: 1DFDA (𝿚) MODIFIER LETTER SMALL UPSILON WITH STROKE => [1D7F] (ᵿ) LATIN SMALL LETTER UPSILON WITH STROKE
+Removed Mapping: 1DFDC (𝿜) MODIFIER LETTER SMALL N WITH LONG RIGHT LEG => [19E] (ƞ) LATIN SMALL LETTER N WITH LONG RIGHT LEG
+Removed Mapping: 1DFDD (𝿝) MODIFIER LETTER SMALL R WITH LONG LEG => [27C] (ɼ) LATIN SMALL LETTER R WITH LONG LEG
+Removed Mapping: 1DFDE (𝿞) MODIFIER LETTER SMALL DB DIGRAPH => [238] (ȸ) LATIN SMALL LETTER DB DIGRAPH
+Removed Mapping: 1DFDF (𝿟) MODIFIER LETTER SMALL QP DIGRAPH => [239] (ȹ) LATIN SMALL LETTER QP DIGRAPH
+Removed Mapping: 1DFE1 (𝿡) MODIFIER LETTER SMALL DEZH DIGRAPH WITH RETROFLEX HOOK => [1DF19] (𝼙) LATIN SMALL LETTER DEZH DIGRAPH WITH RETROFLEX HOOK
+Removed Mapping: 1DFE2 (𝿢) MODIFIER LETTER SMALL ESH WITH CURL => [286] (ʆ) LATIN SMALL LETTER ESH WITH CURL
+Removed Mapping: 1DFE3 (𝿣) MODIFIER LETTER SMALL ESH WITH RETROFLEX HOOK => [1D98] (ᶘ) LATIN SMALL LETTER ESH WITH RETROFLEX HOOK
+Removed Mapping: 1DFE5 (𝿥) MODIFIER LETTER SMALL TESH DIGRAPH WITH RETROFLEX HOOK => [1DF1C] (𝼜) LATIN SMALL LETTER TESH DIGRAPH WITH RETROFLEX HOOK
+Removed Mapping: 1DFE6 (𝿦) MODIFIER LETTER SMALL EZH WITH CURL => [293] (ʓ) LATIN SMALL LETTER EZH WITH CURL
+Removed Mapping: 1DFE7 (𝿧) MODIFIER LETTER SMALL EZH WITH RETROFLEX HOOK => [1D9A] (ᶚ) LATIN SMALL LETTER EZH WITH RETROFLEX HOOK
+Removed Mapping: 1DFE8 (𝿨) MODIFIER LETTER SMALL CAPITAL D => [1D05] (ᴅ) LATIN LETTER SMALL CAPITAL D
+Removed Mapping: 1DFE9 (𝿩) MODIFIER LETTER SMALL CAPITAL A => [1D00] (ᴀ) LATIN LETTER SMALL CAPITAL A
+Removed Mapping: 1DFEA (𝿪) MODIFIER LETTER SMALL CAPITAL E => [1D07] (ᴇ) LATIN LETTER SMALL CAPITAL E
+Removed Mapping: 1DFEB (𝿫) MODIFIER LETTER SMALL REVERSED R WITH FISHHOOK => [27F] (ɿ) LATIN SMALL LETTER REVERSED R WITH FISHHOOK
+Removed Mapping: 1DFEC (𝿬) MODIFIER LETTER SMALL SQUAT REVERSED ESH => [285] (ʅ) LATIN SMALL LETTER SQUAT REVERSED ESH
+Removed Mapping: 1DFED (𝿭) MODIFIER LETTER SMALL TURNED H WITH FISHHOOK => [2AE] (ʮ) LATIN SMALL LETTER TURNED H WITH FISHHOOK
+Removed Mapping: 1DFEE (𝿮) MODIFIER LETTER SMALL TURNED H WITH FISHHOOK AND TAIL => [2AF] (ʯ) LATIN SMALL LETTER TURNED H WITH FISHHOOK AND TAIL
+Removed Mapping: 1DFEF (𝿯) MODIFIER LETTER SMALL D WITH CURL => [221] (ȡ) LATIN SMALL LETTER D WITH CURL
+Removed Mapping: 1DFF0 (𝿰) MODIFIER LETTER SMALL L WITH CURL => [234] (ȴ) LATIN SMALL LETTER L WITH CURL
+Removed Mapping: 1DFF1 (𝿱) MODIFIER LETTER SMALL N WITH CURL => [235] (ȵ) LATIN SMALL LETTER N WITH CURL
+Removed Mapping: 1DFF2 (𝿲) MODIFIER LETTER SMALL T WITH CURL => [236] (ȶ) LATIN SMALL LETTER T WITH CURL
+Removed Mapping: 1DFF5 (𝿵) MODIFIER LETTER SMALL D WITH PALATAL HOOK => [1D81] (ᶁ) LATIN SMALL LETTER D WITH PALATAL HOOK
+Removed Mapping: 1DFF6 (𝿶) MODIFIER LETTER SMALL H WITH PALATAL HOOK => [A795] (ꞕ) LATIN SMALL LETTER H WITH PALATAL HOOK
+Removed Mapping: 1DFF7 (𝿷) MODIFIER LETTER SMALL N WITH PALATAL HOOK => [1D87] (ᶇ) LATIN SMALL LETTER N WITH PALATAL HOOK
+Removed Mapping: 1DFF8 (𝿸) MODIFIER LETTER SMALL S WITH PALATAL HOOK => [1D8A] (ᶊ) LATIN SMALL LETTER S WITH PALATAL HOOK
+Removed Mapping: 1DFF9 (𝿹) MODIFIER LETTER SMALL Z WITH PALATAL HOOK => [1D8E] (ᶎ) LATIN SMALL LETTER Z WITH PALATAL HOOK
+Removed Mapping: 1DFFA (𝿺) MODIFIER LETTER SMALL C WITH HOOK => [188] (ƈ) LATIN SMALL LETTER C WITH HOOK
+Removed Mapping: 1DFFB (𝿻) MODIFIER LETTER SMALL K WITH HOOK => [199] (ƙ) LATIN SMALL LETTER K WITH HOOK
+Removed Mapping: 1DFFC (𝿼) MODIFIER LETTER SMALL P WITH HOOK => [1A5] (ƥ) LATIN SMALL LETTER P WITH HOOK
+Removed Mapping: 1DFFD (𝿽) MODIFIER LETTER SMALL Q WITH HOOK => [2A0] (ʠ) LATIN SMALL LETTER Q WITH HOOK
+Removed Mapping: 1DFFE (𝿾) MODIFIER LETTER SMALL T WITH HOOK => [1AD] (ƭ) LATIN SMALL LETTER T WITH HOOK
+Removed Mapping: 1DFFF (𝿿) MODIFIER LETTER SMALL T WITH HOOK AND RETROFLEX HOOK => [1DF09] (𝼉) LATIN SMALL LETTER T WITH HOOK AND RETROFLEX HOOK
 Removed Mapping: 1EE1C (𞸜) ARABIC MATHEMATICAL DOTLESS BEH => [66E] (ٮ) ARABIC LETTER DOTLESS BEH
 Removed Mapping: 1EE1E (𞸞) ARABIC MATHEMATICAL DOTLESS FEH => [6A1] (ڡ) ARABIC LETTER DOTLESS FEH
 Removed Mapping: 1EE1F (𞸟) ARABIC MATHEMATICAL DOTLESS QAF => [66F] (ٯ) ARABIC LETTER DOTLESS QAF
@@ -16106,13 +16275,13 @@ Removed Mapping: 1F248 (🉈) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-655
 [✓] Fastpath ASCII
 [✓] Groups Names are A-Z
 ==== Find Unique Characters ====
-Valid: 143349
-Multi: 103335
-Unique: 40014
+Valid: 156282
+Multi: 103544
+Unique: 52738
 [✓] Matching Groups have Same CM Style
 [✓] Wholes are Valid
 Confusable: 496
-Not Confusable: 119
+Not Confusable: 120
 Non-Confusable Non-Unique: 51
 ==== Compress Wholes ====
 ==== Compress Groups ====
@@ -16121,182 +16290,186 @@ Non-Confusable Non-Unique: 51
 [✓] Ordered by Registration Likelihood
 ==== Group Summary ====
 Ord | Valid  | Uniqu | Primar | Second | CM   | Group     
-  1 |   1146 |    55 |   1145 |      1 | 0/51 | Latin     
-  2 |    440 |   417 |    439 |      1 |      | Arabic    
-  3 | 103217 |     0 | 102127 |   1090 | 0/0  | Han       
-  4 |    120 |   110 |    120 |      0 |      | Devanagari
-  5 | 114743 | 11526 |  11528 | 103215 | 0/0  | Korean    
-  6 | 103424 |   207 |    209 | 103215 | 0/58 | Japanese  
-  7 |   1169 |   105 |    105 |   1064 | 0/8  | Cyrillic  
-  8 |     86 |    83 |     85 |      1 |      | Hebrew    
+  1 |   1366 |   138 |   1365 |      1 | 0/51 | Latin     
+  2 |    479 |   456 |    478 |      1 |      | Arabic    
+  3 | 103355 |     0 | 102128 |   1227 | 0/0  | Han       
+  4 |    121 |   111 |    121 |      0 |      | Devanagari
+  5 | 114881 | 11526 |  11528 | 103353 | 0/0  | Korean    
+  6 | 103565 |   210 |    212 | 103353 | 0/58 | Japanese  
+  7 |   1306 |   105 |    105 |   1201 | 0/8  | Cyrillic  
+  8 |     88 |    85 |     87 |      1 |      | Hebrew    
   9 |     87 |    85 |     86 |      1 |      | Thai      
- 10 |     91 |    81 |     91 |      0 |      | Bengali   
+ 10 |     93 |    83 |     93 |      0 |      | Bengali   
  11 |    126 |   105 |    126 |      0 |      | Tamil     
- 12 |   1099 |    34 |     35 |   1064 | 0/11 | Greek     
+ 12 |   1236 |    34 |     35 |   1201 | 0/11 | Greek     
  13 |    186 |   186 |    186 |      0 |      | Tibetan   
  14 |     74 |    64 |     74 |      0 |      | Gurmukhi  
  15 |     80 |    80 |     80 |      0 |      | Lao       
  16 |     97 |    97 |     97 |      0 |      | Telugu    
  17 |     91 |    81 |     91 |      0 |      | Gujarati  
  18 |    233 |   223 |    233 |      0 |      | Myanmar   
- 19 | 102201 |    74 |     76 | 102125 | 0/0  | Bopomofo  
- 20 |     42 |    42 |     42 |      0 |      | Georgian  
- 21 |     44 |    43 |     44 |      0 |      | Armenian  
- 22 |    137 |   137 |    137 |      0 |      | Khmer     
- 23 |     90 |    80 |     90 |      0 |      | Kannada   
- 24 |    113 |   113 |    113 |      0 |      | Malayalam 
- 25 |    505 |   505 |    505 |      0 |      | Ethiopic  
- 26 |    111 |   111 |    111 |      0 |      | Sinhala   
- 27 |     89 |    89 |     89 |      0 |      | Oriya     
- 28 |     61 |    50 |     61 |      0 |      | Thaana    
- 29 |     91 |    75 |     91 |      0 |      | Syrc      
- 30 |     54 |    54 |     54 |      0 |      | Nkoo      
- 31 |     92 |    86 |     92 |      0 |      | Cher      
- 32 |    722 |   722 |    722 |      0 |      | Cans      
- 33 |     86 |    86 |     86 |      0 |      | Runr      
- 34 |    155 |   155 |    155 |      0 |      | Mong      
- 35 |     66 |    66 |     66 |      0 |      | Limb      
- 36 |     83 |    83 |     83 |      0 |      | Talu      
- 37 |    123 |   123 |    123 |      0 |      | Lana      
- 38 |   1221 |  1220 |   1221 |      0 |      | Yiii      
- 39 |     80 |    80 |     80 |      0 |      | Cham      
- 40 |     29 |    29 |     29 |      0 |      | Phnx      
- 41 |   5089 |  5089 |   5089 |      0 |      | Egyp      
- 42 |     73 |    73 |     73 |      0 |      | Orkh      
- 43 |   1234 |  1234 |   1234 |      0 |      | Xsux      
- 44 |     28 |    28 |     28 |      0 |      | Ogam      
- 45 |     23 |    23 |     23 |      0 |      | Tglg      
- 46 |     88 |    86 |     88 |      0 |      | Glag      
- 47 |     64 |    59 |     64 |      0 |      | Tfng      
- 48 |    292 |   292 |    292 |      0 |      | Vaii      
- 49 |     49 |    49 |     49 |      0 |      | Cari      
- 50 |     39 |    39 |     39 |      0 |      | Ital      
- 51 |     50 |    50 |     50 |      0 |      | Xpeo      
- 52 |     40 |    40 |     40 |      0 |      | Dsrt      
- 53 |     32 |    32 |     32 |      0 |      | Mero      
- 54 |    113 |   113 |    113 |      0 |      | Brah      
- 55 |     75 |    75 |     75 |      0 |      | Gonm      
- 56 |    654 |   654 |    654 |      0 |      | Bamu      
- 57 |     41 |    41 |     41 |      0 |      | Mroo      
- 58 |     89 |    88 |     89 |      0 |      | Java      
- 59 |     77 |    73 |     77 |      0 |      | Copt      
- 60 |     52 |    52 |     52 |      0 |      | Adlm      
- 61 |     90 |    90 |     90 |      0 |      | Bali      
- 62 |     56 |    56 |     56 |      0 |      | Batk      
- 63 |     88 |    68 |     88 |      0 |      | Cakm      
- 64 |     71 |    71 |     71 |      0 |      | Hmnp      
- 65 |     46 |    46 |     46 |      0 |      | Kali      
- 66 |     72 |    72 |     72 |      0 |      | Lepc      
- 67 |     41 |    41 |     41 |      0 |      | Lisu      
- 68 |     29 |    29 |     29 |      0 |      | Mand      
- 69 |     76 |    76 |     76 |      0 |      | Mtei      
- 70 |     93 |    93 |     93 |      0 |      | Newa      
- 71 |     46 |    46 |     46 |      0 |      | Olck      
- 72 |     39 |    36 |     39 |      0 |      | Osge      
- 73 |    149 |   149 |    149 |      0 |      | Plrd      
- 74 |     50 |    50 |     50 |      0 |      | Rohg      
- 75 |     80 |    80 |     80 |      0 |      | Saur      
- 76 |     72 |    72 |     72 |      0 |      | Sund      
- 77 |     55 |    45 |     55 |      0 |      | Sylo      
- 78 |     50 |    35 |     50 |      0 |      | Tale      
- 79 |     72 |    72 |     72 |      0 |      | Tavt      
- 80 |     59 |    59 |     59 |      0 |      | Wcho      
- 81 |     54 |    53 |     54 |      0 |      | Aghb      
- 82 |     62 |    62 |     62 |      0 |      | Ahom      
- 83 |     31 |    31 |     31 |      0 |      | Armi      
- 84 |     61 |    61 |     61 |      0 |      | Avst      
- 85 |     35 |    35 |     35 |      0 |      | Bass      
- 86 |     95 |    95 |     95 |      0 |      | Bhks      
- 87 |     31 |    30 |     31 |      0 |      | Bugi      
- 88 |     20 |    20 |     20 |      0 |      | Buhd      
- 89 |     28 |    28 |     28 |      0 |      | Chrs      
- 90 |     99 |    99 |     99 |      0 |      | Cpmn      
- 91 |     55 |    55 |     55 |      0 |      | Cprt      
- 92 |     70 |    70 |     70 |      0 |      | Diak      
- 93 |     70 |    60 |     70 |      0 |      | Dogr      
- 94 |    145 |   142 |    145 |      0 |      | Dupl      
- 95 |     41 |    40 |     41 |      0 |      | Elba      
- 96 |     23 |    23 |     23 |      0 |      | Elym      
- 97 |     63 |    63 |     63 |      0 |      | Gong      
- 98 |     30 |    27 |     30 |      0 |      | Goth      
- 99 |    103 |    82 |    103 |      0 |      | Gran      
-100 |     21 |    21 |     21 |      0 |      | Hano      
-101 |     26 |    26 |     26 |      0 |      | Hatr      
-102 |    583 |   583 |    583 |      0 |      | Hluw      
-103 |    124 |   124 |    124 |      0 |      | Hmng      
-104 |     57 |    57 |     57 |      0 |      | Hung      
-105 |     85 |    85 |     85 |      0 |      | Kawi      
-106 |     60 |    60 |     60 |      0 |      | Khar      
-107 |     71 |    61 |     71 |      0 |      | Khoj      
-108 |    472 |   472 |    472 |      0 |      | Kits      
-109 |     72 |    62 |     72 |      0 |      | Kthi      
-110 |     29 |    29 |     29 |      0 |      | Lyci      
-111 |     27 |    27 |     27 |      0 |      | Lydi      
-112 |     23 |    23 |     23 |      0 |      | Maka      
-113 |     49 |    39 |     49 |      0 |      | Mahj      
-114 |     51 |    50 |     51 |      0 |      | Mani      
-115 |     68 |    68 |     68 |      0 |      | Marc      
-116 |     57 |    57 |     57 |      0 |      | Medf      
-117 |    213 |   213 |    213 |      0 |      | Mend      
-118 |     90 |    90 |     90 |      0 |      | Merc      
-119 |     77 |    77 |     77 |      0 |      | Modi      
-120 |     47 |    37 |     47 |      0 |      | Mult      
-121 |     42 |    42 |     42 |      0 |      | Nagm      
-122 |     32 |    32 |     32 |      0 |      | Narb      
-123 |     76 |    66 |     76 |      0 |      | Nand      
-124 |     40 |    40 |     40 |      0 |      | Nbat      
-125 |    397 |   397 |    397 |      0 |      | Nshu      
-126 |     40 |    40 |     40 |      0 |      | Osma      
-127 |     23 |    22 |     23 |      0 |      | Ougr      
-128 |     32 |    32 |     32 |      0 |      | Palm      
-129 |     57 |    57 |     57 |      0 |      | Pauc      
-130 |     47 |    43 |     47 |      0 |      | Perm      
-131 |     54 |    54 |     54 |      0 |      | Phag      
-132 |     27 |    27 |     27 |      0 |      | Phli      
-133 |     29 |    29 |     29 |      0 |      | Phlp      
-134 |     30 |    30 |     30 |      0 |      | Prti      
-135 |     37 |    37 |     37 |      0 |      | Rjng      
-136 |     57 |    57 |     57 |      0 |      | Samr      
-137 |     32 |    32 |     32 |      0 |      | Sarb      
-138 |     48 |    48 |     48 |      0 |      | Shaw      
-139 |     99 |    99 |     99 |      0 |      | Shrd      
-140 |     75 |    75 |     75 |      0 |      | Sidd      
-141 |     69 |    69 |     69 |      0 |      | Sind      
-142 |     35 |    35 |     35 |      0 |      | Sora      
-143 |     37 |    37 |     37 |      0 |      | Sogd      
-144 |     40 |    40 |     40 |      0 |      | Sogo      
-145 |     81 |    81 |     81 |      0 |      | Soyo      
-146 |     18 |    18 |     18 |      0 |      | Tagb      
-147 |     68 |    68 |     68 |      0 |      | Takr      
-148 |   7059 |  7059 |   7059 |      0 |      | Tang      
-149 |     82 |    82 |     82 |      0 |      | Tirh      
-150 |     89 |    89 |     89 |      0 |      | Tnsa      
-151 |     31 |    31 |     31 |      0 |      | Toto      
-152 |     31 |    31 |     31 |      0 |      | Ugar      
-153 |     35 |    35 |     35 |      0 |      | Vith      
-154 |     52 |    52 |     52 |      0 |      | Wara      
-155 |     57 |    47 |     57 |      0 |      | Yezi      
-156 |     70 |    70 |     70 |      0 |      | Zanb      
-157 |     47 |    47 |     47 |      0 |      | Gara      
-158 |     55 |    55 |     55 |      0 |      | Gukh      
-159 |     56 |    56 |     56 |      0 |      | Krai      
-160 |     44 |    44 |     44 |      0 |      | Onao      
-161 |     47 |    44 |     47 |      0 |      | Sunu      
-162 |     55 |    52 |     55 |      0 |      | Todr      
-163 |     88 |    78 |     88 |      0 |      | Tutg      
-164 |     25 |    25 |     25 |      0 |      | Berf      
-165 |     26 |    26 |     26 |      0 |      | Sidt      
-166 |     55 |    55 |     55 |      0 |      | Tayo      
-167 |     54 |    54 |     54 |      0 |      | Tols      
+ 19 |     42 |    42 |     42 |      0 |      | Georgian  
+ 20 |     44 |    43 |     44 |      0 |      | Armenian  
+ 21 |    137 |   137 |    137 |      0 |      | Khmer     
+ 22 |     90 |    80 |     90 |      0 |      | Kannada   
+ 23 |    113 |   113 |    113 |      0 |      | Malayalam 
+ 24 |    505 |   505 |    505 |      0 |      | Ethiopic  
+ 25 |    111 |   111 |    111 |      0 |      | Sinhala   
+ 26 |     91 |    91 |     91 |      0 |      | Oriya     
+ 27 |     61 |    50 |     61 |      0 |      | Thaana    
+ 28 |     91 |    75 |     91 |      0 |      | Syrc      
+ 29 |     54 |    54 |     54 |      0 |      | Nkoo      
+ 30 |     92 |    86 |     92 |      0 |      | Cher      
+ 31 |    722 |   722 |    722 |      0 |      | Cans      
+ 32 |     86 |    86 |     86 |      0 |      | Runr      
+ 33 |    155 |   155 |    155 |      0 |      | Mong      
+ 34 |     66 |    66 |     66 |      0 |      | Limb      
+ 35 |     83 |    83 |     83 |      0 |      | Talu      
+ 36 |    123 |   123 |    123 |      0 |      | Lana      
+ 37 |   1221 |  1220 |   1221 |      0 |      | Yiii      
+ 38 |     80 |    80 |     80 |      0 |      | Cham      
+ 39 |     29 |    29 |     29 |      0 |      | Phnx      
+ 40 |   5089 |  5089 |   5089 |      0 |      | Egyp      
+ 41 |     73 |    73 |     73 |      0 |      | Orkh      
+ 42 |   1393 |  1322 |   1393 |      0 |      | Xsux      
+ 43 |     28 |    28 |     28 |      0 |      | Ogam      
+ 44 |     23 |    23 |     23 |      0 |      | Tglg      
+ 45 |     88 |    86 |     88 |      0 |      | Glag      
+ 46 |     64 |    59 |     64 |      0 |      | Tfng      
+ 47 |    292 |   292 |    292 |      0 |      | Vaii      
+ 48 |     49 |    49 |     49 |      0 |      | Cari      
+ 49 |     39 |    39 |     39 |      0 |      | Ital      
+ 50 |     50 |    50 |     50 |      0 |      | Xpeo      
+ 51 |     40 |    40 |     40 |      0 |      | Dsrt      
+ 52 |     32 |    32 |     32 |      0 |      | Mero      
+ 53 |    113 |   113 |    113 |      0 |      | Brah      
+ 54 |     75 |    75 |     75 |      0 |      | Gonm      
+ 55 |    654 |   654 |    654 |      0 |      | Bamu      
+ 56 |     41 |    41 |     41 |      0 |      | Mroo      
+ 57 |     89 |    88 |     89 |      0 |      | Java      
+ 58 |     77 |    73 |     77 |      0 |      | Copt      
+ 59 |     52 |    52 |     52 |      0 |      | Adlm      
+ 60 |     90 |    90 |     90 |      0 |      | Bali      
+ 61 |     56 |    56 |     56 |      0 |      | Batk      
+ 62 |     88 |    68 |     88 |      0 |      | Cakm      
+ 63 |     71 |    71 |     71 |      0 |      | Hmnp      
+ 64 |     46 |    46 |     46 |      0 |      | Kali      
+ 65 |     72 |    72 |     72 |      0 |      | Lepc      
+ 66 |     41 |    41 |     41 |      0 |      | Lisu      
+ 67 |     29 |    29 |     29 |      0 |      | Mand      
+ 68 |     76 |    76 |     76 |      0 |      | Mtei      
+ 69 |     93 |    93 |     93 |      0 |      | Newa      
+ 70 |     46 |    46 |     46 |      0 |      | Olck      
+ 71 |     39 |    36 |     39 |      0 |      | Osge      
+ 72 |    149 |   149 |    149 |      0 |      | Plrd      
+ 73 |     50 |    50 |     50 |      0 |      | Rohg      
+ 74 |     80 |    80 |     80 |      0 |      | Saur      
+ 75 |     72 |    72 |     72 |      0 |      | Sund      
+ 76 |     55 |    45 |     55 |      0 |      | Sylo      
+ 77 |     50 |    35 |     50 |      0 |      | Tale      
+ 78 |     72 |    72 |     72 |      0 |      | Tavt      
+ 79 |     59 |    59 |     59 |      0 |      | Wcho      
+ 80 |     54 |    53 |     54 |      0 |      | Aghb      
+ 81 |     62 |    62 |     62 |      0 |      | Ahom      
+ 82 |     31 |    31 |     31 |      0 |      | Armi      
+ 83 |     61 |    61 |     61 |      0 |      | Avst      
+ 84 |     35 |    35 |     35 |      0 |      | Bass      
+ 85 |     95 |    95 |     95 |      0 |      | Bhks      
+ 86 |     31 |    30 |     31 |      0 |      | Bugi      
+ 87 |     20 |    20 |     20 |      0 |      | Buhd      
+ 88 |     28 |    28 |     28 |      0 |      | Chrs      
+ 89 |     99 |    99 |     99 |      0 |      | Cpmn      
+ 90 |     55 |    55 |     55 |      0 |      | Cprt      
+ 91 |     70 |    70 |     70 |      0 |      | Diak      
+ 92 |     70 |    60 |     70 |      0 |      | Dogr      
+ 93 |    145 |   142 |    145 |      0 |      | Dupl      
+ 94 |     41 |    40 |     41 |      0 |      | Elba      
+ 95 |     23 |    23 |     23 |      0 |      | Elym      
+ 96 |     63 |    63 |     63 |      0 |      | Gong      
+ 97 |     30 |    27 |     30 |      0 |      | Goth      
+ 98 |    103 |    82 |    103 |      0 |      | Gran      
+ 99 |     21 |    21 |     21 |      0 |      | Hano      
+100 |     26 |    26 |     26 |      0 |      | Hatr      
+101 |    583 |   583 |    583 |      0 |      | Hluw      
+102 |    124 |   124 |    124 |      0 |      | Hmng      
+103 |     57 |    57 |     57 |      0 |      | Hung      
+104 |     85 |    85 |     85 |      0 |      | Kawi      
+105 |     60 |    60 |     60 |      0 |      | Khar      
+106 |     71 |    61 |     71 |      0 |      | Khoj      
+107 |    477 |   477 |    477 |      0 |      | Kits      
+108 |     72 |    62 |     72 |      0 |      | Kthi      
+109 |     29 |    29 |     29 |      0 |      | Lyci      
+110 |     27 |    27 |     27 |      0 |      | Lydi      
+111 |     23 |    23 |     23 |      0 |      | Maka      
+112 |     49 |    39 |     49 |      0 |      | Mahj      
+113 |     51 |    50 |     51 |      0 |      | Mani      
+114 |     68 |    68 |     68 |      0 |      | Marc      
+115 |     57 |    57 |     57 |      0 |      | Medf      
+116 |    213 |   213 |    213 |      0 |      | Mend      
+117 |     90 |    90 |     90 |      0 |      | Merc      
+118 |     77 |    77 |     77 |      0 |      | Modi      
+119 |     47 |    37 |     47 |      0 |      | Mult      
+120 |     42 |    42 |     42 |      0 |      | Nagm      
+121 |     32 |    32 |     32 |      0 |      | Narb      
+122 |     76 |    66 |     76 |      0 |      | Nand      
+123 |     40 |    40 |     40 |      0 |      | Nbat      
+124 |    397 |   397 |    397 |      0 |      | Nshu      
+125 |     40 |    40 |     40 |      0 |      | Osma      
+126 |     23 |    22 |     23 |      0 |      | Ougr      
+127 |     32 |    32 |     32 |      0 |      | Palm      
+128 |     57 |    57 |     57 |      0 |      | Pauc      
+129 |     47 |    43 |     47 |      0 |      | Perm      
+130 |     54 |    54 |     54 |      0 |      | Phag      
+131 |     27 |    27 |     27 |      0 |      | Phli      
+132 |     29 |    29 |     29 |      0 |      | Phlp      
+133 |     30 |    30 |     30 |      0 |      | Prti      
+134 |     37 |    37 |     37 |      0 |      | Rjng      
+135 |     57 |    57 |     57 |      0 |      | Samr      
+136 |     32 |    32 |     32 |      0 |      | Sarb      
+137 |     48 |    48 |     48 |      0 |      | Shaw      
+138 |     99 |    99 |     99 |      0 |      | Shrd      
+139 |     75 |    75 |     75 |      0 |      | Sidd      
+140 |     69 |    69 |     69 |      0 |      | Sind      
+141 |     35 |    35 |     35 |      0 |      | Sora      
+142 |     37 |    37 |     37 |      0 |      | Sogd      
+143 |     40 |    40 |     40 |      0 |      | Sogo      
+144 |     81 |    81 |     81 |      0 |      | Soyo      
+145 |     18 |    18 |     18 |      0 |      | Tagb      
+146 |     68 |    68 |     68 |      0 |      | Takr      
+147 |   7061 |  7061 |   7061 |      0 |      | Tang      
+148 |     82 |    82 |     82 |      0 |      | Tirh      
+149 |     89 |    89 |     89 |      0 |      | Tnsa      
+150 |     31 |    31 |     31 |      0 |      | Toto      
+151 |     31 |    31 |     31 |      0 |      | Ugar      
+152 |     35 |    35 |     35 |      0 |      | Vith      
+153 |     52 |    52 |     52 |      0 |      | Wara      
+154 |     57 |    47 |     57 |      0 |      | Yezi      
+155 |     70 |    70 |     70 |      0 |      | Zanb      
+156 |     47 |    47 |     47 |      0 |      | Gara      
+157 |     55 |    55 |     55 |      0 |      | Gukh      
+158 |     56 |    56 |     56 |      0 |      | Krai      
+159 |     44 |    44 |     44 |      0 |      | Onao      
+160 |     47 |    44 |     47 |      0 |      | Sunu      
+161 |     55 |    52 |     55 |      0 |      | Todr      
+162 |     88 |    78 |     88 |      0 |      | Tutg      
+163 |     25 |    25 |     25 |      0 |      | Berf      
+164 |     26 |    26 |     26 |      0 |      | Sidt      
+165 |     55 |    55 |     55 |      0 |      | Tayo      
+166 |     54 |    54 |     54 |      0 |      | Tols      
+167 |     40 |    40 |     40 |      0 |      | Chis      
+168 |    965 |   965 |    965 |      0 |      | Jurc      
+169 |    235 |   164 |    235 |      0 |      | Pcun      
+170 |  11328 | 11328 |  11328 |      0 |      | Seal      
+171 |     76 |    74 |     76 |      0 |      | Bopo      
 ==== NFC Quick Check ====
-Optimized: 2177 => 581
+Optimized: 2212 => 599
 ==== Compute NSM from Groups w/o CM Whitelist ====
-CM(2543) => NSM(2072) => 1107
-Per Group Max: 61
+CM(2582) => NSM(2105) => 1129
+Per Group Max: 76
 ==== Write Output ====
-Wrote: spec.json [3299377]
-Unchanged: nf.json
-Unchanged: nf-tests.json
-Unchanged: emoji-info.json
-Unchanged: names.json
-Unchanged: confused.json
+Wrote: spec.json [2709210]
+Wrote: nf.json [49430]
+Wrote: nf-tests.json [536112]
+Wrote: emoji-info.json [772242]
+Wrote: names.json [3733454]
+Wrote: confused.json [71157]

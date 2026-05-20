@@ -1,6 +1,6 @@
-import {UnicodeSpec, UnicodePrinter} from './unicode-logic.js';
 import {ens_idna_rules} from './idna.js';
 import {create_nf} from './nf.js';
+import {UnicodePrinter, UnicodeSpec} from './unicode-logic.js';
 
 export const UNICODE = UnicodeSpec.from_release('current');
 

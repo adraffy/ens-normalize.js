@@ -21,11 +21,11 @@
 * [Unicode data files](https://www.unicode.org/Public/)
 	* Download Latest: `node download.js` 
 	* To download older version: `node download.js 12.1.0` 
-	* Already included: [Unicode 11-17](./data/)
+	* Already included: [Unicode 11-18](./data/)
 * [CLDR data files](https://github.com/unicode-org/cldr)
 	* Download Latest: `node parse-cldr.js`
 	* To download older version: `node parse-cldr.js 42` 
-	* Already included: [CLDR 42-47](./data/)
+	* Already included: [CLDR 42-48](./data/)
 	* ⚠️ Versioned separately from Unicode!
 
 ## Instructions
@@ -56,6 +56,18 @@
 * `node names.js find abc` — find characters by name
 
 ## Upgrade Notes
+
+
+### 17.0.0 → 18.0.0
+
+* *WIP*
+* [**Release**](https://www.unicode.org/versions/Unicode18.0.0)
+* [Diff](./diffs/17.0.0-vs-18.0.0.txt) `node unicode-diff.js 17 18`
+* UAX-31: 
+	* **New** 4 Scripts: Chis, Jurc, Pcun, Seal
+* Prior Validation: `node test/validate.js 1.11.1` 
+	* Fails on Bobo demotion
+	* Fails on new emoji
 
 ### 16.0.0 → 17.0.0
 
