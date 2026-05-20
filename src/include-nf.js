@@ -1,4 +1,4 @@
-// created 2026-05-20T19:22:05.255Z
+// created 2026-05-20T19:36:51.420Z
 // compressed base64-encoded blob for include-nf data
 // source: https://github.com/adraffy/ens-normalize.js/blob/main/src/make.js
 // see: https://github.com/adraffy/ens-normalize.js#security
