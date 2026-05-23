@@ -1,13 +1,13 @@
 // dump out a list of characters with consistant formatting
 // eg. `node names.js $ 23 2A 30..39"
 
-import {UNICODE, PRINTER, IDNA} from './unicode-version.js';
-import {parse_cp_range, explode_cp, hex_cp} from './utils.js';
+import {IDNA, PRINTER, UNICODE} from './unicode-version.js';
+import {explode_cp, hex_cp, parse_cp_range} from './utils.js';
 
 let check_old;
 let format = 'js';
 let args = process.argv.slice(2).filter(arg => {
-	let match = arg.match(/^--format=(.*)$/);
+	const match = arg.match(/^--format=(.*)$/);
 	if (match) {
 		format = match[1];
 	} else if (arg === '--old') {
@@ -15,22 +15,24 @@ let args = process.argv.slice(2).filter(arg => {
 	} else {
 		return true;
 	}
+	return false;
 });
 
 let cps;
 if (args[0] === 'find') { // search by name/patt
-	let regex = new RegExp(args.slice(1).join(' '), 'i');
+	const regex = new RegExp(args.slice(1).join(' '), 'i');
 	cps = [...UNICODE.char_map.values()].filter(x => {
 		if (regex.test(x.name)) return true;
 		if (regex.test(x.short)) return true;
 		if (check_old && regex.test(x.old_name)) return true;
+		return false;
 	}).map(x => x.cp);
 } else if (args[0] === 'script') {
 	cps = [...UNICODE.require_script(args[1]).map.keys()];
 } else if (args[0] === 'prop') {
-	let props = UNICODE.read_props();
+	const props = UNICODE.read_props();
 	cps = args.slice(1).flatMap(prop => {
-		let v = props[prop];
+		const v = props[prop];
 		if (!v) throw new Error(`unknown property: ${prop}`);
 		return v;
 	});
@@ -57,22 +59,15 @@ switch (format) {
 	case 'jss':
 	case `jsstr`:
 	case 'js': {
-		for (let cp of cps) {
+		for (const cp of cps) {
 			console.log(PRINTER[format](cp));
-		}
-		console.log(cps.length);
-		break;
-	}
-	case 'jss': {
-		for (let cp of cps) {
-			console.log(PRINTER.jss(cp));
 		}
 		console.log(cps.length);
 		break;
 	}
 	case 'csv': {
 		console.log(`Dec,Hex,Form,Name`);
-		for (let cp of cps) {
+		for (const cp of cps) {
 			console.log(`${cp},${hex_cp(cp)},"${UNICODE.get_display(cp)}","${UNICODE.get_name(cp)}"`);
 		}
 		break;

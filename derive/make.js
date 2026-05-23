@@ -1,5 +1,5 @@
 import {mkdirSync, writeFileSync, createWriteStream, readFileSync} from 'node:fs';
-import {deepEqual, deepStrictEqual} from 'node:assert';
+import {deepEqual} from 'node:assert';
 import {compare_arrays, explode_cp, parse_cp_sequence, print_section, print_checked, print_table, group_by} from './utils.js';
 import {UNICODE, NF, IDNA, PRINTER} from './unicode-version.js';
 import CHARS_VALID from './rules/chars-valid.js';
