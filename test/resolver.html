@@ -3456,6 +3456,7 @@ async function add_resolver_info(row, resolver, context) {
 					const calldata = resolver.interface.encodeFunctionData('name(bytes32)', [namehash(name)]);
 					calls.push(resolver['resolve(bytes,bytes)'](dns_encoded_from(name), calldata));
 				} else {
+					calls.push(resolve(resolver.interface.encodeFunctionData('addr(bytes32)', [resolver.__node])));
 					calls.push(resolve(resolver.interface.encodeFunctionData('addr(bytes32,uint256)', [resolver.__node, 1n << 255n])));
 					calls.push(resolve(resolver.interface.encodeFunctionData('addr(bytes32,uint256)', [resolver.__node, 60n])));
 					calls.push(resolve(resolver.interface.encodeFunctionData('text(bytes32,string)', [resolver.__node, '__dne'])));
