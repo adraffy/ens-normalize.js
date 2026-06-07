@@ -1,6 +1,6 @@
 'use strict';
 
-// created 2026-05-20T19:36:51.420Z
+// created 2026-06-07T17:53:46.643Z
 // compressed base64-encoded blob for include-ens data
 // source: https://github.com/adraffy/ens-normalize.js/blob/main/src/make.js
 // see: https://github.com/adraffy/ens-normalize.js#security
@@ -291,7 +291,7 @@ function array_replace(v, a, b) {
 	}
 }
 
-// created 2026-05-20T19:36:51.420Z
+// created 2026-06-07T17:53:46.643Z
 // compressed base64-encoded blob for include-nf data
 // source: https://github.com/adraffy/ens-normalize.js/blob/main/src/make.js
 // see: https://github.com/adraffy/ens-normalize.js#security

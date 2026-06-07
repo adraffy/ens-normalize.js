@@ -1,4 +1,4 @@
-// created 2026-05-20T19:36:51.420Z
+// created 2026-06-07T17:53:46.643Z
 // compressed base64-encoded blob for include-ens data
 // source: https://github.com/adraffy/ens-normalize.js/blob/main/src/make.js
 // see: https://github.com/adraffy/ens-normalize.js#security
@@ -328,7 +328,7 @@ function run_tests(fn, tests) {
 	return errors;
 }
 
-// created 2026-05-20T19:36:51.420Z
+// created 2026-06-07T17:53:46.643Z
 // compressed base64-encoded blob for include-nf data
 // source: https://github.com/adraffy/ens-normalize.js/blob/main/src/make.js
 // see: https://github.com/adraffy/ens-normalize.js#security
@@ -1563,13 +1563,13 @@ function use_default_style() {
 }
 
 // see: https://github.com/adraffy/ens-normalize.js#security
-const derived = "2026-05-20T19:36:50.338Z";
-const unicode = "18.0.0 (2026-05-20T19:05:42.591Z)";
+const derived = "2026-06-07T17:53:45.548Z";
+const unicode = "18.0.0 (2026-06-07T17:17:52.030Z)";
 const cldr = "48.2 (2026-03-28T19:59:34.849Z)";
 const ens_hash_base64 = "4d061f70ef096d1a91cbad7c3af8e82b2a91c23cdb014d698c92cacea26a61b6";
 const nf_hash_base64 = "e704908d739b5557456e4bf4755f3669a6a6356a13f73cfe03493b2b7da19178";
-const spec_hash = "c0f16b7cc5b73d5df366c1abefa81d86f2d942e284a72fe0ae57c6a8cac5bf59";
-const built = "2026-05-20T19:36:51.420Z";
+const spec_hash = "8588a85050cb461a9b7dc9429b9f0f5944fb3f5989e11433341163a728d1cbea";
+const built = "2026-06-07T17:53:46.643Z";
 const version = "1.11.2";
 
 var includeVersions = /*#__PURE__*/Object.freeze({

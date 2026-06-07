@@ -1,5 +1,5 @@
-Build Date: 2026-05-20T19:36:47.200Z
-Unicode Version: 18.0.0 (2026-05-20T19:05:42.591Z)
+Build Date: 2026-06-07T17:53:42.378Z
+Unicode Version: 18.0.0 (2026-06-07T17:17:52.030Z)
 CLDR Version: 48.2 (2026-03-28T19:59:34.849Z)
 ==== RGI Emoji ZWJ Sequences ====
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
@@ -16468,8 +16468,8 @@ CM(2582) => NSM(2105) => 1129
 Per Group Max: 76
 ==== Write Output ====
 Wrote: spec.json [2709210]
-Unchanged: nf.json
+Wrote: nf.json [49430]
 Unchanged: nf-tests.json
 Unchanged: emoji-info.json
 Unchanged: names.json
-Wrote: confused.json [71155]
+Unchanged: confused.json
