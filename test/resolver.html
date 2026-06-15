@@ -5907,8 +5907,9 @@ async function load_known_interfaces(row, resolver) {
 	const dynamic_frag = RESOLVER_ABI.getFunction('interfaceImplementer');
 	const dynamic_ifaces = resolver.__info.impl ? [
 		{iface: '0x019a38fe', title: `${WRAPPER_NAME} (1155)`},
-		{iface: IFACE_ETH_CONTROLLER, title: 'Controller'},
-		{iface: '0x018fac06', title: 'Old Controller'},
+		{iface: '0xe4f37f79', title: '✨️ Referrer Controller'},
+		{iface: IFACE_ETH_CONTROLLER, title: 'Wrapped Controller'},
+		{iface: '0x018fac06', title: 'Unwrapped Controller'},
 		{iface: '0x7ba18ba1', title: 'Old Registrar'},
 		{iface: '0xd1a70fd3', title: 'Bulk Renewal'},
 		iface_nft,
