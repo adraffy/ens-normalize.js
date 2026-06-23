@@ -4156,31 +4156,22 @@ async function resolve1(input, skip_norm) {
 
 		try {
 			name_norm = ens_normalize(primary);
+			if (name_norm !== primary) {
+				throw new Error('not normalized');
+			}
 		} catch (err) {
 			reverse_row.classList.add('error');
 			add_row_tag(reverse_row, create_tag('norm', err));
 			add_row_tag(reverse_row, create_resolve_btn(primary));
+			console.log({skip_norm});
 			if (!skip_norm) return;
 			name_norm = primary;
 			norm_err = err;
 		}
 		if (!norm_err) {
-			if (name_norm === primary) {
-				add_row_tag(reverse_row, create_resolve_btn(primary));
-				add_reverse_links(reverse_row, name_norm);
-				make_normalized(reverse_row, name_norm);
-			} else {
-				add_row_tag(reverse_row, create_tag('fail', 'Normalized'));
-				let row = normed_row = create_row('Normalized Primary');
-				make_exploded(row, name_norm, true);
-				add_row_tag(row, create_copy_btn(name_norm));
-				add_row_tag(row, create_resolve_btn(name_norm));
-				add_row_tag(row, create_namehash_button(name_norm));
-				add_reverse_links(row, name_norm);
-				make_normalized(row, name_norm);
-				output_div.append(row);
-				output_div.append(create_breakdown_row(name_norm));
-			}
+			add_row_tag(reverse_row, create_resolve_btn(primary));
+			add_reverse_links(reverse_row, name_norm);
+			make_normalized(reverse_row, name_norm);
 		}
 	} else {
 
@@ -5350,65 +5341,42 @@ async function resolve1(input, skip_norm) {
 	make_exploded(primary_row, primary, false);
 
 	// lets check if it's normalized
-	let primary_norm;
+	let primary_is_norm;
 	try {
-		primary_norm = ens_normalize(primary);
-		if (primary_norm === name_norm) {
-			if (owner === address) {
-				add_row_tag(normed_row, create_tag('fire', 'Primary Owner'));
-			} else {
-				add_row_tag(normed_row, create_tag('good', 'Primary'));
-			}
+		const norm = ens_normalize(primary);
+		if (norm !== primary) {
+			throw new Error('not normalized');
 		}
+		primary_is_norm = true;
 	} catch (err) {
 		primary_row.classList.add('error');
 		add_row_tag(primary_row, create_tag('norm', err));
 	}
 
+	if (primary_is_norm) {
+		make_normalized(primary_row, primary);
+		add_ensip1_tag(primary_row, true);
+		add_reverse_links(primary_row, primary);
+		if (owner === address) {
+			add_row_tag(normed_row, create_tag('fire', 'Primary Owner'));
+		} else {
+			add_row_tag(normed_row, create_tag('good', 'Primary'));
+		}
+	} else {
+		output_div.append(create_breakdown_row(primary, true));
+	}
+
 	if (primary === input) {
 		add_row_tag(primary_row, SAME_AS_INPUT);
-	} else if (primary === name_norm) {
-		add_row_tag(primary_row, SAME_AS_NORM);
 	} else {
 		add_row_tag(primary_row, create_copy_btn(primary));
 		add_row_tag(primary_row, create_resolve_btn(primary));
-		add_ensip1_tag(primary_row, primary);
 	}
-	add_row_tag(primary_row, create_reverse_resolve_btn(address));
 
-	if (primary === name_norm) {
-		primary_row.classList.add('normalized');
-		add_reverse_links(primary_row, name_norm);
-		return;
+	if (primary_is_norm || skip_norm) {
+		add_row_tag(primary_row, create_reverse_resolve_btn(address));
 	}
-	output_div.append(create_breakdown_row(primary, true));
-	if (primary === primary_norm) {
-		make_normalized(primary_row, primary_norm);
-		add_reverse_links(primary_row, primary_norm);
-		return;
-	}
-	if (!primary_norm) return;
-	add_row_tag(primary_row, create_tag('fail', 'Normalized'));
 
-	let primary_norm_row = create_row('Normalized Primary');
-	make_exploded(primary_norm_row, primary_norm, true);
-	add_reverse_links(primary_norm_row, primary_norm);
-	output_div.append(primary_norm_row);
-	if (primary_norm === input) {
-		add_row_tag(primary_norm_row, SAME_AS_INPUT);
-		primary_norm_row.classList.add('normalized');
-		return;
-	}
-	if (name_norm === primary_norm) {
-		add_row_tag(primary_norm_row, SAME_AS_NORM);
-		primary_norm_row.classList.add('normalized');
-	} else {
-		add_row_tag(primary_norm_row, create_copy_btn(primary_norm));
-		add_ensip1_tag(primary_norm_row, primary_norm, true);
-		add_row_tag(primary_norm_row, create_resolve_btn(primary_norm));
-		make_normalized(primary_norm_row, primary_norm);
-	}
-	output_div.append(create_breakdown_row(primary_norm));
 }
 
 function add_epf_row(address) {
