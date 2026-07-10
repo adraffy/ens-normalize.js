@@ -3509,7 +3509,7 @@ async function add_resolver_info(row, resolver, context) {
 	}
 }
 
-function add_ensip1_tag(row, input, is_norm) {
+function add_ensip1_tag(row, input) {
 	const OLD_NAME = 'ENSIP-1';
 	let tag = create('span', {className: ['tags', 'ensip1']});
 	try {
@@ -4210,7 +4210,7 @@ async function resolve1(input, skip_norm) {
 					add_row_tag(row, create_resolve_btn(name_norm));
 					add_row_tag(row, create_ens_link(name_norm));
 					add_row_tag(row, create_namehash_button(name_norm));
-					add_ensip1_tag(row, name_norm, true);
+					add_ensip1_tag(row, name_norm);
 					output_div.append(row, create_breakdown_row(name_norm));
 				}
 			}
@@ -5353,9 +5353,9 @@ async function resolve1(input, skip_norm) {
 		add_row_tag(primary_row, create_tag('norm', err));
 	}
 
+	add_ensip1_tag(primary_row, primary);
 	if (primary_is_norm) {
 		make_normalized(primary_row, primary);
-		add_ensip1_tag(primary_row, true);
 		add_reverse_links(primary_row, primary);
 		if (owner === address) {
 			add_row_tag(normed_row, create_tag('fire', 'Primary Owner'));
