@@ -14,8 +14,8 @@ function hex_cps(cps) {
 }
 
 let args = process.argv.slice(2);
-if (args.length < 2) args.unshift('current');
-if (args.length < 2) args.push('beta');
+if (!args.length) args.push('prior');
+if (args.length < 2) args.push('current');
 const UNICODE0 = UnicodeSpec.from_release(args[0]);
 const UNICODE1 = UnicodeSpec.from_release(args[1]);
 

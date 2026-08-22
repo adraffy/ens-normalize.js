@@ -12,7 +12,8 @@ export const SCRIPT_TYPE_LIMITED_USE = 'LimitedUse';
 
 // https://www.unicode.org/reports/tr39/#def-augmented-script-set
 // 20240910: no change (16.0.0)
-// 20240910: no change (17.0.0)
+// 20250914: no change (17.0.0)
+// 20260520: no change (18.0.0)
 export function augment_script_set(set) {
 	if (set.has('Hani')) {
 		set.add('Hanb');
@@ -22,7 +23,7 @@ export function augment_script_set(set) {
 	if (set.has('Hira')) set.add('Jpan');
 	if (set.has('Kana')) set.add('Jpan');
 	if (set.has('Hang')) set.add('Kore');
-	if (set.has('Bopo')) set.add('Hanb');
+	if (set.has('Bopo')) set.add('Hanb'); // TODO: is this correct now that Bopo is Limited Use?
 	if (set.has('Zyyy') || set.has('Zinh')) {
 		set.clear();
 		set.add(AUGMENTED_ALL);
@@ -191,8 +192,15 @@ export class UnicodeSpec {
 		}
 		let {sc} = this.read_prop_values(); // sc = Script
 		// this.names = new Map(sc.map(v => [v[0], v[1]])); // abbr -> name
-		let name2abbr = new Map(sc.map(v => [v[1], v[0]])); // name -> abbr
-		for (let [name, cps] of this.read_scripts()) {
+		// TODO: fix this
+		const missing = {Chis: "Chisoi"};
+		const name2abbr = new Map(sc.map(v => [v[1], v[0]])); // name -> abbr
+		const scripts = this.read_scripts();
+		for (const [abbr, name] of Object.entries(missing)) {
+			name2abbr.set(name, abbr);
+			scripts.push([name, []]);
+		}
+		for (let [name, cps] of scripts) {
 			let abbr = name2abbr.get(name);
 			if (!abbr) throw new TypeError(`unknown script: ${name}`);
 			name = name.replaceAll('_', ' '); // fix name
