@@ -1,5 +1,5 @@
-Build Date: 2026-06-07T17:53:42.378Z
-Unicode Version: 18.0.0 (2026-06-07T17:17:52.030Z)
+Build Date: 2026-08-22T21:26:42.727Z
+Unicode Version: 18.0.0 (2026-08-22T21:13:47.456Z)
 CLDR Version: 48.2 (2026-03-28T19:59:34.849Z)
 ==== RGI Emoji ZWJ Sequences ====
 Register Emoji [RGI_Emoji_ZWJ_Sequence]: [1F468 200D 2764 FE0F 200D 1F468] (👨‍❤️‍👨) couple with heart: man, man
@@ -12293,9 +12293,9 @@ Valid  | Name       | Test      | Rest      | Extra
     91 | Oriya      | Orya      |           |                           
    111 | Sinhala    | Sinh      |           |                           
     91 | Gujarati   | Gujr      |           |                           
-    97 | Telugu     | Telu      |           |                           
-    90 | Kannada    | Knda      |           |                           
-   113 | Malayalam  | Mlym      |           |                           
+    98 | Telugu     | Telu      |           |                           
+    91 | Kannada    | Knda      |           |                           
+   114 | Malayalam  | Mlym      |           |                           
     80 | Lao        | Laoo      |           |                           
     42 | Georgian   | Geor      |           |                           
    234 | Myanmar    | Mymr      |           |                           
@@ -12441,7 +12441,7 @@ Valid  | Name       | Test      | Rest      | Extra
     26 | Sidt [R]   | Sidt      |           |                           
     55 | Tayo [R]   | Tayo      |           |                           
     54 | Tols [R]   | Tols      |           |                           
-    40 | Chis [R]   | Chis      |           |                           
+     0 | Chis [R]   | Chis      |           |                           
    965 | Jurc [R]   | Jurc      |           |                           
    235 | Pcun [R]   | Pcun      |           |                           
  11328 | Seal [R]   | Seal      |           |                           
@@ -16260,6 +16260,7 @@ Removed Mapping: 1F246 (🉆) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-76D
 Removed Mapping: 1F247 (🉇) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-52DD => [3014 52DD 3015] (〔勝〕) LEFT TORTOISE SHELL BRACKET + CJK Ideograph-52DD [1246/20992] + RIGHT TORTOISE SHELL BRACKET
 Removed Mapping: 1F248 (🉈) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-6557 => [3014 6557 3015] (〔敗〕) LEFT TORTOISE SHELL BRACKET + CJK Ideograph-6557 [5976/20992] + RIGHT TORTOISE SHELL BRACKET
 ==== Remove Empty Groups ====
+Removed Group: Chis
 ==== Assert Invariants ====
 [✓] Ignored
 [✓] Mapped is Valid
@@ -16275,14 +16276,14 @@ Removed Mapping: 1F248 (🉈) TORTOISE SHELL BRACKETED CJK UNIFIED IDEOGRAPH-655
 [✓] Fastpath ASCII
 [✓] Groups Names are A-Z
 ==== Find Unique Characters ====
-Valid: 156282
-Multi: 103544
-Unique: 52738
+Valid: 156242
+Multi: 103545
+Unique: 52697
 [✓] Matching Groups have Same CM Style
 [✓] Wholes are Valid
-Confusable: 496
-Not Confusable: 120
-Non-Confusable Non-Unique: 51
+Confusable: 490
+Not Confusable: 107
+Non-Confusable Non-Unique: 44
 ==== Compress Wholes ====
 ==== Compress Groups ====
 ==== Order Groups ====
@@ -16300,19 +16301,19 @@ Ord | Valid  | Uniqu | Primar | Second | CM   | Group
   8 |     88 |    85 |     87 |      1 |      | Hebrew    
   9 |     87 |    85 |     86 |      1 |      | Thai      
  10 |     93 |    83 |     93 |      0 |      | Bengali   
- 11 |    126 |   105 |    126 |      0 |      | Tamil     
+ 11 |    126 |   104 |    126 |      0 |      | Tamil     
  12 |   1236 |    34 |     35 |   1201 | 0/11 | Greek     
  13 |    186 |   186 |    186 |      0 |      | Tibetan   
  14 |     74 |    64 |     74 |      0 |      | Gurmukhi  
  15 |     80 |    80 |     80 |      0 |      | Lao       
- 16 |     97 |    97 |     97 |      0 |      | Telugu    
+ 16 |     98 |    97 |     98 |      0 |      | Telugu    
  17 |    233 |   223 |    233 |      0 |      | Myanmar   
  18 |     91 |    81 |     91 |      0 |      | Gujarati  
  19 |     42 |    42 |     42 |      0 |      | Georgian  
  20 |     44 |    43 |     44 |      0 |      | Armenian  
  21 |    137 |   137 |    137 |      0 |      | Khmer     
- 22 |     90 |    80 |     90 |      0 |      | Kannada   
- 23 |    113 |   113 |    113 |      0 |      | Malayalam 
+ 22 |     91 |    80 |     91 |      0 |      | Kannada   
+ 23 |    114 |   113 |    114 |      0 |      | Malayalam 
  24 |    505 |   505 |    505 |      0 |      | Ethiopic  
  25 |    111 |   111 |    111 |      0 |      | Sinhala   
  26 |     91 |    91 |     91 |      0 |      | Oriya     
@@ -16457,18 +16458,17 @@ Ord | Valid  | Uniqu | Primar | Second | CM   | Group
 165 |     26 |    26 |     26 |      0 |      | Sidt      
 166 |     55 |    55 |     55 |      0 |      | Tayo      
 167 |     54 |    54 |     54 |      0 |      | Tols      
-168 |     40 |    40 |     40 |      0 |      | Chis      
-169 |    965 |   965 |    965 |      0 |      | Jurc      
-170 |    235 |   164 |    235 |      0 |      | Pcun      
-171 |  11328 | 11328 |  11328 |      0 |      | Seal      
+168 |    965 |   965 |    965 |      0 |      | Jurc      
+169 |    235 |   164 |    235 |      0 |      | Pcun      
+170 |  11328 | 11328 |  11328 |      0 |      | Seal      
 ==== NFC Quick Check ====
-Optimized: 2212 => 599
+Optimized: 2211 => 598
 ==== Compute NSM from Groups w/o CM Whitelist ====
-CM(2582) => NSM(2105) => 1129
+CM(2580) => NSM(2103) => 1127
 Per Group Max: 76
 ==== Write Output ====
-Wrote: spec.json [2709210]
-Wrote: nf.json [49430]
+Unchanged: spec.json
+Unchanged: nf.json
 Unchanged: nf-tests.json
 Unchanged: emoji-info.json
 Unchanged: names.json

@@ -192,8 +192,15 @@ export class UnicodeSpec {
 		}
 		let {sc} = this.read_prop_values(); // sc = Script
 		// this.names = new Map(sc.map(v => [v[0], v[1]])); // abbr -> name
-		let name2abbr = new Map(sc.map(v => [v[1], v[0]])); // name -> abbr
-		for (let [name, cps] of this.read_scripts()) {
+		// TODO: fix this
+		const missing = {Chis: "Chisoi"};
+		const name2abbr = new Map(sc.map(v => [v[1], v[0]])); // name -> abbr
+		const scripts = this.read_scripts();
+		for (const [abbr, name] of Object.entries(missing)) {
+			name2abbr.set(name, abbr);
+			scripts.push([name, []]);
+		}
+		for (let [name, cps] of scripts) {
 			let abbr = name2abbr.get(name);
 			if (!abbr) throw new TypeError(`unknown script: ${name}`);
 			name = name.replaceAll('_', ' '); // fix name
