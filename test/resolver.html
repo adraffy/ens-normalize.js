@@ -4352,15 +4352,16 @@ async function resolve1(input, skip_norm) {
 
 	const impls_row = create_row(create_link('https://docs.ens.domains/contract-api-reference/.eth-permanent-registrar#discovery', {innerHTML: 'Interfaces'}));
 	impls_row.classList.add('impls');
-	output_div.append(impls_row);
 	let owner;
 	if (name_norm === 'eth') {
+		output_div.append(impls_row);
 		add_spinner(impls_row);
 		await load_known_interfaces(impls_row, resolver);
 		if (should_stop_resolving()) return;
 		remove_temporary(impls_row);
 		add_row_tag(impls_row, create_elapsed_since());
-	} else if (resolver) {
+	} else if (resolver) {	
+		output_div.append(impls_row);
 		impls_row.classList.add('hide');
 		resolver_row.append(create('button', {
 			innerText: '🔍️ Interfaces',
