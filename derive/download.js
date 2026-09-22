@@ -69,9 +69,9 @@ const FILES = [
 function urls_from_source(source, {major, minor = 0, patch = 0, draft}) {
 	const UNICODE_BASE = `https://www.unicode.org/Public`;
 	let bases = {
-		SPEC: draft ? `${UNICODE_BASE}/draft/` : `${UNICODE_BASE}/${major}.${minor}.${patch}`,
-		IDNA: draft ? `${UNICODE_BASE}/draft/idna/` : `${UNICODE_BASE}/idna/${major}.${minor}.${patch}`,
-		EMOJI: draft ? `${UNICODE_BASE}/draft/emoji/` : `${UNICODE_BASE}/emoji/${major}.${minor}`,
+		SPEC: draft ? `${UNICODE_BASE}/draft` : `${UNICODE_BASE}/${major}.${minor}.${patch}`,
+		IDNA: draft ? `${UNICODE_BASE}/draft/idna` : `${UNICODE_BASE}/idna/${major}.${minor}.${patch}`,
+		EMOJI: draft ? `${UNICODE_BASE}/draft/emoji` : `${UNICODE_BASE}/emoji/${major}.${minor}`,
 		SECURITY: draft ? `${UNICODE_BASE}/draft/security` : `${UNICODE_BASE}/security/${major}.${minor}.${patch}`
 	};
 	return new URL(source.replace(/\{([A-Z]+)\}/g, (_, key) => {

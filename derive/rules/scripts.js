@@ -14,7 +14,6 @@ export const SCRIPT_GROUPS = [
 	{name: 'Japanese', test: ['Kana', 'Hira'], rest: ['Hani', 'Zyyy'], extra: [$AZ], cm: true},
 	{name: 'Korean', test: ['Hang'], rest: ['Hani', 'Zyyy'], extra: [$AZ], cm: true},
 	{name: 'Han', test: ['Hani'], rest: ['Zyyy'], extra: [$AZ], cm: true},
-	{name: 'Bopomofo', test: ['Bopo'], rest: ['Hani'], cm: true},
 
 	// Latin-like
 	{name: 'Latin', test: ['Latn', 'Zyyy'], rest: ['Zinh'], cm: true, extra: [
@@ -255,4 +254,11 @@ export const RESTRICTED_SCRIPTS = [
 	'Tols', // Tolong Siki
 	// Chisoi didn't make the cut: https://bsky.app/profile/adraffy.bsky.social/post/3lvrroos2ck25
 	// Bopo is now Limited Use ==> fix in 18.0.0
+
+	// 18.0.0
+	'Chis', // Chisoi
+	'Jurc', // Jurchen 
+	'Pcun', // Proto Cuneiform 
+	'Seal', // Seal
+	'Bopo', // Bopomofo (was allowed in 17-)
 ];

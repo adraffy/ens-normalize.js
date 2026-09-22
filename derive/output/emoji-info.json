@@ -18352,6 +18352,86 @@
 		"subgroup": "hand-fingers-open"
 	},
 	{
+		"form": "🫹🏻",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "leftwards thumb sign: light skin tone",
+		"version": "18.0",
+		"group": "People & Body",
+		"subgroup": "hand-fingers-closed"
+	},
+	{
+		"form": "🫹🏼",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "leftwards thumb sign: medium-light skin tone",
+		"version": "18.0",
+		"group": "People & Body",
+		"subgroup": "hand-fingers-closed"
+	},
+	{
+		"form": "🫹🏽",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "leftwards thumb sign: medium skin tone",
+		"version": "18.0",
+		"group": "People & Body",
+		"subgroup": "hand-fingers-closed"
+	},
+	{
+		"form": "🫹🏾",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "leftwards thumb sign: medium-dark skin tone",
+		"version": "18.0",
+		"group": "People & Body",
+		"subgroup": "hand-fingers-closed"
+	},
+	{
+		"form": "🫹🏿",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "leftwards thumb sign: dark skin tone",
+		"version": "18.0",
+		"group": "People & Body",
+		"subgroup": "hand-fingers-closed"
+	},
+	{
+		"form": "🫺🏻",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "rightwards thumb sign: light skin tone",
+		"version": "18.0",
+		"group": "People & Body",
+		"subgroup": "hand-fingers-closed"
+	},
+	{
+		"form": "🫺🏼",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "rightwards thumb sign: medium-light skin tone",
+		"version": "18.0",
+		"group": "People & Body",
+		"subgroup": "hand-fingers-closed"
+	},
+	{
+		"form": "🫺🏽",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "rightwards thumb sign: medium skin tone",
+		"version": "18.0",
+		"group": "People & Body",
+		"subgroup": "hand-fingers-closed"
+	},
+	{
+		"form": "🫺🏾",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "rightwards thumb sign: medium-dark skin tone",
+		"version": "18.0",
+		"group": "People & Body",
+		"subgroup": "hand-fingers-closed"
+	},
+	{
+		"form": "🫺🏿",
+		"type": "RGI_Emoji_Modifier_Sequence",
+		"name": "rightwards thumb sign: dark skin tone",
+		"version": "18.0",
+		"group": "People & Body",
+		"subgroup": "hand-fingers-closed"
+	},
+	{
 		"form": "🇦🇨",
 		"type": "RGI_Emoji_Flag_Sequence",
 		"name": "flag: Ascension Island",
@@ -19162,7 +19242,7 @@
 	{
 		"form": "🇭🇲",
 		"type": "RGI_Emoji_Flag_Sequence",
-		"name": "flag: Heard & McDonald Islands",
+		"name": "flag: Heard Island & McDonald Islands",
 		"version": "2.0",
 		"group": "Flags",
 		"subgroup": "country-flag"
@@ -19994,7 +20074,7 @@
 	{
 		"form": "🇸🇭",
 		"type": "RGI_Emoji_Flag_Sequence",
-		"name": "flag: St. Helena",
+		"name": "flag: St. Helena, Ascension & Tristan da Cunha",
 		"version": "2.0",
 		"group": "Flags",
 		"subgroup": "country-flag"
@@ -20138,7 +20218,7 @@
 	{
 		"form": "🇹🇫",
 		"type": "RGI_Emoji_Flag_Sequence",
-		"name": "flag: French Southern Territories",
+		"name": "flag: French Southern and Antarctic Lands",
 		"version": "2.0",
 		"group": "Flags",
 		"subgroup": "country-flag"
@@ -29065,10 +29145,19 @@
 	{
 		"form": "🛘️",
 		"type": "Emoji_Presentation",
-		"name": "LANDSLIDE",
+		"name": "landslide",
+		"name0": "LANDSLIDE",
 		"version": "17.0",
 		"group": "Travel & Places",
 		"subgroup": "place-geographic"
+	},
+	{
+		"form": "🛙️",
+		"type": "Emoji_Presentation",
+		"name": "LIGHTHOUSE",
+		"version": "18.0",
+		"group": "Travel & Places",
+		"subgroup": "transport-water"
 	},
 	{
 		"form": "🛜️",
@@ -31714,15 +31803,41 @@
 	{
 		"form": "🪊️",
 		"type": "Emoji_Presentation",
-		"name": "TROMBONE",
+		"name": "trombone",
+		"name0": "TROMBONE",
 		"version": "17.0",
 		"group": "Objects",
 		"subgroup": "musical-instrument"
 	},
 	{
+		"form": "🪋️",
+		"type": "Emoji_Presentation",
+		"name": "METEOR",
+		"version": "18.0",
+		"group": "Travel & Places",
+		"subgroup": "sky & weather"
+	},
+	{
+		"form": "🪌️",
+		"type": "Emoji_Presentation",
+		"name": "ERASER",
+		"version": "18.0",
+		"group": "Objects",
+		"subgroup": "writing"
+	},
+	{
+		"form": "🪍️",
+		"type": "Emoji_Presentation",
+		"name": "NET WITH HANDLE",
+		"version": "18.0",
+		"group": "Objects",
+		"subgroup": "tool"
+	},
+	{
 		"form": "🪎️",
 		"type": "Emoji_Presentation",
-		"name": "TREASURE CHEST",
+		"name": "treasure chest",
+		"name0": "TREASURE CHEST",
 		"version": "17.0",
 		"group": "Objects",
 		"subgroup": "money"
@@ -32234,15 +32349,25 @@
 	{
 		"form": "🫈️",
 		"type": "Emoji_Presentation",
-		"name": "HAIRY CREATURE",
+		"name": "hairy creature",
+		"name0": "HAIRY CREATURE",
 		"version": "17.0",
 		"group": "People & Body",
 		"subgroup": "person-fantasy"
 	},
 	{
+		"form": "🫌️",
+		"type": "Emoji_Presentation",
+		"name": "MONARCH BUTTERFLY",
+		"version": "18.0",
+		"group": "Animals & Nature",
+		"subgroup": "animal-bug"
+	},
+	{
 		"form": "🫍️",
 		"type": "Emoji_Presentation",
-		"name": "ORCA",
+		"name": "orca",
+		"name0": "ORCA",
 		"version": "17.0",
 		"group": "Animals & Nature",
 		"subgroup": "animal-marine"
@@ -32383,6 +32508,14 @@
 		"subgroup": "food-vegetable"
 	},
 	{
+		"form": "🫝️",
+		"type": "Emoji_Presentation",
+		"name": "PICKLE",
+		"version": "18.0",
+		"group": "Food & Drink",
+		"subgroup": "food-vegetable"
+	},
+	{
 		"form": "🫟️",
 		"type": "Emoji_Presentation",
 		"name": "splatter",
@@ -32484,15 +32617,25 @@
 	{
 		"form": "🫪️",
 		"type": "Emoji_Presentation",
-		"name": "DISTORTED FACE",
+		"name": "distorted face",
+		"name0": "DISTORTED FACE",
 		"version": "17.0",
 		"group": "Smileys & Emotion",
 		"subgroup": "face-concerned"
 	},
 	{
+		"form": "🫫️",
+		"type": "Emoji_Presentation",
+		"name": "CRACKING FACE",
+		"version": "18.0",
+		"group": "Smileys & Emotion",
+		"subgroup": "face-smiling"
+	},
+	{
 		"form": "🫯️",
 		"type": "Emoji_Presentation",
-		"name": "FIGHT CLOUD",
+		"name": "fight cloud",
+		"name0": "FIGHT CLOUD",
 		"version": "17.0",
 		"group": "Smileys & Emotion",
 		"subgroup": "emotion"
@@ -32577,6 +32720,22 @@
 		"version": "15.0",
 		"group": "People & Body",
 		"subgroup": "hand-fingers-open"
+	},
+	{
+		"form": "🫹️",
+		"type": "Emoji_Presentation",
+		"name": "LEFTWARDS THUMB SIGN",
+		"version": "18.0",
+		"group": "People & Body",
+		"subgroup": "hand-fingers-closed"
+	},
+	{
+		"form": "🫺️",
+		"type": "Emoji_Presentation",
+		"name": "RIGHTWARDS THUMB SIGN",
+		"version": "18.0",
+		"group": "People & Body",
+		"subgroup": "hand-fingers-closed"
 	},
 	{
 		"form": "™",

@@ -15,14 +15,20 @@
 		"spec_hash": "4b3c5210a328d7097500b413bf075ec210bbac045cd804deae5d1ed771304825",
 		"library": "1.11.0",
 		"unicode": "16.0.0",
-		"cldr": "45",
-		"tag": "prior"
+		"cldr": "45"
 	},
 	{
 		"spec_hash": "4febc8f5d285cbf80d2320fb0c1777ac25e378eb72910c34ec963d0a4e319c84",
 		"library": "1.11.1",
 		"unicode": "17.0.0",
 		"cldr": "47",
+		"tag": "prior"
+	},
+	{
+		"spec_hash": "299c45174539f081a506887685b5f5fcafc7ac0efd97483e2beadd8b183a847f",
+		"library": "1.11.2",
+		"unicode": "18.0.0",
+		"cldr": "48.2",
 		"tag": "current"
 	}
 ]
