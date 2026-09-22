@@ -59,11 +59,17 @@
 
 ### 17.0.0 → 18.0.0
 
-* *WIP*
 * [**Release**](https://www.unicode.org/versions/Unicode18.0.0)
 * [Diff](./diffs/17.0.0-vs-18.0.0.txt) `node unicode-diff.js 17 18`
+* Algorithm:
+	* **Changed** Bopo &rarr; Limited Use
+* CLDR:
+	* `short-names.json` **New** for emoji
+	* `regions.json` **Unchanged**
 * UAX-31: 
 	* **New** 4 Scripts: Chis, Jurc, Pcun, Seal
+* UTS-51:
+	* **New** 19 Emoji `node derive/dump-emoji-new.js`
 * Prior Validation: `node test/validate.js 1.11.1` 
 	* Fails on Bobo demotion
 	* Fails on new emoji
@@ -72,7 +78,7 @@
 
 * [**Release**](https://www.unicode.org/versions/Unicode17.0.0)
 * [Diff](./diffs/16.0.0-vs-17.0.0.txt) `node unicode-diff.js 16 17`
-* CLDR
+* CLDR:
 	* **Unchanged**
 * UAX-31: 
 	* **New** 4 Scripts: Berf, Sidt, Tayo, Tols
@@ -89,7 +95,7 @@
 
 * [**Release**](https://www.unicode.org/versions/Unicode16.0.0)
 * [Diff](./diffs/15.1.0-vs-16.0.0.txt) `node unicode-diff.js 15.1 16`
-* CLDR
+* CLDR:
 	* `short-names.json` **Unchanged**
 	* `regions.json` **New** `"CQ"`
 * UAX-31: 
