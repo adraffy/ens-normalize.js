@@ -1390,7 +1390,7 @@ Hebrew:
 	<span id="enable_debug_btn" title="Enable Debugging">🛠️</span>
 </footer>
 <script type="module">
-import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.15.0/ethers.min.js';
+import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.17.0/ethers.min.js';
 import {
 	ens_normalize, ens_split, ens_beautify, ens_tokenize, ens_emoji,
 	nfc, nfd, hex_cp, quote_cp, explode_cp, str_from_cps, safe_str_from_cps,
@@ -1480,8 +1480,10 @@ const CHAINS = [
 		// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-1.json
 		id: 1,
 		name: 'Mainnet',
-		ankr: 'eth',
-		drpc: 'https://lb.drpc.live/ethereum/AtKDGgQz0ksoipwrr7EsZIE40uEtrwYR8LovQrxF2MGT',
+		rpc: {
+			name: 'dRPC',
+			url: 'https://lb.drpc.live/ethereum/AtKDGgQz0ksoipwrr7EsZIE40uEtrwYR8LovQrxF2MGT',
+		},
 		manager: 'https://app.ens.domains',
 		explorer: 'https://etherscan.io',
 		metadata: 'https://metadata.ens.domains/mainnet',
@@ -1501,27 +1503,31 @@ const CHAINS = [
 		// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-11155111.json
 		id: 11155111,
 		name: 'Sepolia',
-		ankr: 'eth_sepolia',
-		drpc: 'https://sepolia.drpc.org',
+		rpc: {
+			name: 'Ankr',
+			url: 'https://rpc.ankr.com/eth_sepolia/2574888cbbafea2dc4aee251a96866fbf81e1fe5eb4bcbccb24ea3bddf5eebf7',
+		},
 		manager: 'https://sepolia.app.ens.domains',
 		explorer: 'https://sepolia.etherscan.io',
 		metadata: 'https://metadata.ens.domains/sepolia',
 		opensea: 'https://testnets.opensea.io/assets/sepolia/',
 		public: 'https://ethereum-sepolia-rpc.publicnode.com',
+		//eth_resolver: '0x15222A1C2Bf3A4c24eAd1634B8Ee399fd95c3aaf',
+		name_wrapper: '0x0635513f179D50A207757E05759CbD106d7dFcE8'
 	},
-	{
-		// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-17000.json
-		id: 17000,
-		name: 'Holesky',
-		ankr: 'eth_holesky',
-		drpc: 'https://holesky.drpc.org',
-		manager: 'https://holesky.app.ens.domains',
-		explorer: 'https://holesky.etherscan.io',
-		metadata: 'https://metadata.ens.domains/holesky',
-		//opensea: 'https://testnets.opensea.io/assets/holesky/',
-		//rpc: 'https://rpc.holesky.ethpandaops.io',
-		public: 'https://ethereum-holesky-rpc.publicnode.com',
-	}
+	// {
+	// 	// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-17000.json
+	// 	id: 17000,
+	// 	name: 'Holesky',
+	// 	ankr: 'eth_holesky',
+	// 	drpc: 'https://holesky.drpc.org',
+	// 	manager: 'https://holesky.app.ens.domains',
+	// 	explorer: 'https://holesky.etherscan.io',
+	// 	metadata: 'https://metadata.ens.domains/holesky',
+	// 	//opensea: 'https://testnets.opensea.io/assets/holesky/',
+	// 	//rpc: 'https://rpc.holesky.ethpandaops.io',
+	// 	public: 'https://ethereum-holesky-rpc.publicnode.com',
+	// }
 ];
 CHAINS.forEach(chain => {
 	if (!chain.slug) chain.slug = chain.name.toLowerCase();
@@ -2573,9 +2579,7 @@ function update_network() {
 	} else {
 		let old = active_provider;
 		if (old === window_provider || active_chain !== chain) {
-			//let request = new ethers.FetchRequest(chain.rpc || `https://${chain.name.toLowerCase()}.infura.io/v3/f36f6a8638134ac09f9400d3a7008dfe`);
-			//let request = new ethers.FetchRequest(`https://rpc.ankr.com/${chain.ankr}/4f33b3901537986c548375fa2d307572637cca0f4a4f17d5a4944ca27fee5ea9`)
-			let request = new ethers.FetchRequest(chain.drpc);
+			let request = new ethers.FetchRequest(chain.rpc.url);
 			request.preflightFunc = req => {
 				last_fetch_request = req;
 				++rpc_count;
@@ -2628,7 +2632,7 @@ function update_network() {
 	mainnet_btn.classList.toggle('hide', !!active_chain.is_mainnet);
 	browser_btn.classList.toggle('hide', !(!using_window && window_provider && window_provider.__chain && !window_provider.__chain.is_mainnet));
 	provider_div.replaceChildren(create('div', {className: 'network'}, 'using ', create_explorer_address_link(network_state.ens.target, {
-		innerHTML: using_window ? 'Browser' : active_chain.rpc ? 'Public RPC' : 'dRPC',
+		innerHTML: using_window ? 'Browser' : active_chain.rpc.name,
 		title: 'ENS Registry Contract',
 		contract: true
 	})));
@@ -4163,7 +4167,6 @@ async function resolve1(input, skip_norm) {
 			reverse_row.classList.add('error');
 			add_row_tag(reverse_row, create_tag('norm', err));
 			add_row_tag(reverse_row, create_resolve_btn(primary));
-			console.log({skip_norm});
 			if (!skip_norm) return;
 			name_norm = primary;
 			norm_err = err;
@@ -4360,7 +4363,7 @@ async function resolve1(input, skip_norm) {
 		if (should_stop_resolving()) return;
 		remove_temporary(impls_row);
 		add_row_tag(impls_row, create_elapsed_since());
-	} else if (resolver) {	
+	} else if (resolver) {
 		output_div.append(impls_row);
 		impls_row.classList.add('hide');
 		resolver_row.append(create('button', {
@@ -5358,11 +5361,11 @@ async function resolve1(input, skip_norm) {
 	if (primary_is_norm) {
 		make_normalized(primary_row, primary);
 		add_reverse_links(primary_row, primary);
-		if (owner === address) {
-			add_row_tag(normed_row, create_tag('fire', 'Primary Owner'));
-		} else {
-			add_row_tag(normed_row, create_tag('good', 'Primary'));
-		}
+			if (owner === address) {
+				add_row_tag(normed_row, create_tag('fire', 'Primary Owner'));
+			} else {
+				add_row_tag(normed_row, create_tag('good', 'Primary'));
+			}
 	} else {
 		output_div.append(create_breakdown_row(primary, true));
 	}
@@ -5766,7 +5769,7 @@ async function ensure_wrapper() {
 	if (wrapper === false) throw new Error(`Not implementated`);
 	await ensure_eth_resolver();
 	const {eth} = network_state;
-	let address = await eth.interfaceImplementer(eth.__node, '0x019a38fe');
+	let address = active_chain.name_wrapper ?? await eth.interfaceImplementer(eth.__node, '0x019a38fe');
 	if (is_null_hex(address)) {
 		network_state.wrapper = false;
 		return ensure_wrapper();
@@ -5895,6 +5898,7 @@ async function load_known_interfaces(row, resolver) {
 		{iface: '0x124a319c', title: 'InterfaceResolver', url: 'https://docs.ens.domains/ensip/8', supports: resolver.__info.impl},
 		{iface: '0x9061b923', title: 'ExtendedResolver', url: 'https://docs.ens.domains/ensip/10', supports: resolver.__info.wild},
 		{iface: '0x8ef98a7e', title: 'ExtendedDNSResolver', url: 'https://docs.ens.domains/ensip/17', supports: resolver.__info.edns},
+		{iface: '0xeea330f9', title: 'CompositeResolver', url: 'https://github.com/ensdomains/ens-contracts/blob/staging/contracts/resolvers/profiles/ICompositeResolver.sol'},
 		{iface: '0x73302a25', title: 'TheOffchainResolver', url: 'https://github.com/namestonehq/TheOffchainResolver.sol', supports: resolver.__info.edns},
 	];
 	const discovered = new Set();
@@ -6129,9 +6133,11 @@ async function get_resolver(name0, skip_rewrite) {
 		let name = labels.slice(i).join('.');
 		return {name, node: namehash(name)};
 	});
-	let multi = await multicall_tryAggregate(domains.map(x => {
-		return {target: ens.target, data: ens.interface.encodeFunctionData(func, [x.node])};
-	}));
+	let multi = name0 === 'eth' && active_chain.eth_resolver 
+		? [{data: ethers.AbiCoder.defaultAbiCoder().encode(['address'], [active_chain.eth_resolver])}]
+		: await multicall_tryAggregate(domains.map(x => {
+			return {target: ens.target, data: ens.interface.encodeFunctionData(func, [x.node])};
+		}));
 	for (let i = 0; i < domains.length; i++) {
 		let {name, node} = domains[i];
 		let [address] = ens.interface.decodeFunctionResult(func, multi[i].data);
