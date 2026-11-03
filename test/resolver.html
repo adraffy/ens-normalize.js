@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/png" href="./favicon.png">
-<title>ENS Resolver</title>
+<title>ENSv1 Resolver</title>
 <style>
 :root {
 	--btn-fill-color: #eee;
@@ -1490,15 +1490,8 @@ const CHAINS = [
 		opensea: 'https://opensea.io/assets/ethereum/',
 		is_mainnet: true,
 		public: 'https://cloudflare-eth.com/',
+		name_wrapper: '0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401'
 	},
-	// {
-	// 	// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-5.json
-	// 	id: 5,
-	// 	name: 'Goerli',
-	// 	explorer: 'https://goerli.etherscan.io',
-	// 	metadata: 'https://metadata.ens.domains/goerli',
-	// 	opensea: 'https://testnets.opensea.io/assets/goerli/'
-	// },
 	{
 		// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-11155111.json
 		id: 11155111,
@@ -1528,6 +1521,14 @@ const CHAINS = [
 	// 	//rpc: 'https://rpc.holesky.ethpandaops.io',
 	// 	public: 'https://ethereum-holesky-rpc.publicnode.com',
 	// }
+	// {
+	// 	// https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-5.json
+	// 	id: 5,
+	// 	name: 'Goerli',
+	// 	explorer: 'https://goerli.etherscan.io',
+	// 	metadata: 'https://metadata.ens.domains/goerli',
+	// 	opensea: 'https://testnets.opensea.io/assets/goerli/'
+	// },
 ];
 CHAINS.forEach(chain => {
 	if (!chain.slug) chain.slug = chain.name.toLowerCase();
@@ -2488,7 +2489,22 @@ if (window.ethereum) {
 		init();
 	}
 	function init() {
-		window_provider = new ethers.BrowserProvider(ethereum, 'any');
+		const request = async (...a) => {
+			try {
+				return await ethereum.request(...a);
+			} catch (err) {
+				// 20261102: ambire wallet bug, https://github.com/AmbireTech/extension/issues/38
+				const match = err.message?.match(/action="call", data="(0x[0-9a-f]+)"/);
+				if (match) {
+					throw Object.assign(new Error(err.message), {
+						code: 3,
+						data: match[1]
+					});
+				}
+				throw err;
+			}
+		}
+		window_provider = new ethers.BrowserProvider({request}, 'any');
 		add_ccip_timeout(window_provider);
 		window.__provider = window_provider;
 		window.__ethereum = ethereum;
@@ -2708,7 +2724,7 @@ function get_page_url(debug) {
 	return url;
 }
 function get_page_title() {
-	let title = 'ENS Resolver';
+	let title = 'ENSv1 Resolver';
 	let input = input_field.value;
 	if (input) {
 		title += `: “${input}”`;
