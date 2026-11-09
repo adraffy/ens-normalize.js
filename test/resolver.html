@@ -1009,7 +1009,7 @@ footer {
 </head>
 <body>
 <header>
-	<h1><a href="https://ens.domains/">ENS</a> Resolver</h1>
+	<h1><a href="https://ens.domains/">ENSv1</a> Resolver</h1>
 	<div id="provider"><div class="spinner"></div> waiting for Browser</div>
 	<div id="github">
 		<a href="https://github.com/adraffy/ens-normalize.js">adraffy/ens-normalize.js</a>
@@ -2718,7 +2718,7 @@ function get_page_url(debug) {
 	let args = [];
 	if (!active_chain.is_mainnet) args.push(active_chain.slug);
 	if (skip_norm_check.checked) args.push('skip');
-	if (debug && debug_enabled) args.push(`debug=${encodeURIComponent(stringify(debug_settings))}`);
+	if (debug && debug_enabled) args.push(`debug=${stringify(debug_settings)}`);
 	url.search = args.join('&');
 	url.hash = input ? '#' + encode_uri_component_surrogate_escaped(input) : '';
 	return url;
