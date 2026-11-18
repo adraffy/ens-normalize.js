@@ -6,6 +6,7 @@
 * 🏛️ Follows [**ENSIP-15**: ENS Name Normalization Standard](https://docs.ens.domains/ensip/15)
 	* Unicode: [`17.0.0`](./derive/data/17.0.0/) • CLDR: [`47`](./derive/data/CLDR-47/)
 	* Other implementations:
+		* TypeScript — [adraffy/**ens-normalize.ts**](https://github.com/adraffy/ens-normalize.ts) ⭐
 		* Python — [namehash/**ens-normalize-python**](https://github.com/namehash/ens-normalize-python)
 		* Rust — [sevenzing/**ens-normalize-rs**](https://github.com/sevenzing/ens-normalize-rs)
 		* Zig — [evmts/**z-ens-normalize**](https://github.com/evmts/z-ens-normalize)
@@ -24,18 +25,21 @@
 	* [`38KB` **Default**](./dist/index.min.js) — custom NFC via [nf.js](./src/nf.js)
 	* [`44KB`](./dist/all.min.js) *Everything!* — custom NFC + sub-libraries: [parts.js](./src/parts.js), [utils.js](./src/utils.js)
 * Included Apps:
-	* [**Resolver Demo**](https://adraffy.github.io/ens-normalize.js/test/resolver.html) ⭐
+	* [**Resolver (ENSv2)**](https://raffy.xyz/ens/) ⭐
+	* [**Resolver (ENSv1)**](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 	* [Supported Emoji](https://adraffy.github.io/ens-normalize.js/test/emoji.html)
 	* [Character Viewer](https://adraffy.github.io/ens-normalize.js/test/chars.html)
 	* [Confused Explainer](https://adraffy.github.io/ens-normalize.js/test/confused.html)
-* Related Projects:
+* Related ENSv2 Projects:
+	* [adraffy/**ezccip.js**](https://github.com/adraffy/ezccip.js)
+* Related ENSv1 Projects:
 	* [Recent .eth Registrations](https://raffy.antistupid.com/eth/ens-regs.html) • [Renews](https://raffy.antistupid.com/eth/ens-renews.html) • [Expirations](https://raffy.antistupid.com/eth/ens-exp.html)
 	* [Label Database](https://github.com/adraffy/ens-labels/) • [Labelhash⁻¹](https://adraffy.github.io/ens-labels/demo.html) • [Brute-force](https://raffy.antistupid.com/eth/ens-brute.html)
 	* [Emoji Frequency Explorer](https://raffy.antistupid.com/eth/ens-emoji-freq.html)
 	* [adraffy/**punycode.js**](https://github.com/adraffy/punycode.js/) • [Punycode Coder](https://adraffy.github.io/punycode.js/test/demo.html)
 	* [adraffy/**keccak.js**](https://github.com/adraffy/keccak.js/) • [Keccak Hasher](https://adraffy.github.io/keccak.js/test/demo.html)
 	* [adraffy/**emoji.js**](https://github.com/adraffy/emoji.js/) • [Emoji Parser](https://adraffy.github.io/emoji.js/test/demo.html)
-	* More links at bottom of [Resolver Demo](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
+	* More links at bottom of [Resolver](https://adraffy.github.io/ens-normalize.js/test/resolver.html)
 
 ```js
 import {ens_normalize} from '@adraffy/ens-normalize'; // or require()
